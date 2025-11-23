@@ -116,17 +116,15 @@ const WelcomeHome = ({ user, setCardState, enterDash }) => {
       animate="visible"
     >
       <div className="logo-white">
-        <img src={logoImage} alt="NeptuneChain Logo" />
+        <img src={logoImage} alt="WQT Logo" />
       </div>
       <Title>
         {username
           ? getDynamicWelcomeMessage(username)
-          : "Powered by NeptuneChain"}
+          : "Powered by BlueSignal LTD"}
       </Title>
       <Paragraph>
-        Collaborate with fellow farmers to champion regenerative practices and
-        protect our waterways. Together, we can create a cleaner, healthier
-        planet.
+        Collaborate with your neighbors, utilities, and local organizations to strengthen water quality, restore ecosystems, and support healthy watersheds.
       </Paragraph>
     </StyledWelcomeHome>
   );

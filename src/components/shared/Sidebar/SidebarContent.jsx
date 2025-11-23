@@ -60,7 +60,7 @@ const environmentRoutes = [
   },
   {
     route: "/features/nutrient-calculator",
-    cta: "Nutrient Calculator",
+    cta: "Nutrient Calculator",   // ✅ RESTORED TO ORIGINAL
     onclick: null,
     icon: faCalculator,
   },
@@ -153,7 +153,6 @@ const slideDown = keyframes`
   to {
     height: var(--radix-accordion-content-height);
   }
-
 `;
 
 const StyledAccordion = styled(Accordion.Root)`
@@ -198,7 +197,7 @@ const StyledAccordionContent = styled(Accordion.Content)`
   color: ${({ theme }) => theme.colors.ui600};
   font-size: 14px;
   overflow: hidden;
-  /*   border-left: 1px solid ${({ theme }) => theme.colors.ui300}; */
+
   border-bottom: 1px solid ${({ theme }) => theme.colors.ui300};
   .cta {
     padding: 8px 0px;

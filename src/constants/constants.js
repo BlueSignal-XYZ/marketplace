@@ -1,1 +1,1 @@
-export const APP_NAME = "Nutrient Trading";
+export const APP_NAME = "WaterQuality.Trading";

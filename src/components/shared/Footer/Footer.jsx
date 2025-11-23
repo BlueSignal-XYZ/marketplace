@@ -36,20 +36,20 @@ function Footer() {
   return (
     <StyledFooter>
       <span className="rights-reserved">
-        © 2024 nutrient.trading powered by NEPTUNECHAIN.IO LLC
+        © 2024 WaterQuality.Trading — powered by BlueSignal LTD
       </span>
       <div className="button-wrap">
         <a
           rel="noreferrer"
           target="_blank"
-          href="https://www.neptunechain.io/library/terms-conditions-policy"
+          href="https://waterquality.trading/terms"
         >
           Terms & Conditions
         </a>
         <a
           rel="noreferrer"
           target="_blank"
-          href="https://www.neptunechain.io/library/privacy-policy"
+          href="https://waterquality.trading/privacy"
         >
           Privacy Policy
         </a>

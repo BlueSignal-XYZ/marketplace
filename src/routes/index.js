@@ -1,11 +1,6 @@
-import Welcome from "./Welcome";
 import Home from "./Home";
 import Marketplace from "./Marketplace";
+import Welcome from "./Welcome";
 import NotFound from "./NotFound";
 
-export {
-    Welcome,
-    Marketplace,
-    Home,
-    NotFound
-}
+export { Home, Marketplace, Welcome, NotFound };

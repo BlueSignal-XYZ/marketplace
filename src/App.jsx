@@ -5,7 +5,13 @@ import styled from "styled-components";
 
 import LinkBadgePortal from "./components/LinkBadgePortal.jsx";
 
-import { Welcome, Home, Marketplace, NotFound } from "./routes";
+import {
+  Welcome,
+  Home,
+  Marketplace,
+  NotFound,
+} from "./routes";
+
 import {
   Registry,
   RecentRemoval,
@@ -45,6 +51,7 @@ function App() {
         {/* <Navbar /> */}
 
         <Routes>
+          {/* Root goes back to Welcome */}
           <Route path="/" element={<Welcome />} />
 
           {user?.uid && (
@@ -68,6 +75,7 @@ function App() {
             </>
           )}
 
+          {/* Public marketplace + registry flows */}
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/listing/:id" element={<ListingPage />} />
           <Route path="/recent-removals" element={<RecentRemoval />} />
@@ -75,6 +83,8 @@ function App() {
           <Route path="/registry" element={<Registry />} />
           <Route path="/map" element={<Map />} />
           <Route path="/presale" element={<Presale />} />
+
+          {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
 
