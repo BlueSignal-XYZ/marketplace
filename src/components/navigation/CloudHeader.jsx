@@ -8,22 +8,23 @@ import blueSignalLogo from "../../assets/bluesignal-logo.png";
 
 const HeaderOuter = styled.header`
   width: 100%;
-  background: ${({ theme }) => theme.colors.bg};
   border-bottom: 1px solid ${({ theme }) => theme.colors.ui200};
-  position: relative;
-  z-index: 20;
+  background: ${({ theme }) => theme.colors.bg};
 `;
 
 const HeaderInner = styled.div`
-  width: 100%;
-  max-width: 1280px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 16px;
 
   height: 64px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+
+  @media (min-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 const LogoWrapper = styled.div`

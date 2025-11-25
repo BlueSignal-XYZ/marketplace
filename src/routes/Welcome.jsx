@@ -14,20 +14,32 @@ import { useAppContext } from "../context/AppContext";
 import cloudLogo from "../assets/bluesignal-logo.png";
 import marketplaceLogo from "../assets/logo.png";
 
-// ----------------------------------------------------------------------------
-// Host / mode helpers
-// ----------------------------------------------------------------------------
-const getHostInfo = () => {
+// ---------------------------------------------------------------------------
+// Host / mode detection (shared for logo + redirect)
+// ---------------------------------------------------------------------------
+function getHostInfo() {
   const host = window.location.hostname;
-  const isCloud =
+  const params = new URLSearchParams(window.location.search);
+
+  // Real cloud domain
+  let isCloud =
     host === "cloud.bluesignal.xyz" ||
     host.endsWith(".cloud.bluesignal.xyz");
+
+  // Local dev override: ?app=cloud
+  if (!isCloud) {
+    const appParam = params.get("app");
+    if (appParam === "cloud") {
+      isCloud = true;
+    }
+  }
+
   return { host, isCloud };
-};
+}
 
 const { isCloud: initialIsCloud } = getHostInfo();
 
-// Exposed logo for WelcomeHome, etc.
+// used by WelcomeHome
 export const logoImage = initialIsCloud ? cloudLogo : marketplaceLogo;
 
 const backgroundImage = new URL(
@@ -35,13 +47,14 @@ const backgroundImage = new URL(
   import.meta.url
 ).href;
 
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // Layout
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 const FullScreenWrapper = styled.div`
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
+  width: 100vw;
 
   .form-elements-wrap {
     max-width: 400px;
@@ -76,12 +89,14 @@ const FullScreenWrapper = styled.div`
     overflow-y: hidden;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: ${({ $isCloud }) =>
+      $isCloud ? "center" : "space-between"};
     width: 100%;
     min-height: calc(100vh - 24px);
 
     @media (max-width: 1024px) {
       flex-direction: column;
+      justify-content: center;
     }
   }
 
@@ -91,7 +106,7 @@ const FullScreenWrapper = styled.div`
 
     @media (min-width: 1024px) {
       max-width: 45vw;
-      display: block;
+      display: ${({ $isCloud }) => ($isCloud ? "none" : "block")};
       height: calc(100vh - 24px);
     }
 
@@ -114,15 +129,18 @@ const FullScreenWrapper = styled.div`
     display: flex;
     flex-direction: column;
 
+    align-items: ${({ $isCloud }) => ($isCloud ? "center" : "flex-start")};
+    justify-content: center;
+    padding: ${({ $isCloud }) => ($isCloud ? "48px 16px" : "24px 16px")};
+
     @media (min-width: 1024px) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-left: 0;
+      padding-left: ${({ $isCloud }) => ($isCloud ? "0px" : "64px")};
+      padding-right: ${({ $isCloud }) => ($isCloud ? "0px" : "32px")};
     }
 
     .form-content {
       max-width: 400px;
+      width: 100%;
     }
   }
 `;
@@ -135,10 +153,6 @@ export const logoVariants = {
   visible: { y: 0, opacity: 1, transition: { duration: 1 } },
 };
 
-// ----------------------------------------------------------------------------
-// Component
-// ----------------------------------------------------------------------------
-
 const Welcome = () => {
   const { STATES, ACTIONS } = useAppContext();
   const navigate = useNavigate();
@@ -148,23 +162,20 @@ const Welcome = () => {
   const { user } = STATES || {};
   const { updateUser } = ACTIONS || {};
 
-  // If user already logged in, send them to the right app
+  const { isCloud } = getHostInfo();
+
+  // Mode-aware redirect if user already logged in
   useEffect(() => {
     if (!user?.uid) return;
-
-    const { isCloud } = getHostInfo();
 
     if (isCloud) {
       navigate("/dashboard/main", { replace: true });
     } else {
       navigate("/marketplace", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, isCloud, navigate]);
 
-  // Called after successful login/register
   const enterDash = () => {
-    const { isCloud } = getHostInfo();
-
     if (isCloud) {
       navigate("/dashboard/main");
     } else {
@@ -173,7 +184,7 @@ const Welcome = () => {
   };
 
   return (
-    <FullScreenWrapper>
+    <FullScreenWrapper $isCloud={isCloud}>
       <div className="content">
         <div className="sign-in-form-section">
           <WelcomeHome
@@ -182,6 +193,7 @@ const Welcome = () => {
             setCardState={setCardState}
             enterDash={enterDash}
           />
+
           <div className="form-elements-wrap">
             <div className="form-content">
               <AnimatePresence mode="wait">
@@ -208,12 +220,9 @@ const Welcome = () => {
           </div>
         </div>
 
+        {/* Only show wallpaper panel on marketplace / non-cloud */}
         <div className="section-left">
-          <img
-            className="section-left-image"
-            src={backgroundImage}
-            alt="Welcome background"
-          />
+          <img className="section-left-image" src={backgroundImage} />
         </div>
       </div>
 

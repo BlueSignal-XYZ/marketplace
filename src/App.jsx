@@ -37,7 +37,6 @@ import {
   NotificationBar,
   NutrientCalculator,
   SettingsMenu,
-  Sidebar,
 } from "./components";
 
 import {
@@ -57,9 +56,6 @@ import {
 import { useAppContext } from "./context/AppContext";
 import DashboardMain from "./components/cloud/DashboardMain";
 
-// ---------------------------------------------------------------------------
-// Root App: decide mode based on hostname / ?app= for local dev
-// ---------------------------------------------------------------------------
 function App() {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
@@ -69,23 +65,15 @@ function App() {
 
   let mode = "marketplace";
 
-  // Cloud domain → cloud mode
-  if (
-    host === "cloud.bluesignal.xyz" ||
-    host.endsWith(".cloud.bluesignal.xyz")
-  ) {
+  if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
     mode = "cloud";
-  }
-  // Marketplace domains → marketplace mode
-  else if (
+  } else if (
     host === "waterquality.trading" ||
     host === "waterquality-trading.web.app" ||
     host.endsWith(".waterquality.trading")
   ) {
     mode = "marketplace";
-  }
-  // Local / dev override via ?app=
-  else {
+  } else {
     const appParam = params.get("app");
     if (appParam === "cloud" || appParam === "marketplace") {
       mode = appParam;
@@ -99,9 +87,10 @@ function App() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Inner shell (inside Router) so we can use useLocation, etc.
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/*                           INNER APP SHELL (Router)                          */
+/* -------------------------------------------------------------------------- */
+
 function AppShell({ mode, user }) {
   const location = useLocation();
 
@@ -111,34 +100,15 @@ function AppShell({ mode, user }) {
   const toggleCloudMenu = () => setCloudMenuOpen((prev) => !prev);
   const toggleMarketMenu = () => setMarketMenuOpen((prev) => !prev);
 
-  // Close marketplace drawer on route change
   React.useEffect(() => {
+    setCloudMenuOpen(false);
     setMarketMenuOpen(false);
   }, [location.pathname]);
 
   const isAuthLanding = location.pathname === "/";
-  const isAnyMenuOpen = cloudMenuOpen || marketMenuOpen;
-
-  // Dynamic <title> per mode
-  React.useEffect(() => {
-    if (mode === "cloud") {
-      document.title = "BlueSignal Cloud Monitoring";
-    } else {
-      document.title = "WaterQuality.Trading";
-    }
-  }, [mode]);
 
   return (
     <AppContainer>
-      {/* Mode pill – hidden while a menu drawer is open */}
-      {!isAnyMenuOpen && (
-        <ModeBadge $mode={mode}>
-          {mode === "cloud"
-            ? "CLOUD MODE (Monitoring)"
-            : "MARKETPLACE MODE (Trading)"}
-        </ModeBadge>
-      )}
-
       {/* Headers only on non-auth pages */}
       {!isAuthLanding && mode === "cloud" && (
         <CloudHeader onMenuClick={toggleCloudMenu} />
@@ -148,9 +118,10 @@ function AppShell({ mode, user }) {
         <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
 
-      <Popups mode={mode} />
+      {/* Global popups / settings (no Sidebar in cloud mode anymore) */}
+      <Popups />
 
-      {/* Marketplace drawer */}
+      {/* Menus */}
       {mode === "marketplace" && (
         <MarketplaceMenu
           open={marketMenuOpen}
@@ -159,7 +130,6 @@ function AppShell({ mode, user }) {
         />
       )}
 
-      {/* Cloud drawer */}
       {mode === "cloud" && (
         <CloudMenu
           open={cloudMenuOpen}
@@ -168,6 +138,7 @@ function AppShell({ mode, user }) {
         />
       )}
 
+      {/* Mode-specific routes */}
       {mode === "cloud" ? (
         <CloudRoutes user={user} />
       ) : (
@@ -179,15 +150,15 @@ function AppShell({ mode, user }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Landing redirect handlers
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/*                          LANDING REDIRECT HANDLERS                          */
+/* -------------------------------------------------------------------------- */
+
 const CloudLanding = ({ user }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
     if (user?.uid) {
-      // default cloud landing: devices / environment dashboard
       navigate("/dashboard/main", { replace: true });
     }
   }, [user, navigate]);
@@ -207,36 +178,31 @@ const MarketplaceLanding = ({ user }) => {
   return <Welcome />;
 };
 
-// ---------------------------------------------------------------------------
-// Cloud routes
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/*                                 CLOUD ROUTES                               */
+/* -------------------------------------------------------------------------- */
+
 const CloudRoutes = ({ user }) => (
   <Routes>
     <Route path="/" element={<CloudLanding user={user} />} />
 
     {user?.uid && (
       <>
-        {/* devices / environment dashboard */}
         <Route path="/dashboard/:dashID" element={<Home />} />
         <Route path="/dashboard/main" element={<DashboardMain />} />
 
-        {/* nutrient tools */}
         <Route
           path="/features/nutrient-calculator"
           element={<NutrientCalculator />}
         />
 
-        {/* verification */}
         <Route
           path="/features/verification"
           element={<VerificationUI />}
         />
 
-        {/* broadcast + media */}
         <Route path="/features/stream" element={<Livepeer />} />
         <Route path="/features/upload-media" element={<Livepeer />} />
-
-        {/* generic fallbacks */}
         <Route path="/features/:serviceID" element={<Livepeer />} />
         <Route path="/media/:playbackID" element={<Livepeer />} />
         <Route path="/media/live/:liveID" element={<Livepeer />} />
@@ -247,9 +213,10 @@ const CloudRoutes = ({ user }) => (
   </Routes>
 );
 
-// ---------------------------------------------------------------------------
-// Marketplace routes
-// ---------------------------------------------------------------------------
+/* -------------------------------------------------------------------------- */
+/*                             MARKETPLACE ROUTES                             */
+/* -------------------------------------------------------------------------- */
+
 const MarketplaceRoutes = ({ user }) => (
   <Routes>
     <Route path="/" element={<MarketplaceLanding user={user} />} />
@@ -272,7 +239,6 @@ const MarketplaceRoutes = ({ user }) => (
       path="/marketplace/listing/:id"
       element={<ListingPage />}
     />
-
     <Route path="/recent-removals" element={<RecentRemoval />} />
     <Route path="/certificate/:id" element={<CertificatePage />} />
     <Route path="/registry" element={<Registry />} />
@@ -283,73 +249,30 @@ const MarketplaceRoutes = ({ user }) => (
   </Routes>
 );
 
-// ---------------------------------------------------------------------------
-// Global popups
-// ---------------------------------------------------------------------------
-const Popups = ({ mode }) => {
-  return (
-    <>
-      <Notification />
-      <Confirmation />
-      <ResultPopup />
+/* -------------------------------------------------------------------------- */
+/*                              GLOBAL POPUPS                                 */
+/* -------------------------------------------------------------------------- */
 
-      {/* Sidebar only matters in cloud / monitoring */}
-      {mode === "cloud" && (
-        <Sidebar key={window.location.pathname} />
-      )}
+const Popups = () => (
+  <>
+    <Notification />
+    <Confirmation />
+    <ResultPopup />
+    <NotificationBar />
+    <SettingsMenu />
+  </>
+);
 
-      <NotificationBar />
-      <SettingsMenu />
-    </>
-  );
-};
+/* -------------------------------------------------------------------------- */
+/*                               APP WRAPPER                                  */
+/* -------------------------------------------------------------------------- */
 
-// ---------------------------------------------------------------------------
-// App wrapper + mode badge
-// ---------------------------------------------------------------------------
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-
-  @media (min-width: 1024px) {
-    min-height: 100vh;
-    width: 100vw;
-  }
-
-  @media (min-width: 1200px) {
-    flex-direction: row;
-  }
-`;
-
-const ModeBadge = styled.div`
-  position: fixed;
-  top: 8px;
-  right: 8px;
-  z-index: 9000;
-
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-
-  background: ${({ $mode, theme }) =>
-    $mode === "cloud"
-      ? theme.colors?.primary50 || "#e0f2ff"
-      : theme.colors?.accent50 || "#f3e8ff"};
-
-  color: ${({ $mode, theme }) =>
-    $mode === "cloud"
-      ? theme.colors?.primary700 || "#075985"
-      : theme.colors?.accent700 || "#6b21a8"};
-
-  border: 1px solid
-    ${({ $mode, theme }) =>
-      $mode === "cloud"
-        ? theme.colors?.primary200 || "#bae6fd"
-        : theme.colors?.accent200 || "#e9d5ff"};
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
 `;
 
 export default App;
