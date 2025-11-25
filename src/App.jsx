@@ -9,12 +9,21 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styled from "styled-components";
+
 import { CloudHeader } from "./components/navigation/CloudHeader";
 import { MarketplaceHeader } from "./components/navigation/MarketplaceHeader";
+import { MarketplaceMenu } from "./components/navigation/MarketplaceMenu";
+import { CloudMenu } from "./components/navigation/CloudMenu";
 
 import LinkBadgePortal from "./components/LinkBadgePortal.jsx";
 
-import { Welcome, Home, Marketplace, NotFound } from "./routes";
+import {
+  Welcome,
+  Home,
+  Marketplace,
+  NotFound,
+  FinancialDashboard,
+} from "./routes";
 
 import {
   Registry,
@@ -25,7 +34,6 @@ import {
 } from "./components/routes";
 
 import {
-  Navbar,
   NotificationBar,
   NutrientCalculator,
   SettingsMenu,
@@ -47,36 +55,36 @@ import {
 } from "./components/popups";
 
 import { useAppContext } from "./context/AppContext";
+import DashboardMain from "./components/cloud/DashboardMain";
 
+// ---------------------------------------------------------------------------
+// Root App: decide mode based on hostname / ?app= for local dev
+// ---------------------------------------------------------------------------
 function App() {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
 
-  // ---------------------------------------------
-  // Determine which APP MODE we’re using
-  // ---------------------------------------------
   const host = window.location.hostname;
   const params = new URLSearchParams(window.location.search);
 
-  let mode = "marketplace"; // default
+  let mode = "marketplace";
 
-  // Cloud domain → cloud app
+  // Cloud domain → cloud mode
   if (
     host === "cloud.bluesignal.xyz" ||
     host.endsWith(".cloud.bluesignal.xyz")
   ) {
     mode = "cloud";
   }
-
-  // Marketplace domain → marketplace app
+  // Marketplace domains → marketplace mode
   else if (
     host === "waterquality.trading" ||
+    host === "waterquality-trading.web.app" ||
     host.endsWith(".waterquality.trading")
   ) {
     mode = "marketplace";
   }
-
-  // Local / dev overrides via ?app=
+  // Local / dev override via ?app=
   else {
     const appParam = params.get("app");
     if (appParam === "cloud" || appParam === "marketplace") {
@@ -91,32 +99,47 @@ function App() {
   );
 }
 
-/**
- * Inner shell so we can use useLocation (needs to be inside Router)
- */
+// ---------------------------------------------------------------------------
+// Inner shell (inside Router) so we can use useLocation, etc.
+// ---------------------------------------------------------------------------
 function AppShell({ mode, user }) {
   const location = useLocation();
 
-  // Cloud + Marketplace menu toggles (header burger) – reserved for future menus
   const [cloudMenuOpen, setCloudMenuOpen] = React.useState(false);
   const [marketMenuOpen, setMarketMenuOpen] = React.useState(false);
 
   const toggleCloudMenu = () => setCloudMenuOpen((prev) => !prev);
   const toggleMarketMenu = () => setMarketMenuOpen((prev) => !prev);
 
-  // Treat "/" as AUTH LANDING ONLY (no header there)
+  // Close marketplace drawer on route change
+  React.useEffect(() => {
+    setMarketMenuOpen(false);
+  }, [location.pathname]);
+
   const isAuthLanding = location.pathname === "/";
+  const isAnyMenuOpen = cloudMenuOpen || marketMenuOpen;
+
+  // Dynamic <title> per mode
+  React.useEffect(() => {
+    if (mode === "cloud") {
+      document.title = "BlueSignal Cloud Monitoring";
+    } else {
+      document.title = "WaterQuality.Trading";
+    }
+  }, [mode]);
 
   return (
     <AppContainer>
-      {/* Mode badge so you can SEE the difference */}
-      <ModeBadge $mode={mode}>
-        {mode === "cloud"
-          ? "CLOUD MODE (Monitoring)"
-          : "MARKETPLACE MODE (Trading)"}
-      </ModeBadge>
+      {/* Mode pill – hidden while a menu drawer is open */}
+      {!isAnyMenuOpen && (
+        <ModeBadge $mode={mode}>
+          {mode === "cloud"
+            ? "CLOUD MODE (Monitoring)"
+            : "MARKETPLACE MODE (Trading)"}
+        </ModeBadge>
+      )}
 
-      {/* Headers ONLY when we're not on the auth landing page */}
+      {/* Headers only on non-auth pages */}
       {!isAuthLanding && mode === "cloud" && (
         <CloudHeader onMenuClick={toggleCloudMenu} />
       )}
@@ -125,11 +148,25 @@ function AppShell({ mode, user }) {
         <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
 
-      {/* Popups + sidebars, gated by mode */}
       <Popups mode={mode} />
 
-      {/* Global navbar is intentionally disabled for now */}
-      {/* <Navbar /> */}
+      {/* Marketplace drawer */}
+      {mode === "marketplace" && (
+        <MarketplaceMenu
+          open={marketMenuOpen}
+          onClose={() => setMarketMenuOpen(false)}
+          user={user}
+        />
+      )}
+
+      {/* Cloud drawer */}
+      {mode === "cloud" && (
+        <CloudMenu
+          open={cloudMenuOpen}
+          onClose={() => setCloudMenuOpen(false)}
+          user={user}
+        />
+      )}
 
       {mode === "cloud" ? (
         <CloudRoutes user={user} />
@@ -142,21 +179,19 @@ function AppShell({ mode, user }) {
   );
 }
 
-/* ========================================================================== */
-/* LANDING COMPONENTS WITH REDIRECTS                                          */
-/* ========================================================================== */
-
+// ---------------------------------------------------------------------------
+// Landing redirect handlers
+// ---------------------------------------------------------------------------
 const CloudLanding = ({ user }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
     if (user?.uid) {
-      // redirect logged-in cloud users off "/" to a default dashboard
+      // default cloud landing: devices / environment dashboard
       navigate("/dashboard/main", { replace: true });
     }
   }, [user, navigate]);
 
-  // Logged-out users see Welcome (auth/marketing)
   return <Welcome />;
 };
 
@@ -165,95 +200,92 @@ const MarketplaceLanding = ({ user }) => {
 
   React.useEffect(() => {
     if (user?.uid) {
-      // redirect logged-in marketplace users off "/" to marketplace
       navigate("/marketplace", { replace: true });
     }
   }, [user, navigate]);
 
-  // Logged-out users see Welcome (auth/marketing)
   return <Welcome />;
 };
 
-/* ========================================================================== */
-/* CLOUD ROUTES — cloud.bluesignal.xyz                                         */
-/* Monitoring / devices / dashboard / nutrient tools                           */
-/* ========================================================================== */
+// ---------------------------------------------------------------------------
+// Cloud routes
+// ---------------------------------------------------------------------------
 const CloudRoutes = ({ user }) => (
   <Routes>
-    {/* Root: auth landing + redirect for logged-in cloud users */}
     <Route path="/" element={<CloudLanding user={user} />} />
 
     {user?.uid && (
       <>
-        {/* Environmental dashboard */}
+        {/* devices / environment dashboard */}
         <Route path="/dashboard/:dashID" element={<Home />} />
-        <Route path="/dashboard/main" element={<Home />} />
+        <Route path="/dashboard/main" element={<DashboardMain />} />
 
-        {/* Nutrient calculator */}
+        {/* nutrient tools */}
         <Route
           path="/features/nutrient-calculator"
           element={<NutrientCalculator />}
         />
 
-        {/* Verification */}
+        {/* verification */}
         <Route
           path="/features/verification"
           element={<VerificationUI />}
         />
 
-        {/* Live streaming / playback */}
+        {/* broadcast + media */}
+        <Route path="/features/stream" element={<Livepeer />} />
+        <Route path="/features/upload-media" element={<Livepeer />} />
+
+        {/* generic fallbacks */}
         <Route path="/features/:serviceID" element={<Livepeer />} />
         <Route path="/media/:playbackID" element={<Livepeer />} />
         <Route path="/media/live/:liveID" element={<Livepeer />} />
       </>
     )}
 
-    {/* 404 fallback */}
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
-/* ========================================================================== */
-/* MARKETPLACE ROUTES — waterquality.trading                                   */
-/* Trading / seller dashboard / registry / financial dashboard                 */
-/* ========================================================================== */
+// ---------------------------------------------------------------------------
+// Marketplace routes
+// ---------------------------------------------------------------------------
 const MarketplaceRoutes = ({ user }) => (
   <Routes>
-    {/* Root: auth landing + redirect for logged-in marketplace users */}
     <Route path="/" element={<MarketplaceLanding user={user} />} />
 
-    {/* Authenticated marketplace features */}
     {user?.uid && (
       <>
         <Route
           path="/marketplace/seller-dashboard"
           element={<SellerDashboard />}
         />
+        <Route
+          path="/dashboard/financial"
+          element={<FinancialDashboard />}
+        />
       </>
     )}
 
-    {/* Public marketplace */}
     <Route path="/marketplace" element={<Marketplace />} />
     <Route
       path="/marketplace/listing/:id"
       element={<ListingPage />}
     />
 
-    {/* Registry, map, certificate pages */}
     <Route path="/recent-removals" element={<RecentRemoval />} />
     <Route path="/certificate/:id" element={<CertificatePage />} />
     <Route path="/registry" element={<Registry />} />
     <Route path="/map" element={<Map />} />
     <Route path="/presale" element={<Presale />} />
 
-    {/* 404 fallback */}
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
-/* ========================================================================== */
-/* GLOBAL POPUPS USED BY BOTH MODES                                            */
-/* ========================================================================== */
+// ---------------------------------------------------------------------------
+// Global popups
+// ---------------------------------------------------------------------------
 const Popups = ({ mode }) => {
   return (
     <>
@@ -261,7 +293,7 @@ const Popups = ({ mode }) => {
       <Confirmation />
       <ResultPopup />
 
-      {/* Sidebar + phone sidebar ONLY in cloud mode */}
+      {/* Sidebar only matters in cloud / monitoring */}
       {mode === "cloud" && (
         <Sidebar key={window.location.pathname} />
       )}
@@ -272,9 +304,9 @@ const Popups = ({ mode }) => {
   );
 };
 
-/* ========================================================================== */
-/* WRAPPER + MODE BADGE                                                        */
-/* ========================================================================== */
+// ---------------------------------------------------------------------------
+// App wrapper + mode badge
+// ---------------------------------------------------------------------------
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -294,7 +326,7 @@ const ModeBadge = styled.div`
   position: fixed;
   top: 8px;
   right: 8px;
-  z-index: 9999;
+  z-index: 9000;
 
   padding: 6px 10px;
   border-radius: 999px;

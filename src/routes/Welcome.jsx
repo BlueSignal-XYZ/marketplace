@@ -1,3 +1,4 @@
+// /src/routes/Welcome.jsx
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
@@ -10,18 +11,37 @@ import { WelcomeHome } from "./components/welcome";
 import Footer from "../components/shared/Footer/Footer";
 import { useAppContext } from "../context/AppContext";
 
-// used by WelcomeHome
-export const logoImage = new URL("../assets/logo.png", import.meta.url).href;
+import cloudLogo from "../assets/bluesignal-logo.png";
+import marketplaceLogo from "../assets/logo.png";
+
+// ----------------------------------------------------------------------------
+// Host / mode helpers
+// ----------------------------------------------------------------------------
+const getHostInfo = () => {
+  const host = window.location.hostname;
+  const isCloud =
+    host === "cloud.bluesignal.xyz" ||
+    host.endsWith(".cloud.bluesignal.xyz");
+  return { host, isCloud };
+};
+
+const { isCloud: initialIsCloud } = getHostInfo();
+
+// Exposed logo for WelcomeHome, etc.
+export const logoImage = initialIsCloud ? cloudLogo : marketplaceLogo;
 
 const backgroundImage = new URL(
   "../assets/wallpapers/welcome_wallpaper.jpg",
   import.meta.url
 ).href;
 
-// Styled components
+// ----------------------------------------------------------------------------
+// Layout
+// ----------------------------------------------------------------------------
+
 const FullScreenWrapper = styled.div`
-  width: 100%;
   width: 100vw;
+  min-height: 100vh;
 
   .form-elements-wrap {
     max-width: 400px;
@@ -29,7 +49,7 @@ const FullScreenWrapper = styled.div`
     margin: 0 auto;
 
     @media (min-width: 1024px) {
-      margin: 0 0;
+      margin: 0;
     }
   }
 
@@ -38,11 +58,13 @@ const FullScreenWrapper = styled.div`
     align-items: center;
     gap: 16px;
     padding: 16px 0px;
+
     .separator-line {
       width: 100%;
       height: 1px;
       background: ${({ theme }) => theme.colors.ui100};
     }
+
     .separator-text {
       font-size: 14px;
       font-weight: 500;
@@ -57,6 +79,7 @@ const FullScreenWrapper = styled.div`
     justify-content: space-between;
     width: 100%;
     min-height: calc(100vh - 24px);
+
     @media (max-width: 1024px) {
       flex-direction: column;
     }
@@ -71,6 +94,7 @@ const FullScreenWrapper = styled.div`
       display: block;
       height: calc(100vh - 24px);
     }
+
     img {
       border-radius: 40px;
       height: 100%;
@@ -78,6 +102,7 @@ const FullScreenWrapper = styled.div`
       padding: 24px;
       object-fit: cover;
     }
+
     .section-left-image {
       overflow: hidden;
       width: 100%;
@@ -90,12 +115,12 @@ const FullScreenWrapper = styled.div`
     flex-direction: column;
 
     @media (min-width: 1024px) {
-      padding-left: 64px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-left: 0px;
+      padding-left: 0;
     }
+
     .form-content {
       max-width: 400px;
     }
@@ -110,25 +135,41 @@ export const logoVariants = {
   visible: { y: 0, opacity: 1, transition: { duration: 1 } },
 };
 
+// ----------------------------------------------------------------------------
+// Component
+// ----------------------------------------------------------------------------
+
 const Welcome = () => {
   const { STATES, ACTIONS } = useAppContext();
   const navigate = useNavigate();
 
   const [cardState, setCardState] = useState("");
-  const [googleData, setGoogleData] = useState({}); // kept for future use
+  const [googleData, setGoogleData] = useState({});
   const { user } = STATES || {};
   const { updateUser } = ACTIONS || {};
 
-  // 🔁 Unified redirect: whenever user is truthy, push to marketplace
+  // If user already logged in, send them to the right app
   useEffect(() => {
-    if (user?.uid) {
-      navigate("/marketplace");
+    if (!user?.uid) return;
+
+    const { isCloud } = getHostInfo();
+
+    if (isCloud) {
+      navigate("/dashboard/main", { replace: true });
+    } else {
+      navigate("/marketplace", { replace: true });
     }
   }, [user, navigate]);
 
-  // Still pass this to forms so they behave as expected
+  // Called after successful login/register
   const enterDash = () => {
-    navigate("/marketplace");
+    const { isCloud } = getHostInfo();
+
+    if (isCloud) {
+      navigate("/dashboard/main");
+    } else {
+      navigate("/marketplace");
+    }
   };
 
   return (
@@ -166,10 +207,16 @@ const Welcome = () => {
             </div>
           </div>
         </div>
+
         <div className="section-left">
-          <img className="section-left-image" src={backgroundImage} />
+          <img
+            className="section-left-image"
+            src={backgroundImage}
+            alt="Welcome background"
+          />
         </div>
       </div>
+
       <Footer />
     </FullScreenWrapper>
   );

@@ -4,36 +4,44 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-// Adjust this path if your logo lives somewhere else
-import bluesignalLogo from "../../assets/bluesignal-logo.png";
+import blueSignalLogo from "../../assets/bluesignal-logo.png";
 
 const HeaderOuter = styled.header`
   width: 100%;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ui200};
   background: ${({ theme }) => theme.colors.bg};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.ui200};
+  position: relative;
+  z-index: 20;
 `;
 
 const HeaderInner = styled.div`
-  max-width: 1120px;
+  width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 12px 16px;
+  padding: 0 16px;
 
+  height: 64px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center; /* centers logo + burger vertically */
+`;
 
-  @media (min-width: 1024px) {
-    padding: 16px 0;
-  }
+const LogoWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const LogoImg = styled.img`
-  height: 64px;  /* BlueSignal brand anchor – tweak as needed */
+  max-height: 44px;
   width: auto;
   display: block;
 `;
 
 const MenuButton = styled.button`
+  height: 100%;
+  width: 48px;
+
   background: none;
   border: none;
   padding: 0;
@@ -44,7 +52,7 @@ const MenuButton = styled.button`
   justify-content: center;
 
   color: ${({ theme }) => theme.colors.ui900};
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1;
 
   &:hover {
@@ -56,8 +64,11 @@ export function CloudHeader({ onMenuClick }) {
   return (
     <HeaderOuter>
       <HeaderInner>
-        <LogoImg src={bluesignalLogo} alt="BlueSignal Cloud" />
-        <MenuButton onClick={onMenuClick}>
+        <LogoWrapper>
+          <LogoImg src={blueSignalLogo} alt="BlueSignal Cloud Monitoring" />
+        </LogoWrapper>
+
+        <MenuButton onClick={onMenuClick} aria-label="Open cloud menu">
           <FontAwesomeIcon icon={faBars} />
         </MenuButton>
       </HeaderInner>
