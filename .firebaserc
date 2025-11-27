@@ -12,8 +12,11 @@
     },
     "waterquality-trading": {
       "hosting": {
-        "dashboard": [
+        "waterquality-trading": [
           "waterquality-trading"
+        ],
+        "cloud-bluesignal": [
+          "cloud-bluesignal"
         ]
       }
     }

@@ -12,10 +12,7 @@ import EventsPopup from "../components/elements/marketplace/EventsPopup";
 import { Input } from "../components/shared/input/Input";
 import { ButtonSecondary } from "../components/shared/button/Button";
 
-// NOTE: this page renders **no header / logo / burger**.
-// Header is controlled globally in App.jsx based on mode.
-
-// Wraps the route content + footer, keeps footer at bottom
+// Wraps route content + footer, keeps footer at bottom
 const PageWrapper = styled.div`
   min-height: 100vh;
   display: flex;
@@ -23,7 +20,7 @@ const PageWrapper = styled.div`
 `;
 
 // Main Marketplace area (between header and footer)
-const MarketplaceShell = styled.div`
+const MarketplaceShell = styled.main`
   flex: 1;
   width: 100%;
   max-width: 1120px;
@@ -36,8 +33,35 @@ const MarketplaceShell = styled.div`
 
   .signed-in {
     font-size: 13px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: ${({ theme }) => theme.colors.ui600};
+  }
+`;
+
+const HeaderBlock = styled.header`
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.ui900};
+  }
+
+  p {
+    margin: 6px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: ${({ theme }) => theme.colors.ui600};
+    max-width: 640px;
+  }
+
+  @media (min-width: 1024px) {
+    margin-bottom: 28px;
+
+    h1 {
+      font-size: 24px;
+    }
   }
 `;
 
@@ -47,6 +71,7 @@ const TopBar = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  margin-bottom: 20px;
 
   ${Input} {
     max-width: 420px;
@@ -93,7 +118,7 @@ const TopBar = styled.div`
   }
 `;
 
-const BottomBar = styled.div`
+const BottomBar = styled.section`
   padding-top: 20px;
   margin-top: 20px;
   border-top: 1px solid ${({ theme }) => theme.colors.ui200};
@@ -125,8 +150,17 @@ const Marketplace = () => {
           </div>
         )}
 
+        <HeaderBlock>
+          <h1>WaterQuality.Trading Marketplace</h1>
+          <p>
+            Discover, review, and verify nutrient pollution certificates.
+            Search live listings, explore recent removals, and track how
+            clean-water projects are performing over time.
+          </p>
+        </HeaderBlock>
+
         <TopBar>
-          <Input placeholder="Search for NPCs..." />
+          <Input placeholder="Search for NPCs, projects, or locations..." />
 
           <div className="button-wrapper">
             <ButtonSecondary>

@@ -1,192 +1,163 @@
 // /src/components/navigation/MarketplaceMenu.jsx
 import React from "react";
 import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Backdrop = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.28); /* translucent only on underlying screen */
-  opacity: ${({ $open }) => ($open ? 1 : 0)};
-  pointer-events: ${({ $open }) => ($open ? "auto" : "none")};
-  transition: opacity 0.25s ease-out;
-  z-index: 9500;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  z-index: 60;
+
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const Panel = styled.aside`
-  position: fixed;
-  top: 0;
-  right: ${({ $open }) => ($open ? "0" : "-280px")};
-  height: 100vh;
-  width: 260px;
+  width: 280px;
   max-width: 80%;
-  background: #ffffff; /* solid white, no translucence */
-  box-shadow: -8px 0 24px rgba(15, 23, 42, 0.22);
-  z-index: 9600;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -16px 0 40px rgba(15, 23, 42, 0.32);
+  padding: 20px 18px;
+  box-sizing: border-box;
 
-  transition: right 0.25s ease-out;
   display: flex;
   flex-direction: column;
+  gap: 16px;
 `;
 
 const Header = styled.div`
-  height: 64px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-
-  padding: 0 16px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ui200};
-
-  span {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: ${({ theme }) => theme.colors.ui600};
-  }
+  align-items: center;
 `;
 
-const CloseButton = styled.button`
+const Title = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+`;
+
+const CloseBtn = styled.button`
   border: none;
-  background: none;
-  padding: 4px;
+  background: transparent;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.ui700};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary500};
+    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
   }
 `;
 
-const List = styled.nav`
-  padding: 12px 8px 16px;
+const SectionLabel = styled.div`
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  margin-top: 8px;
+`;
+
+const NavList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
 `;
 
-const SectionLabel = styled.div`
-  padding: 10px 10px 4px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.ui500};
-`;
+const NavItem = styled.li``;
 
-const ItemLink = styled(Link)`
-  display: block;
-  padding: 10px 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-
-  color: ${({ $active, theme }) =>
-    $active ? theme.colors.primary700 : theme.colors.ui800};
+const NavButton = styled.button`
+  width: 100%;
+  border: none;
   background: ${({ $active, theme }) =>
-    $active ? theme.colors.primary50 : "transparent"};
+    $active ? theme.colors?.primary50 || "#e0f2ff" : "transparent"};
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors?.primary700 || "#0369a1" : theme.colors?.ui800 || "#111827"};
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.ui100};
+    background: ${({ $active, theme }) =>
+      $active ? theme.colors?.primary100 || "#dbeafe" : "#f3f4f6"};
   }
 `;
 
 export function MarketplaceMenu({ open, onClose, user }) {
+  const navigate = useNavigate();
   const location = useLocation();
-  const path = location.pathname;
 
-  const isActive = (prefix) =>
-    path === prefix || path.startsWith(prefix + "/");
+  // ⛔️ IMPORTANT: don't render anything unless menu is actually open
+  if (!open) return null;
 
-  const handleClick = () => {
-    if (onClose) onClose();
+  const go = (path) => {
+    navigate(path);
+    onClose && onClose();
   };
 
-  return (
-    <>
-      <Backdrop $open={open} onClick={onClose} />
+  const isActive = (match) => location.pathname.startsWith(match);
 
-      <Panel $open={open} onClick={(e) => e.stopPropagation()}>
+  const isAuthed = !!user?.uid;
+
+  return (
+    <Backdrop onClick={onClose}>
+      <Panel onClick={(e) => e.stopPropagation()}>
         <Header>
-          <span>Marketplace</span>
-          <CloseButton onClick={onClose}>
-            <FontAwesomeIcon icon={faTimes} />
-          </CloseButton>
+          <Title>WaterQuality.Trading</Title>
+          <CloseBtn onClick={onClose} aria-label="Close menu">
+            ×
+          </CloseBtn>
         </Header>
 
-        <List>
-          <SectionLabel>Trading</SectionLabel>
+        {/* Environment / tools live on the cloud app now, 
+            but we keep the section for future linking if needed */}
+        <SectionLabel>Environment</SectionLabel>
+        <NavList>
+          <NavItem>
+            <NavButton
+              type="button"
+              onClick={() => go("/marketplace")}
+              $active={isActive("/marketplace")}
+            >
+              Marketplace
+            </NavButton>
+          </NavItem>
 
-          <ItemLink
-            to="/marketplace"
-            $active={isActive("/marketplace") && !isActive("/marketplace/seller-dashboard")}
-            onClick={handleClick}
-          >
-            Marketplace
-          </ItemLink>
-
-          {user?.uid && (
+          {isAuthed && (
             <>
-              <ItemLink
-                to="/marketplace/seller-dashboard"
-                $active={isActive("/marketplace/seller-dashboard")}
-                onClick={handleClick}
-              >
-                Seller Dashboard
-              </ItemLink>
-
-              <ItemLink
-                to="/dashboard/financial"
-                $active={isActive("/dashboard/financial")}
-                onClick={handleClick}
-              >
-                Financial Dashboard
-              </ItemLink>
+              <NavItem>
+                <NavButton
+                  type="button"
+                  onClick={() => go("/dashboard/financial")}
+                  $active={isActive("/dashboard/financial")}
+                >
+                  Financial Dashboard
+                </NavButton>
+              </NavItem>
+              <NavItem>
+                <NavButton
+                  type="button"
+                  onClick={() => go("/marketplace/seller-dashboard")}
+                  $active={isActive("/marketplace/seller-dashboard")}
+                >
+                  Seller Dashboard
+                </NavButton>
+              </NavItem>
             </>
           )}
-
-          <SectionLabel>Registry</SectionLabel>
-
-          <ItemLink
-            to="/registry"
-            $active={isActive("/registry")}
-            onClick={handleClick}
-          >
-            Registry
-          </ItemLink>
-
-          <ItemLink
-            to="/recent-removals"
-            $active={isActive("/recent-removals")}
-            onClick={handleClick}
-          >
-            Recent Removals
-          </ItemLink>
-
-          <ItemLink
-            to="/map"
-            $active={isActive("/map")}
-            onClick={handleClick}
-          >
-            Map
-          </ItemLink>
-
-          <ItemLink
-            to="/presale"
-            $active={isActive("/presale")}
-            onClick={handleClick}
-          >
-            Presale
-          </ItemLink>
-        </List>
+        </NavList>
       </Panel>
-    </>
+    </Backdrop>
   );
 }
+
+export default MarketplaceMenu;

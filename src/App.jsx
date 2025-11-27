@@ -100,80 +100,70 @@ function AppShell({ mode, user }) {
   const toggleCloudMenu = () => setCloudMenuOpen((prev) => !prev);
   const toggleMarketMenu = () => setMarketMenuOpen((prev) => !prev);
 
-  // Close menus on route change
   React.useEffect(() => {
     setCloudMenuOpen(false);
     setMarketMenuOpen(false);
   }, [location.pathname]);
 
-  // Dynamic page title by mode + route
+  // ---------- DYNAMIC TITLE ----------
   React.useEffect(() => {
-    const path = location.pathname || "/";
-    let title = "";
+    const host = window.location.hostname;
+    const path = location.pathname;
 
-    if (mode === "cloud") {
-      // Base
-      title = "BlueSignal Cloud Monitoring";
-
-      if (path === "/") {
-        title = "Sign in — BlueSignal Cloud Monitoring";
-      } else if (path.startsWith("/dashboard")) {
-        title = "Dashboard — BlueSignal Cloud Monitoring";
-      } else if (path.includes("nutrient-calculator")) {
-        title = "Nutrient Calculator — BlueSignal Cloud Monitoring";
-      } else if (path.includes("verification")) {
-        title = "Verification — BlueSignal Cloud Monitoring";
-      } else if (
-        path.includes("upload-media") ||
-        path.includes("stream") ||
-        path.startsWith("/media")
-      ) {
-        title = "Media — BlueSignal Cloud Monitoring";
+    if (host.includes("cloud.bluesignal.xyz")) {
+      // Cloud app
+      if (path.startsWith("/dashboard")) {
+        document.title = "BlueSignal Cloud Monitoring – Dashboard";
+      } else if (path.startsWith("/features/nutrient-calculator")) {
+        document.title = "BlueSignal Cloud – Nutrient Calculator";
+      } else if (path.startsWith("/features/verification")) {
+        document.title = "BlueSignal Cloud – Verification";
+      } else {
+        document.title = "BlueSignal Cloud Monitoring";
+      }
+    } else if (
+      host.includes("waterquality.trading") ||
+      host.includes("waterquality-trading.web.app")
+    ) {
+      // Marketplace app
+      if (path.startsWith("/marketplace/seller-dashboard")) {
+        document.title = "WaterQuality.Trading – Seller Dashboard";
+      } else if (path.startsWith("/dashboard/financial")) {
+        document.title = "WaterQuality.Trading – Financial Dashboard";
+      } else if (path.startsWith("/marketplace")) {
+        document.title = "WaterQuality.Trading – Marketplace";
+      } else if (path.startsWith("/registry")) {
+        document.title = "WaterQuality.Trading – Registry";
+      } else {
+        document.title = "WaterQuality.Trading";
       }
     } else {
-      // Marketplace side
-      title = "WaterQuality.Trading Marketplace";
-
-      if (path === "/") {
-        title = "Sign in — WaterQuality.Trading";
-      } else if (path.startsWith("/marketplace/seller-dashboard")) {
-        title = "Seller Dashboard — WaterQuality.Trading";
-      } else if (path.startsWith("/dashboard/financial")) {
-        title = "Financial Dashboard — WaterQuality.Trading";
-      } else if (path.startsWith("/registry")) {
-        title = "Registry — WaterQuality.Trading";
-      } else if (path.startsWith("/recent-removals")) {
-        title = "Recent Removals — WaterQuality.Trading";
-      } else if (path.startsWith("/certificate")) {
-        title = "Certificate Viewer — WaterQuality.Trading";
-      } else if (path.startsWith("/map")) {
-        title = "Watershed Map — WaterQuality.Trading";
-      } else if (path.startsWith("/presale")) {
-        title = "Presale — WaterQuality.Trading";
-      }
+      // Fallback (local dev / other)
+      document.title = "Water Quality & Monitoring";
     }
-
-    document.title = title;
-  }, [location.pathname, mode]);
+  }, [location.pathname]);
+  // -----------------------------------
 
   const isAuthLanding = location.pathname === "/";
+  const isLoggedIn = !!user?.uid;
+  const showAppChrome = isLoggedIn && !isAuthLanding;
 
   return (
     <AppContainer>
-      {/* Headers only on non-auth pages */}
-      {!isAuthLanding && mode === "cloud" && (
+      {/* Headers only after login and off "/" */}
+      {showAppChrome && mode === "cloud" && (
         <CloudHeader onMenuClick={toggleCloudMenu} />
       )}
 
-      {!isAuthLanding && mode === "marketplace" && (
+      {showAppChrome && mode === "marketplace" && (
         <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
 
-      {/* Global popups / settings */}
-      <Popups />
+      {/* Global popups / settings only after login */}
+      <Popups show={showAppChrome} />
 
-      {/* Menus */}
-      {mode === "marketplace" && (
+      {/* Menus only after login */}
+      {showAppChrome && mode === "marketplace" && (
         <MarketplaceMenu
           open={marketMenuOpen}
           onClose={() => setMarketMenuOpen(false)}
@@ -181,7 +171,7 @@ function AppShell({ mode, user }) {
         />
       )}
 
-      {mode === "cloud" && (
+      {showAppChrome && mode === "cloud" && (
         <CloudMenu
           open={cloudMenuOpen}
           onClose={() => setCloudMenuOpen(false)}
@@ -196,7 +186,7 @@ function AppShell({ mode, user }) {
         <MarketplaceRoutes user={user} />
       )}
 
-      {user?.uid && <LinkBadgePortal />}
+      {isLoggedIn && <LinkBadgePortal />}
     </AppContainer>
   );
 }
@@ -247,7 +237,10 @@ const CloudRoutes = ({ user }) => (
           element={<NutrientCalculator />}
         />
 
-        <Route path="/features/verification" element={<VerificationUI />} />
+        <Route
+          path="/features/verification"
+          element={<VerificationUI />}
+        />
 
         <Route path="/features/stream" element={<Livepeer />} />
         <Route path="/features/upload-media" element={<Livepeer />} />
@@ -283,7 +276,10 @@ const MarketplaceRoutes = ({ user }) => (
     )}
 
     <Route path="/marketplace" element={<Marketplace />} />
-    <Route path="/marketplace/listing/:id" element={<ListingPage />} />
+    <Route
+      path="/marketplace/listing/:id"
+      element={<ListingPage />}
+    />
     <Route path="/recent-removals" element={<RecentRemoval />} />
     <Route path="/certificate/:id" element={<CertificatePage />} />
     <Route path="/registry" element={<Registry />} />
@@ -298,15 +294,19 @@ const MarketplaceRoutes = ({ user }) => (
 /*                              GLOBAL POPUPS                                 */
 /* -------------------------------------------------------------------------- */
 
-const Popups = () => (
-  <>
-    <Notification />
-    <Confirmation />
-    <ResultPopup />
-    <NotificationBar />
-    <SettingsMenu />
-  </>
-);
+const Popups = ({ show }) => {
+  if (!show) return null;
+
+  return (
+    <>
+      <Notification />
+      <Confirmation />
+      <ResultPopup />
+      <NotificationBar />
+      <SettingsMenu />
+    </>
+  );
+};
 
 /* -------------------------------------------------------------------------- */
 /*                               APP WRAPPER                                  */

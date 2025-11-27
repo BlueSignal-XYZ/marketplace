@@ -1,17 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// /vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
+// Keep this config minimal + light so build doesn't get killed.
 export default defineConfig({
   plugins: [react()],
-  server: {
-    host: true,
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:9000',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
+  build: {
+    // Turn off minification to reduce CPU / memory load during build
+    minify: false,
+    sourcemap: false,
+    // A modern target avoids heavy legacy transforms
+    target: "esnext",
   },
-})
+});

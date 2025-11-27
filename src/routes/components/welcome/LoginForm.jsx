@@ -7,7 +7,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../../apis/firebase";
 
-import { Player } from "@lottiefiles/react-lottie-player";
 
 import successAnimation from "../../../assets/animations/success-animation.json";
 import environmentalRotation from "../../../assets/animations/environmental-friendly-animation.json";

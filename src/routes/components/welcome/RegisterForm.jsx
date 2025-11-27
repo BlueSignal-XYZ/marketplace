@@ -12,7 +12,6 @@ import {
   PROMPT_FORM,
 } from "../../../components/lib/styled";
 import { formVariant, loadingVariant } from "./motion_variants";
-import { Player } from "@lottiefiles/react-lottie-player";
 
 /** #BACKEND */
 import { createUserWithEmailAndPassword } from "firebase/auth";
