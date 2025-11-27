@@ -12,9 +12,8 @@ import styled from "styled-components";
 
 import { CloudHeader } from "./components/navigation/CloudHeader";
 import { MarketplaceHeader } from "./components/navigation/MarketplaceHeader";
-// NOTE: menus are intentionally NOT used right now to avoid auto-open issues
-// import { MarketplaceMenu } from "./components/navigation/MarketplaceMenu";
-// import { CloudMenu } from "./components/navigation/CloudMenu";
+import { MarketplaceMenu } from "./components/navigation/MarketplaceMenu";
+import { CloudMenu } from "./components/navigation/CloudMenu";
 
 import LinkBadgePortal from "./components/LinkBadgePortal.jsx";
 
@@ -66,20 +65,15 @@ function App() {
 
   let mode = "marketplace";
 
-  // Cloud domain → cloud mode
   if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
     mode = "cloud";
-  }
-  // Marketplace domain → marketplace mode
-  else if (
+  } else if (
     host === "waterquality.trading" ||
     host === "waterquality-trading.web.app" ||
     host.endsWith(".waterquality.trading")
   ) {
     mode = "marketplace";
-  }
-  // Local override (?app=cloud|marketplace)
-  else {
+  } else {
     const appParam = params.get("app");
     if (appParam === "cloud" || appParam === "marketplace") {
       mode = appParam;
@@ -100,14 +94,26 @@ function App() {
 function AppShell({ mode, user }) {
   const location = useLocation();
 
-  // Titles only (OG/meta handled by HTML files)
+  const [cloudMenuOpen, setCloudMenuOpen] = React.useState(false);
+  const [marketMenuOpen, setMarketMenuOpen] = React.useState(false);
+
+  const toggleCloudMenu = () => setCloudMenuOpen((prev) => !prev);
+  const toggleMarketMenu = () => setMarketMenuOpen((prev) => !prev);
+
+  // 🔹 Dynamic document title based on mode (Cloud vs Marketplace)
   React.useEffect(() => {
     if (mode === "cloud") {
       document.title = "BlueSignal Cloud Monitoring";
     } else {
-      document.title = "WaterQuality.Trading – Marketplace";
+      document.title = "WaterQuality.Trading";
     }
-  }, [mode, location.pathname]);
+  }, [mode]);
+
+  // Close menus on route change
+  React.useEffect(() => {
+    setCloudMenuOpen(false);
+    setMarketMenuOpen(false);
+  }, [location.pathname]);
 
   const isAuthLanding = location.pathname === "/";
 
@@ -115,15 +121,32 @@ function AppShell({ mode, user }) {
     <AppContainer>
       {/* Headers only on non-auth pages */}
       {!isAuthLanding && mode === "cloud" && (
-        <CloudHeader onMenuClick={() => { /* menu disabled for now */ }} />
+        <CloudHeader onMenuClick={toggleCloudMenu} />
       )}
 
       {!isAuthLanding && mode === "marketplace" && (
-        <MarketplaceHeader onMenuClick={() => { /* menu disabled for now */ }} />
+        <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
 
       {/* Global popups / settings */}
       <Popups />
+
+      {/* Menus */}
+      {mode === "marketplace" && (
+        <MarketplaceMenu
+          open={marketMenuOpen}
+          onClose={() => setMarketMenuOpen(false)}
+          user={user}
+        />
+      )}
+
+      {mode === "cloud" && (
+        <CloudMenu
+          open={cloudMenuOpen}
+          onClose={() => setCloudMenuOpen(false)}
+          user={user}
+        />
+      )}
 
       {/* Mode-specific routes */}
       {mode === "cloud" ? (

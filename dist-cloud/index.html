@@ -2,61 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Title / description driven by Vite env at build time -->
-    <title>BlueSignal Cloud Monitoring</title>
-
+    <!-- Static title/meta for the SPA entry; per-domain HTML is handled by dist/wqt + dist/cloud -->
+    <title>WaterQuality.Trading</title>
     <meta
       name="description"
-      content="BlueSignal Cloud Monitoring — unified water quality, soil, buoy, and algae device monitoring."
+      content="WaterQuality.Trading is a marketplace for verified nutrient and pollution removal credits."
     />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="BlueSignal Cloud Monitoring" />
-    <meta
-      property="og:description"
-      content="Monitor water quality sensors, buoys, soil probes, and algae emitters in real time."
-    />
-    <meta property="og:image" content="/BS-ss.png?v=2" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://cloud.bluesignal.xyz" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BlueSignal Cloud Monitoring" />
-    <meta
-      name="twitter:description"
-      content="Monitor water quality sensors, buoys, soil probes, and algae emitters in real time."
-    />
-    <meta name="twitter:image" content="/BS-ss.png?v=2" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/icon.png?v=3" />
-
-    <!-- Fonts / icons – same as before -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      integrity="sha384-k6Rqe9u88I+pHsvNHVlCdXK9stRWg5z4uZl5a5wbUvk+1F1v1C6Tb7j4yepXZ5K7"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script type="module" crossorigin src="/assets/main-012d78e7.js"></script>
+    <!-- Minimal head; og/twitter/meta are handled in the built HTML we deploy -->
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <script type="module" crossorigin src="/assets/main-8a20543d.js"></script>
     <link rel="stylesheet" href="/assets/main-15638ddf.css">
   </head>
   <body>
     <div id="root"></div>
+    <!-- Vite/React entry -->
     
   </body>
 </html>

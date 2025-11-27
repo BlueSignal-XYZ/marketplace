@@ -1,25 +1,14 @@
 {
   "projects": {
-    "default": "neptunechain-network"
+    "default": "waterquality-trading",
+    "neptunechain-network": "neptunechain-network"
   },
   "targets": {
-    "neptunechain-network": {
-      "hosting": {
-        "dashboard": [
-          "neptunechain-dash"
-        ]
-      }
-    },
     "waterquality-trading": {
       "hosting": {
-        "waterquality-trading": [
-          "waterquality-trading"
-        ],
-        "cloud-bluesignal": [
-          "cloud-bluesignal"
-        ]
+        "waterquality-trading": ["waterquality-trading"],
+        "cloud-bluesignal": ["cloud-bluesignal"]
       }
     }
-  },
-  "etags": {}
+  }
 }
