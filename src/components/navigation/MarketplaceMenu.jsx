@@ -2,8 +2,8 @@
 import React from "react";
 
 /**
- * Temporary stub to prevent any marketplace side menu from rendering.
- * Burger button remains non-functional for now.
+ * Temporary stub: marketplace side menu is disabled.
+ * Burger button does nothing for now.
  */
 export function MarketplaceMenu() {
   return null;

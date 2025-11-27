@@ -2,8 +2,8 @@
 import React from "react";
 
 /**
- * Temporary stub to prevent any cloud side menu from rendering.
- * Burger button remains non-functional for now.
+ * Temporary stub: cloud side menu is disabled.
+ * Burger button does nothing for now.
  */
 export function CloudMenu() {
   return null;

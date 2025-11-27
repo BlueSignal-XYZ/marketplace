@@ -12,8 +12,9 @@ import styled from "styled-components";
 
 import { CloudHeader } from "./components/navigation/CloudHeader";
 import { MarketplaceHeader } from "./components/navigation/MarketplaceHeader";
-import { MarketplaceMenu } from "./components/navigation/MarketplaceMenu";
-import { CloudMenu } from "./components/navigation/CloudMenu";
+// NOTE: menus are intentionally NOT used right now to avoid auto-open issues
+// import { MarketplaceMenu } from "./components/navigation/MarketplaceMenu";
+// import { CloudMenu } from "./components/navigation/CloudMenu";
 
 import LinkBadgePortal from "./components/LinkBadgePortal.jsx";
 
@@ -65,11 +66,11 @@ function App() {
 
   let mode = "marketplace";
 
-  // Cloud domain
+  // Cloud domain → cloud mode
   if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
     mode = "cloud";
   }
-  // Marketplace domain
+  // Marketplace domain → marketplace mode
   else if (
     host === "waterquality.trading" ||
     host === "waterquality-trading.web.app" ||
@@ -99,19 +100,7 @@ function App() {
 function AppShell({ mode, user }) {
   const location = useLocation();
 
-  const [cloudMenuOpen, setCloudMenuOpen] = React.useState(false);
-  const [marketMenuOpen, setMarketMenuOpen] = React.useState(false);
-
-  const toggleCloudMenu = () => setCloudMenuOpen((prev) => !prev);
-  const toggleMarketMenu = () => setMarketMenuOpen((prev) => !prev);
-
-  // Close any drawer on route change
-  React.useEffect(() => {
-    setCloudMenuOpen(false);
-    setMarketMenuOpen(false);
-  }, [location.pathname]);
-
-  // Titles only (OG/meta left to static HTML)
+  // Titles only (OG/meta handled by HTML files)
   React.useEffect(() => {
     if (mode === "cloud") {
       document.title = "BlueSignal Cloud Monitoring";
@@ -124,34 +113,17 @@ function AppShell({ mode, user }) {
 
   return (
     <AppContainer>
-      {/* Headers only when not on "/" */}
+      {/* Headers only on non-auth pages */}
       {!isAuthLanding && mode === "cloud" && (
-        <CloudHeader onMenuClick={toggleCloudMenu} />
+        <CloudHeader onMenuClick={() => { /* menu disabled for now */ }} />
       )}
 
       {!isAuthLanding && mode === "marketplace" && (
-        <MarketplaceHeader onMenuClick={toggleMarketMenu} />
+        <MarketplaceHeader onMenuClick={() => { /* menu disabled for now */ }} />
       )}
 
-      {/* Global popups / settings (no Sidebar here) */}
+      {/* Global popups / settings */}
       <Popups />
-
-      {/* Menus: ONLY render if open === true */}
-      {mode === "marketplace" && marketMenuOpen && (
-        <MarketplaceMenu
-          open={marketMenuOpen}
-          onClose={() => setMarketMenuOpen(false)}
-          user={user}
-        />
-      )}
-
-      {mode === "cloud" && cloudMenuOpen && (
-        <CloudMenu
-          open={cloudMenuOpen}
-          onClose={() => setCloudMenuOpen(false)}
-          user={user}
-        />
-      )}
 
       {/* Mode-specific routes */}
       {mode === "cloud" ? (
