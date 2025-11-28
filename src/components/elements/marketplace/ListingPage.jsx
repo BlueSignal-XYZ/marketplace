@@ -46,6 +46,12 @@ const ListingPageWrapper = styled.div`
   width: 100%;
   box-sizing: border-box;
   animation: ${fadeIn} 0.6s ease-out;
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 `;
 
 const BlurredBack = styled(motion.div)`
@@ -71,9 +77,10 @@ const MainContent = styled.div`
   border-radius: 4px;
   overflow: auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     width: 100%;
-    height: 100vh;
+    margin-right: 0;
+    overflow: visible;
   }
 `;
 

@@ -68,11 +68,16 @@ const MenuButton = styled.button`
 `;
 
 export function MarketplaceHeader({ onMenuClick }) {
+  const handleClick = () => {
+    console.log("[MarketplaceHeader] burger clicked");
+    if (onMenuClick) onMenuClick();
+  };
+
   return (
     <HeaderOuter>
       <HeaderInner>
         <LogoImg src={logoImg} alt={APP_NAME || "WaterQuality.Trading"} />
-        <MenuButton onClick={onMenuClick} aria-label="Open menu">
+        <MenuButton onClick={handleClick} aria-label="Open menu">
           <FontAwesomeIcon icon={faBars} />
         </MenuButton>
       </HeaderInner>

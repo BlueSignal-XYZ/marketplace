@@ -7,9 +7,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../../apis/firebase";
 
-
-import successAnimation from "../../../assets/animations/success-animation.json";
-import environmentalRotation from "../../../assets/animations/environmental-friendly-animation.json";
 import Notification from "../../../components/popups/NotificationPopup";
 import {
   LOADING_ANIMATION,
@@ -53,6 +50,31 @@ const StyledLoginForm = styled.div`
   }
 `;
 
+// Match App.jsx mode detection
+function detectModeFromLocation() {
+  const host = window.location.hostname;
+  const params = new URLSearchParams(window.location.search);
+
+  if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
+    return "cloud";
+  }
+
+  if (
+    host === "waterquality.trading" ||
+    host === "waterquality-trading.web.app" ||
+    host.endsWith(".waterquality.trading")
+  ) {
+    return "marketplace";
+  }
+
+  const appParam = params.get("app");
+  if (appParam === "cloud" || appParam === "marketplace") {
+    return appParam;
+  }
+
+  return "marketplace";
+}
+
 const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
   const { ACTIONS } = useAppContext();
   const navigate = useNavigate();
@@ -70,7 +92,6 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
     setError("");
 
     try {
-      // 1) Firebase auth
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -83,7 +104,7 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
         return;
       }
 
-      // 2) Build a fallback user object for the app (bypasses backend if it’s down)
+      // Fallback user object for app state
       const fallbackUser = {
         uid: firebaseUser.uid,
         username: firebaseUser.email
@@ -94,15 +115,27 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
         PIN: 123456,
       };
 
-      // 3) Push that into AppContext (this skips the backend UserAPI lookup)
-      if (updateUser) {
-        await updateUser(null, fallbackUser);
+      // 🔹 Safely call updateUser (no crash even if signature differs)
+      if (typeof updateUser === "function") {
+        try {
+          await updateUser(firebaseUser, fallbackUser);
+        } catch (err) {
+          console.error("updateUser failed:", err);
+          // Don't set error here; we still have a valid firebaseUser,
+          // and AppContext auth listener should pick it up on its own.
+        }
       }
 
-      // 4) Navigate to the main app surface
-      navigate("/marketplace");
-      if (onSuccess) onSuccess();
+      setIsSuccess(true);
 
+      const mode = detectModeFromLocation();
+      if (mode === "cloud") {
+        navigate("/dashboard/main", { replace: true });
+      } else {
+        navigate("/marketplace", { replace: true });
+      }
+
+      onSuccess && onSuccess();
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message || "Login failed. Please try again.");
@@ -115,14 +148,16 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
     if (isValidEmail(email)) {
       try {
         await sendPasswordResetEmail(auth, email);
-        logNotification("alert", `Password reset email sent to ${email}!`);
+        logNotification &&
+          logNotification("alert", `Password reset email sent to ${email}!`);
       } catch (error) {
         console.error("Reset password error:", error);
         setError(`Error sending password reset email: ${error.message}`);
-        logNotification("error", "Error sending password reset email");
+        logNotification &&
+          logNotification("error", "Error sending password reset email");
       }
     } else {
-      logNotification("error", "Please enter a valid email");
+      logNotification && logNotification("error", "Please enter a valid email");
     }
   };
 
@@ -138,12 +173,16 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
             exit="exit"
             variants={loadingVariant}
           >
-            <Player
-              autoplay
-              loop
-              src={environmentalRotation}
-              style={{ height: 100, width: 100 }}
-            />
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#4b5563",
+                textAlign: "center",
+              }}
+            >
+              Logging in...
+            </div>
           </LOADING_ANIMATION>
         ) : !isSuccess ? (
           <PROMPT_FORM
@@ -199,12 +238,16 @@ const LoginForm = ({ onSuccess, onSwitchToRegister, updateUser }) => {
             exit="exit"
             variants={loadingVariant}
           >
-            <Player
-              autoplay
-              loop
-              src={successAnimation}
-              style={{ height: 100, width: 100 }}
-            />
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#16a34a",
+                textAlign: "center",
+              }}
+            >
+              Logged in successfully.
+            </div>
           </LOADING_ANIMATION>
         )}
       </PROMPT_CARD>

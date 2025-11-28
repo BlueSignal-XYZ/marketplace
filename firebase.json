@@ -2,7 +2,7 @@
   "hosting": [
     {
       "target": "waterquality-trading",
-      "public": "dist-wqt",
+      "public": "dist",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -17,7 +17,7 @@
     },
     {
       "target": "cloud-bluesignal",
-      "public": "dist-cloud",
+      "public": "dist",
       "ignore": [
         "firebase.json",
         "**/.*",

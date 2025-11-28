@@ -26,18 +26,20 @@ const colors = {
 const TabContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   padding: 20px;
   background: ${colors.white};
   border-radius: 10px;
   margin-top: 20px;
-  width: 80%;
-  height: 60vh;
-  overflow: auto;
-  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    width: 95%;
+    padding: 16px 12px 20px;
+    border-radius: 12px;
   }
 `;
 
@@ -47,6 +49,7 @@ const StyledTabList = styled(TabList)`
   display: flex;
   justify-content: center;
   gap: 8px;
+  flex-wrap: wrap;
 `;
 
 const StyledTab = styled(Tab)`
@@ -92,7 +95,7 @@ const StyledTabPanel = styled(TabPanel)`
   &.react-tabs__tab-panel--selected {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     transition: all 0.3s ease;
   }
 `;
@@ -148,18 +151,14 @@ const NFT = styled(motion.div)`
     width: 100%;
   }
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  @media (max-width: 480px) {
+    align-items: flex-start;   /* don’t center everything on tiny screens */
+    padding: 16px 20px;        /* slightly tighter padding */
   }
 
-  p {
-    margin: 2px;
-
-    span {
-      color: ${colors.deepBlue};
-      font-weight: bold;
-    }
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 `;
 
@@ -167,6 +166,12 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const Spinner = styled.div`

@@ -12,6 +12,10 @@ const Page = styled.main`
   justify-content: center;
 
   background: ${({ theme }) => theme.colors?.bg || "#f5f5f5"};
+
+  @media (max-width: 600px) {
+    padding: 16px 8px 32px;
+  }
 `;
 
 const Shell = styled.div`
@@ -75,9 +79,7 @@ const ViewChip = styled.button`
   cursor: default;
 
   background: ${({ active, theme }) =>
-    active
-      ? theme.colors?.primary50 || "#e0f2ff"
-      : "#ffffff"};
+    active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
   color: ${({ active, theme }) =>
     active
       ? theme.colors?.primary700 || "#0369a1"

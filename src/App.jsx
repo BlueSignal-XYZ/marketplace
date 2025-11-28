@@ -56,16 +56,32 @@ import {
 import { useAppContext } from "./context/AppContext";
 import DashboardMain from "./components/cloud/DashboardMain";
 
+/* -------------------------------------------------------------------------- */
+/*                              DEBUG VERSION TAG                              */
+/* -------------------------------------------------------------------------- */
+const BUILD_VERSION = "2025-11-28-02";
+console.log("🔥 BUILD VERSION:", BUILD_VERSION);
+
+/* -------------------------------------------------------------------------- */
+/*                                   APP ROOT                                 */
+/* -------------------------------------------------------------------------- */
+
 function App() {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
 
   const host = window.location.hostname;
   const params = new URLSearchParams(window.location.search);
-
   let mode = "marketplace";
 
-  if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
+  // -----------------------------------------------------------------------
+  // MODE DETECTION (Marketplace vs Cloud)
+  // -----------------------------------------------------------------------
+  if (
+    host === "cloud.bluesignal.xyz" ||
+    host.endsWith(".cloud.bluesignal.xyz") ||
+    host === "cloud-bluesignal.web.app"
+  ) {
     mode = "cloud";
   } else if (
     host === "waterquality.trading" ||
@@ -80,6 +96,8 @@ function App() {
     }
   }
 
+  console.log("🌐 MODE:", mode, "| USER:", user?.uid || "none");
+
   return (
     <Router>
       <AppShell mode={mode} user={user} />
@@ -88,7 +106,7 @@ function App() {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                           INNER APP SHELL (Router)                          */
+/*                                   APP SHELL                                */
 /* -------------------------------------------------------------------------- */
 
 function AppShell({ mode, user }) {
@@ -97,16 +115,22 @@ function AppShell({ mode, user }) {
   const [cloudMenuOpen, setCloudMenuOpen] = React.useState(false);
   const [marketMenuOpen, setMarketMenuOpen] = React.useState(false);
 
-  const toggleCloudMenu = () => setCloudMenuOpen((prev) => !prev);
-  const toggleMarketMenu = () => setMarketMenuOpen((prev) => !prev);
+  const toggleCloudMenu = () => {
+    console.log("📡 CLOUD MENU TOGGLE:", !cloudMenuOpen);
+    setCloudMenuOpen((p) => !p);
+  };
 
-  // 🔹 Dynamic document title based on mode (Cloud vs Marketplace)
+  const toggleMarketMenu = () => {
+    console.log("🛒 MARKET MENU TOGGLE:", !marketMenuOpen);
+    setMarketMenuOpen((p) => !p);
+  };
+
+  // Apply document title
   React.useEffect(() => {
-    if (mode === "cloud") {
-      document.title = "BlueSignal Cloud Monitoring";
-    } else {
-      document.title = "WaterQuality.Trading";
-    }
+    document.title =
+      mode === "cloud"
+        ? "BlueSignal Cloud Monitoring"
+        : "WaterQuality.Trading";
   }, [mode]);
 
   // Close menus on route change
@@ -119,7 +143,26 @@ function AppShell({ mode, user }) {
 
   return (
     <AppContainer>
-      {/* Headers only on non-auth pages */}
+
+      {/* ------------------------ DEBUG VERSION LABEL ------------------------ */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: 4,
+          right: 8,
+          fontSize: "10px",
+          opacity: 0.5,
+          zIndex: 99999,
+          background: "#fff",
+          padding: "2px 6px",
+          borderRadius: 4,
+          border: "1px solid #ddd",
+        }}
+      >
+        v{BUILD_VERSION}
+      </div>
+
+      {/* ------------------------------ HEADERS ------------------------------ */}
       {!isAuthLanding && mode === "cloud" && (
         <CloudHeader onMenuClick={toggleCloudMenu} />
       )}
@@ -128,10 +171,10 @@ function AppShell({ mode, user }) {
         <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
 
-      {/* Global popups / settings */}
+      {/* ------------------------------ POPUPS ------------------------------- */}
       <Popups />
 
-      {/* Menus */}
+      {/* ------------------------------- MENUS ------------------------------- */}
       {mode === "marketplace" && (
         <MarketplaceMenu
           open={marketMenuOpen}
@@ -148,20 +191,21 @@ function AppShell({ mode, user }) {
         />
       )}
 
-      {/* Mode-specific routes */}
+      {/* ------------------------------ ROUTES ------------------------------ */}
       {mode === "cloud" ? (
         <CloudRoutes user={user} />
       ) : (
         <MarketplaceRoutes user={user} />
       )}
 
+      {/* -------------------------- BOTTOM BADGE ---------------------------- */}
       {user?.uid && <LinkBadgePortal />}
     </AppContainer>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/*                          LANDING REDIRECT HANDLERS                          */
+/*                            LANDING REDIRECTS                                */
 /* -------------------------------------------------------------------------- */
 
 const CloudLanding = ({ user }) => {
@@ -171,7 +215,7 @@ const CloudLanding = ({ user }) => {
     if (user?.uid) {
       navigate("/dashboard/main", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user]);
 
   return <Welcome />;
 };
@@ -183,7 +227,7 @@ const MarketplaceLanding = ({ user }) => {
     if (user?.uid) {
       navigate("/marketplace", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user]);
 
   return <Welcome />;
 };
@@ -200,17 +244,8 @@ const CloudRoutes = ({ user }) => (
       <>
         <Route path="/dashboard/:dashID" element={<Home />} />
         <Route path="/dashboard/main" element={<DashboardMain />} />
-
-        <Route
-          path="/features/nutrient-calculator"
-          element={<NutrientCalculator />}
-        />
-
-        <Route
-          path="/features/verification"
-          element={<VerificationUI />}
-        />
-
+        <Route path="/features/nutrient-calculator" element={<NutrientCalculator />} />
+        <Route path="/features/verification" element={<VerificationUI />} />
         <Route path="/features/stream" element={<Livepeer />} />
         <Route path="/features/upload-media" element={<Livepeer />} />
         <Route path="/features/:serviceID" element={<Livepeer />} />
@@ -233,34 +268,24 @@ const MarketplaceRoutes = ({ user }) => (
 
     {user?.uid && (
       <>
-        <Route
-          path="/marketplace/seller-dashboard"
-          element={<SellerDashboard />}
-        />
-        <Route
-          path="/dashboard/financial"
-          element={<FinancialDashboard />}
-        />
+        <Route path="/marketplace/seller-dashboard" element={<SellerDashboard />} />
+        <Route path="/dashboard/financial" element={<FinancialDashboard />} />
       </>
     )}
 
     <Route path="/marketplace" element={<Marketplace />} />
-    <Route
-      path="/marketplace/listing/:id"
-      element={<ListingPage />}
-    />
+    <Route path="/marketplace/listing/:id" element={<ListingPage />} />
     <Route path="/recent-removals" element={<RecentRemoval />} />
     <Route path="/certificate/:id" element={<CertificatePage />} />
     <Route path="/registry" element={<Registry />} />
     <Route path="/map" element={<Map />} />
     <Route path="/presale" element={<Presale />} />
-
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
 /* -------------------------------------------------------------------------- */
-/*                              GLOBAL POPUPS                                 */
+/*                                GLOBAL POPUPS                               */
 /* -------------------------------------------------------------------------- */
 
 const Popups = () => (

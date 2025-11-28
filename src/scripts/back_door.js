@@ -1,7 +1,7 @@
 import axios from "axios";
 import configs from "../../configs";
 
-/*************************ACOUNT_ENDPOINTS************************************* */
+/*************************ACCOUNT_ENDPOINTS************************************* */
 const createAccount = async (userdata) =>
   (await axios.post(`${configs.server_url}/account/create`, userdata))?.data;
 
@@ -28,6 +28,7 @@ const verifyAccountIsRegistered = async (accountID) =>
       accountID,
     })
   )?.data;
+
 const verifyAccountIsNotBlacklisted = async (accountID) =>
   (
     await axios.post(`${configs.server_url}/account/isNotBlacklisted`, {
@@ -57,12 +58,14 @@ const getUserFromUID = async (uid) =>
       userUID: uid,
     })
   )?.data;
+
 const getUserFromUsername = async (username) =>
   (
     await axios.post(`${configs.server_url}/db/user/get/from/username`, {
       username,
     })
   )?.data;
+
 const getUIDFromUsername = async (username) =>
   (
     await axios.post(`${configs.server_url}/db/user/get/uid/from/username`, {
@@ -77,6 +80,7 @@ const getUserMedia = async (userUID) =>
       userUID,
     })
   )?.data;
+
 const getUserStreams = async (userUID) =>
   (
     await axios.post(`${configs.server_url}/db/user/get/streams`, {
@@ -98,6 +102,7 @@ const getUserAssetDisputes = async (userUID) =>
       userUID,
     })
   )?.data;
+
 const getUserAssetApprovals = async (userUID) =>
   (
     await axios.post(`${configs.server_url}/db/user/get/asset/approvals`, {
@@ -383,7 +388,7 @@ const MapsAPI = {
   getAPI: getMapsAPI,
 };
 
-/*************************MORALIS_ENDPOINTS************************************* */
+/*************************MORALIS/ALCHEMY_ENDPOINTS************************************* */
 
 const getWalletNFTs = async (address) => {
   try {
@@ -842,24 +847,43 @@ const DeviceAPI = {
   getDeviceData,
 };
 
-//MetricsAPI
+/*************************METRICS_API (STUB)************************************* */
 
 const allMetrics = ["credit_balance", "credit_price", "equity", "tx_pending"];
 
-const getMetric = async (metric, uid) => "10";
-// String(
-//   (await axios.post(`${configs.server_url}/metrics`, { metric, uid }))
-//     ?.data || 10
-// );
+const getMetric = async (metric, uid) => {
+  // original behavior was just returning "10"
+  return "10";
+  // If you want to wire this later:
+  // return String(
+  //   (await axios.post(`${configs.server_url}/metrics`, { metric, uid }))
+  //     ?.data || 10
+  // );
+};
 
 const MetricsAPI = {
   allMetrics,
   getMetric,
 };
 
-/**************MARKETPLACE*ROUTES *********************** */
+/*************************MARKETPLACE_ENDPOINTS************************************* */
+
+// Optional mock mode flag
+const USE_MARKETPLACE_MOCKS =
+  process.env.REACT_APP_USE_MARKETPLACE_MOCKS === "true";
 
 const handleMarketplacePost = async (endpoint, body) => {
+  if (USE_MARKETPLACE_MOCKS) {
+    console.warn(
+      `[MarketplaceAPI] Mock mode enabled, skipping ${endpoint} request`
+    );
+    // Basic shape so UI doesn't explode; you can extend this later
+    if (endpoint === "events/listings") {
+      return { nfts: [] };
+    }
+    return {};
+  }
+
   try {
     const response = await axios.post(
       `${configs.server_url}/marketplace/${endpoint}`,
@@ -867,8 +891,20 @@ const handleMarketplacePost = async (endpoint, body) => {
     );
     return response?.data;
   } catch (error) {
-    console.error("Error fetching device data:", error);
-    throw error;
+    const status = error.response?.status;
+    const serverMessage =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      null;
+
+    const message =
+      serverMessage ||
+      (status
+        ? `Marketplace temporarily unavailable (HTTP ${status})`
+        : "Marketplace temporarily unavailable (network error)");
+
+    console.error(`[MarketplaceAPI] Error calling ${endpoint}:`, error);
+    throw new Error(message);
   }
 };
 
