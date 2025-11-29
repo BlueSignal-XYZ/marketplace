@@ -18,7 +18,9 @@ import marketplaceLogo from "../assets/logo.png";
 // --------------------- logo by hostname (used by WelcomeHome) -------------
 const host = window.location.hostname;
 const isCloudHost =
-  host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz");
+  host === "cloud.bluesignal.xyz" ||
+  host.endsWith(".cloud.bluesignal.xyz") ||
+  host === "cloud-bluesignal.web.app";
 
 export const logoImage = isCloudHost ? cloudLogo : marketplaceLogo;
 
@@ -85,7 +87,8 @@ const Welcome = () => {
     const host = window.location.hostname;
     const mode =
       host === "cloud.bluesignal.xyz" ||
-      host.endsWith(".cloud.bluesignal.xyz")
+      host.endsWith(".cloud.bluesignal.xyz") ||
+      host === "cloud-bluesignal.web.app"
         ? "cloud"
         : "marketplace";
 
@@ -97,7 +100,8 @@ const Welcome = () => {
     const host = window.location.hostname;
     const mode =
       host === "cloud.bluesignal.xyz" ||
-      host.endsWith(".cloud.bluesignal.xyz")
+      host.endsWith(".cloud.bluesignal.xyz") ||
+      host === "cloud-bluesignal.web.app"
         ? "cloud"
         : "marketplace";
 
