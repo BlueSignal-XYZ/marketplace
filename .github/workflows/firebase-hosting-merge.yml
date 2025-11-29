@@ -14,7 +14,9 @@ jobs:
       checks: write   # Allows the Action to create and update check runs
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci --force && npm run build
+      - run: npm ci --force
+      - run: npm run test:ci
+      - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
