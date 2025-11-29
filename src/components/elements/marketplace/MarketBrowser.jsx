@@ -7,16 +7,18 @@ import { MarketplaceAPI } from "../../../scripts/back_door";
 
 export const NFTGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
-  padding-bottom: 24px;
+  padding: 0 20px 32px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
     grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: 0 16px 24px;
   }
 `;
 

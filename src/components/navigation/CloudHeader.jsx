@@ -15,15 +15,15 @@ const HeaderOuter = styled.header`
 const HeaderInner = styled.div`
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
 
-  height: 64px;
+  height: 68px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   @media (min-width: 1024px) {
-    padding: 0;
+    padding: 0 24px;
   }
 `;
 
@@ -40,8 +40,9 @@ const LogoImg = styled.img`
 `;
 
 const MenuButton = styled.button`
-  height: 100%;
-  width: 48px;
+  height: 44px;
+  width: 44px;
+  border-radius: 8px;
 
   background: none;
   border: none;
@@ -53,11 +54,13 @@ const MenuButton = styled.button`
   justify-content: center;
 
   color: ${({ theme }) => theme.colors.ui900};
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1;
+  transition: all 0.15s ease-out;
 
   &:hover {
     color: ${({ theme }) => theme.colors.primary500};
+    background: ${({ theme }) => theme.colors.ui50};
   }
 `;
 

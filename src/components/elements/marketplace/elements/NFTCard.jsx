@@ -6,21 +6,28 @@ import placeholderIMG from "../../../../assets/icon.png";
 import { ButtonPrimary } from "../../../shared/button/Button";
 
 const Card = styled.div`
-  background-color: white;
-  border: none;
-  padding: 20px;
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-  transition: transform 0.3s, box-shadow 0.3s;
-  max-height: 400px;
-  overflow: auto;
-  box-sizing: border-box;
-  background: ${({ theme }) => theme.colors.ui50};
+  background: white;
   border: 1px solid ${({ theme }) => theme.colors.ui200};
+  border-radius: ${({ theme }) => theme.borderRadius.default};
+  padding: 18px;
+  box-sizing: border-box;
+  transition: all 0.15s ease-out;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.ui300};
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+  }
 
   .upper-section {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
   }
 
   @media (max-width: 768px) {
@@ -46,27 +53,32 @@ export const NFTImage = styled.img`
 `;
 
 const NFTInfo = styled.div`
-  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 const Title = styled.h3`
-  font-size: 1rem;
-  margin: 0;
-  color: ${({ theme }) => theme.colors.ui800};
-  font-weight: 500;
+  font-size: 15px;
+  margin: 0 0 2px 0;
+  color: ${({ theme }) => theme.colors.ui900};
+  font-weight: 600;
+  line-height: 1.4;
 `;
 
 const Seller = styled.p`
   color: ${({ theme }) => theme.colors.ui600};
-  font-size: 14px;
-  margin: 5px 0;
-  font-weight: 500;
+  font-size: 13px;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
 `;
 
 const Price = styled.p`
-  color: ${({ theme }) => theme.colors.primary500};
-  font-size: 1rem;
-  font-weight: 600;
+  color: ${({ theme }) => theme.colors.primary600};
+  font-size: 16px;
+  font-weight: 700;
+  margin: 2px 0 0 0;
 `;
 
 const NFTCard = ({ nft, navigate }) => (

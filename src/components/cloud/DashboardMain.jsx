@@ -5,16 +5,16 @@ import styled from "styled-components";
 const Page = styled.main`
   width: 100%;
   min-height: calc(100vh - 72px); /* subtract header */
-  padding: 24px 16px 40px;
+  padding: 32px 20px 48px;
   box-sizing: border-box;
 
   display: flex;
   justify-content: center;
 
-  background: ${({ theme }) => theme.colors?.bg || "#f5f5f5"};
+  background: ${({ theme }) => theme.colors?.bg || "#fafafa"};
 
   @media (max-width: 600px) {
-    padding: 16px 8px 32px;
+    padding: 20px 16px 40px;
   }
 `;
 
@@ -24,17 +24,17 @@ const Shell = styled.div`
   margin: 0 auto;
 
   background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
-  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+  padding: 32px;
   box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 
   @media (max-width: 768px) {
-    padding: 20px 16px 24px;
+    padding: 24px 20px 28px;
     border-radius: 16px;
   }
 `;
@@ -47,10 +47,11 @@ const HeaderBlock = styled.div`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1.3;
   font-weight: 700;
   color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  letter-spacing: -0.02em;
 `;
 
 const Subtitle = styled.p`
@@ -146,11 +147,17 @@ const DevicesGrid = styled.div`
 const DeviceCard = styled.div`
   border-radius: 16px;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  padding: 14px 16px;
+  padding: 16px 18px;
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  }
 `;
 
 const DeviceHeader = styled.div`

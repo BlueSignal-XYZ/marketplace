@@ -66,7 +66,9 @@ import { getDefaultDashboardRoute } from "./utils/roleRouting";
 /*                              DEBUG VERSION TAG                              */
 /* -------------------------------------------------------------------------- */
 
-const BUILD_VERSION = "2025-11-28-03";
+const BUILD_VERSION =
+  import.meta.env.VITE_BUILD_VERSION ||
+  new Date().toISOString().slice(0, 10);
 console.log("🔥 BUILD VERSION:", BUILD_VERSION);
 
 /* -------------------------------------------------------------------------- */
@@ -152,18 +154,24 @@ function AppShell({ mode, user }) {
       <div
         style={{
           position: "fixed",
-          bottom: 4,
-          right: 8,
-          fontSize: "10px",
-          opacity: 0.5,
+          bottom: 8,
+          right: 12,
+          fontSize: "11px",
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif",
+          fontWeight: 500,
+          opacity: 0.6,
           zIndex: 99999,
-          background: "#fff",
-          padding: "2px 6px",
-          borderRadius: 4,
-          border: "1px solid #ddd",
+          background: "#ffffff",
+          color: "#64748b",
+          padding: "4px 10px",
+          borderRadius: "999px",
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 2px 8px rgba(15, 23, 42, 0.08)",
+          pointerEvents: "none",
+          userSelect: "none",
         }}
       >
-        v{BUILD_VERSION}
+        Last updated: {BUILD_VERSION}
       </div>
 
       {/* HEADERS */}
