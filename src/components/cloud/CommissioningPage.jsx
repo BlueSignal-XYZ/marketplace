@@ -201,9 +201,14 @@ export default function CommissioningPage() {
     setFilteredCommissioning(filtered);
   };
 
-  const handleOpenInGateway = (eventId) => {
-    // TODO: Implement Gateway deep linking
-    alert(`Opening commissioning event ${eventId} in Gateway app`);
+  const handleOpenInGateway = (eventId, deviceId) => {
+    // TODO: Implement PGP web-commission deep linking
+    //       This would link to the gateway's web-commission interface (http://gateway-ip:8080)
+    //       if the gateway's IP/URL is known and accessible
+    alert(
+      `Opening commissioning for ${deviceId} in PGP web-commission interface.\n\n` +
+        `In production, this would link to http://<gateway-ip>:8080/ if known.`
+    );
   };
 
   const getStatusLabel = (status) => {
@@ -230,7 +235,7 @@ export default function CommissioningPage() {
   return (
     <CloudPageLayout
       title="Commissioning"
-      subtitle="Track device commissioning from Gateway app"
+      subtitle="Track device commissioning from Pollution Gateway Pro (PGP)"
     >
       <Controls>
         <Filters>
@@ -274,7 +279,7 @@ export default function CommissioningPage() {
             <p>
               {statusFilter !== "all"
                 ? "Try adjusting your filters."
-                : "No devices are currently being commissioned. Installers will see new jobs here as they're created in the Gateway app."}
+                : "No devices are currently being commissioned. Commissioning events from Pollution Gateway Pro (via python -m cli.pgctl commission or web-commission) will appear here."}
             </p>
           </EmptyState>
         ) : (
@@ -317,8 +322,12 @@ export default function CommissioningPage() {
                     </div>
                   </td>
                   <td>
-                    <ActionLink onClick={() => handleOpenInGateway(event.id)}>
-                      Open in Gateway →
+                    <ActionLink
+                      onClick={() =>
+                        handleOpenInGateway(event.id, event.deviceId)
+                      }
+                    >
+                      Open in PGP →
                     </ActionLink>
                   </td>
                 </tr>

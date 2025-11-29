@@ -262,6 +262,20 @@ const Skeleton = styled.div`
   }
 `;
 
+// Helper function to format PGP sensor field names for display
+const formatSensorLabel = (fieldName) => {
+  const labels = {
+    temp_c: "Temperature (°C)",
+    ph: "pH Level",
+    ntu: "Turbidity (NTU)",
+    tds_ppm: "TDS (ppm)",
+    npk_n: "Nitrogen (ppm)",
+    npk_p: "Phosphorus (ppm)",
+    npk_k: "Potassium (ppm)",
+  };
+  return labels[fieldName] || fieldName;
+};
+
 export default function DeviceDetailPage() {
   const { deviceId } = useParams();
   const [device, setDevice] = useState(null);
@@ -375,9 +389,16 @@ export default function DeviceDetailPage() {
               </div>
             </MetaRow>
           </HeaderInfo>
-          <ActionButton>
-            View in Gateway →
-          </ActionButton>
+          {device.gatewayWebUrl && (
+            <ActionButton
+              as="a"
+              href={device.gatewayWebUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open PGP Web UI →
+            </ActionButton>
+          )}
         </DeviceHeader>
 
         <Tabs>
@@ -467,21 +488,21 @@ export default function DeviceDetailPage() {
               {device.latestReadings && (
                 <>
                   <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
-                    Latest Readings
+                    Latest Sensor Readings (from PGP)
                   </h3>
                   <InfoGrid>
-                    {Object.entries(device.latestReadings).map(
-                      ([key, value]) => (
+                    {Object.entries(device.latestReadings)
+                      .filter(([key, value]) => value !== null) // Filter out null values (sensor not applicable)
+                      .map(([key, value]) => (
                         <InfoCard key={key}>
-                          <div className="label">{key}</div>
+                          <div className="label">{formatSensorLabel(key)}</div>
                           <div className="value">
                             {typeof value === "number"
                               ? value.toFixed(2)
                               : value}
                           </div>
                         </InfoCard>
-                      )
-                    )}
+                      ))}
                   </InfoGrid>
                 </>
               )}
@@ -509,9 +530,9 @@ export default function DeviceDetailPage() {
           {activeTab === "livedata" && (
             <>
               <ChartPlaceholder>
-                Time-series charts will be rendered here
+                Time-series charts will be rendered here (PGP sensor data)
                 <br />
-                (Chart.js integration coming soon)
+                (Chart.js integration coming soon - will show temp_c, ph, ntu, tds_ppm, npk_*)
               </ChartPlaceholder>
               <div style={{ marginBottom: "16px" }}>
                 <label style={{ fontSize: "13px", marginRight: "12px" }}>
@@ -530,16 +551,23 @@ export default function DeviceDetailPage() {
                 </select>
               </div>
               {device.latestReadings && (
-                <InfoGrid>
-                  {Object.entries(device.latestReadings).map(([key, value]) => (
-                    <InfoCard key={key}>
-                      <div className="label">{key}</div>
-                      <div className="value">
-                        {typeof value === "number" ? value.toFixed(2) : value}
-                      </div>
-                    </InfoCard>
-                  ))}
-                </InfoGrid>
+                <>
+                  <h3 style={{ marginBottom: "16px" }}>
+                    Current Readings
+                  </h3>
+                  <InfoGrid>
+                    {Object.entries(device.latestReadings)
+                      .filter(([key, value]) => value !== null)
+                      .map(([key, value]) => (
+                        <InfoCard key={key}>
+                          <div className="label">{formatSensorLabel(key)}</div>
+                          <div className="value">
+                            {typeof value === "number" ? value.toFixed(2) : value}
+                          </div>
+                        </InfoCard>
+                      ))}
+                  </InfoGrid>
+                </>
               )}
             </>
           )}
@@ -587,12 +615,21 @@ export default function DeviceDetailPage() {
                 }}
               >
                 <strong>Note:</strong> Device configuration can only be edited
-                through the Gateway commissioning app.
+                through Pollution Gateway Pro web-commission interface. Cloud is
+                read-only.
               </div>
 
-              <ActionButton style={{ marginTop: "16px" }}>
-                Edit in Gateway →
-              </ActionButton>
+              {device.gatewayWebUrl && (
+                <ActionButton
+                  as="a"
+                  href={device.gatewayWebUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ marginTop: "16px" }}
+                >
+                  Open PGP Web UI →
+                </ActionButton>
+              )}
             </>
           )}
 

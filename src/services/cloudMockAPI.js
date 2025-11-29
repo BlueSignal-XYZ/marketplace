@@ -1,6 +1,25 @@
 // /src/services/cloudMockAPI.js
 // Mock API service for Cloud mode - provides realistic mock data
-// TODO: Replace with real backend API calls
+//
+// IMPORTANT: This mock API is designed to be compatible with Pollution Gateway Pro (PGP).
+//
+// Data Flow Architecture:
+//   Pollution Gateway Pro → HTTPS (run-uplink) → Central API (API_URL) → Cloud Frontend
+//
+// TODO: Replace all mock APIs below with real backend API calls that aggregate data
+//       from Pollution Gateway Pro uploads (via gateway's API_URL ingest endpoint).
+//       Do NOT call gateway SQLite directly. Do NOT require changes to PGP repo.
+//
+// PGP Sensor Field Names (must match exactly):
+//   - temp_c: Temperature in Celsius
+//   - ph: pH level
+//   - ntu: Turbidity (Nephelometric Turbidity Units)
+//   - tds_ppm: Total Dissolved Solids (parts per million)
+//   - npk_n: Nitrogen (ppm)
+//   - npk_p: Phosphorus (ppm)
+//   - npk_k: Potassium (ppm)
+//
+// PGP Device ID Convention: pgw-XXXX (e.g., pgw-0001, pgw-0002)
 
 /* -------------------------------------------------------------------------- */
 /*                                 MOCK DATA                                  */
@@ -41,7 +60,7 @@ const MOCK_SITES = [
 
 const MOCK_DEVICES = [
   {
-    id: "device-1",
+    id: "pgw-0001",
     name: "Lakefront Buoy #1",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
@@ -49,21 +68,26 @@ const MOCK_DEVICES = [
     deviceType: "Water Quality Buoy",
     status: "online",
     lastContact: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
-    gatewayId: "gateway-A1",
-    gatewayName: "North Shore Gateway",
+    gatewayId: "pgw-0001", // PGP Device ID (gateway = device in PGP)
+    gatewayName: "Lakefront Buoy #1",
+    gatewayWebUrl: "http://10.0.1.101:8080", // Optional: gateway web-commission URL
     batteryLevel: 87,
     signalStrength: 95,
     firmwareVersion: "v2.4.1",
     coordinates: { lat: 39.5, lng: -79.3 },
     latestReadings: {
-      temp: 18.4,
+      // PGP sensor field names (must match exactly)
+      temp_c: 18.4,
       ph: 7.2,
-      dissolvedOxygen: 8.1,
-      turbidity: 2.3,
+      ntu: 2.3,
+      tds_ppm: 245,
+      npk_n: null, // Not applicable for water quality buoy
+      npk_p: null,
+      npk_k: null,
     },
   },
   {
-    id: "device-2",
+    id: "pgw-0002",
     name: "East Field Soil Probe",
     siteId: "site-2",
     siteName: "Johnson Farm",
@@ -71,21 +95,25 @@ const MOCK_DEVICES = [
     deviceType: "Soil NPK Probe",
     status: "warning",
     lastContact: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
-    gatewayId: "gateway-B2",
-    gatewayName: "East Field Gateway",
+    gatewayId: "pgw-0002",
+    gatewayName: "East Field Soil Probe",
+    gatewayWebUrl: "http://10.0.2.201:8080",
     batteryLevel: 23,
     signalStrength: 72,
     firmwareVersion: "v2.3.8",
     coordinates: { lat: 41.8, lng: -93.1 },
     latestReadings: {
-      moisture: 42,
-      nitrogen: 18,
-      phosphorus: 7,
-      potassium: 12,
+      temp_c: 22.1,
+      ph: 6.8,
+      ntu: null, // Not applicable for soil probe
+      tds_ppm: 1250,
+      npk_n: 18,
+      npk_p: 7,
+      npk_k: 12,
     },
   },
   {
-    id: "device-3",
+    id: "pgw-0003",
     name: "Algae Emitter — Dock",
     siteId: "site-3",
     siteName: "Harbor Marina",
@@ -93,8 +121,9 @@ const MOCK_DEVICES = [
     deviceType: "Ultrasonic Algae Control",
     status: "offline",
     lastContact: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-    gatewayId: "gateway-C3",
-    gatewayName: "Marina Gateway",
+    gatewayId: "pgw-0003",
+    gatewayName: "Algae Emitter — Dock",
+    gatewayWebUrl: null, // Offline, no web URL available
     batteryLevel: 0,
     signalStrength: 0,
     firmwareVersion: "v2.2.5",
@@ -102,7 +131,7 @@ const MOCK_DEVICES = [
     latestReadings: null,
   },
   {
-    id: "device-4",
+    id: "pgw-0004",
     name: "Lakefront Buoy #2",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
@@ -110,21 +139,25 @@ const MOCK_DEVICES = [
     deviceType: "Water Quality Buoy",
     status: "online",
     lastContact: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-    gatewayId: "gateway-A1",
-    gatewayName: "North Shore Gateway",
+    gatewayId: "pgw-0004",
+    gatewayName: "Lakefront Buoy #2",
+    gatewayWebUrl: "http://10.0.1.102:8080",
     batteryLevel: 92,
     signalStrength: 88,
     firmwareVersion: "v2.4.1",
     coordinates: { lat: 39.51, lng: -79.31 },
     latestReadings: {
-      temp: 18.6,
+      temp_c: 18.6,
       ph: 7.3,
-      dissolvedOxygen: 8.0,
-      turbidity: 2.1,
+      ntu: 2.1,
+      tds_ppm: 238,
+      npk_n: null,
+      npk_p: null,
+      npk_k: null,
     },
   },
   {
-    id: "device-5",
+    id: "pgw-0005",
     name: "West Field Soil Probe",
     siteId: "site-2",
     siteName: "Johnson Farm",
@@ -132,17 +165,21 @@ const MOCK_DEVICES = [
     deviceType: "Soil NPK Probe",
     status: "online",
     lastContact: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
-    gatewayId: "gateway-B3",
-    gatewayName: "West Field Gateway",
+    gatewayId: "pgw-0005",
+    gatewayName: "West Field Soil Probe",
+    gatewayWebUrl: "http://10.0.2.202:8080",
     batteryLevel: 78,
     signalStrength: 81,
     firmwareVersion: "v2.4.0",
     coordinates: { lat: 41.79, lng: -93.11 },
     latestReadings: {
-      moisture: 38,
-      nitrogen: 22,
-      phosphorus: 9,
-      potassium: 15,
+      temp_c: 21.8,
+      ph: 6.9,
+      ntu: null,
+      tds_ppm: 1180,
+      npk_n: 22,
+      npk_p: 9,
+      npk_k: 15,
     },
   },
 ];
@@ -150,49 +187,49 @@ const MOCK_DEVICES = [
 const MOCK_COMMISSIONING = [
   {
     id: "comm-1",
-    deviceId: "device-6",
+    deviceId: "pgw-0006",
     deviceName: "South Lake Buoy #3",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
     installer: "John Smith",
     status: "completed",
-    source: "Gateway",
+    source: "PGP CLI/Web", // From Pollution Gateway Pro
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     lastUpdated: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: "comm-2",
-    deviceId: "device-7",
+    deviceId: "pgw-0007",
     deviceName: "Center Field Probe Array",
     siteId: "site-2",
     siteName: "Johnson Farm",
     installer: "Sarah Johnson",
     status: "in_progress",
-    source: "Gateway",
+    source: "PGP CLI/Web",
     createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
     lastUpdated: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
   },
   {
     id: "comm-3",
-    deviceId: "device-8",
+    deviceId: "pgw-0008",
     deviceName: "Marina Algae Controller",
     siteId: "site-3",
     siteName: "Harbor Marina",
     installer: "Mike Chen",
     status: "pending",
-    source: "Gateway",
+    source: "PGP CLI/Web",
     createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
     lastUpdated: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
   },
   {
     id: "comm-4",
-    deviceId: "device-9",
+    deviceId: "pgw-0009",
     deviceName: "River Monitoring Station",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
     installer: "John Smith",
     status: "failed",
-    source: "Gateway",
+    source: "PGP CLI/Web",
     createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
     lastUpdated: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
   },
@@ -204,7 +241,7 @@ const MOCK_ALERTS = [
     severity: "critical",
     siteId: "site-3",
     siteName: "Harbor Marina",
-    deviceId: "device-3",
+    deviceId: "pgw-0003",
     deviceName: "Algae Emitter — Dock",
     message: "Device offline for 3+ hours",
     firstSeen: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
@@ -216,7 +253,7 @@ const MOCK_ALERTS = [
     severity: "warning",
     siteId: "site-2",
     siteName: "Johnson Farm",
-    deviceId: "device-2",
+    deviceId: "pgw-0002",
     deviceName: "East Field Soil Probe",
     message: "Low battery: 23%",
     firstSeen: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
@@ -228,7 +265,7 @@ const MOCK_ALERTS = [
     severity: "info",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
-    deviceId: "device-1",
+    deviceId: "pgw-0001",
     deviceName: "Lakefront Buoy #1",
     message: "Firmware update available: v2.4.2",
     firstSeen: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
@@ -240,9 +277,9 @@ const MOCK_ALERTS = [
     severity: "warning",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
-    deviceId: "device-4",
+    deviceId: "pgw-0004",
     deviceName: "Lakefront Buoy #2",
-    message: "Turbidity reading spike detected",
+    message: "NTU (turbidity) reading spike detected",
     firstSeen: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     lastSeen: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
     status: "resolved",
@@ -344,17 +381,23 @@ export const CloudMockAPI = {
     },
     getTimeSeriesData: async (deviceId, range = "24h") => {
       await delay();
-      // Generate mock time series data
+      // TODO: Replace with real backend API that aggregates PGP time-series data
+      //       from gateway uploads (via API_URL ingest endpoint)
+
+      // Generate mock time series data using PGP sensor field names
       const points = range === "24h" ? 24 : range === "7d" ? 168 : 720;
       const now = Date.now();
       const interval = range === "24h" ? 60 * 60 * 1000 : 60 * 60 * 1000;
 
       return Array.from({ length: points }, (_, i) => ({
         timestamp: new Date(now - (points - i) * interval).toISOString(),
-        temp: 18 + Math.random() * 4,
+        temp_c: 18 + Math.random() * 4,
         ph: 7.0 + Math.random() * 0.5,
-        dissolvedOxygen: 7.5 + Math.random() * 1.5,
-        turbidity: 2 + Math.random() * 1,
+        ntu: 2 + Math.random() * 1,
+        tds_ppm: 230 + Math.random() * 30,
+        npk_n: null, // Device-specific, varies by sensor type
+        npk_p: null,
+        npk_k: null,
       }));
     },
     getLogs: async (deviceId) => {
