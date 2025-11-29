@@ -56,6 +56,12 @@ import {
 import { useAppContext } from "./context/AppContext";
 import DashboardMain from "./components/cloud/DashboardMain";
 
+// Role-based dashboards
+import BuyerDashboard from "./components/dashboards/BuyerDashboard";
+import SellerDashboard_Role from "./components/dashboards/SellerDashboard";
+import InstallerDashboard from "./components/dashboards/InstallerDashboard";
+import { getDefaultDashboardRoute } from "./utils/roleRouting";
+
 /* -------------------------------------------------------------------------- */
 /*                              DEBUG VERSION TAG                              */
 /* -------------------------------------------------------------------------- */
@@ -211,7 +217,8 @@ const CloudLanding = ({ user }) => {
 
   React.useEffect(() => {
     if (user?.uid) {
-      navigate("/dashboard/main", { replace: true });
+      const route = getDefaultDashboardRoute(user, 'cloud');
+      navigate(route, { replace: true });
     }
   }, [user, navigate]);
 
@@ -223,7 +230,8 @@ const MarketplaceLanding = ({ user }) => {
 
   React.useEffect(() => {
     if (user?.uid) {
-      navigate("/marketplace", { replace: true });
+      const route = getDefaultDashboardRoute(user, 'marketplace');
+      navigate(route, { replace: true });
     }
   }, [user, navigate]);
 
@@ -240,8 +248,16 @@ const CloudRoutes = ({ user }) => (
 
     {user?.uid && (
       <>
+        {/* Role-based dashboards */}
+        <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
+        <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
+        <Route path="/dashboard/installer" element={<InstallerDashboard />} />
+
+        {/* Legacy/admin dashboards */}
         <Route path="/dashboard/:dashID" element={<Home />} />
         <Route path="/dashboard/main" element={<DashboardMain />} />
+
+        {/* Features */}
         <Route
           path="/features/nutrient-calculator"
           element={<NutrientCalculator />}
@@ -279,6 +295,11 @@ const MarketplaceRoutes = ({ user }) => (
     {/* Auth-gated marketplace tools + account */}
     {user?.uid && (
       <>
+        {/* Role-based dashboards */}
+        <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
+        <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
+        <Route path="/dashboard/installer" element={<InstallerDashboard />} />
+
         {/* Tools */}
         <Route
           path="/marketplace/tools/calculator"

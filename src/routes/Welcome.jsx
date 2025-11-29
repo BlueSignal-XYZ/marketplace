@@ -10,6 +10,7 @@ import { WelcomeHome } from "./components/welcome";
 
 import Footer from "../components/shared/Footer/Footer";
 import { useAppContext } from "../context/AppContext";
+import { getDefaultDashboardRoute } from "../utils/roleRouting";
 
 import cloudLogo from "../assets/bluesignal-logo.png";
 import marketplaceLogo from "../assets/logo.png";
@@ -77,33 +78,31 @@ const Welcome = () => {
   const { user } = STATES || {};
   const { updateUser } = ACTIONS || {};
 
-  // If user already logged in, redirect by mode (cloud vs marketplace)
+  // If user already logged in, redirect by mode and role
   useEffect(() => {
     if (!user?.uid) return;
 
     const host = window.location.hostname;
-    const isCloud =
+    const mode =
       host === "cloud.bluesignal.xyz" ||
-      host.endsWith(".cloud.bluesignal.xyz");
+      host.endsWith(".cloud.bluesignal.xyz")
+        ? "cloud"
+        : "marketplace";
 
-    if (isCloud) {
-      navigate("/dashboard/main", { replace: true });
-    } else {
-      navigate("/marketplace", { replace: true });
-    }
+    const route = getDefaultDashboardRoute(user, mode);
+    navigate(route, { replace: true });
   }, [user, navigate]);
 
   const enterDash = () => {
     const host = window.location.hostname;
-    const isCloud =
+    const mode =
       host === "cloud.bluesignal.xyz" ||
-      host.endsWith(".cloud.bluesignal.xyz");
+      host.endsWith(".cloud.bluesignal.xyz")
+        ? "cloud"
+        : "marketplace";
 
-    if (isCloud) {
-      navigate("/dashboard/main");
-    } else {
-      navigate("/marketplace");
-    }
+    const route = getDefaultDashboardRoute(user, mode);
+    navigate(route);
   };
 
   return (
