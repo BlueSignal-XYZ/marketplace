@@ -56,6 +56,20 @@ import {
 import { useAppContext } from "./context/AppContext";
 import DashboardMain from "./components/cloud/DashboardMain";
 
+// Cloud pages
+import OverviewDashboard from "./components/cloud/OverviewDashboard";
+import DevicesListPage from "./components/cloud/DevicesListPage";
+import DeviceDetailPage from "./components/cloud/DeviceDetailPage";
+import CommissioningPage from "./components/cloud/CommissioningPage";
+import AlertsPage from "./components/cloud/AlertsPage";
+import {
+  CloudNutrientCalculator,
+  CloudVerification,
+  CloudLiveStream,
+  CloudUploadMedia,
+  CloudMediaPlayer,
+} from "./components/cloud/CloudToolsWrapper";
+
 // Role-based dashboards
 import BuyerDashboard from "./components/dashboards/BuyerDashboard";
 import SellerDashboard_Role from "./components/dashboards/SellerDashboard";
@@ -257,26 +271,46 @@ const CloudRoutes = ({ user }) => (
 
     {user?.uid && (
       <>
+        {/* Overview Dashboard */}
+        <Route path="/dashboard/main" element={<OverviewDashboard />} />
+
         {/* Role-based dashboards */}
         <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
         <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
         <Route path="/dashboard/installer" element={<InstallerDashboard />} />
 
-        {/* Legacy/admin dashboards */}
+        {/* Legacy dashboard route */}
         <Route path="/dashboard/:dashID" element={<Home />} />
-        <Route path="/dashboard/main" element={<DashboardMain />} />
 
-        {/* Features */}
+        {/* Operations: Sites, Devices, Commissioning, Alerts */}
+        <Route path="/cloud/sites" element={<OverviewDashboard />} />
+        <Route path="/cloud/devices" element={<DevicesListPage />} />
+        <Route path="/cloud/devices/:deviceId" element={<DeviceDetailPage />} />
+        <Route path="/cloud/commissioning" element={<CommissioningPage />} />
+        <Route path="/cloud/alerts" element={<AlertsPage />} />
+
+        {/* Cloud Tools (non-marketplace, non-finance) */}
+        <Route
+          path="/cloud/tools/nutrient-calculator"
+          element={<CloudNutrientCalculator />}
+        />
+        <Route path="/cloud/tools/verification" element={<CloudVerification />} />
+        <Route path="/cloud/tools/live" element={<CloudLiveStream />} />
+        <Route path="/cloud/tools/upload-media" element={<CloudUploadMedia />} />
+
+        {/* Media player routes */}
+        <Route path="/media/:playbackID" element={<CloudMediaPlayer />} />
+        <Route path="/media/live/:liveID" element={<CloudMediaPlayer />} />
+
+        {/* Legacy features routes (keep for backwards compatibility) */}
         <Route
           path="/features/nutrient-calculator"
-          element={<NutrientCalculator />}
+          element={<CloudNutrientCalculator />}
         />
-        <Route path="/features/verification" element={<VerificationUI />} />
-        <Route path="/features/stream" element={<Livepeer />} />
-        <Route path="/features/upload-media" element={<Livepeer />} />
+        <Route path="/features/verification" element={<CloudVerification />} />
+        <Route path="/features/stream" element={<CloudLiveStream />} />
+        <Route path="/features/upload-media" element={<CloudUploadMedia />} />
         <Route path="/features/:serviceID" element={<Livepeer />} />
-        <Route path="/media/:playbackID" element={<Livepeer />} />
-        <Route path="/media/live/:liveID" element={<Livepeer />} />
       </>
     )}
 

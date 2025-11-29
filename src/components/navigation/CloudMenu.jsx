@@ -151,72 +151,86 @@ export function CloudMenu({ open, onClose, user }) {
 
         <Divider />
 
-        <SectionLabel>Dashboards</SectionLabel>
+        <SectionLabel>Overview</SectionLabel>
         <NavList>
           <NavItem
             to="/dashboard/main"
             $active={isActive("/dashboard/main")}
             onClick={onClose}
           >
-            Main Dashboard
+            Overview
           </NavItem>
-          {user?.role === "buyer" && (
-            <NavItem
-              to="/dashboard/buyer"
-              $active={isActive("/dashboard/buyer")}
-              onClick={onClose}
-            >
-              Buyer Dashboard
-            </NavItem>
-          )}
-          {user?.role === "seller" && (
-            <NavItem
-              to="/dashboard/seller"
-              $active={isActive("/dashboard/seller")}
-              onClick={onClose}
-            >
-              Seller Dashboard
-            </NavItem>
-          )}
           {user?.role === "installer" && (
             <NavItem
               to="/dashboard/installer"
               $active={isActive("/dashboard/installer")}
               onClick={onClose}
             >
-              Installer Dashboard
+              My Dashboard
             </NavItem>
           )}
         </NavList>
 
         {user?.uid && (
           <>
+            <SectionLabel>Operations</SectionLabel>
+            <NavList>
+              <NavItem
+                to="/cloud/sites"
+                $active={isActive("/cloud/sites")}
+                onClick={onClose}
+              >
+                Sites
+              </NavItem>
+              <NavItem
+                to="/cloud/devices"
+                $active={isActive("/cloud/devices")}
+                onClick={onClose}
+              >
+                Devices
+              </NavItem>
+              <NavItem
+                to="/cloud/commissioning"
+                $active={isActive("/cloud/commissioning")}
+                onClick={onClose}
+              >
+                Commissioning
+              </NavItem>
+              <NavItem
+                to="/cloud/alerts"
+                $active={isActive("/cloud/alerts")}
+                onClick={onClose}
+              >
+                Alerts
+              </NavItem>
+            </NavList>
+
             <SectionLabel>Tools</SectionLabel>
             <NavList>
               <NavItem
-                to="/features/nutrient-calculator"
-                $active={isActive("/features/nutrient-calculator")}
+                to="/cloud/tools/nutrient-calculator"
+                $active={isActive("/cloud/tools/nutrient-calculator")}
                 onClick={onClose}
               >
                 Nutrient Calculator
               </NavItem>
               <NavItem
-                to="/features/verification"
-                $active={isActive("/features/verification")}
+                to="/cloud/tools/verification"
+                $active={isActive("/cloud/tools/verification")}
                 onClick={onClose}
               >
                 Verification
               </NavItem>
               <NavItem
-                to="/features/stream"
-                $active={isActive("/features/stream")}
+                to="/cloud/tools/live"
+                $active={isActive("/cloud/tools/live")}
                 onClick={onClose}
               >
                 Live Stream
               </NavItem>
               <NavItem
-                to="/features/upload-media"
-                $active={isActive("/features/upload-media")}
+                to="/cloud/tools/upload-media"
+                $active={isActive("/cloud/tools/upload-media")}
                 onClick={onClose}
               >
                 Upload Media

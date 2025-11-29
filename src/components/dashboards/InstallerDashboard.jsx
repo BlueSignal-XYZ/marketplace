@@ -234,6 +234,39 @@ const EmptyState = styled.div`
   font-size: 14px;
 `;
 
+const ToolCard = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  border-radius: 12px;
+  padding: 20px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  text-align: center;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#22d3ee'};
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  }
+
+  .tool-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .tool-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
+    margin-bottom: 6px;
+  }
+
+  .tool-desc {
+    font-size: 13px;
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
+    line-height: 1.4;
+  }
+`;
+
 const InstallerDashboard = () => {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
@@ -473,6 +506,72 @@ const InstallerDashboard = () => {
                 ))}
               </tbody>
             </Table>
+          )}
+        </Section>
+
+        <Section>
+          <h2>Quick Tools</h2>
+          <DeviceGrid>
+            <ToolCard onClick={() => navigate('/cloud/tools/upload-media')}>
+              <div className="tool-icon">📸</div>
+              <div className="tool-name">Upload Media</div>
+              <div className="tool-desc">
+                Document site with photos or videos
+              </div>
+            </ToolCard>
+
+            <ToolCard onClick={() => navigate('/cloud/tools/live')}>
+              <div className="tool-icon">📡</div>
+              <div className="tool-name">Live Stream</div>
+              <div className="tool-desc">
+                Stream live video from site
+              </div>
+            </ToolCard>
+
+            <ToolCard onClick={() => navigate('/cloud/tools/verification')}>
+              <div className="tool-icon">✓</div>
+              <div className="tool-name">Verification</div>
+              <div className="tool-desc">
+                Verify device installation
+              </div>
+            </ToolCard>
+          </DeviceGrid>
+        </Section>
+
+        <Section>
+          <h2>Recently Commissioned Devices</h2>
+          {devices.filter((d) => d.status === 'online').length === 0 ? (
+            <EmptyState>
+              <p>No recently commissioned devices yet.</p>
+            </EmptyState>
+          ) : (
+            <DeviceGrid>
+              {devices
+                .filter((d) => d.status === 'online')
+                .slice(0, 3)
+                .map((device) => (
+                  <DeviceCard key={device.id}>
+                    <div className="device-header">
+                      <div className="device-name">{device.name}</div>
+                      <StatusPill variant={device.status}>
+                        Online
+                      </StatusPill>
+                    </div>
+                    <div className="device-meta">
+                      <div>
+                        <strong>Type:</strong> {device.type}
+                      </div>
+                      <div>
+                        <strong>Location:</strong> {device.location}
+                      </div>
+                      <div>
+                        <strong>Last ping:</strong> {device.lastPing}
+                      </div>
+                    </div>
+                    <div className="device-readings">{device.readings}</div>
+                  </DeviceCard>
+                ))}
+            </DeviceGrid>
           )}
         </Section>
       </Shell>
