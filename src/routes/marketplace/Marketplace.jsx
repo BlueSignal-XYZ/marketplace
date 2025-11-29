@@ -1,7 +1,8 @@
 // /src/routes/marketplace/Marketplace.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { getCredits } from "../../apis/creditsApi";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -73,6 +74,9 @@ const Card = styled.div`
   padding: 24px;
   cursor: pointer;
   transition: all 0.15s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
@@ -81,7 +85,7 @@ const Card = styled.div`
   }
 
   h3 {
-    margin: 0 0 8px;
+    margin: 0;
     font-size: 18px;
     font-weight: 600;
     color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
@@ -93,6 +97,45 @@ const Card = styled.div`
     line-height: 1.5;
     color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
   }
+`;
+
+const MetaRow = styled.div`
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+`;
+
+const TagRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+`;
+
+const Tag = styled.span`
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+`;
+
+const PriceRow = styled.div`
+  margin-top: 8px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+`;
+
+const Price = styled.span`
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+`;
+
+const Quantity = styled.span`
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
 `;
 
 const EmptyState = styled.div`
@@ -116,11 +159,18 @@ const EmptyState = styled.div`
   }
 `;
 
+const LoadingState = styled.div`
+  text-align: center;
+  padding: 48px 20px;
+  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  font-size: 14px;
+`;
+
 const Marketplace = () => {
   const navigate = useNavigate();
-
-  // Placeholder data - replace with real API calls
-  const listings = [];
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   const exploreOptions = [
     {
@@ -140,22 +190,63 @@ const Marketplace = () => {
     },
   ];
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const data = await getCredits();
+        if (!cancelled) {
+          setListings(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.error("Failed to load marketplace credits", err);
+        if (!cancelled) {
+          setLoadError("Unable to load listings right now.");
+          setListings([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <PageWrapper>
       <MarketplaceShell>
         <HeaderBlock>
           <h1>WaterQuality.Trading Marketplace</h1>
           <p>
-            Buy and sell water quality improvement credits. Connect producers, verifiers, and buyers in a transparent marketplace.
+            Buy and sell water quality improvement credits. Connect producers, verifiers, and buyers
+            in a transparent marketplace.
           </p>
         </HeaderBlock>
 
-        {listings.length === 0 ? (
+        {loading ? (
+          <LoadingState>Loading listings…</LoadingState>
+        ) : loadError ? (
+          <>
+            <EmptyState>
+              <h2>We couldn’t load listings</h2>
+              <p>{loadError}</p>
+            </EmptyState>
+          </>
+        ) : listings.length === 0 ? (
           <>
             <EmptyState>
               <h2>No Active Listings</h2>
               <p>
-                There are currently no active credit listings. Check back soon or explore our registry and map.
+                There are currently no active credit listings. Check back soon or explore our
+                registry and map.
               </p>
             </EmptyState>
 
@@ -174,17 +265,41 @@ const Marketplace = () => {
             </Grid>
           </>
         ) : (
-          <Grid>
-            {listings.map((listing) => (
-              <Card
-                key={listing.id}
-                onClick={() => navigate(`/marketplace/listing/${listing.id}`)}
-              >
-                <h3>{listing.title}</h3>
-                <p>{listing.description}</p>
-              </Card>
-            ))}
-          </Grid>
+          <>
+            <Grid>
+              {listings.map((listing) => (
+                <Card
+                  key={listing.id}
+                  onClick={() => navigate(`/marketplace/listing/${listing.id}`)}
+                >
+                  <h3>{listing.name}</h3>
+
+                  <MetaRow>
+                    {listing.location} · {listing.watershed} · Vintage {listing.vintageYear}
+                  </MetaRow>
+
+                  <MetaRow>
+                    {listing.pollutant} · {listing.unit} · {listing.verificationStatus} credit
+                  </MetaRow>
+
+                  <TagRow>
+                    {(listing.tags || []).slice(0, 3).map((tag) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    ))}
+                  </TagRow>
+
+                  <PriceRow>
+                    <Price>
+                      ${listing.pricePerUnit.toLocaleString()}/{listing.unit}
+                    </Price>
+                    <Quantity>
+                      {listing.quantityAvailable.toLocaleString()} {listing.unit} available
+                    </Quantity>
+                  </PriceRow>
+                </Card>
+              ))}
+            </Grid>
+          </>
         )}
       </MarketplaceShell>
     </PageWrapper>
