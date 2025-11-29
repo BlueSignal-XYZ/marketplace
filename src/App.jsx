@@ -157,7 +157,8 @@ function AppShell({ mode, user }) {
           bottom: 8,
           right: 12,
           fontSize: "11px",
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif",
+          fontFamily:
+            "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif",
           fontWeight: 500,
           opacity: 0.6,
           zIndex: 99999,
@@ -225,7 +226,7 @@ const CloudLanding = ({ user }) => {
 
   React.useEffect(() => {
     if (user?.uid) {
-      const route = getDefaultDashboardRoute(user, 'cloud');
+      const route = getDefaultDashboardRoute(user, "cloud");
       navigate(route, { replace: true });
     }
   }, [user, navigate]);
@@ -238,7 +239,7 @@ const MarketplaceLanding = ({ user }) => {
 
   React.useEffect(() => {
     if (user?.uid) {
-      const route = getDefaultDashboardRoute(user, 'marketplace');
+      const route = getDefaultDashboardRoute(user, "marketplace");
       navigate(route, { replace: true });
     }
   }, [user, navigate]);
@@ -313,10 +314,7 @@ const MarketplaceRoutes = ({ user }) => (
           path="/marketplace/tools/calculator"
           element={<NutrientCalculator />}
         />
-        <Route
-          path="/marketplace/tools/live"
-          element={<Livepeer />}
-        />
+        <Route path="/marketplace/tools/live" element={<Livepeer />} />
         <Route
           path="/marketplace/tools/upload"
           element={<Livepeer />} // placeholder for upload tool
@@ -331,10 +329,7 @@ const MarketplaceRoutes = ({ user }) => (
           path="/marketplace/seller-dashboard"
           element={<SellerDashboard />}
         />
-        <Route
-          path="/dashboard/financial"
-          element={<FinancialDashboard />}
-        />
+        <Route path="/dashboard/financial" element={<FinancialDashboard />} />
       </>
     )}
 
