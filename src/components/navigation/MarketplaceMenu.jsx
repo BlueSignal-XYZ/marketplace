@@ -2,6 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
+import { useAppContext } from "../../context/AppContext";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -120,13 +121,41 @@ const SmallText = styled.div`
   line-height: 1.5;
 `;
 
+const LogoutButton = styled.button`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ef4444;
+  transition: background 0.15s ease-out;
+
+  &:hover {
+    background: #fef2f2;
+  }
+`;
+
 export function MarketplaceMenu({ open, onClose, user }) {
   const location = useLocation();
+  const { ACTIONS } = useAppContext();
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget && onClose) {
       onClose();
     }
+  };
+
+  const handleLogout = () => {
+    ACTIONS.logout();
+    onClose();
   };
 
   // Treat nav as active for exact path or nested routes under it
@@ -244,6 +273,12 @@ export function MarketplaceMenu({ open, onClose, user }) {
           Signed in as{" "}
           <strong>{user?.email || user?.username || "guest"}</strong>.
         </SmallText>
+
+        {user?.uid && (
+          <LogoutButton onClick={handleLogout}>
+            Logout
+          </LogoutButton>
+        )}
       </Panel>
     </>
   );

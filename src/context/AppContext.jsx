@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../apis/firebase";
 import { UserAPI } from "../scripts/back_door";
 
@@ -130,13 +130,27 @@ export const AppProvider = ({ children }) => {
   const logNotification = (type, message) =>
     setNotification({ [type]: message });
   const clearNotification = () => setNotification({});
-  const handleLogOut = () => {
-    logConfirmation("Are you sure you want to log out?", () => {
-      setUser(null);
+
+  // Universal logout function - signs out from Firebase and clears state
+  const logout = async () => {
+    console.log("🔓 Logging out...");
+    try {
+      await signOut(auth);
       sessionStorage.removeItem("user");
+      setUser(null);
+      console.log("🔓 User logged out successfully");
       window.location.href = "/";
-    });
+    } catch (error) {
+      console.error("❌ Logout failed:", error);
+      logNotification("error", "Logout failed. Please try again.");
+    }
   };
+
+  // Legacy handleLogOut with confirmation dialog
+  const handleLogOut = () => {
+    logConfirmation("Are you sure you want to log out?", logout);
+  };
+
   const toggleEnvironmentSubItems = () => setShowSubItems(!showSubItems);
 
   const APP = {
@@ -180,7 +194,8 @@ export const AppProvider = ({ children }) => {
       setTxPopupVisible,
       cancelConfirmation,
       logNotification,
-      handleLogOut,
+      logout, // Universal logout - signs out from Firebase
+      handleLogOut, // Legacy logout with confirmation
       toggleEnvironmentSubItems,
     },
   };
