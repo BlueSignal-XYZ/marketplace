@@ -263,6 +263,25 @@ const MarketplaceLanding = ({ user }) => {
 };
 
 /* -------------------------------------------------------------------------- */
+/*                            CLOUD AUTH GATE                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * CloudAuthGate - Protects Cloud routes while preventing 404s
+ * Shows Welcome (login) if no user, otherwise renders the protected component
+ */
+const CloudAuthGate = ({ children }) => {
+  const { STATES } = useAppContext();
+  const { user } = STATES || {};
+
+  if (!user?.uid) {
+    return <Welcome />;
+  }
+
+  return children;
+};
+
+/* -------------------------------------------------------------------------- */
 /*                                 CLOUD ROUTES                                */
 /* -------------------------------------------------------------------------- */
 
@@ -270,54 +289,204 @@ const CloudRoutes = ({ user }) => (
   <Routes>
     <Route path="/" element={<CloudLanding user={user} />} />
 
-    {/* ALWAYS-REGISTERED CLOUD DASHBOARD ROUTE — fixes 404 */}
+    {/*
+      ALWAYS-REGISTERED CLOUD DASHBOARD ROUTES
+      These routes are ALWAYS defined to prevent 404s.
+      CloudAuthGate handles auth, showing Welcome if not logged in.
+    */}
     <Route
       path="/dashboard/main"
-      element={user?.uid ? <OverviewDashboard /> : <Welcome />}
+      element={
+        <CloudAuthGate>
+          <OverviewDashboard />
+        </CloudAuthGate>
+      }
     />
 
-    {/* Auth-gated Cloud routes */}
-    {user?.uid && (
-      <>
-        {/* Role dashboards */}
-        <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
-        <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
-        <Route path="/dashboard/installer" element={<InstallerDashboard />} />
+    <Route
+      path="/dashboard/buyer"
+      element={
+        <CloudAuthGate>
+          <BuyerDashboard />
+        </CloudAuthGate>
+      }
+    />
 
-        {/* Legacy dashboard */}
-        <Route path="/dashboard/:dashID" element={<Home />} />
+    <Route
+      path="/dashboard/seller"
+      element={
+        <CloudAuthGate>
+          <SellerDashboard_Role />
+        </CloudAuthGate>
+      }
+    />
 
-        {/* Cloud console */}
-        <Route path="/cloud/sites" element={<OverviewDashboard />} />
-        <Route path="/cloud/devices" element={<DevicesListPage />} />
-        <Route path="/cloud/devices/:deviceId" element={<DeviceDetailPage />} />
-        <Route path="/cloud/commissioning" element={<CommissioningPage />} />
-        <Route path="/cloud/alerts" element={<AlertsPage />} />
+    <Route
+      path="/dashboard/installer"
+      element={
+        <CloudAuthGate>
+          <InstallerDashboard />
+        </CloudAuthGate>
+      }
+    />
 
-        {/* Cloud tools (non-marketplace) */}
-        <Route
-          path="/cloud/tools/nutrient-calculator"
-          element={<CloudNutrientCalculator />}
-        />
-        <Route path="/cloud/tools/verification" element={<CloudVerification />} />
-        <Route path="/cloud/tools/live" element={<CloudLiveStream />} />
-        <Route path="/cloud/tools/upload-media" element={<CloudUploadMedia />} />
+    {/* Legacy dashboard */}
+    <Route
+      path="/dashboard/:dashID"
+      element={
+        <CloudAuthGate>
+          <Home />
+        </CloudAuthGate>
+      }
+    />
 
-        {/* Media */}
-        <Route path="/media/:playbackID" element={<CloudMediaPlayer />} />
-        <Route path="/media/live/:liveID" element={<CloudMediaPlayer />} />
+    {/* Cloud console pages */}
+    <Route
+      path="/cloud/sites"
+      element={
+        <CloudAuthGate>
+          <OverviewDashboard />
+        </CloudAuthGate>
+      }
+    />
 
-        {/* Legacy features for backwards compatibility */}
-        <Route
-          path="/features/nutrient-calculator"
-          element={<CloudNutrientCalculator />}
-        />
-        <Route path="/features/verification" element={<CloudVerification />} />
-        <Route path="/features/stream" element={<CloudLiveStream />} />
-        <Route path="/features/upload-media" element={<CloudUploadMedia />} />
-        <Route path="/features/:serviceID" element={<Livepeer />} />
-      </>
-    )}
+    <Route
+      path="/cloud/devices"
+      element={
+        <CloudAuthGate>
+          <DevicesListPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/devices/:deviceId"
+      element={
+        <CloudAuthGate>
+          <DeviceDetailPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/commissioning"
+      element={
+        <CloudAuthGate>
+          <CommissioningPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/alerts"
+      element={
+        <CloudAuthGate>
+          <AlertsPage />
+        </CloudAuthGate>
+      }
+    />
+
+    {/* Cloud tools (non-marketplace) */}
+    <Route
+      path="/cloud/tools/nutrient-calculator"
+      element={
+        <CloudAuthGate>
+          <CloudNutrientCalculator />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/tools/verification"
+      element={
+        <CloudAuthGate>
+          <CloudVerification />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/tools/live"
+      element={
+        <CloudAuthGate>
+          <CloudLiveStream />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/tools/upload-media"
+      element={
+        <CloudAuthGate>
+          <CloudUploadMedia />
+        </CloudAuthGate>
+      }
+    />
+
+    {/* Media */}
+    <Route
+      path="/media/:playbackID"
+      element={
+        <CloudAuthGate>
+          <CloudMediaPlayer />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/media/live/:liveID"
+      element={
+        <CloudAuthGate>
+          <CloudMediaPlayer />
+        </CloudAuthGate>
+      }
+    />
+
+    {/* Legacy features for backwards compatibility */}
+    <Route
+      path="/features/nutrient-calculator"
+      element={
+        <CloudAuthGate>
+          <CloudNutrientCalculator />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/features/verification"
+      element={
+        <CloudAuthGate>
+          <CloudVerification />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/features/stream"
+      element={
+        <CloudAuthGate>
+          <CloudLiveStream />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/features/upload-media"
+      element={
+        <CloudAuthGate>
+          <CloudUploadMedia />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/features/:serviceID"
+      element={
+        <CloudAuthGate>
+          <Livepeer />
+        </CloudAuthGate>
+      }
+    />
 
     <Route path="*" element={<NotFound />} />
   </Routes>
