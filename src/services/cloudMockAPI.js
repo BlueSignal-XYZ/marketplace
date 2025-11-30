@@ -325,6 +325,126 @@ const MOCK_INSTALLER_JOBS = [
   },
 ];
 
+const MOCK_PGP_TEST_RESULTS = {
+  // PGP (Pollution Gateway Pro) hardware test results for commissioning
+  "comm-1": {
+    deviceId: "pgw-0006",
+    deviceName: "South Lake Buoy #3",
+    tests: {
+      ads1115: {
+        name: "ADS1115 (ADC)",
+        passed: true,
+        message: "ADC detected successfully, all channels operational",
+      },
+      ds18b20: {
+        name: "DS18B20 (Temperature)",
+        passed: true,
+        reading: 22.4,
+        unit: "°C",
+        message: "Temperature sensor responding correctly",
+      },
+      npk: {
+        name: "NPK (Modbus)",
+        passed: true,
+        readings: { n: 18, p: 7, k: 12 },
+        message: "Modbus NPK sensor responding correctly",
+      },
+      relay: {
+        name: "Relay Toggle",
+        passed: true,
+        channels: [
+          { channel: 1, status: "on", passed: true },
+          { channel: 2, status: "off", passed: true },
+        ],
+        message: "All relay channels toggling correctly",
+      },
+      connectivity: {
+        name: "Connectivity",
+        passed: true,
+        signalStrength: 92,
+        unit: "%",
+        message: "LTE signal excellent (RSRP -85 dBm)",
+      },
+    },
+  },
+  "comm-2": {
+    deviceId: "pgw-0007",
+    deviceName: "Center Field Probe Array",
+    tests: {
+      ads1115: {
+        name: "ADS1115 (ADC)",
+        passed: true,
+        message: "ADC detected successfully",
+      },
+      ds18b20: {
+        name: "DS18B20 (Temperature)",
+        passed: true,
+        reading: 21.8,
+        unit: "°C",
+        message: "Temperature sensor responding correctly",
+      },
+      npk: {
+        name: "NPK (Modbus)",
+        passed: false,
+        message: "Modbus timeout - check NPK sensor wiring",
+      },
+      relay: {
+        name: "Relay Toggle",
+        passed: true,
+        channels: [
+          { channel: 1, status: "on", passed: true },
+          { channel: 2, status: "on", passed: true },
+        ],
+        message: "All relay channels toggling correctly",
+      },
+      connectivity: {
+        name: "Connectivity",
+        passed: true,
+        signalStrength: 78,
+        unit: "%",
+        message: "LTE signal good (RSRP -95 dBm)",
+      },
+    },
+  },
+  "comm-4": {
+    deviceId: "pgw-0009",
+    deviceName: "River Monitoring Station",
+    tests: {
+      ads1115: {
+        name: "ADS1115 (ADC)",
+        passed: false,
+        message: "I2C communication failed - check ADC connections",
+      },
+      ds18b20: {
+        name: "DS18B20 (Temperature)",
+        passed: false,
+        message: "1-Wire bus error - sensor not detected",
+      },
+      npk: {
+        name: "NPK (Modbus)",
+        passed: false,
+        message: "Modbus device not responding",
+      },
+      relay: {
+        name: "Relay Toggle",
+        passed: false,
+        channels: [
+          { channel: 1, status: "unknown", passed: false },
+          { channel: 2, status: "unknown", passed: false },
+        ],
+        message: "GPIO error - relay control failure",
+      },
+      connectivity: {
+        name: "Connectivity",
+        passed: false,
+        signalStrength: 0,
+        unit: "%",
+        message: "No cellular signal detected",
+      },
+    },
+  },
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
@@ -431,6 +551,10 @@ export const CloudMockAPI = {
     getById: async (id) => {
       await delay();
       return MOCK_COMMISSIONING.find((c) => c.id === id) || null;
+    },
+    getTestResults: async (commissioningId) => {
+      await delay();
+      return MOCK_PGP_TEST_RESULTS[commissioningId] || null;
     },
   },
 

@@ -135,6 +135,39 @@ const DeviceLink = styled(Link)`
   }
 `;
 
+const ActionButton = styled.button`
+  border: none;
+  background: none;
+  padding: 4px 8px;
+  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+`;
+
+const AlertLink = styled(Link)`
+  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+    text-decoration: underline;
+  }
+`;
+
 const EmptyState = styled.div`
   text-align: center;
   padding: 48px 20px;
@@ -181,6 +214,7 @@ export default function AlertsPage() {
   const [loading, setLoading] = useState(true);
   const [severityFilter, setSeverityFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [updatingAlerts, setUpdatingAlerts] = useState(new Set());
 
   useEffect(() => {
     loadAlerts();
@@ -232,6 +266,48 @@ export default function AlertsPage() {
       resolved: "Resolved",
     };
     return labels[status] || status;
+  };
+
+  const handleAcknowledge = async (alertId) => {
+    setUpdatingAlerts((prev) => new Set(prev).add(alertId));
+    try {
+      // TODO: Replace with actual API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      setAlerts((prev) =>
+        prev.map((a) =>
+          a.id === alertId ? { ...a, status: "acknowledged" } : a
+        )
+      );
+    } catch (error) {
+      console.error("Error acknowledging alert:", error);
+    } finally {
+      setUpdatingAlerts((prev) => {
+        const next = new Set(prev);
+        next.delete(alertId);
+        return next;
+      });
+    }
+  };
+
+  const handleResolve = async (alertId) => {
+    setUpdatingAlerts((prev) => new Set(prev).add(alertId));
+    try {
+      // TODO: Replace with actual API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      setAlerts((prev) =>
+        prev.map((a) => (a.id === alertId ? { ...a, status: "resolved" } : a))
+      );
+    } catch (error) {
+      console.error("Error resolving alert:", error);
+    } finally {
+      setUpdatingAlerts((prev) => {
+        const next = new Set(prev);
+        next.delete(alertId);
+        return next;
+      });
+    }
   };
 
   if (loading) {
@@ -332,6 +408,7 @@ export default function AlertsPage() {
                 <th>First Seen</th>
                 <th>Last Seen</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -350,7 +427,11 @@ export default function AlertsPage() {
                       </DeviceLink>
                     </div>
                   </td>
-                  <td>{alert.message}</td>
+                  <td>
+                    <AlertLink to={`/cloud/alerts/${alert.id}`}>
+                      {alert.message}
+                    </AlertLink>
+                  </td>
                   <td>
                     <div>{getRelativeTime(alert.firstSeen)}</div>
                     <div
@@ -373,6 +454,37 @@ export default function AlertsPage() {
                     <StatusPill $status={alert.status}>
                       {getStatusLabel(alert.status)}
                     </StatusPill>
+                  </td>
+                  <td>
+                    <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                      {alert.status === "open" && (
+                        <>
+                          <ActionButton
+                            onClick={() => handleAcknowledge(alert.id)}
+                            disabled={updatingAlerts.has(alert.id)}
+                          >
+                            {updatingAlerts.has(alert.id) ? "..." : "Ack"}
+                          </ActionButton>
+                          <ActionButton
+                            onClick={() => handleResolve(alert.id)}
+                            disabled={updatingAlerts.has(alert.id)}
+                          >
+                            {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                          </ActionButton>
+                        </>
+                      )}
+                      {alert.status === "acknowledged" && (
+                        <ActionButton
+                          onClick={() => handleResolve(alert.id)}
+                          disabled={updatingAlerts.has(alert.id)}
+                        >
+                          {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                        </ActionButton>
+                      )}
+                      <ActionButton as={Link} to={`/cloud/alerts/${alert.id}`}>
+                        View
+                      </ActionButton>
+                    </div>
                   </td>
                 </tr>
               ))}

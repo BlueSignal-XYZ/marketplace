@@ -59,8 +59,11 @@ import { useAppContext } from "./context/AppContext";
 import OverviewDashboard from "./components/cloud/OverviewDashboard";
 import DevicesListPage from "./components/cloud/DevicesListPage";
 import DeviceDetailPage from "./components/cloud/DeviceDetailPage";
+import SitesListPage from "./components/cloud/SitesListPage";
+import SiteDetailPage from "./components/cloud/SiteDetailPage";
 import CommissioningPage from "./components/cloud/CommissioningPage";
 import AlertsPage from "./components/cloud/AlertsPage";
+import AlertDetailPage from "./components/cloud/AlertDetailPage";
 
 import {
   CloudNutrientCalculator,
@@ -407,7 +410,16 @@ const CloudRoutes = ({ user, authLoading }) => (
       path="/cloud/sites"
       element={
         <CloudAuthGate authLoading={authLoading}>
-          <OverviewDashboard />
+          <SitesListPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/sites/:siteId"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <SiteDetailPage />
         </CloudAuthGate>
       }
     />
@@ -444,6 +456,15 @@ const CloudRoutes = ({ user, authLoading }) => (
       element={
         <CloudAuthGate authLoading={authLoading}>
           <AlertsPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/alerts/:alertId"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <AlertDetailPage />
         </CloudAuthGate>
       }
     />

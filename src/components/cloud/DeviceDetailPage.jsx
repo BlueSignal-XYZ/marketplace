@@ -2,8 +2,32 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 const ContentWrapper = styled.div`
   background: #ffffff;
@@ -197,17 +221,55 @@ const AlertRow = styled.div`
   }
 `;
 
-const ChartPlaceholder = styled.div`
-  height: 300px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-  border: 2px dashed ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+const ChartContainer = styled.div`
+  background: #ffffff;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  h4 {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 250px;
+  }
+`;
+
+const TimeRangeSelector = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
-  font-size: 14px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 20px;
+`;
+
+const TimeRangeButton = styled.button`
+  border-radius: 6px;
+  border: 1px solid
+    ${({ $active, theme }) =>
+      $active
+        ? theme.colors?.primary500 || "#06b6d4"
+        : theme.colors?.ui200 || "#e5e7eb"};
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+
+  background: ${({ $active, theme }) =>
+    $active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+  color: ${({ $active, theme }) =>
+    $active
+      ? theme.colors?.primary700 || "#0369a1"
+      : theme.colors?.ui700 || "#374151"};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+  }
 `;
 
 const LogsTable = styled.table`
@@ -283,10 +345,19 @@ export default function DeviceDetailPage() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
+  const [timeRange, setTimeRange] = useState("24h");
+  const [timeSeriesData, setTimeSeriesData] = useState(null);
+  const [loadingChart, setLoadingChart] = useState(false);
 
   useEffect(() => {
     loadDeviceData();
   }, [deviceId]);
+
+  useEffect(() => {
+    if (activeTab === "livedata") {
+      loadTimeSeriesData();
+    }
+  }, [activeTab, timeRange, deviceId]);
 
   const loadDeviceData = async () => {
     setLoading(true);
@@ -305,6 +376,91 @@ export default function DeviceDetailPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadTimeSeriesData = async () => {
+    setLoadingChart(true);
+    try {
+      const data = await CloudMockAPI.devices.getTimeSeriesData(
+        deviceId,
+        timeRange
+      );
+      setTimeSeriesData(data);
+    } catch (error) {
+      console.error("Error loading time series data:", error);
+    } finally {
+      setLoadingChart(false);
+    }
+  };
+
+  const createChartData = (dataKey, label, color) => {
+    if (!timeSeriesData) return null;
+
+    return {
+      labels: timeSeriesData.map((point) => {
+        const date = new Date(point.timestamp);
+        if (timeRange === "24h") {
+          return date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        } else if (timeRange === "7d") {
+          return date.toLocaleDateString([], {
+            month: "short",
+            day: "numeric",
+          });
+        } else {
+          return date.toLocaleDateString([], {
+            month: "short",
+            day: "numeric",
+          });
+        }
+      }),
+      datasets: [
+        {
+          label,
+          data: timeSeriesData.map((point) => point[dataKey]),
+          borderColor: color,
+          backgroundColor: `${color}20`,
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true,
+          pointRadius: timeRange === "24h" ? 2 : 0,
+          pointHoverRadius: 5,
+        },
+      ],
+    };
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        mode: "index",
+        intersect: false,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        grid: {
+          color: "#f3f4f6",
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          maxRotation: 0,
+          autoSkipPadding: 20,
+        },
+      },
+    },
   };
 
   const getStatusVariant = (status) => {
@@ -529,44 +685,160 @@ export default function DeviceDetailPage() {
 
           {activeTab === "livedata" && (
             <>
-              <ChartPlaceholder>
-                Time-series charts will be rendered here (PGP sensor data)
-                <br />
-                (Chart.js integration coming soon - will show temp_c, ph, ntu, tds_ppm, npk_*)
-              </ChartPlaceholder>
-              <div style={{ marginBottom: "16px" }}>
-                <label style={{ fontSize: "13px", marginRight: "12px" }}>
-                  Time Range:
-                </label>
-                <select
-                  style={{
-                    padding: "8px 12px",
-                    borderRadius: "6px",
-                    border: "1px solid #e5e7eb",
-                  }}
+              <TimeRangeSelector>
+                <TimeRangeButton
+                  $active={timeRange === "24h"}
+                  onClick={() => setTimeRange("24h")}
                 >
-                  <option>Last 24 hours</option>
-                  <option>Last 7 days</option>
-                  <option>Last 30 days</option>
-                </select>
-              </div>
-              {device.latestReadings && (
+                  Last 24 Hours
+                </TimeRangeButton>
+                <TimeRangeButton
+                  $active={timeRange === "7d"}
+                  onClick={() => setTimeRange("7d")}
+                >
+                  Last 7 Days
+                </TimeRangeButton>
+                <TimeRangeButton
+                  $active={timeRange === "30d"}
+                  onClick={() => setTimeRange("30d")}
+                >
+                  Last 30 Days
+                </TimeRangeButton>
+              </TimeRangeSelector>
+
+              {loadingChart ? (
+                <Skeleton $height="300px" />
+              ) : (
                 <>
-                  <h3 style={{ marginBottom: "16px" }}>
+                  {device.latestReadings && (
+                    <>
+                      {device.latestReadings.temp_c !== null && (
+                        <ChartContainer>
+                          <h4>Temperature (°C)</h4>
+                          <div className="chart-wrapper">
+                            <Line
+                              data={createChartData(
+                                "temp_c",
+                                "Temperature",
+                                "#06b6d4"
+                              )}
+                              options={chartOptions}
+                            />
+                          </div>
+                        </ChartContainer>
+                      )}
+
+                      {device.latestReadings.ph !== null && (
+                        <ChartContainer>
+                          <h4>pH Level</h4>
+                          <div className="chart-wrapper">
+                            <Line
+                              data={createChartData("ph", "pH", "#8b5cf6")}
+                              options={chartOptions}
+                            />
+                          </div>
+                        </ChartContainer>
+                      )}
+
+                      {device.latestReadings.ntu !== null && (
+                        <ChartContainer>
+                          <h4>Turbidity (NTU)</h4>
+                          <div className="chart-wrapper">
+                            <Line
+                              data={createChartData(
+                                "ntu",
+                                "Turbidity",
+                                "#f59e0b"
+                              )}
+                              options={chartOptions}
+                            />
+                          </div>
+                        </ChartContainer>
+                      )}
+
+                      {device.latestReadings.tds_ppm !== null && (
+                        <ChartContainer>
+                          <h4>Total Dissolved Solids (ppm)</h4>
+                          <div className="chart-wrapper">
+                            <Line
+                              data={createChartData(
+                                "tds_ppm",
+                                "TDS",
+                                "#10b981"
+                              )}
+                              options={chartOptions}
+                            />
+                          </div>
+                        </ChartContainer>
+                      )}
+
+                      {device.latestReadings.npk_n !== null && (
+                        <>
+                          <ChartContainer>
+                            <h4>Nitrogen (ppm)</h4>
+                            <div className="chart-wrapper">
+                              <Line
+                                data={createChartData(
+                                  "npk_n",
+                                  "Nitrogen",
+                                  "#3b82f6"
+                                )}
+                                options={chartOptions}
+                              />
+                            </div>
+                          </ChartContainer>
+
+                          <ChartContainer>
+                            <h4>Phosphorus (ppm)</h4>
+                            <div className="chart-wrapper">
+                              <Line
+                                data={createChartData(
+                                  "npk_p",
+                                  "Phosphorus",
+                                  "#ec4899"
+                                )}
+                                options={chartOptions}
+                              />
+                            </div>
+                          </ChartContainer>
+
+                          <ChartContainer>
+                            <h4>Potassium (ppm)</h4>
+                            <div className="chart-wrapper">
+                              <Line
+                                data={createChartData(
+                                  "npk_k",
+                                  "Potassium",
+                                  "#14b8a6"
+                                )}
+                                options={chartOptions}
+                              />
+                            </div>
+                          </ChartContainer>
+                        </>
+                      )}
+                    </>
+                  )}
+
+                  <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
                     Current Readings
                   </h3>
-                  <InfoGrid>
-                    {Object.entries(device.latestReadings)
-                      .filter(([key, value]) => value !== null)
-                      .map(([key, value]) => (
-                        <InfoCard key={key}>
-                          <div className="label">{formatSensorLabel(key)}</div>
-                          <div className="value">
-                            {typeof value === "number" ? value.toFixed(2) : value}
-                          </div>
-                        </InfoCard>
-                      ))}
-                  </InfoGrid>
+                  {device.latestReadings && (
+                    <InfoGrid>
+                      {Object.entries(device.latestReadings)
+                        .filter(([key, value]) => value !== null)
+                        .map(([key, value]) => (
+                          <InfoCard key={key}>
+                            <div className="label">{formatSensorLabel(key)}</div>
+                            <div className="value">
+                              {typeof value === "number"
+                                ? value.toFixed(2)
+                                : value}
+                            </div>
+                          </InfoCard>
+                        ))}
+                    </InfoGrid>
+                  )}
                 </>
               )}
             </>

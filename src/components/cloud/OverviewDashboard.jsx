@@ -262,6 +262,29 @@ const EmptyState = styled.div`
   font-size: 14px;
 `;
 
+const CTAButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+  margin-bottom: 24px;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  }
+`;
+
 const Skeleton = styled.div`
   background: linear-gradient(
     90deg,
@@ -355,6 +378,11 @@ export default function OverviewDashboard() {
       title="Overview"
       subtitle="Monitor your BlueSignal fleet at a glance"
     >
+      {/* CTA Button */}
+      <CTAButton to="/cloud/commissioning">
+        + Commission New Device
+      </CTAButton>
+
       {/* Top Metrics Row */}
       <Grid>
         <MetricCard>
@@ -371,7 +399,7 @@ export default function OverviewDashboard() {
           <div className="subtext">Active locations</div>
         </MetricCard>
 
-        <MetricCard>
+        <MetricCard as={Link} to="/cloud/alerts" style={{ cursor: "pointer", textDecoration: "none" }}>
           <div className="label">Open Alerts</div>
           <div className="value">{stats?.openAlerts || 0}</div>
           <div className="subtext">Need attention</div>
