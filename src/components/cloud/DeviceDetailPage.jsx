@@ -324,6 +324,101 @@ const Skeleton = styled.div`
   }
 `;
 
+const CommissionSection = styled.div`
+  margin-top: 32px;
+  margin-bottom: 32px;
+  padding: 20px;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-radius: 12px;
+  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+`;
+
+const CommissionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+`;
+
+const CommissionStatusPill = styled.span`
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: ${({ $status }) => {
+    if ($status === "commissioned") return "#16a34a";
+    if ($status === "failed") return "#dc2626";
+    if ($status === "uncommissioned") return "#9ca3af";
+    return "#9ca3af";
+  }};
+`;
+
+const CommissionCTA = styled(Link)`
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #06b6d4;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+  display: inline-block;
+
+  &:hover {
+    background: #0891b2;
+  }
+`;
+
+const TestSummary = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+`;
+
+const TestSummaryItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+
+  .test-icon {
+    font-size: 16px;
+  }
+
+  .test-name {
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .test-duration {
+    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    font-size: 12px;
+  }
+`;
+
+const ToggleTestsButton = styled.button`
+  border: none;
+  background: none;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 8px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 // Helper function to format PGP sensor field names for display
 const formatSensorLabel = (fieldName) => {
   const labels = {
@@ -348,6 +443,8 @@ export default function DeviceDetailPage() {
   const [timeRange, setTimeRange] = useState("24h");
   const [timeSeriesData, setTimeSeriesData] = useState(null);
   const [loadingChart, setLoadingChart] = useState(false);
+  const [commissionResult, setCommissionResult] = useState(null);
+  const [showAllTests, setShowAllTests] = useState(false);
 
   useEffect(() => {
     loadDeviceData();
@@ -362,15 +459,17 @@ export default function DeviceDetailPage() {
   const loadDeviceData = async () => {
     setLoading(true);
     try {
-      const [deviceData, alertsData, logsData] = await Promise.all([
+      const [deviceData, alertsData, logsData, commissionData] = await Promise.all([
         CloudMockAPI.devices.getById(deviceId),
         CloudMockAPI.alerts.getByDevice(deviceId),
         CloudMockAPI.devices.getLogs(deviceId),
+        CloudMockAPI.commissioning.getLastCommission(deviceId),
       ]);
 
       setDevice(deviceData);
       setAlerts(alertsData);
       setLogs(logsData);
+      setCommissionResult(commissionData);
     } catch (error) {
       console.error("Error loading device data:", error);
     } finally {
@@ -467,6 +566,18 @@ export default function DeviceDetailPage() {
     if (status === "offline") return "offline";
     if (status === "warning") return "warning";
     return "online";
+  };
+
+  const getTestIcon = (status) => {
+    if (status === "passed") return "✅";
+    if (status === "failed") return "❌";
+    if (status === "running") return "⏳";
+    return "⏸️";
+  };
+
+  const formatDuration = (ms) => {
+    if (!ms) return "—";
+    return `${(ms / 1000).toFixed(1)}s`;
   };
 
   if (loading) {
@@ -662,6 +773,56 @@ export default function DeviceDetailPage() {
                   </InfoGrid>
                 </>
               )}
+
+              {/* Commissioning Status Section */}
+              <CommissionSection>
+                <h3 style={{ margin: "0 0 16px", fontSize: "16px" }}>
+                  Commissioning Status
+                </h3>
+                <CommissionHeader>
+                  <CommissionStatusPill $status={device.commissionStatus || "uncommissioned"}>
+                    {device.commissionStatus || "uncommissioned"}
+                  </CommissionStatusPill>
+                  {device.lastCommissioned && (
+                    <div style={{ fontSize: "13px", color: "#6b7280" }}>
+                      Last commissioned: {new Date(device.lastCommissioned).toLocaleString()}
+                    </div>
+                  )}
+                </CommissionHeader>
+
+                {commissionResult && commissionResult.tests ? (
+                  <>
+                    <TestSummary>
+                      {(showAllTests ? commissionResult.tests : commissionResult.tests.slice(0, 3)).map((test) => (
+                        <TestSummaryItem key={test.id}>
+                          <span className="test-icon">{getTestIcon(test.status)}</span>
+                          <span className="test-name">{test.name}</span>
+                          <span className="test-duration">{formatDuration(test.duration)}</span>
+                        </TestSummaryItem>
+                      ))}
+                    </TestSummary>
+                    {commissionResult.tests.length > 3 && (
+                      <ToggleTestsButton onClick={() => setShowAllTests(!showAllTests)}>
+                        {showAllTests
+                          ? `Show less ↑`
+                          : `Show all ${commissionResult.tests.length} tests ↓`}
+                      </ToggleTestsButton>
+                    )}
+                  </>
+                ) : (
+                  <div style={{ fontSize: "14px", color: "#6b7280", marginTop: "8px" }}>
+                    {device.commissionStatus === "uncommissioned"
+                      ? "This device has not been commissioned yet."
+                      : "No commissioning data available."}
+                  </div>
+                )}
+
+                {device.commissionStatus === "uncommissioned" && (
+                  <CommissionCTA to={`/cloud/commissioning`} style={{ marginTop: "16px" }}>
+                    Start Commissioning →
+                  </CommissionCTA>
+                )}
+              </CommissionSection>
 
               {alerts.length > 0 && (
                 <>
