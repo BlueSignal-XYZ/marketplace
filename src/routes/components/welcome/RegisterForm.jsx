@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
+import { Player } from "@lottiefiles/react-lottie-player";
 import Notification from "../../../components/popups/NotificationPopup";
 import {
   environmentalRotation,
