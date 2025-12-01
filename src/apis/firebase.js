@@ -1,22 +1,32 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
+// Dynamic Firebase configuration that routes to the appropriate app based on hostname
+// For Cloud mode: uses firebaseCloud.ts
+// For WQT mode: uses firebaseWqt.ts
+// This maintains backward compatibility while supporting dual-mode architecture
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAESUVCltG4kviQLIiiygIROJ7BKMMgvX8",
-  authDomain: "waterquality-trading.firebaseapp.com",
-  projectId: "waterquality-trading",
-  storageBucket: "waterquality-trading.firebasestorage.app",
-  messagingSenderId: "1006831487182",
-  appId: "1:1006831487182:web:a58405168a345d8728689f",
-  measurementId: "G-ECMFLV2Y6B"
-};
+import { auth as cloudAuth, db as cloudDb } from './firebaseCloud.ts';
+import { auth as wqtAuth, db as wqtDb } from './firebaseWqt.ts';
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+// Mode detection (same logic as App.jsx)
+function detectMode() {
+  const host = window.location.hostname;
+  const params = new URLSearchParams(window.location.search);
 
-// Initialize Firebase Auth
-const auth = getAuth();
+  if (
+    host === "cloud.bluesignal.xyz" ||
+    host.endsWith(".cloud.bluesignal.xyz") ||
+    host === "cloud-bluesignal.web.app" ||
+    params.get("app") === "cloud"
+  ) {
+    return "cloud";
+  }
+
+  return "marketplace";
+}
+
+const mode = detectMode();
+const auth = mode === "cloud" ? cloudAuth : wqtAuth;
+const db = mode === "cloud" ? cloudDb : wqtDb;
+
+console.log(`🔥 Firebase config loaded for mode: ${mode}`);
 
 export { auth, db };

@@ -20,16 +20,24 @@ const Grid = styled.div`
   }
 `;
 
-const MetricCard = styled.div`
+const MetricCard = styled(Link)`
+  display: block;
   background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   border-radius: 12px;
   padding: 20px;
+  text-decoration: none;
+  cursor: pointer;
   transition: all 0.15s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    border-color: ${({ theme }) => theme.colors?.primary400 || "#38bdf8"};
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   .label {
@@ -42,7 +50,7 @@ const MetricCard = styled.div`
   }
 
   .value {
-    font-size: 32px;
+    font-size: clamp(24px, 5vw, 32px);
     font-weight: 700;
     color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
     margin-bottom: 4px;
@@ -51,6 +59,10 @@ const MetricCard = styled.div`
   .subtext {
     font-size: 13px;
     color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px;
   }
 `;
 
@@ -385,7 +397,7 @@ export default function OverviewDashboard() {
 
       {/* Top Metrics Row */}
       <Grid>
-        <MetricCard>
+        <MetricCard to="/cloud/devices?status=online">
           <div className="label">Devices Online</div>
           <div className="value">
             {stats?.onlineDevices || 0}
@@ -393,19 +405,19 @@ export default function OverviewDashboard() {
           <div className="subtext">{stats?.totalDevices || 0} total</div>
         </MetricCard>
 
-        <MetricCard>
+        <MetricCard to="/cloud/sites">
           <div className="label">Sites Monitored</div>
           <div className="value">{stats?.sitesMonitored || 0}</div>
           <div className="subtext">Active locations</div>
         </MetricCard>
 
-        <MetricCard as={Link} to="/cloud/alerts" style={{ cursor: "pointer", textDecoration: "none" }}>
+        <MetricCard to="/cloud/alerts?status=open">
           <div className="label">Open Alerts</div>
           <div className="value">{stats?.openAlerts || 0}</div>
           <div className="subtext">Need attention</div>
         </MetricCard>
 
-        <MetricCard>
+        <MetricCard to="/cloud/devices?status=warning">
           <div className="label">Devices Needing Attention</div>
           <div className="value">{stats?.devicesNeedingAttention || 0}</div>
           <div className="subtext">Offline or warning</div>

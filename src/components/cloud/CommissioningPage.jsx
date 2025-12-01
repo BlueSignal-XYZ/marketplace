@@ -1,8 +1,9 @@
 // /src/components/cloud/CommissioningPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+import FilterPills from "../shared/FilterPills/FilterPills";
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -417,6 +418,7 @@ export default function CommissioningPage() {
   const [tests, setTests] = useState([]);
   const [commissionResult, setCommissionResult] = useState(null);
   const [viewingResult, setViewingResult] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("all");
 
   useEffect(() => {
     loadDevices();
@@ -511,6 +513,39 @@ export default function CommissioningPage() {
     return `${(ms / 1000).toFixed(1)}s`;
   };
 
+  // Filter devices based on commission status
+  const filteredDevices = useMemo(() => {
+    if (activeFilter === "all") return devices;
+
+    return devices.filter((device) => {
+      const status = device.commissionStatus || "uncommissioned";
+      if (activeFilter === "pending") return status === "uncommissioned";
+      if (activeFilter === "completed") return status === "commissioned";
+      if (activeFilter === "failed") return status === "failed";
+      if (activeFilter === "in_progress") return status === "in_progress";
+      return true;
+    });
+  }, [devices, activeFilter]);
+
+  // Calculate filter counts
+  const filterOptions = useMemo(() => {
+    const counts = {
+      all: devices.length,
+      pending: devices.filter((d) => !d.commissionStatus || d.commissionStatus === "uncommissioned").length,
+      in_progress: devices.filter((d) => d.commissionStatus === "in_progress").length,
+      completed: devices.filter((d) => d.commissionStatus === "commissioned").length,
+      failed: devices.filter((d) => d.commissionStatus === "failed").length,
+    };
+
+    return [
+      { label: "All", value: "all", count: counts.all },
+      { label: "Pending", value: "pending", count: counts.pending },
+      { label: "In Progress", value: "in_progress", count: counts.in_progress },
+      { label: "Completed", value: "completed", count: counts.completed },
+      { label: "Failed", value: "failed", count: counts.failed },
+    ];
+  }, [devices]);
+
   if (loading) {
     return (
       <CloudPageLayout
@@ -527,6 +562,13 @@ export default function CommissioningPage() {
       title="Commissioning"
       subtitle="Field-ready device commissioning wizard"
     >
+      {/* Filter Pills */}
+      <FilterPills
+        filters={filterOptions}
+        activeFilter={activeFilter}
+        onFilterChange={setActiveFilter}
+      />
+
       {/* Device Selector Table */}
       <DeviceTable>
         <Table>
@@ -543,7 +585,7 @@ export default function CommissioningPage() {
             </tr>
           </thead>
           <tbody>
-            {devices.map((device) => (
+            {filteredDevices.map((device) => (
               <tr key={device.id}>
                 <td>
                   <div style={{ fontWeight: 600 }}>{device.id}</div>
@@ -585,7 +627,7 @@ export default function CommissioningPage() {
 
         {/* Mobile Cards */}
         <MobileDeviceCards>
-          {devices.map((device) => (
+          {filteredDevices.map((device) => (
             <MobileDeviceCard key={device.id}>
               <MobileCardRow>
                 <strong>Device ID:</strong>

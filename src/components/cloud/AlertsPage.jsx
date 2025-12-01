@@ -22,6 +22,18 @@ const Filters = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const FilterChip = styled.button`
@@ -31,7 +43,8 @@ const FilterChip = styled.button`
       $active
         ? theme.colors?.primary500 || "#06b6d4"
         : theme.colors?.ui200 || "#e5e7eb"};
-  padding: 6px 14px;
+  padding: 10px 16px;
+  min-height: 44px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -47,6 +60,16 @@ const FilterChip = styled.button`
   &:hover {
     border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
   }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
 `;
 
 const TableContainer = styled.div`
@@ -54,12 +77,21 @@ const TableContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   border-radius: 12px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+
+  @media (max-width: 768px) {
+    min-width: 900px;
+  }
 
   thead {
     background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
@@ -74,12 +106,23 @@ const Table = styled.table`
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
+
+    @media (max-width: 768px) {
+      padding: 12px;
+      font-size: 12px;
+    }
   }
 
   td {
     padding: 14px 16px;
     border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
     color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+
+    @media (max-width: 768px) {
+      padding: 12px;
+      font-size: 13px;
+    }
   }
 
   tbody tr {
@@ -87,6 +130,7 @@ const Table = styled.table`
 
     &:hover {
       background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+      cursor: pointer;
     }
 
     &:last-child td {
