@@ -62,26 +62,29 @@ const MOCK_DEVICES = [
   {
     id: "pgw-0001",
     name: "Lakefront Buoy #1",
+    alias: "Buoy North Shore",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
     customer: "Lake Association",
     deviceType: "Water Quality Buoy",
     status: "online",
+    commissionStatus: "commissioned",
+    lastCommissioned: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     lastContact: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
-    gatewayId: "pgw-0001", // PGP Device ID (gateway = device in PGP)
+    gatewayId: "pgw-0001",
     gatewayName: "Lakefront Buoy #1",
-    gatewayWebUrl: "http://10.0.1.101:8080", // Optional: gateway web-commission URL
+    gatewayWebUrl: "http://10.0.1.101:8080",
+    gatewayIp: "10.0.1.101",
     batteryLevel: 87,
     signalStrength: 95,
     firmwareVersion: "v2.4.1",
     coordinates: { lat: 39.5, lng: -79.3 },
     latestReadings: {
-      // PGP sensor field names (must match exactly)
       temp_c: 18.4,
       ph: 7.2,
       ntu: 2.3,
       tds_ppm: 245,
-      npk_n: null, // Not applicable for water quality buoy
+      npk_n: null,
       npk_p: null,
       npk_k: null,
     },
@@ -89,15 +92,19 @@ const MOCK_DEVICES = [
   {
     id: "pgw-0002",
     name: "East Field Soil Probe",
+    alias: "Soil Probe East",
     siteId: "site-2",
     siteName: "Johnson Farm",
     customer: "Johnson Agri Co.",
     deviceType: "Soil NPK Probe",
     status: "warning",
+    commissionStatus: "failed",
+    lastCommissioned: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     lastContact: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
     gatewayId: "pgw-0002",
     gatewayName: "East Field Soil Probe",
     gatewayWebUrl: "http://10.0.2.201:8080",
+    gatewayIp: "10.0.2.201",
     batteryLevel: 23,
     signalStrength: 72,
     firmwareVersion: "v2.3.8",
@@ -115,15 +122,19 @@ const MOCK_DEVICES = [
   {
     id: "pgw-0003",
     name: "Algae Emitter — Dock",
+    alias: "Dock Algae Unit",
     siteId: "site-3",
     siteName: "Harbor Marina",
     customer: "Marina Management LLC",
     deviceType: "Ultrasonic Algae Control",
     status: "offline",
+    commissionStatus: "uncommissioned",
+    lastCommissioned: null,
     lastContact: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
     gatewayId: "pgw-0003",
     gatewayName: "Algae Emitter — Dock",
     gatewayWebUrl: null, // Offline, no web URL available
+    gatewayIp: "10.0.3.100",
     batteryLevel: 0,
     signalStrength: 0,
     firmwareVersion: "v2.2.5",
@@ -133,15 +144,19 @@ const MOCK_DEVICES = [
   {
     id: "pgw-0004",
     name: "Lakefront Buoy #2",
+    alias: "Buoy South Shore",
     siteId: "site-1",
     siteName: "Deep Creek Lake",
     customer: "Lake Association",
     deviceType: "Water Quality Buoy",
     status: "online",
+    commissionStatus: "commissioned",
+    lastCommissioned: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
     lastContact: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
     gatewayId: "pgw-0004",
     gatewayName: "Lakefront Buoy #2",
     gatewayWebUrl: "http://10.0.1.102:8080",
+    gatewayIp: "10.0.1.102",
     batteryLevel: 92,
     signalStrength: 88,
     firmwareVersion: "v2.4.1",
@@ -159,15 +174,19 @@ const MOCK_DEVICES = [
   {
     id: "pgw-0005",
     name: "West Field Soil Probe",
+    alias: "Soil Probe West",
     siteId: "site-2",
     siteName: "Johnson Farm",
     customer: "Johnson Agri Co.",
     deviceType: "Soil NPK Probe",
     status: "online",
+    commissionStatus: "commissioned",
+    lastCommissioned: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
     lastContact: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
     gatewayId: "pgw-0005",
     gatewayName: "West Field Soil Probe",
     gatewayWebUrl: "http://10.0.2.202:8080",
+    gatewayIp: "10.0.2.202",
     batteryLevel: 78,
     signalStrength: 81,
     firmwareVersion: "v2.4.0",
@@ -183,6 +202,78 @@ const MOCK_DEVICES = [
     },
   },
 ];
+
+// Commission results for devices - matches CommissionResult shape from spec
+const MOCK_COMMISSION_RESULTS = {
+  "pgw-0001": {
+    deviceId: "pgw-0001",
+    startedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    completedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 105 * 1000).toISOString(),
+    status: "passed",
+    tests: [
+      { id: "power_os", name: "Power & OS", status: "passed", duration: 1200, details: null },
+      { id: "ads1115", name: "ADS1115 ADC", status: "passed", duration: 800, details: null },
+      { id: "ds18b20", name: "DS18B20 Temp", status: "passed", duration: 900, details: null },
+      { id: "ph_ntu", name: "pH/Turbidity", status: "passed", duration: 1100, details: null },
+      { id: "npk", name: "NPK Modbus", status: "passed", duration: 0, details: "N/A - water buoy" },
+      { id: "relay_ch1", name: "Relay Ch1", status: "passed", duration: 500, details: null },
+      { id: "relay_ch2", name: "Relay Ch2", status: "passed", duration: 500, details: null },
+      { id: "lte_wifi", name: "LTE/WiFi", status: "passed", duration: 1500, details: null },
+      { id: "cloud_ingest", name: "Cloud Ingest", status: "passed", duration: 2000, details: null },
+    ],
+  },
+  "pgw-0002": {
+    deviceId: "pgw-0002",
+    startedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000 + 92 * 1000).toISOString(),
+    status: "failed",
+    tests: [
+      { id: "power_os", name: "Power & OS", status: "passed", duration: 1100, details: null },
+      { id: "ads1115", name: "ADS1115 ADC", status: "passed", duration: 750, details: null },
+      { id: "ds18b20", name: "DS18B20 Temp", status: "passed", duration: 850, details: null },
+      { id: "ph_ntu", name: "pH/Turbidity", status: "passed", duration: 0, details: "N/A - soil probe" },
+      { id: "npk", name: "NPK Modbus", status: "failed", duration: 2100, details: "Timeout on register read" },
+      { id: "relay_ch1", name: "Relay Ch1", status: "passed", duration: 450, details: null },
+      { id: "relay_ch2", name: "Relay Ch2", status: "passed", duration: 480, details: null },
+      { id: "lte_wifi", name: "LTE/WiFi", status: "passed", duration: 1400, details: null },
+      { id: "cloud_ingest", name: "Cloud Ingest", status: "passed", duration: 1800, details: null },
+    ],
+  },
+  "pgw-0004": {
+    deviceId: "pgw-0004",
+    startedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+    completedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000 + 110 * 1000).toISOString(),
+    status: "passed",
+    tests: [
+      { id: "power_os", name: "Power & OS", status: "passed", duration: 1300, details: null },
+      { id: "ads1115", name: "ADS1115 ADC", status: "passed", duration: 820, details: null },
+      { id: "ds18b20", name: "DS18B20 Temp", status: "passed", duration: 910, details: null },
+      { id: "ph_ntu", name: "pH/Turbidity", status: "passed", duration: 1050, details: null },
+      { id: "npk", name: "NPK Modbus", status: "passed", duration: 0, details: "N/A - water buoy" },
+      { id: "relay_ch1", name: "Relay Ch1", status: "passed", duration: 520, details: null },
+      { id: "relay_ch2", name: "Relay Ch2", status: "passed", duration: 510, details: null },
+      { id: "lte_wifi", name: "LTE/WiFi", status: "passed", duration: 1600, details: null },
+      { id: "cloud_ingest", name: "Cloud Ingest", status: "passed", duration: 2100, details: null },
+    ],
+  },
+  "pgw-0005": {
+    deviceId: "pgw-0005",
+    startedAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
+    completedAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000 + 108 * 1000).toISOString(),
+    status: "passed",
+    tests: [
+      { id: "power_os", name: "Power & OS", status: "passed", duration: 1150, details: null },
+      { id: "ads1115", name: "ADS1115 ADC", status: "passed", duration: 780, details: null },
+      { id: "ds18b20", name: "DS18B20 Temp", status: "passed", duration: 870, details: null },
+      { id: "ph_ntu", name: "pH/Turbidity", status: "passed", duration: 0, details: "N/A - soil probe" },
+      { id: "npk", name: "NPK Modbus", status: "passed", duration: 1950, details: null },
+      { id: "relay_ch1", name: "Relay Ch1", status: "passed", duration: 470, details: null },
+      { id: "relay_ch2", name: "Relay Ch2", status: "passed", duration: 490, details: null },
+      { id: "lte_wifi", name: "LTE/WiFi", status: "passed", duration: 1550, details: null },
+      { id: "cloud_ingest", name: "Cloud Ingest", status: "passed", duration: 1950, details: null },
+    ],
+  },
+};
 
 const MOCK_COMMISSIONING = [
   {
@@ -283,6 +374,32 @@ const MOCK_ALERTS = [
     firstSeen: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     lastSeen: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
     status: "resolved",
+  },
+  {
+    id: "alert-5",
+    severity: "critical",
+    siteId: "site-2",
+    siteName: "Johnson Farm",
+    deviceId: "pgw-0002",
+    deviceName: "East Field Soil Probe",
+    message: "Commissioning failed – NPK Modbus test failed: Timeout on register read",
+    type: "commissioning-failed",
+    firstSeen: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    status: "open",
+  },
+  {
+    id: "alert-6",
+    severity: "warning",
+    siteId: "site-3",
+    siteName: "Harbor Marina",
+    deviceId: "pgw-0003",
+    deviceName: "Algae Emitter — Dock",
+    message: "Commissioning incomplete – Device has not been commissioned",
+    type: "commissioning-incomplete",
+    firstSeen: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+    status: "open",
   },
 ];
 
@@ -555,6 +672,108 @@ export const CloudMockAPI = {
     getTestResults: async (commissioningId) => {
       await delay();
       return MOCK_PGP_TEST_RESULTS[commissioningId] || null;
+    },
+
+    /**
+     * Run commissioning tests for a device
+     * Simulates sequential test execution with realistic delays
+     * @param {string} deviceId - Device ID (e.g., "pgw-0001")
+     * @param {function} onTestUpdate - Callback for real-time test updates (optional)
+     * @returns {Promise<CommissionResult>} Commission result with test statuses
+     */
+    runCommission: async (deviceId, onTestUpdate = null) => {
+      const device = MOCK_DEVICES.find((d) => d.id === deviceId);
+      if (!device) {
+        throw new Error(`Device ${deviceId} not found`);
+      }
+
+      console.log(`📋 Commissioning started: ${deviceId}`);
+
+      const startedAt = new Date().toISOString();
+      const tests = [
+        { id: "power_os", name: "Power & OS", status: "pending", duration: 0, details: null },
+        { id: "ads1115", name: "ADS1115 ADC", status: "pending", duration: 0, details: null },
+        { id: "ds18b20", name: "DS18B20 Temp", status: "pending", duration: 0, details: null },
+        { id: "ph_ntu", name: "pH/Turbidity", status: "pending", duration: 0, details: null },
+        { id: "npk", name: "NPK Modbus", status: "pending", duration: 0, details: null },
+        { id: "relay_ch1", name: "Relay Ch1", status: "pending", duration: 0, details: null },
+        { id: "relay_ch2", name: "Relay Ch2", status: "pending", duration: 0, details: null },
+        { id: "lte_wifi", name: "LTE/WiFi", status: "pending", duration: 0, details: null },
+        { id: "cloud_ingest", name: "Cloud Ingest", status: "pending", duration: 0, details: null },
+      ];
+
+      // Simulate sequential test execution
+      for (let i = 0; i < tests.length; i++) {
+        const test = tests[i];
+        test.status = "running";
+        if (onTestUpdate) onTestUpdate(tests);
+
+        // Simulate test duration (1-3 seconds)
+        const testDuration = 800 + Math.random() * 1500;
+        await delay(testDuration);
+        test.duration = Math.round(testDuration);
+
+        // Determine test result based on device type and commission status
+        const shouldPass = device.commissionStatus === "commissioned" ||
+                          (device.commissionStatus === "failed" && test.id !== "npk");
+
+        // Special cases for device-specific tests
+        if (test.id === "npk" && device.deviceType.includes("Water Quality Buoy")) {
+          test.status = "passed";
+          test.duration = 0;
+          test.details = "N/A - water buoy";
+        } else if (test.id === "ph_ntu" && device.deviceType.includes("Soil NPK Probe")) {
+          test.status = "passed";
+          test.duration = 0;
+          test.details = "N/A - soil probe";
+        } else if (device.commissionStatus === "failed" && test.id === "npk") {
+          test.status = "failed";
+          test.details = "Timeout on register read";
+          console.log(`❌ Test failed: ${test.id} – ${test.details}`);
+        } else {
+          test.status = shouldPass ? "passed" : "failed";
+          if (test.status === "passed") {
+            console.log(`✅ Test passed: ${test.id} (${(test.duration / 1000).toFixed(1)}s)`);
+          } else {
+            test.details = "Test failed";
+            console.log(`❌ Test failed: ${test.id} – ${test.details}`);
+          }
+        }
+
+        if (onTestUpdate) onTestUpdate(tests);
+      }
+
+      const completedAt = new Date().toISOString();
+      const overallStatus = tests.every(t => t.status === "passed") ? "passed" : "failed";
+
+      const result = {
+        deviceId,
+        startedAt,
+        completedAt,
+        status: overallStatus,
+        tests,
+      };
+
+      // Store result in mock data
+      MOCK_COMMISSION_RESULTS[deviceId] = result;
+
+      // Update device commission status
+      device.commissionStatus = overallStatus === "passed" ? "commissioned" : "failed";
+      device.lastCommissioned = completedAt;
+
+      console.log(`🏁 Commissioning ${overallStatus}: ${deviceId}`);
+
+      return result;
+    },
+
+    /**
+     * Get last commission result for a device
+     * @param {string} deviceId - Device ID (e.g., "pgw-0001")
+     * @returns {Promise<CommissionResult|null>} Last commission result or null if never commissioned
+     */
+    getLastCommission: async (deviceId) => {
+      await delay();
+      return MOCK_COMMISSION_RESULTS[deviceId] || null;
     },
   },
 
