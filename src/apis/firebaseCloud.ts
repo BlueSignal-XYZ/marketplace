@@ -2,7 +2,7 @@
 // This config is used exclusively by Cloud authentication components
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
 // Cloud-specific Firebase configuration
@@ -21,5 +21,6 @@ const firebaseCloudConfig = {
 const cloudApp = initializeApp(firebaseCloudConfig, "cloud");
 const cloudDb = getDatabase(cloudApp);
 const cloudAuth = getAuth(cloudApp);
+const cloudGoogleProvider = new GoogleAuthProvider();
 
-export { cloudAuth as auth, cloudDb as db };
+export { cloudAuth as auth, cloudDb as db, cloudGoogleProvider as googleProvider };

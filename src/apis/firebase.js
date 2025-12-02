@@ -3,8 +3,8 @@
 // For WQT mode: uses firebaseWqt.ts
 // This maintains backward compatibility while supporting dual-mode architecture
 
-import { auth as cloudAuth, db as cloudDb } from './firebaseCloud.ts';
-import { auth as wqtAuth, db as wqtDb } from './firebaseWqt.ts';
+import { auth as cloudAuth, db as cloudDb, googleProvider as cloudGoogleProvider } from './firebaseCloud.ts';
+import { auth as wqtAuth, db as wqtDb, googleProvider as wqtGoogleProvider } from './firebaseWqt.ts';
 
 // Mode detection (same logic as App.jsx)
 function detectMode() {
@@ -26,7 +26,8 @@ function detectMode() {
 const mode = detectMode();
 const auth = mode === "cloud" ? cloudAuth : wqtAuth;
 const db = mode === "cloud" ? cloudDb : wqtDb;
+const googleProvider = mode === "cloud" ? cloudGoogleProvider : wqtGoogleProvider;
 
 console.log(`🔥 Firebase config loaded for mode: ${mode}`);
 
-export { auth, db };
+export { auth, db, googleProvider };

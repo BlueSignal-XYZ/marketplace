@@ -2,7 +2,7 @@
 // This config is used exclusively by WQT authentication components
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
 // WQT-specific Firebase configuration
@@ -20,5 +20,6 @@ const firebaseWqtConfig = {
 const wqtApp = initializeApp(firebaseWqtConfig, "wqt");
 const wqtDb = getDatabase(wqtApp);
 const wqtAuth = getAuth(wqtApp);
+const wqtGoogleProvider = new GoogleAuthProvider();
 
-export { wqtAuth as auth, wqtDb as db };
+export { wqtAuth as auth, wqtDb as db, wqtGoogleProvider as googleProvider };

@@ -73,6 +73,7 @@ import SiteDetailPage from "./components/cloud/SiteDetailPage";
 import CommissioningPage from "./components/cloud/CommissioningPage";
 import AlertsPage from "./components/cloud/AlertsPage";
 import AlertDetailPage from "./components/cloud/AlertDetailPage";
+import DeviceOnboardingWizard from "./components/cloud/DeviceOnboardingWizard";
 
 import {
   CloudNutrientCalculator,
@@ -441,6 +442,15 @@ const CloudRoutes = ({ user, authLoading }) => (
       element={
         <CloudAuthGate authLoading={authLoading}>
           <DevicesListPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/devices/new"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <DeviceOnboardingWizard />
         </CloudAuthGate>
       }
     />

@@ -1,9 +1,35 @@
 // /src/components/cloud/DevicesListPage.jsx
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+
+const AddDeviceButton = styled.button`
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
 
 const Controls = styled.div`
   display: flex;
@@ -187,6 +213,7 @@ const Skeleton = styled.div`
 `;
 
 export default function DevicesListPage() {
+  const navigate = useNavigate();
   const [devices, setDevices] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -265,6 +292,11 @@ export default function DevicesListPage() {
     <CloudPageLayout
       title="Devices"
       subtitle="Monitor and manage all deployed devices"
+      actions={
+        <AddDeviceButton onClick={() => navigate("/cloud/devices/new")}>
+          + Add Device
+        </AddDeviceButton>
+      }
     >
       <Controls>
         <SearchBar
