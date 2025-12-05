@@ -18,13 +18,10 @@ import { formVariant, loadingVariant } from "./motion_variants";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
 } from "firebase/auth";
 
 /** FIREBASE AUTH */
 import { auth, googleProvider } from "../../../apis/firebase";
-import { isCloudMode } from "../../../utils/modeDetection";
 import { Input } from "../../../components/shared/input/Input";
 import FormSection from "../../../components/shared/FormSection/FormSection";
 import {
@@ -124,64 +121,8 @@ const RegisterForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Handle redirect result on page load (for Cloud mode OAuth)
-  useEffect(() => {
-    const handleRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result?.user) {
-          console.log("✅ Google redirect sign-up success:", result.user.uid);
-
-          // Create user account with Google data
-          const newUser = {
-            uid: result.user.uid,
-            username: (result.user.displayName || result.user.email?.split("@")[0] || "user")
-              .toLowerCase()
-              .replace(/\s+/g, "_"),
-            email: result.user.email?.toLowerCase(),
-            displayName: result.user.displayName,
-            role: "farmer",
-            PIN: 123456,
-          };
-
-          console.log("RegisterForm → Google redirect newUser:", newUser);
-
-          // Best-effort backend account creation
-          try {
-            const apiResult = await AccountAPI.create(newUser);
-            console.log("AccountAPI.create →", apiResult);
-          } catch (err) {
-            console.warn("AccountAPI.create failed (non-fatal):", err);
-          }
-
-          // Keep local user state in sync
-          let updatedOK = false;
-          if (updateUser) {
-            updatedOK = !!(await updateUser(null, newUser));
-          }
-          if (!updatedOK) {
-            try {
-              sessionStorage.setItem("user", JSON.stringify(newUser));
-            } catch (e) {
-              console.error("Failed to write sessionStorage user:", e);
-            }
-          }
-
-          setIsSuccess(true);
-          // Note: AppContext onAuthStateChanged will also fire and handle redirect
-        }
-      } catch (err) {
-        console.error("❌ Google redirect sign-up failed:", err);
-        if (err.code === "auth/unauthorized-domain") {
-          setError("This domain is not authorized for authentication. Please contact support.");
-        } else if (err.code !== "auth/popup-closed-by-user") {
-          setError(err?.message || "Unable to sign up with Google. Please try again.");
-        }
-      }
-    };
-
-    handleRedirectResult();
-  }, [updateUser]);
+  // NOTE: Redirect result handling is now done centrally in AppContext
+  // to ensure it's processed before any UI renders
 
   // Trigger onSuccess callback after success animation
   useEffect(() => {
@@ -200,18 +141,7 @@ const RegisterForm = ({
     try {
       console.log("🔐 Google sign-up attempt...");
 
-      // Use redirect for Cloud mode to avoid cross-origin popup issues
-      // The authDomain (waterquality-trading.firebaseapp.com) differs from the
-      // current domain (cloud.bluesignal.xyz), which causes popup auth to fail.
-      // Redirect auth doesn't have this cross-origin communication issue.
-      if (isCloudMode()) {
-        console.log("🔄 Using signInWithRedirect for Cloud mode...");
-        await signInWithRedirect(auth, googleProvider);
-        // Page will redirect, no further code executes
-        return;
-      }
-
-      // Use popup for marketplace mode (same origin as authDomain)
+      // Use popup auth - handles cross-origin via postMessage
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 

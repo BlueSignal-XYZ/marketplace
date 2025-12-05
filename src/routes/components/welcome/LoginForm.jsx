@@ -1,17 +1,14 @@
 // /src/routes/components/welcome/LoginForm.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../../apis/firebase";
 
-import { isCloudMode } from "../../../utils/modeDetection";
 
 import Notification from "../../../components/popups/NotificationPopup";
 import { PROMPT_CARD, PROMPT_FORM } from "../../../components/lib/styled";
@@ -161,33 +158,8 @@ const LoginForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [notification, setNotification] = useState(null);
 
-  // Handle redirect result on page load (for Cloud mode OAuth)
-  useEffect(() => {
-    const handleRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result?.user) {
-          console.log("✅ Google redirect login success:", result.user.uid);
-          // Auth listener in AppContext will handle the rest
-        }
-      } catch (err) {
-        console.error("❌ Google redirect login failed:", err);
-        if (err.code === "auth/unauthorized-domain") {
-          setNotification({
-            type: "error",
-            message: "This domain is not authorized for authentication. Please contact support.",
-          });
-        } else if (err.code !== "auth/popup-closed-by-user") {
-          setNotification({
-            type: "error",
-            message: err?.message || "Unable to sign in with Google. Please try again.",
-          });
-        }
-      }
-    };
-
-    handleRedirectResult();
-  }, []);
+  // NOTE: Redirect result handling is now done centrally in AppContext
+  // to ensure it's processed before any UI renders
 
   const handleError = (message) => {
     console.error("🔐 Login error:", message);
@@ -263,18 +235,7 @@ const LoginForm = () => {
       setSubmitting(true);
       console.log("🔐 Google login attempt...");
 
-      // Use redirect for Cloud mode to avoid cross-origin popup issues
-      // The authDomain (waterquality-trading.firebaseapp.com) differs from the
-      // current domain (cloud.bluesignal.xyz), which causes popup auth to fail.
-      // Redirect auth doesn't have this cross-origin communication issue.
-      if (isCloudMode()) {
-        console.log("🔄 Using signInWithRedirect for Cloud mode...");
-        await signInWithRedirect(auth, googleProvider);
-        // Page will redirect, no further code executes
-        return;
-      }
-
-      // Use popup for marketplace mode (same origin as authDomain)
+      // Use popup auth - handles cross-origin via postMessage
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
@@ -284,6 +245,8 @@ const LoginForm = () => {
       // Auth listener will handle the rest
     } catch (err) {
       console.error("❌ Google login failed:", err);
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
 
       // Handle specific error cases
       if (err.code === "auth/popup-closed-by-user") {
@@ -293,6 +256,9 @@ const LoginForm = () => {
         handleError("Popup was blocked. Please allow popups and try again.");
       } else if (err.code === "auth/unauthorized-domain") {
         handleError("This domain is not authorized for authentication. Please contact support.");
+      } else if (err.code === "auth/cancelled-popup-request") {
+        // Another popup was opened - ignore
+        console.log("Popup request cancelled");
       } else {
         handleError(err?.message || "Unable to sign in with Google. Please try again.");
       }

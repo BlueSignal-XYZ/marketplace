@@ -34,7 +34,8 @@ export const AppProvider = ({ children }) => {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // CRITICAL: Firebase Auth State Listener
+  // Firebase Auth State Listener
+  // Using popup auth, so we just need to listen for auth state changes
   useEffect(() => {
     console.log("🔐 Setting up Firebase auth listener...");
 
@@ -177,7 +178,7 @@ export const AppProvider = ({ children }) => {
     ACTIONS: {
       setIsLoading,
       updateUser,
-      setUser, // ADDED: For direct user state updates (used by LoginForm)
+      setUser, // For direct user state updates
       setSearchResults,
       setRoutePath,
       handleSidebar,
@@ -194,8 +195,8 @@ export const AppProvider = ({ children }) => {
       setTxPopupVisible,
       cancelConfirmation,
       logNotification,
-      logout, // Universal logout - signs out from Firebase
-      handleLogOut, // Legacy logout with confirmation
+      logout,
+      handleLogOut,
       toggleEnvironmentSubItems,
     },
   };
