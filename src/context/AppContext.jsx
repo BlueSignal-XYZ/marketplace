@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut, getRedirectResult } from "firebase/auth";
 import { auth } from "../apis/firebase";
 import { UserAPI } from "../scripts/back_door";
+import { getAppMode } from "../utils/modeDetection";
+import { getDefaultDashboardRoute } from "../utils/roleRouting";
 
 const AppContext = createContext();
 
@@ -38,7 +40,6 @@ export const AppProvider = ({ children }) => {
   const loadUserData = async (firebaseUser) => {
     if (!firebaseUser) {
       sessionStorage.removeItem("user");
-      setUser(null);
       return null;
     }
 
@@ -47,7 +48,6 @@ export const AppProvider = ({ children }) => {
 
       if (userdata?.uid) {
         sessionStorage.setItem("user", JSON.stringify(userdata));
-        setUser(userdata);
         console.log("✅ User loaded:", userdata.uid, "| Role:", userdata.role || "none");
         return userdata;
       } else {
@@ -59,7 +59,6 @@ export const AppProvider = ({ children }) => {
           role: "buyer", // default fallback
         };
         sessionStorage.setItem("user", JSON.stringify(fallbackUser));
-        setUser(fallbackUser);
         console.log("⚠️ User loaded from Firebase (backend fallback):", fallbackUser.uid);
         return fallbackUser;
       }
@@ -73,55 +72,67 @@ export const AppProvider = ({ children }) => {
         role: "buyer",
       };
       sessionStorage.setItem("user", JSON.stringify(fallbackUser));
-      setUser(fallbackUser);
       return fallbackUser;
     }
   };
 
   // CRITICAL: Firebase Auth Initialization
-  // Must check for redirect result BEFORE setting up onAuthStateChanged
-  // to prevent showing login page during redirect auth flow
+  // Handle redirect result AND set up auth listener
   useEffect(() => {
     console.log("🔐 Initializing Firebase auth...");
     let unsubscribe = null;
+    let redirectHandled = false;
 
     const initAuth = async () => {
       // Step 1: Check for pending redirect result FIRST
-      // This is critical for signInWithRedirect to work properly
+      // This must complete before we process onAuthStateChanged
       try {
         console.log("🔄 Checking for redirect result...");
         const redirectResult = await getRedirectResult(auth);
 
         if (redirectResult?.user) {
           console.log("✅ Redirect auth success:", redirectResult.user.uid);
-          await loadUserData(redirectResult.user);
-          setAuthLoading(false);
-          setIsLoading(false);
+          redirectHandled = true;
 
-          // Set up listener for future auth changes (logout, etc.)
-          unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            console.log("🔐 Auth state changed:", firebaseUser?.uid || "signed out");
-            if (!firebaseUser) {
-              sessionStorage.removeItem("user");
-              setUser(null);
-              console.log("🚪 User signed out");
-            }
-            // Don't re-load user data here - we already have it
-          });
-          return;
+          // Load user data
+          const userData = await loadUserData(redirectResult.user);
+
+          if (userData) {
+            setUser(userData);
+            setAuthLoading(false);
+            setIsLoading(false);
+
+            // CRITICAL: Navigate immediately using window.location
+            // React Router navigate() can have timing issues with state updates
+            const mode = getAppMode();
+            const route = getDefaultDashboardRoute(userData, mode);
+            console.log("🚀 Redirect complete, navigating to:", route);
+
+            // Use replace to avoid back-button issues
+            window.location.replace(route);
+            return; // Stop execution, page is navigating
+          }
         }
       } catch (error) {
-        // Redirect errors are handled, but we continue to check auth state
-        console.log("🔄 No redirect result (or error):", error?.code || "none");
+        console.error("🔄 Redirect result error:", error?.code || error?.message || "unknown");
+        // Continue to auth state listener even if redirect fails
       }
 
-      // Step 2: No redirect result - set up normal auth state listener
+      // Step 2: Set up normal auth state listener
+      // This handles: existing sessions, popup auth, and normal page loads
       console.log("🔐 Setting up auth state listener...");
       unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
         console.log("🔐 Auth state changed:", firebaseUser?.uid || "signed out");
 
+        // Skip if we already handled redirect (prevents double processing)
+        if (redirectHandled && firebaseUser) {
+          console.log("🔄 Skipping - already handled by redirect");
+          return;
+        }
+
         if (firebaseUser) {
-          await loadUserData(firebaseUser);
+          const userData = await loadUserData(firebaseUser);
+          setUser(userData);
         } else {
           sessionStorage.removeItem("user");
           setUser(null);
