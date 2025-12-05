@@ -11,18 +11,13 @@ import { WelcomeHome } from "./components/welcome";
 import Footer from "../components/shared/Footer/Footer";
 import { useAppContext } from "../context/AppContext";
 import { getDefaultDashboardRoute } from "../utils/roleRouting";
+import { isCloudMode, getAppMode } from "../utils/modeDetection";
 
 import cloudLogo from "../assets/bluesignal-logo.png";
 import marketplaceLogo from "../assets/logo.png";
 
 // --------------------- logo by hostname (used by WelcomeHome) -------------
-const host = window.location.hostname;
-const isCloudHost =
-  host === "cloud.bluesignal.xyz" ||
-  host.endsWith(".cloud.bluesignal.xyz") ||
-  host === "cloud-bluesignal.web.app";
-
-export const logoImage = isCloudHost ? cloudLogo : marketplaceLogo;
+export const logoImage = isCloudMode() ? cloudLogo : marketplaceLogo;
 
 // ------------------------------ layout ------------------------------------
 
@@ -84,28 +79,16 @@ const Welcome = () => {
   useEffect(() => {
     if (!user?.uid) return;
 
-    const host = window.location.hostname;
-    const mode =
-      host === "cloud.bluesignal.xyz" ||
-      host.endsWith(".cloud.bluesignal.xyz") ||
-      host === "cloud-bluesignal.web.app"
-        ? "cloud"
-        : "marketplace";
-
+    const mode = getAppMode();
     const route = getDefaultDashboardRoute(user, mode);
+    console.log("🚀 Welcome: User authenticated, redirecting to:", route);
     navigate(route, { replace: true });
   }, [user, navigate]);
 
   const enterDash = () => {
-    const host = window.location.hostname;
-    const mode =
-      host === "cloud.bluesignal.xyz" ||
-      host.endsWith(".cloud.bluesignal.xyz") ||
-      host === "cloud-bluesignal.web.app"
-        ? "cloud"
-        : "marketplace";
-
+    const mode = getAppMode();
     const route = getDefaultDashboardRoute(user, mode);
+    console.log("🚀 Welcome: enterDash called, navigating to:", route);
     navigate(route);
   };
 

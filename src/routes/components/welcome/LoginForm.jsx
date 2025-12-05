@@ -11,17 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../../apis/firebase";
 
-// Detect if we're in Cloud mode (same logic as firebase.js)
-const isCloudMode = () => {
-  const host = window.location.hostname;
-  const params = new URLSearchParams(window.location.search);
-  return (
-    host === "cloud.bluesignal.xyz" ||
-    host.endsWith(".cloud.bluesignal.xyz") ||
-    host === "cloud-bluesignal.web.app" ||
-    params.get("app") === "cloud"
-  );
-};
+import { isCloudMode } from "../../../utils/modeDetection";
 
 import Notification from "../../../components/popups/NotificationPopup";
 import { PROMPT_CARD, PROMPT_FORM } from "../../../components/lib/styled";

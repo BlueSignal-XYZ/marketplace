@@ -89,6 +89,7 @@ import SellerDashboard_Role from "./components/dashboards/SellerDashboard";
 import InstallerDashboard from "./components/dashboards/InstallerDashboard";
 
 import { getDefaultDashboardRoute } from "./utils/roleRouting";
+import { isCloudMode, getAppMode } from "./utils/modeDetection";
 
 /* -------------------------------------------------------------------------- */
 /*                              DEBUG VERSION TAG                              */
@@ -106,29 +107,8 @@ function App() {
   const { STATES } = useAppContext();
   const { user, authLoading } = STATES || {};
 
-  const host = window.location.hostname;
-  const params = new URLSearchParams(window.location.search);
-  let mode = "marketplace";
-
-  // MODE DETECTION
-  if (
-    host === "cloud.bluesignal.xyz" ||
-    host.endsWith(".cloud.bluesignal.xyz") ||
-    host === "cloud-bluesignal.web.app"
-  ) {
-    mode = "cloud";
-  } else if (
-    host === "waterquality.trading" ||
-    host === "waterquality-trading.web.app" ||
-    host.endsWith(".waterquality.trading")
-  ) {
-    mode = "marketplace";
-  } else {
-    const appParam = params.get("app");
-    if (appParam === "cloud" || appParam === "marketplace") {
-      mode = appParam;
-    }
-  }
+  // MODE DETECTION - using shared utility
+  const mode = getAppMode();
 
   // DIAGNOSTIC LOGGING (as per spec)
   console.log("═══════════════════════════════════════════════════════════");

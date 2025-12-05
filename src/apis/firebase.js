@@ -5,25 +5,9 @@
 
 import { auth as cloudAuth, db as cloudDb, googleProvider as cloudGoogleProvider } from './firebaseCloud.ts';
 import { auth as wqtAuth, db as wqtDb, googleProvider as wqtGoogleProvider } from './firebaseWqt.ts';
+import { getAppMode } from '../utils/modeDetection';
 
-// Mode detection (same logic as App.jsx)
-function detectMode() {
-  const host = window.location.hostname;
-  const params = new URLSearchParams(window.location.search);
-
-  if (
-    host === "cloud.bluesignal.xyz" ||
-    host.endsWith(".cloud.bluesignal.xyz") ||
-    host === "cloud-bluesignal.web.app" ||
-    params.get("app") === "cloud"
-  ) {
-    return "cloud";
-  }
-
-  return "marketplace";
-}
-
-const mode = detectMode();
+const mode = getAppMode();
 const auth = mode === "cloud" ? cloudAuth : wqtAuth;
 const db = mode === "cloud" ? cloudDb : wqtDb;
 const googleProvider = mode === "cloud" ? cloudGoogleProvider : wqtGoogleProvider;
