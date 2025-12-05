@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, signOut, getRedirectResult } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../apis/firebase";
 import { UserAPI } from "../scripts/back_door";
-import { getAppMode } from "../utils/modeDetection";
-import { getDefaultDashboardRoute } from "../utils/roleRouting";
 
 const AppContext = createContext();
 
@@ -36,120 +34,60 @@ export const AppProvider = ({ children }) => {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // Helper to load user data from Firebase user
-  const loadUserData = async (firebaseUser) => {
-    if (!firebaseUser) {
-      sessionStorage.removeItem("user");
-      return null;
-    }
-
-    try {
-      const userdata = (await UserAPI.account.getUserFromUID(firebaseUser.uid))?.userdata;
-
-      if (userdata?.uid) {
-        sessionStorage.setItem("user", JSON.stringify(userdata));
-        console.log("✅ User loaded:", userdata.uid, "| Role:", userdata.role || "none");
-        return userdata;
-      } else {
-        // Firebase user exists but not in backend - use Firebase data
-        const fallbackUser = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          role: "buyer", // default fallback
-        };
-        sessionStorage.setItem("user", JSON.stringify(fallbackUser));
-        console.log("⚠️ User loaded from Firebase (backend fallback):", fallbackUser.uid);
-        return fallbackUser;
-      }
-    } catch (error) {
-      console.error("❌ Failed to fetch user data:", error);
-      // Still set Firebase user so they're not stuck
-      const fallbackUser = {
-        uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        role: "buyer",
-      };
-      sessionStorage.setItem("user", JSON.stringify(fallbackUser));
-      return fallbackUser;
-    }
-  };
-
-  // CRITICAL: Firebase Auth Initialization
-  // Handle redirect result AND set up auth listener
+  // Firebase Auth State Listener
+  // Using popup auth, so we just need to listen for auth state changes
   useEffect(() => {
-    console.log("🔐 Initializing Firebase auth...");
-    let unsubscribe = null;
-    let redirectHandled = false;
+    console.log("🔐 Setting up Firebase auth listener...");
 
-    const initAuth = async () => {
-      // Step 1: Check for pending redirect result FIRST
-      // This must complete before we process onAuthStateChanged
-      try {
-        console.log("🔄 Checking for redirect result...");
-        const redirectResult = await getRedirectResult(auth);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log("🔐 Firebase auth state changed:", firebaseUser?.uid || "signed out");
 
-        if (redirectResult?.user) {
-          console.log("✅ Redirect auth success:", redirectResult.user.uid);
-          redirectHandled = true;
+      if (firebaseUser) {
+        // User signed in - fetch full user data from backend
+        try {
+          const userdata = (await UserAPI.account.getUserFromUID(firebaseUser.uid))?.userdata;
 
-          // Load user data
-          const userData = await loadUserData(redirectResult.user);
-
-          if (userData) {
-            setUser(userData);
-            setAuthLoading(false);
-            setIsLoading(false);
-
-            // CRITICAL: Navigate immediately using window.location
-            // React Router navigate() can have timing issues with state updates
-            const mode = getAppMode();
-            const route = getDefaultDashboardRoute(userData, mode);
-            console.log("🚀 Redirect complete, navigating to:", route);
-
-            // Use replace to avoid back-button issues
-            window.location.replace(route);
-            return; // Stop execution, page is navigating
+          if (userdata?.uid) {
+            sessionStorage.setItem("user", JSON.stringify(userdata));
+            setUser(userdata);
+            console.log("✅ User loaded:", userdata.uid, "| Role:", userdata.role || "none");
+          } else {
+            // Firebase user exists but not in backend - use Firebase data
+            const fallbackUser = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName,
+              role: "buyer", // default fallback
+            };
+            sessionStorage.setItem("user", JSON.stringify(fallbackUser));
+            setUser(fallbackUser);
+            console.log("⚠️ User loaded from Firebase (backend fallback):", fallbackUser.uid);
           }
+        } catch (error) {
+          console.error("❌ Failed to fetch user data:", error);
+          // Still set Firebase user so they're not stuck
+          const fallbackUser = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            role: "buyer",
+          };
+          sessionStorage.setItem("user", JSON.stringify(fallbackUser));
+          setUser(fallbackUser);
         }
-      } catch (error) {
-        console.error("🔄 Redirect result error:", error?.code || error?.message || "unknown");
-        // Continue to auth state listener even if redirect fails
+      } else {
+        // User signed out
+        sessionStorage.removeItem("user");
+        setUser(null);
+        console.log("🚪 User signed out");
       }
 
-      // Step 2: Set up normal auth state listener
-      // This handles: existing sessions, popup auth, and normal page loads
-      console.log("🔐 Setting up auth state listener...");
-      unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        console.log("🔐 Auth state changed:", firebaseUser?.uid || "signed out");
-
-        // Skip if we already handled redirect (prevents double processing)
-        if (redirectHandled && firebaseUser) {
-          console.log("🔄 Skipping - already handled by redirect");
-          return;
-        }
-
-        if (firebaseUser) {
-          const userData = await loadUserData(firebaseUser);
-          setUser(userData);
-        } else {
-          sessionStorage.removeItem("user");
-          setUser(null);
-          console.log("🚪 User signed out");
-        }
-
-        setAuthLoading(false);
-        setIsLoading(false);
-      });
-    };
-
-    initAuth();
+      setAuthLoading(false);
+      setIsLoading(false);
+    });
 
     // Cleanup listener on unmount
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   // Manual user update (for registration or profile edits)
@@ -240,7 +178,7 @@ export const AppProvider = ({ children }) => {
     ACTIONS: {
       setIsLoading,
       updateUser,
-      setUser, // ADDED: For direct user state updates (used by LoginForm)
+      setUser, // For direct user state updates
       setSearchResults,
       setRoutePath,
       handleSidebar,
@@ -257,8 +195,8 @@ export const AppProvider = ({ children }) => {
       setTxPopupVisible,
       cancelConfirmation,
       logNotification,
-      logout, // Universal logout - signs out from Firebase
-      handleLogOut, // Legacy logout with confirmation
+      logout,
+      handleLogOut,
       toggleEnvironmentSubItems,
     },
   };

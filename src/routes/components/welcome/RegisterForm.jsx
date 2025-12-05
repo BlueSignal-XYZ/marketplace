@@ -18,12 +18,10 @@ import { formVariant, loadingVariant } from "./motion_variants";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
 } from "firebase/auth";
 
 /** FIREBASE AUTH */
 import { auth, googleProvider } from "../../../apis/firebase";
-import { isCloudMode } from "../../../utils/modeDetection";
 import { Input } from "../../../components/shared/input/Input";
 import FormSection from "../../../components/shared/FormSection/FormSection";
 import {
@@ -143,18 +141,7 @@ const RegisterForm = ({
     try {
       console.log("🔐 Google sign-up attempt...");
 
-      // Use redirect for Cloud mode to avoid cross-origin popup issues
-      // The authDomain (waterquality-trading.firebaseapp.com) differs from the
-      // current domain (cloud.bluesignal.xyz), which causes popup auth to fail.
-      // Redirect auth doesn't have this cross-origin communication issue.
-      if (isCloudMode()) {
-        console.log("🔄 Using signInWithRedirect for Cloud mode...");
-        await signInWithRedirect(auth, googleProvider);
-        // Page will redirect, no further code executes
-        return;
-      }
-
-      // Use popup for marketplace mode (same origin as authDomain)
+      // Use popup auth - handles cross-origin via postMessage
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
