@@ -1,7 +1,7 @@
 // /src/components/BlueSignalConfigurator.jsx
 // BlueSignal Product Configurator - Water Quality Hardware
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import styled, { css, keyframes } from "styled-components";
 
 // ============================================================================
 // PRODUCT DATA
@@ -350,6 +350,20 @@ const COMPETITORS = {
     limitations: ["NO algae control", "Monitoring only", "Expensive calibration", "No integrated connectivity"],
   },
 };
+
+// ============================================================================
+// ANIMATIONS
+// ============================================================================
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const pulse = keyframes`
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+`;
 
 // ============================================================================
 // STYLED COMPONENTS
@@ -777,6 +791,397 @@ const MarginBadge = styled.span`
   background: ${({ good }) => (good ? "rgba(74, 222, 128, 0.2)" : "rgba(251, 146, 60, 0.2)")};
   color: ${({ good }) => (good ? "#4ade80" : "#fb923c")};
   margin-left: 8px;
+`;
+
+// ============================================================================
+// NEW USABILITY STYLED COMPONENTS
+// ============================================================================
+
+const FilterBar = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+`;
+
+const FilterGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const FilterLabel = styled.label`
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+`;
+
+const FilterSelect = styled.select`
+  padding: 8px 12px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #e2e8f0;
+  cursor: pointer;
+  min-width: 140px;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+
+  option {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+`;
+
+const SearchInput = styled.input`
+  padding: 8px 12px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #e2e8f0;
+  min-width: 200px;
+
+  &::placeholder {
+    color: #64748b;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+`;
+
+const CompareButton = styled.button`
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background: ${({ active }) => (active ? "#3b82f6" : "rgba(59, 130, 246, 0.2)")};
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: ${({ active }) => (active ? "#2563eb" : "rgba(59, 130, 246, 0.3)")};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const CompareCheckbox = styled.input.attrs({ type: "checkbox" })`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+
+  ${({ show }) => !show && css`
+    display: none;
+  `}
+`;
+
+const ProductCardWrapper = styled.div`
+  position: relative;
+`;
+
+const ComparisonPanel = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  animation: ${fadeIn} 0.3s ease;
+  backdrop-filter: blur(8px);
+`;
+
+const ComparisonSelectedProducts = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+`;
+
+const ComparisonChip = styled.div`
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid #3b82f6;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #60a5fa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1;
+
+    &:hover {
+      color: #f87171;
+    }
+  }
+`;
+
+const CompareNowButton = styled.button`
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+`;
+
+const ComparisonModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: ${fadeIn} 0.3s ease;
+`;
+
+const ComparisonContent = styled.div`
+  background: linear-gradient(135deg, #0c1929 0%, #1a365d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  animation: ${fadeIn} 0.3s ease;
+`;
+
+const ComparisonHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+`;
+
+const ComparisonTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+`;
+
+const CloseButton = styled.button`
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+`;
+
+const ComparisonTable = styled.div`
+  padding: 24px;
+  overflow-x: auto;
+`;
+
+const ComparisonRow = styled.div`
+  display: grid;
+  grid-template-columns: 180px repeat(${({ cols }) => cols}, 1fr);
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const ComparisonLabel = styled.div`
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+`;
+
+const ComparisonValue = styled.div`
+  font-size: 14px;
+  color: ${({ highlight }) => (highlight ? "#4ade80" : "#e2e8f0")};
+  font-weight: ${({ highlight }) => (highlight ? "600" : "400")};
+`;
+
+const ComparisonProductHeader = styled.div`
+  text-align: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+`;
+
+const QuickActions = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+`;
+
+const ActionButton = styled.button`
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const KeyboardHint = styled.div`
+  font-size: 11px;
+  color: #64748b;
+  text-align: center;
+  margin-top: 16px;
+
+  kbd {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: monospace;
+    margin: 0 2px;
+  }
+`;
+
+const StickyProductInfo = styled.div`
+  position: sticky;
+  top: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 12px 16px;
+  margin: -24px -24px 24px -24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+`;
+
+const CurrentProductName = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+
+  span {
+    color: #94a3b8;
+    font-weight: 400;
+    margin-left: 8px;
+  }
+`;
+
+const TabNavigation = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const MiniNavButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ disabled }) => (disabled ? "#475569" : "#60a5fa")};
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+  font-size: 18px;
+  padding: 4px 8px;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    color: #93c5fd;
+  }
+`;
+
+const NoResults = styled.div`
+  text-align: center;
+  padding: 48px 24px;
+  color: #94a3b8;
+
+  h4 {
+    font-size: 18px;
+    color: #e2e8f0;
+    margin: 0 0 8px;
+  }
+
+  p {
+    margin: 0;
+  }
 `;
 
 // ============================================================================
@@ -1483,13 +1888,191 @@ const BenchmarkView = () => {
 };
 
 // ============================================================================
+// COMPARISON VIEW COMPONENT
+// ============================================================================
+
+const ProductComparisonView = ({ products, onClose }) => {
+  const comparisonFields = [
+    { key: "price", label: "Price", format: (v) => `$${v.toLocaleString()}` },
+    { key: "deployment", label: "Deployment" },
+    { key: "power.type", label: "Power Type", path: true },
+    { key: "sensors", label: "Sensors", format: (v) => `${v} parameters` },
+    { key: "ultrasonic", label: "Ultrasonic", format: (v) => v?.enabled ? `${v.watts}W @ ${v.frequency}` : "None" },
+    { key: "battery", label: "Battery", format: (v) => v ? `${v.voltage}V ${v.capacity}Ah (${v.wh}Wh)` : "N/A" },
+    { key: "solar", label: "Solar", format: (v) => v ? `${v.watts}W` : "N/A" },
+    { key: "autonomy", label: "Autonomy" },
+    { key: "weight", label: "Weight" },
+  ];
+
+  const getValue = (product, field) => {
+    if (field.path) {
+      const keys = field.key.split(".");
+      let val = product;
+      for (const k of keys) val = val?.[k];
+      return field.format ? field.format(val) : val;
+    }
+    const val = product[field.key];
+    return field.format ? field.format(val) : val;
+  };
+
+  const findBestValue = (field) => {
+    if (field.key === "price") {
+      return Math.min(...products.map(p => p.price));
+    }
+    if (field.key === "sensors") {
+      return Math.max(...products.map(p => p.sensors));
+    }
+    return null;
+  };
+
+  return (
+    <ComparisonModal onClick={onClose}>
+      <ComparisonContent onClick={(e) => e.stopPropagation()}>
+        <ComparisonHeader>
+          <ComparisonTitle>Product Comparison</ComparisonTitle>
+          <CloseButton onClick={onClose}>Close (Esc)</CloseButton>
+        </ComparisonHeader>
+        <ComparisonTable>
+          {/* Product headers */}
+          <ComparisonRow cols={products.length}>
+            <ComparisonLabel />
+            {products.map((p) => (
+              <ComparisonProductHeader key={p.id}>
+                <ProductName style={{ marginBottom: 4 }}>{p.name}</ProductName>
+                <ProductSubtitle style={{ marginBottom: 0 }}>{p.subtitle}</ProductSubtitle>
+              </ComparisonProductHeader>
+            ))}
+          </ComparisonRow>
+
+          {/* Comparison fields */}
+          {comparisonFields.map((field) => {
+            const bestValue = findBestValue(field);
+            return (
+              <ComparisonRow key={field.key} cols={products.length}>
+                <ComparisonLabel>{field.label}</ComparisonLabel>
+                {products.map((p) => {
+                  const value = getValue(p, field);
+                  const isBest = field.key === "price"
+                    ? p.price === bestValue
+                    : field.key === "sensors"
+                    ? p.sensors === bestValue
+                    : false;
+                  return (
+                    <ComparisonValue key={p.id} highlight={isBest}>
+                      {value}
+                    </ComparisonValue>
+                  );
+                })}
+              </ComparisonRow>
+            );
+          })}
+
+          {/* Sensor list */}
+          <ComparisonRow cols={products.length}>
+            <ComparisonLabel>Sensor List</ComparisonLabel>
+            {products.map((p) => (
+              <ComparisonValue key={p.id}>
+                {p.sensorList.join(", ")}
+              </ComparisonValue>
+            ))}
+          </ComparisonRow>
+
+          {/* BOM Total */}
+          <ComparisonRow cols={products.length}>
+            <ComparisonLabel>BOM Cost</ComparisonLabel>
+            {products.map((p) => {
+              const bomTotal = p.bom.reduce((sum, item) => sum + item.cost, 0);
+              return (
+                <ComparisonValue key={p.id}>
+                  ${bomTotal.toLocaleString()}
+                </ComparisonValue>
+              );
+            })}
+          </ComparisonRow>
+
+          {/* Margin */}
+          <ComparisonRow cols={products.length}>
+            <ComparisonLabel>Margin</ComparisonLabel>
+            {products.map((p) => {
+              const bomTotal = p.bom.reduce((sum, item) => sum + item.cost, 0);
+              const margin = ((p.price - bomTotal) / p.price * 100).toFixed(1);
+              return (
+                <ComparisonValue key={p.id} highlight={parseFloat(margin) >= 40}>
+                  {margin}%
+                </ComparisonValue>
+              );
+            })}
+          </ComparisonRow>
+        </ComparisonTable>
+      </ComparisonContent>
+    </ComparisonModal>
+  );
+};
+
+// ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
 export default function BlueSignalConfigurator() {
-  const [view, setView] = useState("products"); // "products" | "benchmark"
+  const [view, setView] = useState("products");
   const [selectedProduct, setSelectedProduct] = useState("s-ac");
   const [activeTab, setActiveTab] = useState("overview");
+
+  // New state for enhanced features
+  const [searchQuery, setSearchQuery] = useState("");
+  const [deploymentFilter, setDeploymentFilter] = useState("all");
+  const [priceFilter, setPriceFilter] = useState("all");
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareProducts, setCompareProducts] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
+
+  const containerRef = useRef(null);
+  const productIds = Object.keys(PRODUCTS);
+
+  // URL hash sync for deep linking
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && PRODUCTS[hash]) {
+      setSelectedProduct(hash);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (view === "products") {
+      window.location.hash = selectedProduct;
+    }
+  }, [selectedProduct, view]);
+
+  // Filtered products
+  const filteredProducts = useMemo(() => {
+    return Object.values(PRODUCTS).filter((p) => {
+      // Search filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesSearch =
+          p.name.toLowerCase().includes(query) ||
+          p.subtitle.toLowerCase().includes(query) ||
+          p.tagline.toLowerCase().includes(query) ||
+          p.features.some(f => f.toLowerCase().includes(query)) ||
+          p.sensorList.some(s => s.toLowerCase().includes(query));
+        if (!matchesSearch) return false;
+      }
+
+      // Deployment filter
+      if (deploymentFilter !== "all" && p.deployment.toLowerCase() !== deploymentFilter) {
+        return false;
+      }
+
+      // Price filter
+      if (priceFilter !== "all") {
+        if (priceFilter === "under1000" && p.price >= 1000) return false;
+        if (priceFilter === "1000to3000" && (p.price < 1000 || p.price > 3000)) return false;
+        if (priceFilter === "over3000" && p.price <= 3000) return false;
+      }
+
+      return true;
+    });
+  }, [searchQuery, deploymentFilter, priceFilter]);
 
   const product = PRODUCTS[selectedProduct];
 
@@ -1501,6 +2084,162 @@ export default function BlueSignalConfigurator() {
     { id: "gpio", label: "GPIO" },
     { id: "bom", label: "BOM" },
   ];
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Escape closes comparison modal
+      if (e.key === "Escape") {
+        if (showComparison) {
+          setShowComparison(false);
+          return;
+        }
+        if (compareMode) {
+          setCompareMode(false);
+          setCompareProducts([]);
+          return;
+        }
+      }
+
+      // Don't handle if typing in input
+      if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+
+      const currentIndex = productIds.indexOf(selectedProduct);
+      const currentTabIndex = tabs.findIndex(t => t.id === activeTab);
+
+      // Arrow keys for product navigation
+      if (e.key === "ArrowLeft" && currentIndex > 0) {
+        setSelectedProduct(productIds[currentIndex - 1]);
+        setActiveTab("overview");
+      } else if (e.key === "ArrowRight" && currentIndex < productIds.length - 1) {
+        setSelectedProduct(productIds[currentIndex + 1]);
+        setActiveTab("overview");
+      }
+
+      // Tab navigation with [ and ]
+      if (e.key === "[" && currentTabIndex > 0) {
+        setActiveTab(tabs[currentTabIndex - 1].id);
+      } else if (e.key === "]" && currentTabIndex < tabs.length - 1) {
+        setActiveTab(tabs[currentTabIndex + 1].id);
+      }
+
+      // Number keys for direct tab access
+      const num = parseInt(e.key);
+      if (num >= 1 && num <= tabs.length) {
+        setActiveTab(tabs[num - 1].id);
+      }
+
+      // 'c' to toggle compare mode
+      if (e.key === "c" && !e.ctrlKey && !e.metaKey) {
+        setCompareMode(!compareMode);
+        if (compareMode) setCompareProducts([]);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProduct, activeTab, compareMode, showComparison, productIds, tabs]);
+
+  // Toggle product in comparison
+  const toggleCompareProduct = (productId) => {
+    setCompareProducts((prev) => {
+      if (prev.includes(productId)) {
+        return prev.filter((id) => id !== productId);
+      }
+      if (prev.length >= 4) {
+        return prev; // Max 4 products
+      }
+      return [...prev, productId];
+    });
+  };
+
+  // Export BOM as CSV
+  const exportBomAsCsv = () => {
+    const headers = ["Category", "Item", "Quantity", "Cost"];
+    const rows = product.bom.map(item => [
+      item.category,
+      item.item,
+      item.qty,
+      item.cost
+    ]);
+    const total = product.bom.reduce((sum, item) => sum + item.cost, 0);
+    rows.push(["", "TOTAL", "", total]);
+
+    const csv = [headers, ...rows].map(row => row.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${product.name}-BOM.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Print specs
+  const printSpecs = () => {
+    const printWindow = window.open("", "_blank");
+    const bomTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${product.name} Specifications</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 24px; }
+            h1 { color: #1e40af; }
+            h2 { color: #374151; margin-top: 24px; }
+            table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+            th, td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; }
+            th { background: #f3f4f6; }
+            .price { font-size: 24px; color: #059669; font-weight: bold; }
+            ul { margin: 0; padding-left: 20px; }
+          </style>
+        </head>
+        <body>
+          <h1>${product.name} - ${product.subtitle}</h1>
+          <p class="price">$${product.price.toLocaleString()}</p>
+          <p><strong>${product.tagline}</strong></p>
+
+          <h2>Features</h2>
+          <ul>${product.features.map(f => `<li>${f}</li>`).join("")}</ul>
+
+          <h2>Specifications</h2>
+          <table>
+            <tr><th>Deployment</th><td>${product.deployment}</td></tr>
+            <tr><th>Power</th><td>${product.power.type}${product.solar ? ` (${product.solar.watts}W Solar)` : ""}</td></tr>
+            <tr><th>Sensors</th><td>${product.sensors} parameters</td></tr>
+            <tr><th>Autonomy</th><td>${product.autonomy}</td></tr>
+            <tr><th>Weight</th><td>${product.weight}</td></tr>
+          </table>
+
+          <h2>Sensors</h2>
+          <ul>${product.sensorList.map(s => `<li>${s}</li>`).join("")}</ul>
+
+          <h2>Bill of Materials</h2>
+          <table>
+            <tr><th>Category</th><th>Item</th><th>Qty</th><th>Cost</th></tr>
+            ${product.bom.map(item => `<tr><td>${item.category}</td><td>${item.item}</td><td>${item.qty}</td><td>$${item.cost}</td></tr>`).join("")}
+            <tr><th colspan="3">Total</th><th>$${bomTotal.toLocaleString()}</th></tr>
+          </table>
+
+          <p style="margin-top: 24px; color: #6b7280; font-size: 12px;">
+            Generated from BlueSignal Configurator on ${new Date().toLocaleDateString()}
+          </p>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setDeploymentFilter("all");
+    setPriceFilter("all");
+  };
+
+  const currentProductIndex = productIds.indexOf(selectedProduct);
+  const canGoPrev = currentProductIndex > 0;
+  const canGoNext = currentProductIndex < productIds.length - 1;
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -1522,7 +2261,7 @@ export default function BlueSignalConfigurator() {
   };
 
   return (
-    <ConfiguratorWrapper>
+    <ConfiguratorWrapper ref={containerRef}>
       <Container>
         <Header>
           <Logo>
@@ -1531,56 +2270,234 @@ export default function BlueSignalConfigurator() {
           <Tagline>Water Quality Hardware Configurator</Tagline>
         </Header>
 
-        <NavTabs>
-          <NavTab active={view === "products"} onClick={() => setView("products")}>
+        <NavTabs role="tablist" aria-label="Main navigation">
+          <NavTab
+            role="tab"
+            aria-selected={view === "products"}
+            active={view === "products"}
+            onClick={() => setView("products")}
+          >
             Products
           </NavTab>
-          <NavTab active={view === "benchmark"} onClick={() => setView("benchmark")}>
+          <NavTab
+            role="tab"
+            aria-selected={view === "benchmark"}
+            active={view === "benchmark"}
+            onClick={() => setView("benchmark")}
+          >
             Benchmark
           </NavTab>
         </NavTabs>
 
         {view === "products" ? (
           <>
-            <ProductGrid>
-              {Object.values(PRODUCTS).map((p) => (
-                <ProductCard
-                  key={p.id}
-                  selected={selectedProduct === p.id}
-                  onClick={() => {
-                    setSelectedProduct(p.id);
-                    setActiveTab("overview");
-                  }}
+            {/* Filter Bar */}
+            <FilterBar>
+              <FilterGroup>
+                <FilterLabel htmlFor="search">Search</FilterLabel>
+                <SearchInput
+                  id="search"
+                  type="text"
+                  placeholder="Search products, features..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  aria-label="Search products"
+                />
+              </FilterGroup>
+
+              <FilterGroup>
+                <FilterLabel htmlFor="deployment">Deployment</FilterLabel>
+                <FilterSelect
+                  id="deployment"
+                  value={deploymentFilter}
+                  onChange={(e) => setDeploymentFilter(e.target.value)}
                 >
-                  <ProductName>{p.name}</ProductName>
-                  <ProductSubtitle>{p.subtitle}</ProductSubtitle>
-                  <ProductPrice>${p.price.toLocaleString()}</ProductPrice>
-                  <ProductTagline>{p.tagline}</ProductTagline>
-                  <ProductBadges>
-                    {p.ultrasonic?.enabled && (
-                      <Badge variant="ultrasonic">{p.ultrasonic.watts}W Ultrasonic</Badge>
-                    )}
-                    {p.solar && <Badge variant="solar">{p.solar.watts}W Solar</Badge>}
-                    <Badge variant="sensors">{p.sensors} Sensors</Badge>
-                  </ProductBadges>
-                </ProductCard>
-              ))}
-            </ProductGrid>
+                  <option value="all">All Types</option>
+                  <option value="shore-mounted">Shore-mounted</option>
+                  <option value="floating">Floating</option>
+                </FilterSelect>
+              </FilterGroup>
+
+              <FilterGroup>
+                <FilterLabel htmlFor="price">Price Range</FilterLabel>
+                <FilterSelect
+                  id="price"
+                  value={priceFilter}
+                  onChange={(e) => setPriceFilter(e.target.value)}
+                >
+                  <option value="all">All Prices</option>
+                  <option value="under1000">Under $1,000</option>
+                  <option value="1000to3000">$1,000 - $3,000</option>
+                  <option value="over3000">Over $3,000</option>
+                </FilterSelect>
+              </FilterGroup>
+
+              <div style={{ flex: 1 }} />
+
+              <CompareButton
+                active={compareMode}
+                onClick={() => {
+                  setCompareMode(!compareMode);
+                  if (compareMode) setCompareProducts([]);
+                }}
+                aria-pressed={compareMode}
+              >
+                {compareMode ? "Exit Compare" : "Compare Products"}
+              </CompareButton>
+
+              {(searchQuery || deploymentFilter !== "all" || priceFilter !== "all") && (
+                <ActionButton onClick={clearFilters}>
+                  Clear Filters
+                </ActionButton>
+              )}
+            </FilterBar>
+
+            {filteredProducts.length === 0 ? (
+              <NoResults>
+                <h4>No products match your filters</h4>
+                <p>Try adjusting your search or filter criteria</p>
+                <ActionButton onClick={clearFilters} style={{ marginTop: 16 }}>
+                  Clear All Filters
+                </ActionButton>
+              </NoResults>
+            ) : (
+              <ProductGrid role="listbox" aria-label="Products">
+                {filteredProducts.map((p) => (
+                  <ProductCardWrapper key={p.id}>
+                    <CompareCheckbox
+                      show={compareMode}
+                      checked={compareProducts.includes(p.id)}
+                      onChange={() => toggleCompareProduct(p.id)}
+                      aria-label={`Compare ${p.name}`}
+                    />
+                    <ProductCard
+                      role="option"
+                      aria-selected={selectedProduct === p.id}
+                      selected={selectedProduct === p.id}
+                      onClick={() => {
+                        if (compareMode) {
+                          toggleCompareProduct(p.id);
+                        } else {
+                          setSelectedProduct(p.id);
+                          setActiveTab("overview");
+                        }
+                      }}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          if (compareMode) {
+                            toggleCompareProduct(p.id);
+                          } else {
+                            setSelectedProduct(p.id);
+                            setActiveTab("overview");
+                          }
+                        }
+                      }}
+                    >
+                      <ProductName>{p.name}</ProductName>
+                      <ProductSubtitle>{p.subtitle}</ProductSubtitle>
+                      <ProductPrice>${p.price.toLocaleString()}</ProductPrice>
+                      <ProductTagline>{p.tagline}</ProductTagline>
+                      <ProductBadges>
+                        {p.ultrasonic?.enabled && (
+                          <Badge variant="ultrasonic">{p.ultrasonic.watts}W Ultrasonic</Badge>
+                        )}
+                        {p.solar && <Badge variant="solar">{p.solar.watts}W Solar</Badge>}
+                        <Badge variant="sensors">{p.sensors} Sensors</Badge>
+                      </ProductBadges>
+                    </ProductCard>
+                  </ProductCardWrapper>
+                ))}
+              </ProductGrid>
+            )}
 
             <DetailPanel>
-              <DetailTabs>
-                {tabs.map((tab) => (
+              <DetailTabs role="tablist" aria-label="Product details">
+                {tabs.map((tab, index) => (
                   <DetailTab
                     key={tab.id}
+                    role="tab"
+                    aria-selected={activeTab === tab.id}
+                    aria-controls={`tabpanel-${tab.id}`}
                     active={activeTab === tab.id}
                     onClick={() => setActiveTab(tab.id)}
+                    tabIndex={activeTab === tab.id ? 0 : -1}
                   >
+                    <span style={{ opacity: 0.5, marginRight: 4 }}>{index + 1}</span>
                     {tab.label}
                   </DetailTab>
                 ))}
               </DetailTabs>
-              <DetailContent>{renderTabContent()}</DetailContent>
+              <DetailContent
+                role="tabpanel"
+                id={`tabpanel-${activeTab}`}
+                aria-labelledby={activeTab}
+              >
+                {/* Sticky product info header */}
+                <StickyProductInfo>
+                  <CurrentProductName>
+                    {product.name}
+                    <span>{product.subtitle}</span>
+                  </CurrentProductName>
+                  <TabNavigation>
+                    <MiniNavButton
+                      disabled={!canGoPrev}
+                      onClick={() => {
+                        if (canGoPrev) {
+                          setSelectedProduct(productIds[currentProductIndex - 1]);
+                          setActiveTab("overview");
+                        }
+                      }}
+                      aria-label="Previous product"
+                      title="Previous product (Left Arrow)"
+                    >
+                      ←
+                    </MiniNavButton>
+                    <MiniNavButton
+                      disabled={!canGoNext}
+                      onClick={() => {
+                        if (canGoNext) {
+                          setSelectedProduct(productIds[currentProductIndex + 1]);
+                          setActiveTab("overview");
+                        }
+                      }}
+                      aria-label="Next product"
+                      title="Next product (Right Arrow)"
+                    >
+                      →
+                    </MiniNavButton>
+                  </TabNavigation>
+                </StickyProductInfo>
+
+                {renderTabContent()}
+
+                {/* Quick Actions */}
+                <QuickActions>
+                  <ActionButton onClick={printSpecs} title="Print product specifications">
+                    Print Specs
+                  </ActionButton>
+                  <ActionButton onClick={exportBomAsCsv} title="Export BOM as CSV file">
+                    Export BOM (CSV)
+                  </ActionButton>
+                  <ActionButton
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                    }}
+                    title="Copy link to this product"
+                  >
+                    Copy Link
+                  </ActionButton>
+                </QuickActions>
+              </DetailContent>
             </DetailPanel>
+
+            <KeyboardHint>
+              <kbd>←</kbd><kbd>→</kbd> Navigate products |
+              <kbd>1</kbd>-<kbd>6</kbd> Switch tabs |
+              <kbd>C</kbd> Compare mode |
+              <kbd>Esc</kbd> Exit
+            </KeyboardHint>
           </>
         ) : (
           <DetailPanel>
@@ -1590,6 +2507,39 @@ export default function BlueSignalConfigurator() {
           </DetailPanel>
         )}
       </Container>
+
+      {/* Comparison Panel */}
+      {compareMode && compareProducts.length > 0 && (
+        <ComparisonPanel>
+          <ComparisonSelectedProducts>
+            <span style={{ color: "#94a3b8", fontSize: 13 }}>
+              Comparing ({compareProducts.length}/4):
+            </span>
+            {compareProducts.map((id) => (
+              <ComparisonChip key={id}>
+                {PRODUCTS[id].name}
+                <button onClick={() => toggleCompareProduct(id)} aria-label={`Remove ${PRODUCTS[id].name} from comparison`}>
+                  ×
+                </button>
+              </ComparisonChip>
+            ))}
+          </ComparisonSelectedProducts>
+          <CompareNowButton
+            disabled={compareProducts.length < 2}
+            onClick={() => setShowComparison(true)}
+          >
+            Compare {compareProducts.length} Products
+          </CompareNowButton>
+        </ComparisonPanel>
+      )}
+
+      {/* Comparison Modal */}
+      {showComparison && (
+        <ProductComparisonView
+          products={compareProducts.map((id) => PRODUCTS[id])}
+          onClose={() => setShowComparison(false)}
+        />
+      )}
     </ConfiguratorWrapper>
   );
 }
