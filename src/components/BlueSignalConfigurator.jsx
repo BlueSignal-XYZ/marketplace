@@ -550,6 +550,281 @@ const TCO_COMPARISON = {
 };
 
 // ============================================================================
+// GPIO PINOUT (Pi Zero 2 W 40-pin header)
+// ============================================================================
+
+const GPIO_PINOUT = [
+  { pin: 1, name: "3.3V", gpio: null, type: "power", connection: "ADS1115 VDD", notes: "50mA max from rail" },
+  { pin: 2, name: "5V", gpio: null, type: "power", connection: "Sensor VCC Bus", notes: "From buck converter" },
+  { pin: 3, name: "SDA", gpio: 2, type: "i2c", connection: "ADS1115 SDA", notes: "I2C Data" },
+  { pin: 4, name: "5V", gpio: null, type: "power", connection: "(spare)", notes: "" },
+  { pin: 5, name: "SCL", gpio: 3, type: "i2c", connection: "ADS1115 SCL", notes: "I2C Clock" },
+  { pin: 6, name: "GND", gpio: null, type: "ground", connection: "Common Ground", notes: "Star ground point" },
+  { pin: 7, name: "GPCLK0", gpio: 4, type: "reserved", connection: "(reserved)", notes: "Future use / 1-Wire" },
+  { pin: 8, name: "TXD", gpio: 14, type: "uart", connection: "Cat-1 HAT RX", notes: "Reserved - DO NOT USE" },
+  { pin: 9, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 10, name: "RXD", gpio: 15, type: "uart", connection: "Cat-1 HAT TX", notes: "Reserved - DO NOT USE" },
+  { pin: 11, name: "GPIO17", gpio: 17, type: "output", connection: "Relay 1 → Ultrasonic", notes: "Active-LOW" },
+  { pin: 12, name: "PWM0", gpio: 18, type: "reserved", connection: "(reserved)", notes: "Future PWM / Ultrasonic #2" },
+  { pin: 13, name: "GPIO27", gpio: 27, type: "output", connection: "Relay 2 → (spare)", notes: "Active-LOW" },
+  { pin: 14, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 15, name: "GPIO22", gpio: 22, type: "output", connection: "Relay 3 → (spare)", notes: "Active-LOW" },
+  { pin: 16, name: "GPIO23", gpio: 23, type: "output", connection: "Relay 4 → Fan", notes: "Active-LOW" },
+  { pin: 17, name: "3.3V", gpio: null, type: "power", connection: "(spare)", notes: "" },
+  { pin: 18, name: "GPIO24", gpio: 24, type: "output", connection: "Status LED", notes: "Via 330Ω resistor" },
+  { pin: 19, name: "MOSI", gpio: 10, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 20, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 21, name: "MISO", gpio: 9, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 22, name: "GPIO25", gpio: 25, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 23, name: "SCLK", gpio: 11, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 24, name: "CE0", gpio: 8, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 25, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 26, name: "CE1", gpio: 7, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 27, name: "ID_SD", gpio: 0, type: "reserved", connection: "(EEPROM)", notes: "Do not use" },
+  { pin: 28, name: "ID_SC", gpio: 1, type: "reserved", connection: "(EEPROM)", notes: "Do not use" },
+  { pin: 29, name: "GPIO5", gpio: 5, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 30, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 31, name: "GPIO6", gpio: 6, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 32, name: "GPIO12", gpio: 12, type: "spare", connection: "(spare)", notes: "PWM capable" },
+  { pin: 33, name: "GPIO13", gpio: 13, type: "spare", connection: "(spare)", notes: "PWM capable" },
+  { pin: 34, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 35, name: "GPIO19", gpio: 19, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 36, name: "GPIO16", gpio: 16, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 37, name: "GPIO26", gpio: 26, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 38, name: "GPIO20", gpio: 20, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 39, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 40, name: "GPIO21", gpio: 21, type: "spare", connection: "(spare)", notes: "" },
+];
+
+// ============================================================================
+// SENSOR CALIBRATION FORMULAS
+// ============================================================================
+
+const CALIBRATION = {
+  tds: {
+    name: "TDS (Total Dissolved Solids)",
+    formula: "ppm = (voltage / 2.3) × 1000",
+    voltageRange: "0-2.3V",
+    outputRange: "0-1000 ppm",
+    temperatureCompensation: "TDS_compensated = TDS_raw × (1 + 0.02 × (temp - 25))",
+    calibrationPoints: [
+      { standard: "500 ppm NaCl solution", expectedVoltage: "~1.15V" },
+      { standard: "1000 ppm NaCl solution", expectedVoltage: "~2.3V" },
+    ],
+    interval: "90 days",
+  },
+  turbidity: {
+    name: "Turbidity",
+    formula: "NTU = -1120.4 × V² + 5742.3 × V - 4352.9",
+    voltageRange: "0-4.5V (at 5V supply)",
+    outputRange: "0-3000 NTU",
+    notes: "Polynomial fit from DFRobot SEN0189 datasheet",
+    calibrationPoints: [
+      { standard: "0 NTU (distilled water)", expectedVoltage: "~4.1V" },
+      { standard: "100 NTU standard", expectedVoltage: "~3.5V" },
+    ],
+    interval: "90 days",
+  },
+  ph: {
+    name: "pH",
+    formula: "pH = 7.0 + ((V_neutral - V_measured) / slope)",
+    defaultSlope: "0.18 V/pH at 25°C",
+    neutralVoltage: "2.5V at pH 7.0 (module dependent)",
+    temperatureCompensation: "slope_adj = slope × (273.15 + temp) / 298.15",
+    twoPointCalibration: "slope = (V_pH7 - V_pH4) / (7.0 - 4.0); pH = 7.0 + ((V_pH7 - V_measured) / slope)",
+    calibrationPoints: [
+      { standard: "pH 7.0 buffer", action: "Record as neutral voltage point" },
+      { standard: "pH 4.0 buffer", action: "Calculate slope from difference" },
+    ],
+    interval: "30 days",
+    probeReplacement: "12-18 months ($28.79)",
+  },
+  dissolvedOxygen: {
+    name: "Dissolved Oxygen",
+    formula: "DO_mg/L = (voltage / cal_voltage) × saturation_at_temp_pressure",
+    saturationTable: {
+      "15°C": "10.08 mg/L",
+      "20°C": "9.09 mg/L",
+      "25°C": "8.26 mg/L",
+      "30°C": "7.56 mg/L",
+    },
+    pressureCompensation: "DO_corrected = DO_raw × (local_pressure / 101.325)",
+    calibrationPoints: [
+      { standard: "Air-saturated water", action: "Set 100% saturation point" },
+      { standard: "Zero-oxygen solution (Na₂SO₃)", action: "Optional zero calibration" },
+    ],
+    interval: "14 days (membrane calibration)",
+    membraneReplacement: "12 months ($25 cap + electrolyte)",
+  },
+  voltageMonitor: {
+    name: "Battery Voltage Monitor",
+    formula: "V_battery = V_adc × (R1 + R2) / R2",
+    configurations: {
+      "24V system": { R1: "20kΩ", R2: "3.3kΩ", ratio: "7.06×", maxInput: "28.4V → 4.02V ADC" },
+      "12V system": { R1: "10kΩ", R2: "3.3kΩ", ratio: "4.03×", maxInput: "14.4V → 3.57V ADC" },
+    },
+    notes: "Use 1% tolerance resistors for accuracy",
+  },
+};
+
+// ============================================================================
+// INSTALLATION SPECIFICATIONS
+// ============================================================================
+
+const INSTALLATION = {
+  shore: {
+    mountingHoles: "Standard NEMA 4X pattern",
+    torqueSpecs: { M6: "8-10 Nm", M4: "2-3 Nm" },
+    cableGlands: "Hand-tight + 1/4 turn",
+    groundLug: "Bottom left corner, 10-12 AWG ground wire",
+    orientation: "Vertical, cable glands at bottom",
+    clearance: "12\" minimum on all sides for airflow",
+  },
+  buoy: {
+    sensorDepth: "6-12\" below surface",
+    transducerAngle: "15° downward into water",
+    transducerDepth: "1-2\" below surface",
+    mooringScope: "3:1 minimum (line length : water depth)",
+    anchorSizing: {
+      standard: "25-50 lbs (soft bottom)",
+      xl: "100-150 lbs",
+    },
+    waterDepth: "Minimum 4ft, maximum limited by mooring line",
+  },
+  tools: [
+    "Phillips screwdriver (PH2)",
+    "Wire strippers (10-24 AWG)",
+    "Multimeter",
+    "Cable crimping tool",
+    "Torque wrench (for anchor)",
+    "Kayak or small boat (buoy deployment)",
+  ],
+};
+
+// ============================================================================
+// MAINTENANCE SCHEDULES
+// ============================================================================
+
+const MAINTENANCE = [
+  { component: "pH probe", interval: "30 days", action: "2-point calibration (pH 4.0 & 7.0)", cost: null },
+  { component: "pH probe", interval: "12-18 months", action: "Replace probe", cost: "$28.79" },
+  { component: "DO membrane", interval: "14 days", action: "Atmospheric calibration", cost: null },
+  { component: "DO membrane", interval: "12 months", action: "Replace cap + electrolyte", cost: "$25" },
+  { component: "TDS sensor", interval: "90 days", action: "Single-point calibration (1000 ppm)", cost: null },
+  { component: "Turbidity sensor", interval: "90 days", action: "Clean optical window, verify zero", cost: null },
+  { component: "Solar panel", interval: "30 days", action: "Clean with soft cloth + water", cost: null },
+  { component: "Buoy hull", interval: "30 days", action: "Scrub biofouling, inspect mooring", cost: null },
+  { component: "Battery health", interval: "30 days", action: "Check via dashboard (no physical inspection)", cost: null },
+  { component: "Mooring hardware", interval: "90 days", action: "Inspect for corrosion, check anchor holding", cost: null },
+  { component: "Firmware", interval: "As released", action: "OTA update via dashboard", cost: null },
+];
+
+// ============================================================================
+// LED STATUS CODES
+// ============================================================================
+
+const LED_CODES = [
+  { pattern: "1 blink → pause → 2 blinks", color: "Green", duration: "30-60 seconds", meaning: "Boot sequence - initializing cellular", action: null },
+  { pattern: "Slow pulse 1Hz", color: "Green", duration: "Continuous", meaning: "Normal operation, cloud connected", action: null },
+  { pattern: "Fast blink 2Hz", color: "Green", duration: "Up to 3 minutes", meaning: "Attempting cellular registration", action: null },
+  { pattern: "Solid", color: "Amber", duration: "Continuous", meaning: "No cellular connection - logging locally", action: "Check antenna, verify coverage" },
+  { pattern: "1 blink every 5 sec", color: "Red", duration: "Continuous", meaning: "Sensor communication error", action: "Check dashboard for specific sensor" },
+  { pattern: "Rapid blink 4Hz", color: "Red", duration: "Continuous", meaning: "Critical system error", action: "Check dashboard, may need power cycle" },
+  { pattern: "Slow blink 0.5Hz", color: "Amber", duration: "Continuous", meaning: "Battery <20%, not charging adequately", action: "Check solar panel for shading/soiling" },
+  { pattern: "Solid", color: "Blue", duration: "15 minutes per cycle", meaning: "Ultrasonic treatment running", action: null },
+  { pattern: "Alternating", color: "Green/Amber", duration: "While charging", meaning: "Battery charging (bulk/absorption)", action: null },
+];
+
+// ============================================================================
+// WIRE COLOR STANDARDS
+// ============================================================================
+
+const WIRE_COLORS = {
+  power: {
+    batteryPositive: { hex: "#dc2626", name: "Red", gauge: "10-12 AWG" },
+    batteryNegative: { hex: "#1f2937", name: "Black", gauge: "10-12 AWG" },
+    solarPositive: { hex: "#dc2626", name: "Red", gauge: "10 AWG", connector: "MC4" },
+    solarNegative: { hex: "#1f2937", name: "Black", gauge: "10 AWG", connector: "MC4" },
+  },
+  dcRails: {
+    rail24V: { hex: "#dc2626", name: "Red", gauge: "14 AWG" },
+    rail12V: { hex: "#f97316", name: "Orange", gauge: "18 AWG" },
+    rail5V: { hex: "#22c55e", name: "Green", gauge: "22 AWG" },
+    rail3V3: { hex: "#eab308", name: "Yellow", gauge: "24 AWG" },
+    ground: { hex: "#1f2937", name: "Black", gauge: "Match positive" },
+  },
+  signals: {
+    i2cSDA: { hex: "#7c3aed", name: "Purple", gauge: "24 AWG" },
+    i2cSCL: { hex: "#6366f1", name: "Blue", gauge: "24 AWG" },
+    gpioControl: { hex: "#22c55e", name: "Green", gauge: "22 AWG" },
+  },
+  sensors: {
+    tdsSignal: { hex: "#0891b2", name: "Cyan", gauge: "24 AWG" },
+    turbiditySignal: { hex: "#0d9488", name: "Teal", gauge: "24 AWG" },
+    phSignal: { hex: "#db2777", name: "Pink", gauge: "24 AWG" },
+  },
+  ac: {
+    acHot: { hex: "#1f2937", name: "Black", gauge: "14-16 AWG" },
+    acNeutral: { hex: "#f3f4f6", name: "White", gauge: "14-16 AWG" },
+    acGround: { hex: "#22c55e", name: "Green", gauge: "14-16 AWG" },
+  },
+  ultrasonic: {
+    ultrasonicPair: { hex: "#7c3aed", name: "Shielded twisted pair", gauge: "16 AWG" },
+  },
+};
+
+// ============================================================================
+// CONNECTOR TYPES
+// ============================================================================
+
+const CONNECTORS = {
+  batteryToMPPT: "Anderson SB50 (45A red)",
+  mpptToLVD: "Anderson SB50 or screw terminal",
+  lvdToLoads: "Screw terminal block",
+  solarToMPPT: "MC4 (pre-wired on panel)",
+  buckInput: "Screw terminal",
+  buckOutput: "Screw terminal or JST-XH",
+  piGPIO: "DuPont 2.54mm female",
+  hatStacking: "40-pin stacking header",
+  relayControl: "DuPont or JST-XH",
+  relayLoad: "Screw terminal (up to 10A)",
+  sensorPower: "JST-XH 2-pin",
+  sensorSignal: "JST-XH 3-pin (V+, Signal, GND)",
+  adcToSensors: "JST-XH or screw terminal",
+  phProbe: "BNC female on module",
+  ultrasonicDriver: "Screw terminal (AC input)",
+  transducer: "Screw terminal (shielded cable)",
+  acMains: "3-position terminal block (L/N/G)",
+};
+
+// ============================================================================
+// FUSE SPECIFICATIONS
+// ============================================================================
+
+const FUSES = {
+  batteryMain: { rating: "60A ANL", location: "Positive terminal", products: ["s-sol", "smart-buoy", "smart-buoy-xl"] },
+  inverterInput: { rating: "30A ANL", location: "Inverter positive lead", products: ["s-sol", "smart-buoy", "smart-buoy-xl"] },
+  acInput: { rating: "5A 250V", location: "After terminal block", products: ["s-ac"] },
+  dcBranch: { rating: "10A ATC", location: "Each major branch", products: "all" },
+};
+
+// ============================================================================
+// VOLTAGE TEST POINTS
+// ============================================================================
+
+const TEST_POINTS = [
+  { id: "TP1", location: "Battery terminals", expected: { "24V": "24.0-28.4V", "12V": "12.0-14.2V" }, notes: "Healthy LiFePO4 range" },
+  { id: "TP2", location: "MPPT battery output", expected: "Same as TP1", notes: "Should match battery" },
+  { id: "TP3", location: "LVD output", expected: "0V (tripped) or battery voltage", notes: "Check LVD status LED" },
+  { id: "TP4", location: "12V rail (buck output)", expected: "11.8-12.2V", notes: "Adjust pot if needed" },
+  { id: "TP5", location: "5V rail", expected: "4.95-5.10V", notes: "Critical for Pi stability" },
+  { id: "TP6", location: "Pi GPIO header Pin 2", expected: "4.9-5.1V", notes: "Power reaching Pi" },
+  { id: "TP7", location: "ADS1115 VDD", expected: "3.25-3.35V", notes: "From Pi 3.3V rail" },
+  { id: "TP8", location: "Solar panel OC", expected: "28-42V (24V panel)", notes: "Disconnect from MPPT first" },
+  { id: "TP9", location: "Inverter AC output", expected: "118-122V AC", notes: "Use AC voltmeter" },
+];
+
+// ============================================================================
 // ANIMATIONS
 // ============================================================================
 
@@ -1865,63 +2140,377 @@ const PowerTab = ({ product }) => {
   );
 };
 
-const GpioTab = ({ product }) => (
-  <div>
-    <SectionTitle>GPIO Pin Assignments</SectionTitle>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20 }}>
-      {product.gpio.i2c?.length > 0 && (
-        <GpioSection>
-          <GpioTitle>I2C Bus</GpioTitle>
-          <GpioList>
-            {product.gpio.i2c.map((pin, i) => (
-              <li key={i}>{pin}</li>
-            ))}
-          </GpioList>
-        </GpioSection>
-      )}
-      {product.gpio.uart?.length > 0 && (
-        <GpioSection>
-          <GpioTitle>UART</GpioTitle>
-          <GpioList>
-            {product.gpio.uart.map((pin, i) => (
-              <li key={i}>{pin}</li>
-            ))}
-          </GpioList>
-        </GpioSection>
-      )}
-      {product.gpio.oneWire?.length > 0 && (
-        <GpioSection>
-          <GpioTitle>1-Wire</GpioTitle>
-          <GpioList>
-            {product.gpio.oneWire.map((pin, i) => (
-              <li key={i}>{pin}</li>
-            ))}
-          </GpioList>
-        </GpioSection>
-      )}
-      {product.gpio.gpio?.length > 0 && (
-        <GpioSection>
-          <GpioTitle>Digital GPIO</GpioTitle>
-          <GpioList>
-            {product.gpio.gpio.map((pin, i) => (
-              <li key={i}>{pin}</li>
-            ))}
-          </GpioList>
-        </GpioSection>
-      )}
-      {product.gpio.sdi12?.length > 0 && (
-        <GpioSection>
-          <GpioTitle>SDI-12</GpioTitle>
-          <GpioList>
-            {product.gpio.sdi12.map((pin, i) => (
-              <li key={i}>{pin}</li>
-            ))}
-          </GpioList>
-        </GpioSection>
-      )}
+const GpioTab = ({ product }) => {
+  const getTypeColor = (type) => {
+    const colors = {
+      power: "#f97316",
+      ground: "#64748b",
+      i2c: "#a855f7",
+      uart: "#f43f5e",
+      output: "#22c55e",
+      reserved: "#475569",
+      spare: "#6366f1",
+    };
+    return colors[type] || "#94a3b8";
+  };
+
+  return (
+    <div>
+      <SectionTitle>GPIO Pin Assignments</SectionTitle>
+
+      {/* Product-specific connections */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20, marginBottom: 24 }}>
+        {product.gpio.i2c?.length > 0 && (
+          <GpioSection>
+            <GpioTitle>I2C Bus</GpioTitle>
+            <GpioList>
+              {product.gpio.i2c.map((pin, i) => (
+                <li key={i}>{pin}</li>
+              ))}
+            </GpioList>
+          </GpioSection>
+        )}
+        {product.gpio.uart?.length > 0 && (
+          <GpioSection>
+            <GpioTitle>UART</GpioTitle>
+            <GpioList>
+              {product.gpio.uart.map((pin, i) => (
+                <li key={i}>{pin}</li>
+              ))}
+            </GpioList>
+          </GpioSection>
+        )}
+        {product.gpio.oneWire?.length > 0 && (
+          <GpioSection>
+            <GpioTitle>1-Wire</GpioTitle>
+            <GpioList>
+              {product.gpio.oneWire.map((pin, i) => (
+                <li key={i}>{pin}</li>
+              ))}
+            </GpioList>
+          </GpioSection>
+        )}
+        {product.gpio.gpio?.length > 0 && (
+          <GpioSection>
+            <GpioTitle>Digital GPIO</GpioTitle>
+            <GpioList>
+              {product.gpio.gpio.map((pin, i) => (
+                <li key={i}>{pin}</li>
+              ))}
+            </GpioList>
+          </GpioSection>
+        )}
+        {product.gpio.sdi12?.length > 0 && (
+          <GpioSection>
+            <GpioTitle>SDI-12</GpioTitle>
+            <GpioList>
+              {product.gpio.sdi12.map((pin, i) => (
+                <li key={i}>{pin}</li>
+              ))}
+            </GpioList>
+          </GpioSection>
+        )}
+      </div>
+
+      {/* Full 40-pin header reference */}
+      <div style={{ marginTop: 24 }}>
+        <SectionTitle>40-Pin Header Reference (Pi Zero 2 W)</SectionTitle>
+        <div style={{ overflowX: "auto" }}>
+          <Table>
+            <thead>
+              <tr>
+                <Th>Pin</Th>
+                <Th>Name</Th>
+                <Th>GPIO</Th>
+                <Th>Type</Th>
+                <Th style={{ textAlign: "left" }}>Connection</Th>
+                <Th style={{ textAlign: "left" }}>Notes</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {GPIO_PINOUT.filter(p => p.type !== "ground" || p.pin <= 20).slice(0, 20).map((pin) => (
+                <tr key={pin.pin}>
+                  <Td>{pin.pin}</Td>
+                  <Td style={{ fontFamily: "monospace" }}>{pin.name}</Td>
+                  <Td>{pin.gpio !== null ? `GPIO${pin.gpio}` : "—"}</Td>
+                  <Td>
+                    <span style={{
+                      background: `${getTypeColor(pin.type)}20`,
+                      color: getTypeColor(pin.type),
+                      padding: "2px 6px",
+                      borderRadius: 3,
+                      fontSize: 11,
+                      fontWeight: 600,
+                    }}>
+                      {pin.type}
+                    </span>
+                  </Td>
+                  <Td style={{ textAlign: "left", fontSize: 12 }}>{pin.connection}</Td>
+                  <Td style={{ textAlign: "left", color: "#94a3b8", fontSize: 11 }}>{pin.notes}</Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+        <p style={{ fontSize: 11, color: "#64748b", marginTop: 8 }}>
+          Showing first 20 pins. Full pinout available in documentation. Reserved pins (UART, SPI, EEPROM) should not be used.
+        </p>
+      </div>
     </div>
+  );
+};
+
+// ============================================================================
+// CALIBRATION TAB
+// ============================================================================
+
+const CalibrationTab = ({ product }) => (
+  <div>
+    <SectionTitle>Sensor Calibration</SectionTitle>
+
+    {Object.entries(CALIBRATION).filter(([key]) => {
+      // Only show relevant sensors for this product
+      if (key === "dissolvedOxygen" && !product.sensorList.some(s => s.includes("Dissolved") || s.includes("DO"))) return false;
+      if (key === "voltageMonitor") return product.battery !== null;
+      return true;
+    }).map(([key, cal]) => (
+      <div key={key} style={{ marginBottom: 24, background: "rgba(255,255,255,0.03)", borderRadius: 12, padding: 16 }}>
+        <h4 style={{ color: "#60a5fa", margin: "0 0 12px", fontSize: 16 }}>{cal.name}</h4>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 12 }}>
+          <div>
+            <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>Formula</span>
+            <p style={{ color: "#e2e8f0", fontSize: 13, fontFamily: "monospace", margin: "4px 0 0" }}>{cal.formula}</p>
+          </div>
+          {cal.voltageRange && (
+            <div>
+              <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>Input Range</span>
+              <p style={{ color: "#e2e8f0", fontSize: 13, margin: "4px 0 0" }}>{cal.voltageRange}</p>
+            </div>
+          )}
+          {cal.outputRange && (
+            <div>
+              <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>Output Range</span>
+              <p style={{ color: "#e2e8f0", fontSize: 13, margin: "4px 0 0" }}>{cal.outputRange}</p>
+            </div>
+          )}
+          {cal.interval && (
+            <div>
+              <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>Calibration Interval</span>
+              <p style={{ color: "#4ade80", fontSize: 13, fontWeight: 600, margin: "4px 0 0" }}>{cal.interval}</p>
+            </div>
+          )}
+        </div>
+
+        {cal.temperatureCompensation && (
+          <div style={{ marginBottom: 12 }}>
+            <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>Temperature Compensation</span>
+            <p style={{ color: "#fbbf24", fontSize: 12, fontFamily: "monospace", margin: "4px 0 0" }}>{cal.temperatureCompensation}</p>
+          </div>
+        )}
+
+        {cal.calibrationPoints && (
+          <div>
+            <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>Calibration Points</span>
+            <ul style={{ margin: "8px 0 0", paddingLeft: 16 }}>
+              {cal.calibrationPoints.map((point, i) => (
+                <li key={i} style={{ color: "#cbd5e1", fontSize: 12, marginBottom: 4 }}>
+                  <strong>{point.standard}</strong>: {point.expectedVoltage || point.action}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {cal.saturationTable && (
+          <div style={{ marginTop: 12 }}>
+            <span style={{ color: "#94a3b8", fontSize: 11, textTransform: "uppercase" }}>DO Saturation Table</span>
+            <div style={{ display: "flex", gap: 16, marginTop: 8, flexWrap: "wrap" }}>
+              {Object.entries(cal.saturationTable).map(([temp, value]) => (
+                <span key={temp} style={{ background: "rgba(59,130,246,0.2)", padding: "4px 8px", borderRadius: 4, fontSize: 12 }}>
+                  {temp}: <strong>{value}</strong>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    ))}
   </div>
 );
+
+// ============================================================================
+// INSTALLATION TAB
+// ============================================================================
+
+const InstallationTab = ({ product }) => {
+  const isFloating = product.deployment === "Floating";
+  const installData = isFloating ? INSTALLATION.buoy : INSTALLATION.shore;
+
+  return (
+    <div>
+      <SectionTitle>Installation Guide</SectionTitle>
+
+      <SpecGrid>
+        {Object.entries(installData).filter(([key]) => key !== "anchorSizing" || isFloating).map(([key, value]) => {
+          if (typeof value === "object" && !Array.isArray(value)) {
+            return (
+              <SpecCard key={key}>
+                <SpecLabel>{key.replace(/([A-Z])/g, " $1").trim()}</SpecLabel>
+                <SpecValue style={{ fontSize: 14 }}>
+                  {Object.entries(value).map(([k, v]) => (
+                    <div key={k} style={{ marginBottom: 4 }}>{k}: {v}</div>
+                  ))}
+                </SpecValue>
+              </SpecCard>
+            );
+          }
+          return (
+            <SpecCard key={key}>
+              <SpecLabel>{key.replace(/([A-Z])/g, " $1").trim()}</SpecLabel>
+              <SpecValue style={{ fontSize: 14 }}>{value}</SpecValue>
+            </SpecCard>
+          );
+        })}
+      </SpecGrid>
+
+      <div style={{ marginTop: 24 }}>
+        <SectionTitle>Required Tools</SectionTitle>
+        <FeatureList>
+          {INSTALLATION.tools.map((tool, i) => (
+            <FeatureItem key={i}>{tool}</FeatureItem>
+          ))}
+        </FeatureList>
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <SectionTitle>Voltage Test Points</SectionTitle>
+        <div style={{ overflowX: "auto" }}>
+          <Table>
+            <thead>
+              <tr>
+                <Th>ID</Th>
+                <Th>Location</Th>
+                <Th>Expected</Th>
+                <Th style={{ textAlign: "left" }}>Notes</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {TEST_POINTS.map((tp) => (
+                <tr key={tp.id}>
+                  <Td style={{ fontWeight: 600, color: "#60a5fa" }}>{tp.id}</Td>
+                  <Td>{tp.location}</Td>
+                  <Td style={{ fontFamily: "monospace", fontSize: 12 }}>
+                    {typeof tp.expected === "object"
+                      ? (product.battery?.voltage === 24 ? tp.expected["24V"] : tp.expected["12V"])
+                      : tp.expected
+                    }
+                  </Td>
+                  <Td style={{ textAlign: "left", color: "#94a3b8", fontSize: 12 }}>{tp.notes}</Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// MAINTENANCE TAB
+// ============================================================================
+
+const MaintenanceTab = ({ product }) => {
+  const hasDO = product.sensorList.some(s => s.includes("Dissolved") || s.includes("DO"));
+  const isBuoy = product.deployment === "Floating";
+
+  const relevantMaintenance = MAINTENANCE.filter(m => {
+    if (m.component.includes("DO") && !hasDO) return false;
+    if (m.component.includes("Buoy") && !isBuoy) return false;
+    if (m.component.includes("Mooring") && !isBuoy) return false;
+    if (m.component.includes("Solar") && !product.solar) return false;
+    return true;
+  });
+
+  return (
+    <div>
+      <SectionTitle>Maintenance Schedule</SectionTitle>
+
+      <div style={{ overflowX: "auto" }}>
+        <Table>
+          <thead>
+            <tr>
+              <Th>Component</Th>
+              <Th>Interval</Th>
+              <Th style={{ textAlign: "left" }}>Action</Th>
+              <Th>Cost</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {relevantMaintenance.map((m, i) => (
+              <tr key={i}>
+                <Td style={{ fontWeight: 600 }}>{m.component}</Td>
+                <Td>
+                  <span style={{
+                    background: m.interval.includes("day") ? "rgba(74,222,128,0.2)" : "rgba(251,146,60,0.2)",
+                    color: m.interval.includes("day") ? "#4ade80" : "#fb923c",
+                    padding: "2px 8px",
+                    borderRadius: 4,
+                    fontSize: 12,
+                  }}>
+                    {m.interval}
+                  </span>
+                </Td>
+                <Td style={{ textAlign: "left" }}>{m.action}</Td>
+                <Td style={{ color: m.cost ? "#f87171" : "#4ade80" }}>{m.cost || "Free"}</Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <SectionTitle>LED Status Codes</SectionTitle>
+        <div style={{ overflowX: "auto" }}>
+          <Table>
+            <thead>
+              <tr>
+                <Th>Pattern</Th>
+                <Th>Color</Th>
+                <Th style={{ textAlign: "left" }}>Meaning</Th>
+                <Th style={{ textAlign: "left" }}>Action</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {LED_CODES.map((led, i) => (
+                <tr key={i}>
+                  <Td style={{ fontFamily: "monospace", fontSize: 12 }}>{led.pattern}</Td>
+                  <Td>
+                    <span style={{
+                      background: led.color === "Green" ? "#22c55e" : led.color === "Red" ? "#ef4444" : led.color === "Amber" ? "#f59e0b" : led.color === "Blue" ? "#3b82f6" : "#64748b",
+                      color: "#fff",
+                      padding: "2px 8px",
+                      borderRadius: 4,
+                      fontSize: 11,
+                      fontWeight: 600,
+                    }}>
+                      {led.color}
+                    </span>
+                  </Td>
+                  <Td style={{ textAlign: "left", fontSize: 13 }}>{led.meaning}</Td>
+                  <Td style={{ textAlign: "left", color: led.action ? "#fbbf24" : "#64748b", fontSize: 12 }}>
+                    {led.action || "—"}
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const BomTab = ({ product }) => {
   const totalCost = product.bom.reduce((sum, item) => sum + item.cost, 0);
@@ -2315,6 +2904,9 @@ export default function BlueSignalConfigurator() {
     { id: "wiring", label: "Wiring" },
     { id: "power", label: "Power" },
     { id: "gpio", label: "GPIO" },
+    { id: "calibration", label: "Calibration" },
+    { id: "installation", label: "Install" },
+    { id: "maintenance", label: "Maintenance" },
     { id: "bom", label: "BOM" },
   ];
 
@@ -2486,6 +3078,12 @@ export default function BlueSignalConfigurator() {
         return <PowerTab product={product} />;
       case "gpio":
         return <GpioTab product={product} />;
+      case "calibration":
+        return <CalibrationTab product={product} />;
+      case "installation":
+        return <InstallationTab product={product} />;
+      case "maintenance":
+        return <MaintenanceTab product={product} />;
       case "bom":
         return <BomTab product={product} />;
       default:
