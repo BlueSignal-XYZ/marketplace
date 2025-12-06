@@ -55,6 +55,7 @@ import {
 
 import { Livepeer } from "./components/elements/livepeer";
 import { VerificationUI } from "./components/elements/contractUI";
+import BlueSignalConfigurator from "./components/BlueSignalConfigurator";
 
 import {
   Notification,
@@ -594,6 +595,7 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
     <Route path="/registry" element={<RegistryPage />} />
     <Route path="/map" element={<MapPage />} />
     <Route path="/presale" element={<Presale />} />
+    <Route path="/sales/configurator" element={<BlueSignalConfigurator />} />
 
     {/* Auth-gated marketplace */}
     {user?.uid && (
