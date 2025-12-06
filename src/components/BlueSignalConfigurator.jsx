@@ -10,345 +10,543 @@ import styled, { css, keyframes } from "styled-components";
 const PRODUCTS = {
   "s-ac": {
     id: "s-ac",
-    name: "S-AC",
-    subtitle: "Shore AC-Powered",
+    sku: "WQM-S-AC",
+    name: "Shore Monitor AC",
+    subtitle: "AC-Powered Algae Control",
     price: 599,
     tagline: "Entry-level algae control for sites with AC power",
     deployment: "Shore-mounted",
-    power: { type: "AC", voltage: "120V AC", watts: null },
+    power: { type: "AC", voltage: "120V AC Mains", watts: null },
     ultrasonic: { enabled: true, watts: 100, frequency: "28kHz", units: 1 },
     sensors: 3,
-    sensorList: ["Temperature", "pH", "Dissolved Oxygen"],
+    sensorList: ["TDS", "Turbidity", "pH"],
     battery: null,
     solar: null,
-    autonomy: "N/A (AC powered)",
-    weight: "8 lbs",
+    autonomy: "N/A (grid powered)",
+    weight: "~15 lbs",
+    dimensions: { length: "12.6\"", width: "18.1\"", height: "6.4\"" },
+    enclosure: "NEMA 4X (IP66)",
     floatCost: 0,
     features: [
-      "100W ultrasonic algae control",
-      "3 basic water quality sensors",
-      "Pi Zero 2W controller",
-      "LTE Cat-1 connectivity",
+      "100W ultrasonic algae control @ 28kHz",
+      "3 water quality sensors (TDS, Turbidity, pH)",
+      "Pi Zero 2W controller with pre-soldered headers",
+      "LTE Cat-1 connectivity (Hologram IoT)",
       "Real-time cloud dashboard",
+      "NEMA 4X weatherproof enclosure",
     ],
     bom: [
-      { item: "Pi Zero 2W", qty: 1, cost: 15, category: "Compute" },
-      { item: "Waveshare SIM7670G Cat-1 HAT", qty: 1, cost: 45, category: "Connectivity" },
-      { item: "ADS1115 16-bit ADC", qty: 1, cost: 12, category: "Sensing" },
-      { item: "DS18B20 Temperature Probe", qty: 1, cost: 8, category: "Sensing" },
-      { item: "Analog pH Sensor", qty: 1, cost: 35, category: "Sensing" },
-      { item: "Analog DO Sensor", qty: 1, cost: 45, category: "Sensing" },
-      { item: "BQLZR 100W 28kHz Ultrasonic Transducer", qty: 1, cost: 65, category: "Ultrasonic" },
-      { item: "100W Ultrasonic Driver Board", qty: 1, cost: 35, category: "Ultrasonic" },
-      { item: "Mean Well 24V/5A Power Supply", qty: 1, cost: 28, category: "Power" },
-      { item: "5V 3A Buck Converter", qty: 1, cost: 6, category: "Power" },
-      { item: "IP67 Enclosure (Medium)", qty: 1, cost: 45, category: "Housing" },
-      { item: "Cable Glands, Wiring, Connectors", qty: 1, cost: 25, category: "Hardware" },
-      { item: "SIM Card + 1yr Data Plan", qty: 1, cost: 60, category: "Service" },
+      { item: "Raspberry Pi Zero 2 W (SC0510)", qty: 1, cost: 30.99, category: "Compute" },
+      { item: "Waveshare SIM7670G Cat-1/GNSS HAT", qty: 1, cost: 37.99, category: "Connectivity" },
+      { item: "MicroSD Card (SanDisk Industrial 32GB)", qty: 1, cost: 12, category: "Compute" },
+      { item: "Hologram Global IoT SIM", qty: 1, cost: 5, category: "Connectivity" },
+      { item: "SMA External 4G/LTE Antenna", qty: 1, cost: 8, category: "Connectivity" },
+      { item: "ADS1115 16-bit I2C ADC", qty: 1, cost: 5, category: "Sensing" },
+      { item: "CQRobot Ocean TDS Meter", qty: 1, cost: 11.99, category: "Sensing" },
+      { item: "DFRobot SEN0189 Turbidity Sensor", qty: 1, cost: 11.90, category: "Sensing" },
+      { item: "PH-4502C Module + BNC Electrode", qty: 1, cost: 28.79, category: "Sensing" },
+      { item: "pH Calibration Kit (4.0 + 7.0 buffers)", qty: 1, cost: 10, category: "Sensing" },
+      { item: "BQLZR 100W 28kHz Ultrasonic Kit", qty: 1, cost: 68.99, category: "Ultrasonic" },
+      { item: "Transducer Cable (16AWG Shielded 10ft)", qty: 1, cost: 8, category: "Ultrasonic" },
+      { item: "Mean Well 12V DC Power Supply", qty: 1, cost: 28, category: "Power" },
+      { item: "12V to 5V Buck Converter", qty: 1, cost: 6, category: "Power" },
+      { item: "4-Channel Relay Module", qty: 1, cost: 8, category: "Power" },
+      { item: "40mm Cooling Fan", qty: 1, cost: 6, category: "Power" },
+      { item: "NEMA 4X Enclosure (IP66)", qty: 1, cost: 45, category: "Housing" },
+      { item: "DIN Rail + Mounting Hardware", qty: 1, cost: 15, category: "Housing" },
+      { item: "Cable Glands (PG9/PG11/PG13.5)", qty: 1, cost: 12, category: "Hardware" },
+      { item: "Wiring, Terminals, Connectors", qty: 1, cost: 20, category: "Hardware" },
     ],
     gpio: {
-      i2c: ["ADS1115 ADC (0x48)"],
-      oneWire: ["DS18B20 Temperature"],
-      uart: ["SIM7670G HAT"],
-      gpio: ["Ultrasonic Enable (GPIO17)", "Status LED (GPIO27)"],
+      i2c: ["ADS1115 ADC (0x48) - GPIO2 SDA, GPIO3 SCL"],
+      uart: ["SIM7670G HAT (GPIO14 TX, GPIO15 RX) - Reserved"],
+      gpio: [
+        "GPIO17 → Relay 1 → Ultrasonic Driver (Active-LOW)",
+        "GPIO23 → Relay 4 → Cooling Fan (Active-LOW)",
+        "GPIO24 → Status LED (via 330Ω)",
+        "GPIO27 → Relay 2 → Spare (Active-LOW)",
+        "GPIO22 → Relay 3 → Spare (Active-LOW)",
+      ],
     },
     powerTable: [
-      { component: "Pi Zero 2W", voltage: 5, current: 0.3, duty: 100, avgWatts: 1.5 },
-      { component: "SIM7670G HAT", voltage: 5, current: 0.4, duty: 30, avgWatts: 0.6 },
-      { component: "Sensors (ADC)", voltage: 5, current: 0.05, duty: 100, avgWatts: 0.25 },
-      { component: "Ultrasonic System", voltage: 24, current: 4.2, duty: 50, avgWatts: 50 },
+      { component: "Pi Zero 2 W + HAT", voltage: 5, current: 0.5, duty: 100, avgWatts: 2.5, notes: "Always on" },
+      { component: "Sensors (3×)", voltage: 5, current: 0.05, duty: 100, avgWatts: 0.25, notes: "Continuous sampling" },
+      { component: "ADS1115 ADC", voltage: 3.3, current: 0.003, duty: 100, avgWatts: 0.01, notes: "I2C polling" },
+      { component: "Relay Coils (avg)", voltage: 5, current: 0.08, duty: 10, avgWatts: 0.4, notes: "Switching events" },
+      { component: "Cooling Fan", voltage: 12, current: 0.1, duty: 20, avgWatts: 1.2, notes: "40-45°C hysteresis" },
+      { component: "Status LED", voltage: 3.3, current: 0.02, duty: 50, avgWatts: 0.02, notes: "Heartbeat blink" },
+      { component: "Ultrasonic Driver (AC Load)", voltage: 120, current: 0.83, duty: 4.2, avgWatts: 4.2, notes: "15 min every 6 hrs" },
     ],
+    dailyWh: 185,
   },
   "s-sol": {
     id: "s-sol",
-    name: "S-SOL",
-    subtitle: "Shore Solar-Powered",
+    sku: "WQM-S-SOL",
+    name: "Shore Monitor Solar",
+    subtitle: "Solar-Powered Algae Control",
     price: 1499,
     tagline: "Off-grid algae control with 4.6-day autonomy",
     deployment: "Shore-mounted",
     power: { type: "Solar + Battery", voltage: "24V DC", watts: 200 },
-    ultrasonic: { enabled: true, watts: 100, frequency: "28kHz", units: 1 },
-    sensors: 4,
-    sensorList: ["Temperature", "pH", "Dissolved Oxygen", "Turbidity"],
-    battery: { type: "LiFePO4", voltage: 24, capacity: 50, wh: 1200 },
+    ultrasonic: { enabled: true, watts: 100, frequency: "28kHz", units: 1, inverterLoss: "18%" },
+    sensors: 3,
+    sensorList: ["TDS", "Turbidity", "pH"],
+    battery: { type: "LiFePO4", voltage: 24, capacity: 50, wh: 1280 },
     solar: { watts: 200, panels: 1 },
     autonomy: "4.6 days",
-    weight: "45 lbs",
+    weight: "~35 lbs",
+    dimensions: { length: "16\"", width: "20\"", height: "8\"" },
+    enclosure: "NEMA 4X (IP66)",
     floatCost: 0,
     features: [
-      "200W solar array",
-      "24V 50Ah LiFePO4 battery (1.2kWh)",
-      "100W ultrasonic algae control",
-      "4 water quality sensors",
-      "Victron MPPT charge controller",
+      "200W Renogy monocrystalline solar panel",
+      "24V 50Ah LiFePO4 battery (1.28kWh)",
+      "100W ultrasonic algae control @ 28kHz",
+      "3 water quality sensors (TDS, Turbidity, pH)",
+      "Victron SmartSolar 100/20 MPPT",
+      "Victron BatteryProtect 65A LVD",
+      "Pure sine inverter for ultrasonic",
       "4.6 days autonomy without sun",
+      "NEMA 4X weatherproof enclosure",
     ],
     bom: [
-      { item: "Pi Zero 2W", qty: 1, cost: 15, category: "Compute" },
-      { item: "Waveshare SIM7670G Cat-1 HAT", qty: 1, cost: 45, category: "Connectivity" },
-      { item: "ADS1115 16-bit ADC", qty: 1, cost: 12, category: "Sensing" },
-      { item: "DS18B20 Temperature Probe", qty: 1, cost: 8, category: "Sensing" },
-      { item: "Analog pH Sensor", qty: 1, cost: 35, category: "Sensing" },
-      { item: "Analog DO Sensor", qty: 1, cost: 45, category: "Sensing" },
-      { item: "Analog Turbidity Sensor", qty: 1, cost: 25, category: "Sensing" },
-      { item: "BQLZR 100W 28kHz Ultrasonic Transducer", qty: 1, cost: 65, category: "Ultrasonic" },
-      { item: "100W Ultrasonic Driver Board", qty: 1, cost: 35, category: "Ultrasonic" },
-      { item: "200W Monocrystalline Solar Panel", qty: 1, cost: 120, category: "Power" },
-      { item: "Victron SmartSolar 100/20 MPPT", qty: 1, cost: 145, category: "Power" },
-      { item: "24V 50Ah LiFePO4 Battery", qty: 1, cost: 280, category: "Power" },
-      { item: "Victron Smart BatteryProtect 65A", qty: 1, cost: 55, category: "Power" },
-      { item: "5V 5A Buck Converter", qty: 1, cost: 8, category: "Power" },
-      { item: "IP67 Enclosure (Large)", qty: 1, cost: 75, category: "Housing" },
+      { item: "Raspberry Pi Zero 2 W (SC0510)", qty: 1, cost: 30.99, category: "Compute" },
+      { item: "Waveshare SIM7670G Cat-1/GNSS HAT", qty: 1, cost: 37.99, category: "Connectivity" },
+      { item: "MicroSD Card (SanDisk Industrial 32GB)", qty: 1, cost: 12, category: "Compute" },
+      { item: "Hologram Global IoT SIM", qty: 1, cost: 5, category: "Connectivity" },
+      { item: "SMA External 4G/LTE Antenna", qty: 1, cost: 8, category: "Connectivity" },
+      { item: "ADS1115 16-bit I2C ADC", qty: 1, cost: 5, category: "Sensing" },
+      { item: "CQRobot Ocean TDS Meter", qty: 1, cost: 11.99, category: "Sensing" },
+      { item: "DFRobot SEN0189 Turbidity Sensor", qty: 1, cost: 11.90, category: "Sensing" },
+      { item: "PH-4502C Module + BNC Electrode", qty: 1, cost: 28.79, category: "Sensing" },
+      { item: "pH Calibration Kit (4.0 + 7.0 buffers)", qty: 1, cost: 10, category: "Sensing" },
+      { item: "BQLZR 100W 28kHz Ultrasonic Kit", qty: 1, cost: 68.99, category: "Ultrasonic" },
+      { item: "Transducer Cable (16AWG Shielded 10ft)", qty: 1, cost: 8, category: "Ultrasonic" },
+      { item: "Renogy 200W 24V Monocrystalline Panel", qty: 1, cost: 189, category: "Power" },
+      { item: "Victron SmartSolar 100/20 MPPT", qty: 1, cost: 125, category: "Power" },
+      { item: "24V 50Ah LiFePO4 Battery w/ BMS (1280Wh)", qty: 1, cost: 269, category: "Power" },
+      { item: "Victron BatteryProtect 65A LVD", qty: 1, cost: 45, category: "Power" },
+      { item: "Pure Sine Inverter 300W 24VDC→120VAC", qty: 1, cost: 65, category: "Power" },
+      { item: "24V to 12V Buck Converter", qty: 1, cost: 8, category: "Power" },
+      { item: "12V to 5V Buck Converter", qty: 1, cost: 6, category: "Power" },
+      { item: "4-Channel Relay Module", qty: 1, cost: 8, category: "Power" },
+      { item: "60mm Cooling Fan", qty: 1, cost: 8, category: "Power" },
+      { item: "NEMA 4X Enclosure (IP66) Large", qty: 1, cost: 75, category: "Housing" },
+      { item: "DIN Rail + Mounting Hardware", qty: 1, cost: 20, category: "Housing" },
       { item: "Solar Panel Mounting Hardware", qty: 1, cost: 45, category: "Hardware" },
-      { item: "Cable Glands, Wiring, Connectors", qty: 1, cost: 35, category: "Hardware" },
-      { item: "SIM Card + 1yr Data Plan", qty: 1, cost: 60, category: "Service" },
+      { item: "Cable Glands (PG9/PG11/PG13.5)", qty: 1, cost: 15, category: "Hardware" },
+      { item: "Wiring, Terminals, Connectors", qty: 1, cost: 25, category: "Hardware" },
     ],
     gpio: {
-      i2c: ["ADS1115 ADC (0x48)", "Victron VE.Direct (via adapter)"],
-      oneWire: ["DS18B20 Temperature"],
-      uart: ["SIM7670G HAT"],
-      gpio: ["Ultrasonic Enable (GPIO17)", "Status LED (GPIO27)", "Battery Monitor (GPIO22)"],
+      i2c: ["ADS1115 ADC (0x48) - GPIO2 SDA, GPIO3 SCL"],
+      uart: ["SIM7670G HAT (GPIO14 TX, GPIO15 RX) - Reserved"],
+      gpio: [
+        "GPIO17 → Relay 1 → Ultrasonic Driver (Active-LOW)",
+        "GPIO23 → Relay 4 → Cooling Fan (Active-LOW)",
+        "GPIO24 → Status LED (via 330Ω)",
+        "GPIO27 → Relay 2 → Spare (Active-LOW)",
+        "GPIO22 → Relay 3 → Spare (Active-LOW)",
+      ],
     },
     powerTable: [
-      { component: "Pi Zero 2W", voltage: 5, current: 0.3, duty: 100, avgWatts: 1.5 },
-      { component: "SIM7670G HAT", voltage: 5, current: 0.4, duty: 30, avgWatts: 0.6 },
-      { component: "Sensors (ADC)", voltage: 5, current: 0.06, duty: 100, avgWatts: 0.3 },
-      { component: "Victron MPPT", voltage: 24, current: 0.02, duty: 100, avgWatts: 0.5 },
-      { component: "Ultrasonic System", voltage: 24, current: 4.2, duty: 40, avgWatts: 40 },
+      { component: "Pi Zero 2 W + HAT", voltage: 5, current: 0.5, duty: 100, avgWatts: 2.5, notes: "Always on" },
+      { component: "Sensors (3×)", voltage: 5, current: 0.05, duty: 100, avgWatts: 0.25, notes: "Continuous sampling" },
+      { component: "MPPT Controller", voltage: 24, current: 0.0125, duty: 100, avgWatts: 0.3, notes: "Standby draw" },
+      { component: "LVD (BatteryProtect)", voltage: 24, current: 0.008, duty: 100, avgWatts: 0.2, notes: "Monitoring" },
+      { component: "Relay Coils (avg)", voltage: 5, current: 0.08, duty: 10, avgWatts: 0.4, notes: "Switching events" },
+      { component: "Cooling Fan", voltage: 12, current: 0.1, duty: 20, avgWatts: 1.2, notes: "40-45°C hysteresis" },
+      { component: "Ultrasonic (via Inverter)", voltage: 24, current: 4.92, duty: 4.2, avgWatts: 4.96, notes: "100W + 18% inverter loss" },
     ],
+    dailyWh: 223,
   },
   "s-mon": {
     id: "s-mon",
-    name: "S-MON",
-    subtitle: "Shore Monitoring Only",
+    sku: "WQM-S-MON",
+    name: "Shore Monitor Lite",
+    subtitle: "Monitoring Only (No Ultrasonic)",
     price: 849,
-    tagline: "Solar-powered monitoring without ultrasonic",
+    tagline: "Solar-powered monitoring without ultrasonic treatment",
     deployment: "Shore-mounted",
     power: { type: "Solar + Battery", voltage: "12V DC", watts: 100 },
     ultrasonic: { enabled: false },
-    sensors: 4,
-    sensorList: ["Temperature", "pH", "Dissolved Oxygen", "Turbidity"],
-    battery: { type: "LiFePO4", voltage: 12, capacity: 25, wh: 300 },
+    sensors: 3,
+    sensorList: ["TDS", "Turbidity", "pH"],
+    battery: { type: "LiFePO4", voltage: 12, capacity: 25, wh: 320 },
     solar: { watts: 100, panels: 1 },
-    autonomy: "8+ days",
-    weight: "22 lbs",
+    autonomy: "3.3 days",
+    weight: "~20 lbs",
+    dimensions: { length: "10\"", width: "12\"", height: "6\"" },
+    enclosure: "NEMA 4X (IP66)",
     floatCost: 0,
     features: [
-      "100W solar panel",
-      "12V 25Ah LiFePO4 battery (300Wh)",
+      "100W monocrystalline solar panel",
+      "12V 25Ah LiFePO4 battery (320Wh)",
       "NO ultrasonic (monitoring only)",
-      "4 water quality sensors",
-      "8+ days autonomy",
+      "3 water quality sensors (TDS, Turbidity, pH)",
+      "3.3 days autonomy without sun",
       "Lowest power consumption",
+      "Passive cooling (no fan)",
+      "NEMA 4X weatherproof enclosure",
     ],
     bom: [
-      { item: "Pi Zero 2W", qty: 1, cost: 15, category: "Compute" },
-      { item: "Waveshare SIM7670G Cat-1 HAT", qty: 1, cost: 45, category: "Connectivity" },
-      { item: "ADS1115 16-bit ADC", qty: 1, cost: 12, category: "Sensing" },
-      { item: "DS18B20 Temperature Probe", qty: 1, cost: 8, category: "Sensing" },
-      { item: "Analog pH Sensor", qty: 1, cost: 35, category: "Sensing" },
-      { item: "Analog DO Sensor", qty: 1, cost: 45, category: "Sensing" },
-      { item: "Analog Turbidity Sensor", qty: 1, cost: 25, category: "Sensing" },
-      { item: "100W Monocrystalline Solar Panel", qty: 1, cost: 65, category: "Power" },
-      { item: "Victron SmartSolar 75/15 MPPT", qty: 1, cost: 95, category: "Power" },
-      { item: "12V 25Ah LiFePO4 Battery", qty: 1, cost: 140, category: "Power" },
-      { item: "Victron Smart BatteryProtect 12/24V 65A", qty: 1, cost: 55, category: "Power" },
-      { item: "5V 3A Buck Converter", qty: 1, cost: 6, category: "Power" },
-      { item: "IP67 Enclosure (Medium)", qty: 1, cost: 55, category: "Housing" },
-      { item: "Solar Panel Mounting Hardware", qty: 1, cost: 35, category: "Hardware" },
-      { item: "Cable Glands, Wiring, Connectors", qty: 1, cost: 25, category: "Hardware" },
-      { item: "SIM Card + 1yr Data Plan", qty: 1, cost: 60, category: "Service" },
+      { item: "Raspberry Pi Zero 2 W (SC0510)", qty: 1, cost: 30.99, category: "Compute" },
+      { item: "Waveshare SIM7670G Cat-1/GNSS HAT", qty: 1, cost: 37.99, category: "Connectivity" },
+      { item: "MicroSD Card (SanDisk Industrial 32GB)", qty: 1, cost: 12, category: "Compute" },
+      { item: "Hologram Global IoT SIM", qty: 1, cost: 5, category: "Connectivity" },
+      { item: "SMA External 4G/LTE Antenna", qty: 1, cost: 8, category: "Connectivity" },
+      { item: "ADS1115 16-bit I2C ADC", qty: 1, cost: 5, category: "Sensing" },
+      { item: "CQRobot Ocean TDS Meter", qty: 1, cost: 11.99, category: "Sensing" },
+      { item: "DFRobot SEN0189 Turbidity Sensor", qty: 1, cost: 11.90, category: "Sensing" },
+      { item: "PH-4502C Module + BNC Electrode", qty: 1, cost: 28.79, category: "Sensing" },
+      { item: "pH Calibration Kit (4.0 + 7.0 buffers)", qty: 1, cost: 10, category: "Sensing" },
+      { item: "100W Monocrystalline Solar Panel", qty: 1, cost: 85, category: "Power" },
+      { item: "MPPT Controller (small)", qty: 1, cost: 35, category: "Power" },
+      { item: "12V 25Ah LiFePO4 Battery w/ BMS (320Wh)", qty: 1, cost: 149, category: "Power" },
+      { item: "Low Voltage Disconnect (12V)", qty: 1, cost: 25, category: "Power" },
+      { item: "12V to 5V Buck Converter", qty: 1, cost: 6, category: "Power" },
+      { item: "2-Channel Relay Module", qty: 1, cost: 5, category: "Power" },
+      { item: "NEMA 4X Enclosure (IP66) Compact", qty: 1, cost: 45, category: "Housing" },
+      { item: "DIN Rail + Mounting Hardware", qty: 1, cost: 12, category: "Housing" },
+      { item: "Solar Panel Mounting Hardware", qty: 1, cost: 30, category: "Hardware" },
+      { item: "Cable Glands (PG9/PG11)", qty: 1, cost: 10, category: "Hardware" },
+      { item: "Wiring, Terminals, Connectors", qty: 1, cost: 15, category: "Hardware" },
     ],
     gpio: {
-      i2c: ["ADS1115 ADC (0x48)"],
-      oneWire: ["DS18B20 Temperature"],
-      uart: ["SIM7670G HAT"],
-      gpio: ["Status LED (GPIO27)", "Battery Monitor (GPIO22)"],
+      i2c: ["ADS1115 ADC (0x48) - GPIO2 SDA, GPIO3 SCL"],
+      uart: ["SIM7670G HAT (GPIO14 TX, GPIO15 RX) - Reserved"],
+      gpio: [
+        "GPIO24 → Status LED (via 330Ω)",
+        "GPIO27 → Relay 1 → Spare (Active-LOW)",
+        "GPIO22 → Relay 2 → Spare (Active-LOW)",
+      ],
     },
     powerTable: [
-      { component: "Pi Zero 2W", voltage: 5, current: 0.3, duty: 100, avgWatts: 1.5 },
-      { component: "SIM7670G HAT", voltage: 5, current: 0.4, duty: 20, avgWatts: 0.4 },
-      { component: "Sensors (ADC)", voltage: 5, current: 0.06, duty: 100, avgWatts: 0.3 },
-      { component: "Victron MPPT", voltage: 12, current: 0.02, duty: 100, avgWatts: 0.24 },
+      { component: "Pi Zero 2 W + HAT", voltage: 5, current: 0.5, duty: 100, avgWatts: 2.5, notes: "Always on" },
+      { component: "Sensors (3×)", voltage: 5, current: 0.05, duty: 100, avgWatts: 0.25, notes: "Continuous sampling" },
+      { component: "MPPT Controller", voltage: 12, current: 0.021, duty: 100, avgWatts: 0.25, notes: "Standby" },
+      { component: "LVD", voltage: 12, current: 0.0125, duty: 100, avgWatts: 0.15, notes: "Monitoring" },
+      { component: "Relay Coils (avg)", voltage: 5, current: 0.04, duty: 5, avgWatts: 0.2, notes: "Minimal switching" },
     ],
+    dailyWh: 78,
   },
   "smart-buoy": {
     id: "smart-buoy",
+    sku: "BS-BUOY-01",
     name: "Smart Buoy",
-    subtitle: "Floating Platform",
+    subtitle: "Floating Algae Control Platform",
     price: 2499,
     tagline: "Floating algae control for ponds and lakes",
     deployment: "Floating",
     power: { type: "Solar + Battery", voltage: "24V DC", watts: 50 },
-    ultrasonic: { enabled: true, watts: 100, frequency: "28kHz", units: 1 },
+    ultrasonic: { enabled: true, watts: 100, frequency: "28kHz", units: 1, inverterLoss: "15%" },
     sensors: 5,
-    sensorList: ["Temperature", "pH", "Dissolved Oxygen", "Turbidity", "Conductivity"],
+    sensorList: ["TDS", "Turbidity", "pH", "Dissolved Oxygen", "Temperature"],
     battery: { type: "LiFePO4", voltage: 24, capacity: 20, wh: 480 },
     solar: { watts: 50, panels: 1 },
-    autonomy: "2.2 days",
+    autonomy: "3.0 days",
     weight: "22 lbs",
+    dimensions: { length: "20.87\"", width: "20.87\"", height: "26.38\"" },
+    enclosure: "HDPE Hull + IP68 Electronics Bay",
     floatCost: 628,
-    floatDetails: "Marine-grade float platform",
+    floatDetails: "HDPE Cylindrical 21\" Blue Float",
     features: [
       "Floating buoy deployment",
-      "50W integrated solar panel",
+      "~50W integrated solar panel",
       "24V 20Ah LiFePO4 battery (480Wh)",
-      "100W ultrasonic algae control",
-      "5 water quality sensors",
-      "Marine-grade float ($628)",
+      "100W ultrasonic algae control @ 28kHz",
+      "5 water quality sensors (TDS, Turbidity, pH, DO, Temp)",
+      "HDPE cylindrical float hull ($628)",
       "GPS position tracking",
+      "SS 316 perforated sensor cage",
+      "IP68 sealed electronics bay",
+      "3.0 days autonomy without sun",
     ],
     bom: [
-      { item: "Pi Zero 2W", qty: 1, cost: 15, category: "Compute" },
-      { item: "Waveshare SIM7670G Cat-1 HAT", qty: 1, cost: 45, category: "Connectivity" },
-      { item: "ADS1115 16-bit ADC", qty: 2, cost: 24, category: "Sensing" },
-      { item: "DS18B20 Temperature Probe", qty: 1, cost: 8, category: "Sensing" },
-      { item: "Analog pH Sensor", qty: 1, cost: 35, category: "Sensing" },
-      { item: "Analog DO Sensor", qty: 1, cost: 45, category: "Sensing" },
-      { item: "Analog Turbidity Sensor", qty: 1, cost: 25, category: "Sensing" },
-      { item: "Analog Conductivity Sensor", qty: 1, cost: 40, category: "Sensing" },
-      { item: "BQLZR 100W 28kHz Ultrasonic Transducer", qty: 1, cost: 65, category: "Ultrasonic" },
-      { item: "100W Ultrasonic Driver Board", qty: 1, cost: 35, category: "Ultrasonic" },
-      { item: "50W Marine Solar Panel", qty: 1, cost: 85, category: "Power" },
-      { item: "Victron SmartSolar 75/15 MPPT", qty: 1, cost: 95, category: "Power" },
-      { item: "24V 20Ah LiFePO4 Battery", qty: 1, cost: 165, category: "Power" },
-      { item: "Victron Smart BatteryProtect 65A", qty: 1, cost: 55, category: "Power" },
-      { item: "5V 5A Buck Converter", qty: 1, cost: 8, category: "Power" },
-      { item: "GPS Module (u-blox NEO-6M)", qty: 1, cost: 12, category: "Navigation" },
-      { item: "Marine Float Platform", qty: 1, cost: 628, category: "Float" },
-      { item: "IP68 Enclosure (Buoy)", qty: 1, cost: 95, category: "Housing" },
-      { item: "Anchor, Chain, Swivel Kit", qty: 1, cost: 85, category: "Hardware" },
-      { item: "Cable Glands, Wiring, Connectors", qty: 1, cost: 40, category: "Hardware" },
-      { item: "SIM Card + 1yr Data Plan", qty: 1, cost: 60, category: "Service" },
+      { item: "Raspberry Pi Zero 2 W (SC0510)", qty: 1, cost: 30.99, category: "Compute" },
+      { item: "Waveshare SIM7670G Cat-1/GNSS HAT", qty: 1, cost: 37.99, category: "Connectivity" },
+      { item: "MicroSD Card (SanDisk Industrial 32GB)", qty: 1, cost: 12, category: "Compute" },
+      { item: "Hologram Global IoT SIM", qty: 1, cost: 5, category: "Connectivity" },
+      { item: "SMA External 4G/LTE Antenna", qty: 1, cost: 8, category: "Connectivity" },
+      { item: "ADS1115 16-bit I2C ADC", qty: 1, cost: 5, category: "Sensing" },
+      { item: "CQRobot Ocean TDS Meter", qty: 1, cost: 11.99, category: "Sensing" },
+      { item: "DFRobot SEN0189 Turbidity Sensor", qty: 1, cost: 11.90, category: "Sensing" },
+      { item: "PH-4502C Module + BNC Electrode", qty: 1, cost: 28.79, category: "Sensing" },
+      { item: "pH Calibration Kit (4.0 + 7.0 buffers)", qty: 1, cost: 10, category: "Sensing" },
+      { item: "Atlas Scientific EZO-DO Kit", qty: 1, cost: 89, category: "Sensing" },
+      { item: "DS18B20 Waterproof Temperature Probe", qty: 1, cost: 8, category: "Sensing" },
+      { item: "BQLZR 100W 28kHz Ultrasonic Kit", qty: 1, cost: 68.99, category: "Ultrasonic" },
+      { item: "Transducer Cable (16AWG Shielded 10ft)", qty: 1, cost: 8, category: "Ultrasonic" },
+      { item: "50W Marine Solar Panel", qty: 1, cost: 95, category: "Power" },
+      { item: "MPPT Controller (marine)", qty: 1, cost: 55, category: "Power" },
+      { item: "24V 20Ah LiFePO4 Battery w/ BMS (480Wh)", qty: 1, cost: 185, category: "Power" },
+      { item: "Low Voltage Disconnect (24V)", qty: 1, cost: 35, category: "Power" },
+      { item: "Pure Sine Inverter 150W 24VDC→120VAC", qty: 1, cost: 45, category: "Power" },
+      { item: "24V to 5V Buck Converter", qty: 1, cost: 8, category: "Power" },
+      { item: "4-Channel Relay Module", qty: 1, cost: 8, category: "Power" },
+      { item: "HDPE Cylindrical Float Body 21\" Blue", qty: 1, cost: 628, category: "Float" },
+      { item: "IP68 Sealed Electronics Bay", qty: 1, cost: 125, category: "Housing" },
+      { item: "SS 316 Perforated Sensor Cage", qty: 1, cost: 85, category: "Housing" },
+      { item: "Aluminum Frame + Solar Mount", qty: 1, cost: 65, category: "Hardware" },
+      { item: "Mooring Anchor (25-50 lbs)", qty: 1, cost: 45, category: "Hardware" },
+      { item: "Anchor Chain, Line, Swivel Kit", qty: 1, cost: 55, category: "Hardware" },
+      { item: "Marine Cable Glands + Connectors", qty: 1, cost: 35, category: "Hardware" },
     ],
     gpio: {
-      i2c: ["ADS1115 ADC #1 (0x48)", "ADS1115 ADC #2 (0x49)"],
-      oneWire: ["DS18B20 Temperature"],
-      uart: ["SIM7670G HAT", "GPS NEO-6M"],
-      gpio: ["Ultrasonic Enable (GPIO17)", "Status LED (GPIO27)", "Battery Monitor (GPIO22)"],
+      i2c: [
+        "ADS1115 ADC (0x48) - GPIO2 SDA, GPIO3 SCL",
+        "Atlas EZO-DO (0x61) - I2C Bus",
+      ],
+      oneWire: ["DS18B20 Temperature - GPIO4"],
+      uart: ["SIM7670G HAT (GPIO14 TX, GPIO15 RX) - Reserved"],
+      gpio: [
+        "GPIO17 → Relay 1 → Ultrasonic Driver (Active-LOW)",
+        "GPIO23 → Relay 4 → Spare (Active-LOW)",
+        "GPIO24 → Status LED (via 330Ω)",
+        "GPIO27 → Relay 2 → Spare (Active-LOW)",
+        "GPIO22 → Relay 3 → Spare (Active-LOW)",
+      ],
     },
     powerTable: [
-      { component: "Pi Zero 2W", voltage: 5, current: 0.3, duty: 100, avgWatts: 1.5 },
-      { component: "SIM7670G HAT", voltage: 5, current: 0.4, duty: 25, avgWatts: 0.5 },
-      { component: "Sensors (2x ADC)", voltage: 5, current: 0.1, duty: 100, avgWatts: 0.5 },
-      { component: "GPS Module", voltage: 3.3, current: 0.04, duty: 100, avgWatts: 0.13 },
-      { component: "Victron MPPT", voltage: 24, current: 0.02, duty: 100, avgWatts: 0.5 },
-      { component: "Ultrasonic System", voltage: 24, current: 4.2, duty: 20, avgWatts: 20 },
+      { component: "Pi Zero 2 W + HAT", voltage: 5, current: 0.5, duty: 100, avgWatts: 2.5, notes: "Always on" },
+      { component: "Sensors (5× standard suite)", voltage: 5, current: 0.09, duty: 100, avgWatts: 0.45, notes: "Continuous sampling" },
+      { component: "MPPT Controller", voltage: 24, current: 0.01, duty: 100, avgWatts: 0.25, notes: "Standby" },
+      { component: "LVD", voltage: 24, current: 0.006, duty: 100, avgWatts: 0.15, notes: "Monitoring" },
+      { component: "Relay Coils (avg)", voltage: 5, current: 0.07, duty: 10, avgWatts: 0.35, notes: "Switching" },
+      { component: "Ultrasonic (via Inverter)", voltage: 24, current: 4.79, duty: 4.2, avgWatts: 4.83, notes: "100W + 15% inverter loss" },
     ],
+    dailyWh: 130,
   },
   "smart-buoy-xl": {
     id: "smart-buoy-xl",
+    sku: "BS-BUOY-XL",
     name: "Smart Buoy XL",
     subtitle: "Research-Grade Platform",
     price: 19999,
     tagline: "Professional research platform with Atlas Scientific sensors",
     deployment: "Floating",
     power: { type: "Solar + Battery", voltage: "24V DC", watts: 300 },
-    ultrasonic: { enabled: true, watts: 200, frequency: "28kHz", units: 2 },
+    ultrasonic: { enabled: true, watts: 200, frequency: "28kHz", units: 2, inverterLoss: "17.5%" },
     sensors: 8,
     sensorList: [
-      "Atlas Temp (PT-1000)",
-      "Atlas pH",
-      "Atlas Dissolved Oxygen",
-      "Atlas Conductivity/TDS",
-      "Atlas ORP",
-      "Atlas Turbidity",
-      "Chlorophyll-a",
-      "Blue-Green Algae (Phycocyanin)",
+      "TDS/Conductivity (Atlas EZO-EC)",
+      "Turbidity (Optical Nephelometer)",
+      "pH (Atlas EZO-pH)",
+      "Dissolved Oxygen (Atlas EZO-DO)",
+      "Temperature (PT1000 Marine)",
+      "ORP (Atlas EZO-ORP)",
+      "Chlorophyll-a (Fluorometer)",
+      "Phycocyanin/BGA (Cyanobacteria)",
     ],
     battery: { type: "LiFePO4", voltage: 24, capacity: 100, wh: 2400 },
-    solar: { watts: 300, panels: 2 },
-    autonomy: "5+ days",
-    weight: "265 lbs",
+    solar: { watts: 300, panels: 3 },
+    autonomy: "7.5 days",
+    weight: "264.6 lbs",
+    dimensions: { length: "39.37\"", width: "39.37\"", height: "32.68\"" },
+    enclosure: "Triple HDPE Float + IP68 Electronics Bay",
     floatCost: 3897,
-    floatDetails: "3× research-grade floats ($1,299 each)",
+    floatDetails: "3× HDPE Teardrop 24\" Blue Floats ($1,299 each)",
     features: [
       "Research-grade platform",
-      "300W solar array (2 panels)",
-      "24V 100Ah LiFePO4 (2.4kWh)",
-      "2× 100W ultrasonic transducers",
-      "8 Atlas Scientific sensors",
+      "~300W solar array (3× 100W panels)",
+      "24V 100Ah LiFePO4 battery (2.4kWh)",
+      "2× 100W ultrasonic transducers @ 28kHz",
+      "8+ Atlas Scientific pro sensors",
       "Lab-grade accuracy",
-      "3× research floats ($3,897)",
-      "Modbus/SDI-12 expansion",
-      "Edge computing capability",
+      "Triple HDPE teardrop floats ($3,897)",
+      "Pi CM4 edge computing",
+      "Navigation light (dusk-dawn)",
+      "Heavy-duty SS 316 sensor cage",
+      "7.5 days autonomy without sun",
     ],
     bom: [
-      { item: "Raspberry Pi 4 (4GB)", qty: 1, cost: 55, category: "Compute" },
-      { item: "Waveshare SIM7670G Cat-1 HAT", qty: 1, cost: 45, category: "Connectivity" },
-      { item: "Atlas Scientific EZO pH Kit", qty: 1, cost: 185, category: "Sensing" },
-      { item: "Atlas Scientific EZO DO Kit", qty: 1, cost: 245, category: "Sensing" },
-      { item: "Atlas Scientific EZO EC Kit", qty: 1, cost: 215, category: "Sensing" },
-      { item: "Atlas Scientific EZO ORP Kit", qty: 1, cost: 175, category: "Sensing" },
-      { item: "Atlas Scientific EZO RTD Kit", qty: 1, cost: 125, category: "Sensing" },
-      { item: "Turner C3 Turbidity Sensor", qty: 1, cost: 850, category: "Sensing" },
-      { item: "Turner Chlorophyll-a Sensor", qty: 1, cost: 1200, category: "Sensing" },
-      { item: "Turner Phycocyanin (BGA) Sensor", qty: 1, cost: 1400, category: "Sensing" },
-      { item: "Whitebox Labs Tentacle T3 (8ch)", qty: 1, cost: 95, category: "Interface" },
-      { item: "BQLZR 100W 28kHz Ultrasonic Transducer", qty: 2, cost: 130, category: "Ultrasonic" },
-      { item: "100W Ultrasonic Driver Board", qty: 2, cost: 70, category: "Ultrasonic" },
-      { item: "150W Monocrystalline Solar Panel", qty: 2, cost: 180, category: "Power" },
-      { item: "Victron SmartSolar 100/30 MPPT", qty: 1, cost: 195, category: "Power" },
-      { item: "24V 100Ah LiFePO4 Battery", qty: 1, cost: 650, category: "Power" },
-      { item: "Victron Smart BatteryProtect 100A", qty: 1, cost: 75, category: "Power" },
-      { item: "5V 10A Buck Converter", qty: 1, cost: 15, category: "Power" },
-      { item: "GPS Module (u-blox NEO-M9N)", qty: 1, cost: 45, category: "Navigation" },
-      { item: "Research Float Platform", qty: 3, cost: 3897, category: "Float" },
-      { item: "IP68 Research Enclosure", qty: 1, cost: 350, category: "Housing" },
-      { item: "Heavy Duty Anchor System", qty: 1, cost: 250, category: "Hardware" },
-      { item: "Stainless Mounting Hardware", qty: 1, cost: 180, category: "Hardware" },
-      { item: "Marine Cable Assemblies", qty: 1, cost: 120, category: "Hardware" },
-      { item: "SIM Card + 1yr Data Plan (Priority)", qty: 1, cost: 120, category: "Service" },
+      { item: "Raspberry Pi Compute Module 4 (4GB)", qty: 1, cost: 65, category: "Compute" },
+      { item: "CM4 IO Board", qty: 1, cost: 35, category: "Compute" },
+      { item: "MicroSD Card (SanDisk Industrial 64GB)", qty: 1, cost: 18, category: "Compute" },
+      { item: "Waveshare SIM7670G Cat-1/GNSS HAT", qty: 1, cost: 37.99, category: "Connectivity" },
+      { item: "Hologram Global IoT SIM", qty: 1, cost: 5, category: "Connectivity" },
+      { item: "SMA External 4G/LTE Antenna", qty: 1, cost: 8, category: "Connectivity" },
+      { item: "Atlas Scientific EZO-EC Kit (TDS/Conductivity)", qty: 1, cost: 165, category: "Sensing" },
+      { item: "Optical Nephelometer (Turbidity)", qty: 1, cost: 75, category: "Sensing" },
+      { item: "Atlas Scientific EZO-pH Kit", qty: 1, cost: 145, category: "Sensing" },
+      { item: "Atlas Scientific EZO-DO Kit", qty: 1, cost: 178, category: "Sensing" },
+      { item: "PT1000 Marine Temperature Probe", qty: 1, cost: 28, category: "Sensing" },
+      { item: "Atlas Scientific EZO-ORP Kit", qty: 1, cost: 145, category: "Sensing" },
+      { item: "Chlorophyll-a Fluorometer Module", qty: 1, cost: 420, category: "Sensing" },
+      { item: "Phycocyanin (BGA) Cyanobacteria Detector", qty: 1, cost: 380, category: "Sensing" },
+      { item: "BQLZR 100W 28kHz Ultrasonic Kit", qty: 2, cost: 137.98, category: "Ultrasonic" },
+      { item: "Transducer Cable (16AWG Shielded 10ft)", qty: 2, cost: 16, category: "Ultrasonic" },
+      { item: "100W Monocrystalline Solar Panel", qty: 3, cost: 225, category: "Power" },
+      { item: "Aluminum Tri-Mount Solar Frame", qty: 1, cost: 85, category: "Power" },
+      { item: "Victron SmartSolar 100/30 MPPT", qty: 1, cost: 165, category: "Power" },
+      { item: "24V 100Ah LiFePO4 Battery w/ BMS (2400Wh)", qty: 1, cost: 549, category: "Power" },
+      { item: "Victron BatteryProtect 100A LVD", qty: 1, cost: 65, category: "Power" },
+      { item: "Pure Sine Inverter 500W 24VDC→120VAC", qty: 1, cost: 95, category: "Power" },
+      { item: "24V to 12V Buck Converter (10A)", qty: 1, cost: 15, category: "Power" },
+      { item: "12V to 5V Buck Converter (5A)", qty: 1, cost: 10, category: "Power" },
+      { item: "8-Channel Relay Module", qty: 1, cost: 12, category: "Power" },
+      { item: "Marine Navigation Light (LED)", qty: 1, cost: 45, category: "Navigation" },
+      { item: "HDPE Teardrop Float Body 24\" Blue", qty: 3, cost: 3897, category: "Float" },
+      { item: "Aluminum Structural Center Frame", qty: 1, cost: 285, category: "Float" },
+      { item: "IP68 Large Electronics Bay", qty: 1, cost: 295, category: "Housing" },
+      { item: "Heavy-Duty SS 316 Sensor Cage", qty: 1, cost: 165, category: "Housing" },
+      { item: "Dual Transducer Mounting Pockets", qty: 1, cost: 85, category: "Housing" },
+      { item: "Mooring Anchor (100-150 lbs)", qty: 1, cost: 125, category: "Hardware" },
+      { item: "Heavy-Duty Anchor Chain + Line", qty: 1, cost: 95, category: "Hardware" },
+      { item: "Marine Cable Glands + Assemblies", qty: 1, cost: 75, category: "Hardware" },
+      { item: "Stainless Mounting Hardware Kit", qty: 1, cost: 65, category: "Hardware" },
     ],
     gpio: {
       i2c: [
-        "Whitebox Tentacle T3 (0x66)",
-        "Atlas EZO pH (0x63)",
-        "Atlas EZO DO (0x61)",
-        "Atlas EZO EC (0x64)",
-        "Atlas EZO ORP (0x62)",
-        "Atlas EZO RTD (0x66)",
+        "Atlas EZO-pH (0x63) - I2C Bus",
+        "Atlas EZO-DO (0x61) - I2C Bus",
+        "Atlas EZO-EC (0x64) - I2C Bus",
+        "Atlas EZO-ORP (0x62) - I2C Bus",
+        "Atlas EZO-RTD (0x66) - I2C Bus",
       ],
-      uart: ["SIM7670G HAT", "GPS NEO-M9N", "Turner Sensors (RS-232)"],
+      uart: [
+        "SIM7670G HAT (GPIO14 TX, GPIO15 RX) - Reserved",
+        "Fluorometer/BGA Sensors (RS-232 via adapter)",
+      ],
       gpio: [
-        "Ultrasonic #1 Enable (GPIO17)",
-        "Ultrasonic #2 Enable (GPIO18)",
-        "Status LED (GPIO27)",
-        "Battery Monitor (GPIO22)",
-        "Alert Beacon (GPIO23)",
+        "GPIO17 → Relay 1 → Ultrasonic #1 (Active-LOW)",
+        "GPIO18 → Relay 2 → Ultrasonic #2 (Active-LOW)",
+        "GPIO23 → Relay 5 → Navigation Light (Active-LOW)",
+        "GPIO24 → Status LED (via 330Ω)",
+        "GPIO27 → Relay 3 → Spare (Active-LOW)",
+        "GPIO22 → Relay 4 → Spare (Active-LOW)",
       ],
       sdi12: ["SDI-12 Bus (future expansion)"],
     },
     powerTable: [
-      { component: "Raspberry Pi 4", voltage: 5, current: 0.85, duty: 100, avgWatts: 4.25 },
-      { component: "SIM7670G HAT", voltage: 5, current: 0.4, duty: 30, avgWatts: 0.6 },
-      { component: "Atlas Sensors (8ch)", voltage: 5, current: 0.4, duty: 100, avgWatts: 2.0 },
-      { component: "Turner Optical Sensors", voltage: 12, current: 0.5, duty: 50, avgWatts: 3.0 },
-      { component: "GPS Module", voltage: 3.3, current: 0.05, duty: 100, avgWatts: 0.17 },
-      { component: "Victron MPPT", voltage: 24, current: 0.02, duty: 100, avgWatts: 0.5 },
-      { component: "Ultrasonic System (2×)", voltage: 24, current: 8.4, duty: 30, avgWatts: 60 },
+      { component: "Pi CM4 + IO Board", voltage: 5, current: 0.7, duty: 100, avgWatts: 3.5, notes: "Always on" },
+      { component: "Sensors (8× pro suite)", voltage: 5, current: 0.36, duty: 100, avgWatts: 1.8, notes: "Pro suite" },
+      { component: "MPPT + Monitor", voltage: 24, current: 0.033, duty: 100, avgWatts: 0.8, notes: "Active monitoring" },
+      { component: "LVD", voltage: 24, current: 0.008, duty: 100, avgWatts: 0.2, notes: "Protection" },
+      { component: "Relay Coils (avg)", voltage: 5, current: 0.12, duty: 15, avgWatts: 0.6, notes: "More switching" },
+      { component: "Navigation Light", voltage: 12, current: 0.125, duty: 50, avgWatts: 1.5, notes: "Dusk-dawn" },
+      { component: "Ultrasonics ×2 (via Inverter)", voltage: 24, current: 9.79, duty: 4.2, avgWatts: 9.87, notes: "200W + 17.5% inverter loss" },
+    ],
+    dailyWh: 260,
+  },
+};
+
+// Benchmark competitors with detailed specifications
+const COMPETITORS = {
+  enterprise: {
+    name: "Enterprise Algae Control (LG Sonic, WaterIQ, etc.)",
+    priceRange: "$30,000 - $100,000+",
+    minPrice: 30000,
+    maxPrice: 100000,
+    weight: "440+ lbs (200+ kg)",
+    deployment: "3+ people, crane or boat with davit",
+    sensors: "6 parameters typical",
+    algaeControl: true,
+    coverage: "500m diameter",
+    connectivity: "Cellular/Radio with proprietary gateway",
+    annualCosts: "$5,000 - $15,000 (service contracts)",
+    targetMarket: "Utilities, large municipalities",
+    features: [
+      "Industrial ultrasonic systems",
+      "Professional installation required",
+      "500m coverage diameter",
+      "6 parameter monitoring",
+    ],
+    limitations: [
+      "High cost ($30K-$100K+)",
+      "Heavy (440+ lbs)",
+      "Requires crane/boat deployment",
+      "Vendor lock-in",
+      "$5K-$15K annual service contracts",
+    ],
+  },
+  proSondes: {
+    name: "Professional Sondes (YSI, Hach, In-Situ)",
+    priceRange: "$6,000 - $12,000+",
+    minPrice: 6000,
+    maxPrice: 12000,
+    weight: "35 lbs (buoy) or handheld",
+    deployment: "1 person possible",
+    sensors: "4-7 parameters",
+    algaeControl: false,
+    coverage: "Point monitoring only",
+    connectivity: "Cellular or Bluetooth to phone",
+    annualCosts: "$500 - $2,000 (calibration, sensors)",
+    targetMarket: "Research, consulting, compliance",
+    features: [
+      "Lab-grade accuracy",
+      "Multiple parameters (4-7)",
+      "Established brands",
+      "1-person deployment",
+    ],
+    limitations: [
+      "NO algae control",
+      "Monitoring only",
+      "Expensive consumables",
+      "$500-$2K annual calibration/sensors",
+      "No integrated algae treatment",
+    ],
+  },
+  bluesignal: {
+    name: "BlueSignal Smart Buoy",
+    priceRange: "$2,499",
+    minPrice: 2499,
+    maxPrice: 2499,
+    weight: "22 lbs (10 kg)",
+    deployment: "1 person, kayak/waders sufficient",
+    sensors: "5 parameters",
+    algaeControl: true,
+    coverage: "100m diameter",
+    connectivity: "Cat-1 LTE + GPS (Hologram IoT)",
+    annualCosts: "~$120 (cellular only)",
+    targetMarket: "Farms, golf courses, small lakes, aquaculture",
+    features: [
+      "2-in-1 monitoring + control",
+      "1-person deployment",
+      "22 lbs lightweight",
+      "Cat-1 LTE + GPS included",
+      "$120/year cellular only",
+    ],
+    limitations: [],
+    advantages: [
+      "2-in-1 solution (monitoring + algae control)",
+      "One-person deployment",
+      "Lowest total cost of ownership",
+    ],
+  },
+  bluesignalXL: {
+    name: "BlueSignal Smart Buoy XL",
+    priceRange: "$19,999",
+    minPrice: 19999,
+    maxPrice: 19999,
+    weight: "264.6 lbs (120 kg)",
+    deployment: "2-3 people, boat required",
+    sensors: "8+ parameters (research-grade)",
+    algaeControl: true,
+    coverage: "200m diameter",
+    connectivity: "Cat-1 LTE + GPS",
+    annualCosts: "~$120 (cellular only)",
+    targetMarket: "Reservoirs, research institutions, utilities",
+    features: [
+      "Research-grade 8+ sensors",
+      "Dual 100W ultrasonic",
+      "7.5 days autonomy",
+      "200m coverage",
+    ],
+    limitations: [],
+    advantages: [
+      "Research-grade at fraction of enterprise cost",
+      "No vendor lock-in (Pi-based)",
+      "$120/year vs $5K-$15K enterprise",
     ],
   },
 };
 
-// Benchmark competitors
-const COMPETITORS = {
-  enterprise: {
-    name: "Enterprise Algae Control",
-    priceRange: "$30,000 - $100,000",
-    minPrice: 30000,
-    maxPrice: 100000,
-    features: ["Industrial ultrasonic systems", "Professional installation required", "Annual service contracts", "Limited monitoring"],
-    limitations: ["No water quality sensors", "Proprietary systems", "High maintenance costs", "Long lead times"],
-  },
-  proSondes: {
-    name: "Professional Multi-Parameter Sondes",
-    priceRange: "$6,000 - $12,000",
-    minPrice: 6000,
-    maxPrice: 12000,
-    features: ["Lab-grade accuracy", "Multiple parameters", "Established brands (YSI, Hach, In-Situ)"],
-    limitations: ["NO algae control", "Monitoring only", "Expensive calibration", "No integrated connectivity"],
-  },
+// 5-Year TCO Comparison
+const TCO_COMPARISON = {
+  enterprise: { upfront: 50000, annual: 10000, fiveYear: 100000 },
+  proMonitoring: { upfront: 8000, annual: 1500, fiveYear: 15500 },
+  bluesignalBuoy: { upfront: 2499, annual: 120, fiveYear: 3099 },
+  bluesignalXL: { upfront: 19999, annual: 120, fiveYear: 20599 },
 };
 
 // ============================================================================
@@ -1491,6 +1689,24 @@ const WiringDiagram = ({ product }) => {
 
 const OverviewTab = ({ product }) => (
   <div>
+    {/* SKU Badge */}
+    {product.sku && (
+      <div style={{ marginBottom: 16 }}>
+        <span style={{
+          background: "rgba(59, 130, 246, 0.2)",
+          border: "1px solid #3b82f6",
+          borderRadius: 4,
+          padding: "4px 12px",
+          fontSize: 12,
+          fontWeight: 600,
+          color: "#60a5fa",
+          fontFamily: "monospace"
+        }}>
+          SKU: {product.sku}
+        </span>
+      </div>
+    )}
+
     <SectionTitle>Features</SectionTitle>
     <FeatureList>
       {product.features.map((f, i) => (
@@ -1519,13 +1735,13 @@ const OverviewTab = ({ product }) => (
         {product.ultrasonic?.enabled && (
           <SpecCard>
             <SpecLabel>Ultrasonic</SpecLabel>
-            <SpecValue>{product.ultrasonic.watts}W × {product.ultrasonic.units}</SpecValue>
+            <SpecValue>{product.ultrasonic.watts}W × {product.ultrasonic.units} @ {product.ultrasonic.frequency}</SpecValue>
           </SpecCard>
         )}
         {product.battery && (
           <SpecCard>
             <SpecLabel>Battery</SpecLabel>
-            <SpecValue>{product.battery.voltage}V {product.battery.capacity}Ah</SpecValue>
+            <SpecValue>{product.battery.voltage}V {product.battery.capacity}Ah ({product.battery.wh}Wh)</SpecValue>
           </SpecCard>
         )}
         <SpecCard>
@@ -1536,6 +1752,18 @@ const OverviewTab = ({ product }) => (
           <SpecLabel>Weight</SpecLabel>
           <SpecValue>{product.weight}</SpecValue>
         </SpecCard>
+        {product.dimensions && (
+          <SpecCard>
+            <SpecLabel>Dimensions (L×W×H)</SpecLabel>
+            <SpecValue>{product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height}</SpecValue>
+          </SpecCard>
+        )}
+        {product.enclosure && (
+          <SpecCard>
+            <SpecLabel>Enclosure</SpecLabel>
+            <SpecValue>{product.enclosure}</SpecValue>
+          </SpecCard>
+        )}
       </SpecGrid>
     </div>
 
@@ -1570,39 +1798,44 @@ const WiringTab = ({ product }) => (
 
 const PowerTab = ({ product }) => {
   const totalAvgWatts = product.powerTable.reduce((sum, row) => sum + row.avgWatts, 0);
-  const dailyWh = totalAvgWatts * 24;
+  const dailyWh = product.dailyWh || totalAvgWatts * 24;
   const batteryWh = product.battery?.wh || 0;
-  const calculatedAutonomy = batteryWh > 0 ? (batteryWh / totalAvgWatts / 24).toFixed(1) : "N/A";
+  const calculatedAutonomy = batteryWh > 0 ? (batteryWh / (dailyWh / 24)).toFixed(1) : "N/A";
 
   return (
     <div>
       <SectionTitle>Power Budget</SectionTitle>
-      <Table>
-        <thead>
-          <tr>
-            <Th>Component</Th>
-            <Th>Voltage</Th>
-            <Th>Current (A)</Th>
-            <Th>Duty %</Th>
-            <Th>Avg Watts</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {product.powerTable.map((row, i) => (
-            <tr key={i}>
-              <Td>{row.component}</Td>
-              <Td>{row.voltage}V</Td>
-              <Td>{row.current}</Td>
-              <Td>{row.duty}%</Td>
-              <Td>{row.avgWatts.toFixed(2)}W</Td>
+      <div style={{ overflowX: "auto" }}>
+        <Table>
+          <thead>
+            <tr>
+              <Th>Component</Th>
+              <Th>Voltage</Th>
+              <Th>Current (A)</Th>
+              <Th>Duty %</Th>
+              <Th>Avg Watts</Th>
+              <Th style={{ textAlign: "left" }}>Notes</Th>
             </tr>
-          ))}
-          <TotalRow>
-            <Td colSpan={4}>Total Average Power</Td>
-            <Td>{totalAvgWatts.toFixed(2)}W</Td>
-          </TotalRow>
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {product.powerTable.map((row, i) => (
+              <tr key={i}>
+                <Td>{row.component}</Td>
+                <Td>{row.voltage}V</Td>
+                <Td>{row.current}</Td>
+                <Td>{row.duty}%</Td>
+                <Td>{row.avgWatts.toFixed(2)}W</Td>
+                <Td style={{ textAlign: "left", color: "#94a3b8", fontSize: 12 }}>{row.notes || "—"}</Td>
+              </tr>
+            ))}
+            <TotalRow>
+              <Td colSpan={4}>Total Average Power</Td>
+              <Td>{totalAvgWatts.toFixed(2)}W</Td>
+              <Td></Td>
+            </TotalRow>
+          </tbody>
+        </Table>
+      </div>
 
       <SpecGrid style={{ marginTop: 24 }}>
         <SpecCard>
@@ -1624,7 +1857,7 @@ const PowerTab = ({ product }) => {
         {product.solar && (
           <SpecCard>
             <SpecLabel>Solar Input</SpecLabel>
-            <SpecValue>{product.solar.watts}W peak</SpecValue>
+            <SpecValue>{product.solar.watts}W ({product.solar.panels} panel{product.solar.panels > 1 ? "s" : ""})</SpecValue>
           </SpecCard>
         )}
       </SpecGrid>
