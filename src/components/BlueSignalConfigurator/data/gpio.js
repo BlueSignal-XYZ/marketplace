@@ -1,0 +1,57 @@
+// GPIO Pinout Data for Pi Zero 2 W 40-pin header
+
+export const GPIO_PINOUT = [
+  { pin: 1, name: "3.3V", gpio: null, type: "power", connection: "ADS1115 VDD", notes: "50mA max from rail" },
+  { pin: 2, name: "5V", gpio: null, type: "power", connection: "Sensor VCC Bus", notes: "From buck converter" },
+  { pin: 3, name: "SDA", gpio: 2, type: "i2c", connection: "ADS1115 SDA", notes: "I2C Data" },
+  { pin: 4, name: "5V", gpio: null, type: "power", connection: "(spare)", notes: "" },
+  { pin: 5, name: "SCL", gpio: 3, type: "i2c", connection: "ADS1115 SCL", notes: "I2C Clock" },
+  { pin: 6, name: "GND", gpio: null, type: "ground", connection: "Common Ground", notes: "Star ground point" },
+  { pin: 7, name: "GPCLK0", gpio: 4, type: "reserved", connection: "(reserved)", notes: "Future use / 1-Wire" },
+  { pin: 8, name: "TXD", gpio: 14, type: "uart", connection: "Cat-1 HAT RX", notes: "Reserved - DO NOT USE" },
+  { pin: 9, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 10, name: "RXD", gpio: 15, type: "uart", connection: "Cat-1 HAT TX", notes: "Reserved - DO NOT USE" },
+  { pin: 11, name: "GPIO17", gpio: 17, type: "output", connection: "Relay 1 → Ultrasonic", notes: "Active-LOW" },
+  { pin: 12, name: "PWM0", gpio: 18, type: "reserved", connection: "(reserved)", notes: "Future PWM / Ultrasonic #2" },
+  { pin: 13, name: "GPIO27", gpio: 27, type: "output", connection: "Relay 2 → (spare)", notes: "Active-LOW" },
+  { pin: 14, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 15, name: "GPIO22", gpio: 22, type: "output", connection: "Relay 3 → (spare)", notes: "Active-LOW" },
+  { pin: 16, name: "GPIO23", gpio: 23, type: "output", connection: "Relay 4 → Fan", notes: "Active-LOW" },
+  { pin: 17, name: "3.3V", gpio: null, type: "power", connection: "(spare)", notes: "" },
+  { pin: 18, name: "GPIO24", gpio: 24, type: "output", connection: "Status LED", notes: "Via 330Ω resistor" },
+  { pin: 19, name: "MOSI", gpio: 10, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 20, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 21, name: "MISO", gpio: 9, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 22, name: "GPIO25", gpio: 25, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 23, name: "SCLK", gpio: 11, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 24, name: "CE0", gpio: 8, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 25, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 26, name: "CE1", gpio: 7, type: "reserved", connection: "(SPI reserved)", notes: "" },
+  { pin: 27, name: "ID_SD", gpio: 0, type: "reserved", connection: "(EEPROM)", notes: "Do not use" },
+  { pin: 28, name: "ID_SC", gpio: 1, type: "reserved", connection: "(EEPROM)", notes: "Do not use" },
+  { pin: 29, name: "GPIO5", gpio: 5, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 30, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 31, name: "GPIO6", gpio: 6, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 32, name: "GPIO12", gpio: 12, type: "spare", connection: "(spare)", notes: "PWM capable" },
+  { pin: 33, name: "GPIO13", gpio: 13, type: "spare", connection: "(spare)", notes: "PWM capable" },
+  { pin: 34, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 35, name: "GPIO19", gpio: 19, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 36, name: "GPIO16", gpio: 16, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 37, name: "GPIO26", gpio: 26, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 38, name: "GPIO20", gpio: 20, type: "spare", connection: "(spare)", notes: "" },
+  { pin: 39, name: "GND", gpio: null, type: "ground", connection: "Ground", notes: "" },
+  { pin: 40, name: "GPIO21", gpio: 21, type: "spare", connection: "(spare)", notes: "" },
+];
+
+// Type color mapping for GPIO pins
+export const GPIO_TYPE_COLORS = {
+  power: "#f97316",
+  ground: "#64748b",
+  i2c: "#a855f7",
+  uart: "#f43f5e",
+  output: "#22c55e",
+  reserved: "#475569",
+  spare: "#6366f1",
+};
+
+export default GPIO_PINOUT;
