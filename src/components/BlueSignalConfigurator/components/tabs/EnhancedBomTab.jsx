@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SectionTitle, Table, Th, Td, TotalRow, MarginBadge } from "../../styles";
 import { ENHANCED_BOM, calculateBOMTotals } from "../../data";
+import { BlueSignalCTA } from "../shared";
 
 const ToggleBar = styled.div`
   display: flex;
@@ -457,6 +458,9 @@ const EnhancedBomTab = ({ product }) => {
           </Table>
         </div>
       )}
+
+      {/* BlueSignal CTA */}
+      <BlueSignalCTA productSlug={product.id} variant="banner" />
     </div>
   );
 };

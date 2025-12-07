@@ -67,6 +67,8 @@ import {
   AddToQuoteBtn,
   // Bundles
   BundlesSection,
+  // CTA
+  BlueSignalCTA,
 } from "./components";
 
 // Tab configuration - Enhanced with new tabs
@@ -613,14 +615,16 @@ export default function BlueSignalConfigurator() {
                     <span>{product.subtitle}</span>
                     <span style={{
                       marginLeft: 16,
-                      color: '#059669',
+                      color: '#4ade80',
                       fontWeight: 700,
                       fontSize: 18
                     }}>
                       ${product.price.toLocaleString()}
                     </span>
                   </CurrentProductName>
-                  <TabNavigation>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <BlueSignalCTA productSlug={product.id} />
+                    <TabNavigation>
                     <MiniNavButton
                       disabled={!canGoPrev}
                       onClick={() => {
@@ -648,6 +652,7 @@ export default function BlueSignalConfigurator() {
                       →
                     </MiniNavButton>
                   </TabNavigation>
+                  </div>
                 </StickyProductInfo>
 
                 {renderTabContent()}
@@ -666,6 +671,8 @@ export default function BlueSignalConfigurator() {
                   >
                     Share Config
                   </ActionButton>
+                  <div style={{ flex: 1 }} />
+                  <BlueSignalCTA productSlug={product.id} variant="link" />
                 </QuickActions>
               </DetailContent>
             </DetailPanel>

@@ -218,6 +218,8 @@ export const DetailTab = styled.button`
 
 export const DetailContent = styled.div`
   padding: 24px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 0 0 16px 16px;
 `;
 
 // ============================================================================
@@ -779,17 +781,17 @@ export const QuickActions = styled.div`
   gap: 8px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 export const ActionButton = styled.button`
   padding: 8px 16px;
   font-size: 12px;
   font-weight: 600;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  color: #6b7280;
+  color: #94a3b8;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -797,9 +799,9 @@ export const ActionButton = styled.button`
   gap: 6px;
 
   &:hover {
-    background: #f9fafb;
-    color: #1f2937;
-    border-color: #d1d5db;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    border-color: rgba(255, 255, 255, 0.25);
   }
 `;
 
@@ -823,11 +825,11 @@ export const KeyboardHint = styled.div`
 export const StickyProductInfo = styled.div`
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(8px);
   padding: 12px 16px;
   margin: -24px -24px 24px -24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -837,10 +839,10 @@ export const StickyProductInfo = styled.div`
 export const CurrentProductName = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
+  color: #e2e8f0;
 
   span {
-    color: #6b7280;
+    color: #94a3b8;
     font-weight: 400;
     margin-left: 8px;
   }

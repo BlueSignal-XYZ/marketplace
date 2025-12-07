@@ -356,6 +356,25 @@ const LoginForm = () => {
               Create one here.
             </ButtonLink>
           </FooterRow>
+
+          <div style={{
+            marginTop: '24px',
+            paddingTop: '16px',
+            borderTop: '1px solid #e5e7eb',
+            textAlign: 'center',
+            fontSize: '12px',
+            color: '#6b7280'
+          }}>
+            Hardware by{' '}
+            <a
+              href="https://bluesignal.xyz?source=wqt-login"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}
+            >
+              BlueSignal.xyz
+            </a>
+          </div>
         </FormSection>
       </Card>
 

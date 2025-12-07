@@ -1,7 +1,7 @@
 // Enhanced Specs Tab with Expandable Sections
 import React from "react";
 import styled from "styled-components";
-import { ExpandableSection } from "../shared";
+import { ExpandableSection, BlueSignalCTA } from "../shared";
 import { SectionTitle, SpecGrid, SpecCard, SpecLabel, SpecValue, Table, Th, Td } from "../../styles";
 import { FULL_SPECS, GPIO_PINOUT, GPIO_TYPE_COLORS } from "../../data";
 
@@ -345,6 +345,9 @@ const SpecsTab = ({ product }) => {
           </div>
         </ExpandableSection>
       )}
+
+      {/* BlueSignal CTA */}
+      <BlueSignalCTA productSlug={product.id} variant="banner" />
     </div>
   );
 };
