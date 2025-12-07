@@ -288,11 +288,13 @@ const EnclosurePage = () => {
             value={selectedProduct}
             onChange={(e) => setSelectedProduct(e.target.value)}
           >
-            {Object.values(PRODUCTS).map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name} - {p.subtitle}
-              </option>
-            ))}
+            {Object.values(PRODUCTS)
+              .sort((a, b) => a.price - b.price)
+              .map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} - {p.subtitle}
+                </option>
+              ))}
           </ProductSelect>
         </ProductSelector>
 
