@@ -21,8 +21,17 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     build: {
+      sourcemap: false,
+      minify: 'esbuild',
       rollupOptions: {
-        input: input
+        input: input,
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom'],
+            firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
+            ethers: ['ethers'],
+          }
+        }
       }
     }
   };
