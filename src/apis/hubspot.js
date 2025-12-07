@@ -262,6 +262,60 @@ const syncEntity = async (entityType, entityId, forceSync = false) => {
   }
 };
 
+// Batch sync multiple entities
+const batchSync = async (entities) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/hubspot/sync/batch`,
+      { entities }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error('Error batch syncing to HubSpot:', error);
+    throw error;
+  }
+};
+
+// Get all sync errors
+const getSyncErrors = async () => {
+  try {
+    const response = await axios.get(
+      `${configs.server_url}/hubspot/sync/errors`
+    );
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching sync errors:', error);
+    throw error;
+  }
+};
+
+// Retry a failed sync
+const retrySyncError = async (errorId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/hubspot/sync/retry`,
+      { errorId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error('Error retrying sync:', error);
+    throw error;
+  }
+};
+
+// Get sync statistics
+const getSyncStats = async () => {
+  try {
+    const response = await axios.get(
+      `${configs.server_url}/hubspot/sync/stats`
+    );
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching sync stats:', error);
+    throw error;
+  }
+};
+
 // Utility: Create or update customer in HubSpot
 const syncCustomerToHubSpot = async (customer) => {
   try {
@@ -406,6 +460,10 @@ export const HubSpotDevicesAPI = {
 export const HubSpotSyncAPI = {
   getStatus: getSyncStatus,
   syncEntity: syncEntity,
+  batchSync: batchSync,
+  getErrors: getSyncErrors,
+  retryError: retrySyncError,
+  getStats: getSyncStats,
   syncCustomer: syncCustomerToHubSpot,
   syncOrder: syncOrderToHubSpot,
   syncDevice: syncDeviceToHubSpot,

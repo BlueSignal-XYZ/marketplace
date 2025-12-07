@@ -77,6 +77,9 @@ import {
   DeviceActivation,
 } from "./components/installer";
 
+// Admin components
+import { HubSpotSyncStatus } from "./components/admin";
+
 import {
   Notification,
   Confirmation,
@@ -665,6 +668,9 @@ const SalesRoutes = () => (
     {/* Commissioning workflow */}
     <Route path="/commissions/:commissionId" element={<CommissionWorkflow />} />
     <Route path="/commissions/:commissionId/complete" element={<DeviceActivation />} />
+
+    {/* Admin - HubSpot integration */}
+    <Route path="/admin/hubspot" element={<HubSpotSyncStatus />} />
 
     {/* Catch-all: redirect to configurator */}
     <Route path="*" element={<BlueSignalConfigurator />} />
