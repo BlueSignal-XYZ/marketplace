@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import { DemoHint } from "../DemoHint";
+import SEOHead from "../seo/SEOHead";
 
 const Grid = styled.div`
   display: grid;
@@ -396,6 +397,12 @@ export default function OverviewDashboard() {
       }
       subtitle="Monitor your BlueSignal fleet at a glance"
     >
+      <SEOHead
+        title="Dashboard Overview | BlueSignal Cloud"
+        description="Monitor your BlueSignal water quality monitoring fleet. View device status, alerts, and site performance at a glance."
+        canonical="/dashboard/main"
+        noindex={true}
+      />
       {/* CTA Button */}
       <CTAButton to="/cloud/commissioning">
         + Commission New Device

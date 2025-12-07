@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { PRODUCTS, BUNDLES, calculateBundlePrice } from "./data";
 import bluesignalLogo from "../../assets/bluesignal-logo.png";
 import { generateQuotePDF, generateSpecsPDF } from "./utils";
+import SEOHead from "../seo/SEOHead";
+import { BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, createProductSchema } from "../seo/schemas";
 import {
   ConfiguratorWrapper,
   Container,
@@ -410,8 +412,28 @@ export default function BlueSignalConfigurator() {
     }
   };
 
+  // Generate product schema for current product
+  const productSchema = product ? createProductSchema({
+    name: product.name,
+    description: product.tagline || `${product.name} water quality monitoring system`,
+    image: `https://sales.bluesignal.xyz/products/${selectedProduct}.png`,
+    brand: 'BlueSignal',
+    sku: selectedProduct.toUpperCase(),
+    price: product.price,
+    currency: 'USD',
+    availability: 'InStock',
+    url: `https://sales.bluesignal.xyz/configurator?product=${selectedProduct}`,
+  }) : null;
+
   return (
     <ConfiguratorWrapper ref={containerRef}>
+      <SEOHead
+        title="Water Quality Sensors & Smart Buoys | BlueSignal"
+        description="Professional-grade water quality monitoring hardware. Smart buoys, NPK sensors, LoRaWAN gateways, and enclosures. Configure your monitoring system and get a quote."
+        canonical="/configurator"
+        keywords="water quality sensors, smart buoys, lake monitoring, pond monitoring, NPK sensors, water monitoring hardware"
+        jsonLd={[BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, ...(productSchema ? [productSchema] : [])]}
+      />
       <Container>
         {/* Compact header for sales mode */}
         <div style={{

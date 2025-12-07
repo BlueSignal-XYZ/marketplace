@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { PRODUCTS } from "./data";
 import { EnclosureView } from "./components/diagrams";
 import EnclosureComparisonView from "./components/EnclosureComparisonView";
+import SEOHead from "../seo/SEOHead";
+import { createBreadcrumbSchema, createProductSchema } from "../seo/schemas";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -278,8 +280,21 @@ const EnclosurePage = () => {
     navigator.clipboard.writeText(window.location.href);
   };
 
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: 'https://sales.bluesignal.xyz/' },
+    { name: 'Configurator', url: 'https://sales.bluesignal.xyz/configurator' },
+    { name: 'Enclosure', url: 'https://sales.bluesignal.xyz/enclosure' },
+  ]);
+
   return (
     <PageWrapper>
+      <SEOHead
+        title={`${product.name} Enclosure Details | BlueSignal`}
+        description={`Detailed enclosure specifications for ${product.name}. View component layout, wiring diagrams, and bill of materials for water quality monitoring systems.`}
+        canonical="/enclosure"
+        keywords="water monitoring enclosure, sensor housing, weatherproof enclosure, water quality hardware"
+        jsonLd={breadcrumbSchema}
+      />
       <TopBar>
         <ProductSelector>
           <SelectorLabel htmlFor="product-select">Product:</SelectorLabel>
