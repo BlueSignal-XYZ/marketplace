@@ -3,21 +3,13 @@
     {
       "target": "waterquality-trading",
       "public": "dist-wqt",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{"source": "**", "destination": "/index.html"}]
     },
     {
       "target": "cloud-bluesignal",
       "public": "dist-cloud",
+<<<<<<< HEAD
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -29,10 +21,15 @@
           "destination": "/index.html"
         }
       ]
+=======
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{"source": "**", "destination": "/index.html"}]
+>>>>>>> 893e9bc (Sync local changes before pull)
     },
     {
       "target": "sales-bluesignal",
       "public": "dist-sales",
+<<<<<<< HEAD
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -44,6 +41,10 @@
           "destination": "/index.html"
         }
       ]
+=======
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{"source": "**", "destination": "/index.html"}]
+>>>>>>> 893e9bc (Sync local changes before pull)
     }
   ]
 }

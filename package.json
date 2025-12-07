@@ -16,7 +16,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run --reporter=verbose"
+    "test:ci": "vitest run --reporter=verbose",
+    "build:sales": "BUILD_TARGET=sales vite build --outDir dist-sales && mv dist-sales/sales.html dist-sales/index.html 2>/dev/null || true",
+    "deploy:sales": "npm run build:sales && firebase deploy --only hosting:sales-bluesignal"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
