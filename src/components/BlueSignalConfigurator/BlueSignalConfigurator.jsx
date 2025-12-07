@@ -1,6 +1,7 @@
 // BlueSignal Product Configurator - Main Component
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { PRODUCTS, BUNDLES, calculateBundlePrice } from "./data";
+import bluesignalLogo from "../../assets/bluesignal-logo.png";
 import { generateQuotePDF, generateSpecsPDF } from "./utils";
 import {
   ConfiguratorWrapper,
@@ -179,35 +180,37 @@ export default function BlueSignalConfigurator() {
     // Could add a toast notification here
   };
 
-  // Filtered products
+  // Filtered and sorted products (sorted by price, lowest to highest)
   const filteredProducts = useMemo(() => {
-    return Object.values(PRODUCTS).filter((p) => {
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matchesSearch =
-          p.name.toLowerCase().includes(query) ||
-          p.subtitle.toLowerCase().includes(query) ||
-          p.tagline.toLowerCase().includes(query) ||
-          p.features.some(f => f.toLowerCase().includes(query)) ||
-          p.sensorList.some(s => s.toLowerCase().includes(query));
-        if (!matchesSearch) return false;
-      }
+    return Object.values(PRODUCTS)
+      .filter((p) => {
+        // Search filter
+        if (searchQuery) {
+          const query = searchQuery.toLowerCase();
+          const matchesSearch =
+            p.name.toLowerCase().includes(query) ||
+            p.subtitle.toLowerCase().includes(query) ||
+            p.tagline.toLowerCase().includes(query) ||
+            p.features.some(f => f.toLowerCase().includes(query)) ||
+            p.sensorList.some(s => s.toLowerCase().includes(query));
+          if (!matchesSearch) return false;
+        }
 
-      // Deployment filter
-      if (deploymentFilter !== "all" && p.deployment.toLowerCase() !== deploymentFilter) {
-        return false;
-      }
+        // Deployment filter
+        if (deploymentFilter !== "all" && p.deployment.toLowerCase() !== deploymentFilter) {
+          return false;
+        }
 
-      // Price filter
-      if (priceFilter !== "all") {
-        if (priceFilter === "under1000" && p.price >= 1000) return false;
-        if (priceFilter === "1000to3000" && (p.price < 1000 || p.price > 3000)) return false;
-        if (priceFilter === "over3000" && p.price <= 3000) return false;
-      }
+        // Price filter
+        if (priceFilter !== "all") {
+          if (priceFilter === "under1000" && p.price >= 1000) return false;
+          if (priceFilter === "1000to3000" && (p.price < 1000 || p.price > 3000)) return false;
+          if (priceFilter === "over3000" && p.price <= 3000) return false;
+        }
 
-      return true;
-    });
+        return true;
+      })
+      .sort((a, b) => a.price - b.price); // Sort by price, lowest to highest
   }, [searchQuery, deploymentFilter, priceFilter]);
 
   const product = PRODUCTS[selectedProduct];
@@ -420,9 +423,18 @@ export default function BlueSignalConfigurator() {
           borderBottom: '1px solid #e5e7eb'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#1e40af' }}>
-              Blue<span style={{ color: '#3b82f6' }}>Signal</span>
-            </span>
+            <a
+              href="https://bluesignal.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <img
+                src={bluesignalLogo}
+                alt="BlueSignal"
+                style={{ height: 32, width: 'auto' }}
+              />
+            </a>
             <NavTabs role="tablist" aria-label="Main navigation" style={{ marginBottom: 0 }}>
               <NavTab
                 role="tab"
