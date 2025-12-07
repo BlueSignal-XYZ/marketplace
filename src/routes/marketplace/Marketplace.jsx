@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { getCredits } from "../../apis/creditsApi";
+import SEOHead from "../../components/seo/SEOHead";
+import { WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, createItemListSchema } from "../../components/seo/schemas";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -220,8 +222,28 @@ const Marketplace = () => {
     };
   }, []);
 
+  // Build dynamic JSON-LD schema for listings
+  const marketplaceSchema = listings.length > 0
+    ? createItemListSchema({
+        name: 'Water Quality Credit Listings',
+        description: 'Active water quality credit listings on WaterQuality.Trading marketplace',
+        url: 'https://waterquality.trading/marketplace',
+        items: listings.slice(0, 10).map(listing => ({
+          name: listing.name,
+          url: `https://waterquality.trading/marketplace/listing/${listing.id}`,
+        })),
+      })
+    : null;
+
   return (
     <PageWrapper>
+      <SEOHead
+        title="Water Quality Credit Marketplace"
+        description="Buy and sell nutrient, stormwater, and thermal credits. The modern B2B marketplace for water quality trading. Connect with verified sellers and meet regulatory requirements."
+        canonical="/marketplace"
+        keywords="water quality credits, nutrient credits, stormwater credits, thermal credits, water trading, environmental credits"
+        jsonLd={[WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, ...(marketplaceSchema ? [marketplaceSchema] : [])]}
+      />
       <MarketplaceShell>
         <HeaderBlock>
           <h1>WaterQuality.Trading Marketplace</h1>

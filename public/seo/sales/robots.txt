@@ -1,0 +1,16 @@
+# BlueSignal Sales - robots.txt
+User-agent: *
+Allow: /
+
+# Allow all major crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://sales.bluesignal.xyz/sitemap.xml

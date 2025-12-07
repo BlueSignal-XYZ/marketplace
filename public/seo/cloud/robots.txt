@@ -1,0 +1,26 @@
+# BlueSignal Cloud - robots.txt
+User-agent: *
+Allow: /
+
+# Allow major crawlers for public pages
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Disallow authenticated dashboard routes from indexing
+Disallow: /dashboard/
+Disallow: /cloud/devices/
+Disallow: /cloud/sites/
+Disallow: /cloud/alerts/
+Disallow: /cloud/commissioning
+Disallow: /cloud/tools/
+Disallow: /features/
+Disallow: /media/
+
+# Sitemap location
+Sitemap: https://cloud.bluesignal.xyz/sitemap.xml

@@ -4,47 +4,130 @@
       "target": "waterquality-trading",
       "public": "dist-wqt",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [{"source": "**", "destination": "/index.html"}]
+      "headers": [
+        {
+          "source": "**/*.@(js|css)",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+          ]
+        },
+        {
+          "source": "**/*.@(jpg|jpeg|png|gif|webp|svg|ico)",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+          ]
+        },
+        {
+          "source": "**/*.html",
+          "headers": [
+            {"key": "Cache-Control", "value": "no-cache"}
+          ]
+        },
+        {
+          "source": "/robots.txt",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=86400"}
+          ]
+        },
+        {
+          "source": "/sitemap.xml",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=86400"},
+            {"key": "Content-Type", "value": "application/xml"}
+          ]
+        }
+      ],
+      "rewrites": [
+        {"source": "/sitemap.xml", "destination": "/sitemap.xml"},
+        {"source": "/robots.txt", "destination": "/robots.txt"},
+        {"source": "**", "destination": "/index.html"}
+      ]
     },
     {
       "target": "cloud-bluesignal",
       "public": "dist-cloud",
-<<<<<<< HEAD
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "**/*.@(js|css)",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+          ]
+        },
+        {
+          "source": "**/*.@(jpg|jpeg|png|gif|webp|svg|ico)",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+          ]
+        },
+        {
+          "source": "**/*.html",
+          "headers": [
+            {"key": "Cache-Control", "value": "no-cache"}
+          ]
+        },
+        {
+          "source": "/robots.txt",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=86400"}
+          ]
+        },
+        {
+          "source": "/sitemap.xml",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=86400"},
+            {"key": "Content-Type", "value": "application/xml"}
+          ]
+        }
       ],
       "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
+        {"source": "/sitemap.xml", "destination": "/sitemap.xml"},
+        {"source": "/robots.txt", "destination": "/robots.txt"},
+        {"source": "**", "destination": "/index.html"}
       ]
-=======
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [{"source": "**", "destination": "/index.html"}]
->>>>>>> 893e9bc (Sync local changes before pull)
     },
     {
       "target": "sales-bluesignal",
       "public": "dist-sales",
-<<<<<<< HEAD
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "**/*.@(js|css)",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+          ]
+        },
+        {
+          "source": "**/*.@(jpg|jpeg|png|gif|webp|svg|ico)",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}
+          ]
+        },
+        {
+          "source": "**/*.html",
+          "headers": [
+            {"key": "Cache-Control", "value": "no-cache"}
+          ]
+        },
+        {
+          "source": "/robots.txt",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=86400"}
+          ]
+        },
+        {
+          "source": "/sitemap.xml",
+          "headers": [
+            {"key": "Cache-Control", "value": "public, max-age=86400"},
+            {"key": "Content-Type", "value": "application/xml"}
+          ]
+        }
       ],
       "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
+        {"source": "/sitemap.xml", "destination": "/sitemap.xml"},
+        {"source": "/robots.txt", "destination": "/robots.txt"},
+        {"source": "**", "destination": "/index.html"}
       ]
-=======
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [{"source": "**", "destination": "/index.html"}]
->>>>>>> 893e9bc (Sync local changes before pull)
     }
   ]
 }

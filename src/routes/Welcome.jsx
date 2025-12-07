@@ -12,6 +12,8 @@ import Footer from "../components/shared/Footer/Footer";
 import { useAppContext } from "../context/AppContext";
 import { getDefaultDashboardRoute } from "../utils/roleRouting";
 import { isCloudMode, getAppMode } from "../utils/modeDetection";
+import SEOHead from "../components/seo/SEOHead";
+import { WQT_ORGANIZATION_SCHEMA, BLUESIGNAL_ORGANIZATION_SCHEMA } from "../components/seo/schemas";
 
 import cloudLogo from "../assets/bluesignal-logo.png";
 import marketplaceLogo from "../assets/logo.png";
@@ -92,8 +94,30 @@ const Welcome = () => {
     navigate(route);
   };
 
+  const mode = getAppMode();
+  const isCloud = mode === 'cloud';
+
+  // Mode-specific SEO content
+  const seoContent = isCloud
+    ? {
+        title: 'BlueSignal Cloud - Water Quality Monitoring Platform',
+        description: 'Real-time water quality monitoring and device management. Monitor your sensors, track data, and manage alerts from anywhere.',
+        schema: BLUESIGNAL_ORGANIZATION_SCHEMA,
+      }
+    : {
+        title: 'WaterQuality.Trading - Water Credit Marketplace',
+        description: 'B2B marketplace for water quality credit trading. Buy and sell nutrient, stormwater, and thermal credits. Connect with verified sellers.',
+        schema: WQT_ORGANIZATION_SCHEMA,
+      };
+
   return (
     <FullScreenWrapper>
+      <SEOHead
+        title={seoContent.title}
+        description={seoContent.description}
+        canonical="/"
+        jsonLd={seoContent.schema}
+      />
       <Content>
         <CardShell>
           <WelcomeHome

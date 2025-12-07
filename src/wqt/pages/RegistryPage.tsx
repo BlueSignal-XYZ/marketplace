@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { mockRegistryCredits, RegistryCredit, getCreditsByType, searchCredits } from '../../data/mockRegistryData';
 import { DemoHint } from '../../components/DemoHint';
+import SEOHead from '../../components/seo/SEOHead';
+import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -385,8 +387,20 @@ export function RegistryPage() {
     });
   };
 
+  const registrySchema = createBreadcrumbSchema([
+    { name: 'Home', url: 'https://waterquality.trading/' },
+    { name: 'Registry', url: 'https://waterquality.trading/registry' },
+  ]);
+
   return (
     <PageContainer>
+      <SEOHead
+        title="Water Quality Credit Registry"
+        description="Public registry of verified nutrient and stormwater credits. Search nitrogen, phosphorus, stormwater, and thermal credits by project, location, or credit ID."
+        canonical="/registry"
+        keywords="credit registry, nutrient credits, verified credits, water quality, nitrogen credits, phosphorus credits"
+        jsonLd={registrySchema}
+      />
       <ContentWrapper>
         <Header>
           <TitleRow>

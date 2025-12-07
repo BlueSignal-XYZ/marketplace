@@ -4,6 +4,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mockMapProjects, MapProject, getProjectsByType, getCreditTypeColor } from '../../data/mockMapData';
 import { DemoHint } from '../../components/DemoHint';
+import SEOHead from '../../components/seo/SEOHead';
+import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoiYmx1ZXNpZ25hbCIsImEiOiJjbG0wMTIzNDUwMTIzM2RtZnJ5dXJ5dXJ5In0.dGVzdA';
 
@@ -467,8 +469,20 @@ export function MapPage() {
     }
   }, [filteredProjects, viewMode]);
 
+  const mapSchema = createBreadcrumbSchema([
+    { name: 'Home', url: 'https://waterquality.trading/' },
+    { name: 'Map', url: 'https://waterquality.trading/map' },
+  ]);
+
   return (
     <PageContainer>
+      <SEOHead
+        title="Water Credit Project Map"
+        description="Interactive map of water quality credit projects. Explore nitrogen, phosphorus, stormwater, and thermal credit generating facilities by location."
+        canonical="/map"
+        keywords="water credit map, project locations, nutrient credit projects, water quality facilities, geographic view"
+        jsonLd={mapSchema}
+      />
       <ContentWrapper>
         <Header>
           <TitleRow>

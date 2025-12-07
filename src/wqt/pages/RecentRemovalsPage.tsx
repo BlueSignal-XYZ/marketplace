@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { mockRegistryCredits, RegistryCredit, getCreditsByStatus } from '../../data/mockRegistryData';
+import SEOHead from '../../components/seo/SEOHead';
+import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -319,8 +321,20 @@ export function RecentRemovalsPage() {
     return `${Math.floor(diffDays / 365)} years ago`;
   };
 
+  const removalsSchema = createBreadcrumbSchema([
+    { name: 'Home', url: 'https://waterquality.trading/' },
+    { name: 'Recent Removals', url: 'https://waterquality.trading/recent-removals' },
+  ]);
+
   return (
     <PageContainer>
+      <SEOHead
+        title="Recent Credit Retirements"
+        description="Track recently retired water quality credits. View nitrogen, phosphorus, stormwater, and thermal credit retirement history and usage data."
+        canonical="/recent-removals"
+        keywords="credit retirements, retired credits, nutrient removal, water quality transactions, credit usage"
+        jsonLd={removalsSchema}
+      />
       <ContentWrapper>
         <Header>
           <Title>Recent Removals</Title>
