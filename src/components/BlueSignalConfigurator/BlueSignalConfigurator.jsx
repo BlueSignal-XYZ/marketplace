@@ -1,6 +1,7 @@
 // BlueSignal Product Configurator - Main Component
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { PRODUCTS } from "./data";
+import { PRODUCTS, BUNDLES, calculateBundlePrice } from "./data";
+import { generateQuotePDF, generateSpecsPDF } from "./utils";
 import {
   ConfiguratorWrapper,
   Container,
@@ -60,6 +61,12 @@ import {
   EnclosureTab,
   BenchmarkView,
   ProductComparisonView,
+  // Quote Builder
+  QuoteBuilder,
+  QuoteFloatingButton,
+  AddToQuoteBtn,
+  // Bundles
+  BundlesSection,
 } from "./components";
 
 // Tab configuration - Enhanced with new tabs
@@ -88,22 +95,87 @@ export default function BlueSignalConfigurator() {
   const [compareProducts, setCompareProducts] = useState([]);
   const [showComparison, setShowComparison] = useState(false);
 
+  // Quote builder state
+  const [quoteItems, setQuoteItems] = useState([]);
+  const [showQuoteBuilder, setShowQuoteBuilder] = useState(false);
+
+  // Bundles state
+  const [showBundles, setShowBundles] = useState(false);
+
   const containerRef = useRef(null);
   const productIds = Object.keys(PRODUCTS);
 
-  // URL hash sync for deep linking
+  // URL sync for deep linking - format: #product/tab?quote=id:qty,id:qty
+  // Restore state from URL on load
   useEffect(() => {
     const hash = window.location.hash.slice(1);
-    if (hash && PRODUCTS[hash]) {
-      setSelectedProduct(hash);
+    const searchParams = new URLSearchParams(window.location.search);
+
+    // Parse hash (product/tab)
+    if (hash) {
+      const [productPart, tabPart] = hash.split('/');
+      if (productPart && PRODUCTS[productPart]) {
+        setSelectedProduct(productPart);
+        if (tabPart && TABS.find(t => t.id === tabPart)) {
+          setActiveTab(tabPart);
+        }
+      }
+    }
+
+    // Parse quote from URL params
+    const quoteParam = searchParams.get('quote');
+    if (quoteParam) {
+      try {
+        const items = quoteParam.split(',').map(item => {
+          const [productId, qty] = item.split(':');
+          if (PRODUCTS[productId]) {
+            return { productId, quantity: parseInt(qty, 10) || 1 };
+          }
+          return null;
+        }).filter(Boolean);
+        if (items.length > 0) {
+          setQuoteItems(items);
+        }
+      } catch (e) {
+        console.warn('Failed to parse quote from URL', e);
+      }
     }
   }, []);
 
+  // Update URL hash when product/tab changes
   useEffect(() => {
     if (view === "products") {
-      window.location.hash = selectedProduct;
+      window.location.hash = `${selectedProduct}/${activeTab}`;
     }
-  }, [selectedProduct, view]);
+  }, [selectedProduct, activeTab, view]);
+
+  // Generate shareable link with full state
+  const generateShareableLink = () => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const hash = `#${selectedProduct}/${activeTab}`;
+
+    const params = new URLSearchParams();
+
+    // Add quote items if any
+    if (quoteItems.length > 0) {
+      const quoteString = quoteItems.map(item => `${item.productId}:${item.quantity}`).join(',');
+      params.set('quote', quoteString);
+    }
+
+    // Add filters if active
+    if (searchQuery) params.set('search', searchQuery);
+    if (deploymentFilter !== 'all') params.set('deployment', deploymentFilter);
+    if (priceFilter !== 'all') params.set('price', priceFilter);
+
+    const queryString = params.toString();
+    return `${baseUrl}${queryString ? '?' + queryString : ''}${hash}`;
+  };
+
+  const copyShareableLink = () => {
+    const link = generateShareableLink();
+    navigator.clipboard.writeText(link);
+    // Could add a toast notification here
+  };
 
   // Filtered products
   const filteredProducts = useMemo(() => {
@@ -228,66 +300,80 @@ export default function BlueSignalConfigurator() {
     URL.revokeObjectURL(url);
   };
 
-  // Print specs
-  const printSpecs = () => {
-    const printWindow = window.open("", "_blank");
-    const bomTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>${product.name} Specifications</title>
-          <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 24px; }
-            h1 { color: #1e40af; }
-            h2 { color: #374151; margin-top: 24px; }
-            table { border-collapse: collapse; width: 100%; margin-top: 16px; }
-            th, td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; }
-            th { background: #f3f4f6; }
-            .price { font-size: 24px; color: #059669; font-weight: bold; }
-            ul { margin: 0; padding-left: 20px; }
-          </style>
-        </head>
-        <body>
-          <h1>${product.name} - ${product.subtitle}</h1>
-          <p class="price">$${product.price.toLocaleString()}</p>
-          <p><strong>${product.tagline}</strong></p>
+  // Export specs as PDF
+  const exportSpecsPDF = () => {
+    generateSpecsPDF(product);
+  };
 
-          <h2>Features</h2>
-          <ul>${product.features.map(f => `<li>${f}</li>`).join("")}</ul>
-
-          <h2>Specifications</h2>
-          <table>
-            <tr><th>Deployment</th><td>${product.deployment}</td></tr>
-            <tr><th>Power</th><td>${product.power.type}${product.solar ? ` (${product.solar.watts}W Solar)` : ""}</td></tr>
-            <tr><th>Sensors</th><td>${product.sensors} parameters</td></tr>
-            <tr><th>Autonomy</th><td>${product.autonomy}</td></tr>
-            <tr><th>Weight</th><td>${product.weight}</td></tr>
-          </table>
-
-          <h2>Sensors</h2>
-          <ul>${product.sensorList.map(s => `<li>${s}</li>`).join("")}</ul>
-
-          <h2>Bill of Materials</h2>
-          <table>
-            <tr><th>Category</th><th>Item</th><th>Qty</th><th>Cost</th></tr>
-            ${product.bom.map(item => `<tr><td>${item.category}</td><td>${item.item}</td><td>${item.qty}</td><td>$${item.cost}</td></tr>`).join("")}
-            <tr><th colspan="3">Total</th><th>$${bomTotal.toLocaleString()}</th></tr>
-          </table>
-
-          <p style="margin-top: 24px; color: #6b7280; font-size: 12px;">
-            Generated from BlueSignal Configurator on ${new Date().toLocaleDateString()}
-          </p>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
+  // Export quote as PDF
+  const exportQuotePDF = () => {
+    if (quoteItems.length > 0) {
+      generateQuotePDF(quoteItems, PRODUCTS);
+    }
   };
 
   const clearFilters = () => {
     setSearchQuery("");
     setDeploymentFilter("all");
     setPriceFilter("all");
+  };
+
+  // Quote builder handlers
+  const addToQuote = (productId) => {
+    setQuoteItems((prev) => {
+      const existing = prev.find((item) => item.productId === productId);
+      if (existing) {
+        return prev.map((item) =>
+          item.productId === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { productId, quantity: 1 }];
+    });
+  };
+
+  const updateQuoteQuantity = (productId, quantity) => {
+    if (quantity < 1) return;
+    setQuoteItems((prev) =>
+      prev.map((item) =>
+        item.productId === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const removeFromQuote = (productId) => {
+    setQuoteItems((prev) => prev.filter((item) => item.productId !== productId));
+  };
+
+  const clearQuote = () => {
+    setQuoteItems([]);
+  };
+
+  const isInQuote = (productId) => {
+    return quoteItems.some((item) => item.productId === productId);
+  };
+
+  const quoteItemCount = quoteItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Add entire bundle to quote
+  const addBundleToQuote = (bundle) => {
+    setQuoteItems((prev) => {
+      const newItems = [...prev];
+      bundle.products.forEach(({ productId, quantity }) => {
+        const existingIndex = newItems.findIndex(item => item.productId === productId);
+        if (existingIndex >= 0) {
+          newItems[existingIndex] = {
+            ...newItems[existingIndex],
+            quantity: newItems[existingIndex].quantity + quantity,
+          };
+        } else {
+          newItems.push({ productId, quantity });
+        }
+      });
+      return newItems;
+    });
+    setShowQuoteBuilder(true); // Open quote builder to show added items
   };
 
   const currentProductIndex = productIds.indexOf(selectedProduct);
@@ -322,31 +408,42 @@ export default function BlueSignalConfigurator() {
   return (
     <ConfiguratorWrapper ref={containerRef}>
       <Container>
-        <Header>
-          <Logo>
-            Blue<span>Signal</span>
-          </Logo>
-          <Tagline>Water Quality Hardware Configurator</Tagline>
-        </Header>
-
-        <NavTabs role="tablist" aria-label="Main navigation">
-          <NavTab
-            role="tab"
-            aria-selected={view === "products"}
-            active={view === "products"}
-            onClick={() => setView("products")}
-          >
-            Products
-          </NavTab>
-          <NavTab
-            role="tab"
-            aria-selected={view === "benchmark"}
-            active={view === "benchmark"}
-            onClick={() => setView("benchmark")}
-          >
-            Benchmark
-          </NavTab>
-        </NavTabs>
+        {/* Compact header for sales mode */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+          paddingBottom: 12,
+          borderBottom: '1px solid #e5e7eb'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#1e40af' }}>
+              Blue<span style={{ color: '#3b82f6' }}>Signal</span>
+            </span>
+            <NavTabs role="tablist" aria-label="Main navigation" style={{ marginBottom: 0 }}>
+              <NavTab
+                role="tab"
+                aria-selected={view === "products"}
+                active={view === "products"}
+                onClick={() => setView("products")}
+              >
+                Products
+              </NavTab>
+              <NavTab
+                role="tab"
+                aria-selected={view === "benchmark"}
+                active={view === "benchmark"}
+                onClick={() => setView("benchmark")}
+              >
+                Benchmark
+              </NavTab>
+            </NavTabs>
+          </div>
+          <div style={{ fontSize: 12, color: '#6b7280' }}>
+            Sales Configurator
+          </div>
+        </div>
 
         {view === "products" ? (
           <>
@@ -411,6 +508,16 @@ export default function BlueSignalConfigurator() {
               )}
             </FilterBar>
 
+            {/* Bundles Section */}
+            <BundlesSection
+              bundles={BUNDLES}
+              products={PRODUCTS}
+              calculateBundlePrice={calculateBundlePrice}
+              onAddBundle={addBundleToQuote}
+              expanded={showBundles}
+              onToggle={() => setShowBundles(!showBundles)}
+            />
+
             {filteredProducts.length === 0 ? (
               <NoResults>
                 <h4>No products match your filters</h4>
@@ -465,6 +572,12 @@ export default function BlueSignalConfigurator() {
                         {p.solar && <Badge variant="solar">{p.solar.watts}W Solar</Badge>}
                         <Badge variant="sensors">{p.sensors} Sensors</Badge>
                       </ProductBadges>
+                      <div style={{ marginTop: 12 }} onClick={(e) => e.stopPropagation()}>
+                        <AddToQuoteBtn
+                          onClick={() => addToQuote(p.id)}
+                          inQuote={isInQuote(p.id)}
+                        />
+                      </div>
                     </ProductCard>
                   </ProductCardWrapper>
                 ))}
@@ -498,6 +611,14 @@ export default function BlueSignalConfigurator() {
                   <CurrentProductName>
                     {product.name}
                     <span>{product.subtitle}</span>
+                    <span style={{
+                      marginLeft: 16,
+                      color: '#059669',
+                      fontWeight: 700,
+                      fontSize: 18
+                    }}>
+                      ${product.price.toLocaleString()}
+                    </span>
                   </CurrentProductName>
                   <TabNavigation>
                     <MiniNavButton
@@ -533,19 +654,17 @@ export default function BlueSignalConfigurator() {
 
                 {/* Quick Actions */}
                 <QuickActions>
-                  <ActionButton onClick={printSpecs} title="Print product specifications">
-                    Print Specs
+                  <ActionButton onClick={exportSpecsPDF} title="Export product specifications as PDF">
+                    Export PDF
                   </ActionButton>
                   <ActionButton onClick={exportBomAsCsv} title="Export BOM as CSV file">
                     Export BOM (CSV)
                   </ActionButton>
                   <ActionButton
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href);
-                    }}
-                    title="Copy link to this product"
+                    onClick={copyShareableLink}
+                    title="Copy shareable link with current config"
                   >
-                    Copy Link
+                    Share Config
                   </ActionButton>
                 </QuickActions>
               </DetailContent>
@@ -597,6 +716,27 @@ export default function BlueSignalConfigurator() {
         <ProductComparisonView
           products={compareProducts.map((id) => PRODUCTS[id])}
           onClose={() => setShowComparison(false)}
+        />
+      )}
+
+      {/* Quote Builder */}
+      <QuoteBuilder
+        isOpen={showQuoteBuilder}
+        onClose={() => setShowQuoteBuilder(false)}
+        quoteItems={quoteItems}
+        onUpdateQuantity={updateQuoteQuantity}
+        onRemoveItem={removeFromQuote}
+        onClearQuote={clearQuote}
+        onExportPDF={exportQuotePDF}
+        onShareQuote={copyShareableLink}
+        products={PRODUCTS}
+      />
+
+      {/* Floating Quote Button */}
+      {!showQuoteBuilder && (
+        <QuoteFloatingButton
+          itemCount={quoteItemCount}
+          onClick={() => setShowQuoteBuilder(true)}
         />
       )}
     </ConfiguratorWrapper>

@@ -23,3 +23,6 @@ export { TROUBLESHOOTING, LED_STATUS_CODES, LED_COLORS_HEX } from './troubleshoo
 // Enclosure and wiring data
 export { ENCLOSURE_COMPONENTS, CATEGORY_COLORS } from './enclosure';
 export { WIRING_DIAGRAMS, WIRE_LEGEND } from './enhancedWiring';
+
+// Bundles for quick sales
+export { BUNDLES, calculateBundlePrice } from './bundles';
