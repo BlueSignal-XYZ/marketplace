@@ -21,7 +21,7 @@ export const pulse = keyframes`
 
 export const ConfiguratorWrapper = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: transparent;
+  background: #ffffff;
   min-height: 100vh;
   padding: 24px;
   box-sizing: border-box;

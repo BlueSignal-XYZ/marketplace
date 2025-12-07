@@ -25,7 +25,7 @@ const LayoutDiagram = ({ product }) => {
       </defs>
 
       {/* Background */}
-      <rect x="0" y="0" width="600" height="450" fill="#0f172a" />
+      <rect x="0" y="0" width="600" height="450" fill="#ffffff" />
 
       {isFloating ? (
         <>

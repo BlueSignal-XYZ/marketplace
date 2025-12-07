@@ -16,7 +16,7 @@ const WiringDiagram = ({ product }) => {
       </defs>
 
       {/* Background */}
-      <rect x="0" y="0" width="700" height="500" fill="#0f172a" />
+      <rect x="0" y="0" width="700" height="500" fill="#ffffff" />
 
       {/* Title */}
       <text x="20" y="30" fill="#60a5fa" fontSize="14" fontWeight="700">{product.name} Wiring Diagram</text>
