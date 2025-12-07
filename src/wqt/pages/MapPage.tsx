@@ -7,6 +7,9 @@ import { DemoHint } from '../../components/DemoHint';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoiYmx1ZXNpZ25hbCIsImEiOiJjbG0wMTIzNDUwMTIzM2RtZnJ5dXJ5dXJ5In0.dGVzdA';
 
+// Track boundary layer IDs for cleanup
+const BOUNDARY_LAYER_PREFIX = 'project-boundary';
+
 const PageContainer = styled.div`
   min-height: 100vh;
   padding: 80px 20px 40px;
@@ -300,16 +303,84 @@ export function MapPage() {
     if (!map.current) {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
+        style: 'mapbox://styles/mapbox/outdoors-v12',
         center: [-76.6122, 39.7],
         zoom: 7.5,
       });
 
       map.current.on('load', () => {
         setLoading(false);
+        addBoundaryLayers();
       });
 
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    } else if (map.current.isStyleLoaded()) {
+      // Update boundaries when filter changes
+      addBoundaryLayers();
+    }
+
+    function addBoundaryLayers() {
+      if (!map.current) return;
+
+      // Remove ALL existing boundary layers and sources (check up to 20 possible indices)
+      for (let idx = 0; idx < 20; idx++) {
+        const layerFillId = `${BOUNDARY_LAYER_PREFIX}-fill-${idx}`;
+        const layerOutlineId = `${BOUNDARY_LAYER_PREFIX}-outline-${idx}`;
+        const sourceId = `${BOUNDARY_LAYER_PREFIX}-${idx}`;
+
+        if (map.current!.getLayer(layerFillId)) {
+          map.current!.removeLayer(layerFillId);
+        }
+        if (map.current!.getLayer(layerOutlineId)) {
+          map.current!.removeLayer(layerOutlineId);
+        }
+        if (map.current!.getSource(sourceId)) {
+          map.current!.removeSource(sourceId);
+        }
+      }
+
+      // Add boundary layers for each project
+      filteredProjects.forEach((project, idx) => {
+        if (!project.boundary) return;
+
+        const color = project.creditTypes.length > 0
+          ? getCreditTypeColor(project.creditTypes[0])
+          : '#6b7280';
+
+        const sourceId = `${BOUNDARY_LAYER_PREFIX}-${idx}`;
+        const layerFillId = `${BOUNDARY_LAYER_PREFIX}-fill-${idx}`;
+        const layerOutlineId = `${BOUNDARY_LAYER_PREFIX}-outline-${idx}`;
+
+        map.current!.addSource(sourceId, {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: project.boundary,
+            properties: { name: project.name },
+          },
+        });
+
+        map.current!.addLayer({
+          id: layerFillId,
+          type: 'fill',
+          source: sourceId,
+          paint: {
+            'fill-color': color,
+            'fill-opacity': 0.2,
+          },
+        });
+
+        map.current!.addLayer({
+          id: layerOutlineId,
+          type: 'line',
+          source: sourceId,
+          paint: {
+            'line-color': color,
+            'line-width': 2,
+            'line-opacity': 0.7,
+          },
+        });
+      });
     }
 
     markers.current.forEach(marker => marker.remove());
@@ -338,6 +409,10 @@ export function MapPage() {
       el.addEventListener('mouseleave', () => {
         el.style.transform = 'scale(1)';
       });
+
+      const acreageInfo = project.acreage
+        ? `<p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">${project.acreage} acres</p>`
+        : '';
 
       const popupContent = `
         <div style="padding: 4px;">
@@ -369,6 +444,7 @@ export function MapPage() {
           <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">
             ${project.owner}
           </p>
+          ${acreageInfo}
         </div>
       `;
 

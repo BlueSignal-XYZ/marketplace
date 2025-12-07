@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { getCreditById } from "../../apis/creditsApi";
 import { ButtonPrimary, ButtonSecondary } from "../../components/shared/button/Button";
 import { RequestQuoteModal } from "../../components/elements/marketplace/RequestQuoteModal";
+import { PropertyMap } from "../../components/shared/PropertyMap";
 
 const Page = styled.div`
   max-width: 960px;
@@ -101,6 +102,25 @@ const SectionBody = styled.p`
   margin: 0;
   line-height: 1.5;
   opacity: 0.9;
+`;
+
+const MapSection = styled.section`
+  margin-top: 24px;
+  margin-bottom: 24px;
+`;
+
+const MapTitle = styled.h2`
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const MapSubtitle = styled.span`
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #64748b;
 `;
 
 export default function ListingDetail() {
@@ -238,6 +258,25 @@ export default function ListingDetail() {
           </StatValue>
         </StatCard>
       </StatGrid>
+
+      {credit.lat && credit.lng && (
+        <MapSection>
+          <MapTitle>
+            Property Location
+            {credit.acreage && (
+              <MapSubtitle>{credit.acreage} acres</MapSubtitle>
+            )}
+          </MapTitle>
+          <PropertyMap
+            lat={credit.lat}
+            lng={credit.lng}
+            boundary={credit.boundary}
+            pollutant={credit.pollutant}
+            propertyName={credit.name}
+            height="350px"
+          />
+        </MapSection>
+      )}
 
       <Section>
         <SectionTitle>Description</SectionTitle>
