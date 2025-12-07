@@ -18,6 +18,9 @@
         ],
         "cloud-bluesignal": [
           "cloud-bluesignal"
+        ],
+        "sales-bluesignal": [
+          "sales-bluesignal"
         ]
       }
     }

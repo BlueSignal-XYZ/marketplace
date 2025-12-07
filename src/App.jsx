@@ -91,7 +91,7 @@ import SellerDashboard_Role from "./components/dashboards/SellerDashboard";
 import InstallerDashboard from "./components/dashboards/InstallerDashboard";
 
 import { getDefaultDashboardRoute } from "./utils/roleRouting";
-import { isCloudMode, getAppMode } from "./utils/modeDetection";
+import { isCloudMode, isSalesMode, getAppMode } from "./utils/modeDetection";
 
 /* -------------------------------------------------------------------------- */
 /*                              DEBUG VERSION TAG                              */
@@ -149,10 +149,12 @@ function AppShell({ mode, user, authLoading }) {
 
   // Apply tab title
   React.useEffect(() => {
-    document.title =
-      mode === "cloud"
-        ? "BlueSignal Cloud Monitoring"
-        : "WaterQuality.Trading";
+    const titles = {
+      cloud: "BlueSignal Cloud Monitoring",
+      sales: "BlueSignal Hardware",
+      marketplace: "WaterQuality.Trading",
+    };
+    document.title = titles[mode] || "WaterQuality.Trading";
   }, [mode]);
 
   // Close menus on route change
@@ -193,7 +195,7 @@ function AppShell({ mode, user, authLoading }) {
         {BUILD_VERSION}
       </div>
 
-      {/* HEADERS */}
+      {/* HEADERS - Sales mode has no header (clean product-focused layout) */}
       {!isAuthLanding && mode === "cloud" && (
         <CloudHeader onMenuClick={toggleCloudMenu} />
       )}
@@ -201,6 +203,8 @@ function AppShell({ mode, user, authLoading }) {
       {!isAuthLanding && mode === "marketplace" && (
         <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
+
+      {/* Sales mode intentionally has no header - configurator has its own navigation */}
 
       {/* GLOBAL POPUPS */}
       <Popups />
@@ -223,7 +227,9 @@ function AppShell({ mode, user, authLoading }) {
       )}
 
       {/* ROUTES */}
-      {mode === "cloud" ? (
+      {mode === "sales" ? (
+        <SalesRoutes />
+      ) : mode === "cloud" ? (
         <CloudRoutes user={user} authLoading={authLoading} />
       ) : (
         <MarketplaceRoutes user={user} authLoading={authLoading} />
@@ -577,6 +583,31 @@ const CloudRoutes = ({ user, authLoading }) => (
 
     {/* Catch-all: redirect to CloudLanding instead of 404 */}
     <Route path="*" element={<CloudLanding user={user} authLoading={authLoading} />} />
+  </Routes>
+);
+
+/* -------------------------------------------------------------------------- */
+/*                               SALES ROUTES                                  */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * SalesRoutes - Dedicated routes for sales.bluesignal.xyz
+ * Clean, focused layout for hardware sales and configuration.
+ * No authentication required - public product catalog.
+ */
+const SalesRoutes = () => (
+  <Routes>
+    {/* Default to configurator */}
+    <Route path="/" element={<BlueSignalConfigurator />} />
+
+    {/* Product configurator */}
+    <Route path="/configurator" element={<BlueSignalConfigurator />} />
+
+    {/* Enclosure details page */}
+    <Route path="/enclosure" element={<EnclosurePage />} />
+
+    {/* Catch-all: redirect to configurator */}
+    <Route path="*" element={<BlueSignalConfigurator />} />
   </Routes>
 );
 

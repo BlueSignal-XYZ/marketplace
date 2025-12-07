@@ -4,7 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Bluesignal Marketplace is a React SPA that operates in **dual-mode architecture**: a marketplace frontend (waterquality.trading) and a cloud monitoring dashboard (cloud.bluesignal.xyz). Both modes share the same codebase but have different routing, navigation, and features based on hostname detection.
+Bluesignal Marketplace is a React SPA that operates in **tri-mode architecture**:
+- **Marketplace** (waterquality.trading) - Nutrient credit marketplace
+- **Cloud** (cloud.bluesignal.xyz) - Device monitoring dashboard
+- **Sales** (sales.bluesignal.xyz) - Hardware sales and product configurator
+
+All modes share the same codebase but have different routing, navigation, and features based on hostname detection.
 
 ## Tech Stack
 
@@ -13,7 +18,7 @@ Bluesignal Marketplace is a React SPA that operates in **dual-mode architecture*
 - **State**: AppContext (React Context API) in `src/context/AppContext.jsx`
 - **Styling**: Styled Components
 - **Auth & Database**: Firebase Authentication + Realtime Database
-- **Hosting**: Firebase Hosting (multi-site: waterquality-trading, cloud-bluesignal)
+- **Hosting**: Firebase Hosting (multi-site: waterquality-trading, cloud-bluesignal, sales-bluesignal)
 - **Backend API**: Cloud Functions at `us-central1-app-neptunechain.cloudfunctions.net/app`
 - **Blockchain**: Polygon (Amoy testnet / mainnet) via Alchemy, ethers.js
 - **Media**: Livepeer for video upload/streaming
@@ -26,12 +31,13 @@ Bluesignal Marketplace is a React SPA that operates in **dual-mode architecture*
 # Development server (localhost:3000)
 npm run dev
 
-# Build for production (default: waterquality.trading)
+# Build for production (all sites)
 npm run build
 
 # Build for specific sites
 npm run build:wqt    # WaterQuality.Trading
 npm run build:cloud  # BlueSignal Cloud
+npm run build:sales  # BlueSignal Sales
 
 # Deploy to Firebase
 firebase deploy
@@ -39,21 +45,31 @@ firebase deploy
 # Deploy specific sites
 npm run deploy:wqt    # Build + deploy waterquality.trading
 npm run deploy:cloud  # Build + deploy cloud.bluesignal.xyz
+npm run deploy:sales  # Build + deploy sales.bluesignal.xyz
+
+# Test sales mode locally
+npm run dev          # Then visit localhost:3000?app=sales
 ```
 
 ## Architecture
 
-### Mode Detection (`src/App.jsx`)
+### Mode Detection (`src/utils/modeDetection.js`)
 
 The app detects mode based on hostname:
+- **Sales mode**: `sales.bluesignal.xyz`, `*.sales.bluesignal.xyz`, `sales-bluesignal.web.app`, or `?app=sales`
 - **Cloud mode**: `cloud.bluesignal.xyz`, `*.cloud.bluesignal.xyz`, `cloud-bluesignal.web.app`, or `?app=cloud`
 - **Marketplace mode**: `waterquality.trading`, `*.waterquality.trading`, `waterquality-trading.web.app`, or default
 
-Mode determines which header, menu, and route set to render.
+Mode determines which header, menu, and route set to render. Sales mode has no header/menu (clean product-focused layout).
 
 ### Routing Structure
 
-Routes are split into `CloudRoutes` and `MarketplaceRoutes` in `src/App.jsx`:
+Routes are split into `SalesRoutes`, `CloudRoutes`, and `MarketplaceRoutes` in `src/App.jsx`:
+
+**Sales Routes** (public, no auth):
+- `/` - Product configurator (default landing)
+- `/configurator` - BlueSignal product configurator
+- `/enclosure` - Enclosure details page
 
 **Cloud Routes** (auth-gated):
 - `/dashboard/:dashID` - Dynamic dashboards
@@ -67,7 +83,7 @@ Routes are split into `CloudRoutes` and `MarketplaceRoutes` in `src/App.jsx`:
 - `/marketplace/tools/*` - Auth-gated tools (calculator, live, upload, verification)
 - `/marketplace/seller-dashboard` - Auth-gated seller account
 
-Landing route (`/`) redirects authenticated users to `/marketplace` or `/dashboard/main` based on mode.
+Landing route (`/`) redirects authenticated users to `/marketplace` or `/dashboard/main` based on mode. Sales mode always shows the configurator.
 
 ### Key Directories
 
@@ -105,12 +121,13 @@ All APIs use axios to call Cloud Functions at `configs.server_url`.
 ### Firebase Configuration
 
 Multi-site hosting in `firebase.json`:
-- `waterquality-trading` target → `dist/`
-- `cloud-bluesignal` target → `dist/`
+- `waterquality-trading` target → `dist-wqt/`
+- `cloud-bluesignal` target → `dist-cloud/`
+- `sales-bluesignal` target → `dist-sales/`
 
-Both sites use SPA rewrites (`** → /index.html`).
+All sites use SPA rewrites (`** → /index.html`).
 
-Vite config builds multiple entry points (`index.html`, `cloud.html`) but current setup deploys same `dist/` for both targets. Mode detection happens at runtime via hostname.
+Vite config builds separate entry points (`index.html`, `cloud.html`, `sales.html`) per target. Each build outputs to its own dist directory. Mode detection happens at runtime via hostname.
 
 ### Blockchain Integration
 
