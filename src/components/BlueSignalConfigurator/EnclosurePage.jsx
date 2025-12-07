@@ -7,51 +7,98 @@ import { EnclosureView } from "./components/diagrams";
 import EnclosureComparisonView from "./components/EnclosureComparisonView";
 import SEOHead from "../seo/SEOHead";
 import { createBreadcrumbSchema, createProductSchema } from "../seo/schemas";
+import { media, safeAreaInsets } from "../../styles/breakpoints";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
+  min-height: 100dvh;
   background: #0a0a0a;
-  padding: 20px;
+  padding: 12px;
+  padding-bottom: calc(12px + ${safeAreaInsets.bottom});
+  overflow-x: hidden;
+
+  ${media.lg} {
+    padding: 20px;
+  }
 `;
 
 const TopBar = styled.div`
   max-width: 1200px;
-  margin: 0 auto 24px;
+  margin: 0 auto 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 24px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+
+  ${media.lg} {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 24px;
+    margin-bottom: 24px;
+  }
 `;
 
 const ProductSelector = styled.div`
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  ${media.lg} {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+  }
 `;
 
 const SelectorLabel = styled.label`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 12px;
+  font-size: 11px;
   color: #00ff88;
   letter-spacing: 1px;
   text-transform: uppercase;
+
+  ${media.lg} {
+    font-size: 12px;
+  }
 `;
 
 const ProductSelect = styled.select`
   background: rgba(0, 255, 136, 0.1);
   border: 1px solid #00ff88;
-  border-radius: 4px;
-  padding: 8px 16px;
+  border-radius: 8px;
+  padding: 12px 16px;
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 13px;
+  font-size: 16px; /* Prevents iOS zoom */
   color: #00ff88;
   cursor: pointer;
   outline: none;
+  width: 100%;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300ff88'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+
+  ${media.lg} {
+    width: auto;
+    min-width: 280px;
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 4px;
+    padding-right: 36px;
+  }
 
   &:hover {
-    background: rgba(0, 255, 136, 0.15);
+    background-color: rgba(0, 255, 136, 0.15);
   }
 
   &:focus {
@@ -65,101 +112,165 @@ const ProductSelect = styled.select`
 `;
 
 const PriceDisplay = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+
+  ${media.lg} {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: auto;
+  }
 `;
 
 const PriceBadge = styled.div`
   background: rgba(0, 255, 136, 0.15);
   border: 2px solid #00ff88;
   border-radius: 8px;
-  padding: 12px 20px;
+  padding: 8px 12px;
   text-align: center;
   box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+
+  ${media.lg} {
+    padding: 12px 20px;
+  }
 `;
 
 const PriceLabel = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 10px;
+  font-size: 9px;
   color: #00aa66;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+
+  ${media.lg} {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
 `;
 
 const PriceValue = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
   color: #00ff88;
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+
+  ${media.lg} {
+    font-size: 24px;
+  }
 `;
 
 const BomSummary = styled.div`
   max-width: 1200px;
-  margin: 24px auto;
-  padding: 0 24px;
+  margin: 16px auto;
+  padding: 0;
+
+  ${media.lg} {
+    margin: 24px auto;
+    padding: 0 24px;
+  }
 `;
 
 const BomCard = styled.div`
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(0, 255, 136, 0.3);
   border-radius: 8px;
-  padding: 20px;
+  padding: 12px;
+
+  ${media.lg} {
+    padding: 20px;
+  }
 `;
 
 const BomHeader = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+
+  ${media.lg} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
 `;
 
 const BomTitle = styled.h3`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 14px;
+  font-size: 12px;
   color: #00ff88;
   margin: 0;
   letter-spacing: 1px;
+
+  ${media.lg} {
+    font-size: 14px;
+  }
 `;
 
 const BomTotal = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #00ff88;
+
+  ${media.lg} {
+    font-size: 18px;
+  }
 `;
 
 const BomGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+
+  ${media.lg} {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
 `;
 
 const BomCategory = styled.div`
   background: rgba(0, 255, 136, 0.05);
   border: 1px solid rgba(0, 255, 136, 0.15);
   border-radius: 6px;
-  padding: 12px;
+  padding: 10px;
+
+  ${media.lg} {
+    padding: 12px;
+  }
 `;
 
 const CategoryName = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 11px;
+  font-size: 10px;
   color: #00aa66;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+
+  ${media.lg} {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
 `;
 
 const CategoryTotal = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #00ff88;
+
+  ${media.lg} {
+    font-size: 16px;
+  }
 `;
 
 const CategoryItems = styled.div`
@@ -171,10 +282,17 @@ const CategoryItems = styled.div`
 
 const QuickLinks = styled.div`
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
-  padding-top: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid rgba(0, 255, 136, 0.2);
+
+  ${media.lg} {
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+  }
 `;
 
 const QuickLink = styled.a`
@@ -182,58 +300,123 @@ const QuickLink = styled.a`
   font-size: 11px;
   color: #00aa66;
   text-decoration: none;
-  padding: 6px 12px;
+  padding: 10px 14px;
   border: 1px solid rgba(0, 255, 136, 0.3);
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    padding: 6px 12px;
+    border-radius: 4px;
+    min-height: auto;
+  }
 
   &:hover {
     background: rgba(0, 255, 136, 0.1);
     color: #00ff88;
     border-color: #00ff88;
   }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+`;
+
+const ActionButtonsRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+
+  ${media.lg} {
+    flex-direction: row;
+    width: auto;
+    margin-top: 0;
+  }
 `;
 
 const OpenInConfiguratorButton = styled.button`
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   border: none;
-  border-radius: 6px;
-  padding: 10px 20px;
+  border-radius: 8px;
+  padding: 14px 20px;
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: white;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 12px;
+    border-radius: 6px;
+    min-height: 44px;
+  }
 
   &:hover {
     box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
   }
 `;
 
 const CompareButton = styled.button`
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid #8b5cf6;
-  border-radius: 6px;
-  padding: 10px 20px;
+  border-radius: 8px;
+  padding: 14px 20px;
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #8b5cf6;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 12px;
+    border-radius: 6px;
+    min-height: 44px;
+  }
 
   &:hover {
     background: rgba(139, 92, 246, 0.25);
     box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
   }
 `;
 
@@ -328,15 +511,17 @@ const EnclosurePage = () => {
               {Math.round(((product.price - bomByCategory.total) / product.price) * 100)}%
             </PriceValue>
           </PriceBadge>
+        </PriceDisplay>
 
+        <ActionButtonsRow>
           <CompareButton onClick={() => setShowComparison(true)}>
             Compare Enclosures
           </CompareButton>
 
           <OpenInConfiguratorButton onClick={openInConfigurator}>
-            Open in Configurator →
+            Open in Configurator
           </OpenInConfiguratorButton>
-        </PriceDisplay>
+        </ActionButtonsRow>
       </TopBar>
 
       <EnclosureView product={product} />

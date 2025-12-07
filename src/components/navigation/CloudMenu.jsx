@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
+import { safeAreaInsets } from "../../styles/breakpoints";
 
 const Backdrop = styled.div`
   position: fixed;
@@ -22,16 +23,21 @@ const Panel = styled.aside`
   top: 0;
   right: 0;
   height: 100%;
+  height: 100dvh;
   width: 280px;
-  max-width: 80%;
+  max-width: 85%;
   background: ${({ theme }) => theme.colors?.bg || "#ffffff"};
   box-shadow: -12px 0 40px rgba(15, 23, 42, 0.16);
   z-index: 1000;
 
   display: flex;
   flex-direction: column;
-  padding: 16px 16px 24px;
+  padding: 16px;
+  padding-top: calc(16px + ${safeAreaInsets.top});
+  padding-bottom: calc(24px + ${safeAreaInsets.bottom});
   box-sizing: border-box;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   transform: translateX(${({ $open }) => ($open ? "0%" : "100%")});
   transition: transform 0.25s ease-out;
@@ -56,15 +62,29 @@ const PanelTitle = styled.div`
 
 const CloseButton = styled.button`
   border: none;
-  background: none;
-  padding: 4px 8px;
+  background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 1;
   color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s ease-out;
 
   &:hover {
     color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    background: ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
@@ -94,11 +114,15 @@ const NavItem = styled(Link)`
   justify-content: space-between;
   align-items: center;
 
-  padding: 8px 10px;
-  border-radius: 999px;
+  padding: 12px 14px;
+  min-height: 44px;
+  border-radius: 12px;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s ease-out;
 
   color: ${({ $active, theme }) =>
     $active
@@ -112,13 +136,19 @@ const NavItem = styled(Link)`
   &:hover {
     background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
   }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
 `;
 
 const SmallText = styled.div`
   margin-top: auto;
-  font-size: 11px;
+  font-size: 12px;
   color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
   line-height: 1.5;
+  padding: 8px 0;
 `;
 
 const LogoutButton = styled.button`
@@ -127,19 +157,27 @@ const LogoutButton = styled.button`
   align-items: center;
   width: 100%;
   margin-top: 12px;
-  padding: 8px 10px;
-  border-radius: 999px;
+  padding: 12px 14px;
+  min-height: 44px;
+  border-radius: 12px;
   border: none;
   background: transparent;
   cursor: pointer;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: #ef4444;
-  transition: background 0.15s ease-out;
+  transition: all 0.15s ease-out;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     background: #fef2f2;
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
   }
 `;
 

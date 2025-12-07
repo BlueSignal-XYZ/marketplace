@@ -1,5 +1,6 @@
 // BlueSignal Configurator Styled Components
 import styled, { css, keyframes } from "styled-components";
+import { media, safeAreaInsets } from "../../../styles/breakpoints";
 
 // ============================================================================
 // ANIMATIONS
@@ -23,18 +24,26 @@ export const ConfiguratorWrapper = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: #ffffff;
   min-height: 100vh;
-  padding: 24px;
+  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  padding: 12px;
+  padding-bottom: calc(12px + ${safeAreaInsets.bottom});
   box-sizing: border-box;
   color: #1f2937;
+  overflow-x: hidden;
 
   *, *::before, *::after {
     box-sizing: border-box;
+  }
+
+  ${media.lg} {
+    padding: 24px;
   }
 `;
 
 export const Container = styled.div`
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 `;
 
 export const Header = styled.header`
@@ -67,25 +76,42 @@ export const Tagline = styled.p`
 export const NavTabs = styled.nav`
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 32px;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+
+  ${media.lg} {
+    gap: 8px;
+    margin-bottom: 32px;
+  }
 `;
 
 export const NavTab = styled.button`
-  padding: 12px 32px;
+  padding: 10px 16px;
   font-size: 14px;
   font-weight: 600;
   border: 1px solid ${({ active }) => (active ? "#3b82f6" : "#e5e7eb")};
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
   background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
   color: ${({ active }) => (active ? "#ffffff" : "#6b7280")};
 
+  ${media.lg} {
+    padding: 12px 32px;
+  }
+
   &:hover {
     background: ${({ active }) => (active ? "#2563eb" : "#f9fafb")};
     border-color: ${({ active }) => (active ? "#2563eb" : "#d1d5db")};
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 `;
 
@@ -95,25 +121,50 @@ export const NavTab = styled.button`
 
 export const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  ${media.sm} {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  ${media.lg} {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
 `;
 
 export const ProductCard = styled.div`
   background: ${({ selected }) =>
     selected ? "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)" : "#ffffff"};
   border: 2px solid ${({ selected }) => (selected ? "#3b82f6" : "#e5e7eb")};
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 16px;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: ${({ selected }) => (selected ? "0 4px 12px rgba(59, 130, 246, 0.15)" : "0 1px 3px rgba(0,0,0,0.05)")};
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
-  &:hover {
-    border-color: ${({ selected }) => (selected ? "#3b82f6" : "#d1d5db")};
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  ${media.lg} {
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  /* Touch-friendly active state */
+  &:active {
+    transform: scale(0.98);
+  }
+
+  /* Hover only on non-touch devices */
+  ${media.mouse} {
+    &:hover {
+      border-color: ${({ selected }) => (selected ? "#3b82f6" : "#d1d5db")};
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
   }
 `;
 
@@ -122,29 +173,43 @@ export const ProductCardWrapper = styled.div`
 `;
 
 export const ProductName = styled.h3`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   margin: 0 0 4px;
   color: #1f2937;
+
+  ${media.lg} {
+    font-size: 20px;
+  }
 `;
 
 export const ProductSubtitle = styled.p`
-  font-size: 12px;
+  font-size: 11px;
   color: #6b7280;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+
+  ${media.lg} {
+    font-size: 12px;
+    margin: 0 0 12px;
+  }
 `;
 
 export const ProductPrice = styled.div`
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #059669;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+
+  ${media.lg} {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
 `;
 
 export const ProductTagline = styled.p`
-  font-size: 13px;
+  font-size: 14px;
   color: #4b5563;
   margin: 0 0 12px;
   line-height: 1.4;
@@ -153,7 +218,11 @@ export const ProductTagline = styled.p`
 export const ProductBadges = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
+
+  ${media.lg} {
+    gap: 6px;
+  }
 `;
 
 export const Badge = styled.span`
@@ -187,21 +256,45 @@ export const Badge = styled.span`
 export const DetailPanel = styled.div`
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+  ${media.lg} {
+    border-radius: 16px;
+  }
 `;
 
 export const DetailTabs = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   border-bottom: 1px solid #e5e7eb;
   background: #f9fafb;
+  gap: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Fade indicators for scroll */
+  ${media.mobileOnly} {
+    mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 8px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 8px), transparent);
+  }
+
+  ${media.lg} {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
 `;
 
 export const DetailTab = styled.button`
-  padding: 14px 20px;
-  font-size: 13px;
+  padding: 12px 14px;
+  font-size: 12px;
   font-weight: 600;
   border: none;
   background: ${({ active }) => (active ? "#ffffff" : "transparent")};
@@ -209,17 +302,36 @@ export const DetailTab = styled.button`
   cursor: pointer;
   border-bottom: 2px solid ${({ active }) => (active ? "#3b82f6" : "transparent")};
   transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
 
   &:hover {
     color: ${({ active }) => (active ? "#3b82f6" : "#1f2937")};
     background: ${({ active }) => (active ? "#ffffff" : "#f3f4f6")};
   }
+
+  &:active {
+    opacity: 0.8;
+  }
 `;
 
 export const DetailContent = styled.div`
-  padding: 24px;
+  padding: 16px;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 12px 12px;
+
+  ${media.lg} {
+    padding: 24px;
+    border-radius: 0 0 16px 16px;
+  }
 `;
 
 // ============================================================================
@@ -490,21 +602,33 @@ export const MarginBadge = styled.span`
 
 export const FilterBar = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px;
+  margin-bottom: 16px;
+  padding: 12px;
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  align-items: center;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+  ${media.lg} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 16px;
+  }
 `;
 
 export const FilterGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
+
+  ${media.lg} {
+    width: auto;
+  }
 `;
 
 export const FilterLabel = styled.label`
@@ -515,14 +639,32 @@ export const FilterLabel = styled.label`
 `;
 
 export const FilterSelect = styled.select`
-  padding: 8px 12px;
-  font-size: 13px;
+  padding: 12px 16px;
+  font-size: 16px; /* Prevents iOS zoom */
   background: #ffffff;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #374151;
   cursor: pointer;
-  min-width: 140px;
+  width: 100%;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+
+  ${media.lg} {
+    width: auto;
+    min-width: 140px;
+    padding: 8px 12px;
+    font-size: 13px;
+    padding-right: 36px;
+  }
 
   &:focus {
     outline: none;
@@ -537,13 +679,23 @@ export const FilterSelect = styled.select`
 `;
 
 export const SearchInput = styled.input`
-  padding: 8px 12px;
-  font-size: 13px;
+  padding: 12px 16px;
+  font-size: 16px; /* Prevents iOS zoom */
   background: #ffffff;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #374151;
-  min-width: 200px;
+  width: 100%;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    width: auto;
+    min-width: 200px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 
   &::placeholder {
     color: #9ca3af;
@@ -561,21 +713,36 @@ export const SearchInput = styled.input`
 // ============================================================================
 
 export const CompareButton = styled.button`
-  padding: 8px 16px;
-  font-size: 13px;
+  padding: 12px 16px;
+  font-size: 14px;
   font-weight: 600;
   background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
   border: 1px solid #3b82f6;
-  border-radius: 6px;
+  border-radius: 8px;
   color: ${({ active }) => (active ? "#ffffff" : "#3b82f6")};
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
 
   &:hover {
     background: ${({ active }) => (active ? "#2563eb" : "#eff6ff")};
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   &:disabled {
@@ -588,10 +755,11 @@ export const CompareCheckbox = styled.input.attrs({ type: "checkbox" })`
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   accent-color: #3b82f6;
+  touch-action: manipulation;
 
   ${({ show }) => !show && css`
     display: none;
@@ -605,27 +773,42 @@ export const ComparisonPanel = styled.div`
   right: 0;
   background: linear-gradient(to top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
   border-top: 1px solid #e5e7eb;
-  padding: 16px 24px;
+  padding: 12px;
+  padding-bottom: calc(12px + ${safeAreaInsets.bottom});
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 12px;
   z-index: 100;
   animation: ${fadeIn} 0.3s ease;
   backdrop-filter: blur(8px);
   box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+
+  ${media.lg} {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    padding-bottom: calc(16px + ${safeAreaInsets.bottom});
+  }
 `;
 
 export const ComparisonSelectedProducts = styled.div`
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
+
+  ${media.lg} {
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
 `;
 
 export const ComparisonChip = styled.div`
   background: #eff6ff;
   border: 1px solid #3b82f6;
   border-radius: 20px;
-  padding: 6px 12px;
+  padding: 8px 12px;
   font-size: 13px;
   color: #2563eb;
   display: flex;
@@ -637,9 +820,15 @@ export const ComparisonChip = styled.div`
     border: none;
     color: #6b7280;
     cursor: pointer;
-    padding: 0;
-    font-size: 16px;
+    padding: 4px;
+    font-size: 18px;
     line-height: 1;
+    min-width: 28px;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
 
     &:hover {
       color: #dc2626;
@@ -648,7 +837,7 @@ export const ComparisonChip = styled.div`
 `;
 
 export const CompareNowButton = styled.button`
-  padding: 10px 24px;
+  padding: 14px 24px;
   font-size: 14px;
   font-weight: 600;
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
@@ -657,10 +846,23 @@ export const CompareNowButton = styled.button`
   color: #ffffff;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
+  min-height: 48px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    width: auto;
+    padding: 10px 24px;
+    min-height: 44px;
+  }
 
   &:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   &:disabled {
@@ -680,35 +882,52 @@ export const ComparisonModal = styled.div`
   background: rgba(0, 0, 0, 0.5);
   z-index: 200;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  padding: 24px;
+  padding: 0;
   animation: ${fadeIn} 0.3s ease;
+
+  ${media.lg} {
+    align-items: center;
+    padding: 24px;
+  }
 `;
 
 export const ComparisonContent = styled.div`
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  max-width: 1200px;
+  border-radius: 16px 16px 0 0;
   width: 100%;
-  max-height: 90vh;
+  max-height: 95vh;
+  max-height: 95dvh;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   animation: ${fadeIn} 0.3s ease;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  box-shadow: 0 -20px 60px rgba(0,0,0,0.2);
+
+  ${media.lg} {
+    border-radius: 16px;
+    max-width: 1200px;
+    max-height: 90vh;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
 `;
 
 export const ComparisonHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
+  padding: 16px;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   z-index: 10;
+
+  ${media.lg} {
+    padding: 20px 24px;
+  }
 `;
 
 export const ComparisonTitle = styled.h2`
@@ -778,6 +997,7 @@ export const ComparisonProductHeader = styled.div`
 
 export const QuickActions = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 16px;
   padding-top: 16px;
@@ -785,23 +1005,40 @@ export const QuickActions = styled.div`
 `;
 
 export const ActionButton = styled.button`
-  padding: 8px 16px;
-  font-size: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
+  border-radius: 8px;
   color: #94a3b8;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  flex: 1 1 auto;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  ${media.lg} {
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    font-size: 12px;
+    min-height: 36px;
+  }
 
   &:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #e2e8f0;
     border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
   }
 `;
 
@@ -810,6 +1047,11 @@ export const KeyboardHint = styled.div`
   color: #9ca3af;
   text-align: center;
   margin-top: 16px;
+  display: none; /* Hide on mobile since keyboard shortcuts don't apply */
+
+  ${media.lg} {
+    display: block;
+  }
 
   kbd {
     background: #f3f4f6;
@@ -827,24 +1069,42 @@ export const StickyProductInfo = styled.div`
   top: 0;
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(8px);
-  padding: 12px 16px;
-  margin: -24px -24px 24px -24px;
+  padding: 12px;
+  margin: -16px -16px 16px -16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
   z-index: 10;
+
+  ${media.lg} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin: -24px -24px 24px -24px;
+    gap: 0;
+  }
 `;
 
 export const CurrentProductName = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #e2e8f0;
+
+  ${media.lg} {
+    font-size: 16px;
+  }
 
   span {
     color: #94a3b8;
     font-weight: 400;
     margin-left: 8px;
+    display: block;
+
+    ${media.lg} {
+      display: inline;
+    }
   }
 `;
 

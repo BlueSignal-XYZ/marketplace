@@ -846,6 +846,98 @@ const getDeviceData = async (deviceID) => {
   }
 };
 
+// Device lifecycle updates
+const updateDeviceLifecycle = async (deviceId, lifecycle, metadata) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/update-lifecycle`,
+      { deviceId, lifecycle, metadata }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating device lifecycle:", error);
+    throw error;
+  }
+};
+
+const assignDeviceToOrder = async (deviceId, orderId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/assign-to-order`,
+      { deviceId, orderId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error assigning device to order:", error);
+    throw error;
+  }
+};
+
+const assignDeviceInstaller = async (deviceId, installerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/assign-installer`,
+      { deviceId, installerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error assigning installer to device:", error);
+    throw error;
+  }
+};
+
+const getDevicesByOrder = async (orderId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/get-by-order`,
+      { orderId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching devices by order:", error);
+    throw error;
+  }
+};
+
+const getDeviceInventory = async (filters = {}) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/inventory`,
+      { filters }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching device inventory:", error);
+    throw error;
+  }
+};
+
+const getDevicesBySite = async (siteId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/get-by-site`,
+      { siteId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching devices by site:", error);
+    throw error;
+  }
+};
+
+const getDevicesByInstaller = async (installerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/device/get-by-installer`,
+      { installerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching devices by installer:", error);
+    throw error;
+  }
+};
+
 const DeviceAPI = {
   getDevices,
   addDevice,
@@ -854,6 +946,538 @@ const DeviceAPI = {
   getDeviceDetails,
   emulateDevice,
   getDeviceData,
+  // Lifecycle management
+  updateLifecycle: updateDeviceLifecycle,
+  assignToOrder: assignDeviceToOrder,
+  assignInstaller: assignDeviceInstaller,
+  getByOrder: getDevicesByOrder,
+  getBySite: getDevicesBySite,
+  getByInstaller: getDevicesByInstaller,
+  getInventory: getDeviceInventory,
+};
+
+/*************************CUSTOMER_ENDPOINTS************************************* */
+
+const createCustomer = async (customerData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/customer/create`,
+      { customerData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error creating customer:", error);
+    throw error;
+  }
+};
+
+const getCustomer = async (customerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/customer/get`,
+      { customerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching customer:", error);
+    throw error;
+  }
+};
+
+const updateCustomer = async (customerId, updateData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/customer/update`,
+      { customerId, updateData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw error;
+  }
+};
+
+const getCustomerByEmail = async (email) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/customer/get-by-email`,
+      { email }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching customer by email:", error);
+    throw error;
+  }
+};
+
+const listCustomers = async (filters = {}) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/customer/list`,
+      { filters }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error listing customers:", error);
+    throw error;
+  }
+};
+
+const deleteCustomer = async (customerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/customer/delete`,
+      { customerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error deleting customer:", error);
+    throw error;
+  }
+};
+
+const CustomerAPI = {
+  create: createCustomer,
+  get: getCustomer,
+  update: updateCustomer,
+  getByEmail: getCustomerByEmail,
+  list: listCustomers,
+  delete: deleteCustomer,
+};
+
+/*************************SITE_ENDPOINTS************************************* */
+
+const createSite = async (siteData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/create`,
+      { siteData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error creating site:", error);
+    throw error;
+  }
+};
+
+const getSite = async (siteId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/get`,
+      { siteId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching site:", error);
+    throw error;
+  }
+};
+
+const updateSite = async (siteId, updateData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/update`,
+      { siteId, updateData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating site:", error);
+    throw error;
+  }
+};
+
+const listSitesByCustomer = async (customerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/list-by-customer`,
+      { customerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error listing sites by customer:", error);
+    throw error;
+  }
+};
+
+const listSites = async (filters = {}) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/list`,
+      { filters }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error listing sites:", error);
+    throw error;
+  }
+};
+
+const deleteSite = async (siteId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/delete`,
+      { siteId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error deleting site:", error);
+    throw error;
+  }
+};
+
+const addDeviceToSite = async (siteId, deviceId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/add-device`,
+      { siteId, deviceId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error adding device to site:", error);
+    throw error;
+  }
+};
+
+const removeDeviceFromSite = async (siteId, deviceId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/site/remove-device`,
+      { siteId, deviceId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error removing device from site:", error);
+    throw error;
+  }
+};
+
+const SiteAPI = {
+  create: createSite,
+  get: getSite,
+  update: updateSite,
+  listByCustomer: listSitesByCustomer,
+  list: listSites,
+  delete: deleteSite,
+  addDevice: addDeviceToSite,
+  removeDevice: removeDeviceFromSite,
+};
+
+/*************************ORDER_ENDPOINTS************************************* */
+
+const createOrder = async (orderData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/create`,
+      { orderData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw error;
+  }
+};
+
+const getOrder = async (orderId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/get`,
+      { orderId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    throw error;
+  }
+};
+
+const updateOrder = async (orderId, updateData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/update`,
+      { orderId, updateData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating order:", error);
+    throw error;
+  }
+};
+
+const listOrders = async (filters = {}) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/list`,
+      { filters }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error listing orders:", error);
+    throw error;
+  }
+};
+
+const allocateDevicesToOrder = async (orderId, deviceIds) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/allocate-devices`,
+      { orderId, deviceIds }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error allocating devices to order:", error);
+    throw error;
+  }
+};
+
+const updateOrderStatus = async (orderId, status) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/update-status`,
+      { orderId, status }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error;
+  }
+};
+
+const convertQuoteToOrder = async (orderId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/convert-quote`,
+      { orderId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error converting quote to order:", error);
+    throw error;
+  }
+};
+
+const getOrdersByCustomer = async (customerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/list-by-customer`,
+      { customerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching orders by customer:", error);
+    throw error;
+  }
+};
+
+const getOrdersBySite = async (siteId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/list-by-site`,
+      { siteId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching orders by site:", error);
+    throw error;
+  }
+};
+
+const cancelOrder = async (orderId, reason) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/order/cancel`,
+      { orderId, reason }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error cancelling order:", error);
+    throw error;
+  }
+};
+
+const OrderAPI = {
+  create: createOrder,
+  get: getOrder,
+  update: updateOrder,
+  list: listOrders,
+  allocateDevices: allocateDevicesToOrder,
+  updateStatus: updateOrderStatus,
+  convertQuote: convertQuoteToOrder,
+  getByCustomer: getOrdersByCustomer,
+  getBySite: getOrdersBySite,
+  cancel: cancelOrder,
+};
+
+/*************************COMMISSION_ENDPOINTS************************************* */
+
+const createCommission = async (commissionData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/create`,
+      { commissionData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error creating commission:", error);
+    throw error;
+  }
+};
+
+const getCommission = async (commissionId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/get`,
+      { commissionId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching commission:", error);
+    throw error;
+  }
+};
+
+const updateCommission = async (commissionId, updateData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/update`,
+      { commissionId, updateData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating commission:", error);
+    throw error;
+  }
+};
+
+const submitCommissionChecklist = async (commissionId, checklistData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/submit-checklist`,
+      { commissionId, checklistData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error submitting commission checklist:", error);
+    throw error;
+  }
+};
+
+const runCommissionTests = async (commissionId, deviceId, tests) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/run-tests`,
+      { commissionId, deviceId, tests }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error running commission tests:", error);
+    throw error;
+  }
+};
+
+const completeCommission = async (commissionId, result) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/complete`,
+      { commissionId, result }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error completing commission:", error);
+    throw error;
+  }
+};
+
+const getCommissionByDevice = async (deviceId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/get-by-device`,
+      { deviceId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching commission by device:", error);
+    throw error;
+  }
+};
+
+const getCommissionsByInstaller = async (installerId) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/get-by-installer`,
+      { installerId }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error fetching commissions by installer:", error);
+    throw error;
+  }
+};
+
+const listCommissions = async (filters = {}) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/list`,
+      { filters }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error listing commissions:", error);
+    throw error;
+  }
+};
+
+const uploadCommissionPhoto = async (commissionId, photoData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/upload-photo`,
+      { commissionId, photoData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error uploading commission photo:", error);
+    throw error;
+  }
+};
+
+const submitCommissionSignature = async (commissionId, signatureData) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/submit-signature`,
+      { commissionId, signatureData }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error submitting commission signature:", error);
+    throw error;
+  }
+};
+
+const cancelCommission = async (commissionId, reason) => {
+  try {
+    const response = await axios.post(
+      `${configs.server_url}/commission/cancel`,
+      { commissionId, reason }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Error cancelling commission:", error);
+    throw error;
+  }
+};
+
+const CommissionAPI = {
+  create: createCommission,
+  get: getCommission,
+  update: updateCommission,
+  submitChecklist: submitCommissionChecklist,
+  runTests: runCommissionTests,
+  complete: completeCommission,
+  getByDevice: getCommissionByDevice,
+  getByInstaller: getCommissionsByInstaller,
+  list: listCommissions,
+  uploadPhoto: uploadCommissionPhoto,
+  submitSignature: submitCommissionSignature,
+  cancel: cancelCommission,
 };
 
 /*************************METRICS_API (STUB)************************************* */
@@ -974,4 +1598,9 @@ export {
   DeviceAPI,
   MetricsAPI,
   MarketplaceAPI,
+  // Commercial pipeline APIs
+  CustomerAPI,
+  SiteAPI,
+  OrderAPI,
+  CommissionAPI,
 };

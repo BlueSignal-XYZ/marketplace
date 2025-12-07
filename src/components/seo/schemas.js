@@ -284,7 +284,7 @@ export const BLUESIGNAL_WEBSITE_SCHEMA = createWebSiteSchema({
 });
 
 export const SALES_WEBSITE_SCHEMA = createWebSiteSchema({
-  name: 'BlueSignal Hardware',
+  name: 'BlueSignal Sales Portal',
   url: 'https://sales.bluesignal.xyz',
-  description: 'Water quality monitoring hardware and sensors',
+  description: 'Configure, quote, and manage BlueSignal water quality device installations',
 });

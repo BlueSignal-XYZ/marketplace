@@ -58,6 +58,12 @@ import { VerificationUI } from "./components/elements/contractUI";
 import BlueSignalConfigurator from "./components/BlueSignalConfigurator";
 import EnclosurePage from "./components/BlueSignalConfigurator/EnclosurePage";
 
+// Installer portal components (used in Cloud commissioning routes)
+import {
+  CommissionWorkflow,
+  DeviceActivation,
+} from "./components/installer";
+
 import {
   Notification,
   Confirmation,
@@ -151,7 +157,7 @@ function AppShell({ mode, user, authLoading }) {
   React.useEffect(() => {
     const titles = {
       cloud: "BlueSignal Cloud Monitoring",
-      sales: "BlueSignal Hardware",
+      sales: "BlueSignal Sales Portal",
       marketplace: "WaterQuality.Trading",
     };
     document.title = titles[mode] || "WaterQuality.Trading";
@@ -462,6 +468,24 @@ const CloudRoutes = ({ user, authLoading }) => (
     />
 
     <Route
+      path="/cloud/commissioning/:commissionId"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <CommissionWorkflow />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/commissioning/:commissionId/complete"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <DeviceActivation />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
       path="/cloud/alerts"
       element={
         <CloudAuthGate authLoading={authLoading}>
@@ -592,19 +616,13 @@ const CloudRoutes = ({ user, authLoading }) => (
 
 /**
  * SalesRoutes - Dedicated routes for sales.bluesignal.xyz
- * Clean, focused layout for hardware sales and configuration.
- * No authentication required - public product catalog.
+ * Only exposes the product configurator - all other routes redirect to it.
  */
 const SalesRoutes = () => (
   <Routes>
-    {/* Default to configurator */}
+    {/* Product configurator - the only page available */}
     <Route path="/" element={<BlueSignalConfigurator />} />
-
-    {/* Product configurator */}
     <Route path="/configurator" element={<BlueSignalConfigurator />} />
-
-    {/* Enclosure details page */}
-    <Route path="/enclosure" element={<EnclosurePage />} />
 
     {/* Catch-all: redirect to configurator */}
     <Route path="*" element={<BlueSignalConfigurator />} />

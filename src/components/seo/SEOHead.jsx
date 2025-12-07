@@ -30,8 +30,8 @@ const SITE_CONFIG = {
     baseUrl: 'https://cloud.bluesignal.xyz',
   },
   'sales.bluesignal.xyz': {
-    siteName: 'BlueSignal',
-    defaultImage: 'https://sales.bluesignal.xyz/social/sales-preview.png',
+    siteName: 'BlueSignal Sales Portal',
+    defaultImage: 'https://sales.bluesignal.xyz/bluesignal-logo.png',
     twitterHandle: '@BlueSignalHQ',
     baseUrl: 'https://sales.bluesignal.xyz',
   },

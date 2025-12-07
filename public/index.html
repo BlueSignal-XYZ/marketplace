@@ -2,7 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Enhanced viewport for mobile optimization -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+
+    <!-- Mobile app theme colors -->
+    <meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)" />
+
+    <!-- iOS PWA meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BlueSignal" />
+
+    <!-- Prevent phone number auto-detection (for data displays) -->
+    <meta name="format-detection" content="telephone=no" />
 
     <title>WaterQuality.Trading</title>
     <meta
@@ -14,6 +27,13 @@
     <!-- (Platforms will just use the title/URL and maybe a generic thumbnail) -->
 
     <link rel="icon" type="image/png" href="/icon.png" />
+
+    <!-- Apple touch icons -->
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon.png" />
+
+    <!-- PWA manifest (to be created) -->
+    <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
     <div id="root"></div>
