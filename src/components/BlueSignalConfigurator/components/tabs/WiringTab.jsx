@@ -1,14 +1,12 @@
-// Wiring Tab Component
+// Wiring Tab Component - Enhanced with detailed wire runs and test points
 import React from "react";
-import { SectionTitle, SvgContainer } from "../../styles";
-import { WiringDiagram } from "../diagrams";
+import { SectionTitle } from "../../styles";
+import { EnhancedWiringDiagram } from "../diagrams";
 
 const WiringTab = ({ product }) => (
   <div>
     <SectionTitle>Electrical Wiring</SectionTitle>
-    <SvgContainer>
-      <WiringDiagram product={product} />
-    </SvgContainer>
+    <EnhancedWiringDiagram product={product} />
   </div>
 );
 

@@ -19,3 +19,7 @@ export { WIRE_COLORS, CONNECTORS, FUSES } from './wiring';
 export { FULL_SPECS } from './fullSpecs';
 export { ENHANCED_BOM, calculateBOMTotals } from './enhancedBom';
 export { TROUBLESHOOTING, LED_STATUS_CODES, LED_COLORS_HEX } from './troubleshooting';
+
+// Enclosure and wiring data
+export { ENCLOSURE_COMPONENTS, CATEGORY_COLORS } from './enclosure';
+export { WIRING_DIAGRAMS, WIRE_LEGEND } from './enhancedWiring';

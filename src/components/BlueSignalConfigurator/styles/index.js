@@ -21,11 +21,11 @@ export const pulse = keyframes`
 
 export const ConfiguratorWrapper = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: linear-gradient(135deg, #0c1929 0%, #1a365d 100%);
+  background: transparent;
   min-height: 100vh;
   padding: 24px;
   box-sizing: border-box;
-  color: #e2e8f0;
+  color: #1f2937;
 
   *, *::before, *::after {
     box-sizing: border-box;
@@ -45,18 +45,18 @@ export const Header = styled.header`
 export const Logo = styled.h1`
   font-size: 32px;
   font-weight: 700;
-  color: #60a5fa;
+  color: #1e40af;
   margin: 0 0 8px;
   letter-spacing: -0.02em;
 
   span {
-    color: #38bdf8;
+    color: #3b82f6;
   }
 `;
 
 export const Tagline = styled.p`
   font-size: 16px;
-  color: #94a3b8;
+  color: #64748b;
   margin: 0;
 `;
 
@@ -75,16 +75,17 @@ export const NavTab = styled.button`
   padding: 12px 32px;
   font-size: 14px;
   font-weight: 600;
-  border: none;
+  border: 1px solid ${({ active }) => (active ? "#3b82f6" : "#e5e7eb")};
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
 
-  background: ${({ active }) => (active ? "#3b82f6" : "rgba(255,255,255,0.1)")};
-  color: ${({ active }) => (active ? "#ffffff" : "#94a3b8")};
+  background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
+  color: ${({ active }) => (active ? "#ffffff" : "#6b7280")};
 
   &:hover {
-    background: ${({ active }) => (active ? "#3b82f6" : "rgba(255,255,255,0.15)")};
+    background: ${({ active }) => (active ? "#2563eb" : "#f9fafb")};
+    border-color: ${({ active }) => (active ? "#2563eb" : "#d1d5db")};
   }
 `;
 
@@ -101,16 +102,18 @@ export const ProductGrid = styled.div`
 
 export const ProductCard = styled.div`
   background: ${({ selected }) =>
-    selected ? "linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%)" : "rgba(255,255,255,0.05)"};
-  border: 2px solid ${({ selected }) => (selected ? "#3b82f6" : "rgba(255,255,255,0.1)")};
+    selected ? "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)" : "#ffffff"};
+  border: 2px solid ${({ selected }) => (selected ? "#3b82f6" : "#e5e7eb")};
   border-radius: 16px;
   padding: 20px;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: ${({ selected }) => (selected ? "0 4px 12px rgba(59, 130, 246, 0.15)" : "0 1px 3px rgba(0,0,0,0.05)")};
 
   &:hover {
-    border-color: ${({ selected }) => (selected ? "#3b82f6" : "rgba(255,255,255,0.3)")};
+    border-color: ${({ selected }) => (selected ? "#3b82f6" : "#d1d5db")};
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 `;
 
@@ -122,12 +125,12 @@ export const ProductName = styled.h3`
   font-size: 20px;
   font-weight: 700;
   margin: 0 0 4px;
-  color: #ffffff;
+  color: #1f2937;
 `;
 
 export const ProductSubtitle = styled.p`
   font-size: 12px;
-  color: #94a3b8;
+  color: #6b7280;
   margin: 0 0 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -136,13 +139,13 @@ export const ProductSubtitle = styled.p`
 export const ProductPrice = styled.div`
   font-size: 28px;
   font-weight: 700;
-  color: #38bdf8;
+  color: #059669;
   margin-bottom: 8px;
 `;
 
 export const ProductTagline = styled.p`
   font-size: 13px;
-  color: #cbd5e1;
+  color: #4b5563;
   margin: 0 0 12px;
   line-height: 1.4;
 `;
@@ -161,20 +164,20 @@ export const Badge = styled.span`
   border-radius: 4px;
   background: ${({ variant }) =>
     variant === "ultrasonic"
-      ? "rgba(251, 146, 60, 0.2)"
+      ? "#fef3c7"
       : variant === "solar"
-      ? "rgba(74, 222, 128, 0.2)"
+      ? "#dcfce7"
       : variant === "sensors"
-      ? "rgba(96, 165, 250, 0.2)"
-      : "rgba(255,255,255,0.1)"};
+      ? "#dbeafe"
+      : "#f3f4f6"};
   color: ${({ variant }) =>
     variant === "ultrasonic"
-      ? "#fb923c"
+      ? "#d97706"
       : variant === "solar"
-      ? "#4ade80"
+      ? "#16a34a"
       : variant === "sensors"
-      ? "#60a5fa"
-      : "#94a3b8"};
+      ? "#2563eb"
+      : "#6b7280"};
 `;
 
 // ============================================================================
@@ -182,17 +185,18 @@ export const Badge = styled.span`
 // ============================================================================
 
 export const DetailPanel = styled.div`
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 `;
 
 export const DetailTabs = styled.div`
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
 `;
 
 export const DetailTab = styled.button`
@@ -200,15 +204,15 @@ export const DetailTab = styled.button`
   font-size: 13px;
   font-weight: 600;
   border: none;
-  background: ${({ active }) => (active ? "rgba(59, 130, 246, 0.2)" : "transparent")};
-  color: ${({ active }) => (active ? "#60a5fa" : "#94a3b8")};
+  background: ${({ active }) => (active ? "#ffffff" : "transparent")};
+  color: ${({ active }) => (active ? "#3b82f6" : "#6b7280")};
   cursor: pointer;
   border-bottom: 2px solid ${({ active }) => (active ? "#3b82f6" : "transparent")};
   transition: all 0.2s;
 
   &:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    color: ${({ active }) => (active ? "#3b82f6" : "#1f2937")};
+    background: ${({ active }) => (active ? "#ffffff" : "#f3f4f6")};
   }
 `;
 
@@ -224,7 +228,7 @@ export const SectionTitle = styled.h4`
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 16px;
-  color: #ffffff;
+  color: #1f2937;
 `;
 
 export const FeatureList = styled.ul`
@@ -241,12 +245,12 @@ export const FeatureItem = styled.li`
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
-  color: #cbd5e1;
+  color: #4b5563;
   line-height: 1.5;
 
   &::before {
     content: "✓";
-    color: #4ade80;
+    color: #16a34a;
     font-weight: bold;
     flex-shrink: 0;
   }
@@ -260,14 +264,15 @@ export const SpecGrid = styled.div`
 `;
 
 export const SpecCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 16px;
 `;
 
 export const SpecLabel = styled.div`
   font-size: 12px;
-  color: #94a3b8;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
@@ -276,11 +281,12 @@ export const SpecLabel = styled.div`
 export const SpecValue = styled.div`
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: #1f2937;
 `;
 
 export const SvgContainer = styled.div`
-  background: rgba(0, 0, 0, 0.3);
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 24px;
   display: flex;
@@ -308,13 +314,13 @@ export const Table = styled.table`
 export const Th = styled.th`
   text-align: left;
   padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #94a3b8;
+  background: #f3f4f6;
+  color: #6b7280;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e5e7eb;
 
   &:last-child {
     text-align: right;
@@ -323,8 +329,8 @@ export const Th = styled.th`
 
 export const Td = styled.td`
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: #e2e8f0;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
 
   &:last-child {
     text-align: right;
@@ -333,11 +339,11 @@ export const Td = styled.td`
 `;
 
 export const TotalRow = styled.tr`
-  background: rgba(59, 130, 246, 0.1);
+  background: #eff6ff;
 
   td {
     font-weight: 700;
-    color: #60a5fa;
+    color: #2563eb;
     border-bottom: none;
   }
 `;
@@ -353,7 +359,7 @@ export const GpioSection = styled.div`
 export const GpioTitle = styled.h5`
   font-size: 14px;
   font-weight: 600;
-  color: #60a5fa;
+  color: #2563eb;
   margin: 0 0 8px;
 `;
 
@@ -364,9 +370,9 @@ export const GpioList = styled.ul`
 
   li {
     font-size: 13px;
-    color: #cbd5e1;
+    color: #4b5563;
     padding: 6px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #f3f4f6;
     font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
 
     &:last-child {
@@ -387,23 +393,24 @@ export const BenchmarkGrid = styled.div`
 
 export const BenchmarkCard = styled.div`
   background: ${({ highlight }) =>
-    highlight ? "linear-gradient(135deg, #064e3b 0%, #065f46 100%)" : "rgba(255,255,255,0.05)"};
-  border: 2px solid ${({ highlight }) => (highlight ? "#10b981" : "rgba(255,255,255,0.1)")};
+    highlight ? "linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)" : "#ffffff"};
+  border: 2px solid ${({ highlight }) => (highlight ? "#10b981" : "#e5e7eb")};
   border-radius: 16px;
   padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 `;
 
 export const BenchmarkName = styled.h4`
   font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
+  color: #1f2937;
   margin: 0 0 8px;
 `;
 
 export const BenchmarkPrice = styled.div`
   font-size: 24px;
   font-weight: 700;
-  color: ${({ highlight }) => (highlight ? "#4ade80" : "#fb923c")};
+  color: ${({ highlight }) => (highlight ? "#059669" : "#d97706")};
   margin-bottom: 16px;
 `;
 
@@ -414,7 +421,7 @@ export const BenchmarkSection = styled.div`
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #94a3b8;
+    color: #6b7280;
     margin: 0 0 8px;
   }
 
@@ -425,7 +432,7 @@ export const BenchmarkSection = styled.div`
 
     li {
       font-size: 13px;
-      color: #cbd5e1;
+      color: #4b5563;
       padding: 4px 0;
       display: flex;
       align-items: center;
@@ -433,15 +440,15 @@ export const BenchmarkSection = styled.div`
 
       &::before {
         content: "${({ type }) => (type === "pro" ? "✓" : "✗")}";
-        color: ${({ type }) => (type === "pro" ? "#4ade80" : "#f87171")};
+        color: ${({ type }) => (type === "pro" ? "#16a34a" : "#dc2626")};
       }
     }
   }
 `;
 
 export const SavingsCallout = styled.div`
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
   border-radius: 12px;
   padding: 20px;
   margin-top: 24px;
@@ -449,18 +456,18 @@ export const SavingsCallout = styled.div`
 
   h4 {
     font-size: 16px;
-    color: #4ade80;
+    color: #059669;
     margin: 0 0 8px;
   }
 
   p {
     font-size: 14px;
-    color: #cbd5e1;
+    color: #4b5563;
     margin: 0;
   }
 
   strong {
-    color: #4ade80;
+    color: #059669;
   }
 `;
 
@@ -470,8 +477,8 @@ export const MarginBadge = styled.span`
   font-size: 10px;
   font-weight: 600;
   border-radius: 4px;
-  background: ${({ good }) => (good ? "rgba(74, 222, 128, 0.2)" : "rgba(251, 146, 60, 0.2)")};
-  color: ${({ good }) => (good ? "#4ade80" : "#fb923c")};
+  background: ${({ good }) => (good ? "#dcfce7" : "#fef3c7")};
+  color: ${({ good }) => (good ? "#16a34a" : "#d97706")};
   margin-left: 8px;
 `;
 
@@ -485,10 +492,11 @@ export const FilterBar = styled.div`
   gap: 12px;
   margin-bottom: 24px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #e5e7eb;
   align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 `;
 
 export const FilterGroup = styled.div`
@@ -499,7 +507,7 @@ export const FilterGroup = styled.div`
 
 export const FilterLabel = styled.label`
   font-size: 11px;
-  color: #94a3b8;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 `;
@@ -507,42 +515,42 @@ export const FilterLabel = styled.label`
 export const FilterSelect = styled.select`
   padding: 8px 12px;
   font-size: 13px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  color: #e2e8f0;
+  color: #374151;
   cursor: pointer;
   min-width: 140px;
 
   &:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
 
   option {
-    background: #1e293b;
-    color: #e2e8f0;
+    background: #ffffff;
+    color: #374151;
   }
 `;
 
 export const SearchInput = styled.input`
   padding: 8px 12px;
   font-size: 13px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  color: #e2e8f0;
+  color: #374151;
   min-width: 200px;
 
   &::placeholder {
-    color: #64748b;
+    color: #9ca3af;
   }
 
   &:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
 `;
 
@@ -554,10 +562,10 @@ export const CompareButton = styled.button`
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
-  background: ${({ active }) => (active ? "#3b82f6" : "rgba(59, 130, 246, 0.2)")};
+  background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
   border: 1px solid #3b82f6;
   border-radius: 6px;
-  color: #ffffff;
+  color: ${({ active }) => (active ? "#ffffff" : "#3b82f6")};
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -565,7 +573,7 @@ export const CompareButton = styled.button`
   gap: 6px;
 
   &:hover {
-    background: ${({ active }) => (active ? "#2563eb" : "rgba(59, 130, 246, 0.3)")};
+    background: ${({ active }) => (active ? "#2563eb" : "#eff6ff")};
   }
 
   &:disabled {
@@ -593,8 +601,8 @@ export const ComparisonPanel = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+  border-top: 1px solid #e5e7eb;
   padding: 16px 24px;
   display: flex;
   align-items: center;
@@ -602,6 +610,7 @@ export const ComparisonPanel = styled.div`
   z-index: 100;
   animation: ${fadeIn} 0.3s ease;
   backdrop-filter: blur(8px);
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
 `;
 
 export const ComparisonSelectedProducts = styled.div`
@@ -611,12 +620,12 @@ export const ComparisonSelectedProducts = styled.div`
 `;
 
 export const ComparisonChip = styled.div`
-  background: rgba(59, 130, 246, 0.2);
+  background: #eff6ff;
   border: 1px solid #3b82f6;
   border-radius: 20px;
   padding: 6px 12px;
   font-size: 13px;
-  color: #60a5fa;
+  color: #2563eb;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -624,14 +633,14 @@ export const ComparisonChip = styled.div`
   button {
     background: none;
     border: none;
-    color: #94a3b8;
+    color: #6b7280;
     cursor: pointer;
     padding: 0;
     font-size: 16px;
     line-height: 1;
 
     &:hover {
-      color: #f87171;
+      color: #dc2626;
     }
   }
 `;
@@ -666,7 +675,7 @@ export const ComparisonModal = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -676,14 +685,15 @@ export const ComparisonModal = styled.div`
 `;
 
 export const ComparisonContent = styled.div`
-  background: linear-gradient(135deg, #0c1929 0%, #1a365d 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
   max-width: 1200px;
   width: 100%;
   max-height: 90vh;
   overflow: auto;
   animation: ${fadeIn} 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 `;
 
 export const ComparisonHeader = styled.div`
@@ -691,10 +701,10 @@ export const ComparisonHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   z-index: 10;
 `;
@@ -702,23 +712,23 @@ export const ComparisonHeader = styled.div`
 export const ComparisonTitle = styled.h2`
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: #1f2937;
   margin: 0;
 `;
 
 export const CloseButton = styled.button`
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 8px 16px;
-  color: #94a3b8;
+  color: #6b7280;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    background: #e5e7eb;
+    color: #1f2937;
   }
 `;
 
@@ -732,7 +742,7 @@ export const ComparisonRow = styled.div`
   grid-template-columns: 180px repeat(${({ cols }) => cols}, 1fr);
   gap: 16px;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #f3f4f6;
 
   &:last-child {
     border-bottom: none;
@@ -742,21 +752,21 @@ export const ComparisonRow = styled.div`
 export const ComparisonLabel = styled.div`
   font-size: 13px;
   font-weight: 600;
-  color: #94a3b8;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 `;
 
 export const ComparisonValue = styled.div`
   font-size: 14px;
-  color: ${({ highlight }) => (highlight ? "#4ade80" : "#e2e8f0")};
+  color: ${({ highlight }) => (highlight ? "#059669" : "#374151")};
   font-weight: ${({ highlight }) => (highlight ? "600" : "400")};
 `;
 
 export const ComparisonProductHeader = styled.div`
   text-align: center;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: #f9fafb;
   border-radius: 12px;
 `;
 
@@ -769,17 +779,17 @@ export const QuickActions = styled.div`
   gap: 8px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid #e5e7eb;
 `;
 
 export const ActionButton = styled.button`
   padding: 8px 16px;
   font-size: 12px;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 6px;
-  color: #94a3b8;
+  color: #6b7280;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -787,36 +797,37 @@ export const ActionButton = styled.button`
   gap: 6px;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.2);
+    background: #f9fafb;
+    color: #1f2937;
+    border-color: #d1d5db;
   }
 `;
 
 export const KeyboardHint = styled.div`
   font-size: 11px;
-  color: #64748b;
+  color: #9ca3af;
   text-align: center;
   margin-top: 16px;
 
   kbd {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
     border-radius: 4px;
     padding: 2px 6px;
     font-family: monospace;
     margin: 0 2px;
+    color: #4b5563;
   }
 `;
 
 export const StickyProductInfo = styled.div`
   position: sticky;
   top: 0;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   padding: 12px 16px;
   margin: -24px -24px 24px -24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -826,10 +837,10 @@ export const StickyProductInfo = styled.div`
 export const CurrentProductName = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: #1f2937;
 
   span {
-    color: #94a3b8;
+    color: #6b7280;
     font-weight: 400;
     margin-left: 8px;
   }
@@ -843,25 +854,25 @@ export const TabNavigation = styled.div`
 export const MiniNavButton = styled.button`
   background: none;
   border: none;
-  color: ${({ disabled }) => (disabled ? "#475569" : "#60a5fa")};
+  color: ${({ disabled }) => (disabled ? "#d1d5db" : "#3b82f6")};
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
   font-size: 18px;
   padding: 4px 8px;
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    color: #93c5fd;
+    color: #2563eb;
   }
 `;
 
 export const NoResults = styled.div`
   text-align: center;
   padding: 48px 24px;
-  color: #94a3b8;
+  color: #6b7280;
 
   h4 {
     font-size: 18px;
-    color: #e2e8f0;
+    color: #1f2937;
     margin: 0 0 8px;
   }
 

@@ -14,3 +14,4 @@ export { default as SpecsTab } from './SpecsTab';
 export { default as EnhancedBomTab } from './EnhancedBomTab';
 export { default as EnhancedInstallationTab } from './EnhancedInstallationTab';
 export { default as OperationsTab } from './OperationsTab';
+export { default as EnclosureTab } from './EnclosureTab';

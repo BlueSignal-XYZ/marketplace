@@ -57,6 +57,7 @@ import {
   EnhancedBomTab,
   EnhancedInstallationTab,
   OperationsTab,
+  EnclosureTab,
   BenchmarkView,
   ProductComparisonView,
 } from "./components";
@@ -65,6 +66,7 @@ import {
 const TABS = [
   { id: "overview", label: "Overview" },
   { id: "specs", label: "Specs" },
+  { id: "enclosure", label: "Enclosure" },
   { id: "layout", label: "Layout" },
   { id: "wiring", label: "Wiring" },
   { id: "power", label: "Power" },
@@ -298,6 +300,8 @@ export default function BlueSignalConfigurator() {
         return <OverviewTab product={product} />;
       case "specs":
         return <SpecsTab product={product} />;
+      case "enclosure":
+        return <EnclosureTab product={product} />;
       case "layout":
         return <LayoutTab product={product} />;
       case "wiring":
@@ -549,7 +553,7 @@ export default function BlueSignalConfigurator() {
 
             <KeyboardHint>
               <kbd>←</kbd><kbd>→</kbd> Navigate products |
-              <kbd>1</kbd>-<kbd>8</kbd> Switch tabs |
+              <kbd>1</kbd>-<kbd>9</kbd> Switch tabs |
               <kbd>C</kbd> Compare mode |
               <kbd>Esc</kbd> Exit
             </KeyboardHint>
