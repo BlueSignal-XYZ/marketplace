@@ -68,6 +68,8 @@ import {
   QuoteBuilder,
   QuoteFloatingButton,
   AddToQuoteBtn,
+  // Customer Name Modal
+  CustomerNameModal,
   // Bundles
   BundlesSection,
   // CTA
@@ -103,6 +105,9 @@ export default function BlueSignalConfigurator() {
   // Quote builder state
   const [quoteItems, setQuoteItems] = useState([]);
   const [showQuoteBuilder, setShowQuoteBuilder] = useState(false);
+  const [showCustomerModal, setShowCustomerModal] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [pdfError, setPdfError] = useState(null);
 
   // Bundles state
   const [showBundles, setShowBundles] = useState(false);
@@ -312,10 +317,26 @@ export default function BlueSignalConfigurator() {
     generateSpecsPDF(product);
   };
 
-  // Export quote as PDF
-  const exportQuotePDF = () => {
+  // Open customer name modal before exporting quote PDF
+  const openQuotePDFModal = () => {
     if (quoteItems.length > 0) {
-      generateQuotePDF(quoteItems, PRODUCTS);
+      setPdfError(null);
+      setShowCustomerModal(true);
+    }
+  };
+
+  // Generate and download quote PDF with customer name
+  const handleGenerateQuotePDF = async (customerName) => {
+    setIsGeneratingPDF(true);
+    setPdfError(null);
+    try {
+      await generateQuotePDF(quoteItems, PRODUCTS, { customerName });
+      setShowCustomerModal(false);
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      setPdfError('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPDF(false);
     }
   };
 
@@ -768,9 +789,18 @@ export default function BlueSignalConfigurator() {
         onUpdateQuantity={updateQuoteQuantity}
         onRemoveItem={removeFromQuote}
         onClearQuote={clearQuote}
-        onExportPDF={exportQuotePDF}
+        onExportPDF={openQuotePDFModal}
         onShareQuote={copyShareableLink}
         products={PRODUCTS}
+      />
+
+      {/* Customer Name Modal for PDF Generation */}
+      <CustomerNameModal
+        isOpen={showCustomerModal}
+        onClose={() => setShowCustomerModal(false)}
+        onGenerate={handleGenerateQuotePDF}
+        isGenerating={isGeneratingPDF}
+        error={pdfError}
       />
 
       {/* Floating Quote Button */}

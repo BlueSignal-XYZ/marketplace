@@ -1,7 +1,8 @@
 // /src/components/cloud/SiteDetailPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
+import { GoogleMap, useJsApiLoader, Marker, Polygon } from "@react-google-maps/api";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 
@@ -15,13 +16,21 @@ const Section = styled.div`
   background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   border-radius: 12px;
-  padding: 24px;
+  padding: 16px;
+
+  @media (min-width: 600px) {
+    padding: 24px;
+  }
 
   h2 {
     margin: 0 0 16px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+
+    @media (min-width: 600px) {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -79,14 +88,23 @@ const StatusPill = styled.span`
       : "#16a34a"};
 `;
 
+// Desktop table - hidden on mobile
 const DevicesTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  display: none;
+
+  @media (min-width: 768px) {
+    display: table;
+  }
 
   thead {
     background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
     border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   th {
@@ -115,6 +133,63 @@ const DevicesTable = styled.table`
     &:last-child td {
       border-bottom: none;
     }
+  }
+`;
+
+// Mobile card layout - shown only on mobile
+const DeviceCardList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const DeviceCard = styled.div`
+  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-radius: 10px;
+  padding: 14px;
+`;
+
+const DeviceCardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+`;
+
+const DeviceCardName = styled(Link)`
+  font-size: 15px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const DeviceCardMeta = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 13px;
+`;
+
+const DeviceCardMetaItem = styled.div`
+  .label {
+    font-size: 11px;
+    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .value {
+    font-weight: 500;
+    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
   }
 `;
 
@@ -164,11 +239,24 @@ const AlertRow = styled.div`
   }
 `;
 
-const MapPlaceholder = styled.div`
-  height: 300px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-  border: 2px dashed ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+const MapContainer = styled.div`
+  height: 250px;
   border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+
+  @media (min-width: 600px) {
+    height: 300px;
+  }
+
+  @media (min-width: 1024px) {
+    height: 400px;
+  }
+`;
+
+const MapLoading = styled.div`
+  height: 100%;
+  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -176,6 +264,22 @@ const MapPlaceholder = styled.div`
   color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
   font-size: 14px;
   gap: 8px;
+`;
+
+const MapError = styled.div`
+  height: 100%;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  font-size: 14px;
+  gap: 8px;
+  text-align: center;
+  padding: 20px;
 `;
 
 const EmptyState = styled.div`
@@ -207,12 +311,49 @@ const Skeleton = styled.div`
   }
 `;
 
+// Google Maps API key from environment
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
+
+// Map styling
+const mapContainerStyle = {
+  width: "100%",
+  height: "100%",
+};
+
+const mapOptions = {
+  disableDefaultUI: false,
+  zoomControl: true,
+  mapTypeControl: false,
+  streetViewControl: false,
+  fullscreenControl: true,
+  styles: [
+    {
+      featureType: "water",
+      elementType: "geometry",
+      stylers: [{ color: "#a3ccff" }],
+    },
+  ],
+};
+
 export default function SiteDetailPage() {
   const { siteId } = useParams();
   const [site, setSite] = useState(null);
   const [devices, setDevices] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Load Google Maps
+  const { isLoaded: mapsLoaded, loadError: mapsError } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+  });
+
+  // Map center - memoized to prevent re-renders
+  const mapCenter = useMemo(() => {
+    if (site?.coordinates) {
+      return { lat: site.coordinates.lat, lng: site.coordinates.lng };
+    }
+    return { lat: 39.5, lng: -79.3 }; // Default center
+  }, [site?.coordinates]);
 
   useEffect(() => {
     loadSiteData();
@@ -362,15 +503,78 @@ export default function SiteDetailPage() {
           </InfoGrid>
         </Section>
 
-        {/* Map Placeholder */}
+        {/* Location Map */}
         <Section>
           <h2>Location Map</h2>
-          <MapPlaceholder>
-            <div>Map integration coming soon</div>
-            <div style={{ fontSize: "12px" }}>
-              Will display site location on interactive map
-            </div>
-          </MapPlaceholder>
+          <MapContainer>
+            {mapsError ? (
+              <MapError>
+                <div>Failed to load map</div>
+                <div style={{ fontSize: "12px" }}>Please check your internet connection</div>
+              </MapError>
+            ) : !mapsLoaded ? (
+              <MapLoading>
+                <div>Loading map...</div>
+              </MapLoading>
+            ) : (
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={mapCenter}
+                zoom={14}
+                options={mapOptions}
+              >
+                {/* Site marker */}
+                {site?.coordinates && (
+                  <Marker
+                    position={{ lat: site.coordinates.lat, lng: site.coordinates.lng }}
+                    title={site.name}
+                    icon={{
+                      url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#0284c7">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                      `),
+                      scaledSize: { width: 32, height: 32 },
+                    }}
+                  />
+                )}
+                {/* Device markers */}
+                {devices.map((device) =>
+                  device.coordinates ? (
+                    <Marker
+                      key={device.id}
+                      position={{ lat: device.coordinates.lat, lng: device.coordinates.lng }}
+                      title={device.name}
+                      icon={{
+                        url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${
+                            device.status === "online" ? "#16a34a" : device.status === "warning" ? "#f97316" : "#dc2626"
+                          }">
+                            <circle cx="12" cy="12" r="8"/>
+                          </svg>
+                        `),
+                        scaledSize: { width: 16, height: 16 },
+                        anchor: { x: 8, y: 8 },
+                      }}
+                    />
+                  ) : null
+                )}
+                {/* Property boundary polygon if available */}
+                {site?.boundary && (
+                  <Polygon
+                    paths={site.boundary}
+                    options={{
+                      fillColor: "#0284c7",
+                      fillOpacity: 0.1,
+                      strokeColor: "#0284c7",
+                      strokeOpacity: 0.8,
+                      strokeWeight: 2,
+                    }}
+                  />
+                )}
+              </GoogleMap>
+            )}
+          </MapContainer>
         </Section>
 
         {/* Devices at this Site */}
@@ -379,26 +583,15 @@ export default function SiteDetailPage() {
           {devices.length === 0 ? (
             <EmptyState>No devices at this site yet.</EmptyState>
           ) : (
-            <DevicesTable>
-              <thead>
-                <tr>
-                  <th>Device Name</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Last Contact</th>
-                  <th>Battery</th>
-                </tr>
-              </thead>
-              <tbody>
+            <>
+              {/* Mobile Card Layout */}
+              <DeviceCardList>
                 {devices.map((device) => (
-                  <tr key={device.id}>
-                    <td>
-                      <DeviceLink to={`/cloud/devices/${device.id}`}>
+                  <DeviceCard key={device.id}>
+                    <DeviceCardHeader>
+                      <DeviceCardName to={`/cloud/devices/${device.id}`}>
                         {device.name}
-                      </DeviceLink>
-                    </td>
-                    <td>{device.deviceType}</td>
-                    <td>
+                      </DeviceCardName>
                       <StatusPill $variant={getStatusVariant(device.status)}>
                         {device.status === "online"
                           ? "Online"
@@ -406,13 +599,61 @@ export default function SiteDetailPage() {
                           ? "Warning"
                           : "Offline"}
                       </StatusPill>
-                    </td>
-                    <td>{getRelativeTime(device.lastContact)}</td>
-                    <td>{device.batteryLevel}%</td>
-                  </tr>
+                    </DeviceCardHeader>
+                    <DeviceCardMeta>
+                      <DeviceCardMetaItem>
+                        <div className="label">Type</div>
+                        <div className="value">{device.deviceType}</div>
+                      </DeviceCardMetaItem>
+                      <DeviceCardMetaItem>
+                        <div className="label">Battery</div>
+                        <div className="value">{device.batteryLevel}%</div>
+                      </DeviceCardMetaItem>
+                      <DeviceCardMetaItem style={{ gridColumn: "1 / -1" }}>
+                        <div className="label">Last Contact</div>
+                        <div className="value">{getRelativeTime(device.lastContact)}</div>
+                      </DeviceCardMetaItem>
+                    </DeviceCardMeta>
+                  </DeviceCard>
                 ))}
-              </tbody>
-            </DevicesTable>
+              </DeviceCardList>
+
+              {/* Desktop Table Layout */}
+              <DevicesTable>
+                <thead>
+                  <tr>
+                    <th>Device Name</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Last Contact</th>
+                    <th>Battery</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {devices.map((device) => (
+                    <tr key={device.id}>
+                      <td>
+                        <DeviceLink to={`/cloud/devices/${device.id}`}>
+                          {device.name}
+                        </DeviceLink>
+                      </td>
+                      <td>{device.deviceType}</td>
+                      <td>
+                        <StatusPill $variant={getStatusVariant(device.status)}>
+                          {device.status === "online"
+                            ? "Online"
+                            : device.status === "warning"
+                            ? "Warning"
+                            : "Offline"}
+                        </StatusPill>
+                      </td>
+                      <td>{getRelativeTime(device.lastContact)}</td>
+                      <td>{device.batteryLevel}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </DevicesTable>
+            </>
           )}
         </Section>
 

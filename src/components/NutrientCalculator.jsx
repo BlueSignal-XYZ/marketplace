@@ -31,30 +31,89 @@ const LoadingIndicator = styled.div`
   margin-top: 10px;
 `;
 
+const ResultsWrapper = styled.div`
+  @media (max-width: 767px) {
+    margin-top: 24px;
+    padding: 0 4px;
+  }
+`;
+
 const Result = styled.div`
   background-color: #fff;
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
+  max-width: 100%;
+  overflow-x: hidden;
+
+  @media (min-width: 768px) {
+    margin-top: 40px;
+  }
 
   canvas {
     width: 100% !important;
-    height: 100% !important;
-  }
-
-  @media (min-width: 768px) {
+    max-width: 100%;
+    height: auto !important;
+    touch-action: pan-y; /* Prevent horizontal scroll on touch */
   }
 `;
 
 const Footer = styled.footer`
   text-align: left;
   color: ${({ theme }) => theme.colors.ui600};
-  font-size: 14px;
+  font-size: 13px;
   margin-top: 16px;
   font-weight: 500;
-  font-size: 0.8em;
+  line-height: 1.5;
+  padding: 0 4px;
+
+  @media (min-width: 768px) {
+    font-size: 0.8em;
+    padding: 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    word-break: break-word;
+  }
+`;
+
+const StickyButtonWrapper = styled.div`
+  @media (max-width: 767px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 16px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+
+    button {
+      width: 100%;
+      min-height: 48px;
+      font-size: 16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    margin-top: 8px;
+  }
 `;
 
 const StyledNutrientCalculator = styled.div`
+  padding-bottom: 80px;
+
+  @media (min-width: 768px) {
+    padding-bottom: 0;
+  }
+
   .header-text {
     max-width: 600px;
     width: 100%;
@@ -70,20 +129,34 @@ const StyledNutrientCalculator = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     width: 100%;
 
     @media (min-width: 768px) {
+      gap: 16px;
       width: 250px;
       min-width: 250px;
     }
+
     .form-section-inputs {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 16px;
 
       @media (min-width: 768px) {
+        gap: 8px;
         flex-direction: column;
+      }
+    }
+
+    /* Ensure touch targets are at least 44px */
+    input, select {
+      min-height: 48px;
+      font-size: 16px; /* Prevents iOS zoom on focus */
+
+      @media (min-width: 768px) {
+        min-height: auto;
+        font-size: inherit;
       }
     }
   }
@@ -433,13 +506,15 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
                 </FormSection>
               </div>
 
-              <ButtonPrimary type="submit">Calculate</ButtonPrimary>
+              <StickyButtonWrapper>
+                <ButtonPrimary type="submit">Calculate</ButtonPrimary>
+              </StickyButtonWrapper>
             </form>
 
             <LoadingIndicator loading={isLoading}>Loading...</LoadingIndicator>
             {/*             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} */}
 
-            <div>
+            <ResultsWrapper>
               <Result>
                 <canvas ref={chartRef}></canvas>
               </Result>
@@ -456,7 +531,7 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
                   available data for accurate nutrient recommendations.
                 </p>
               </Footer>
-            </div>
+            </ResultsWrapper>
           </div>
         </DashboardPage>
       </StyledNutrientCalculator>

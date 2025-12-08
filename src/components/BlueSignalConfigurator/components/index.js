@@ -7,3 +7,4 @@ export { default as ProductComparisonView } from './ProductComparisonView';
 export { QuoteBuilder, QuoteFloatingButton, AddToQuoteBtn } from './QuoteBuilder';
 export { default as BundlesSection } from './BundlesSection';
 export { default as EnclosureComparisonView } from './EnclosureComparisonView';
+export { CustomerNameModal } from './CustomerNameModal';

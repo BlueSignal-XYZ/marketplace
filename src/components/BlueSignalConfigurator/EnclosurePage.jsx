@@ -56,13 +56,13 @@ const ProductSelector = styled.div`
 
 const SelectorLabel = styled.label`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 11px;
+  font-size: 12px;
   color: #00ff88;
   letter-spacing: 1px;
   text-transform: uppercase;
 
   ${media.lg} {
-    font-size: 12px;
+    font-size: 13px;
   }
 `;
 
@@ -140,14 +140,14 @@ const PriceBadge = styled.div`
 
 const PriceLabel = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 9px;
-  color: #00aa66;
+  font-size: 11px;
+  color: #00cc77;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 2px;
 
   ${media.lg} {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 2px;
     margin-bottom: 4px;
   }
@@ -205,13 +205,13 @@ const BomHeader = styled.div`
 
 const BomTitle = styled.h3`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: #00ff88;
   margin: 0;
   letter-spacing: 1px;
 
   ${media.lg} {
-    font-size: 14px;
+    font-size: 15px;
   }
 `;
 
@@ -250,14 +250,14 @@ const BomCategory = styled.div`
 
 const CategoryName = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 10px;
-  color: #00aa66;
+  font-size: 11px;
+  color: #00cc77;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 4px;
 
   ${media.lg} {
-    font-size: 11px;
+    font-size: 12px;
     margin-bottom: 8px;
   }
 `;
@@ -275,8 +275,8 @@ const CategoryTotal = styled.div`
 
 const CategoryItems = styled.div`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 10px;
-  color: #666;
+  font-size: 11px;
+  color: #888;
   margin-top: 4px;
 `;
 
@@ -297,8 +297,8 @@ const QuickLinks = styled.div`
 
 const QuickLink = styled.a`
   font-family: "SF Mono", Consolas, monospace;
-  font-size: 11px;
-  color: #00aa66;
+  font-size: 12px;
+  color: #00cc77;
   text-decoration: none;
   padding: 10px 14px;
   border: 1px solid rgba(0, 255, 136, 0.3);
@@ -312,9 +312,10 @@ const QuickLink = styled.a`
   -webkit-tap-highlight-color: transparent;
 
   ${media.lg} {
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 4px;
     min-height: auto;
+    font-size: 13px;
   }
 
   &:hover {

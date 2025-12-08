@@ -99,7 +99,7 @@ export const NavTab = styled.button`
   -webkit-tap-highlight-color: transparent;
 
   background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
-  color: ${({ active }) => (active ? "#ffffff" : "#6b7280")};
+  color: ${({ active }) => (active ? "#ffffff" : "#4b5563")};
 
   ${media.lg} {
     padding: 12px 32px;
@@ -108,6 +108,7 @@ export const NavTab = styled.button`
   &:hover {
     background: ${({ active }) => (active ? "#2563eb" : "#f9fafb")};
     border-color: ${({ active }) => (active ? "#2563eb" : "#d1d5db")};
+    color: ${({ active }) => (active ? "#ffffff" : "#1f2937")};
   }
 
   &:active {
@@ -184,14 +185,14 @@ export const ProductName = styled.h3`
 `;
 
 export const ProductSubtitle = styled.p`
-  font-size: 11px;
-  color: #6b7280;
+  font-size: 12px;
+  color: #4b5563;
   margin: 0 0 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 
   ${media.lg} {
-    font-size: 12px;
+    font-size: 13px;
     margin: 0 0 12px;
   }
 `;
@@ -228,7 +229,7 @@ export const ProductBadges = styled.div`
 export const Badge = styled.span`
   display: inline-block;
   padding: 4px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 4px;
   background: ${({ variant }) =>
@@ -294,11 +295,11 @@ export const DetailTabs = styled.div`
 
 export const DetailTab = styled.button`
   padding: 12px 14px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   border: none;
   background: ${({ active }) => (active ? "#ffffff" : "transparent")};
-  color: ${({ active }) => (active ? "#3b82f6" : "#6b7280")};
+  color: ${({ active }) => (active ? "#3b82f6" : "#4b5563")};
   cursor: pointer;
   border-bottom: 2px solid ${({ active }) => (active ? "#3b82f6" : "transparent")};
   transition: all 0.2s;
@@ -310,7 +311,7 @@ export const DetailTab = styled.button`
 
   ${media.lg} {
     padding: 14px 20px;
-    font-size: 13px;
+    font-size: 14px;
   }
 
   &:hover {
@@ -359,7 +360,7 @@ export const FeatureItem = styled.li`
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
-  color: #4b5563;
+  color: #374151;
   line-height: 1.5;
 
   &::before {
@@ -386,7 +387,7 @@ export const SpecCard = styled.div`
 
 export const SpecLabel = styled.div`
   font-size: 12px;
-  color: #6b7280;
+  color: #4b5563;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
@@ -429,10 +430,10 @@ export const Th = styled.th`
   text-align: left;
   padding: 12px 16px;
   background: #f3f4f6;
-  color: #6b7280;
+  color: #4b5563;
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.05em;
   border-bottom: 1px solid #e5e7eb;
 
@@ -532,10 +533,10 @@ export const BenchmarkSection = styled.div`
   margin-bottom: 12px;
 
   h5 {
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #6b7280;
+    color: #4b5563;
     margin: 0 0 8px;
   }
 
@@ -545,8 +546,8 @@ export const BenchmarkSection = styled.div`
     margin: 0;
 
     li {
-      font-size: 13px;
-      color: #4b5563;
+      font-size: 14px;
+      color: #374151;
       padding: 4px 0;
       display: flex;
       align-items: center;
@@ -588,7 +589,7 @@ export const SavingsCallout = styled.div`
 export const MarginBadge = styled.span`
   display: inline-block;
   padding: 2px 6px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   border-radius: 4px;
   background: ${({ good }) => (good ? "#dcfce7" : "#fef3c7")};
@@ -632,8 +633,8 @@ export const FilterGroup = styled.div`
 `;
 
 export const FilterLabel = styled.label`
-  font-size: 11px;
-  color: #6b7280;
+  font-size: 12px;
+  color: #4b5563;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 `;

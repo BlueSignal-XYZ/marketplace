@@ -10,6 +10,12 @@ import AssetCard from "./AssetCard";
 import { ButtonPrimary } from "../../shared/button/Button";
 import { Badge } from "../../shared/Badge/Badge";
 import { useAppContext } from "../../../context/AppContext";
+import {
+  NoUploadsState,
+  NoSubmissionsState,
+  NoDisputesState,
+  NoApprovalsState,
+} from "../../shared/EmptyState/EmptyState";
 
 const neptuneColorPalette = {
   lightBlue: "#8abbd0",
@@ -336,10 +342,11 @@ function VerificationUI() {
           {activeTab === "uploads" && (
             <InputGroup>
               {uploads?.length < 1 ? (
-                <p>No Uploads</p>
+                <NoUploadsState />
               ) : (
                 uploads.map((upload, index) => (
                   <AssetCard
+                    key={index}
                     metadata={upload?.metadata}
                     onClick={() =>
                       handleMutation(submitMutation, upload.assetID)
@@ -352,7 +359,7 @@ function VerificationUI() {
           {activeTab === "submissions" && (
             <InputGroup>
               {submissions?.length < 1 ? (
-                <p>No Submissions</p>
+                <NoSubmissionsState />
               ) : (
                 submissions.map((submission, index) => (
                   <div key={index}>
@@ -378,7 +385,7 @@ function VerificationUI() {
           {activeTab === "disputes" && (
             <InputGroup>
               {disputes?.length < 1 ? (
-                <p>No Disputes</p>
+                <NoDisputesState />
               ) : (
                 disputes.map((dispute, index) => (
                   <div key={index}>
@@ -399,7 +406,7 @@ function VerificationUI() {
           {activeTab === "approvals" && (
             <InputGroup>
               {approvals?.length < 1 ? (
-                <p>No Approvals</p>
+                <NoApprovalsState />
               ) : (
                 approvals.map((approval, index) => (
                   <div key={index}>

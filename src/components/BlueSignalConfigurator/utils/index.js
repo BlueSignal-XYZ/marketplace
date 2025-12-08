@@ -1,2 +1,2 @@
 // Utilities Index
-export { generateQuotePDF, generateSpecsPDF } from './pdfExport';
+export { generateQuotePDF, generateQuotePDFPrint, generateSpecsPDF } from './pdfExport';

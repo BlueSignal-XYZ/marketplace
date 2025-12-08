@@ -279,6 +279,59 @@ const Spinner = styled.div`
   }
 `;
 
+const MapErrorOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  text-align: center;
+  padding: 40px;
+`;
+
+const MapErrorIcon = styled.div`
+  font-size: 48px;
+  margin-bottom: 16px;
+`;
+
+const MapErrorTitle = styled.h3`
+  font-size: 20px;
+  font-weight: 600;
+  color: #dc2626;
+  margin: 0 0 8px 0;
+`;
+
+const MapErrorText = styled.p`
+  font-size: 14px;
+  color: #7f1d1d;
+  margin: 0 0 16px 0;
+  max-width: 400px;
+`;
+
+const RetryButton = styled.button`
+  padding: 10px 24px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #b91c1c;
+  }
+`;
+
 type ViewMode = 'map' | 'list';
 
 export function MapPage() {
@@ -287,6 +340,7 @@ export function MapPage() {
   const markers = useRef<mapboxgl.Marker[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [mapError, setMapError] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [filteredProjects, setFilteredProjects] = useState<MapProject[]>(mockMapProjects);
@@ -299,23 +353,57 @@ export function MapPage() {
     }
   }, [filterType]);
 
+  // Retry map initialization
+  const retryMapInit = () => {
+    setMapError(null);
+    setLoading(true);
+    if (map.current) {
+      map.current.remove();
+      map.current = null;
+    }
+  };
+
   useEffect(() => {
     if (!mapContainer.current || viewMode !== 'map') return;
+    if (mapError) return; // Don't retry automatically
 
     if (!map.current) {
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/outdoors-v12',
-        center: [-76.6122, 39.7],
-        zoom: 7.5,
-      });
+      try {
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/outdoors-v12',
+          center: [-76.6122, 39.7],
+          zoom: 7.5,
+        });
 
-      map.current.on('load', () => {
+        // Set a timeout to detect if map fails to load
+        const loadTimeout = setTimeout(() => {
+          if (loading && !mapError) {
+            setMapError('Map is taking too long to load. Please check your internet connection.');
+            setLoading(false);
+          }
+        }, 15000);
+
+        map.current.on('load', () => {
+          clearTimeout(loadTimeout);
+          setLoading(false);
+          setMapError(null);
+          addBoundaryLayers();
+        });
+
+        map.current.on('error', (e) => {
+          clearTimeout(loadTimeout);
+          console.error('Mapbox error:', e);
+          setMapError('Failed to load the map. Please try again later.');
+          setLoading(false);
+        });
+
+        map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      } catch (error) {
+        console.error('Map initialization error:', error);
+        setMapError('Failed to initialize the map. Please try again later.');
         setLoading(false);
-        addBoundaryLayers();
-      });
-
-      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      }
     } else if (map.current.isStyleLoaded()) {
       // Update boundaries when filter changes
       addBoundaryLayers();
@@ -467,7 +555,7 @@ export function MapPage() {
       });
       map.current.fitBounds(bounds, { padding: 60, maxZoom: 10 });
     }
-  }, [filteredProjects, viewMode]);
+  }, [filteredProjects, viewMode, mapError]);
 
   const mapSchema = createBreadcrumbSchema([
     { name: 'Home', url: 'https://waterquality.trading/' },
@@ -523,12 +611,21 @@ export function MapPage() {
 
         {viewMode === 'map' ? (
           <MapContainer>
-            {loading && (
+            {loading && !mapError && (
               <LoadingOverlay>
                 <Spinner />
               </LoadingOverlay>
             )}
-            {filteredProjects.length === 0 ? (
+            {mapError ? (
+              <MapErrorOverlay>
+                <MapErrorIcon>Map Error</MapErrorIcon>
+                <MapErrorTitle>Unable to Load Map</MapErrorTitle>
+                <MapErrorText>{mapError}</MapErrorText>
+                <RetryButton onClick={retryMapInit}>
+                  Try Again
+                </RetryButton>
+              </MapErrorOverlay>
+            ) : filteredProjects.length === 0 ? (
               <EmptyMapOverlay>
                 <EmptyIcon>📍</EmptyIcon>
                 <EmptyTitle>No projects to display</EmptyTitle>

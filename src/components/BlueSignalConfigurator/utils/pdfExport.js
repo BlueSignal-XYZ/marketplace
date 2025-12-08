@@ -1,11 +1,256 @@
 // PDF Export Utility for Sales Configurator
-// Uses browser print-to-PDF for reliable, dependency-free PDF generation
+// Uses jsPDF for direct PDF download with custom filename
+
+import jsPDF from 'jspdf';
 
 /**
  * Generate a professional PDF quote from quote items
+ * Downloads a PDF file with proper filename
+ */
+export const generateQuotePDF = async (quoteItems, products, options = {}) => {
+  const {
+    companyName = "BlueSignal",
+    customerName = "",
+    quoteNumber = `QT-${Date.now().toString(36).toUpperCase()}`,
+    validDays = 30,
+  } = options;
+
+  const today = new Date();
+  const validUntil = new Date(today.getTime() + validDays * 24 * 60 * 60 * 1000);
+
+  // Calculate totals
+  let subtotal = 0;
+  const lineItems = quoteItems.map((item) => {
+    const product = products[item.productId];
+    const lineTotal = product.price * item.quantity;
+    subtotal += lineTotal;
+    return {
+      name: product.name,
+      subtitle: product.subtitle,
+      sku: product.sku,
+      unitPrice: product.price,
+      quantity: item.quantity,
+      lineTotal,
+      features: product.features.slice(0, 4), // Top 4 features
+    };
+  });
+
+  // Generate PDF using jsPDF
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: 'letter',
+  });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const margin = 54; // 0.75 inch margins
+  const contentWidth = pageWidth - (margin * 2);
+  let yPos = margin;
+
+  // Helper functions
+  const formatCurrency = (amount) => `$${amount.toLocaleString()}`;
+  const formatDate = (date) => date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // Header - Logo and Quote Info
+  pdf.setFontSize(28);
+  pdf.setTextColor(30, 64, 175); // Blue
+  pdf.text('Blue', margin, yPos + 20);
+  pdf.setTextColor(59, 130, 246); // Light blue
+  const blueWidth = pdf.getTextWidth('Blue');
+  pdf.text('Signal', margin + blueWidth, yPos + 20);
+
+  // Quote number and date on the right
+  pdf.setFontSize(14);
+  pdf.setTextColor(59, 130, 246);
+  pdf.text(quoteNumber, pageWidth - margin, yPos + 8, { align: 'right' });
+  pdf.setFontSize(10);
+  pdf.setTextColor(107, 114, 128);
+  pdf.text(`Date: ${formatDate(today)}`, pageWidth - margin, yPos + 22, { align: 'right' });
+
+  yPos += 40;
+
+  // Blue line under header
+  pdf.setDrawColor(59, 130, 246);
+  pdf.setLineWidth(3);
+  pdf.line(margin, yPos, pageWidth - margin, yPos);
+  yPos += 30;
+
+  // Customer Section
+  pdf.setFontSize(9);
+  pdf.setTextColor(107, 114, 128);
+  pdf.text('PREPARED FOR', margin, yPos);
+  pdf.text('VALID UNTIL', pageWidth - margin - 100, yPos);
+
+  yPos += 14;
+  pdf.setFontSize(12);
+  pdf.setTextColor(31, 41, 55);
+  pdf.text(customerName || '[Customer Name]', margin, yPos);
+  pdf.setTextColor(5, 150, 105);
+  pdf.text(formatDate(validUntil), pageWidth - margin - 100, yPos);
+
+  yPos += 30;
+
+  // Line Items Table Header
+  pdf.setFillColor(249, 250, 251);
+  pdf.rect(margin, yPos - 4, contentWidth, 24, 'F');
+  pdf.setFontSize(9);
+  pdf.setTextColor(107, 114, 128);
+  pdf.text('PRODUCT', margin + 8, yPos + 10);
+  pdf.text('UNIT PRICE', margin + contentWidth * 0.55, yPos + 10);
+  pdf.text('QTY', margin + contentWidth * 0.72, yPos + 10);
+  pdf.text('TOTAL', margin + contentWidth * 0.85, yPos + 10);
+
+  yPos += 30;
+
+  // Draw line under header
+  pdf.setDrawColor(229, 231, 235);
+  pdf.setLineWidth(1);
+  pdf.line(margin, yPos - 6, pageWidth - margin, yPos - 6);
+
+  // Line Items
+  lineItems.forEach((item, index) => {
+    // Check if we need a new page
+    if (yPos > 680) {
+      pdf.addPage();
+      yPos = margin;
+    }
+
+    // Product name
+    pdf.setFontSize(11);
+    pdf.setTextColor(31, 41, 55);
+    pdf.text(item.name, margin + 8, yPos);
+
+    // Subtitle
+    pdf.setFontSize(9);
+    pdf.setTextColor(107, 114, 128);
+    pdf.text(item.subtitle, margin + 8, yPos + 12);
+
+    // SKU
+    pdf.setFontSize(8);
+    pdf.setTextColor(156, 163, 175);
+    pdf.text(item.sku, margin + 8, yPos + 23);
+
+    // Features (top 2 only to save space)
+    const featuresToShow = item.features.slice(0, 2);
+    featuresToShow.forEach((feature, fi) => {
+      pdf.setFontSize(8);
+      pdf.setTextColor(107, 114, 128);
+      pdf.text(`• ${feature}`, margin + 12, yPos + 35 + (fi * 10));
+    });
+
+    // Price columns
+    pdf.setFontSize(10);
+    pdf.setTextColor(31, 41, 55);
+    pdf.text(formatCurrency(item.unitPrice), margin + contentWidth * 0.55, yPos + 8);
+    pdf.text(String(item.quantity), margin + contentWidth * 0.75, yPos + 8);
+
+    // Line total
+    pdf.setTextColor(5, 150, 105);
+    pdf.text(formatCurrency(item.lineTotal), margin + contentWidth * 0.85, yPos + 8);
+
+    // Separator line
+    const itemHeight = 60 + (featuresToShow.length > 0 ? featuresToShow.length * 10 : 0);
+    yPos += itemHeight;
+
+    if (index < lineItems.length - 1) {
+      pdf.setDrawColor(243, 244, 246);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, yPos - 8, pageWidth - margin, yPos - 8);
+    }
+  });
+
+  yPos += 20;
+
+  // Totals Section
+  const totalsX = pageWidth - margin - 180;
+
+  // Subtotal
+  pdf.setFontSize(10);
+  pdf.setTextColor(107, 114, 128);
+  pdf.text('Subtotal', totalsX, yPos);
+  pdf.setTextColor(31, 41, 55);
+  pdf.text(formatCurrency(subtotal), pageWidth - margin, yPos, { align: 'right' });
+
+  yPos += 18;
+
+  // Shipping
+  pdf.setTextColor(107, 114, 128);
+  pdf.text('Shipping', totalsX, yPos);
+  pdf.setTextColor(31, 41, 55);
+  pdf.text('TBD', pageWidth - margin, yPos, { align: 'right' });
+
+  yPos += 24;
+
+  // Grand Total line
+  pdf.setDrawColor(229, 231, 235);
+  pdf.setLineWidth(2);
+  pdf.line(totalsX - 10, yPos - 8, pageWidth - margin, yPos - 8);
+
+  pdf.setFontSize(14);
+  pdf.setTextColor(31, 41, 55);
+  pdf.text('Quote Total', totalsX, yPos + 6);
+  pdf.setFontSize(18);
+  pdf.setTextColor(5, 150, 105);
+  pdf.text(formatCurrency(subtotal), pageWidth - margin, yPos + 6, { align: 'right' });
+
+  yPos += 40;
+
+  // Terms & Conditions Box
+  if (yPos > 620) {
+    pdf.addPage();
+    yPos = margin;
+  }
+
+  pdf.setFillColor(249, 250, 251);
+  pdf.roundedRect(margin, yPos, contentWidth, 90, 8, 8, 'F');
+
+  pdf.setFontSize(10);
+  pdf.setTextColor(31, 41, 55);
+  pdf.text('Terms & Conditions', margin + 16, yPos + 18);
+
+  const terms = [
+    `Quote valid for ${validDays} days from issue date`,
+    'Prices in USD, exclusive of applicable taxes',
+    'Standard lead time: 2-4 weeks from order confirmation',
+    'Payment terms: Net 30 for approved accounts',
+    'Warranty: 1 year limited warranty on hardware',
+  ];
+
+  pdf.setFontSize(9);
+  pdf.setTextColor(107, 114, 128);
+  terms.forEach((term, i) => {
+    pdf.text(`• ${term}`, margin + 16, yPos + 34 + (i * 11));
+  });
+
+  yPos += 110;
+
+  // Footer
+  pdf.setDrawColor(229, 231, 235);
+  pdf.setLineWidth(0.5);
+  pdf.line(margin, yPos, pageWidth - margin, yPos);
+
+  yPos += 18;
+  pdf.setFontSize(9);
+  pdf.setTextColor(156, 163, 175);
+  pdf.text('BlueSignal Water Quality Monitoring Solutions', pageWidth / 2, yPos, { align: 'center' });
+  pdf.text('Questions? Contact your sales representative', pageWidth / 2, yPos + 12, { align: 'center' });
+
+  // Generate filename: BlueSignal_Quote_{CustomerName}_{YYYY-MM-DD}.pdf
+  const sanitizedName = customerName ? customerName.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30) : 'Customer';
+  const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
+  const filename = `BlueSignal_Quote_${sanitizedName}_${dateStr}.pdf`;
+
+  // Download the PDF
+  pdf.save(filename);
+
+  return { success: true, filename };
+};
+
+/**
+ * Legacy print-based PDF generation (fallback)
  * Opens a print dialog that can save as PDF
  */
-export const generateQuotePDF = (quoteItems, products, options = {}) => {
+export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
   const {
     companyName = "BlueSignal",
     customerName = "",
