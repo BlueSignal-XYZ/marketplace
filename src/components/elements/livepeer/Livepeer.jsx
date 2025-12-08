@@ -9,6 +9,11 @@ import { Stream } from './Stream';
 import { MediaPlayer, BasicStreamPlayer } from './elements';
 import {LivepeerAPI} from '../../../scripts/back_door';
 import MediaUpload from './MediaUpload';
+import {
+  LoadingState,
+  ClientUnavailableState,
+  ServiceUnavailableState,
+} from '../../shared/EmptyState/EmptyState';
 
 //livepeer github docs: https://github.com/livepeer/livepeer-js?tab=readme-ov-file
 
@@ -43,6 +48,10 @@ function Livepeer() {
      }
   }
 
+  const handleRetry = () => {
+    window.location.reload();
+  };
+
   const renderService = (serviceID) => {
     switch (serviceID) {
       case 'stream':
@@ -55,13 +64,17 @@ function Livepeer() {
         )
       default:
         return (
-          <p>Service Unavailable</p>
+          <ServiceUnavailableState onRetry={handleRetry} />
         )
     }
   }
 
   if(livepeerClient===null){
-    return <p style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{isLoading ? "Loading..." : "Client Unavailable"}</p>;
+    return isLoading ? (
+      <LoadingState />
+    ) : (
+      <ClientUnavailableState onRetry={handleRetry} />
+    );
   }
 
 
