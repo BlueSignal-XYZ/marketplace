@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI from "../../services/cloudMockAPI";
 import { useAppContext } from "../../context/AppContext";
+import QRScanner from "./QRScanner";
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -225,6 +226,59 @@ const CoordinatesRow = styled.div`
   }
 `;
 
+const InputWithButton = styled.div`
+  display: flex;
+  gap: 8px;
+
+  input {
+    flex: 1;
+  }
+`;
+
+const ScanButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 500px) {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+`;
+
+const ScanSuccessBadge = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #059669;
+  margin-top: 8px;
+`;
+
 const SummaryCard = styled.div`
   background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
@@ -383,6 +437,8 @@ export default function DeviceOnboardingWizard() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [newDeviceId, setNewDeviceId] = useState(null);
+  const [showQRScanner, setShowQRScanner] = useState(false);
+  const [scannedFromQR, setScannedFromQR] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -519,6 +575,30 @@ export default function DeviceOnboardingWizard() {
     }
   };
 
+  // Handle QR scan result
+  const handleQRScan = (scanResult) => {
+    setScannedFromQR(true);
+    setShowQRScanner(false);
+
+    // Update form with scanned data
+    setFormData((prev) => ({
+      ...prev,
+      serialNumber: scanResult.serialNumber || prev.serialNumber,
+      hardwareId: scanResult.hardwareId || prev.hardwareId,
+    }));
+
+    // Clear related errors
+    setErrors((prev) => ({
+      ...prev,
+      serialNumber: null,
+      hardwareId: null,
+    }));
+
+    if (logNotification) {
+      logNotification("success", "Device QR code scanned successfully!");
+    }
+  };
+
   // Render success state
   if (success) {
     return (
@@ -608,7 +688,7 @@ export default function DeviceOnboardingWizard() {
             <>
               <StepTitle>Device Identity</StepTitle>
               <StepDescription>
-                Enter identifying information for your {getDeviceTypeName(formData.deviceType)}.
+                Scan the device QR code or enter identifying information manually.
               </StepDescription>
 
               <FormGroup>
@@ -626,17 +706,34 @@ export default function DeviceOnboardingWizard() {
 
               <FormGroup>
                 <label>Serial Number *</label>
-                <Input
-                  type="text"
-                  placeholder="e.g., SN-2024-001234"
-                  value={formData.serialNumber}
-                  onChange={(e) => handleInputChange("serialNumber", e.target.value)}
-                  $error={errors.serialNumber}
-                />
+                <InputWithButton>
+                  <Input
+                    type="text"
+                    placeholder="e.g., SN-2024-001234"
+                    value={formData.serialNumber}
+                    onChange={(e) => {
+                      handleInputChange("serialNumber", e.target.value);
+                      setScannedFromQR(false);
+                    }}
+                    $error={errors.serialNumber}
+                  />
+                  <ScanButton
+                    type="button"
+                    onClick={() => setShowQRScanner(true)}
+                    title="Scan device QR code"
+                  >
+                    Scan QR
+                  </ScanButton>
+                </InputWithButton>
                 {errors.serialNumber && (
                   <div className="error">{errors.serialNumber}</div>
                 )}
-                <div className="hint">Found on the device label</div>
+                {scannedFromQR && formData.serialNumber && (
+                  <ScanSuccessBadge>
+                    Scanned from QR code
+                  </ScanSuccessBadge>
+                )}
+                <div className="hint">Found on the device label or scan the QR code</div>
               </FormGroup>
 
               <FormGroup>
@@ -791,6 +888,13 @@ export default function DeviceOnboardingWizard() {
           )}
         </Footer>
       </WizardContainer>
+
+      {/* QR Scanner Modal */}
+      <QRScanner
+        isOpen={showQRScanner}
+        onClose={() => setShowQRScanner(false)}
+        onScan={handleQRScan}
+      />
     </CloudPageLayout>
   );
 }
