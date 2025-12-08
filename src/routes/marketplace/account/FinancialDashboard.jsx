@@ -299,7 +299,7 @@ const AmountCell = styled.span`
   color: ${({ positive }) => (positive ? "#10b981" : "#ef4444")};
 `;
 
-const Legend = styled.div`
+const LegendContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -616,7 +616,7 @@ const FinancialDashboard = () => {
               <DonutContainer>
                 <Doughnut data={creditTypeData} options={creditTypeOptions} />
               </DonutContainer>
-              <Legend>
+              <LegendContainer>
                 <LegendItem>
                   <LegendDot color="#3b82f6" />
                   Nitrogen (45%)
@@ -633,7 +633,7 @@ const FinancialDashboard = () => {
                   <LegendDot color="#06b6d4" />
                   Stormwater (10%)
                 </LegendItem>
-              </Legend>
+              </LegendContainer>
             </Section>
 
             <Section style={{ marginTop: "24px" }}>
