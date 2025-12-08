@@ -41,6 +41,7 @@ import {
 import { RegistryPage } from "./wqt/pages/RegistryPage";
 import { RecentRemovalsPage } from "./wqt/pages/RecentRemovalsPage";
 import { MapPage } from "./wqt/pages/MapPage";
+import { PresalePage } from "./wqt/pages/PresalePage";
 
 import {
   NotificationBar,
@@ -644,7 +645,7 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
     <Route path="/certificate/:id" element={<CertificatePage />} />
     <Route path="/registry" element={<RegistryPage />} />
     <Route path="/map" element={<MapPage />} />
-    <Route path="/presale" element={<Presale />} />
+    <Route path="/presale" element={<PresalePage />} />
     <Route path="/sales/configurator" element={<BlueSignalConfigurator />} />
     <Route path="/sales/enclosure" element={<EnclosurePage />} />
 
