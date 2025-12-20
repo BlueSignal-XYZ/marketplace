@@ -60,8 +60,8 @@ jobs:
           trigger_hook() {
             local hook_url="$1"
             local site_name="$2"
-            local max_retries=4
-            local delays=(2 4 8 16)
+            local max_retries=6
+            local delays=(3 5 10 15 20 30)
 
             if [ -z "$hook_url" ]; then
               echo "⏭️ Skipping $site_name - no deploy hook configured"
@@ -103,9 +103,17 @@ jobs:
 
           failed=0
 
-          # Trigger all three sites
+          # Trigger all three sites with delays between each to avoid rate limiting
+          echo "🚀 Starting Cloudflare deployments..."
+
           trigger_hook "$HOOK_WQT" "wqt" || failed=$((failed + 1))
+          echo "⏳ Waiting 10s before next trigger to avoid rate limiting..."
+          sleep 10
+
           trigger_hook "$HOOK_CLOUD" "cloud" || failed=$((failed + 1))
+          echo "⏳ Waiting 10s before next trigger to avoid rate limiting..."
+          sleep 10
+
           trigger_hook "$HOOK_SALES" "sales" || failed=$((failed + 1))
 
           if [ $failed -gt 0 ]; then
