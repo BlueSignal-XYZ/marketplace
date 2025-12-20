@@ -162,7 +162,6 @@ const LoginForm = () => {
   // to ensure it's processed before any UI renders
 
   const handleError = (message) => {
-    console.error("🔐 Login error:", message);
     setNotification({
       type: "error",
       message,
@@ -184,24 +183,13 @@ const LoginForm = () => {
 
     try {
       setSubmitting(true);
-      console.log("🔐 Login attempt:", email);
-
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      const user = result.user;
-
-      console.log("✅ Login success:", user.uid);
-      console.log("⏳ Waiting for auth listener to update context...");
-
-      // CRITICAL FIX: Don't navigate here!
-      // Let onAuthStateChanged listener update AppContext,
-      // then CloudLanding/MarketplaceLanding will handle redirect
-
+      await signInWithEmailAndPassword(auth, email, password);
+      // Auth listener will handle the rest
     } catch (err) {
-      console.error("❌ Login failed:", err);
-      handleError(err?.message || "Unable to sign in. Please try again.");
+      // SECURITY: Use generic error message to prevent user enumeration
+      handleError("Invalid email or password. Please try again.");
       setSubmitting(false);
     }
-    // Note: Don't setSubmitting(false) on success - form will unmount on redirect
   };
 
   const handleResetPassword = async () => {
@@ -218,13 +206,17 @@ const LoginForm = () => {
     try {
       setSubmitting(true);
       await sendPasswordResetEmail(auth, email);
+      // SECURITY: Always show success to prevent email enumeration
       setNotification({
         type: "success",
-        message: "Password reset link sent. Check your inbox.",
+        message: "If an account exists with this email, a reset link will be sent.",
       });
     } catch (err) {
-      console.error(err);
-      handleError(err?.message || "Unable to send reset link.");
+      // SECURITY: Still show success message to prevent enumeration
+      setNotification({
+        type: "success",
+        message: "If an account exists with this email, a reset link will be sent.",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -233,34 +225,20 @@ const LoginForm = () => {
   const handleGoogleLogin = async () => {
     try {
       setSubmitting(true);
-      console.log("🔐 Google login attempt...");
-
-      // Use popup auth - handles cross-origin via postMessage
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      console.log("✅ Google login success:", user.uid);
-      console.log("⏳ Waiting for auth listener to update context...");
-
+      await signInWithPopup(auth, googleProvider);
       // Auth listener will handle the rest
     } catch (err) {
-      console.error("❌ Google login failed:", err);
-      console.error("Error code:", err.code);
-      console.error("Error message:", err.message);
-
       // Handle specific error cases
       if (err.code === "auth/popup-closed-by-user") {
         // User closed popup - don't show error
-        console.log("User closed popup");
       } else if (err.code === "auth/popup-blocked") {
         handleError("Popup was blocked. Please allow popups and try again.");
       } else if (err.code === "auth/unauthorized-domain") {
-        handleError("This domain is not authorized for authentication. Please contact support.");
+        handleError("Authentication is not available on this domain.");
       } else if (err.code === "auth/cancelled-popup-request") {
         // Another popup was opened - ignore
-        console.log("Popup request cancelled");
       } else {
-        handleError(err?.message || "Unable to sign in with Google. Please try again.");
+        handleError("Unable to sign in with Google. Please try again.");
       }
       setSubmitting(false);
     }

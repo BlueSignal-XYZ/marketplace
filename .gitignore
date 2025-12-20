@@ -35,7 +35,21 @@ ui-debug.log
 ################################################################################
 .env
 .env.*
+.env.local.backup
 !.env.example
+
+################################################################################
+# Security - Sensitive Files
+################################################################################
+secrets/
+credentials/
+*.credentials
+*.secret
+serviceAccountKey.json
+*-service-account.json
+firebase-adminsdk*.json
+*.bak
+*.backup
 
 ################################################################################
 # IDE / Editor Junk

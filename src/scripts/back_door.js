@@ -1,5 +1,6 @@
 import axios from "axios";
 import configs from "../../configs";
+import { auth } from "../apis/firebase";
 
 // Lightweight process polyfill for browser
 if (typeof window !== "undefined" && typeof window.process === "undefined") {
@@ -10,13 +11,40 @@ if (typeof window !== "undefined" && typeof window.process === "undefined") {
   };
 }
 
+// SECURITY: Create authenticated axios instance
+const getAuthHeaders = async () => {
+  try {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const token = await currentUser.getIdToken();
+      return { Authorization: `Bearer ${token}` };
+    }
+  } catch (error) {
+    // Silent fail - let request proceed without auth for public endpoints
+  }
+  return {};
+};
+
+// Authenticated POST request
+const authPost = async (url, data = {}) => {
+  const headers = await getAuthHeaders();
+  return axios.post(url, data, { headers });
+};
+
+// Authenticated GET request
+const authGet = async (url, params = {}) => {
+  const headers = await getAuthHeaders();
+  return axios.get(url, { headers, params });
+};
+
 /*************************ACCOUNT_ENDPOINTS************************************* */
+// SECURITY: Account operations require authentication
 const createAccount = async (userdata) =>
-  (await axios.post(`${configs.server_url}/account/create`, userdata))?.data;
+  (await authPost(`${configs.server_url}/account/create`, userdata))?.data;
 
 const registerAccount = async (accountID, role, txAddress) =>
   (
-    await axios.post(`${configs.server_url}/account/register`, {
+    await authPost(`${configs.server_url}/account/register`, {
       accountID,
       role,
       txAddress,
@@ -25,7 +53,7 @@ const registerAccount = async (accountID, role, txAddress) =>
 
 const verifyAccountRole = async (accountID, role) =>
   (
-    await axios.post(`${configs.server_url}/account/verifyRole`, {
+    await authPost(`${configs.server_url}/account/verifyRole`, {
       accountID,
       role,
     })
@@ -33,20 +61,20 @@ const verifyAccountRole = async (accountID, role) =>
 
 const verifyAccountIsRegistered = async (accountID) =>
   (
-    await axios.post(`${configs.server_url}/account/isRegistered`, {
+    await authPost(`${configs.server_url}/account/isRegistered`, {
       accountID,
     })
   )?.data;
 
 const verifyAccountIsNotBlacklisted = async (accountID) =>
   (
-    await axios.post(`${configs.server_url}/account/isNotBlacklisted`, {
+    await authPost(`${configs.server_url}/account/isNotBlacklisted`, {
       accountID,
     })
   )?.data;
 
 const getAccountData = async (accountID) =>
-  (await axios.post(`${configs.server_url}/account/data`, { accountID }))?.data;
+  (await authPost(`${configs.server_url}/account/data`, { accountID }))?.data;
 
 const AccountAPI = {
   create: createAccount,
@@ -60,24 +88,25 @@ const AccountAPI = {
 };
 
 /*************************USER_DATABASE_ENDPOINTS************************************* */
+// SECURITY: User data operations require authentication
 
 const getUserFromUID = async (uid) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/from/uid`, {
+    await authPost(`${configs.server_url}/db/user/get/from/uid`, {
       userUID: uid,
     })
   )?.data;
 
 const getUserFromUsername = async (username) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/from/username`, {
+    await authPost(`${configs.server_url}/db/user/get/from/username`, {
       username,
     })
   )?.data;
 
 const getUIDFromUsername = async (username) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/uid/from/username`, {
+    await authPost(`${configs.server_url}/db/user/get/uid/from/username`, {
       username,
     })
   )?.data;
@@ -85,14 +114,14 @@ const getUIDFromUsername = async (username) =>
 /** USER_MEDIA */
 const getUserMedia = async (userUID) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/media`, {
+    await authPost(`${configs.server_url}/db/user/get/media`, {
       userUID,
     })
   )?.data;
 
 const getUserStreams = async (userUID) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/streams`, {
+    await authPost(`${configs.server_url}/db/user/get/streams`, {
       userUID,
     })
   )?.data;
@@ -100,21 +129,21 @@ const getUserStreams = async (userUID) =>
 /** USER_ASSETS */
 const getUserAssets = async (userUID) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/assets`, {
+    await authPost(`${configs.server_url}/db/user/get/assets`, {
       userUID,
     })
   )?.data;
 
 const getUserAssetDisputes = async (userUID) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/asset/disputes`, {
+    await authPost(`${configs.server_url}/db/user/get/asset/disputes`, {
       userUID,
     })
   )?.data;
 
 const getUserAssetApprovals = async (userUID) =>
   (
-    await axios.post(`${configs.server_url}/db/user/get/asset/approvals`, {
+    await authPost(`${configs.server_url}/db/user/get/asset/approvals`, {
       userUID,
     })
   )?.data;
@@ -271,14 +300,14 @@ const AssetAPI = {
 };
 
 /*************************LIVEPEER_ENDPOINTS************************************* */
+// SECURITY: API key endpoints require authentication
 
 const getLivepeerKey = async () => {
   try {
-    const response = await axios.post(`${configs.server_url}/livepeer/key`);
+    const response = await authPost(`${configs.server_url}/livepeer/key`);
     return response?.data;
   } catch (error) {
-    console.error("Error fetching Livepeer key:", error);
-    throw error;
+    throw new Error("Failed to fetch Livepeer configuration");
   }
 };
 
@@ -371,24 +400,23 @@ const LivepeerAPI = {
 };
 
 /*************************MAPS_ENDPOINTS************************************* */
+// SECURITY: API key endpoints require authentication
 
 const getMapsKey = async () => {
   try {
-    const response = await axios.post(`${configs.server_url}/maps/get/key`);
+    const response = await authPost(`${configs.server_url}/maps/get/key`);
     return response?.data;
   } catch (error) {
-    console.error("Error fetching Maps key:", error);
-    throw error;
+    throw new Error("Failed to fetch Maps configuration");
   }
 };
 
 const getMapsAPI = async () => {
   try {
-    const response = await axios.post(`${configs.server_url}/maps/get/api`);
+    const response = await authPost(`${configs.server_url}/maps/get/api`);
     return response?.data;
   } catch (error) {
-    console.error("Error fetching Maps API:", error);
-    throw error;
+    throw new Error("Failed to fetch Maps API");
   }
 };
 
@@ -433,6 +461,8 @@ const NFT_API = {
 };
 
 /*************************NEPTUNE_CHAIN_CREDITS_ENDPOINTS************************************* */
+// SECURITY: Credit operations require authentication
+// Server MUST verify that senderID matches authenticated user
 
 const issueCredits = async (
   senderID,
@@ -443,14 +473,13 @@ const issueCredits = async (
   amount
 ) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/npc_credits/issue`,
       { senderID, nftTokenId, producer, verifier, creditType, amount }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error issuing credits:", error);
-    throw error;
+    throw new Error("Failed to issue credits");
   }
 };
 
@@ -463,7 +492,7 @@ const buyCredits = async (
   price
 ) => {
   try {
-    const response = await axios.post(`${configs.server_url}/npc_credits/buy`, {
+    const response = await authPost(`${configs.server_url}/npc_credits/buy`, {
       accountID,
       producer,
       verifier,
@@ -473,8 +502,7 @@ const buyCredits = async (
     });
     return response?.data;
   } catch (error) {
-    console.error("Error buying credits:", error);
-    throw error;
+    throw new Error("Failed to buy credits");
   }
 };
 
@@ -488,14 +516,13 @@ const transferCredits = async (
   price
 ) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/npc_credits/transfer`,
       { senderID, recipientID, producer, verifier, creditType, amount, price }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error transferring credits:", error);
-    throw error;
+    throw new Error("Failed to transfer credits");
   }
 };
 
@@ -507,14 +534,13 @@ const donateCredits = async (
   amount
 ) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/npc_credits/donate`,
       { senderID, producer, verifier, creditType, amount }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error donating credits:", error);
-    throw error;
+    throw new Error("Failed to donate credits");
   }
 };
 
@@ -717,40 +743,39 @@ const NPCCreditsAPI = {
 };
 
 /*************************STRIPE_ENDPOINTS************************************* */
+// SECURITY: Payment operations require authentication
 
 const getStripeConfig = async () => {
   try {
-    const response = await axios.post(`${configs.server_url}/stripe/config`);
+    const response = await authPost(`${configs.server_url}/stripe/config`);
     return response?.data;
   } catch (error) {
-    console.error("Error fetching Stripe config:", error);
-    throw error;
+    throw new Error("Failed to fetch payment configuration");
   }
 };
 
 const createPaymentIntent = async (amount, currency, optional_params) => {
   try {
-    const response = await axios.post(
+    // SECURITY: Amount should be validated server-side, never trusted from client
+    const response = await authPost(
       `${configs.server_url}/stripe/create/payment_intent`,
       { amount, currency, optional_params }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error creating payment intent:", error);
-    throw error;
+    throw new Error("Failed to create payment intent");
   }
 };
 
 const getStripePrice = async (priceID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/stripe/get/price`,
       { priceID }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error fetching Stripe price:", error);
-    throw error;
+    throw new Error("Failed to fetch price information");
   }
 };
 
@@ -761,63 +786,60 @@ const StripeAPI = {
 };
 
 /*************************DEVICE_MANAGEMENT_ENDPOINTS************************************* */
+// SECURITY: Device operations require authentication
+// Server MUST verify device ownership before modifications
 
 const getDevices = async () => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/all`);
+    const response = await authPost(`${configs.server_url}/device/all`);
     return response?.data;
   } catch (error) {
-    console.error("Error fetching devices:", error);
-    throw error;
+    throw new Error("Failed to fetch devices");
   }
 };
 
 const addDevice = async (devicePayload) => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/add`, {
+    const response = await authPost(`${configs.server_url}/device/add`, {
       devicePayload,
     });
     return response?.data;
   } catch (error) {
-    console.error("Error adding device:", error);
-    throw error;
+    throw new Error("Failed to add device");
   }
 };
 
 const editDevice = async (deviceID, updateData) => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/edit`, {
+    const response = await authPost(`${configs.server_url}/device/edit`, {
       deviceID,
       updateData,
     });
     return response?.data;
   } catch (error) {
-    console.error("Error editing device:", error);
-    throw error;
+    throw new Error("Failed to edit device");
   }
 };
 
 const removeDevice = async (deviceID) => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/remove`, {
+    const response = await authPost(`${configs.server_url}/device/remove`, {
       deviceID,
     });
     return response?.data;
   } catch (error) {
-    console.error("Error removing device:", error);
-    throw error;
+    throw new Error("Failed to remove device");
   }
 };
 
 const getDeviceDetails = async (deviceID) => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/details`, {
+    const response = await authPost(`${configs.server_url}/device/details`, {
       deviceID,
     });
     return response?.data;
   } catch (error) {
-    console.error("Error fetching device details:", error);
-    throw error;
+    throw new Error("Failed to fetch device details");
   }
 };
 
@@ -957,82 +979,78 @@ const DeviceAPI = {
 };
 
 /*************************CUSTOMER_ENDPOINTS************************************* */
+// SECURITY: Customer operations require authentication
+// Server MUST verify authorization before returning customer data
 
 const createCustomer = async (customerData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/customer/create`,
       { customerData }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error creating customer:", error);
-    throw error;
+    throw new Error("Failed to create customer");
   }
 };
 
 const getCustomer = async (customerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/customer/get`,
       { customerId }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error fetching customer:", error);
-    throw error;
+    throw new Error("Failed to fetch customer");
   }
 };
 
 const updateCustomer = async (customerId, updateData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/customer/update`,
       { customerId, updateData }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error updating customer:", error);
-    throw error;
+    throw new Error("Failed to update customer");
   }
 };
 
 const getCustomerByEmail = async (email) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/customer/get-by-email`,
       { email }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error fetching customer by email:", error);
-    throw error;
+    throw new Error("Failed to fetch customer");
   }
 };
 
 const listCustomers = async (filters = {}) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/customer/list`,
       { filters }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error listing customers:", error);
-    throw error;
+    throw new Error("Failed to list customers");
   }
 };
 
 const deleteCustomer = async (customerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/customer/delete`,
       { customerId }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error deleting customer:", error);
-    throw error;
+    throw new Error("Failed to delete customer");
   }
 };
 
@@ -1163,56 +1181,53 @@ const SiteAPI = {
 };
 
 /*************************ORDER_ENDPOINTS************************************* */
+// SECURITY: Order operations require authentication
 
 const createOrder = async (orderData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/create`,
       { orderData }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error creating order:", error);
-    throw error;
+    throw new Error("Failed to create order");
   }
 };
 
 const getOrder = async (orderId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/get`,
       { orderId }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error fetching order:", error);
-    throw error;
+    throw new Error("Failed to fetch order");
   }
 };
 
 const updateOrder = async (orderId, updateData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/update`,
       { orderId, updateData }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error updating order:", error);
-    throw error;
+    throw new Error("Failed to update order");
   }
 };
 
 const listOrders = async (filters = {}) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/list`,
       { filters }
     );
     return response?.data;
   } catch (error) {
-    console.error("Error listing orders:", error);
-    throw error;
+    throw new Error("Failed to list orders");
   }
 };
 

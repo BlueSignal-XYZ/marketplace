@@ -84,13 +84,25 @@ const transformDataToLabels = (dataArray) => {
   return labels;
 };
 
+// SECURITY: Sanitize text to prevent XSS attacks
+const sanitizeText = (text) => {
+  if (text == null) return "";
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
 const renderTooltip = (tooltipModel) => {
   let tooltipEl = document.getElementById("chartjs-tooltip");
 
   if (!tooltipEl) {
     tooltipEl = document.createElement("div");
     tooltipEl.id = "chartjs-tooltip";
-    tooltipEl.innerHTML = "<table></table>";
+    const table = document.createElement("table");
+    tooltipEl.appendChild(table);
     document.body.appendChild(tooltipEl);
   }
 
@@ -110,25 +122,44 @@ const renderTooltip = (tooltipModel) => {
     const titleLines = tooltipModel.title || [];
     const bodyLines = tooltipModel.body.map((item) => item.lines);
 
-    let innerHtml = "<thead>";
-
-    titleLines.forEach((title) => {
-      innerHtml += "<tr><th>" + title + "</th></tr>";
-    });
-    innerHtml += "</thead><tbody>";
-
-    bodyLines.forEach((body, i) => {
-      const colors = tooltipModel.labelColors[i];
-      let style = "background:" + colors.backgroundColor;
-      style += "; border-color:" + colors.borderColor;
-      style += "; border-width: 2px";
-      const span = '<span style="' + style + '"></span>';
-      innerHtml += "<tr><td>" + span + body + "</td></tr>";
-    });
-    innerHtml += "</tbody>";
-
     const tableRoot = tooltipEl.querySelector("table");
-    tableRoot.innerHTML = innerHtml;
+    // SECURITY: Clear content safely using DOM methods
+    while (tableRoot.firstChild) {
+      tableRoot.removeChild(tableRoot.firstChild);
+    }
+
+    // Build table structure with DOM methods to prevent XSS
+    const thead = document.createElement("thead");
+    titleLines.forEach((title) => {
+      const tr = document.createElement("tr");
+      const th = document.createElement("th");
+      th.textContent = sanitizeText(title);
+      tr.appendChild(th);
+      thead.appendChild(tr);
+    });
+    tableRoot.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    bodyLines.forEach((body, i) => {
+      const colors = tooltipModel.labelColors[i] || {};
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+
+      const colorSpan = document.createElement("span");
+      colorSpan.style.background = colors.backgroundColor || "transparent";
+      colorSpan.style.borderColor = colors.borderColor || "transparent";
+      colorSpan.style.borderWidth = "2px";
+      colorSpan.style.display = "inline-block";
+      colorSpan.style.width = "10px";
+      colorSpan.style.height = "10px";
+      colorSpan.style.marginRight = "5px";
+
+      td.appendChild(colorSpan);
+      td.appendChild(document.createTextNode(sanitizeText(body)));
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+    tableRoot.appendChild(tbody);
   }
 
   const position = this._chart.canvas.getBoundingClientRect();

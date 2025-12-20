@@ -37,11 +37,7 @@ export const AppProvider = ({ children }) => {
   // Firebase Auth State Listener
   // Using popup auth, so we just need to listen for auth state changes
   useEffect(() => {
-    console.log("🔐 Setting up Firebase auth listener...");
-
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      console.log("🔐 Firebase auth state changed:", firebaseUser?.uid || "signed out");
-
       if (firebaseUser) {
         // User signed in - fetch full user data from backend
         try {
@@ -50,27 +46,24 @@ export const AppProvider = ({ children }) => {
           if (userdata?.uid) {
             sessionStorage.setItem("user", JSON.stringify(userdata));
             setUser(userdata);
-            console.log("✅ User loaded:", userdata.uid, "| Role:", userdata.role || "none");
           } else {
             // Firebase user exists but not in backend - use Firebase data
+            // SECURITY: Do not assign default role client-side - role comes from server
             const fallbackUser = {
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               displayName: firebaseUser.displayName,
-              role: "buyer", // default fallback
             };
             sessionStorage.setItem("user", JSON.stringify(fallbackUser));
             setUser(fallbackUser);
-            console.log("⚠️ User loaded from Firebase (backend fallback):", fallbackUser.uid);
           }
         } catch (error) {
-          console.error("❌ Failed to fetch user data:", error);
           // Still set Firebase user so they're not stuck
+          // SECURITY: Do not assign default role client-side
           const fallbackUser = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             displayName: firebaseUser.displayName,
-            role: "buyer",
           };
           sessionStorage.setItem("user", JSON.stringify(fallbackUser));
           setUser(fallbackUser);
@@ -79,7 +72,6 @@ export const AppProvider = ({ children }) => {
         // User signed out
         sessionStorage.removeItem("user");
         setUser(null);
-        console.log("🚪 User signed out");
       }
 
       setAuthLoading(false);
@@ -102,12 +94,10 @@ export const AppProvider = ({ children }) => {
       if (userdata?.uid) {
         sessionStorage.setItem("user", JSON.stringify(userdata));
         setUser(userdata);
-        console.log("✅ User manually updated:", userdata.uid, "| Role:", userdata.role);
         return true;
       }
     } catch (error) {
-      logNotification("error", error.message);
-      console.error("❌ updateUser failed:", error);
+      logNotification("error", "Failed to update user data. Please try again.");
     }
     return null;
   };
@@ -134,15 +124,12 @@ export const AppProvider = ({ children }) => {
 
   // Universal logout function - signs out from Firebase and clears state
   const logout = async () => {
-    console.log("🔓 Logging out...");
     try {
       await signOut(auth);
       sessionStorage.removeItem("user");
       setUser(null);
-      console.log("🔓 User logged out successfully");
       window.location.href = "/";
     } catch (error) {
-      console.error("❌ Logout failed:", error);
       logNotification("error", "Logout failed. Please try again.");
     }
   };

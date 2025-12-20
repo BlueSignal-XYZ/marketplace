@@ -17,7 +17,34 @@ const hubspot = require("./hubspot");
 
 // Create Express app for HTTP endpoints
 const app = express();
-app.use(cors({ origin: true }));
+
+// SECURITY: Restrict CORS to allowed origins only
+const allowedOrigins = [
+  'https://waterquality.trading',
+  'https://www.waterquality.trading',
+  'https://cloud.bluesignal.xyz',
+  'https://sales.bluesignal.xyz',
+  'https://waterquality-trading.web.app',
+  'https://cloud-bluesignal.web.app',
+  'https://sales-bluesignal.web.app',
+  // Allow localhost for development
+  'http://localhost:3000',
+  'http://localhost:5173',
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // =============================================================================
@@ -333,10 +360,44 @@ exports.onDeviceActivated = functions
 /**
  * HTTP Endpoint: HubSpot Webhook Receiver
  * Receives webhooks from HubSpot for deal/contact updates
+ * SECURITY: Verifies HubSpot signature before processing
  */
+const crypto = require("crypto");
+
+// Verify HubSpot webhook signature
+const verifyHubSpotSignature = (req, clientSecret) => {
+  if (!clientSecret) {
+    console.warn("HUBSPOT_CLIENT_SECRET not configured - signature verification skipped");
+    return true; // Skip verification if secret not configured (for backwards compatibility)
+  }
+
+  const signature = req.headers["x-hubspot-signature-v3"] || req.headers["x-hubspot-signature"];
+  if (!signature) {
+    console.warn("No HubSpot signature found in request headers");
+    return false;
+  }
+
+  try {
+    // HubSpot v3 signature: HMAC SHA256 of request body
+    const requestBody = typeof req.body === "string" ? req.body : JSON.stringify(req.body);
+    const expectedHash = crypto
+      .createHmac("sha256", clientSecret)
+      .update(requestBody)
+      .digest("hex");
+
+    return crypto.timingSafeEqual(
+      Buffer.from(signature),
+      Buffer.from(expectedHash)
+    );
+  } catch (error) {
+    console.error("Signature verification error:", error);
+    return false;
+  }
+};
+
 exports.hubspotWebhook = functions
   .runWith({
-    secrets: ["HUBSPOT_ACCESS_TOKEN"],
+    secrets: ["HUBSPOT_ACCESS_TOKEN", "HUBSPOT_CLIENT_SECRET"],
     timeoutSeconds: 30,
   })
   .https.onRequest(async (req, res) => {
@@ -346,17 +407,22 @@ exports.hubspotWebhook = functions
       return;
     }
 
+    // SECURITY: Verify webhook signature
+    const clientSecret = process.env.HUBSPOT_CLIENT_SECRET;
+    if (!verifyHubSpotSignature(req, clientSecret)) {
+      console.error("Invalid webhook signature - rejecting request");
+      res.status(401).send("Invalid signature");
+      return;
+    }
+
     try {
       const events = req.body;
 
       // HubSpot sends array of events
       if (!Array.isArray(events)) {
-        console.log("Received non-array webhook payload:", events);
         res.status(200).send("OK");
         return;
       }
-
-      console.log(`Received ${events.length} HubSpot webhook events`);
 
       for (const event of events) {
         await hubspot.processWebhookEvent(event);
@@ -364,7 +430,7 @@ exports.hubspotWebhook = functions
 
       res.status(200).send("OK");
     } catch (error) {
-      console.error("Webhook processing error:", error);
+      console.error("Webhook processing error");
       res.status(500).send("Error processing webhook");
     }
   });

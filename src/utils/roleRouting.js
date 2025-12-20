@@ -11,15 +11,18 @@
 
 /**
  * Extract a normalized role from Firebase user object.
+ * SECURITY: Role must come from server - no client-side defaults
  */
 const getUserRole = (user) => {
   if (!user) return null;
 
+  // SECURITY: Only use roles explicitly set by the server
+  // Do not default to any role if none is set
   return (
     user.role ||                     // explicit role on user object
     user?.claims?.role ||            // Firebase custom claim
     user?.roleId ||                  // alternate field
-    "buyer"                          // safe fallback
+    null                             // No default - server must set role
   );
 };
 
@@ -44,6 +47,9 @@ export const getDefaultDashboardRoute = (user, mode = "marketplace") => {
 
   /* -------------------------- MARKETPLACE MODE -------------------------- */
   if (mode === "marketplace") {
+    // SECURITY: If no role is set, go to public marketplace
+    if (!role) return "/marketplace";
+
     if (role === "buyer") return "/dashboard/buyer";
     if (role === "seller") return "/dashboard/seller";
     if (role === "farmer") return "/dashboard/seller";

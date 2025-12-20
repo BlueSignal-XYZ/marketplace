@@ -119,15 +119,11 @@ function App() {
   // MODE DETECTION - using shared utility
   const mode = getAppMode();
 
-  // DIAGNOSTIC LOGGING (as per spec)
-  console.log("═══════════════════════════════════════════════════════════");
-  console.log("BUILD:", BUILD_VERSION);
-  console.log("MODE:", mode);
-  console.log("AUTH_LOADING:", authLoading);
-  console.log("USER:", user?.uid || "null");
-  console.log("ROLE:", user?.role || "null");
-  console.log("ROUTE:", window.location.pathname);
-  console.log("═══════════════════════════════════════════════════════════");
+  // SECURITY: Debug logging disabled in production - enable with VITE_DEBUG=true
+  const isDev = import.meta.env.DEV || import.meta.env.VITE_DEBUG === "true";
+  if (isDev) {
+    console.log("BUILD:", BUILD_VERSION, "| MODE:", mode);
+  }
 
   return (
     <Router>
@@ -177,30 +173,32 @@ function AppShell({ mode, user, authLoading }) {
       {/* DEMO MODE BANNER */}
       <DemoBanner />
 
-      {/* DEBUG VERSION BUBBLE */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 8,
-          right: 12,
-          fontSize: "11px",
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif",
-          fontWeight: 500,
-          opacity: 0.6,
-          zIndex: 99999,
-          background: "#ffffff",
-          color: "#64748b",
-          padding: "4px 10px",
-          borderRadius: "999px",
-          border: "1px solid #e2e8f0",
-          boxShadow: "0 2px 8px rgba(15, 23, 42, 0.08)",
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      >
-        {BUILD_VERSION}
-      </div>
+      {/* SECURITY: Version bubble only shown in development mode */}
+      {(import.meta.env.DEV || import.meta.env.VITE_DEBUG === "true") && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 8,
+            right: 12,
+            fontSize: "11px",
+            fontFamily:
+              "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif",
+            fontWeight: 500,
+            opacity: 0.6,
+            zIndex: 99999,
+            background: "#ffffff",
+            color: "#64748b",
+            padding: "4px 10px",
+            borderRadius: "999px",
+            border: "1px solid #e2e8f0",
+            boxShadow: "0 2px 8px rgba(15, 23, 42, 0.08)",
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        >
+          {BUILD_VERSION}
+        </div>
+      )}
 
       {/* HEADERS - Sales mode has no header (clean product-focused layout) */}
       {!isAuthLanding && mode === "cloud" && (

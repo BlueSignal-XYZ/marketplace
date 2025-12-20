@@ -139,32 +139,24 @@ const RegisterForm = ({
     setIsLoading(true);
 
     try {
-      console.log("🔐 Google sign-up attempt...");
-
       // Use popup auth - handles cross-origin via postMessage
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
-      console.log("✅ Google auth success:", user.uid);
-
       // Create user account with Google data
+      // SECURITY: Role is assigned server-side, not client-side
       const newUser = {
         uid: user.uid,
         username: (user.displayName || user.email?.split("@")[0] || "user").toLowerCase().replace(/\s+/g, "_"),
         email: user.email?.toLowerCase(),
         displayName: user.displayName,
-        role: "farmer",
-        PIN: 123456,
       };
-
-      console.log("RegisterForm → Google newUser:", newUser);
 
       // Best-effort backend account creation
       try {
-        const apiResult = await AccountAPI.create(newUser);
-        console.log("AccountAPI.create →", apiResult);
+        await AccountAPI.create(newUser);
       } catch (err) {
-        console.warn("AccountAPI.create failed (non-fatal):", err);
+        // Non-fatal - account may already exist
       }
 
       // Keep local user state in sync
@@ -176,28 +168,35 @@ const RegisterForm = ({
         try {
           sessionStorage.setItem("user", JSON.stringify(newUser));
         } catch (e) {
-          console.error("Failed to write sessionStorage user:", e);
+          // Silent fail
         }
       }
 
       setIsSuccess(true);
-      // Note: AppContext onAuthStateChanged will handle redirect
     } catch (err) {
-      console.error("❌ Google sign-up failed:", err);
-
       if (err.code === "auth/popup-closed-by-user") {
-        console.log("User closed popup");
+        // User closed popup - don't show error
       } else if (err.code === "auth/popup-blocked") {
         setError("Popup was blocked. Please allow popups and try again.");
       } else if (err.code === "auth/account-exists-with-different-credential") {
         setError("An account already exists with this email. Try signing in instead.");
       } else if (err.code === "auth/unauthorized-domain") {
-        setError("This domain is not authorized for authentication. Please contact support.");
+        setError("Authentication is not available on this domain.");
       } else {
-        setError(err?.message || "Unable to sign up with Google. Please try again.");
+        setError("Unable to sign up with Google. Please try again.");
       }
       setIsLoading(false);
     }
+  };
+
+  // SECURITY: Password strength validation
+  const isStrongPassword = (pwd) => {
+    if (!pwd || pwd.length < 8) return false;
+    // Require at least one uppercase, one lowercase, one number
+    const hasUppercase = /[A-Z]/.test(pwd);
+    const hasLowercase = /[a-z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    return hasUppercase && hasLowercase && hasNumber;
   };
 
   const handleSubmit = async (e) => {
@@ -219,13 +218,18 @@ const RegisterForm = ({
       setError("Password must be at least 8 characters long.");
       return;
     }
+    // SECURITY: Enforce stronger password policy
+    if (!isStrongPassword(password)) {
+      setError("Password must include uppercase, lowercase, and a number.");
+      return;
+    }
 
     setIsLoading(true);
 
     try {
       let newUser = null;
 
-      // Keep Google path future-proofed, even though we disabled it in the UI for now
+      // SECURITY: Role is assigned server-side, not client-side
       if (googleData?.gmail || googleData?.email) {
         const googleEmail =
           (googleData.gmail || googleData.email || "").toLowerCase();
@@ -233,8 +237,6 @@ const RegisterForm = ({
           uid: googleData.uid,
           username: trimmedUsername.toLowerCase(),
           email: googleEmail,
-          role: "farmer",
-          PIN: 123456,
         };
       } else {
         const userCredential = await createUserWithEmailAndPassword(
@@ -248,19 +250,14 @@ const RegisterForm = ({
           uid: userData.uid,
           username: trimmedUsername.toLowerCase(),
           email: (userData.email || trimmedEmail).toLowerCase(),
-          role: "farmer",
-          PIN: 123456,
         };
       }
 
-      console.log("RegisterForm → newUser:", newUser);
-
-      // 🔹 Best-effort backend account creation — NO alert if it fails
+      // Best-effort backend account creation
       try {
-        const apiResult = await AccountAPI.create(newUser);
-        console.log("AccountAPI.create →", apiResult);
+        await AccountAPI.create(newUser);
       } catch (err) {
-        console.warn("AccountAPI.create failed (non-fatal):", err);
+        // Non-fatal - account may already exist
       }
 
       // Keep local user state in sync
@@ -272,21 +269,20 @@ const RegisterForm = ({
         try {
           sessionStorage.setItem("user", JSON.stringify(newUser));
         } catch (e) {
-          console.error("Failed to write sessionStorage user:", e);
+          // Silent fail
         }
       }
 
       setIsSuccess(true);
     } catch (error) {
-      console.error("Registration error:", error);
       if (error.code === "auth/email-already-in-use") {
         setError("An account with this email already exists.");
       } else if (error.code === "auth/invalid-email") {
         setError("Please enter a valid email address.");
       } else if (error.code === "auth/weak-password") {
-        setError("Password is too weak. Use at least 8 characters.");
+        setError("Password is too weak. Use at least 8 characters with mixed case and numbers.");
       } else {
-        setError(error.message || "Failed to create account. Please try again.");
+        setError("Failed to create account. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -380,7 +376,7 @@ const RegisterForm = ({
               <Input
                 type="password"
                 value={password}
-                placeholder="Create a password (min 8 chars)"
+                placeholder="Min 8 chars, uppercase, lowercase, number"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />

@@ -13,15 +13,23 @@ import { getAppMode } from '../utils/modeDetection';
 
 // Firebase configuration for waterquality-trading project
 // Used by both Cloud and Marketplace modes
+// SECURITY: All config values MUST come from environment variables
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyAESUVCltG4kviQLIiiygIROJ7BKMMgvX8",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "waterquality-trading.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "waterquality-trading",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "waterquality-trading.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1006831487182",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1006831487182:web:a58405168a345d8728689f",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-ECMFLV2Y6B"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
+// Validate required Firebase config at startup
+const requiredKeys = ['apiKey', 'authDomain', 'projectId'];
+const missingKeys = requiredKeys.filter(key => !firebaseConfig[key]);
+if (missingKeys.length > 0) {
+  throw new Error(`Missing required Firebase config: ${missingKeys.join(', ')}. Check environment variables.`);
+}
 
 // Initialize Firebase (single default app)
 const app = initializeApp(firebaseConfig);
@@ -30,6 +38,6 @@ const db = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 
 const mode = getAppMode();
-console.log(`🔥 Firebase initialized for mode: ${mode}`);
+// Debug logging removed for security - mode detection happens silently
 
 export { auth, db, googleProvider };
