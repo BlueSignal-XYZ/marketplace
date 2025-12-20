@@ -47,6 +47,20 @@ npm run deploy:wqt    # Build + deploy waterquality.trading
 npm run deploy:cloud  # Build + deploy cloud.bluesignal.xyz
 npm run deploy:sales  # Build + deploy sales.bluesignal.xyz
 
+# Deploy all sites (Firebase + Cloudflare)
+npm run deploy:all    # Build all, deploy to Firebase, trigger Cloudflare
+
+# Full deployment (Firebase + Cloudflare) per site
+npm run deploy:full:wqt    # Deploy WQT to Firebase then trigger Cloudflare
+npm run deploy:full:cloud  # Deploy Cloud to Firebase then trigger Cloudflare
+npm run deploy:full:sales  # Deploy Sales to Firebase then trigger Cloudflare
+
+# Trigger Cloudflare builds only (no Firebase deploy)
+npm run cloudflare:trigger       # Trigger all sites
+npm run cloudflare:trigger:wqt   # Trigger WQT only
+npm run cloudflare:trigger:cloud # Trigger Cloud only
+npm run cloudflare:trigger:sales # Trigger Sales only
+
 # Test sales mode locally
 npm run dev          # Then visit localhost:3000?app=sales
 ```
@@ -129,6 +143,33 @@ All sites use SPA rewrites (`** → /index.html`).
 
 Vite config builds separate entry points (`index.html`, `cloud.html`, `sales.html`) per target. Each build outputs to its own dist directory. Mode detection happens at runtime via hostname.
 
+### Cloudflare Integration
+
+The deployment pipeline automatically triggers Cloudflare builds after Firebase deployment succeeds. This provides CDN caching and edge optimization on top of Firebase Hosting.
+
+**Automatic (CI/CD)**: On merge to `master`, GitHub Actions deploys to Firebase then triggers Cloudflare builds in parallel for all three sites with retry logic (4 attempts, exponential backoff: 2s, 4s, 8s, 16s).
+
+**Manual**: Use `scripts/cloudflare-deploy.sh` or npm scripts to trigger Cloudflare builds locally.
+
+**Required GitHub Secrets (deploy hooks method)**:
+- `CLOUDFLARE_DEPLOY_HOOK_WQT` - Deploy hook URL for waterquality-trading
+- `CLOUDFLARE_DEPLOY_HOOK_CLOUD` - Deploy hook URL for cloud-bluesignal
+- `CLOUDFLARE_DEPLOY_HOOK_SALES` - Deploy hook URL for sales-bluesignal
+
+**Alternative (API method)** - Set `USE_CLOUDFLARE_API=true` in GitHub Variables:
+- `CLOUDFLARE_ACCOUNT_ID` (secret) - Cloudflare account ID
+- `CLOUDFLARE_API_TOKEN` (secret) - API token with Pages permissions
+- `CLOUDFLARE_PROJECT_WQT` (variable) - Project name for WQT
+- `CLOUDFLARE_PROJECT_CLOUD` (variable) - Project name for Cloud
+- `CLOUDFLARE_PROJECT_SALES` (variable) - Project name for Sales
+
+**Local environment variables** (for npm scripts):
+```bash
+export CLOUDFLARE_DEPLOY_HOOK_WQT="https://api.cloudflare.com/..."
+export CLOUDFLARE_DEPLOY_HOOK_CLOUD="https://api.cloudflare.com/..."
+export CLOUDFLARE_DEPLOY_HOOK_SALES="https://api.cloudflare.com/..."
+```
+
 ### Blockchain Integration
 
 Configured in `configs.js`:
@@ -195,6 +236,11 @@ Firebase config and API keys should be in environment variables (typically `.env
 - Firebase API key, project ID, auth domain, etc.
 - Livepeer API key
 - Backend/registry API URL (currently hardcoded in `configs.js`)
+
+Cloudflare deployment (for local use):
+- `CLOUDFLARE_DEPLOY_HOOK_WQT` - Deploy hook URL for waterquality-trading
+- `CLOUDFLARE_DEPLOY_HOOK_CLOUD` - Deploy hook URL for cloud-bluesignal
+- `CLOUDFLARE_DEPLOY_HOOK_SALES` - Deploy hook URL for sales-bluesignal
 
 Check Firebase config files and existing `.env` examples for exact variable names.
 
