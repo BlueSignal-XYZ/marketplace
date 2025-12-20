@@ -16,8 +16,6 @@ jobs:
     permissions:
       contents: read
       checks: write
-    outputs:
-      firebase_success: ${{ steps.firebase_deploy.outcome }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,97 +50,37 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_deploy
     if: ${{ needs.build_and_deploy.result == 'success' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        site:
-          - name: wqt
-            hook_secret: CLOUDFLARE_DEPLOY_HOOK_WQT
-          - name: cloud
-            hook_secret: CLOUDFLARE_DEPLOY_HOOK_CLOUD
-          - name: sales
-            hook_secret: CLOUDFLARE_DEPLOY_HOOK_SALES
     steps:
-      - name: Trigger Cloudflare build for ${{ matrix.site.name }}
-        id: trigger
-        if: ${{ secrets[matrix.site.hook_secret] != '' }}
+      - name: Trigger Cloudflare builds
         env:
-          HOOK_URL: ${{ secrets[matrix.site.hook_secret] }}
+          HOOK_WQT: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_WQT }}
+          HOOK_CLOUD: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_CLOUD }}
+          HOOK_SALES: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_SALES }}
         run: |
-          MAX_RETRIES=4
-          RETRY_DELAYS=(2 4 8 16)
-
-          for attempt in $(seq 1 $MAX_RETRIES); do
-            echo "Triggering Cloudflare build for ${{ matrix.site.name }} (attempt $attempt/$MAX_RETRIES)..."
-
-            HTTP_CODE=$(curl -s -o /tmp/response.txt -w "%{http_code}" -X POST "$HOOK_URL")
-
-            if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
-              echo "✅ Cloudflare build triggered successfully for ${{ matrix.site.name }}"
-              cat /tmp/response.txt
-              exit 0
-            fi
-
-            echo "⚠️ Build trigger failed with HTTP $HTTP_CODE"
-            cat /tmp/response.txt
-
-            if [ $attempt -lt $MAX_RETRIES ]; then
-              DELAY=${RETRY_DELAYS[$attempt - 1]}
-              echo "Retrying in ${DELAY}s..."
-              sleep $DELAY
-            fi
-          done
-
-          echo "❌ Failed to trigger Cloudflare build after $MAX_RETRIES attempts"
-          exit 1
-
-      - name: Skip - No hook configured
-        if: ${{ secrets[matrix.site.hook_secret] == '' }}
-        run: echo "⏭️ Skipping ${{ matrix.site.name }} - no deploy hook configured"
-
-  # Alternative: Use Cloudflare API instead of deploy hooks
-  cloudflare_api_deploy:
-    runs-on: ubuntu-latest
-    needs: build_and_deploy
-    if: ${{ needs.build_and_deploy.result == 'success' && vars.USE_CLOUDFLARE_API == 'true' }}
-    steps:
-      - name: Trigger Cloudflare builds via API
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_PROJECT_WQT: ${{ vars.CLOUDFLARE_PROJECT_WQT }}
-          CLOUDFLARE_PROJECT_CLOUD: ${{ vars.CLOUDFLARE_PROJECT_CLOUD }}
-          CLOUDFLARE_PROJECT_SALES: ${{ vars.CLOUDFLARE_PROJECT_SALES }}
-        run: |
-          trigger_build() {
-            local project_name="$1"
+          trigger_hook() {
+            local hook_url="$1"
+            local site_name="$2"
             local max_retries=4
             local delays=(2 4 8 16)
 
-            if [ -z "$project_name" ]; then
-              echo "⏭️ Skipping - no project name configured"
+            if [ -z "$hook_url" ]; then
+              echo "⏭️ Skipping $site_name - no deploy hook configured"
               return 0
             fi
 
             for attempt in $(seq 1 $max_retries); do
-              echo "Triggering build for $project_name (attempt $attempt/$max_retries)..."
+              echo "Triggering Cloudflare build for $site_name (attempt $attempt/$max_retries)..."
 
-              response=$(curl -s -w "\n%{http_code}" -X POST \
-                "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${project_name}/deployments" \
-                -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-                -H "Content-Type: application/json" \
-                -d '{"branch":"main"}')
+              HTTP_CODE=$(curl -s -o /tmp/response_${site_name}.txt -w "%{http_code}" -X POST "$hook_url")
 
-              http_code=$(echo "$response" | tail -n1)
-              body=$(echo "$response" | sed '$d')
-
-              if [ "$http_code" -eq 200 ] || [ "$http_code" -eq 201 ]; then
-                echo "✅ Build triggered for $project_name"
-                echo "$body" | jq -r '.result.id // .result' 2>/dev/null || echo "$body"
+              if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
+                echo "✅ Cloudflare build triggered successfully for $site_name"
+                cat /tmp/response_${site_name}.txt
                 return 0
               fi
 
-              echo "⚠️ Failed with HTTP $http_code"
+              echo "⚠️ Build trigger failed with HTTP $HTTP_CODE"
+              cat /tmp/response_${site_name}.txt
 
               if [ $attempt -lt $max_retries ]; then
                 delay=${delays[$attempt - 1]}
@@ -151,18 +89,19 @@ jobs:
               fi
             done
 
-            echo "❌ Failed to trigger build for $project_name"
+            echo "❌ Failed to trigger Cloudflare build for $site_name after $max_retries attempts"
             return 1
           }
 
           failed=0
 
-          trigger_build "$CLOUDFLARE_PROJECT_WQT" || failed=$((failed + 1))
-          trigger_build "$CLOUDFLARE_PROJECT_CLOUD" || failed=$((failed + 1))
-          trigger_build "$CLOUDFLARE_PROJECT_SALES" || failed=$((failed + 1))
+          # Trigger all three sites
+          trigger_hook "$HOOK_WQT" "wqt" || failed=$((failed + 1))
+          trigger_hook "$HOOK_CLOUD" "cloud" || failed=$((failed + 1))
+          trigger_hook "$HOOK_SALES" "sales" || failed=$((failed + 1))
 
           if [ $failed -gt 0 ]; then
-            echo "❌ $failed deployment(s) failed"
+            echo "❌ $failed Cloudflare deployment(s) failed"
             exit 1
           fi
 
