@@ -68,19 +68,39 @@ jobs:
               return 0
             fi
 
+            # Debug: Show URL format (masked)
+            echo "🔗 Hook URL for $site_name starts with: ${hook_url:0:50}..."
+
             for attempt in $(seq 1 $max_retries); do
               echo "Triggering Cloudflare build for $site_name (attempt $attempt/$max_retries)..."
 
-              HTTP_CODE=$(curl -s -o /tmp/response_${site_name}.txt -w "%{http_code}" -X POST "$hook_url")
+              # Create response file and make the request
+              response_file="/tmp/response_${site_name}.txt"
+              touch "$response_file"
+
+              HTTP_CODE=$(curl -sL -o "$response_file" -w "%{http_code}" \
+                -X POST \
+                -H "Content-Type: application/json" \
+                -d '{}' \
+                "$hook_url" 2>&1)
+
+              echo "HTTP Response Code: $HTTP_CODE"
 
               if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
                 echo "✅ Cloudflare build triggered successfully for $site_name"
-                cat /tmp/response_${site_name}.txt
+                if [ -s "$response_file" ]; then
+                  cat "$response_file"
+                fi
                 return 0
               fi
 
               echo "⚠️ Build trigger failed with HTTP $HTTP_CODE"
-              cat /tmp/response_${site_name}.txt
+              if [ -s "$response_file" ]; then
+                echo "Response body:"
+                cat "$response_file"
+              else
+                echo "No response body received"
+              fi
 
               if [ $attempt -lt $max_retries ]; then
                 delay=${delays[$attempt - 1]}
