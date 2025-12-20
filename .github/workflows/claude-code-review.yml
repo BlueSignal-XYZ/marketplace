@@ -3,27 +3,17 @@ name: Claude Code Review
 on:
   pull_request:
     types: [opened, synchronize]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
-
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       pull-requests: write
-      issues: read
+      issues: write
       id-token: write
+      actions: read
 
     steps:
       - name: Checkout repository
@@ -33,22 +23,30 @@ jobs:
 
       - name: Run Claude Code Review
         id: claude-review
+        continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          additional_permissions: |
+            actions: read
           prompt: |
-            REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
-
-            Please review this pull request and provide feedback on:
+            Please review this pull request and provide constructive feedback on:
             - Code quality and best practices
             - Potential bugs or issues
             - Performance considerations
             - Security concerns
-            - Test coverage
 
-            Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
+            Use the repository's CLAUDE.md for guidance on style and conventions.
 
-            Use `gh pr comment` with your Bash tool to leave your review as a comment on the PR.
-
+      - name: Check review status
+        if: steps.claude-review.outcome == 'failure'
+        run: |
+          echo "::error::Claude Code Review failed. This is usually caused by:"
+          echo "::error::1. Missing or invalid ANTHROPIC_API_KEY secret"
+          echo "::error::2. API rate limits or quota exhaustion"
+          echo "::error::3. Network connectivity issues"
+          echo ""
+          echo "To fix: Go to Settings → Secrets and variables → Actions → Repository secrets"
+          echo "Ensure ANTHROPIC_API_KEY is set with a valid key starting with 'sk-ant-'"
+          exit 1
