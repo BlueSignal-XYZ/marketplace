@@ -24,18 +24,28 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Validate required Firebase config at startup
+// Validate required Firebase config - fail gracefully instead of throwing
+// This prevents white screen when env vars are missing
 const requiredKeys = ['apiKey', 'authDomain', 'projectId'];
 const missingKeys = requiredKeys.filter(key => !firebaseConfig[key]);
-if (missingKeys.length > 0) {
-  throw new Error(`Missing required Firebase config: ${missingKeys.join(', ')}. Check environment variables.`);
-}
+export const isFirebaseConfigured = missingKeys.length === 0;
+export const firebaseConfigError = missingKeys.length > 0
+  ? `Missing required Firebase config: ${missingKeys.join(', ')}. Check environment variables.`
+  : null;
 
-// Initialize Firebase (single default app)
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-const googleProvider = new GoogleAuthProvider();
+// Initialize Firebase only if configured (single default app)
+// If not configured, create null placeholders to prevent import errors
+let app = null;
+let auth = null;
+let db = null;
+let googleProvider = null;
+
+if (isFirebaseConfigured) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getDatabase(app);
+  googleProvider = new GoogleAuthProvider();
+}
 
 const mode = getAppMode();
 // Debug logging removed for security - mode detection happens silently

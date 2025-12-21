@@ -99,6 +99,7 @@ import InstallerDashboard from "./components/dashboards/InstallerDashboard";
 
 import { getDefaultDashboardRoute } from "./utils/roleRouting";
 import { isCloudMode, isSalesMode, getAppMode } from "./utils/modeDetection";
+import { isFirebaseConfigured, firebaseConfigError } from "./apis/firebase";
 
 /* -------------------------------------------------------------------------- */
 /*                              DEBUG VERSION TAG                              */
@@ -109,10 +110,44 @@ const BUILD_VERSION =
   new Date().toISOString().slice(0, 10);
 
 /* -------------------------------------------------------------------------- */
+/*                           CONFIGURATION ERROR                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * ConfigurationError - Displays a user-friendly error when Firebase isn't configured
+ * This prevents the white screen issue when environment variables are missing
+ */
+const ConfigurationError = ({ error }) => (
+  <ConfigErrorContainer>
+    <ConfigErrorCard>
+      <ConfigErrorIcon>⚠️</ConfigErrorIcon>
+      <ConfigErrorTitle>Configuration Required</ConfigErrorTitle>
+      <ConfigErrorMessage>
+        The application is not properly configured. This usually means
+        environment variables are missing from the deployment.
+      </ConfigErrorMessage>
+      <ConfigErrorDetails>
+        <strong>Technical details:</strong> {error}
+      </ConfigErrorDetails>
+      <ConfigErrorHelp>
+        If you are a developer, ensure all required VITE_FIREBASE_* environment
+        variables are set. If you are a user, please contact support.
+      </ConfigErrorHelp>
+    </ConfigErrorCard>
+  </ConfigErrorContainer>
+);
+
+/* -------------------------------------------------------------------------- */
 /*                                   APP ROOT                                 */
 /* -------------------------------------------------------------------------- */
 
 function App() {
+  // Check Firebase configuration first - show error screen if not configured
+  // This prevents white screen when environment variables are missing
+  if (!isFirebaseConfigured) {
+    return <ConfigurationError error={firebaseConfigError} />;
+  }
+
   const { STATES } = useAppContext();
   const { user, authLoading } = STATES || {};
 
@@ -732,6 +767,62 @@ const LoadingText = styled.p`
   font-size: 18px;
   font-weight: 500;
   opacity: 0.9;
+`;
+
+const ConfigErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  padding: 20px;
+`;
+
+const ConfigErrorCard = styled.div`
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+`;
+
+const ConfigErrorIcon = styled.div`
+  font-size: 64px;
+  margin-bottom: 20px;
+`;
+
+const ConfigErrorTitle = styled.h1`
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+`;
+
+const ConfigErrorMessage = styled.p`
+  font-size: 16px;
+  color: #64748b;
+  margin: 0 0 20px 0;
+  line-height: 1.6;
+`;
+
+const ConfigErrorDetails = styled.div`
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #991b1b;
+  text-align: left;
+  margin-bottom: 20px;
+  word-break: break-word;
+`;
+
+const ConfigErrorHelp = styled.p`
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
 `;
 
 export default App;

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../apis/firebase";
+import { auth, isFirebaseConfigured } from "../apis/firebase";
 import { UserAPI } from "../scripts/back_door";
 
 const AppContext = createContext();
@@ -37,6 +37,14 @@ export const AppProvider = ({ children }) => {
   // Firebase Auth State Listener
   // Using popup auth, so we just need to listen for auth state changes
   useEffect(() => {
+    // Skip auth listener if Firebase isn't configured
+    // This prevents errors when env vars are missing
+    if (!isFirebaseConfigured || !auth) {
+      setAuthLoading(false);
+      setIsLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // User signed in - fetch full user data from backend
@@ -125,7 +133,9 @@ export const AppProvider = ({ children }) => {
   // Universal logout function - signs out from Firebase and clears state
   const logout = async () => {
     try {
-      await signOut(auth);
+      if (isFirebaseConfigured && auth) {
+        await signOut(auth);
+      }
       sessionStorage.removeItem("user");
       setUser(null);
       window.location.href = "/";
