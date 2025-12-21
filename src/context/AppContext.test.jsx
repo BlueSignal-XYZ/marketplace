@@ -6,6 +6,8 @@ import React from 'react'
 // Mock Firebase auth - use vi.fn() directly in the factory
 vi.mock('../apis/firebase', () => ({
   auth: {},
+  isFirebaseConfigured: true,
+  firebaseConfigError: null,
 }))
 
 vi.mock('firebase/auth', () => ({
