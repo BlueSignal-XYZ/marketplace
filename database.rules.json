@@ -1,0 +1,400 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".write": "auth != null && auth.uid === $uid",
+
+        "profile": {
+          ".validate": "newData.hasChildren(['email', 'role'])",
+          "email": { ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+$/)" },
+          "displayName": { ".validate": "newData.isString() && newData.val().length <= 100" },
+          "phone": { ".validate": "newData.isString() && newData.val().length <= 20" },
+          "company": { ".validate": "newData.isString() && newData.val().length <= 200" },
+          "role": { ".validate": "newData.isString() && newData.val().matches(/^(buyer|seller|installer|admin)$/)" },
+          "createdAt": { ".validate": "newData.isNumber()" },
+          "updatedAt": { ".validate": "newData.isNumber()" },
+          "onboardingComplete": { ".validate": "newData.isBoolean()" }
+        },
+
+        "settings": {
+          "notifications": {
+            "email": { ".validate": "newData.isBoolean()" },
+            "sms": { ".validate": "newData.isBoolean()" },
+            "push": { ".validate": "newData.isBoolean()" }
+          },
+          "timezone": { ".validate": "newData.isString()" },
+          "units": { ".validate": "newData.isString() && newData.val().matches(/^(metric|imperial)$/)" }
+        },
+
+        "wallets": {
+          "polygon": {
+            "address": { ".validate": "newData.isString()" },
+            "linked": { ".validate": "newData.isBoolean()" }
+          },
+          "stripe": {
+            "customerId": { ".validate": "newData.isString()" },
+            "defaultPaymentMethod": { ".validate": "newData.isString()" }
+          }
+        },
+
+        "activity": {
+          "$activityId": {
+            ".validate": "newData.hasChildren(['type', 'timestamp'])",
+            "type": { ".validate": "newData.isString()" },
+            "timestamp": { ".validate": "newData.isNumber()" },
+            "metadata": { ".validate": true }
+          }
+        }
+      }
+    },
+
+    "devices": {
+      ".read": "auth != null",
+      "$serialNumber": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || root.child('users').child(auth.uid).child('profile').child('role').val() === 'installer' || data.child('ownership').child('ownerId').val() === auth.uid || !data.exists())",
+        ".validate": "newData.hasChildren(['serialNumber', 'type'])",
+
+        "serialNumber": { ".validate": "newData.isString() && newData.val().matches(/^BS-\\d{4}-\\d{6}$/)" },
+        "qrCode": { ".validate": "newData.isString()" },
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(buoy|soil_probe|gateway|algae_control)$/)" },
+        "model": { ".validate": "newData.isString()" },
+        "firmware": { ".validate": "newData.isString()" },
+
+        "ownership": {
+          "ownerId": { ".validate": "newData.isString()" },
+          "purchaseDate": { ".validate": "newData.isNumber()" },
+          "warrantyExpiry": { ".validate": "newData.isNumber()" },
+          "transferHistory": { ".validate": true }
+        },
+
+        "installation": {
+          "status": { ".validate": "newData.isString() && newData.val().matches(/^(unregistered|registered|commissioned|active|offline|decommissioned)$/)" },
+          "siteId": { ".validate": "newData.isString()" },
+          "installerId": { ".validate": "newData.isString()" },
+          "commissionedAt": { ".validate": "newData.isNumber()" },
+          "commissionedBy": { ".validate": "newData.isString()" },
+          "location": {
+            "lat": { ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90" },
+            "lng": { ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180" },
+            "accuracy": { ".validate": "newData.isNumber()" },
+            "source": { ".validate": "newData.isString() && newData.val().matches(/^(gps|manual|address)$/)" }
+          }
+        },
+
+        "configuration": {
+          "reportingInterval": { ".validate": "newData.isNumber() && newData.val() >= 60" },
+          "alertThresholds": { ".validate": true },
+          "calibration": {
+            "lastCalibrated": { ".validate": "newData.isNumber()" },
+            "calibratedBy": { ".validate": "newData.isString()" },
+            "offsets": { ".validate": true }
+          }
+        },
+
+        "health": {
+          "lastSeen": { ".validate": "newData.isNumber()" },
+          "batteryLevel": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100" },
+          "signalStrength": { ".validate": "newData.isNumber()" },
+          "errorCount": { ".validate": "newData.isNumber()" }
+        }
+      }
+    },
+
+    "sites": {
+      ".read": "auth != null",
+      "$siteId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || data.child('ownerId').val() === auth.uid || !data.exists())",
+        ".validate": "newData.hasChildren(['name', 'type', 'ownerId'])",
+
+        "name": { ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 200" },
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(farm|lake|river|pond|treatment_plant|stormwater)$/)" },
+        "ownerId": { ".validate": "newData.isString()" },
+
+        "location": {
+          "address": { ".validate": "newData.isString()" },
+          "city": { ".validate": "newData.isString()" },
+          "state": { ".validate": "newData.isString()" },
+          "country": { ".validate": "newData.isString()" },
+          "postalCode": { ".validate": "newData.isString()" },
+          "coordinates": {
+            "lat": { ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90" },
+            "lng": { ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180" }
+          },
+          "boundary": { ".validate": true },
+          "watershed": { ".validate": "newData.isString()" }
+        },
+
+        "metadata": {
+          "area": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "waterBodyType": { ".validate": "newData.isString()" },
+          "depth": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "regulatoryId": { ".validate": "newData.isString()" }
+        },
+
+        "devices": { ".validate": true },
+
+        "credits": {
+          "eligible": { ".validate": "newData.isBoolean()" },
+          "registryId": { ".validate": "newData.isString()" },
+          "totalGenerated": { ".validate": "newData.isNumber()" }
+        }
+      }
+    },
+
+    "commissions": {
+      ".read": "auth != null",
+      "$commissionId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || root.child('users').child(auth.uid).child('profile').child('role').val() === 'installer' || data.child('ownerId').val() === auth.uid || data.child('installerId').val() === auth.uid || !data.exists())",
+        ".validate": "newData.hasChildren(['deviceId', 'status'])",
+
+        "deviceId": { ".validate": "newData.isString()" },
+        "siteId": { ".validate": "newData.isString()" },
+        "installerId": { ".validate": "newData.isString()" },
+        "ownerId": { ".validate": "newData.isString()" },
+        "orderId": { ".validate": "newData.isString()" },
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(initiated|device_linked|site_selected|location_set|photos_uploaded|tests_passed|completed|failed)$/)" },
+
+        "workflow": {
+          "currentStep": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10" },
+          "totalSteps": { ".validate": "newData.isNumber()" },
+          "steps": { ".validate": true }
+        },
+
+        "deviceLink": {
+          "method": { ".validate": "newData.isString() && newData.val().matches(/^(qr_scan|serial_manual)$/)" },
+          "scannedAt": { ".validate": "newData.isNumber()" },
+          "verifiedSerial": { ".validate": "newData.isString()" }
+        },
+
+        "location": {
+          "method": { ".validate": "newData.isString() && newData.val().matches(/^(gps|map_pin|address)$/)" },
+          "coordinates": {
+            "lat": { ".validate": "newData.isNumber()" },
+            "lng": { ".validate": "newData.isNumber()" },
+            "accuracy": { ".validate": "newData.isNumber()" }
+          },
+          "address": { ".validate": "newData.isString()" }
+        },
+
+        "photos": { ".validate": true },
+        "tests": { ".validate": true },
+
+        "timestamps": {
+          "initiated": { ".validate": "newData.isNumber()" },
+          "completed": { ".validate": "newData.isNumber()" },
+          "lastUpdated": { ".validate": "newData.isNumber()" }
+        }
+      }
+    },
+
+    "readings": {
+      "$deviceId": {
+        ".read": "auth != null && (root.child('devices').child($deviceId).child('ownership').child('ownerId').val() === auth.uid || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".write": false,
+
+        "$timestamp": {
+          ".validate": "newData.hasChildren(['timestamp', 'deviceId', 'sensors'])",
+          "timestamp": { ".validate": "newData.isNumber()" },
+          "deviceId": { ".validate": "newData.isString()" },
+          "siteId": { ".validate": "newData.isString()" },
+          "sensors": { ".validate": true },
+          "metadata": { ".validate": true }
+        }
+      }
+    },
+
+    "credits": {
+      ".read": "auth != null",
+      "$creditId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || data.child('ownership').child('currentOwner').val() === auth.uid || !data.exists())",
+        ".validate": "newData.hasChildren(['type', 'status'])",
+
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(nitrogen|phosphorus|stormwater|thermal)$/)" },
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(pending|verified|listed|sold|retired)$/)" },
+
+        "origin": {
+          "siteId": { ".validate": "newData.isString()" },
+          "deviceId": { ".validate": "newData.isString()" },
+          "watershed": { ".validate": "newData.isString()" },
+          "generatedFrom": { ".validate": "newData.isNumber()" },
+          "generatedTo": { ".validate": "newData.isNumber()" },
+          "methodology": { ".validate": "newData.isString()" }
+        },
+
+        "quantity": {
+          "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "unit": { ".validate": "newData.isString() && newData.val().matches(/^(lbs|kg)$/)" }
+        },
+
+        "verification": {
+          "verifiedAt": { ".validate": "newData.isNumber()" },
+          "certificateHash": { ".validate": "newData.isString()" },
+          "transactionHash": { ".validate": "newData.isString()" }
+        },
+
+        "ownership": {
+          "currentOwner": { ".validate": "newData.isString()" },
+          "originalOwner": { ".validate": "newData.isString()" },
+          "transferHistory": { ".validate": true }
+        },
+
+        "listing": {
+          "listingId": { ".validate": "newData.isString()" },
+          "price": { ".validate": "newData.isNumber()" },
+          "listedAt": { ".validate": "newData.isNumber()" }
+        }
+      }
+    },
+
+    "listings": {
+      ".read": true,
+      "$listingId": {
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || data.child('sellerId').val() === auth.uid || !data.exists())",
+        ".validate": "newData.hasChildren(['creditId', 'sellerId', 'status'])",
+
+        "creditId": { ".validate": "newData.isString()" },
+        "sellerId": { ".validate": "newData.isString()" },
+
+        "details": {
+          "creditType": { ".validate": "newData.isString()" },
+          "quantity": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "pricePerUnit": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "totalPrice": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "currency": { ".validate": "newData.isString()" },
+          "minPurchase": { ".validate": "newData.isNumber() && newData.val() > 0" }
+        },
+
+        "location": {
+          "watershed": { ".validate": "newData.isString()" },
+          "state": { ".validate": "newData.isString()" },
+          "siteId": { ".validate": "newData.isString()" },
+          "coordinates": {
+            "lat": { ".validate": "newData.isNumber()" },
+            "lng": { ".validate": "newData.isNumber()" }
+          }
+        },
+
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(active|pending|sold|expired|cancelled)$/)" },
+
+        "timestamps": {
+          "created": { ".validate": "newData.isNumber()" },
+          "updated": { ".validate": "newData.isNumber()" },
+          "expires": { ".validate": "newData.isNumber()" },
+          "sold": { ".validate": "newData.isNumber()" }
+        },
+
+        "metadata": {
+          "views": { ".validate": "newData.isNumber()" },
+          "inquiries": { ".validate": "newData.isNumber()" },
+          "featured": { ".validate": "newData.isBoolean()" }
+        }
+      }
+    },
+
+    "alerts": {
+      ".read": "auth != null",
+      "$alertId": {
+        ".read": "auth != null && (data.child('ownerId').val() === auth.uid || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || data.child('ownerId').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['deviceId', 'type', 'status'])",
+
+        "deviceId": { ".validate": "newData.isString()" },
+        "siteId": { ".validate": "newData.isString()" },
+        "ownerId": { ".validate": "newData.isString()" },
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(threshold|offline|battery|calibration)$/)" },
+        "severity": { ".validate": "newData.isString() && newData.val().matches(/^(info|warning|critical)$/)" },
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(active|acknowledged|resolved)$/)" },
+
+        "trigger": {
+          "parameter": { ".validate": "newData.isString()" },
+          "condition": { ".validate": "newData.isString() && newData.val().matches(/^(above|below)$/)" },
+          "threshold": { ".validate": "newData.isNumber()" },
+          "actualValue": { ".validate": "newData.isNumber()" }
+        },
+
+        "timestamps": {
+          "triggered": { ".validate": "newData.isNumber()" },
+          "acknowledged": { ".validate": "newData.isNumber()" },
+          "resolved": { ".validate": "newData.isNumber()" },
+          "acknowledgedBy": { ".validate": "newData.isString()" },
+          "resolvedBy": { ".validate": "newData.isString()" }
+        },
+
+        "notifications": {
+          "emailSent": { ".validate": "newData.isBoolean()" },
+          "smsSent": { ".validate": "newData.isBoolean()" },
+          "pushSent": { ".validate": "newData.isBoolean()" }
+        }
+      }
+    },
+
+    "orders": {
+      ".read": "auth != null",
+      "$orderId": {
+        ".read": "auth != null && (data.child('buyer').child('uid').val() === auth.uid || data.child('seller').child('uid').val() === auth.uid || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['type', 'status', 'buyer'])",
+
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(credit_purchase|device_purchase)$/)" },
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(pending|processing|completed|cancelled)$/)" },
+
+        "buyer": {
+          "uid": { ".validate": "newData.isString()" },
+          "email": { ".validate": "newData.isString()" },
+          "company": { ".validate": "newData.isString()" }
+        },
+
+        "seller": {
+          "uid": { ".validate": "newData.isString()" },
+          "email": { ".validate": "newData.isString()" },
+          "company": { ".validate": "newData.isString()" }
+        },
+
+        "items": { ".validate": true },
+
+        "payment": {
+          "method": { ".validate": "newData.isString() && newData.val().matches(/^(stripe|crypto)$/)" },
+          "stripePaymentIntentId": { ".validate": "newData.isString()" },
+          "amount": { ".validate": "newData.isNumber() && newData.val() > 0" },
+          "currency": { ".validate": "newData.isString()" },
+          "status": { ".validate": "newData.isString() && newData.val().matches(/^(pending|succeeded|failed)$/)" }
+        },
+
+        "timestamps": {
+          "created": { ".validate": "newData.isNumber()" },
+          "updated": { ".validate": "newData.isNumber()" },
+          "completed": { ".validate": "newData.isNumber()" }
+        }
+      }
+    },
+
+    "customers": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin'",
+      "$customerId": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin'",
+        ".validate": "newData.hasChildren(['name', 'email'])"
+      }
+    },
+
+    "syncErrors": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin'",
+      ".write": false
+    },
+
+    "installers": {
+      ".read": "auth != null",
+      "$installerId": {
+        ".write": "auth != null && (auth.uid === $installerId || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        "stats": {
+          "totalInstalls": { ".validate": "newData.isNumber()" },
+          "activeDevices": { ".validate": "newData.isNumber()" },
+          "lastInstall": { ".validate": "newData.isNumber()" }
+        }
+      }
+    }
+  }
+}

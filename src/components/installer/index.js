@@ -9,3 +9,5 @@ export { default as InstallerAssignment } from './InstallerAssignment';
 export { default as CommissionChecklist } from './CommissionChecklist';
 export { default as CommissionWorkflow } from './CommissionWorkflow';
 export { default as DeviceActivation } from './DeviceActivation';
+export { default as QRScanner } from './QRScanner';
+export { default as LocationCapture } from './LocationCapture';

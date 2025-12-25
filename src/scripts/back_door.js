@@ -1600,6 +1600,382 @@ const MarketplaceAPI = {
   },
 };
 
+/*************************QR_CODE_ENDPOINTS************************************* */
+// SECURITY: QR code operations require authentication
+
+const generateDeviceQR = async (serialNumber, deviceType) => {
+  try {
+    const response = await authPost(`${configs.server_url}/device/qr/generate`, {
+      serialNumber,
+      deviceType,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to generate QR code");
+  }
+};
+
+const batchGenerateQR = async (devices) => {
+  try {
+    const response = await authPost(`${configs.server_url}/device/qr/generate-batch`, {
+      devices,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to batch generate QR codes");
+  }
+};
+
+const validateDeviceQR = async (qrData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/device/qr/validate`, {
+      qrData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to validate QR code");
+  }
+};
+
+const registerDeviceFromQR = async (serialNumber, purchaseOrderId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/device/register`, {
+      serialNumber,
+      purchaseOrderId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to register device");
+  }
+};
+
+const QRCodeAPI = {
+  generate: generateDeviceQR,
+  batchGenerate: batchGenerateQR,
+  validate: validateDeviceQR,
+  registerDevice: registerDeviceFromQR,
+};
+
+/*************************GEOCODING_ENDPOINTS************************************* */
+
+const geocodeAddress = async (address) => {
+  try {
+    const response = await authPost(`${configs.server_url}/geocode/address`, {
+      address,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to geocode address");
+  }
+};
+
+const reverseGeocode = async (lat, lng) => {
+  try {
+    const response = await authPost(`${configs.server_url}/geocode/reverse`, {
+      lat,
+      lng,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to reverse geocode");
+  }
+};
+
+const GeocodingAPI = {
+  geocode: geocodeAddress,
+  reverse: reverseGeocode,
+};
+
+/*************************READINGS_ENDPOINTS************************************* */
+
+const getDeviceReadings = async (deviceId, limit = 100, startTime, endTime) => {
+  try {
+    const response = await authPost(`${configs.server_url}/readings/get`, {
+      deviceId,
+      limit,
+      startTime,
+      endTime,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch readings");
+  }
+};
+
+const getDeviceStats = async (deviceId, period = "day") => {
+  try {
+    const response = await authPost(`${configs.server_url}/readings/stats`, {
+      deviceId,
+      period,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch device stats");
+  }
+};
+
+const ReadingsAPI = {
+  get: getDeviceReadings,
+  stats: getDeviceStats,
+};
+
+/*************************ALERTS_ENDPOINTS************************************* */
+
+const getActiveAlerts = async (filters = {}) => {
+  try {
+    const response = await authPost(`${configs.server_url}/alerts/active`, {
+      filters,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch alerts");
+  }
+};
+
+const acknowledgeAlert = async (alertId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/alerts/acknowledge`, {
+      alertId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to acknowledge alert");
+  }
+};
+
+const resolveAlert = async (alertId, resolution) => {
+  try {
+    const response = await authPost(`${configs.server_url}/alerts/resolve`, {
+      alertId,
+      resolution,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to resolve alert");
+  }
+};
+
+const updateAlertThresholds = async (deviceId, thresholds) => {
+  try {
+    const response = await authPost(`${configs.server_url}/device/thresholds/update`, {
+      deviceId,
+      thresholds,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update thresholds");
+  }
+};
+
+const AlertsAPI = {
+  getActive: getActiveAlerts,
+  acknowledge: acknowledgeAlert,
+  resolve: resolveAlert,
+  updateThresholds: updateAlertThresholds,
+};
+
+/*************************CREDITS_MARKETPLACE_ENDPOINTS************************************* */
+
+const createCreditListing = async (creditId, quantity, pricePerUnit, minPurchase, expiresInDays) => {
+  try {
+    const response = await authPost(`${configs.server_url}/marketplace/listing/create`, {
+      creditId,
+      quantity,
+      pricePerUnit,
+      minPurchase,
+      expiresInDays,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to create listing");
+  }
+};
+
+const getCreditListing = async (listingId) => {
+  try {
+    const response = await axios.post(`${configs.server_url}/marketplace/listing/get`, {
+      listingId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch listing");
+  }
+};
+
+const searchCreditListings = async (filters = {}, sort = "created", limit = 50) => {
+  try {
+    const response = await axios.post(`${configs.server_url}/marketplace/listings/search`, {
+      filters,
+      sort,
+      limit,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to search listings");
+  }
+};
+
+const updateCreditListing = async (listingId, updateData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/marketplace/listing/update`, {
+      listingId,
+      updateData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update listing");
+  }
+};
+
+const cancelCreditListing = async (listingId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/marketplace/listing/cancel`, {
+      listingId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to cancel listing");
+  }
+};
+
+const purchaseCredits = async (listingId, quantity) => {
+  try {
+    const response = await authPost(`${configs.server_url}/marketplace/purchase`, {
+      listingId,
+      quantity,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to initiate purchase");
+  }
+};
+
+const completeCreditPurchase = async (orderId, paymentIntentId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/marketplace/purchase/complete`, {
+      orderId,
+      paymentIntentId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to complete purchase");
+  }
+};
+
+const getMarketplaceOrders = async (role = "buyer", status) => {
+  try {
+    const response = await authPost(`${configs.server_url}/marketplace/orders`, {
+      role,
+      status,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch orders");
+  }
+};
+
+const getMarketplaceStats = async () => {
+  try {
+    const response = await axios.post(`${configs.server_url}/marketplace/stats`);
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch marketplace stats");
+  }
+};
+
+const createCredit = async (creditData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/credits/create`, {
+      creditData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to create credit");
+  }
+};
+
+const getUserCredits = async (status) => {
+  try {
+    const response = await authPost(`${configs.server_url}/credits/user`, {
+      status,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch credits");
+  }
+};
+
+const CreditsMarketplaceAPI = {
+  // Listings
+  createListing: createCreditListing,
+  getListing: getCreditListing,
+  searchListings: searchCreditListings,
+  updateListing: updateCreditListing,
+  cancelListing: cancelCreditListing,
+  // Purchases
+  purchase: purchaseCredits,
+  completePurchase: completeCreditPurchase,
+  getOrders: getMarketplaceOrders,
+  // Stats & Credits
+  getStats: getMarketplaceStats,
+  createCredit,
+  getUserCredits,
+};
+
+/*************************USER_PROFILE_ENDPOINTS************************************* */
+
+const getUserProfile = async (uid) => {
+  try {
+    const response = await authPost(`${configs.server_url}/user/profile/get`, { uid });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch user profile");
+  }
+};
+
+const updateUserProfile = async (uid, profileData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/user/profile/update`, {
+      uid,
+      profileData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update profile");
+  }
+};
+
+const updateUserRole = async (targetUid, role) => {
+  try {
+    const response = await authPost(`${configs.server_url}/user/role/update`, {
+      targetUid,
+      role,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update role");
+  }
+};
+
+const completeUserOnboarding = async (uid, onboardingData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/user/onboarding/complete`, {
+      uid,
+      onboardingData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to complete onboarding");
+  }
+};
+
+const UserProfileAPI = {
+  get: getUserProfile,
+  update: updateUserProfile,
+  updateRole: updateUserRole,
+  completeOnboarding: completeUserOnboarding,
+};
+
 export {
   AccountAPI,
   UserAPI,
@@ -1618,4 +1994,11 @@ export {
   SiteAPI,
   OrderAPI,
   CommissionAPI,
+  // Backend Revolution APIs
+  QRCodeAPI,
+  GeocodingAPI,
+  ReadingsAPI,
+  AlertsAPI,
+  CreditsMarketplaceAPI,
+  UserProfileAPI,
 };

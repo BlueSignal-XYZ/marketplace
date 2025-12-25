@@ -1,7 +1,14 @@
 /**
  * BlueSignal Firebase Cloud Functions
  *
- * HubSpot CRM Integration Functions
+ * Complete Backend Implementation including:
+ * - HubSpot CRM Integration
+ * - User Authentication & Profiles
+ * - Device QR Code & Registration
+ * - Device Commissioning Workflow
+ * - Site Management & Geocoding
+ * - Sensor Data Ingestion & Alerts
+ * - Marketplace Listings & Purchases
  */
 
 const functions = require("firebase-functions");
@@ -12,8 +19,14 @@ const cors = require("cors");
 // Initialize Firebase Admin
 admin.initializeApp();
 
-// Import HubSpot functions
+// Import modules
 const hubspot = require("./hubspot");
+const auth = require("./auth");
+const qrcode = require("./qrcode");
+const commissioning = require("./commissioning");
+const sites = require("./sites");
+const readings = require("./readings");
+const marketplace = require("./marketplace");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -83,6 +96,78 @@ app.post("/hubspot/sync/batch", hubspot.batchSync);
 // Webhook endpoints
 app.post("/hubspot/webhooks/deal", hubspot.handleDealWebhook);
 app.post("/hubspot/webhooks/contact", hubspot.handleContactWebhook);
+
+// =============================================================================
+// USER PROFILE ENDPOINTS
+// =============================================================================
+
+app.post("/user/profile/get", auth.getUserProfile);
+app.post("/user/profile/update", auth.updateUserProfile);
+app.post("/user/role/update", auth.updateUserRole);
+app.post("/user/onboarding/complete", auth.completeOnboarding);
+
+// =============================================================================
+// QR CODE & DEVICE REGISTRATION ENDPOINTS
+// =============================================================================
+
+app.post("/device/qr/generate", qrcode.generateDeviceQR);
+app.post("/device/qr/generate-batch", qrcode.batchGenerateQR);
+app.post("/device/qr/validate", qrcode.validateDeviceQR);
+app.post("/device/register", qrcode.registerDevice);
+
+// =============================================================================
+// COMMISSIONING WORKFLOW ENDPOINTS
+// =============================================================================
+
+app.post("/commission/initiate", commissioning.initiateCommission);
+app.post("/commission/update-step", commissioning.updateCommissionStep);
+app.post("/commission/complete", commissioning.completeCommission);
+app.post("/commission/get", commissioning.getCommission);
+app.post("/commission/list", commissioning.listCommissions);
+app.post("/commission/cancel", commissioning.cancelCommission);
+app.post("/commission/run-tests", commissioning.runCommissionTests);
+
+// =============================================================================
+// SITE MANAGEMENT ENDPOINTS
+// =============================================================================
+
+app.post("/site/create", sites.createSite);
+app.post("/site/get", sites.getSite);
+app.post("/site/update", sites.updateSite);
+app.post("/site/list", sites.listSites);
+app.post("/site/delete", sites.deleteSite);
+app.post("/site/add-device", sites.addDeviceToSite);
+app.post("/site/remove-device", sites.removeDeviceFromSite);
+app.post("/site/update-boundary", sites.updateSiteBoundary);
+app.post("/geocode/address", sites.geocodeAddress);
+app.post("/geocode/reverse", sites.reverseGeocode);
+
+// =============================================================================
+// SENSOR READINGS & ALERTS ENDPOINTS
+// =============================================================================
+
+app.post("/readings/get", readings.getDeviceReadings);
+app.post("/readings/stats", readings.getDeviceStats);
+app.post("/alerts/active", readings.getActiveAlerts);
+app.post("/alerts/acknowledge", readings.acknowledgeAlert);
+app.post("/alerts/resolve", readings.resolveAlert);
+app.post("/device/thresholds/update", readings.updateAlertThresholds);
+
+// =============================================================================
+// MARKETPLACE ENDPOINTS
+// =============================================================================
+
+app.post("/marketplace/listing/create", marketplace.createListing);
+app.post("/marketplace/listing/get", marketplace.getListing);
+app.post("/marketplace/listing/update", marketplace.updateListing);
+app.post("/marketplace/listing/cancel", marketplace.cancelListing);
+app.post("/marketplace/listings/search", marketplace.searchListings);
+app.post("/marketplace/purchase", marketplace.purchaseCredits);
+app.post("/marketplace/purchase/complete", marketplace.completePurchase);
+app.post("/marketplace/orders", marketplace.getOrders);
+app.post("/marketplace/stats", marketplace.getMarketplaceStats);
+app.post("/credits/create", marketplace.createCredit);
+app.post("/credits/user", marketplace.getUserCredits);
 
 // Export the Express app as a Cloud Function
 exports.app = functions
@@ -434,3 +519,44 @@ exports.hubspotWebhook = functions
       res.status(500).send("Error processing webhook");
     }
   });
+
+// =============================================================================
+// AUTHENTICATION TRIGGERS
+// =============================================================================
+
+/**
+ * Trigger: User Created in Firebase Auth
+ * Creates user profile in database
+ */
+exports.onUserCreate = auth.onUserCreate;
+
+/**
+ * Trigger: User Deleted from Firebase Auth
+ * Cleans up user data
+ */
+exports.onUserDelete = auth.onUserDelete;
+
+// =============================================================================
+// SENSOR DATA INGESTION
+// =============================================================================
+
+/**
+ * HTTP Endpoint: Sensor Data Ingestion
+ * Devices POST sensor readings here (API key auth)
+ */
+exports.ingestReading = functions
+  .runWith({
+    timeoutSeconds: 60,
+    memory: "256MB",
+  })
+  .https.onRequest(readings.ingestReading);
+
+// =============================================================================
+// SCHEDULED FUNCTIONS
+// =============================================================================
+
+/**
+ * Scheduled: Device Health Check
+ * Runs every 15 minutes to monitor device connectivity
+ */
+exports.deviceHealthCheck = readings.deviceHealthCheck;
