@@ -8,6 +8,17 @@ import DeviceService from "../../services/deviceService";
 import AddDeviceModal from "./AddDeviceModal";
 import { useAppContext } from "../../context/AppContext";
 
+const ActionButtonsWrapper = styled.div`
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-direction: column;
+  }
+`;
+
 const AddDeviceButton = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
@@ -25,6 +36,32 @@ const AddDeviceButton = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
+
+const CommissionButton = styled.button`
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
+  background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
+  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary100 || "#bae6fd"};
     transform: translateY(-1px);
   }
 
@@ -404,11 +441,16 @@ export default function DevicesListPage() {
       title="Devices"
       subtitle="Monitor and manage all deployed devices"
       actions={
-        isAdmin && (
-          <AddDeviceButton onClick={() => setShowAddModal(true)}>
-            + Add Device
-          </AddDeviceButton>
-        )
+        <ActionButtonsWrapper>
+          <CommissionButton onClick={() => navigate("/cloud/commissioning/new")}>
+            Commission Device
+          </CommissionButton>
+          {isAdmin && (
+            <AddDeviceButton onClick={() => setShowAddModal(true)}>
+              + Add Device
+            </AddDeviceButton>
+          )}
+        </ActionButtonsWrapper>
       }
     >
       <Controls>

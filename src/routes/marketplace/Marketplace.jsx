@@ -1,11 +1,12 @@
 // /src/routes/marketplace/Marketplace.jsx
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getCredits } from "../../apis/creditsApi";
 import SEOHead from "../../components/seo/SEOHead";
 import { WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, createItemListSchema } from "../../components/seo/schemas";
 import { media, safeAreaInsets } from "../../styles/breakpoints";
+import { useAppContext } from "../../context/AppContext";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -191,8 +192,63 @@ const LoadingState = styled.div`
   font-size: 14px;
 `;
 
+const QuickActionsRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const PrimaryButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  }
+`;
+
+const SecondaryActionButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2fe"};
+    transform: translateY(-1px);
+  }
+`;
+
 const Marketplace = () => {
   const navigate = useNavigate();
+  const { STATES } = useAppContext();
+  const { user } = STATES || {};
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
@@ -275,6 +331,21 @@ const Marketplace = () => {
             in a transparent marketplace.
           </p>
         </HeaderBlock>
+
+        {/* Quick Actions for authenticated users */}
+        {user?.uid && (
+          <QuickActionsRow>
+            <PrimaryButton to="/marketplace/create-listing">
+              + Create Listing
+            </PrimaryButton>
+            <SecondaryActionButton to="/marketplace/seller-dashboard">
+              Seller Dashboard
+            </SecondaryActionButton>
+            <SecondaryActionButton to="/dashboard/buyer">
+              Buyer Dashboard
+            </SecondaryActionButton>
+          </QuickActionsRow>
+        )}
 
         {loading ? (
           <LoadingState>Loading listings…</LoadingState>

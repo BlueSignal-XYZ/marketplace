@@ -250,6 +250,13 @@ export function CloudMenu({ open, onClose, user }) {
                 Sites
               </NavItem>
               <NavItem
+                to="/cloud/sites/new"
+                $active={isActive("/cloud/sites/new")}
+                onClick={onClose}
+              >
+                + New Site
+              </NavItem>
+              <NavItem
                 to="/cloud/devices"
                 $active={isActive("/cloud/devices")}
                 onClick={onClose}
@@ -262,6 +269,13 @@ export function CloudMenu({ open, onClose, user }) {
                 onClick={onClose}
               >
                 Commissioning
+              </NavItem>
+              <NavItem
+                to="/cloud/commissioning/new"
+                $active={isActive("/cloud/commissioning/new")}
+                onClick={onClose}
+              >
+                + New Commission
               </NavItem>
               <NavItem
                 to="/cloud/alerts"

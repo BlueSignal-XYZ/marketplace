@@ -202,6 +202,41 @@ export const signedUser = '0x94439f811328BAD743F68C26b5bF5B0A67b3b1df';
 
 //USE API
 /** IMPLEMENT MARKETPLACE FUNCTIONALITY */
+const CreateListingButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  border: none;
+  background: ${colors.deepBlue};
+  color: ${colors.white};
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  margin-bottom: 24px;
+
+  &:hover {
+    background: ${colors.lightBlue};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 189, 186, 0.3);
+  }
+`;
+
+const QuickActionsBar = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 12px;
+  }
+`;
+
 const SellerDashboard = () => {
   const { STATES, ACTIONS } = useAppContext();
   const navigate = useNavigate();
@@ -389,6 +424,11 @@ const SellerDashboard = () => {
 
   return (
     <DashboardPage>
+      <QuickActionsBar>
+        <CreateListingButton onClick={() => navigate("/marketplace/create-listing")}>
+          + Create New Listing
+        </CreateListingButton>
+      </QuickActionsBar>
       <Tabs>
       <StyledTabList>
         <Badge>Owned</Badge>

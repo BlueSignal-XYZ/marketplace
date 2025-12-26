@@ -1,6 +1,7 @@
 // /src/components/cloud/CommissioningPage.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import FilterPills from "../shared/FilterPills/FilterPills";
@@ -407,11 +408,43 @@ const WebUILink = styled.a`
   }
 `;
 
+const StartNewButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  min-height: 44px;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
+
 /* -------------------------------------------------------------------------- */
 /*                              MAIN COMPONENT                                */
 /* -------------------------------------------------------------------------- */
 
 export default function CommissioningPage() {
+  const navigate = useNavigate();
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commissioningDevice, setCommissioningDevice] = useState(null);
@@ -561,6 +594,11 @@ export default function CommissioningPage() {
     <CloudPageLayout
       title="Commissioning"
       subtitle="Field-ready device commissioning wizard"
+      actions={
+        <StartNewButton onClick={() => navigate("/cloud/commissioning/new")}>
+          + Start New Commission
+        </StartNewButton>
+      }
     >
       {/* Filter Pills */}
       <FilterPills

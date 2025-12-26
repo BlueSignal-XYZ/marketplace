@@ -276,6 +276,17 @@ const EmptyState = styled.div`
   font-size: 14px;
 `;
 
+const QuickActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
 const CTAButton = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -290,12 +301,32 @@ const CTAButton = styled(Link)`
   cursor: pointer;
   text-decoration: none;
   transition: all 0.15s ease-out;
-  margin-bottom: 24px;
 
   &:hover {
     background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  }
+`;
+
+const SecondaryButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2fe"};
+    transform: translateY(-1px);
   }
 `;
 
@@ -403,10 +434,18 @@ export default function OverviewDashboard() {
         canonical="/dashboard/main"
         noindex={true}
       />
-      {/* CTA Button */}
-      <CTAButton to="/cloud/commissioning">
-        + Commission New Device
-      </CTAButton>
+      {/* Quick Action Buttons */}
+      <QuickActions>
+        <CTAButton to="/cloud/commissioning/new">
+          + Commission Device
+        </CTAButton>
+        <SecondaryButton to="/cloud/sites/new">
+          + Add Site
+        </SecondaryButton>
+        <SecondaryButton to="/cloud/devices">
+          View All Devices
+        </SecondaryButton>
+      </QuickActions>
 
       {/* Top Metrics Row */}
       <Grid>
