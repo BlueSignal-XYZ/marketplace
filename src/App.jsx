@@ -52,6 +52,7 @@ import {
 import {
   SellerDashboard,
   ListingPage,
+  CreateListingPage,
 } from "./components/elements/marketplace";
 
 import { Livepeer } from "./components/elements/livepeer";
@@ -79,10 +80,14 @@ import DevicesListPage from "./components/cloud/DevicesListPage";
 import DeviceDetailPage from "./components/cloud/DeviceDetailPage";
 import SitesListPage from "./components/cloud/SitesListPage";
 import SiteDetailPage from "./components/cloud/SiteDetailPage";
+import CreateSitePage from "./components/cloud/CreateSitePage";
 import CommissioningPage from "./components/cloud/CommissioningPage";
+import FullCommissioningWizard from "./components/cloud/FullCommissioningWizard";
 import AlertsPage from "./components/cloud/AlertsPage";
 import AlertDetailPage from "./components/cloud/AlertDetailPage";
 import DeviceOnboardingWizard from "./components/cloud/DeviceOnboardingWizard";
+import ProfilePage from "./components/cloud/ProfilePage";
+import OnboardingWizard from "./components/cloud/OnboardingWizard";
 
 import {
   CloudNutrientCalculator,
@@ -457,10 +462,37 @@ const CloudRoutes = ({ user, authLoading }) => (
     />
 
     <Route
+      path="/cloud/sites/new"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <CreateSitePage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
       path="/cloud/sites/:siteId"
       element={
         <CloudAuthGate authLoading={authLoading}>
           <SiteDetailPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/profile"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <ProfilePage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/onboarding"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <OnboardingWizard />
         </CloudAuthGate>
       }
     />
@@ -497,6 +529,15 @@ const CloudRoutes = ({ user, authLoading }) => (
       element={
         <CloudAuthGate authLoading={authLoading}>
           <CommissioningPage />
+        </CloudAuthGate>
+      }
+    />
+
+    <Route
+      path="/cloud/commissioning/new"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <FullCommissioningWizard />
         </CloudAuthGate>
       }
     />
@@ -703,6 +744,10 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
         <Route
           path="/marketplace/seller-dashboard"
           element={<SellerDashboard />}
+        />
+        <Route
+          path="/marketplace/create-listing"
+          element={<CreateListingPage />}
         />
         <Route path="/dashboard/financial" element={<FinancialDashboard />} />
       </>

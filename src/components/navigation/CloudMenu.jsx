@@ -306,6 +306,21 @@ export function CloudMenu({ open, onClose, user }) {
           </>
         )}
 
+        {user?.uid && (
+          <>
+            <SectionLabel>Account</SectionLabel>
+            <NavList>
+              <NavItem
+                to="/cloud/profile"
+                $active={isActive("/cloud/profile")}
+                onClick={onClose}
+              >
+                Profile Settings
+              </NavItem>
+            </NavList>
+          </>
+        )}
+
         <SmallText>
           Signed in as{" "}
           <strong>{user?.email || user?.username || "guest"}</strong>.

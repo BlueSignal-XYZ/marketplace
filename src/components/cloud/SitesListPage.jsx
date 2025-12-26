@@ -1,9 +1,38 @@
 // /src/components/cloud/SitesListPage.jsx
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import SiteCard from "./SiteCard";
 import CloudMockAPI from "../../services/cloudMockAPI";
+import { GeocodingAPI } from "../../scripts/back_door";
+import { useAppContext } from "../../context/AppContext";
+
+const CreateSiteButton = styled.button`
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
 
 const Controls = styled.div`
   display: flex;
@@ -124,6 +153,10 @@ const Skeleton = styled.div`
 `;
 
 export default function SitesListPage() {
+  const navigate = useNavigate();
+  const { STATES } = useAppContext();
+  const { user } = STATES || {};
+
   const [sites, setSites] = useState([]);
   const [filteredSites, setFilteredSites] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -132,7 +165,7 @@ export default function SitesListPage() {
 
   useEffect(() => {
     loadSites();
-  }, []);
+  }, [user?.uid]);
 
   useEffect(() => {
     applyFilters();
@@ -141,7 +174,15 @@ export default function SitesListPage() {
   const loadSites = async () => {
     setLoading(true);
     try {
-      const data = await CloudMockAPI.sites.getAll();
+      // Try real API first, fall back to mock
+      let data = [];
+      try {
+        const response = await GeocodingAPI.listSites({ ownerId: user?.uid });
+        data = response.sites || [];
+      } catch (apiErr) {
+        console.log("API unavailable, using mock data:", apiErr);
+        data = await CloudMockAPI.sites.getAll();
+      }
       setSites(data);
     } catch (error) {
       console.error("Error loading sites:", error);
@@ -191,6 +232,11 @@ export default function SitesListPage() {
     <CloudPageLayout
       title="Sites"
       subtitle="Manage all monitoring locations"
+      actions={
+        <CreateSiteButton onClick={() => navigate("/cloud/sites/new")}>
+          + Create Site
+        </CreateSiteButton>
+      }
     >
       <Controls>
         <SearchBar

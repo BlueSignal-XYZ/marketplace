@@ -290,11 +290,25 @@ export function MarketplaceMenu({ open, onClose, user }) {
             <SectionLabel>Account</SectionLabel>
             <NavList>
               <NavItem
+                to="/dashboard/buyer"
+                $active={isActive("/dashboard/buyer")}
+                onClick={onClose}
+              >
+                My Dashboard
+              </NavItem>
+              <NavItem
                 to="/marketplace/seller-dashboard"
                 $active={isActive("/marketplace/seller-dashboard")}
                 onClick={onClose}
               >
                 Seller Dashboard
+              </NavItem>
+              <NavItem
+                to="/marketplace/create-listing"
+                $active={isActive("/marketplace/create-listing")}
+                onClick={onClose}
+              >
+                Create Listing
               </NavItem>
               <NavItem
                 to="/dashboard/financial"
