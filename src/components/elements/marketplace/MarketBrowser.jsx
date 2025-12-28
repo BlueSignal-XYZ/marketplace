@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { NFTCard } from "./elements";
 import { useNavigate } from "react-router-dom";
 import { MarketplaceAPI } from "../../../scripts/back_door";
+import { ListingCardSkeleton } from "../../shared/Skeleton/Skeleton";
 
 export const NFTGrid = styled.div`
   display: grid;
@@ -22,49 +23,32 @@ export const NFTGrid = styled.div`
   }
 `;
 
-const LoadingIndicator = styled.div`
-  border: 5px solid ${({ theme }) => theme.colors.ui200};
-  border-top: 5px solid ${({ theme }) => theme.colors.ui800};
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 0.8s linear infinite;
-  margin: auto;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;
-
 const ErrorMsg = styled.p`
-  color: red;
+  color: ${({ theme }) => theme.colors?.red500 || "#EF4444"};
   text-align: center;
+  padding: 24px;
+  background: ${({ theme }) => theme.colors?.red50 || "#FEF2F2"};
+  border-radius: 12px;
+  margin: 0 20px;
 `;
 
-const StyledLoading = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .loading-text {
-    font-weight: 500;
-    color: ${({ theme }) => theme.colors.ui800};
-    text-align: center;
-    margin-top: 8px;
-    font-size: 14px;
-  }
-`;
-
-const EmptyState = styled.p`
+const EmptyState = styled.div`
   text-align: center;
   color: ${({ theme }) => theme.colors.ui600};
   font-size: 14px;
+  padding: 48px 24px;
+  grid-column: 1 / -1;
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.ui700};
+    margin: 0 0 8px;
+  }
+
+  p {
+    margin: 0;
+  }
 `;
 
 const MarketBrowser = () => {
@@ -95,24 +79,24 @@ const MarketBrowser = () => {
     }
   };
 
-  if (loading)
-    return (
-      <StyledLoading>
-        <LoadingIndicator />
-        <div className="loading-text">Loading items…</div>
-      </StyledLoading>
-    );
-
   if (error) return <ErrorMsg>Error: {error}</ErrorMsg>;
 
   return (
     <NFTGrid>
-      {nfts?.length > 0 ? (
+      {loading ? (
+        // Show skeleton cards while loading
+        Array.from({ length: 6 }).map((_, i) => (
+          <ListingCardSkeleton key={i} />
+        ))
+      ) : nfts?.length > 0 ? (
         nfts.map((nft, index) => (
           <NFTCard key={index} nft={nft} navigate={navigate} />
         ))
       ) : (
-        <EmptyState>No assets available.</EmptyState>
+        <EmptyState>
+          <h4>No listings available</h4>
+          <p>Check back soon for new water quality credits.</p>
+        </EmptyState>
       )}
     </NFTGrid>
   );

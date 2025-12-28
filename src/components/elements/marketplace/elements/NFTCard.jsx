@@ -4,24 +4,30 @@ import styled from "styled-components";
 import { formatLongString } from "../../../../scripts/utils";
 import placeholderIMG from "../../../../assets/icon.png";
 import { ButtonPrimary } from "../../../shared/button/Button";
+import { hoverLift } from "../../../../styles/animations";
 
 const Card = styled.div`
   background: white;
   border: 1px solid ${({ theme }) => theme.colors.ui200};
-  border-radius: ${({ theme }) => theme.borderRadius.default};
+  border-radius: ${({ theme }) => theme.borderRadius.md || "16px"};
   padding: 18px;
   box-sizing: border-box;
-  transition: all 0.15s ease-out;
   cursor: pointer;
 
   display: flex;
   flex-direction: column;
   gap: 12px;
 
+  /* Enhanced hover effect */
+  ${hoverLift}
+
   &:hover {
-    border-color: ${({ theme }) => theme.colors.ui300};
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-    transform: translateY(-2px);
+    border-color: ${({ theme }) => theme.colors.primary300 || "#5DC9CC"};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary400 || "#38BDBE"};
+    outline-offset: 2px;
   }
 
   .upper-section {
