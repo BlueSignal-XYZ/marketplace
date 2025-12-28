@@ -288,6 +288,56 @@ const EmptyState = styled.div`
   }
 `;
 
+const FleetSummary = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+`;
+
+const SummaryCard = styled.div`
+  background: #ffffff;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: ${({ $variant }) =>
+      $variant === "online"
+        ? "#dcfce7"
+        : $variant === "warning"
+        ? "#fef3c7"
+        : $variant === "offline"
+        ? "#fee2e2"
+        : "#f3f4f6"};
+  }
+
+  .content {
+    flex: 1;
+
+    .value {
+      font-size: 20px;
+      font-weight: 700;
+      color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    }
+
+    .label {
+      font-size: 12px;
+      color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    }
+  }
+`;
+
 const Skeleton = styled.div`
   background: linear-gradient(
     90deg,
@@ -422,6 +472,15 @@ export default function DevicesListPage() {
     return "online";
   };
 
+  // Calculate fleet stats
+  const fleetStats = {
+    total: devices.length,
+    online: devices.filter((d) => d.status === "online").length,
+    warning: devices.filter((d) => d.status === "warning").length,
+    offline: devices.filter((d) => d.status === "offline").length,
+    lowBattery: devices.filter((d) => d.batteryLevel != null && d.batteryLevel < 20).length,
+  };
+
   const uniqueTypes = [...new Set(devices.map((d) => d.deviceType).filter(Boolean))];
   const uniqueLifecycles = [...new Set(devices.map((d) => d.lifecycle).filter(Boolean))];
 
@@ -453,6 +512,49 @@ export default function DevicesListPage() {
         </ActionButtonsWrapper>
       }
     >
+      {/* Fleet Summary Cards */}
+      {devices.length > 0 && (
+        <FleetSummary>
+          <SummaryCard $variant="total">
+            <div className="icon">📊</div>
+            <div className="content">
+              <div className="value">{fleetStats.total}</div>
+              <div className="label">Total Devices</div>
+            </div>
+          </SummaryCard>
+          <SummaryCard $variant="online">
+            <div className="icon">✓</div>
+            <div className="content">
+              <div className="value">{fleetStats.online}</div>
+              <div className="label">Online</div>
+            </div>
+          </SummaryCard>
+          <SummaryCard $variant="warning">
+            <div className="icon">●</div>
+            <div className="content">
+              <div className="value">{fleetStats.warning}</div>
+              <div className="label">Warning</div>
+            </div>
+          </SummaryCard>
+          <SummaryCard $variant="offline">
+            <div className="icon">!</div>
+            <div className="content">
+              <div className="value">{fleetStats.offline}</div>
+              <div className="label">Offline</div>
+            </div>
+          </SummaryCard>
+          {fleetStats.lowBattery > 0 && (
+            <SummaryCard $variant="warning">
+              <div className="icon">🔋</div>
+              <div className="content">
+                <div className="value">{fleetStats.lowBattery}</div>
+                <div className="label">Low Battery</div>
+              </div>
+            </SummaryCard>
+          )}
+        </FleetSummary>
+      )}
+
       <Controls>
         <SearchBar
           type="text"

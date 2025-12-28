@@ -403,7 +403,7 @@ const CloudRoutes = ({ user, authLoading }) => (
   <Routes>
     <Route path="/" element={<CloudLanding user={user} authLoading={authLoading} />} />
 
-    {/* All dashboard routes ALWAYS registered */}
+    {/* Main dashboard */}
     <Route
       path="/dashboard/main"
       element={
@@ -413,24 +413,7 @@ const CloudRoutes = ({ user, authLoading }) => (
       }
     />
 
-    <Route
-      path="/dashboard/buyer"
-      element={
-        <CloudAuthGate authLoading={authLoading}>
-          <BuyerDashboard />
-        </CloudAuthGate>
-      }
-    />
-
-    <Route
-      path="/dashboard/seller"
-      element={
-        <CloudAuthGate authLoading={authLoading}>
-          <SellerDashboard_Role />
-        </CloudAuthGate>
-      }
-    />
-
+    {/* Role-specific dashboards - only installer belongs on Cloud */}
     <Route
       path="/dashboard/installer"
       element={
@@ -439,6 +422,9 @@ const CloudRoutes = ({ user, authLoading }) => (
         </CloudAuthGate>
       }
     />
+
+    {/* Buyer/seller dashboards removed - they belong on WQT marketplace */}
+    {/* Users accessing these routes will fall through to the catch-all */}
 
     <Route
       path="/dashboard/:dashID"
