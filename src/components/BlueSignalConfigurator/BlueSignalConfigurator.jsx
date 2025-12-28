@@ -74,6 +74,8 @@ import {
   BundlesSection,
   // CTA
   BlueSignalCTA,
+  // Landing
+  SalesLandingHero,
 } from "./components";
 
 // Tab configuration - Enhanced with new tabs
@@ -111,6 +113,15 @@ export default function BlueSignalConfigurator() {
 
   // Bundles state
   const [showBundles, setShowBundles] = useState(false);
+
+  // Landing page state - show landing for new visitors
+  const [showLanding, setShowLanding] = useState(() => {
+    // Check if user has seen the configurator before
+    const hasVisited = localStorage.getItem("sales_configurator_visited");
+    // Also check URL - if there's a hash or quote params, go straight to configurator
+    const hasDeepLink = window.location.hash || window.location.search.includes("quote=");
+    return !hasVisited && !hasDeepLink;
+  });
 
   const containerRef = useRef(null);
   const productIds = Object.keys(PRODUCTS);
@@ -378,6 +389,26 @@ export default function BlueSignalConfigurator() {
     setQuoteItems([]);
   };
 
+  const loadQuote = (items) => {
+    // Validate items exist in PRODUCTS before loading
+    const validItems = items.filter((item) => PRODUCTS[item.productId]);
+    setQuoteItems(validItems);
+  };
+
+  // Landing page handlers
+  const handleGetStarted = () => {
+    localStorage.setItem("sales_configurator_visited", "true");
+    setShowLanding(false);
+  };
+
+  const handleWatchDemo = () => {
+    // Could open a video modal or link to demo
+    // For now, go to benchmark view which shows capabilities
+    localStorage.setItem("sales_configurator_visited", "true");
+    setShowLanding(false);
+    setView("benchmark");
+  };
+
   const isInQuote = (productId) => {
     return quoteItems.some((item) => item.productId === productId);
   };
@@ -455,6 +486,15 @@ export default function BlueSignalConfigurator() {
         keywords="water quality sensors, smart buoys, lake monitoring, pond monitoring, NPK sensors, water monitoring hardware"
         jsonLd={[BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, ...(productSchema ? [productSchema] : [])]}
       />
+
+      {/* Landing Hero for new visitors */}
+      {showLanding && (
+        <SalesLandingHero
+          onGetStarted={handleGetStarted}
+          onWatchDemo={handleWatchDemo}
+        />
+      )}
+
       <Container>
         {/* Compact header for sales mode */}
         <div style={{
@@ -791,6 +831,7 @@ export default function BlueSignalConfigurator() {
         onClearQuote={clearQuote}
         onExportPDF={openQuotePDFModal}
         onShareQuote={copyShareableLink}
+        onLoadQuote={loadQuote}
         products={PRODUCTS}
       />
 
