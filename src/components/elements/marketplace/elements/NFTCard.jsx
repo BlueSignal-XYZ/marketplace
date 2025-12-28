@@ -10,19 +10,21 @@ const Card = styled.div`
   background: white;
   border: 1px solid ${({ theme }) => theme.colors.ui200};
   border-radius: ${({ theme }) => theme.borderRadius.md || "16px"};
-  padding: 18px;
+  /* Standardized card padding from UI audit */
+  padding: ${({ theme }) => theme.spacing?.card || "24px"};
   box-sizing: border-box;
   cursor: pointer;
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 
   /* Enhanced hover effect */
   ${hoverLift}
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary300 || "#5DC9CC"};
+    box-shadow: 0 4px 12px rgba(29, 112, 114, 0.1);
   }
 
   &:focus-visible {
@@ -33,16 +35,21 @@ const Card = styled.div`
   .upper-section {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
   }
 
   @media (max-width: 768px) {
     width: 100%;
+    padding: 20px;
   }
 
   @media (max-width: 480px) {
+    padding: 16px;
+    gap: 12px;
+
     .upper-section {
       align-items: flex-start;
+      gap: 12px;
     }
   }
 `;
@@ -101,9 +108,8 @@ const NFTCard = ({ nft, navigate }) => (
     </div>
 
     <NFTInfo>
-      {/* <Seller>Seller: {formatLongString(nft.seller)}</Seller> */}
-      <Seller>Seller: NeptuneChain*</Seller>
-      <Seller>Available: {Math.round(Math.random() * 100)}</Seller>
+      <Seller>Seller: {nft.sellerName || formatLongString(nft.seller)}</Seller>
+      <Seller>Available: {nft.available || Math.round(Math.random() * 100)}</Seller>
     </NFTInfo>
 
     <ButtonPrimary onClick={() => navigate(`listing/${nft.listingId}`)}>

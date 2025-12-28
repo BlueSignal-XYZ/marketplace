@@ -98,7 +98,7 @@ function createLinkedInShareLink(url, title, summary) {
   )}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`;
 }
 
-const shareText = "My NeptuneChain Certificate";
+const shareText = "My Water Quality Credit Certificate";
 
 const CertificatePage = () => {
   const { id } = useParams();

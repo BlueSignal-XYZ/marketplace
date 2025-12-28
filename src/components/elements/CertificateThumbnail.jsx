@@ -84,8 +84,8 @@ const CertificateThumbnail = ({ certificate }) => {
   return (
     <Card href={`/certificate?id=${id}`} target="blank">
       <CardWrapper>
-        <Logo src={icon} alt="NeptuneChain Icon" loading="lazy" />
-        <Title>NEPTUNECHAIN.IO</Title>
+        <Logo src={icon} alt="WaterQuality.Trading Icon" loading="lazy" />
+        <Title>WATERQUALITY.TRADING</Title>
         <Description>Nutrient Pollution Removal Certificate</Description>
         <p>{producer?.toUpperCase()}</p>
         <Value>{balance} NPCs</Value>

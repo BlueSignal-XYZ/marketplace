@@ -78,17 +78,13 @@ import {
   SalesLandingHero,
 } from "./components";
 
-// Tab configuration - Enhanced with new tabs
+// Tab configuration - Consolidated for cleaner UX (per UI audit)
+// Previous 9 tabs consolidated to 4 main categories
 const TABS = [
-  { id: "overview", label: "Overview" },
-  { id: "specs", label: "Specs" },
-  { id: "enclosure", label: "Enclosure" },
-  { id: "layout", label: "Layout" },
-  { id: "wiring", label: "Wiring" },
-  { id: "power", label: "Power" },
-  { id: "install", label: "Install" },
-  { id: "ops", label: "Operations" },
-  { id: "bom", label: "BOM" },
+  { id: "overview", label: "Overview", description: "Product summary, features, and key specs" },
+  { id: "technical", label: "Technical", description: "Specs, wiring, layout, and enclosure details" },
+  { id: "install", label: "Install", description: "Installation guides and operational setup" },
+  { id: "pricing", label: "Pricing", description: "BOM, pricing breakdown, and quote options" },
 ];
 
 export default function BlueSignalConfigurator() {
@@ -443,21 +439,37 @@ export default function BlueSignalConfigurator() {
     switch (activeTab) {
       case "overview":
         return <OverviewTab product={product} />;
-      case "specs":
-        return <SpecsTab product={product} />;
-      case "enclosure":
-        return <EnclosureTab product={product} />;
-      case "layout":
-        return <LayoutTab product={product} />;
-      case "wiring":
-        return <WiringTab product={product} />;
-      case "power":
-        return <PowerTab product={product} />;
+      case "technical":
+        // Consolidated technical tab: Specs + Wiring + Layout + Power + Enclosure
+        return (
+          <>
+            <SpecsTab product={product} />
+            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <WiringTab product={product} />
+            </div>
+            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <LayoutTab product={product} />
+            </div>
+            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <PowerTab product={product} />
+            </div>
+            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <EnclosureTab product={product} />
+            </div>
+          </>
+        );
       case "install":
-        return <EnhancedInstallationTab product={product} />;
-      case "ops":
-        return <OperationsTab product={product} />;
-      case "bom":
+        // Consolidated install tab: Installation + Operations
+        return (
+          <>
+            <EnhancedInstallationTab product={product} />
+            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <OperationsTab product={product} />
+            </div>
+          </>
+        );
+      case "pricing":
+        // Pricing tab with enhanced BOM
         return <EnhancedBomTab product={product} />;
       default:
         return <OverviewTab product={product} />;
@@ -774,7 +786,7 @@ export default function BlueSignalConfigurator() {
 
             <KeyboardHint>
               <kbd>←</kbd><kbd>→</kbd> Navigate products |
-              <kbd>1</kbd>-<kbd>9</kbd> Switch tabs |
+              <kbd>1</kbd>-<kbd>4</kbd> Switch tabs |
               <kbd>C</kbd> Compare mode |
               <kbd>Esc</kbd> Exit
             </KeyboardHint>
