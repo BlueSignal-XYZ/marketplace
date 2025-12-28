@@ -215,6 +215,37 @@ const LogoutButton = styled.button`
   }
 `;
 
+const ExternalLink = styled.a`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  min-height: 44px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors?.ui600 || "#4B5563"};
+  background: transparent;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s ease-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
+    color: ${({ theme }) => theme.colors?.primary600 || "#0F393A"};
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const ExternalIcon = styled.span`
+  font-size: 14px;
+  opacity: 0.6;
+`;
+
 export function CloudMenu({ open, onClose, user }) {
   const location = useLocation();
   const { ACTIONS } = useAppContext();
@@ -368,6 +399,28 @@ export function CloudMenu({ open, onClose, user }) {
             </NavList>
           </>
         )}
+
+        <SectionLabel>WaterQuality.Trading</SectionLabel>
+        <NavList>
+          <ExternalLink
+            href="https://waterquality.trading"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+          >
+            Credit Marketplace
+            <ExternalIcon>↗</ExternalIcon>
+          </ExternalLink>
+          <ExternalLink
+            href="https://sales.bluesignal.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+          >
+            Get a Quote
+            <ExternalIcon>↗</ExternalIcon>
+          </ExternalLink>
+        </NavList>
 
         <SmallText>
           Signed in as{" "}
