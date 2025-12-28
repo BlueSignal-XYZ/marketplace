@@ -42,33 +42,64 @@ export const ButtonPrimary = styled(Button)`
     theme.gradients?.primaryLight ||
     "linear-gradient(135deg, #38BDBE 0%, #1D7072 100%)"};
   color: white;
-  box-shadow: 0 2px 8px rgba(29, 112, 114, 0.25),
-    0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 8px rgba(29, 112, 114, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
+  /* Shine overlay */
   &::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    height: 50%;
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0) 50%
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
     );
     pointer-events: none;
+    border-radius: inherit;
+  }
+
+  /* Ripple effect base */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.4s ease-out;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:active:not(:disabled)::after {
+    width: 200%;
+    height: 200%;
+    opacity: 1;
+    transition: 0s;
   }
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(29, 112, 114, 0.35),
-      0 2px 6px rgba(0, 0, 0, 0.12);
+    box-shadow:
+      0 6px 20px rgba(29, 112, 114, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 1px 4px rgba(29, 112, 114, 0.2);
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+      0 1px 4px rgba(29, 112, 114, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   &:disabled {
@@ -76,6 +107,10 @@ export const ButtonPrimary = styled(Button)`
     color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
     box-shadow: none;
     cursor: not-allowed;
+
+    &::before, &::after {
+      display: none;
+    }
   }
 `;
 

@@ -4,7 +4,9 @@ import styled, { css } from "styled-components";
 // Enhanced Input with modern styling
 export const Input = styled.input`
   background: ${({ theme, error }) =>
-    error ? theme.colors?.red50 || "#FEF2F2" : "#FFFFFF"};
+    error
+      ? `linear-gradient(180deg, ${theme.colors?.red50 || "#FEF2F2"} 0%, #FFFFFF 100%)`
+      : "linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%)"};
   height: ${({ theme }) => theme.formHeightMd || "44px"};
   padding: 0px 16px;
   border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
@@ -19,13 +21,19 @@ export const Input = styled.input`
         ? theme.colors?.red300 || "#FCA5A5"
         : theme.colors?.ui200 || "#E5E7EB"};
   transition: all 0.2s ease-out;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    inset 0 1px 2px rgba(0, 0, 0, 0.02);
 
   &:hover:not(:disabled):not(:focus) {
     border-color: ${({ theme, error }) =>
       error
         ? theme.colors?.red400 || "#F87171"
         : theme.colors?.ui300 || "#D1D5DB"};
+    background: ${({ error }) =>
+      error
+        ? "linear-gradient(180deg, #FEF2F2 0%, #FFFFFF 100%)"
+        : "linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)"};
   }
 
   &:focus {
@@ -34,11 +42,14 @@ export const Input = styled.input`
       error
         ? theme.colors?.red500 || "#EF4444"
         : theme.colors?.primary400 || "#38BDBE"};
-    box-shadow: 0 0 0 3px
-      ${({ theme, error }) =>
-        error
-          ? "rgba(239, 68, 68, 0.15)"
-          : "rgba(56, 189, 190, 0.15)"};
+    background: #FFFFFF;
+    box-shadow:
+      0 0 0 3px
+        ${({ error }) =>
+          error
+            ? "rgba(239, 68, 68, 0.12)"
+            : "rgba(56, 189, 190, 0.12)"},
+      0 1px 2px rgba(0, 0, 0, 0.02);
   }
 
   &:disabled {
@@ -46,11 +57,20 @@ export const Input = styled.input`
     color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
     cursor: not-allowed;
     border-color: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
+    box-shadow: none;
   }
 
   &::placeholder {
     color: ${({ theme }) => theme.colors?.ui400 || "#9CA3AF"};
     font-weight: 400;
+  }
+
+  /* Autofill styling */
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset;
+    -webkit-text-fill-color: ${({ theme }) => theme.colors?.ui800 || "#1F2937"};
   }
 `;
 
