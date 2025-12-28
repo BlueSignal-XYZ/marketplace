@@ -8,3 +8,4 @@ export { QuoteBuilder, QuoteFloatingButton, AddToQuoteBtn } from './QuoteBuilder
 export { default as BundlesSection } from './BundlesSection';
 export { default as EnclosureComparisonView } from './EnclosureComparisonView';
 export { CustomerNameModal } from './CustomerNameModal';
+export { default as SalesLandingHero } from './SalesLandingHero';
