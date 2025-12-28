@@ -276,6 +276,202 @@ const EmptyState = styled.div`
   font-size: 14px;
 `;
 
+const WelcomeBanner = styled.div`
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  .welcome-content {
+    flex: 1;
+    min-width: 200px;
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  .welcome-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+`;
+
+const WelcomeButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+const WelcomePrimaryButton = styled(WelcomeButton)`
+  background: #ffffff;
+  color: #0369a1;
+  border-color: #ffffff;
+
+  &:hover {
+    background: #f0f9ff;
+  }
+`;
+
+const DismissButton = styled.button`
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 18px;
+  line-height: 1;
+
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
+const HealthSummary = styled.div`
+  background: #ffffff;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+
+  .health-status {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .health-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: ${({ $status }) =>
+        $status === "excellent"
+          ? "#dcfce7"
+          : $status === "good"
+          ? "#fef9c3"
+          : "#fee2e2"};
+    }
+
+    .health-text {
+      h3 {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0 0 4px;
+        color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+      }
+
+      p {
+        font-size: 13px;
+        margin: 0;
+        color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+      }
+    }
+  }
+
+  .health-metrics {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+
+    .metric {
+      text-align: center;
+
+      .value {
+        font-size: 24px;
+        font-weight: 700;
+        color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+      }
+
+      .label {
+        font-size: 12px;
+        color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+`;
+
+const CrossSiteLink = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+  }
+
+  .link-icon {
+    font-size: 24px;
+  }
+
+  .link-content {
+    flex: 1;
+
+    .link-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .link-subtitle {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+  }
+
+  .link-arrow {
+    font-size: 18px;
+    opacity: 0.8;
+  }
+`;
+
 const QuickActions = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -358,10 +554,51 @@ export default function OverviewDashboard() {
   const [recentCommissioning, setRecentCommissioning] = useState([]);
   const [todayTasks, setTodayTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(() => {
+    // Show welcome banner if user hasn't dismissed it
+    return !localStorage.getItem("cloud_welcome_dismissed");
+  });
 
   useEffect(() => {
     loadDashboardData();
   }, []);
+
+  const dismissWelcome = () => {
+    localStorage.setItem("cloud_welcome_dismissed", "true");
+    setShowWelcome(false);
+  };
+
+  // Calculate fleet health status
+  const getFleetHealth = () => {
+    if (!stats || stats.totalDevices === 0) {
+      return { status: "none", message: "No devices configured", icon: "📡" };
+    }
+
+    const onlinePercent = (stats.onlineDevices / stats.totalDevices) * 100;
+    const hasAlerts = stats.openAlerts > 0;
+
+    if (onlinePercent >= 95 && !hasAlerts) {
+      return {
+        status: "excellent",
+        message: "All systems operational",
+        icon: "✓",
+      };
+    } else if (onlinePercent >= 80) {
+      return {
+        status: "good",
+        message: hasAlerts
+          ? `${stats.openAlerts} alert${stats.openAlerts > 1 ? "s" : ""} need attention`
+          : "Most devices online",
+        icon: "●",
+      };
+    } else {
+      return {
+        status: "warning",
+        message: "Multiple devices need attention",
+        icon: "!",
+      };
+    }
+  };
 
   const loadDashboardData = async () => {
     setLoading(true);
@@ -434,6 +671,79 @@ export default function OverviewDashboard() {
         canonical="/dashboard/main"
         noindex={true}
       />
+
+      {/* First-time user welcome banner */}
+      {showWelcome && (
+        <WelcomeBanner>
+          <div className="welcome-content">
+            <h2>Welcome to BlueSignal Cloud</h2>
+            <p>
+              Monitor your water quality devices, manage sites, and track
+              performance all in one place.
+            </p>
+          </div>
+          <div className="welcome-actions">
+            <WelcomePrimaryButton to="/cloud/onboarding">
+              Get Started
+            </WelcomePrimaryButton>
+            <WelcomeButton to="/cloud/devices/new">Add Device</WelcomeButton>
+            <DismissButton onClick={dismissWelcome} title="Dismiss">
+              ×
+            </DismissButton>
+          </div>
+        </WelcomeBanner>
+      )}
+
+      {/* Fleet Health Summary */}
+      {stats && stats.totalDevices > 0 && (
+        <HealthSummary $status={getFleetHealth().status}>
+          <div className="health-status">
+            <div className="health-icon">{getFleetHealth().icon}</div>
+            <div className="health-text">
+              <h3>Fleet Health</h3>
+              <p>{getFleetHealth().message}</p>
+            </div>
+          </div>
+          <div className="health-metrics">
+            <div className="metric">
+              <div className="value">
+                {stats.totalDevices > 0
+                  ? Math.round((stats.onlineDevices / stats.totalDevices) * 100)
+                  : 0}
+                %
+              </div>
+              <div className="label">Uptime</div>
+            </div>
+            <div className="metric">
+              <div className="value">{stats.onlineDevices}</div>
+              <div className="label">Online</div>
+            </div>
+            <div className="metric">
+              <div className="value">{stats.openAlerts}</div>
+              <div className="label">Alerts</div>
+            </div>
+          </div>
+        </HealthSummary>
+      )}
+
+      {/* Cross-site link to WQT for credit generation */}
+      {stats && stats.onlineDevices > 0 && (
+        <CrossSiteLink
+          href="https://waterquality.trading/marketplace"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="link-icon">💧</div>
+          <div className="link-content">
+            <div className="link-title">Generate Water Quality Credits</div>
+            <div className="link-subtitle">
+              Turn your device data into tradeable credits on the marketplace
+            </div>
+          </div>
+          <div className="link-arrow">→</div>
+        </CrossSiteLink>
+      )}
+
       {/* Quick Action Buttons */}
       <QuickActions>
         <CTAButton to="/cloud/commissioning/new">
