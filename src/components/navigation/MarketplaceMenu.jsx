@@ -215,6 +215,37 @@ const LogoutButton = styled.button`
   }
 `;
 
+const ExternalLink = styled.a`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  min-height: 44px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors?.ui600 || "#4B5563"};
+  background: transparent;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s ease-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
+    color: ${({ theme }) => theme.colors?.primary600 || "#0F393A"};
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const ExternalIcon = styled.span`
+  font-size: 14px;
+  opacity: 0.6;
+`;
+
 export function MarketplaceMenu({ open, onClose, user }) {
   const location = useLocation();
   const { ACTIONS } = useAppContext();
@@ -292,27 +323,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
             <SectionLabel>Tools</SectionLabel>
             <NavList>
               <NavItem
-                to="/marketplace/tools/calculator"
-                $active={isActive("/marketplace/tools/calculator")}
-                onClick={onClose}
-              >
-                Nutrient Calculator
-              </NavItem>
-              <NavItem
-                to="/marketplace/tools/live"
-                $active={isActive("/marketplace/tools/live")}
-                onClick={onClose}
-              >
-                Live Stream
-              </NavItem>
-              <NavItem
-                to="/marketplace/tools/upload"
-                $active={isActive("/marketplace/tools/upload")}
-                onClick={onClose}
-              >
-                Upload Media
-              </NavItem>
-              <NavItem
                 to="/marketplace/tools/verification"
                 $active={isActive("/marketplace/tools/verification")}
                 onClick={onClose}
@@ -331,8 +341,8 @@ export function MarketplaceMenu({ open, onClose, user }) {
                 My Dashboard
               </NavItem>
               <NavItem
-                to="/marketplace/seller-dashboard"
-                $active={isActive("/marketplace/seller-dashboard")}
+                to="/dashboard/seller"
+                $active={isActive("/dashboard/seller")}
                 onClick={onClose}
               >
                 Seller Dashboard
@@ -354,6 +364,28 @@ export function MarketplaceMenu({ open, onClose, user }) {
             </NavList>
           </>
         )}
+
+        <SectionLabel>BlueSignal</SectionLabel>
+        <NavList>
+          <ExternalLink
+            href="https://cloud.bluesignal.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+          >
+            Device Monitoring
+            <ExternalIcon>↗</ExternalIcon>
+          </ExternalLink>
+          <ExternalLink
+            href="https://sales.bluesignal.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+          >
+            Get a Quote
+            <ExternalIcon>↗</ExternalIcon>
+          </ExternalLink>
+        </NavList>
 
         <SmallText>
           Signed in as{" "}

@@ -11,6 +11,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  Navigate,
   useLocation,
   useNavigate,
 } from "react-router-dom";
@@ -45,12 +46,10 @@ import { PresalePage } from "./wqt/pages/PresalePage";
 
 import {
   NotificationBar,
-  NutrientCalculator,
   SettingsMenu,
 } from "./components";
 
 import {
-  SellerDashboard,
   ListingPage,
   CreateListingPage,
 } from "./components/elements/marketplace";
@@ -58,7 +57,6 @@ import {
 import { Livepeer } from "./components/elements/livepeer";
 import { VerificationUI } from "./components/elements/contractUI";
 import BlueSignalConfigurator from "./components/BlueSignalConfigurator";
-import EnclosurePage from "./components/BlueSignalConfigurator/EnclosurePage";
 
 // Installer portal components (used in Cloud commissioning routes)
 import {
@@ -720,30 +718,26 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
     <Route path="/registry" element={<RegistryPage />} />
     <Route path="/map" element={<MapPage />} />
     <Route path="/presale" element={<PresalePage />} />
-    <Route path="/sales/configurator" element={<BlueSignalConfigurator />} />
-    <Route path="/sales/enclosure" element={<EnclosurePage />} />
+
+    {/* Redirects for relocated features */}
+    {/* Sales configurator moved to sales.bluesignal.xyz */}
+    {/* Installer dashboard moved to cloud.bluesignal.xyz */}
 
     {/* Auth-gated marketplace */}
     {user?.uid && (
       <>
         <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
         <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
-        <Route path="/dashboard/installer" element={<InstallerDashboard />} />
 
-        <Route
-          path="/marketplace/tools/calculator"
-          element={<NutrientCalculator />}
-        />
-        <Route path="/marketplace/tools/live" element={<Livepeer />} />
-        <Route path="/marketplace/tools/upload" element={<Livepeer />} />
         <Route
           path="/marketplace/tools/verification"
           element={<VerificationUI />}
         />
 
+        {/* Redirect legacy seller dashboard to consolidated route */}
         <Route
           path="/marketplace/seller-dashboard"
-          element={<SellerDashboard />}
+          element={<Navigate to="/dashboard/seller" replace />}
         />
         <Route
           path="/marketplace/create-listing"
