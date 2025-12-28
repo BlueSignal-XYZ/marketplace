@@ -106,7 +106,7 @@ const Certificate = ({ data }) => {
         src={AppIcon}
         loading="lazy"
         sizes="(max-width: 479px) 75.98958587646484px, (max-width: 767px) 83.99305725097656px, (max-width: 991px) 12vw, 120.00000762939453px"
-        alt="NeptuneChain AppIcon"
+        alt="WaterQuality.Trading AppIcon"
       />
       <Heading1>Nutrient Trading</Heading1>
       <Heading4>Nutrient Pollution Removal Certificate</Heading4>
@@ -151,7 +151,7 @@ const Certificate = ({ data }) => {
           <Heading4>Issued by:</Heading4>
           <Signiture>Jacques De Jean</Signiture>
           <Line width={"80%"} />
-          <Heading2>NEPTUNECHAIN.IO LLC</Heading2>
+          <Heading2>BLUESIGNAL LLC</Heading2>
         </DivBlockInner>
       </DivBlock>
       <Heading4>ID: {formatCertificateID(id)}</Heading4>

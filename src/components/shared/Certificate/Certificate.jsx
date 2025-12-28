@@ -76,7 +76,7 @@ function Certificate() {
   return (
     <StyledCertificate>
       <img className="certificate-icon" src={Logo} />
-      <div className="certificate-domain">Neptunechain.io</div>
+      <div className="certificate-domain">WaterQuality.Trading</div>
       <div className="certificate-description">
         Nutrient Pollution Removal Certificate
       </div>

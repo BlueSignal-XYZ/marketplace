@@ -198,6 +198,51 @@ const FooterStrip = styled.div`
   margin-top: 4px;
   font-size: 11px;
   color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const StatusTooltip = styled.span`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 600;
+  cursor: help;
+
+  &:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:hover::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  }
 `;
 
 export default function DashboardMain() {
@@ -263,7 +308,12 @@ export default function DashboardMain() {
                 <span>Location: Dock</span>
                 <span>Last heartbeat: —</span>
               </DeviceMeta>
-              <FooterStrip>No link · 0 devices</FooterStrip>
+              <FooterStrip>
+                <span>No link · 0 devices</span>
+                <StatusTooltip data-tooltip="Device not linked to gateway. Check connection settings.">
+                  ?
+                </StatusTooltip>
+              </FooterStrip>
             </DeviceCard>
           </DevicesGrid>
         </div>

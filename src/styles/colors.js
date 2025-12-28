@@ -15,6 +15,30 @@ export const logoColors = {
   accent: "#007BB5",
 };
 
+// Credit type badge colors for WaterQuality.Trading marketplace
+export const creditTypeColors = {
+  nitrogen: {
+    bg: "#DBEAFE",      // blue-100
+    text: "#1D4ED8",    // blue-700
+    border: "#93C5FD",  // blue-300
+  },
+  phosphorus: {
+    bg: "#DCFCE7",      // green-100
+    text: "#15803D",    // green-700
+    border: "#86EFAC",  // green-300
+  },
+  thermal: {
+    bg: "#FFEDD5",      // orange-100
+    text: "#C2410C",    // orange-700
+    border: "#FDBA74",  // orange-300
+  },
+  stormwater: {
+    bg: "#F3E8FF",      // purple-100
+    text: "#7E22CE",    // purple-700
+    border: "#D8B4FE",  // purple-300
+  },
+};
+
 export const theme = {
   colors: {
     // Primary brand colors - ocean/water inspired
@@ -146,10 +170,22 @@ export const theme = {
     "2xl": "32px",
     "3xl": "48px",
     "4xl": "64px",
+    // Standardized values from UI audit
+    card: "24px",       // Standard card padding
+    section: "48px",    // Standard section spacing
   },
 
   formHeightMd: "44px",
   formHeightLg: "52px",
+
+  // Audit-specified semantic tokens
+  audit: {
+    primary: "#0D9488",        // Teal action color
+    backgroundDark: "#0F172A", // Slate-900
+    backgroundLight: "#F8FAFC",// Slate-50
+    error: "#DC2626",          // Red-600
+    warning: "#F59E0B",        // Amber-500
+  },
 
   // Transitions
   transitions: {

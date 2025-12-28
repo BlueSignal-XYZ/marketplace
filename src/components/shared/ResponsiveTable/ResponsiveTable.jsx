@@ -65,8 +65,13 @@ const TableRow = styled.tr`
   border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e2e8f0"};
   transition: background 0.15s;
 
-  &:hover {
+  /* Zebra striping for better readability */
+  &:nth-child(even) {
     background: ${({ theme }) => theme.colors?.ui50 || "#f8fafc"};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primary50 || "#e6f7f8"};
   }
 
   &:last-child {

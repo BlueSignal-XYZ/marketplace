@@ -278,38 +278,48 @@ const EmptyState = styled.div`
 
 const WelcomeBanner = styled.div`
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  border-radius: 16px;
-  padding: 24px 28px;
-  margin-bottom: 24px;
+  border-radius: 10px;
+  padding: 12px 20px;
+  margin-bottom: 20px;
   color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  gap: 16px;
 
   .welcome-content {
     flex: 1;
-    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-    h2 {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 0 0 8px;
+    .welcome-icon {
+      font-size: 18px;
     }
 
     p {
       font-size: 14px;
-      opacity: 0.9;
       margin: 0;
-      line-height: 1.5;
+      font-weight: 500;
+
+      @media (max-width: 600px) {
+        font-size: 13px;
+      }
     }
   }
 
   .welcome-actions {
     display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
-    flex-wrap: wrap;
+    padding: 14px 16px;
   }
 `;
 
@@ -320,9 +330,9 @@ const WelcomeButton = styled(Link)`
   background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-size: 14px;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.15s ease-out;
@@ -344,15 +354,18 @@ const WelcomePrimaryButton = styled(WelcomeButton)`
 `;
 
 const DismissButton = styled.button`
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  padding: 4px;
-  font-size: 18px;
+  padding: 6px 10px;
+  font-size: 12px;
   line-height: 1;
+  border-radius: 4px;
+  transition: all 0.15s ease-out;
 
   &:hover {
+    background: rgba(255, 255, 255, 0.2);
     color: #ffffff;
   }
 `;
@@ -410,6 +423,7 @@ const HealthSummary = styled.div`
     display: flex;
     gap: 32px;
     flex-wrap: wrap;
+    align-items: center;
 
     .metric {
       text-align: center;
@@ -427,6 +441,29 @@ const HealthSummary = styled.div`
         letter-spacing: 0.5px;
       }
     }
+  }
+`;
+
+const HealthCTA = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: ${({ $variant }) =>
+    $variant === "warning" ? "#fef3c7" : "#fee2e2"};
+  color: ${({ $variant }) =>
+    $variant === "warning" ? "#92400e" : "#991b1b"};
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+  white-space: nowrap;
+
+  &:hover {
+    background: ${({ $variant }) =>
+      $variant === "warning" ? "#fde68a" : "#fecaca"};
+    transform: translateY(-1px);
   }
 `;
 
@@ -672,23 +709,19 @@ export default function OverviewDashboard() {
         noindex={true}
       />
 
-      {/* First-time user welcome banner */}
+      {/* First-time user welcome banner - compact single-line */}
       {showWelcome && (
         <WelcomeBanner>
           <div className="welcome-content">
-            <h2>Welcome to BlueSignal Cloud</h2>
-            <p>
-              Monitor your water quality devices, manage sites, and track
-              performance all in one place.
-            </p>
+            <span className="welcome-icon">👋</span>
+            <p>Welcome to BlueSignal Cloud — monitor devices, manage sites, and track performance.</p>
           </div>
           <div className="welcome-actions">
             <WelcomePrimaryButton to="/cloud/onboarding">
               Get Started
             </WelcomePrimaryButton>
-            <WelcomeButton to="/cloud/devices/new">Add Device</WelcomeButton>
-            <DismissButton onClick={dismissWelcome} title="Dismiss">
-              ×
+            <DismissButton onClick={dismissWelcome}>
+              Dismiss
             </DismissButton>
           </div>
         </WelcomeBanner>
@@ -722,6 +755,14 @@ export default function OverviewDashboard() {
               <div className="value">{stats.openAlerts}</div>
               <div className="label">Alerts</div>
             </div>
+            {(stats.openAlerts > 0 || stats.devicesNeedingAttention > 0) && (
+              <HealthCTA
+                to="/cloud/alerts?status=open"
+                $variant={getFleetHealth().status === "good" ? "warning" : "error"}
+              >
+                View issues →
+              </HealthCTA>
+            )}
           </div>
         </HealthSummary>
       )}
