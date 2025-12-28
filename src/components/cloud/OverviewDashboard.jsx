@@ -26,45 +26,81 @@ const MetricCard = styled(Link)`
   display: block;
   background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 14px;
+  padding: 22px;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.15s ease-out;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle inner glow */
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  /* Decorative gradient accent on top */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.colors?.primary400 || "#38BDBE"} 0%,
+      ${({ theme }) => theme.colors?.primary600 || "#196061"} 100%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+  }
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#38bdf8"};
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
-    transform: translateY(-2px);
+    border-color: ${({ theme }) => theme.colors?.primary300 || "#5DC9CC"};
+    box-shadow:
+      0 8px 24px rgba(29, 112, 114, 0.12),
+      0 4px 8px rgba(0, 0, 0, 0.04);
+    transform: translateY(-3px);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(29, 112, 114, 0.08);
   }
 
   .label {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .value {
-    font-size: clamp(24px, 5vw, 32px);
+    font-size: clamp(26px, 5vw, 34px);
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
-    margin-bottom: 4px;
+    color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 
   .subtext {
     font-size: 13px;
     color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   @media (max-width: 768px) {
-    padding: 16px;
+    padding: 18px;
   }
 `;
 
@@ -82,22 +118,29 @@ const TwoColumnGrid = styled.div`
 const Section = styled.div`
   background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 24px;
+  position: relative;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
   h2 {
-    margin: 0 0 16px;
-    font-size: 18px;
-    font-weight: 600;
+    margin: 0 0 20px;
+    font-size: 17px;
+    font-weight: 700;
     color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
     display: flex;
     justify-content: space-between;
     align-items: center;
+    letter-spacing: -0.01em;
+    padding-bottom: 16px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f4f5f7"};
   }
 
   .view-all {
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
     text-decoration: none;
 

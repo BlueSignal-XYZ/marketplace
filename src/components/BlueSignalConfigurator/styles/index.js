@@ -139,15 +139,35 @@ export const ProductGrid = styled.div`
 
 export const ProductCard = styled.div`
   background: ${({ selected }) =>
-    selected ? "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)" : "#ffffff"};
+    selected
+      ? "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)"
+      : "linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)"};
   border: 2px solid ${({ selected }) => (selected ? "#3b82f6" : "#e5e7eb")};
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 20px;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: ${({ selected }) => (selected ? "0 4px 12px rgba(59, 130, 246, 0.15)" : "0 1px 3px rgba(0,0,0,0.05)")};
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: ${({ selected }) =>
+    selected
+      ? "0 8px 24px rgba(59, 130, 246, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9)"
+      : "0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8)"};
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+
+  /* Selected indicator bar */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+    opacity: ${({ selected }) => (selected ? 1 : 0)};
+    transition: opacity 0.25s ease-out;
+  }
 
   ${media.lg} {
     border-radius: 16px;
