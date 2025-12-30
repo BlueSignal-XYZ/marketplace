@@ -27,6 +27,7 @@ const commissioning = require("./commissioning");
 const sites = require("./sites");
 const readings = require("./readings");
 const marketplace = require("./marketplace");
+const virginia = require("./virginia");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -168,6 +169,29 @@ app.post("/marketplace/orders", marketplace.getOrders);
 app.post("/marketplace/stats", marketplace.getMarketplaceStats);
 app.post("/credits/create", marketplace.createCredit);
 app.post("/credits/user", marketplace.getUserCredits);
+
+// =============================================================================
+// VIRGINIA NUTRIENT CREDIT EXCHANGE ENDPOINTS
+// =============================================================================
+
+// Basins
+app.get("/virginia/basins", virginia.getBasins);
+app.post("/virginia/basins", virginia.getBasins);
+app.post("/virginia/basin", virginia.getBasin);
+
+// Projects
+app.post("/virginia/projects/create", virginia.createProject);
+app.post("/virginia/projects/get", virginia.getProject);
+app.post("/virginia/projects/update", virginia.updateProject);
+app.post("/virginia/projects/list", virginia.listProjects);
+app.post("/virginia/projects/link-device", virginia.linkDevice);
+app.post("/virginia/projects/unlink-device", virginia.unlinkDevice);
+
+// Credits
+app.post("/virginia/credits/calculate", virginia.calculateCredits);
+app.post("/virginia/credits/generate", virginia.generateCredits);
+app.post("/virginia/credits", virginia.getCredits);
+app.post("/virginia/credits/validate-transfer", virginia.validateTransfer);
 
 // Export the Express app as a Cloud Function
 exports.app = functions

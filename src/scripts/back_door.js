@@ -1976,6 +1976,173 @@ const UserProfileAPI = {
   completeOnboarding: completeUserOnboarding,
 };
 
+/*************************VIRGINIA_CREDIT_EXCHANGE_ENDPOINTS************************************* */
+// Virginia Chesapeake Bay Watershed Nutrient Credit Exchange
+
+// Basins
+const getVirginiaBasins = async () => {
+  try {
+    const response = await axios.post(`${configs.server_url}/virginia/basins`);
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch Virginia basins");
+  }
+};
+
+const getVirginiaBasin = async (basinCode) => {
+  try {
+    const response = await axios.post(`${configs.server_url}/virginia/basin`, {
+      basinCode,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch basin");
+  }
+};
+
+// Projects
+const createVirginiaProject = async (projectData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/projects/create`, {
+      projectData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to create Virginia project");
+  }
+};
+
+const getVirginiaProject = async (projectId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/projects/get`, {
+      projectId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch Virginia project");
+  }
+};
+
+const updateVirginiaProject = async (projectId, updateData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/projects/update`, {
+      projectId,
+      updateData,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update Virginia project");
+  }
+};
+
+const listVirginiaProjects = async (filters = {}) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/projects/list`, {
+      filters,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to list Virginia projects");
+  }
+};
+
+const linkDeviceToVirginiaProject = async (projectId, deviceId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/projects/link-device`, {
+      projectId,
+      deviceId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to link device to project");
+  }
+};
+
+const unlinkDeviceFromVirginiaProject = async (projectId, deviceId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/projects/unlink-device`, {
+      projectId,
+      deviceId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to unlink device from project");
+  }
+};
+
+// Credits
+const calculateVirginiaCredits = async (projectId, complianceYear) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/credits/calculate`, {
+      projectId,
+      complianceYear,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to calculate credits");
+  }
+};
+
+const generateVirginiaCredits = async (projectId, complianceYear) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/credits/generate`, {
+      projectId,
+      complianceYear,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to generate credits");
+  }
+};
+
+const getVirginiaCredits = async (filters = {}) => {
+  try {
+    const response = await authPost(`${configs.server_url}/virginia/credits`, {
+      filters,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to fetch Virginia credits");
+  }
+};
+
+const validateVirginiaCreditTransfer = async (creditId, buyerBasinCode, quantityLbs) => {
+  try {
+    const response = await axios.post(`${configs.server_url}/virginia/credits/validate-transfer`, {
+      creditId,
+      buyerBasinCode,
+      quantityLbs,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to validate credit transfer");
+  }
+};
+
+const VirginiaAPI = {
+  // Basins
+  basins: {
+    getAll: getVirginiaBasins,
+    get: getVirginiaBasin,
+  },
+  // Projects
+  projects: {
+    create: createVirginiaProject,
+    get: getVirginiaProject,
+    update: updateVirginiaProject,
+    list: listVirginiaProjects,
+    linkDevice: linkDeviceToVirginiaProject,
+    unlinkDevice: unlinkDeviceFromVirginiaProject,
+  },
+  // Credits
+  credits: {
+    calculate: calculateVirginiaCredits,
+    generate: generateVirginiaCredits,
+    get: getVirginiaCredits,
+    validateTransfer: validateVirginiaCreditTransfer,
+  },
+};
+
 export {
   AccountAPI,
   UserAPI,
@@ -2001,4 +2168,6 @@ export {
   AlertsAPI,
   CreditsMarketplaceAPI,
   UserProfileAPI,
+  // Virginia Nutrient Credit Exchange
+  VirginiaAPI,
 };
