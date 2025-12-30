@@ -42,6 +42,27 @@ const Header = styled.div`
   }
 `;
 
+const DemoBanner = styled.div`
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #92400e;
+
+  .icon {
+    font-size: 18px;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+`;
+
 const HeaderActions = styled.div`
   display: flex;
   flex-direction: column;
@@ -677,6 +698,11 @@ const BuyerDashboard = () => {
           </h1>
           <p>Browse available credits, track purchases, and manage compliance requirements.</p>
         </Header>
+
+        <DemoBanner>
+          <span className="icon">ℹ️</span>
+          <span><strong>Sample Data:</strong> This dashboard shows example credits and purchases for demonstration purposes. Your actual data will appear here once you make purchases.</span>
+        </DemoBanner>
 
         {isNewUser && (
           <GettingStartedCard>

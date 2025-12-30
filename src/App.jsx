@@ -320,6 +320,7 @@ const CloudLanding = ({ user, authLoading }) => {
       <LoadingContainer>
         <LoadingSpinner />
         <LoadingText>Loading BlueSignal Cloud...</LoadingText>
+        <LoadingSubtext>Preparing your dashboard</LoadingSubtext>
       </LoadingContainer>
     );
   }
@@ -358,6 +359,7 @@ const MarketplaceLanding = ({ user, authLoading }) => {
       <LoadingContainer>
         <LoadingSpinner />
         <LoadingText>Loading WaterQuality.Trading...</LoadingText>
+        <LoadingSubtext>Connecting to the marketplace</LoadingSubtext>
       </LoadingContainer>
     );
   }
@@ -378,7 +380,8 @@ const CloudAuthGate = ({ children, authLoading }) => {
     return (
       <LoadingContainer>
         <LoadingSpinner />
-        <LoadingText>Authenticating...</LoadingText>
+        <LoadingText>Checking authentication...</LoadingText>
+        <LoadingSubtext>Please wait while we verify your session</LoadingSubtext>
       </LoadingContainer>
     );
   }
@@ -769,7 +772,7 @@ const LoadingContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1D7072 0%, #155e5f 100%);
   color: white;
 `;
 
@@ -790,8 +793,15 @@ const LoadingSpinner = styled.div`
 const LoadingText = styled.p`
   margin-top: 20px;
   font-size: 18px;
-  font-weight: 500;
-  opacity: 0.9;
+  font-weight: 600;
+  opacity: 1;
+`;
+
+const LoadingSubtext = styled.p`
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.8;
 `;
 
 const ConfigErrorContainer = styled.div`
