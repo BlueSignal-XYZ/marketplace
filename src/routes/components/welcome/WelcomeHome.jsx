@@ -1,95 +1,85 @@
 import React from "react";
 import styled from "styled-components";
-import { BUTTON, PROMPT_CARD } from "../../../components/lib/styled";
 import { logoImage } from "../../Welcome";
+import { isCloudMode, getAppMode } from "../../../utils/modeDetection";
+
 const Title = styled.h1`
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.ui800};
-
+  color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
   text-align: left;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 `;
 
 const Paragraph = styled.p`
   font-size: 14px;
   font-weight: 500;
-  line-height: 1.4;
-  color: ${({ theme }) => theme.colors.ui600};
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
   text-align: left;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 `;
 
-const ButtonContainer = styled.div`
+const FeatureList = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+`;
+
+const FeatureTag = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: ${({ $isCloud }) => $isCloud ? "rgba(29, 112, 114, 0.08)" : "rgba(37, 99, 235, 0.08)"};
+  color: ${({ $isCloud }) => $isCloud ? "#1D7072" : "#2563eb"};
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
 `;
 
 export const contentVariants = {
   hidden: { y: 30, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 1, delay: 0.2 } },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.6, delay: 0.1 } },
 };
 
 export const StyledWelcomeHome = styled.div`
-  background: url("https://images.unsplash.com/photo-1498408040764-ab6eb772a145?q=80&w=2672&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-
-  background-size: cover;
-  background-position: center;
   position: relative;
-  padding: 40px 24px;
-  > * {
-    color: White;
-    position: relative;
-    z-index: 2;
-    max-width: 400px;
-    @media (min-width: 1024px) {
-      color: inherit;
-    }
-  }
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+  padding: 24px;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 
-    height: 100%;
-    background: rgba(
-      0,
-      0,
-      0,
-      0.4
-    ); // Adjust the rgba value for different overlay colors and opacities
-    z-index: 0; // Ensure the overlay is on top of the background image
-    @media (min-width: 1024px) {
-      background: none;
-    }
-  }
-  margin-bottom: 40px;
-
-  @media (min-width: 1024px) {
-    background: none;
-    padding: 0px;
-    padding-left: 0px;
+  @media (min-width: 768px) {
+    padding: 32px;
   }
 
-  .logo-white {
-    background: white;
-    width: auto;
-    max-width: 180px;
-    border-radius: 4px;
+  .logo-wrap {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 8px 24px;
-    margin-bottom: 16px;
-    @media (min-width: 1024px) {
-      padding: 0px;
-      margin-bottom: 40px;
-    }
+    gap: 12px;
+    margin-bottom: 20px;
+
     img {
-      width: 100%;
+      height: 36px;
+      width: auto;
     }
+  }
+
+  .mode-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: ${({ $isCloud }) => $isCloud ? "#1D7072" : "#2563eb"};
+    color: white;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 `;
 
@@ -106,26 +96,56 @@ const getDynamicWelcomeMessage = (username) => {
   return `Good ${timeOfDay}, ${username}`;
 };
 
+// Mode-specific content
+const MODE_CONTENT = {
+  cloud: {
+    title: "BlueSignal Cloud",
+    description: "Monitor your water quality sensors, manage sites, and track real-time data from anywhere.",
+    features: ["Real-time Monitoring", "Device Management", "Alerts & Reports"],
+  },
+  marketplace: {
+    title: "WaterQuality.Trading",
+    description: "Buy and sell verified water quality credits. Connect with farmers, utilities, and environmental organizations.",
+    features: ["Browse Credits", "Verified Sellers", "Secure Trading"],
+  },
+};
+
 const WelcomeHome = ({ user, setCardState, enterDash }) => {
   const { username } = user || {};
+  const mode = getAppMode();
+  const isCloud = mode === 'cloud';
+  const content = isCloud ? MODE_CONTENT.cloud : MODE_CONTENT.marketplace;
 
   return (
     <StyledWelcomeHome
+      $isCloud={isCloud}
       variants={contentVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="logo-white">
-        <img src={logoImage} alt="WQT Logo" />
+      <div className="logo-wrap">
+        <img src={logoImage} alt={isCloud ? "BlueSignal" : "WaterQuality.Trading"} />
+        <span className="mode-badge">
+          {isCloud ? "Cloud" : "Marketplace"}
+        </span>
       </div>
+
       <Title>
-        {username
-          ? getDynamicWelcomeMessage(username)
-          : "Powered by BlueSignal LTD"}
+        {username ? getDynamicWelcomeMessage(username) : content.title}
       </Title>
-      <Paragraph>
-        Collaborate with your neighbors, utilities, and local organizations to strengthen water quality, restore ecosystems, and support healthy watersheds.
-      </Paragraph>
+
+      <Paragraph>{content.description}</Paragraph>
+
+      {!username && (
+        <FeatureList>
+          {content.features.map((feature, idx) => (
+            <FeatureTag key={idx} $isCloud={isCloud}>
+              <span style={{ fontSize: 14 }}>✓</span>
+              {feature}
+            </FeatureTag>
+          ))}
+        </FeatureList>
+      )}
     </StyledWelcomeHome>
   );
 };

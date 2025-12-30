@@ -191,31 +191,74 @@ const ListView = styled.div`
 `;
 
 const ProjectCard = styled.div`
-  padding: 20px;
+  padding: 20px 24px;
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
 
   &:hover {
     background: #f8fafc;
+    transform: translateX(4px);
   }
 
   &:last-child {
     border-bottom: none;
   }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+`;
+
+const ProjectMainInfo = styled.div`
+  flex: 1;
+`;
+
+const ProjectStats = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 120px;
+
+  @media (max-width: 640px) {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+`;
+
+const StatValue = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+  color: #1D7072;
+`;
+
+const StatLabel = styled.div`
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 `;
 
 const ProjectName = styled.h3`
   font-size: 18px;
   font-weight: 600;
   color: #1e293b;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
 `;
 
 const ProjectDescription = styled.p`
   font-size: 14px;
   color: #64748b;
   margin: 0 0 12px 0;
+  line-height: 1.5;
 `;
 
 const ProjectMeta = styled.div`
@@ -228,6 +271,53 @@ const ProjectMeta = styled.div`
 const ProjectMetaItem = styled.span`
   font-size: 13px;
   color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const ProjectLocation = styled.span`
+  font-size: 12px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const ListViewHeader = styled.div`
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ListViewTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+`;
+
+const ProjectCount = styled.span`
+  font-size: 13px;
+  color: #64748b;
+`;
+
+const MapUnavailableBanner = styled.div`
+  padding: 12px 24px;
+  background: #fef3c7;
+  border-bottom: 1px solid #fcd34d;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #92400e;
+`;
+
+const BannerIcon = styled.span`
+  font-size: 16px;
 `;
 
 const CreditTypeBadge = styled.span<{ type: string }>`
@@ -650,6 +740,18 @@ export function MapPage() {
           </MapContainer>
         ) : (
           <ListView>
+            {!HAS_VALID_TOKEN && (
+              <MapUnavailableBanner>
+                <BannerIcon>ℹ️</BannerIcon>
+                Map view is temporarily unavailable. Browse projects in the list below.
+              </MapUnavailableBanner>
+            )}
+            <ListViewHeader>
+              <ListViewTitle>
+                {filterType === 'all' ? 'All Projects' : `${filterType.charAt(0).toUpperCase() + filterType.slice(1)} Projects`}
+              </ListViewTitle>
+              <ProjectCount>{filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}</ProjectCount>
+            </ListViewHeader>
             {filteredProjects.length === 0 ? (
               <div style={{ padding: '60px 20px', textAlign: 'center' }}>
                 <EmptyIcon>📋</EmptyIcon>
@@ -659,21 +761,29 @@ export function MapPage() {
             ) : (
               filteredProjects.map(project => (
                 <ProjectCard key={project.id}>
-                  <ProjectName>{project.name}</ProjectName>
-                  <ProjectDescription>{project.description}</ProjectDescription>
-                  <ProjectMeta>
-                    {project.creditTypes.map(type => (
-                      <CreditTypeBadge key={type} type={type}>
-                        {type}
-                      </CreditTypeBadge>
-                    ))}
-                    <ProjectMetaItem>
-                      <strong>{project.totalCredits.toLocaleString()}</strong> credits
-                    </ProjectMetaItem>
-                    <ProjectMetaItem style={{ color: '#94a3b8' }}>
-                      {project.owner}
-                    </ProjectMetaItem>
-                  </ProjectMeta>
+                  <ProjectMainInfo>
+                    <ProjectName>{project.name}</ProjectName>
+                    <ProjectDescription>{project.description}</ProjectDescription>
+                    <ProjectMeta>
+                      {project.creditTypes.map(type => (
+                        <CreditTypeBadge key={type} type={type}>
+                          {type}
+                        </CreditTypeBadge>
+                      ))}
+                      <ProjectMetaItem>
+                        {project.owner}
+                      </ProjectMetaItem>
+                      {project.acreage && (
+                        <ProjectLocation>
+                          {project.acreage} acres
+                        </ProjectLocation>
+                      )}
+                    </ProjectMeta>
+                  </ProjectMainInfo>
+                  <ProjectStats>
+                    <StatValue>{project.totalCredits.toLocaleString()}</StatValue>
+                    <StatLabel>Total Credits</StatLabel>
+                  </ProjectStats>
                 </ProjectCard>
               ))
             )}

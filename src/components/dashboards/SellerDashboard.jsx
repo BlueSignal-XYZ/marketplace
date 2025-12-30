@@ -493,6 +493,90 @@ const LoadingSpinner = styled.div`
   }
 `;
 
+const GettingStartedCard = styled.div`
+  background: linear-gradient(135deg, #e0f7f8 0%, #c5e8e9 100%);
+  border: 1px solid #1D7072;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 20px;
+  }
+`;
+
+const GettingStartedIcon = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #1D7072;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+`;
+
+const GettingStartedContent = styled.div`
+  flex: 1;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.5;
+  }
+`;
+
+const StepList = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+`;
+
+const Step = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D7072;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #1D7072;
+    color: white;
+  }
+
+  .number {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #1D7072;
+    color: white;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
 const SellerDashboard = () => {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
@@ -621,6 +705,7 @@ const SellerDashboard = () => {
   const activeListings = listings.filter((l) => l.status === 'Active').length;
   const totalViews = listings.reduce((sum, l) => sum + l.views, 0);
   const totalInquiries = listings.reduce((sum, l) => sum + (l.inquiries || 0), 0);
+  const isNewSeller = listings.length === 0;
 
   // Chart data
   const chartData = {
@@ -665,9 +750,38 @@ const SellerDashboard = () => {
     <Page>
       <Shell>
         <Header>
-          <h1>Seller Dashboard</h1>
+          <h1>
+            {user?.username ? `Welcome back, ${user.username}` : 'Seller Dashboard'}
+          </h1>
           <p>Manage your listings, track sales, and maximize revenue from water quality improvements.</p>
         </Header>
+
+        {isNewSeller && (
+          <GettingStartedCard>
+            <GettingStartedIcon>Sell</GettingStartedIcon>
+            <GettingStartedContent>
+              <h3>Start Selling Water Credits</h3>
+              <p>
+                Turn your environmental improvements into revenue. List your verified water quality
+                credits and connect with buyers across the region.
+              </p>
+              <StepList>
+                <Step onClick={handleCreateListing}>
+                  <span className="number">1</span>
+                  Create Listing
+                </Step>
+                <Step onClick={() => navigate('/marketplace/tools/verification')}>
+                  <span className="number">2</span>
+                  Get Verified
+                </Step>
+                <Step onClick={() => navigate('/marketplace/tools/calculator')}>
+                  <span className="number">3</span>
+                  Calculate Value
+                </Step>
+              </StepList>
+            </GettingStartedContent>
+          </GettingStartedCard>
+        )}
 
         <HeaderActions>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>

@@ -9,7 +9,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../../apis/firebase";
 
-
 import Notification from "../../../components/popups/NotificationPopup";
 import { PROMPT_CARD, PROMPT_FORM } from "../../../components/lib/styled";
 import { formVariant } from "./motion_variants";
@@ -21,6 +20,7 @@ import {
   ButtonSecondary,
 } from "../../../components/shared/button/Button";
 import { useAppContext } from "../../../context/AppContext";
+import { getAppMode } from "../../../utils/modeDetection";
 
 /* -------------------------------------------------------------------------- */
 /*                               STYLED WRAPPERS                               */
@@ -149,8 +149,23 @@ function isValidEmail(email) {
 /*                                 LOGIN FORM                                  */
 /* -------------------------------------------------------------------------- */
 
+// Mode-specific login content
+const LOGIN_CONTENT = {
+  cloud: {
+    heading: "Sign in to Cloud",
+    subheading: "Access your sensors, dashboards, and monitoring tools.",
+  },
+  marketplace: {
+    heading: "Sign in to continue",
+    subheading: "Access your marketplace tools, dashboards, and projects.",
+  },
+};
+
 const LoginForm = () => {
   const navigate = useNavigate();
+  const mode = getAppMode();
+  const isCloud = mode === 'cloud';
+  const content = isCloud ? LOGIN_CONTENT.cloud : LOGIN_CONTENT.marketplace;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -254,8 +269,8 @@ const LoginForm = () => {
       >
         <FormSection>
           <Header>
-            <h2>Sign in to continue</h2>
-            <p>Access your marketplace tools, dashboards, and projects.</p>
+            <h2>{content.heading}</h2>
+            <p>{content.subheading}</p>
           </Header>
 
           {/* Google Sign-In Button */}
@@ -335,24 +350,46 @@ const LoginForm = () => {
             </ButtonLink>
           </FooterRow>
 
-          <div style={{
-            marginTop: '24px',
-            paddingTop: '16px',
-            borderTop: '1px solid #e5e7eb',
-            textAlign: 'center',
-            fontSize: '12px',
-            color: '#6b7280'
-          }}>
-            Hardware by{' '}
-            <a
-              href="https://bluesignal.xyz?source=wqt-login"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}
-            >
-              BlueSignal.xyz
-            </a>
-          </div>
+          {!isCloud && (
+            <div style={{
+              marginTop: '24px',
+              paddingTop: '16px',
+              borderTop: '1px solid #e5e7eb',
+              textAlign: 'center',
+              fontSize: '12px',
+              color: '#6b7280'
+            }}>
+              Hardware by{' '}
+              <a
+                href="https://bluesignal.xyz?source=wqt-login"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}
+              >
+                BlueSignal.xyz
+              </a>
+            </div>
+          )}
+          {isCloud && (
+            <div style={{
+              marginTop: '24px',
+              paddingTop: '16px',
+              borderTop: '1px solid #e5e7eb',
+              textAlign: 'center',
+              fontSize: '12px',
+              color: '#6b7280'
+            }}>
+              <a
+                href="https://waterquality.trading"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#1D7072', textDecoration: 'none', fontWeight: 500 }}
+              >
+                WaterQuality.Trading
+              </a>
+              {' '}- Credit Marketplace
+            </div>
+          )}
         </FormSection>
       </Card>
 
