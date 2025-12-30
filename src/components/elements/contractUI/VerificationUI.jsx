@@ -163,6 +163,47 @@ const ErrorMsg = styled.div`
 const Page = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 300px;
+`;
+
+const WelcomeState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+`;
+
+const WelcomeTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 12px;
+`;
+
+const WelcomeText = styled.p`
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  max-width: 400px;
+`;
+
+// Simple Button styled component
+const Button = styled.button`
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #1D7072;
+  background: #1D7072;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #155e5f;
+  }
 `;
 
 // Framer Motion variants for animations
@@ -189,10 +230,15 @@ function VerificationUI() {
   const { assetID } = verificationData || {};
 
   useEffect(() => {
-    if (user?.role) {
-      const accessible = getAccessibleTabs(user.role);
-      setAccessibleTabs(accessible);
-      setActiveTab(accessible[0]);
+    if (user?.uid) {
+      // Default to farmer role (full access) for users without explicit role
+      const role = user?.role || 'farmer';
+      const accessible = getAccessibleTabs(role);
+
+      // Ensure we have at least uploads tab available
+      const finalTabs = accessible.length > 0 ? accessible : ['uploads', 'submissions'];
+      setAccessibleTabs(finalTabs);
+      setActiveTab(finalTabs[0]);
 
       getUploads();
       getSubmissions();
@@ -310,15 +356,24 @@ function VerificationUI() {
     damping: 30,
   };
 
+  // Show welcome state if no user or no tabs
+  if (!user?.uid) {
+    return (
+      <Page>
+        <WelcomeState>
+          <WelcomeTitle>Verification Portal</WelcomeTitle>
+          <WelcomeText>
+            Sign in to access the verification system. Upload media, submit data
+            for verification, and track your submissions.
+          </WelcomeText>
+        </WelcomeState>
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <TabContainer>
-        {/* <Tab active={activeTab === 'submitData'} onClick={() => setActiveTab('submitData')}>Submit Data</Tab>
-                            <Tab active={activeTab === 'approveData'} onClick={() => setActiveTab('approveData')}>Approve Data</Tab>
-                            <Tab active={activeTab === 'dispute'} onClick={() => setActiveTab('dispute')}>Raise Dispute</Tab>
-                            <Tab active={activeTab === 'resolveDispute'} onClick={() => setActiveTab('resolveDispute')}>Resolve Dispute</Tab>
-                            <Tab active={activeTab === 'verifier'} onClick={() => setActiveTab('verifier')}>Verifier</Tab>
-                            <Tab active={activeTab === 'contractControl'} onClick={() => setActiveTab('contractControl')}>Contract Control</Tab> */}
         {accessibleTabs.map((tab) => (
           <Badge
             key={tab}

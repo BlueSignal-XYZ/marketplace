@@ -7,7 +7,13 @@ import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoiYmx1ZXNpZ25hbCIsImEiOiJjbG0wMTIzNDUwMTIzM2RtZnJ5dXJ5dXJ5In0.dGVzdA';
+// Set Mapbox token - requires valid VITE_MAPBOX_TOKEN environment variable
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const HAS_VALID_TOKEN = MAPBOX_TOKEN && MAPBOX_TOKEN.length > 50 && MAPBOX_TOKEN.startsWith('pk.');
+
+if (HAS_VALID_TOKEN) {
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+}
 
 // Track boundary layer IDs for cleanup
 const BOUNDARY_LAYER_PREFIX = 'project-boundary';
@@ -71,8 +77,8 @@ const FilterChipsContainer = styled.div`
 
 const FilterChip = styled.button<{ active: boolean }>`
   padding: 8px 16px;
-  border: 1px solid ${props => props.active ? '#667eea' : '#cbd5e1'};
-  background: ${props => props.active ? '#667eea' : 'white'};
+  border: 1px solid ${props => props.active ? '#1D7072' : '#cbd5e1'};
+  background: ${props => props.active ? '#1D7072' : 'white'};
   color: ${props => props.active ? 'white' : '#475569'};
   border-radius: 20px;
   font-size: 14px;
@@ -81,7 +87,7 @@ const FilterChip = styled.button<{ active: boolean }>`
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.active ? '#5568d3' : '#f8fafc'};
+    background: ${props => props.active ? '#155e5f' : '#f8fafc'};
   }
 `;
 
@@ -96,7 +102,7 @@ const ViewToggle = styled.div`
 const ViewButton = styled.button<{ active: boolean }>`
   padding: 8px 20px;
   border: none;
-  background: ${props => props.active ? '#667eea' : 'white'};
+  background: ${props => props.active ? '#1D7072' : 'white'};
   color: ${props => props.active ? 'white' : '#475569'};
   font-size: 14px;
   font-weight: 500;
@@ -108,7 +114,7 @@ const ViewButton = styled.button<{ active: boolean }>`
   }
 
   &:hover {
-    background: ${props => props.active ? '#5568d3' : '#f8fafc'};
+    background: ${props => props.active ? '#155e5f' : '#f8fafc'};
   }
 `;
 
@@ -270,7 +276,7 @@ const Spinner = styled.div`
   width: 40px;
   height: 40px;
   border: 4px solid #e2e8f0;
-  border-top-color: #667eea;
+  border-top-color: #1D7072;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 
@@ -342,7 +348,8 @@ export function MapPage() {
   const [loading, setLoading] = useState(true);
   const [mapError, setMapError] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<ViewMode>('map');
+  // Default to list view if no valid token, map view if token is valid
+  const [viewMode, setViewMode] = useState<ViewMode>(HAS_VALID_TOKEN ? 'map' : 'list');
   const [filteredProjects, setFilteredProjects] = useState<MapProject[]>(mockMapProjects);
 
   useEffect(() => {
@@ -366,6 +373,13 @@ export function MapPage() {
   useEffect(() => {
     if (!mapContainer.current || viewMode !== 'map') return;
     if (mapError) return; // Don't retry automatically
+
+    // Check for valid Mapbox token
+    if (!HAS_VALID_TOKEN) {
+      setMapError('Map service is currently unavailable. Please use the List View to browse projects.');
+      setLoading(false);
+      return;
+    }
 
     if (!map.current) {
       try {

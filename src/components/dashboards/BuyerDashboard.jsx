@@ -6,18 +6,18 @@ import { useAppContext } from '../../context/AppContext';
 const Page = styled.main`
   width: 100%;
   min-height: calc(100vh - 72px);
-  padding: 24px 16px 40px;
+  padding: 80px 16px 40px;
   box-sizing: border-box;
-  background: ${({ theme }) => theme.colors?.bg || '#f5f5f5'};
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
 
-  @media (max-width: 600px) {
-    padding: 16px 8px 32px;
+  @media (max-width: 768px) {
+    padding: 70px 12px 32px;
   }
 `;
 
 const Shell = styled.div`
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 `;
 
@@ -28,142 +28,458 @@ const Header = styled.div`
     margin: 0 0 8px;
     font-size: 28px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
+    color: #0f172a;
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
   }
 
   p {
     margin: 0;
     font-size: 15px;
-    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
+    color: #64748b;
+  }
+`;
+
+const HeaderActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
 `;
 
 const StatusCard = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
-  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
   padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
 
-  .label {
-    font-size: 13px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
-    margin-bottom: 8px;
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
-  .value {
-    font-size: 32px;
-    font-weight: 700;
-    color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
-    margin-bottom: 4px;
+  @media (max-width: 768px) {
+    padding: 16px;
   }
+`;
 
-  .subtext {
-    font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
+const CardIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+  background: ${({ color }) => color || '#e0f2ff'};
+`;
+
+const CardLabel = styled.div`
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 4px;
+`;
+
+const CardValue = styled.div`
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
+`;
+
+const CardSubtext = styled.div`
+  font-size: 13px;
+  color: ${({ positive }) => (positive ? '#10b981' : '#64748b')};
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const SectionGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 2fr 1fr;
   }
 `;
 
 const Section = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
-  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
   padding: 24px;
-  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+`;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 
   h2 {
-    margin: 0 0 16px;
+    margin: 0;
     font-size: 18px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
+    color: #0f172a;
+  }
+`;
+
+const ViewAllLink = styled.span`
+  font-size: 14px;
+  color: #1D7072;
+  cursor: pointer;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 40px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
-  font-size: 14px;
+  padding: 48px 20px;
+  color: #64748b;
+
+  .icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  p {
+    margin: 0 0 20px;
+    font-size: 14px;
+  }
 `;
 
 const ActionButton = styled.button`
   border: none;
   border-radius: 8px;
-  padding: 12px 24px;
+  padding: 14px 24px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  background: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
-  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  min-height: 48px;
+  transition: all 0.2s;
+
+  background: ${({ variant }) =>
+    variant === 'secondary'
+      ? '#ffffff'
+      : 'linear-gradient(135deg, #1D7072 0%, #155e5f 100%)'};
+  color: ${({ variant }) => (variant === 'secondary' ? '#1D7072' : '#ffffff')};
+  border: ${({ variant }) =>
+    variant === 'secondary' ? '1px solid #1D7072' : 'none'};
+  box-shadow: ${({ variant }) =>
+    variant === 'secondary'
+      ? 'none'
+      : '0 4px 12px rgba(29, 112, 114, 0.3)'};
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
+    background: ${({ variant }) =>
+      variant === 'secondary'
+        ? '#e0f2ff'
+        : 'linear-gradient(135deg, #155e5f 0%, #0f4344 100%)'};
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
+    background: #d1d5db;
+    box-shadow: none;
     cursor: not-allowed;
   }
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
+const CreditCard = styled.div`
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+  cursor: pointer;
 
-  th {
-    text-align: left;
-    padding: 12px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
-    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
-    font-size: 13px;
+  &:hover {
+    border-color: #1D7072;
+    background: #f8fafc;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const CreditHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+`;
+
+const CreditTitle = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+`;
+
+const CreditMeta = styled.div`
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+`;
+
+const CreditTypeBadge = styled.span`
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: 8px;
+
+  background: ${({ type }) => {
+    switch (type) {
+      case 'Nitrogen':
+      case 'Nutrient Reduction':
+        return '#dbeafe';
+      case 'Phosphorus':
+        return '#d1fae5';
+      case 'Stormwater':
+      case 'Stormwater Retention':
+        return '#cffafe';
+      case 'Thermal':
+      case 'Thermal Mitigation':
+        return '#fed7aa';
+      default:
+        return '#f3f4f6';
+    }
+  }};
+
+  color: ${({ type }) => {
+    switch (type) {
+      case 'Nitrogen':
+      case 'Nutrient Reduction':
+        return '#1e40af';
+      case 'Phosphorus':
+        return '#065f46';
+      case 'Stormwater':
+      case 'Stormwater Retention':
+        return '#155e75';
+      case 'Thermal':
+      case 'Thermal Mitigation':
+        return '#9a3412';
+      default:
+        return '#374151';
+    }
+  }};
+`;
+
+const CreditStats = styled.div`
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+`;
+
+const CreditStat = styled.div`
+  .label {
+    font-size: 11px;
+    color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
 
-  td {
-    padding: 14px 12px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
-    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
+  .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: ${({ highlight }) => (highlight ? '#1D7072' : '#0f172a')};
   }
+`;
 
-  tr:hover {
-    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+const PurchaseItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+
+  &:last-child {
+    border-bottom: none;
   }
+`;
 
-  .credit-type {
+const PurchaseInfo = styled.div`
+  .type {
+    font-size: 14px;
     font-weight: 500;
+    color: #0f172a;
   }
+
+  .details {
+    font-size: 13px;
+    color: #64748b;
+  }
+`;
+
+const PurchaseAmount = styled.div`
+  text-align: right;
 
   .price {
+    font-size: 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
+    color: #1D7072;
   }
 
-  .btn-link {
-    color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
-    text-decoration: none;
-    font-weight: 500;
-    cursor: pointer;
+  .date {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+`;
 
-    &:hover {
-      text-decoration: underline;
+const QuickActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const QuickActionCard = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #e0f7f8;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .description {
+    font-size: 12px;
+    color: #64748b;
+  }
+`;
+
+const LoadingSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #1D7072;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
+`;
+
+const StatusBadge = styled.span`
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+
+  background: ${({ status }) => {
+    switch (status) {
+      case 'Completed':
+        return '#d1fae5';
+      case 'Pending':
+      case 'Pending Verification':
+        return '#fef3c7';
+      default:
+        return '#f3f4f6';
+    }
+  }};
+
+  color: ${({ status }) => {
+    switch (status) {
+      case 'Completed':
+        return '#065f46';
+      case 'Pending':
+      case 'Pending Verification':
+        return '#92400e';
+      default:
+        return '#374151';
+    }
+  }};
 `;
 
 const BuyerDashboard = () => {
@@ -256,7 +572,9 @@ const BuyerDashboard = () => {
     return (
       <Page>
         <Shell>
-          <EmptyState>Loading your dashboard...</EmptyState>
+          <LoadingSpinner>
+            <div className="spinner" />
+          </LoadingSpinner>
         </Shell>
       </Page>
     );
@@ -269,120 +587,158 @@ const BuyerDashboard = () => {
     <Page>
       <Shell>
         <Header>
-          <h1>Credit Buyer Dashboard</h1>
-          <p>
-            Browse available credits, track your purchases, and meet compliance requirements.
-          </p>
+          <h1>Buyer Dashboard</h1>
+          <p>Browse available credits, track purchases, and manage compliance requirements.</p>
         </Header>
+
+        <HeaderActions>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <ActionButton onClick={handleBrowseMarketplace}>
+              Browse Marketplace
+            </ActionButton>
+            <ActionButton variant="secondary" onClick={() => navigate('/registry')}>
+              View Registry
+            </ActionButton>
+          </div>
+        </HeaderActions>
 
         <Grid>
           <StatusCard>
-            <div className="label">Available Credits</div>
-            <div className="value">{credits.length}</div>
-            <div className="subtext">Ready to purchase</div>
+            <CardIcon color="#d1fae5">Avail</CardIcon>
+            <CardLabel>Available Credits</CardLabel>
+            <CardValue>{credits.length}</CardValue>
+            <CardSubtext>Ready to purchase</CardSubtext>
           </StatusCard>
 
           <StatusCard>
-            <div className="label">Total Spent</div>
-            <div className="value">${totalSpent.toFixed(0)}</div>
-            <div className="subtext">{purchases.length} purchases</div>
+            <CardIcon color="#dbeafe">$</CardIcon>
+            <CardLabel>Total Spent</CardLabel>
+            <CardValue>${totalSpent.toFixed(0)}</CardValue>
+            <CardSubtext>{purchases.length} purchases</CardSubtext>
           </StatusCard>
 
           <StatusCard>
-            <div className="label">Pending Verification</div>
-            <div className="value">{pendingCount}</div>
-            <div className="subtext">Awaiting approval</div>
+            <CardIcon color="#fef3c7">Wait</CardIcon>
+            <CardLabel>Pending Verification</CardLabel>
+            <CardValue>{pendingCount}</CardValue>
+            <CardSubtext positive={pendingCount === 0}>
+              {pendingCount === 0 ? 'All verified' : 'Awaiting approval'}
+            </CardSubtext>
           </StatusCard>
         </Grid>
 
-        <Section>
-          <h2>Available Credits for Purchase</h2>
-          {credits.length === 0 ? (
-            <EmptyState>
-              <p>No credits currently available.</p>
-              <p style={{ marginTop: '8px', fontSize: '13px' }}>
-                Check back soon or contact sellers directly.
-              </p>
-            </EmptyState>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>Credit Type</th>
-                  <th>Amount</th>
-                  <th>Location</th>
-                  <th>Seller</th>
-                  <th>Price</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {credits.map((credit) => (
-                  <tr key={credit.id}>
-                    <td className="credit-type">{credit.type}</td>
-                    <td>
-                      {credit.amount} {credit.unit}
-                    </td>
-                    <td>{credit.location}</td>
-                    <td>{credit.seller}</td>
-                    <td className="price">${credit.price}</td>
-                    <td>
-                      <span
-                        className="btn-link"
-                        onClick={() => handleViewCredit(credit.id)}
-                      >
-                        View Details
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
+        <SectionGrid>
+          <div>
+            <Section>
+              <SectionHeader>
+                <h2>Available Credits</h2>
+                <ViewAllLink onClick={handleBrowseMarketplace}>View All</ViewAllLink>
+              </SectionHeader>
 
-          <div style={{ marginTop: '20px' }}>
-            <ActionButton onClick={handleBrowseMarketplace}>
-              Browse All Credits
-            </ActionButton>
+              {credits.length === 0 ? (
+                <EmptyState>
+                  <div className="icon">Credits</div>
+                  <h3>No credits available</h3>
+                  <p>Check back soon or contact sellers directly.</p>
+                  <ActionButton onClick={handleBrowseMarketplace}>
+                    Browse Marketplace
+                  </ActionButton>
+                </EmptyState>
+              ) : (
+                credits.map((credit) => (
+                  <CreditCard key={credit.id} onClick={() => handleViewCredit(credit.id)}>
+                    <CreditHeader>
+                      <div>
+                        <CreditTitle>{credit.type}</CreditTitle>
+                        <CreditMeta>
+                          <CreditTypeBadge type={credit.type}>{credit.type}</CreditTypeBadge>
+                          {credit.location}
+                        </CreditMeta>
+                      </div>
+                    </CreditHeader>
+                    <CreditStats>
+                      <CreditStat>
+                        <div className="label">Amount</div>
+                        <div className="value">{credit.amount.toLocaleString()} {credit.unit}</div>
+                      </CreditStat>
+                      <CreditStat highlight>
+                        <div className="label">Price</div>
+                        <div className="value">${credit.price}</div>
+                      </CreditStat>
+                      <CreditStat>
+                        <div className="label">Seller</div>
+                        <div className="value">{credit.seller}</div>
+                      </CreditStat>
+                    </CreditStats>
+                  </CreditCard>
+                ))
+              )}
+            </Section>
+
+            <Section>
+              <SectionHeader>
+                <h2>Recent Purchases</h2>
+              </SectionHeader>
+
+              {purchases.length === 0 ? (
+                <EmptyState>
+                  <div className="icon">Cart</div>
+                  <h3>No purchases yet</h3>
+                  <p>Start by browsing available credits above.</p>
+                </EmptyState>
+              ) : (
+                purchases.map((purchase) => (
+                  <PurchaseItem key={purchase.id}>
+                    <PurchaseInfo>
+                      <div className="type">
+                        <CreditTypeBadge type={purchase.type}>{purchase.type}</CreditTypeBadge>
+                        {purchase.amount} {purchase.unit}
+                      </div>
+                      <div className="details">
+                        <StatusBadge status={purchase.status}>{purchase.status}</StatusBadge>
+                      </div>
+                    </PurchaseInfo>
+                    <PurchaseAmount>
+                      <div className="price">${purchase.price.toLocaleString()}</div>
+                      <div className="date">{purchase.date}</div>
+                    </PurchaseAmount>
+                  </PurchaseItem>
+                ))
+              )}
+            </Section>
           </div>
-        </Section>
 
-        <Section>
-          <h2>Recent Purchases</h2>
-          {purchases.length === 0 ? (
-            <EmptyState>
-              <p>You haven't made any purchases yet.</p>
-              <p style={{ marginTop: '8px', fontSize: '13px' }}>
-                Start by browsing available credits above.
-              </p>
-            </EmptyState>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Type</th>
-                  <th>Amount</th>
-                  <th>Price</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {purchases.map((purchase) => (
-                  <tr key={purchase.id}>
-                    <td>{purchase.date}</td>
-                    <td className="credit-type">{purchase.type}</td>
-                    <td>
-                      {purchase.amount} {purchase.unit}
-                    </td>
-                    <td className="price">${purchase.price}</td>
-                    <td>{purchase.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Section>
+          <div>
+            <Section>
+              <SectionHeader>
+                <h2>Quick Actions</h2>
+              </SectionHeader>
+              <QuickActions>
+                <QuickActionCard onClick={handleBrowseMarketplace}>
+                  <div className="icon">Browse</div>
+                  <div className="content">
+                    <div className="title">Browse Credits</div>
+                    <div className="description">Find credits to purchase</div>
+                  </div>
+                </QuickActionCard>
+                <QuickActionCard onClick={() => navigate('/map')}>
+                  <div className="icon">Map</div>
+                  <div className="content">
+                    <div className="title">Project Map</div>
+                    <div className="description">View project locations</div>
+                  </div>
+                </QuickActionCard>
+                <QuickActionCard onClick={() => navigate('/registry')}>
+                  <div className="icon">Registry</div>
+                  <div className="content">
+                    <div className="title">Credit Registry</div>
+                    <div className="description">View verified credits</div>
+                  </div>
+                </QuickActionCard>
+              </QuickActions>
+            </Section>
+          </div>
+        </SectionGrid>
       </Shell>
     </Page>
   );

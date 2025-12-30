@@ -84,20 +84,20 @@ const ActionButton = styled.button`
   background: ${({ variant }) =>
     variant === 'secondary'
       ? '#ffffff'
-      : 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'};
-  color: ${({ variant }) => (variant === 'secondary' ? '#0284c7' : '#ffffff')};
+      : 'linear-gradient(135deg, #1D7072 0%, #155e5f 100%)'};
+  color: ${({ variant }) => (variant === 'secondary' ? '#1D7072' : '#ffffff')};
   border: ${({ variant }) =>
-    variant === 'secondary' ? '1px solid #0284c7' : 'none'};
+    variant === 'secondary' ? '1px solid #1D7072' : 'none'};
   box-shadow: ${({ variant }) =>
     variant === 'secondary'
       ? 'none'
-      : '0 4px 12px rgba(2, 132, 199, 0.3)'};
+      : '0 4px 12px rgba(29, 112, 114, 0.3)'};
 
   &:hover {
     background: ${({ variant }) =>
       variant === 'secondary'
-        ? '#e0f2ff'
-        : 'linear-gradient(135deg, #0369a1 0%, #075985 100%)'};
+        ? '#e0f7f8'
+        : 'linear-gradient(135deg, #155e5f 0%, #0f4344 100%)'};
     transform: translateY(-2px);
   }
 
@@ -211,7 +211,7 @@ const SectionHeader = styled.div`
 
 const ViewAllLink = styled.span`
   font-size: 14px;
-  color: #0284c7;
+  color: #1D7072;
   cursor: pointer;
   font-weight: 500;
 
@@ -253,7 +253,7 @@ const ListingCard = styled.div`
   cursor: pointer;
 
   &:hover {
-    border-color: #0284c7;
+    border-color: #1D7072;
     background: #f8fafc;
   }
 
@@ -371,7 +371,7 @@ const ListingStat = styled.div`
   .value {
     font-size: 16px;
     font-weight: 600;
-    color: ${({ highlight }) => (highlight ? '#0284c7' : '#0f172a')};
+    color: ${({ highlight }) => (highlight ? '#1D7072' : '#0f172a')};
   }
 `;
 
@@ -406,7 +406,7 @@ const SaleAmount = styled.div`
   .price {
     font-size: 16px;
     font-weight: 600;
-    color: #10b981;
+    color: #1D7072;
   }
 
   .date {
@@ -441,7 +441,7 @@ const QuickActionCard = styled.div`
   transition: all 0.2s;
 
   &:hover {
-    background: #e0f2ff;
+    background: #e0f7f8;
   }
 
   .icon {
@@ -481,7 +481,7 @@ const LoadingSpinner = styled.div`
     width: 40px;
     height: 40px;
     border: 3px solid #e5e7eb;
-    border-top-color: #0284c7;
+    border-top-color: #1D7072;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -629,7 +629,7 @@ const SellerDashboard = () => {
       {
         label: 'Revenue ($)',
         data: [13500, 15000, 10400, 22500],
-        backgroundColor: 'rgba(2, 132, 199, 0.8)',
+        backgroundColor: 'rgba(29, 112, 114, 0.8)',
         borderRadius: 6,
       },
     ],
