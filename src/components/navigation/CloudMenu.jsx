@@ -246,9 +246,22 @@ const ExternalIcon = styled.span`
   opacity: 0.6;
 `;
 
+// Role-based menu configuration
+const getMenuConfig = (user) => {
+  const isInstaller = user?.role === "installer";
+  const isAdmin = user?.role === "admin";
+
+  return {
+    showInstallerDash: isInstaller || isAdmin,
+    showCommissioning: isInstaller || isAdmin,
+    showAdvancedTools: user?.uid, // Only logged-in users
+  };
+};
+
 export function CloudMenu({ open, onClose, user }) {
   const location = useLocation();
   const { ACTIONS } = useAppContext();
+  const menuConfig = getMenuConfig(user);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget && onClose) {
@@ -271,7 +284,7 @@ export function CloudMenu({ open, onClose, user }) {
       <Backdrop $open={open} onClick={handleBackdropClick} />
       <Panel $open={open}>
         <PanelHeader>
-          <PanelTitle>Cloud Monitoring</PanelTitle>
+          <PanelTitle>BlueSignal Cloud</PanelTitle>
           <CloseButton
             type="button"
             aria-label="Close menu"
@@ -283,7 +296,8 @@ export function CloudMenu({ open, onClose, user }) {
 
         <Divider />
 
-        <SectionLabel>Overview</SectionLabel>
+        {/* Primary Navigation - Always visible */}
+        <SectionLabel>Dashboard</SectionLabel>
         <NavList>
           <NavItem
             to="/dashboard/main"
@@ -292,20 +306,21 @@ export function CloudMenu({ open, onClose, user }) {
           >
             Overview
           </NavItem>
-          {user?.role === "installer" && (
+          {menuConfig.showInstallerDash && (
             <NavItem
               to="/dashboard/installer"
               $active={isActive("/dashboard/installer")}
               onClick={onClose}
             >
-              My Dashboard
+              Installer Dashboard
             </NavItem>
           )}
         </NavList>
 
         {user?.uid && (
           <>
-            <SectionLabel>Operations</SectionLabel>
+            {/* Sites & Devices - Core functionality */}
+            <SectionLabel>Manage</SectionLabel>
             <NavList>
               <NavItem
                 to="/cloud/sites"
@@ -315,32 +330,11 @@ export function CloudMenu({ open, onClose, user }) {
                 Sites
               </NavItem>
               <NavItem
-                to="/cloud/sites/new"
-                $active={isActive("/cloud/sites/new")}
-                onClick={onClose}
-              >
-                + New Site
-              </NavItem>
-              <NavItem
                 to="/cloud/devices"
                 $active={isActive("/cloud/devices")}
                 onClick={onClose}
               >
                 Devices
-              </NavItem>
-              <NavItem
-                to="/cloud/commissioning"
-                $active={isActive("/cloud/commissioning")}
-                onClick={onClose}
-              >
-                Commissioning
-              </NavItem>
-              <NavItem
-                to="/cloud/commissioning/new"
-                $active={isActive("/cloud/commissioning/new")}
-                onClick={onClose}
-              >
-                + New Commission
               </NavItem>
               <NavItem
                 to="/cloud/alerts"
@@ -351,6 +345,28 @@ export function CloudMenu({ open, onClose, user }) {
               </NavItem>
             </NavList>
 
+            {/* Quick Actions - Streamlined */}
+            <SectionLabel>Quick Actions</SectionLabel>
+            <NavList>
+              <NavItem
+                to="/cloud/sites/new"
+                $active={isActive("/cloud/sites/new")}
+                onClick={onClose}
+              >
+                + Add Site
+              </NavItem>
+              {menuConfig.showCommissioning && (
+                <NavItem
+                  to="/cloud/commissioning"
+                  $active={isActive("/cloud/commissioning")}
+                  onClick={onClose}
+                >
+                  Commission Device
+                </NavItem>
+              )}
+            </NavList>
+
+            {/* Tools - Consolidated */}
             <SectionLabel>Tools</SectionLabel>
             <NavList>
               <NavItem
@@ -365,7 +381,7 @@ export function CloudMenu({ open, onClose, user }) {
                 $active={isActive("/cloud/tools/verification")}
                 onClick={onClose}
               >
-                Verification
+                Verification Portal
               </NavItem>
               <NavItem
                 to="/cloud/tools/live"
@@ -379,14 +395,11 @@ export function CloudMenu({ open, onClose, user }) {
                 $active={isActive("/cloud/tools/upload-media")}
                 onClick={onClose}
               >
-                Upload Media
+                Media Upload
               </NavItem>
             </NavList>
-          </>
-        )}
 
-        {user?.uid && (
-          <>
+            {/* Account */}
             <SectionLabel>Account</SectionLabel>
             <NavList>
               <NavItem
@@ -394,13 +407,14 @@ export function CloudMenu({ open, onClose, user }) {
                 $active={isActive("/cloud/profile")}
                 onClick={onClose}
               >
-                Profile Settings
+                Profile & Settings
               </NavItem>
             </NavList>
           </>
         )}
 
-        <SectionLabel>WaterQuality.Trading</SectionLabel>
+        {/* Cross-platform links */}
+        <SectionLabel>BlueSignal Ecosystem</SectionLabel>
         <NavList>
           <ExternalLink
             href="https://waterquality.trading"
@@ -417,19 +431,22 @@ export function CloudMenu({ open, onClose, user }) {
             rel="noopener noreferrer"
             onClick={onClose}
           >
-            Get a Quote
+            Hardware & Quotes
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
         </NavList>
 
         <SmallText>
-          Signed in as{" "}
-          <strong>{user?.email || user?.username || "guest"}</strong>.
+          {user?.uid ? (
+            <>Signed in as <strong>{user?.email || user?.username}</strong></>
+          ) : (
+            <>Welcome to <strong>BlueSignal Cloud</strong></>
+          )}
         </SmallText>
 
         {user?.uid && (
           <LogoutButton onClick={handleLogout}>
-            Logout
+            Sign Out
           </LogoutButton>
         )}
       </Panel>

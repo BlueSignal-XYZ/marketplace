@@ -246,9 +246,27 @@ const ExternalIcon = styled.span`
   opacity: 0.6;
 `;
 
+// Role-based menu configuration for marketplace
+const getMarketplaceMenuConfig = (user) => {
+  const userRole = user?.role || 'buyer';
+  const isSeller = userRole === 'seller' || userRole === 'farmer';
+  const isBuyer = userRole === 'buyer' || userRole === 'utility';
+  const isAdmin = userRole === 'admin';
+
+  return {
+    isSeller,
+    isBuyer,
+    isAdmin,
+    showSellerTools: isSeller || isAdmin,
+    showBuyerTools: isBuyer || isAdmin,
+    showAdvancedFeatures: user?.uid,
+  };
+};
+
 export function MarketplaceMenu({ open, onClose, user }) {
   const location = useLocation();
   const { ACTIONS } = useAppContext();
+  const menuConfig = getMarketplaceMenuConfig(user);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget && onClose) {
@@ -265,10 +283,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
   const isActive = (path) =>
     location.pathname === path ||
     location.pathname.startsWith(path + "/");
-
-  // Determine primary dashboard based on user role
-  const userRole = user?.role || 'buyer';
-  const isSeller = userRole === 'seller' || userRole === 'farmer';
 
   return (
     <>
@@ -287,6 +301,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
 
         <Divider />
 
+        {/* Public Explore Section */}
         <SectionLabel>Explore</SectionLabel>
         <NavList>
           <NavItem
@@ -306,40 +321,96 @@ export function MarketplaceMenu({ open, onClose, user }) {
           <NavItem to="/map" $active={isActive("/map")} onClick={onClose}>
             Project Map
           </NavItem>
+          <NavItem
+            to="/recent-removals"
+            $active={isActive("/recent-removals")}
+            onClick={onClose}
+          >
+            Recent Removals
+          </NavItem>
         </NavList>
 
         {user?.uid && (
           <>
+            {/* Account Dashboard */}
             <SectionLabel>My Account</SectionLabel>
             <NavList>
               <NavItem
-                to={isSeller ? "/dashboard/seller" : "/dashboard/buyer"}
+                to={menuConfig.isSeller ? "/dashboard/seller" : "/dashboard/buyer"}
                 $active={isActive("/dashboard/seller") || isActive("/dashboard/buyer")}
                 onClick={onClose}
               >
                 Dashboard
               </NavItem>
-              {isSeller && (
-                <NavItem
-                  to="/marketplace/create-listing"
-                  $active={isActive("/marketplace/create-listing")}
-                  onClick={onClose}
-                >
-                  Create Listing
-                </NavItem>
-              )}
               <NavItem
-                to="/marketplace/tools/verification"
-                $active={isActive("/marketplace/tools/verification")}
+                to="/dashboard/financial"
+                $active={isActive("/dashboard/financial")}
                 onClick={onClose}
               >
-                Verification Portal
+                Financial Overview
+              </NavItem>
+              <NavItem
+                to="/marketplace/transactions"
+                $active={isActive("/marketplace/transactions")}
+                onClick={onClose}
+              >
+                My Transactions
+              </NavItem>
+            </NavList>
+
+            {/* Seller Tools */}
+            {menuConfig.showSellerTools && (
+              <>
+                <SectionLabel>Seller Tools</SectionLabel>
+                <NavList>
+                  <NavItem
+                    to="/marketplace/create-listing"
+                    $active={isActive("/marketplace/create-listing")}
+                    onClick={onClose}
+                  >
+                    + Create Listing
+                  </NavItem>
+                  <NavItem
+                    to="/marketplace/my-listings"
+                    $active={isActive("/marketplace/my-listings")}
+                    onClick={onClose}
+                  >
+                    My Listings
+                  </NavItem>
+                  <NavItem
+                    to="/marketplace/tools/verification"
+                    $active={isActive("/marketplace/tools/verification")}
+                    onClick={onClose}
+                  >
+                    Verification Portal
+                  </NavItem>
+                </NavList>
+              </>
+            )}
+
+            {/* Tools - For all logged-in users */}
+            <SectionLabel>Tools</SectionLabel>
+            <NavList>
+              <NavItem
+                to="/marketplace/tools/calculator"
+                $active={isActive("/marketplace/tools/calculator")}
+                onClick={onClose}
+              >
+                Credit Calculator
+              </NavItem>
+              <NavItem
+                to="/marketplace/tools/live"
+                $active={isActive("/marketplace/tools/live")}
+                onClick={onClose}
+              >
+                Live Streams
               </NavItem>
             </NavList>
           </>
         )}
 
-        <SectionLabel>BlueSignal</SectionLabel>
+        {/* BlueSignal Ecosystem */}
+        <SectionLabel>BlueSignal Ecosystem</SectionLabel>
         <NavList>
           <ExternalLink
             href="https://cloud.bluesignal.xyz"
@@ -356,7 +427,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
             rel="noopener noreferrer"
             onClick={onClose}
           >
-            Get Hardware Quote
+            Hardware & Quotes
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
         </NavList>
@@ -365,7 +436,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
           {user?.uid ? (
             <>Signed in as <strong>{user?.email || user?.username}</strong></>
           ) : (
-            <>Welcome, <strong>guest</strong></>
+            <>Welcome, <strong>guest</strong> - <a href="/login" style={{ color: '#1D7072' }}>Sign in</a></>
           )}
         </SmallText>
 

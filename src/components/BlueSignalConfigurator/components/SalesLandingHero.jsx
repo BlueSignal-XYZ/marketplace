@@ -282,6 +282,168 @@ const ROIMetric = styled.div`
   }
 `;
 
+// DIY Section Styles
+const DIYSection = styled.div`
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 32px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #ffffff;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+`;
+
+const DIYHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const DIYTitle = styled.div`
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    span {
+      background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    max-width: 400px;
+  }
+`;
+
+const DIYBadge = styled.div`
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4ade80;
+  white-space: nowrap;
+`;
+
+const DIYPathsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const DIYPathCard = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(74, 222, 128, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: ${({ $color }) => $color || 'rgba(74, 222, 128, 0.15)'};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+
+  .description {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .feature {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &::before {
+      content: "✓";
+      color: #4ade80;
+      font-size: 11px;
+    }
+  }
+`;
+
+const DIYResources = styled.div`
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+`;
+
+const ResourceLink = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+`;
+
 export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
   // ROI Calculator state
   const [waterVolume, setWaterVolume] = useState(50000);
@@ -403,6 +565,79 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
           </ROIResults>
         </ROIGrid>
       </ROISection>
+
+      {/* DIY Section */}
+      <DIYSection>
+        <DIYHeader>
+          <DIYTitle>
+            <h3>Build It <span>Yourself</span></h3>
+            <p>
+              For those who want to build their own monitoring system, we provide
+              complete documentation, wiring diagrams, and BOM lists.
+            </p>
+          </DIYTitle>
+          <DIYBadge>Open Hardware</DIYBadge>
+        </DIYHeader>
+
+        <DIYPathsGrid>
+          <DIYPathCard onClick={onGetStarted} $color="rgba(74, 222, 128, 0.15)">
+            <div className="icon">Tool</div>
+            <div className="title">Full DIY Kit</div>
+            <div className="description">
+              Source your own components using our complete bill of materials and wiring diagrams.
+            </div>
+            <div className="features">
+              <div className="feature">Complete BOM with sources</div>
+              <div className="feature">Wiring diagrams</div>
+              <div className="feature">3D enclosure files</div>
+              <div className="feature">Firmware repository</div>
+            </div>
+          </DIYPathCard>
+
+          <DIYPathCard onClick={onGetStarted} $color="rgba(34, 211, 238, 0.15)">
+            <div className="icon">Chip</div>
+            <div className="title">Electronics Only</div>
+            <div className="description">
+              Get the pre-assembled PCB and sensors, build your own enclosure and power system.
+            </div>
+            <div className="features">
+              <div className="feature">Pre-flashed controller</div>
+              <div className="feature">Calibrated sensors</div>
+              <div className="feature">Cloud connectivity ready</div>
+              <div className="feature">Enclosure templates</div>
+            </div>
+          </DIYPathCard>
+
+          <DIYPathCard onClick={onGetStarted} $color="rgba(251, 191, 36, 0.15)">
+            <div className="icon">Box</div>
+            <div className="title">Turnkey System</div>
+            <div className="description">
+              Fully assembled and tested system ready to deploy. Just connect power and start monitoring.
+            </div>
+            <div className="features">
+              <div className="feature">Factory calibrated</div>
+              <div className="feature">Weatherproof enclosure</div>
+              <div className="feature">Solar + battery included</div>
+              <div className="feature">1-year warranty</div>
+            </div>
+          </DIYPathCard>
+        </DIYPathsGrid>
+
+        <DIYResources>
+          <ResourceLink href="#technical" onClick={onGetStarted}>
+            View Wiring Diagrams
+          </ResourceLink>
+          <ResourceLink href="#pricing" onClick={onGetStarted}>
+            Download BOM
+          </ResourceLink>
+          <ResourceLink href="#install" onClick={onGetStarted}>
+            Installation Guide
+          </ResourceLink>
+          <ResourceLink href="https://github.com/bluesignal" target="_blank" rel="noopener noreferrer">
+            GitHub Repository
+          </ResourceLink>
+        </DIYResources>
+      </DIYSection>
     </HeroWrapper>
   );
 }

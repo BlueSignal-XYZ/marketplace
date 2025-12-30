@@ -5,6 +5,27 @@ import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 
+const DemoBanner = styled.div`
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #92400e;
+
+  .icon {
+    font-size: 18px;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+`;
+
 const Controls = styled.div`
   display: flex;
   flex-direction: column;
@@ -370,6 +391,10 @@ export default function AlertsPage() {
       title="Alerts"
       subtitle="Monitor and manage device alerts"
     >
+      <DemoBanner>
+        <span className="icon">ℹ️</span>
+        <span><strong>Sample Data:</strong> Alerts shown are for demonstration. Actions update locally but don't persist to a database yet.</span>
+      </DemoBanner>
       <Controls>
         <Filters>
           <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>

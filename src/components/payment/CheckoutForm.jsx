@@ -12,7 +12,7 @@ import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState, useEffect } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { motion } from "framer-motion";
-import Spinner from "./Spinner"; 
+import Spinner from "./Spinner";
 import configs from "../../../configs";
 import { unitToString } from "./OrderConfirmation";
 import {presaleProducer} from "./data";
@@ -20,6 +20,7 @@ import { ButtonPrimary } from "../shared/button/Button";
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import {NPCCreditsAPI} from "../../scripts/back_door";
+import { useAppContext } from "../../context/AppContext";
 
 
 
@@ -28,6 +29,8 @@ const Form = ({ item }) => {
   const stripe = useStripe();
   const elements = useElements();
   const naviagte = useNavigate();
+  const { STATES } = useAppContext();
+  const { user } = STATES;
 
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -46,9 +49,13 @@ const Form = ({ item }) => {
     let certReturn = 0;
     try {
       const { producer, verifier, type } = presaleProducer;
-  
+
+      if (!user?.uid) {
+        throw new Error("User not authenticated");
+      }
+
       const data = await NPCCreditsAPI.buyCredits({
-        accountID: "test_investor",
+        accountID: user.uid,
         producer,
         verifier,
         creditType: type,

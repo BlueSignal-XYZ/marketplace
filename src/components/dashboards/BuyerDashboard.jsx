@@ -42,6 +42,27 @@ const Header = styled.div`
   }
 `;
 
+const DemoBanner = styled.div`
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #92400e;
+
+  .icon {
+    font-size: 18px;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+`;
+
 const HeaderActions = styled.div`
   display: flex;
   flex-direction: column;
@@ -450,6 +471,90 @@ const LoadingSpinner = styled.div`
   }
 `;
 
+const GettingStartedCard = styled.div`
+  background: linear-gradient(135deg, #e0f7f8 0%, #c5e8e9 100%);
+  border: 1px solid #1D7072;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 20px;
+  }
+`;
+
+const GettingStartedIcon = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #1D7072;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+`;
+
+const GettingStartedContent = styled.div`
+  flex: 1;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.5;
+  }
+`;
+
+const StepList = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+`;
+
+const Step = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D7072;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #1D7072;
+    color: white;
+  }
+
+  .number {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: ${({ $completed }) => $completed ? '#10b981' : '#1D7072'};
+    color: white;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
 const StatusBadge = styled.span`
   display: inline-block;
   padding: 4px 10px;
@@ -582,14 +687,49 @@ const BuyerDashboard = () => {
 
   const totalSpent = purchases.reduce((sum, p) => sum + p.price, 0);
   const pendingCount = purchases.filter((p) => p.status.includes('Pending')).length;
+  const isNewUser = purchases.length === 0;
 
   return (
     <Page>
       <Shell>
         <Header>
-          <h1>Buyer Dashboard</h1>
+          <h1>
+            {user?.username ? `Welcome back, ${user.username}` : 'Buyer Dashboard'}
+          </h1>
           <p>Browse available credits, track purchases, and manage compliance requirements.</p>
         </Header>
+
+        <DemoBanner>
+          <span className="icon">ℹ️</span>
+          <span><strong>Sample Data:</strong> This dashboard shows example credits and purchases for demonstration purposes. Your actual data will appear here once you make purchases.</span>
+        </DemoBanner>
+
+        {isNewUser && (
+          <GettingStartedCard>
+            <GettingStartedIcon>Start</GettingStartedIcon>
+            <GettingStartedContent>
+              <h3>Get Started with Water Credits</h3>
+              <p>
+                Welcome to WaterQuality.Trading! Here's how to make your first credit purchase
+                and start meeting your environmental compliance goals.
+              </p>
+              <StepList>
+                <Step onClick={handleBrowseMarketplace}>
+                  <span className="number">1</span>
+                  Browse Credits
+                </Step>
+                <Step onClick={() => navigate('/registry')}>
+                  <span className="number">2</span>
+                  Verify Sources
+                </Step>
+                <Step onClick={() => navigate('/map')}>
+                  <span className="number">3</span>
+                  View Projects
+                </Step>
+              </StepList>
+            </GettingStartedContent>
+          </GettingStartedCard>
+        )}
 
         <HeaderActions>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
