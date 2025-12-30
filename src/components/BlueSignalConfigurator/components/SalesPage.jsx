@@ -70,12 +70,13 @@ const ProductDetailOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
   z-index: ${salesTheme.zIndex.modal};
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.25s ease-out;
 
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -84,34 +85,36 @@ const ProductDetailOverlay = styled.div`
 
   @media (min-width: ${salesTheme.breakpoints.laptop}) {
     align-items: center;
-    padding: 24px;
+    padding: 32px;
   }
 `;
 
 const ProductDetailPanel = styled.div`
   background: ${salesTheme.colors.bgCard};
-  border-radius: 24px 24px 0 0;
+  border-radius: 28px 28px 0 0;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
 
   @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
+    from { transform: translateY(100%); opacity: 0.8; }
+    to { transform: translateY(0); opacity: 1; }
   }
 
   @media (min-width: ${salesTheme.breakpoints.laptop}) {
-    border-radius: 24px;
+    border-radius: 28px;
     max-width: 1200px;
-    max-height: 85vh;
-    animation: scaleIn 0.2s ease-out;
+    max-height: 88vh;
+    animation: scaleIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
 
     @keyframes scaleIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
   }
 `;
@@ -120,38 +123,62 @@ const DetailHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
+  padding: 24px 28px;
   border-bottom: 1px solid ${salesTheme.colors.border};
-  background: ${salesTheme.colors.bgCard};
+  background: linear-gradient(to bottom, ${salesTheme.colors.bgCard} 0%, #fafbfc 100%);
   position: sticky;
   top: 0;
   z-index: 10;
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    padding: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 `;
 
 const DetailProductInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    flex: 1;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const DetailProductName = styled.h2`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
   color: ${salesTheme.colors.textDark};
   margin: 0;
+  letter-spacing: -0.02em;
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    font-size: 18px;
+  }
 `;
 
 const DetailProductPrice = styled.span`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 800;
   color: ${salesTheme.colors.accentPrimary};
   font-family: ${salesTheme.typography.fontMono};
+  letter-spacing: -0.02em;
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    font-size: 20px;
+  }
 `;
 
 const CloseButton = styled.button`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: #f3f4f6;
   border: none;
   color: ${salesTheme.colors.textMuted};
@@ -159,16 +186,30 @@ const CloseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 
   &:hover {
     background: #e5e7eb;
     color: ${salesTheme.colors.textDark};
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   svg {
     width: 20px;
     height: 20px;
+  }
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
   }
 `;
 
@@ -179,6 +220,7 @@ const DetailTabs = styled.div`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  padding: 0 12px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -186,20 +228,29 @@ const DetailTabs = styled.div`
 `;
 
 const DetailTab = styled.button`
-  padding: 14px 24px;
+  padding: 16px 28px;
   font-size: 14px;
   font-weight: 600;
   border: none;
-  background: ${props => props.$active ? salesTheme.colors.bgCard : 'transparent'};
+  background: transparent;
   color: ${props => props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textMuted};
   cursor: pointer;
-  border-bottom: 2px solid ${props => props.$active ? salesTheme.colors.accentSecondary : 'transparent'};
-  transition: all ${salesTheme.transitions.fast};
+  border-bottom: 3px solid ${props => props.$active ? salesTheme.colors.accentSecondary : 'transparent'};
+  transition: all 0.2s ease;
   white-space: nowrap;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
   &:hover {
     color: ${props => props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textDark};
-    background: ${props => props.$active ? salesTheme.colors.bgCard : '#f3f4f6'};
+    background: ${props => props.$active ? 'transparent' : 'rgba(0, 0, 0, 0.02)'};
+  }
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    padding: 14px 20px;
+    font-size: 13px;
   }
 `;
 
@@ -207,46 +258,86 @@ const DetailContent = styled.div`
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 24px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 32px;
+  background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    padding: 24px 20px;
+  }
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    padding: 20px 16px;
+  }
 `;
 
 const DetailActions = styled.div`
   display: flex;
   gap: 12px;
-  padding: 16px 24px;
+  padding: 20px 28px;
   border-top: 1px solid ${salesTheme.colors.border};
-  background: ${salesTheme.colors.bgCard};
+  background: linear-gradient(to top, ${salesTheme.colors.bgCard} 0%, #fafbfc 100%);
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    padding: 16px 20px;
+    flex-wrap: wrap;
+  }
 `;
 
 const ActionButton = styled.button`
   flex: 1;
-  padding: 14px 24px;
+  padding: 16px 24px;
   font-size: 14px;
-  font-weight: 600;
-  border-radius: ${salesTheme.borderRadius.md};
+  font-weight: 700;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
   ${props => props.$primary ? `
     background: ${salesTheme.gradients.greenCta};
     border: none;
-    color: ${salesTheme.colors.bgPrimary};
+    color: #0f172a;
+    flex: 1.5;
 
     &:hover {
-      transform: translateY(-1px);
-      box-shadow: ${salesTheme.shadows.glow};
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   ` : `
     background: ${salesTheme.colors.bgCard};
-    border: 1px solid ${salesTheme.colors.border};
+    border: 2px solid ${salesTheme.colors.border};
     color: ${salesTheme.colors.textMuted};
 
     &:hover {
       background: #f3f4f6;
       color: ${salesTheme.colors.textDark};
+      border-color: #d1d5db;
     }
   `}
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    padding: 14px 16px;
+    font-size: 13px;
+    min-width: unset;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 `;
 
 // Benchmark Section Wrapper
@@ -734,7 +825,7 @@ export default function SalesPage() {
           </div>
         </MainContent>
 
-        <SalesFooter />
+        <SalesFooter onNavigate={handleNavigate} />
 
         {/* Product Detail Panel */}
         {selectedProduct && (
