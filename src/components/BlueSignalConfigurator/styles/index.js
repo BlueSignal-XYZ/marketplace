@@ -1163,3 +1163,6 @@ export const NoResults = styled.div`
     margin: 0;
   }
 `;
+
+// Re-export theme
+export { salesTheme, generateCSSVariables } from './theme';

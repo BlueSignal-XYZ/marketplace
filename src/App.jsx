@@ -57,6 +57,7 @@ import {
 import { Livepeer } from "./components/elements/livepeer";
 import { VerificationUI } from "./components/elements/contractUI";
 import BlueSignalConfigurator from "./components/BlueSignalConfigurator";
+import { SalesPage } from "./components/BlueSignalConfigurator/components";
 
 // Installer portal components (used in Cloud commissioning routes)
 import {
@@ -678,18 +679,33 @@ const CloudRoutes = ({ user, authLoading }) => (
 
 /**
  * SalesRoutes - Dedicated routes for sales.bluesignal.xyz
- * Only exposes the product configurator - all other routes redirect to it.
+ * Unified single-page sales portal with clean URL structure.
+ * Uses query params for state instead of hash routes.
  */
 const SalesRoutes = () => (
   <Routes>
-    {/* Product configurator - the only page available */}
-    <Route path="/" element={<BlueSignalConfigurator />} />
-    <Route path="/configurator" element={<BlueSignalConfigurator />} />
+    {/* Main unified sales page - handles all product/quote state via query params */}
+    <Route path="/" element={<SalesPage />} />
 
-    {/* Catch-all: redirect to configurator */}
-    <Route path="*" element={<BlueSignalConfigurator />} />
+    {/* Legacy configurator path - redirects to main page */}
+    <Route path="/configurator" element={<Navigate to="/" replace />} />
+
+    {/* Product deep links - redirect to main with product param */}
+    <Route path="/products/:productId" element={<ProductRedirect />} />
+
+    {/* Catch-all: redirect to main sales page */}
+    <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
+
+/**
+ * ProductRedirect - Handles legacy product routes by converting to query params
+ */
+const ProductRedirect = () => {
+  const location = useLocation();
+  const productId = location.pathname.split('/').pop();
+  return <Navigate to={`/?product=${productId}`} replace />;
+};
 
 /* -------------------------------------------------------------------------- */
 /*                             MARKETPLACE ROUTES                              */
