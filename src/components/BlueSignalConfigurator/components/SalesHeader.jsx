@@ -1,8 +1,19 @@
 // SalesHeader - Unified sticky header for the sales portal
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect, useCallback } from "react";
+import styled, { keyframes } from "styled-components";
 import bluesignalLogo from "../../../assets/bluesignal-logo.png";
 import { salesTheme } from "../styles/theme";
+
+const slideDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const HeaderWrapper = styled.header`
   position: fixed;
@@ -12,28 +23,35 @@ const HeaderWrapper = styled.header`
   z-index: ${salesTheme.zIndex.sticky};
   background: ${props => props.$scrolled
     ? 'rgba(15, 23, 42, 0.98)'
-    : 'rgba(15, 23, 42, 0.85)'};
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+    : 'rgba(15, 23, 42, 0.9)'};
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid ${props => props.$scrolled
-    ? salesTheme.colors.borderDark
+    ? 'rgba(255, 255, 255, 0.08)'
     : 'transparent'};
-  transition: all ${salesTheme.transitions.normal};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${props => props.$scrolled
+    ? '0 4px 20px rgba(0, 0, 0, 0.3)'
+    : 'none'};
 `;
 
 const HeaderContainer = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
-  height: 72px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: 40px;
+
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    gap: 24px;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     padding: 0 16px;
-    height: 64px;
+    height: 68px;
   }
 `;
 
@@ -42,99 +60,173 @@ const LogoLink = styled.a`
   align-items: center;
   text-decoration: none;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${salesTheme.colors.accentPrimary};
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
 `;
 
 const LogoImage = styled.img`
-  height: 36px;
+  height: 38px;
   width: auto;
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    height: 28px;
+    height: 30px;
   }
 `;
 
 const Nav = styled.nav`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 
-  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
     display: none;
   }
 `;
 
 const NavLink = styled.button`
   background: ${props => props.$active
-    ? 'rgba(255, 255, 255, 0.1)'
+    ? 'rgba(16, 185, 129, 0.15)'
     : 'transparent'};
   border: none;
-  border-radius: ${salesTheme.borderRadius.md};
-  padding: 10px 18px;
+  border-radius: 10px;
+  padding: 12px 20px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: ${props => props.$active
-    ? salesTheme.colors.textPrimary
-    : salesTheme.colors.textSecondary};
+    ? salesTheme.colors.accentPrimary
+    : 'rgba(255, 255, 255, 0.7)'};
   cursor: pointer;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.2s ease;
   white-space: nowrap;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    opacity: ${props => props.$active ? 1 : 0.6};
+    transition: opacity 0.2s ease;
+  }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: ${salesTheme.colors.textPrimary};
+    background: ${props => props.$active
+      ? 'rgba(16, 185, 129, 0.2)'
+      : 'rgba(255, 255, 255, 0.08)'};
+    color: ${props => props.$active
+      ? salesTheme.colors.accentPrimary
+      : 'rgba(255, 255, 255, 0.95)'};
+
+    svg {
+      opacity: 1;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${salesTheme.colors.accentPrimary};
+    outline-offset: 2px;
   }
 `;
 
 const HeaderActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 `;
 
 const QuoteButton = styled.button`
   background: ${salesTheme.gradients.greenCta};
   border: none;
-  border-radius: ${salesTheme.borderRadius.md};
-  padding: 10px 20px;
+  border-radius: 12px;
+  padding: 12px 24px;
   font-size: 14px;
-  font-weight: 600;
-  color: ${salesTheme.colors.bgPrimary};
+  font-weight: 700;
+  color: #0f172a;
   cursor: pointer;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: ${salesTheme.shadows.glow};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+
+    &::before {
+      transform: translateX(100%);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${salesTheme.colors.accentPrimary};
+    outline-offset: 3px;
   }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    padding: 8px 16px;
+    padding: 10px 18px;
     font-size: 13px;
+    border-radius: 10px;
+  }
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    padding: 10px 14px;
+
+    span {
+      display: none;
+    }
   }
 `;
 
 const QuoteBadge = styled.span`
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: ${salesTheme.borderRadius.full};
-  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 100px;
+  padding: 3px 10px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  min-width: 24px;
+  text-align: center;
 `;
 
 const MobileMenuButton = styled.button`
   display: none;
-  background: transparent;
-  border: 1px solid ${salesTheme.colors.borderDark};
-  border-radius: ${salesTheme.borderRadius.md};
-  padding: 8px;
-  color: ${salesTheme.colors.textSecondary};
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.2s ease;
 
-  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,69 +237,179 @@ const MobileMenuButton = styled.button`
     color: ${salesTheme.colors.textPrimary};
   }
 
+  &:focus-visible {
+    outline: 2px solid ${salesTheme.colors.accentPrimary};
+    outline-offset: 2px;
+  }
+
   svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+  }
+`;
+
+const MobileMenuOverlay = styled.div`
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: 68px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: ${salesTheme.zIndex.sticky - 1};
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    display: block;
+    ${props => props.$isOpen && `
+      opacity: 1;
+      pointer-events: auto;
+    `}
   }
 `;
 
 const MobileMenu = styled.div`
   display: none;
   position: fixed;
-  top: 64px;
+  top: 68px;
   left: 0;
   right: 0;
   background: ${salesTheme.colors.bgPrimary};
-  border-bottom: 1px solid ${salesTheme.colors.borderDark};
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 16px;
-  animation: slideDown 0.2s ease-out;
+  z-index: ${salesTheme.zIndex.sticky};
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    display: ${props => props.$isOpen ? 'flex' : 'none'};
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+
+    ${props => props.$isOpen && `
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+      animation: ${slideDown} 0.3s ease-out;
+    `}
   }
 `;
 
 const MobileNavLink = styled.button`
   background: ${props => props.$active
-    ? 'rgba(255, 255, 255, 0.1)'
+    ? 'rgba(16, 185, 129, 0.12)'
     : 'transparent'};
   border: none;
-  border-radius: ${salesTheme.borderRadius.md};
-  padding: 14px 16px;
+  border-radius: 12px;
+  padding: 16px 18px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: ${props => props.$active
-    ? salesTheme.colors.textPrimary
-    : salesTheme.colors.textSecondary};
+    ? salesTheme.colors.accentPrimary
+    : 'rgba(255, 255, 255, 0.75)'};
   cursor: pointer;
   text-align: left;
   width: 100%;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    opacity: ${props => props.$active ? 1 : 0.5};
+  }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: ${salesTheme.colors.textPrimary};
+    background: ${props => props.$active
+      ? 'rgba(16, 185, 129, 0.18)'
+      : 'rgba(255, 255, 255, 0.06)'};
+    color: ${props => props.$active
+      ? salesTheme.colors.accentPrimary
+      : 'rgba(255, 255, 255, 0.95)'};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${salesTheme.colors.accentPrimary};
+    outline-offset: -2px;
   }
 `;
 
+const MobileMenuDivider = styled.div`
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 8px 0;
+`;
+
+const MobileQuoteInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 12px;
+  margin-top: 8px;
+`;
+
+const MobileQuoteText = styled.span`
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+`;
+
+const MobileQuoteCount = styled.span`
+  font-size: 14px;
+  color: ${salesTheme.colors.accentPrimary};
+  font-weight: 700;
+`;
+
 const navItems = [
-  { id: 'hero', label: 'Home' },
-  { id: 'products', label: 'Products' },
-  { id: 'calculator', label: 'ROI Calculator' },
-  { id: 'benchmark', label: 'Benchmark' },
+  {
+    id: 'hero',
+    label: 'Home',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    )
+  },
+  {
+    id: 'products',
+    label: 'Products',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+    )
+  },
+  {
+    id: 'calculator',
+    label: 'ROI Calculator',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <line x1="12" y1="1" x2="12" y2="23"/>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+    )
+  },
+  {
+    id: 'benchmark',
+    label: 'Benchmark',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+    )
+  },
 ];
 
 export default function SalesHeader({
@@ -224,16 +426,47 @@ export default function SalesHeader({
       setScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (sectionId) => {
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [mobileMenuOpen]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  const handleNavClick = useCallback((sectionId) => {
     setMobileMenuOpen(false);
     if (onNavigate) {
       onNavigate(sectionId);
     }
-  };
+  }, [onNavigate]);
+
+  const handleQuoteClick = useCallback(() => {
+    setMobileMenuOpen(false);
+    if (onOpenQuote) {
+      onOpenQuote();
+    }
+  }, [onOpenQuote]);
 
   return (
     <>
@@ -243,25 +476,33 @@ export default function SalesHeader({
             href="https://bluesignal.xyz"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="BlueSignal Homepage"
           >
             <LogoImage src={bluesignalLogo} alt="BlueSignal" />
           </LogoLink>
 
-          <Nav>
+          <Nav role="navigation" aria-label="Main navigation">
             {navItems.map((item) => (
               <NavLink
                 key={item.id}
                 $active={activeSection === item.id}
                 onClick={() => handleNavClick(item.id)}
+                aria-current={activeSection === item.id ? 'page' : undefined}
               >
+                {item.icon}
                 {item.label}
               </NavLink>
             ))}
           </Nav>
 
           <HeaderActions>
-            <QuoteButton onClick={onOpenQuote}>
-              Get a Quote
+            <QuoteButton onClick={handleQuoteClick} aria-label={`View quote with ${quoteItemCount} items`}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              <span>Get a Quote</span>
               {quoteItemCount > 0 && (
                 <QuoteBadge>{quoteItemCount}</QuoteBadge>
               )}
@@ -269,7 +510,8 @@ export default function SalesHeader({
 
             <MobileMenuButton
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -285,16 +527,33 @@ export default function SalesHeader({
         </HeaderContainer>
       </HeaderWrapper>
 
-      <MobileMenu $isOpen={mobileMenuOpen}>
+      <MobileMenuOverlay
+        $isOpen={mobileMenuOpen}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      <MobileMenu $isOpen={mobileMenuOpen} role="navigation" aria-label="Mobile navigation">
         {navItems.map((item) => (
           <MobileNavLink
             key={item.id}
             $active={activeSection === item.id}
             onClick={() => handleNavClick(item.id)}
+            aria-current={activeSection === item.id ? 'page' : undefined}
           >
+            {item.icon}
             {item.label}
           </MobileNavLink>
         ))}
+
+        {quoteItemCount > 0 && (
+          <>
+            <MobileMenuDivider />
+            <MobileQuoteInfo onClick={handleQuoteClick} style={{ cursor: 'pointer' }}>
+              <MobileQuoteText>Items in your quote</MobileQuoteText>
+              <MobileQuoteCount>{quoteItemCount} item{quoteItemCount !== 1 ? 's' : ''}</MobileQuoteCount>
+            </MobileQuoteInfo>
+          </>
+        )}
       </MobileMenu>
     </>
   );

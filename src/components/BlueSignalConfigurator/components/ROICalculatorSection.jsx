@@ -1,61 +1,88 @@
 // ROICalculatorSection - Interactive ROI calculator for the sales portal
 import React, { useState, useMemo } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { salesTheme } from "../styles/theme";
+
+const pulse = keyframes`
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+`;
 
 const CalculatorSection = styled.section`
   background: ${salesTheme.colors.bgSurface};
-  padding: 80px 24px;
+  padding: 100px 24px;
+  position: relative;
+
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    padding: 80px 20px;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    padding: 48px 16px;
+    padding: 60px 16px;
   }
 `;
 
 const CalculatorContainer = styled.div`
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 `;
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 56px;
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    margin-bottom: 40px;
+  }
 `;
 
 const SectionLabel = styled.span`
-  display: inline-block;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: ${salesTheme.colors.accentPrimary};
-  margin-bottom: 12px;
-`;
+  margin-bottom: 16px;
+  padding: 6px 14px;
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 100px;
 
-const SectionTitle = styled.h2`
-  font-size: 32px;
-  font-weight: 600;
-  color: ${salesTheme.colors.textDark};
-  margin: 0 0 16px;
-
-  @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    font-size: 24px;
+  svg {
+    width: 14px;
+    height: 14px;
   }
 `;
 
+const SectionTitle = styled.h2`
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  color: ${salesTheme.colors.textDark};
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+`;
+
 const SectionDescription = styled.p`
-  font-size: 16px;
+  font-size: 17px;
   color: ${salesTheme.colors.textMuted};
-  max-width: 600px;
+  max-width: 560px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.7;
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    font-size: 15px;
+  }
 `;
 
 const CalculatorCard = styled.div`
   background: ${salesTheme.colors.bgCard};
-  border-radius: ${salesTheme.borderRadius.xl};
-  box-shadow: ${salesTheme.shadows.xl};
+  border-radius: 28px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 12px 40px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
 `;
 
 const CalculatorGrid = styled.div`
@@ -68,8 +95,12 @@ const CalculatorGrid = styled.div`
 `;
 
 const InputsPanel = styled.div`
-  padding: 40px;
+  padding: 48px;
   border-right: 1px solid ${salesTheme.colors.border};
+
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    padding: 40px;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     border-right: none;
@@ -78,15 +109,39 @@ const InputsPanel = styled.div`
   }
 `;
 
-const InputsTitle = styled.h3`
-  font-size: 18px;
-  font-weight: 600;
+const PanelHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+`;
+
+const PanelIcon = styled.div`
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    color: ${salesTheme.colors.accentSecondary};
+  }
+`;
+
+const PanelTitle = styled.h3`
+  font-size: 20px;
+  font-weight: 700;
   color: ${salesTheme.colors.textDark};
-  margin: 0 0 24px;
+  margin: 0;
+  letter-spacing: -0.01em;
 `;
 
 const InputGroup = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 
   &:last-child {
     margin-bottom: 0;
@@ -95,103 +150,166 @@ const InputGroup = styled.div`
 
 const InputLabel = styled.label`
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  color: ${salesTheme.colors.textDark};
+  margin-bottom: 10px;
+`;
+
+const InputHelper = styled.span`
+  font-weight: 400;
   color: ${salesTheme.colors.textMuted};
-  margin-bottom: 8px;
+  font-size: 13px;
+  display: block;
+  margin-top: 4px;
 `;
 
 const InputField = styled.input`
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid ${salesTheme.colors.border};
-  border-radius: ${salesTheme.borderRadius.md};
+  padding: 16px 18px;
+  border: 2px solid ${salesTheme.colors.border};
+  border-radius: 12px;
   font-size: 16px;
+  font-weight: 500;
   color: ${salesTheme.colors.textDark};
-  transition: all ${salesTheme.transitions.fast};
+  background: #fafbfc;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #d1d5db;
+  }
 
   &:focus {
     outline: none;
     border-color: ${salesTheme.colors.accentSecondary};
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  &::placeholder {
+    color: #9ca3af;
   }
 `;
 
 const SelectField = styled.select`
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid ${salesTheme.colors.border};
-  border-radius: ${salesTheme.borderRadius.md};
+  padding: 16px 18px;
+  border: 2px solid ${salesTheme.colors.border};
+  border-radius: 12px;
   font-size: 16px;
+  font-weight: 500;
   color: ${salesTheme.colors.textDark};
-  background: ${salesTheme.colors.bgCard};
+  background: #fafbfc;
   cursor: pointer;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 18px;
+  padding-right: 48px;
+
+  &:hover {
+    border-color: #d1d5db;
+  }
 
   &:focus {
     outline: none;
     border-color: ${salesTheme.colors.accentSecondary};
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   }
 `;
 
 const ResultsPanel = styled.div`
-  padding: 40px;
-  background: ${salesTheme.gradients.roiResults};
+  padding: 48px;
+  background: linear-gradient(145deg, #f0fdf4 0%, #ecfeff 50%, #f0f9ff 100%);
+  position: relative;
+
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    padding: 40px;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     padding: 32px 24px;
   }
 `;
 
-const ResultsTitle = styled.h3`
-  font-size: 18px;
-  font-weight: 600;
-  color: ${salesTheme.colors.textDark};
-  margin: 0 0 24px;
-`;
-
 const ResultsGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 `;
 
-const ResultItem = styled.div``;
+const ResultItem = styled.div`
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+  }
+`;
 
 const ResultLabel = styled.div`
   font-size: 13px;
+  font-weight: 600;
   color: ${salesTheme.colors.textMuted};
-  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
 `;
 
 const ResultValue = styled.div`
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 800;
   color: ${salesTheme.colors.accentPrimary};
   font-family: ${salesTheme.typography.fontMono};
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    font-size: 28px;
+  }
 `;
 
 const ResultSubtext = styled.div`
-  font-size: 12px;
+  font-size: 13px;
   color: ${salesTheme.colors.textMuted};
-  margin-top: 4px;
+  margin-top: 6px;
+  line-height: 1.4;
 `;
 
 const CTASection = styled.div`
-  padding: 24px 40px;
-  background: ${salesTheme.colors.bgCard};
+  padding: 28px 48px;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.04) 0%, rgba(59, 130, 246, 0.04) 100%);
   border-top: 1px solid ${salesTheme.colors.border};
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
+
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+    padding: 24px 40px;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     flex-direction: column;
     padding: 24px;
     text-align: center;
   }
+`;
+
+const CTAContent = styled.div``;
+
+const CTATitle = styled.h4`
+  font-size: 16px;
+  font-weight: 700;
+  color: ${salesTheme.colors.textDark};
+  margin: 0 0 4px;
 `;
 
 const CTAText = styled.p`
@@ -202,19 +320,37 @@ const CTAText = styled.p`
 
 const CTAButton = styled.button`
   background: ${salesTheme.gradients.greenCta};
-  color: ${salesTheme.colors.bgPrimary};
+  color: #0f172a;
   border: none;
-  border-radius: ${salesTheme.borderRadius.md};
-  padding: 14px 28px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all ${salesTheme.transitions.fast};
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: ${salesTheme.shadows.glow};
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(16, 185, 129, 0.3);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    width: 100%;
+    justify-content: center;
   }
 `;
 
@@ -224,18 +360,11 @@ export default function ROICalculatorSection({ onGetQuote }) {
   const [currentCost, setCurrentCost] = useState(500);
 
   const results = useMemo(() => {
-    // Calculate estimated monthly credits based on water volume
     const estimatedCredits = Math.round(waterVolume * 0.02);
     const annualCredits = estimatedCredits * 12;
-
-    // System cost based on site type
     const systemCost = siteType === "pond" ? 1500 : siteType === "lake" ? 3000 : 5000;
-
-    // Payback calculation
     const monthlySavings = estimatedCredits + currentCost * 0.3;
     const paybackMonths = Math.round(systemCost / monthlySavings);
-
-    // 5-year value
     const fiveYearValue = annualCredits * 5 + currentCost * 0.3 * 12 * 5;
 
     return {
@@ -249,22 +378,37 @@ export default function ROICalculatorSection({ onGetQuote }) {
     <CalculatorSection id="calculator">
       <CalculatorContainer>
         <SectionHeader>
-          <SectionLabel>ROI Calculator</SectionLabel>
-          <SectionTitle>Calculate Your Return</SectionTitle>
+          <SectionLabel>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            ROI Calculator
+          </SectionLabel>
+          <SectionTitle>Calculate Your Return on Investment</SectionTitle>
           <SectionDescription>
             See how quickly a BlueSignal monitoring system can pay for itself
-            through water quality credits and monitoring savings.
+            through water quality credits and reduced monitoring costs.
           </SectionDescription>
         </SectionHeader>
 
         <CalculatorCard>
           <CalculatorGrid>
             <InputsPanel>
-              <InputsTitle>Your Site Details</InputsTitle>
+              <PanelHeader>
+                <PanelIcon>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </PanelIcon>
+                <PanelTitle>Your Site Details</PanelTitle>
+              </PanelHeader>
 
               <InputGroup>
                 <InputLabel htmlFor="waterVolume">
-                  Water Volume (gallons/day)
+                  Daily Water Volume
+                  <InputHelper>Estimated gallons processed per day</InputHelper>
                 </InputLabel>
                 <InputField
                   id="waterVolume"
@@ -273,25 +417,30 @@ export default function ROICalculatorSection({ onGetQuote }) {
                   onChange={(e) => setWaterVolume(Number(e.target.value))}
                   min="1000"
                   step="1000"
+                  placeholder="50000"
                 />
               </InputGroup>
 
               <InputGroup>
-                <InputLabel htmlFor="siteType">Site Type</InputLabel>
+                <InputLabel htmlFor="siteType">
+                  Site Type
+                  <InputHelper>Select your water body type</InputHelper>
+                </InputLabel>
                 <SelectField
                   id="siteType"
                   value={siteType}
                   onChange={(e) => setSiteType(e.target.value)}
                 >
-                  <option value="pond">Pond / Small Lake</option>
-                  <option value="lake">Large Lake</option>
+                  <option value="pond">Pond / Small Lake (up to 5 acres)</option>
+                  <option value="lake">Large Lake (5-50 acres)</option>
                   <option value="commercial">Commercial / Municipal</option>
                 </SelectField>
               </InputGroup>
 
               <InputGroup>
                 <InputLabel htmlFor="currentCost">
-                  Current Monthly Monitoring Cost ($)
+                  Current Monthly Monitoring Cost
+                  <InputHelper>What you currently spend on water testing</InputHelper>
                 </InputLabel>
                 <InputField
                   id="currentCost"
@@ -300,12 +449,20 @@ export default function ROICalculatorSection({ onGetQuote }) {
                   onChange={(e) => setCurrentCost(Number(e.target.value))}
                   min="0"
                   step="50"
+                  placeholder="500"
                 />
               </InputGroup>
             </InputsPanel>
 
             <ResultsPanel>
-              <ResultsTitle>Projected Results</ResultsTitle>
+              <PanelHeader>
+                <PanelIcon style={{ background: 'rgba(16, 185, 129, 0.15)' }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: salesTheme.colors.accentPrimary }}>
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                  </svg>
+                </PanelIcon>
+                <PanelTitle>Projected Results</PanelTitle>
+              </PanelHeader>
               <ResultsGrid>
                 <ResultItem>
                   <ResultLabel>Estimated Monthly Credits</ResultLabel>
@@ -318,25 +475,31 @@ export default function ROICalculatorSection({ onGetQuote }) {
                 <ResultItem>
                   <ResultLabel>Payback Period</ResultLabel>
                   <ResultValue>{results.paybackMonths} months</ResultValue>
-                  <ResultSubtext>Time to recover system cost</ResultSubtext>
+                  <ResultSubtext>Time to fully recover your system investment</ResultSubtext>
                 </ResultItem>
 
                 <ResultItem>
-                  <ResultLabel>5-Year Value</ResultLabel>
+                  <ResultLabel>5-Year Total Value</ResultLabel>
                   <ResultValue>
                     ${results.fiveYearValue.toLocaleString()}
                   </ResultValue>
-                  <ResultSubtext>Credits + monitoring savings</ResultSubtext>
+                  <ResultSubtext>Combined credits and monitoring savings</ResultSubtext>
                 </ResultItem>
               </ResultsGrid>
             </ResultsPanel>
           </CalculatorGrid>
 
           <CTASection>
-            <CTAText>
-              Ready to see the full breakdown? Get a customized quote for your site.
-            </CTAText>
-            <CTAButton onClick={onGetQuote}>Get Your Custom Quote</CTAButton>
+            <CTAContent>
+              <CTATitle>Ready to see the full breakdown?</CTATitle>
+              <CTAText>Get a customized quote tailored to your specific site requirements.</CTAText>
+            </CTAContent>
+            <CTAButton onClick={onGetQuote}>
+              Get Your Custom Quote
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </CTAButton>
           </CTASection>
         </CalculatorCard>
       </CalculatorContainer>
