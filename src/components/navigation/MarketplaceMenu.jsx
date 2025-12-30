@@ -266,12 +266,16 @@ export function MarketplaceMenu({ open, onClose, user }) {
     location.pathname === path ||
     location.pathname.startsWith(path + "/");
 
+  // Determine primary dashboard based on user role
+  const userRole = user?.role || 'buyer';
+  const isSeller = userRole === 'seller' || userRole === 'farmer';
+
   return (
     <>
       <Backdrop $open={open} onClick={handleBackdropClick} />
       <Panel $open={open}>
         <PanelHeader>
-          <PanelTitle>Marketplace</PanelTitle>
+          <PanelTitle>WaterQuality.Trading</PanelTitle>
           <CloseButton
             type="button"
             aria-label="Close menu"
@@ -290,76 +294,46 @@ export function MarketplaceMenu({ open, onClose, user }) {
             $active={isActive("/marketplace")}
             onClick={onClose}
           >
-            Marketplace Home
-          </NavItem>
-          <NavItem
-            to="/recent-removals"
-            $active={isActive("/recent-removals")}
-            onClick={onClose}
-          >
-            Recent Removals
+            Browse Credits
           </NavItem>
           <NavItem
             to="/registry"
             $active={isActive("/registry")}
             onClick={onClose}
           >
-            Registry
+            Credit Registry
           </NavItem>
           <NavItem to="/map" $active={isActive("/map")} onClick={onClose}>
-            Map
-          </NavItem>
-          <NavItem
-            to="/presale"
-            $active={isActive("/presale")}
-            onClick={onClose}
-          >
-            Presale
+            Project Map
           </NavItem>
         </NavList>
 
         {user?.uid && (
           <>
-            <SectionLabel>Tools</SectionLabel>
+            <SectionLabel>My Account</SectionLabel>
             <NavList>
+              <NavItem
+                to={isSeller ? "/dashboard/seller" : "/dashboard/buyer"}
+                $active={isActive("/dashboard/seller") || isActive("/dashboard/buyer")}
+                onClick={onClose}
+              >
+                Dashboard
+              </NavItem>
+              {isSeller && (
+                <NavItem
+                  to="/marketplace/create-listing"
+                  $active={isActive("/marketplace/create-listing")}
+                  onClick={onClose}
+                >
+                  Create Listing
+                </NavItem>
+              )}
               <NavItem
                 to="/marketplace/tools/verification"
                 $active={isActive("/marketplace/tools/verification")}
                 onClick={onClose}
               >
-                Verification
-              </NavItem>
-            </NavList>
-
-            <SectionLabel>Account</SectionLabel>
-            <NavList>
-              <NavItem
-                to="/dashboard/buyer"
-                $active={isActive("/dashboard/buyer")}
-                onClick={onClose}
-              >
-                My Dashboard
-              </NavItem>
-              <NavItem
-                to="/dashboard/seller"
-                $active={isActive("/dashboard/seller")}
-                onClick={onClose}
-              >
-                Seller Dashboard
-              </NavItem>
-              <NavItem
-                to="/marketplace/create-listing"
-                $active={isActive("/marketplace/create-listing")}
-                onClick={onClose}
-              >
-                Create Listing
-              </NavItem>
-              <NavItem
-                to="/dashboard/financial"
-                $active={isActive("/dashboard/financial")}
-                onClick={onClose}
-              >
-                Financial Dashboard
+                Verification Portal
               </NavItem>
             </NavList>
           </>
@@ -373,7 +347,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
             rel="noopener noreferrer"
             onClick={onClose}
           >
-            Device Monitoring
+            Cloud Monitoring
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
           <ExternalLink
@@ -382,19 +356,22 @@ export function MarketplaceMenu({ open, onClose, user }) {
             rel="noopener noreferrer"
             onClick={onClose}
           >
-            Get a Quote
+            Get Hardware Quote
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
         </NavList>
 
         <SmallText>
-          Signed in as{" "}
-          <strong>{user?.email || user?.username || "guest"}</strong>.
+          {user?.uid ? (
+            <>Signed in as <strong>{user?.email || user?.username}</strong></>
+          ) : (
+            <>Welcome, <strong>guest</strong></>
+          )}
         </SmallText>
 
         {user?.uid && (
           <LogoutButton onClick={handleLogout}>
-            Logout
+            Sign Out
           </LogoutButton>
         )}
       </Panel>
