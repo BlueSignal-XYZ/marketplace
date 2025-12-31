@@ -1,6 +1,8 @@
 /**
  * Mock data for Registry page
  * Represents verified credits in the public registry
+ *
+ * Updated to include Virginia Chesapeake Bay Watershed credits
  */
 
 export interface RegistryCredit {
@@ -16,9 +18,144 @@ export interface RegistryCredit {
   verificationId: string;
   location: string;
   verifier: string;
+  // Virginia-specific fields (optional for backwards compatibility)
+  basinCode?: string;
+  basinName?: string;
+  complianceYear?: number;
+  deliveryFactor?: number;
+  sourceType?: 'point_source' | 'nonpoint_source';
 }
 
 export const mockRegistryCredits: RegistryCredit[] = [
+  // Virginia Chesapeake Bay Watershed Credits
+  {
+    id: 'VA-JAM-2025-N-000001',
+    type: 'nitrogen',
+    quantity: 4250,
+    unit: 'lbs N',
+    projectName: 'Shenandoah Valley Agricultural BMP',
+    projectId: 'VA-PROJ-2024-001',
+    issueDate: '2025-01-20',
+    status: 'active',
+    verificationId: 'VA-VER-2025-001',
+    location: 'Rockingham County, VA',
+    verifier: 'Virginia DEQ',
+    basinCode: 'JAM',
+    basinName: 'James River',
+    complianceYear: 2025,
+    deliveryFactor: 0.92,
+    sourceType: 'nonpoint_source',
+  },
+  {
+    id: 'VA-JAM-2025-P-000001',
+    type: 'phosphorus',
+    quantity: 890,
+    unit: 'lbs P',
+    projectName: 'Shenandoah Valley Agricultural BMP',
+    projectId: 'VA-PROJ-2024-001',
+    issueDate: '2025-01-20',
+    status: 'active',
+    verificationId: 'VA-VER-2025-002',
+    location: 'Rockingham County, VA',
+    verifier: 'Virginia DEQ',
+    basinCode: 'JAM',
+    basinName: 'James River',
+    complianceYear: 2025,
+    deliveryFactor: 0.92,
+    sourceType: 'nonpoint_source',
+  },
+  {
+    id: 'VA-POT-2025-N-000001',
+    type: 'nitrogen',
+    quantity: 12500,
+    unit: 'lbs N',
+    projectName: 'Alexandria Wastewater Treatment Upgrade',
+    projectId: 'VA-PROJ-2024-002',
+    issueDate: '2025-01-18',
+    status: 'active',
+    verificationId: 'VA-VER-2025-003',
+    location: 'Alexandria, VA',
+    verifier: 'Virginia DEQ',
+    basinCode: 'POT',
+    basinName: 'Potomac River',
+    complianceYear: 2025,
+    deliveryFactor: 0.58,
+    sourceType: 'point_source',
+  },
+  {
+    id: 'VA-POT-2025-P-000001',
+    type: 'phosphorus',
+    quantity: 3200,
+    unit: 'lbs P',
+    projectName: 'Alexandria Wastewater Treatment Upgrade',
+    projectId: 'VA-PROJ-2024-002',
+    issueDate: '2025-01-18',
+    status: 'active',
+    verificationId: 'VA-VER-2025-004',
+    location: 'Alexandria, VA',
+    verifier: 'Virginia DEQ',
+    basinCode: 'POT',
+    basinName: 'Potomac River',
+    complianceYear: 2025,
+    deliveryFactor: 0.70,
+    sourceType: 'point_source',
+  },
+  {
+    id: 'VA-YOR-2025-N-000001',
+    type: 'nitrogen',
+    quantity: 1850,
+    unit: 'lbs N',
+    projectName: 'Williamsburg Oyster Aquaculture Project',
+    projectId: 'VA-PROJ-2024-003',
+    issueDate: '2025-01-12',
+    status: 'active',
+    verificationId: 'VA-VER-2025-005',
+    location: 'York County, VA',
+    verifier: 'VIMS',
+    basinCode: 'YOR',
+    basinName: 'York River',
+    complianceYear: 2025,
+    deliveryFactor: 0.90,
+    sourceType: 'nonpoint_source',
+  },
+  {
+    id: 'VA-RAP-2024-N-000012',
+    type: 'nitrogen',
+    quantity: 2100,
+    unit: 'lbs N',
+    projectName: 'Rappahannock Forest Buffer Project',
+    projectId: 'VA-PROJ-2023-045',
+    issueDate: '2024-12-15',
+    retirementDate: '2025-01-10',
+    status: 'retired',
+    verificationId: 'VA-VER-2024-089',
+    location: 'Spotsylvania County, VA',
+    verifier: 'Virginia DEQ',
+    basinCode: 'RAP',
+    basinName: 'Rappahannock River',
+    complianceYear: 2024,
+    deliveryFactor: 0.78,
+    sourceType: 'nonpoint_source',
+  },
+  {
+    id: 'VA-ES-2025-N-000001',
+    type: 'nitrogen',
+    quantity: 750,
+    unit: 'lbs N',
+    projectName: 'Eastern Shore Cover Crop Program',
+    projectId: 'VA-PROJ-2024-004',
+    issueDate: '2025-01-08',
+    status: 'active',
+    verificationId: 'VA-VER-2025-006',
+    location: 'Accomack County, VA',
+    verifier: 'Virginia DEQ',
+    basinCode: 'ES',
+    basinName: 'Eastern Shore',
+    complianceYear: 2025,
+    deliveryFactor: 1.0,
+    sourceType: 'nonpoint_source',
+  },
+  // Legacy non-Virginia credits
   {
     id: 'WQT-2025-00142',
     type: 'nitrogen',
@@ -172,4 +309,77 @@ export const searchCredits = (query: string): RegistryCredit[] => {
       credit.projectName.toLowerCase().includes(lowerQuery) ||
       credit.location.toLowerCase().includes(lowerQuery)
   );
+};
+
+// Virginia-specific filters
+
+export const getCreditsByBasin = (basinCode?: string): RegistryCredit[] => {
+  if (!basinCode || basinCode === 'all') return mockRegistryCredits;
+  return mockRegistryCredits.filter(credit => credit.basinCode === basinCode);
+};
+
+export const getVirginiaCredits = (): RegistryCredit[] => {
+  return mockRegistryCredits.filter(credit => credit.basinCode !== undefined);
+};
+
+export const getCreditsByComplianceYear = (year?: number): RegistryCredit[] => {
+  if (!year) return mockRegistryCredits;
+  return mockRegistryCredits.filter(credit => credit.complianceYear === year);
+};
+
+export const getCreditsBySourceType = (sourceType?: 'point_source' | 'nonpoint_source'): RegistryCredit[] => {
+  if (!sourceType) return mockRegistryCredits;
+  return mockRegistryCredits.filter(credit => credit.sourceType === sourceType);
+};
+
+// Get unique basins from credits
+export const getAvailableBasins = (): { code: string; name: string }[] => {
+  const basins = new Map<string, string>();
+  mockRegistryCredits.forEach(credit => {
+    if (credit.basinCode && credit.basinName) {
+      basins.set(credit.basinCode, credit.basinName);
+    }
+  });
+  return Array.from(basins).map(([code, name]) => ({ code, name }));
+};
+
+// Get unique compliance years
+export const getAvailableComplianceYears = (): number[] => {
+  const years = new Set<number>();
+  mockRegistryCredits.forEach(credit => {
+    if (credit.complianceYear) {
+      years.add(credit.complianceYear);
+    }
+  });
+  return Array.from(years).sort((a, b) => b - a);
+};
+
+// Combined filter for Virginia credits
+export const filterVirginiaCredits = (filters: {
+  basinCode?: string;
+  complianceYear?: number;
+  nutrientType?: string;
+  sourceType?: 'point_source' | 'nonpoint_source';
+  status?: 'active' | 'retired';
+}): RegistryCredit[] => {
+  return mockRegistryCredits.filter(credit => {
+    if (!credit.basinCode) return false; // Only Virginia credits
+
+    if (filters.basinCode && filters.basinCode !== 'all' && credit.basinCode !== filters.basinCode) {
+      return false;
+    }
+    if (filters.complianceYear && credit.complianceYear !== filters.complianceYear) {
+      return false;
+    }
+    if (filters.nutrientType && filters.nutrientType !== 'all' && credit.type !== filters.nutrientType) {
+      return false;
+    }
+    if (filters.sourceType && credit.sourceType !== filters.sourceType) {
+      return false;
+    }
+    if (filters.status && credit.status !== filters.status) {
+      return false;
+    }
+    return true;
+  });
 };
