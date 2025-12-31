@@ -283,6 +283,32 @@ const ResultSubtext = styled.div`
   line-height: 1.4;
 `;
 
+const MarketDisclaimer = styled.div`
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: #f59e0b;
+    margin-top: 1px;
+  }
+
+  p {
+    font-size: 12px;
+    color: ${salesTheme.colors.textMuted};
+    margin: 0;
+    line-height: 1.5;
+  }
+`;
+
 const CTASection = styled.div`
   padding: 28px 48px;
   background: linear-gradient(90deg, rgba(16, 185, 129, 0.04) 0%, rgba(59, 130, 246, 0.04) 100%);
@@ -387,8 +413,8 @@ export default function ROICalculatorSection({ onGetQuote }) {
           </SectionLabel>
           <SectionTitle>Calculate Your Return on Investment</SectionTitle>
           <SectionDescription>
-            See how quickly a BlueSignal monitoring system can pay for itself
-            through water quality credits and reduced monitoring costs.
+            Estimate potential returns from water quality credits and monitoring savings.
+            Credit values vary based on market conditions and regional programs.
           </SectionDescription>
         </SectionHeader>
 
@@ -465,17 +491,17 @@ export default function ROICalculatorSection({ onGetQuote }) {
               </PanelHeader>
               <ResultsGrid>
                 <ResultItem>
-                  <ResultLabel>Estimated Monthly Credits</ResultLabel>
+                  <ResultLabel>Estimated Monthly Credits*</ResultLabel>
                   <ResultValue>
                     ${results.estimatedCredits.toLocaleString()}
                   </ResultValue>
-                  <ResultSubtext>Based on water quality data value</ResultSubtext>
+                  <ResultSubtext>Based on illustrative market rates</ResultSubtext>
                 </ResultItem>
 
                 <ResultItem>
                   <ResultLabel>Payback Period</ResultLabel>
                   <ResultValue>{results.paybackMonths} months</ResultValue>
-                  <ResultSubtext>Time to fully recover your system investment</ResultSubtext>
+                  <ResultSubtext>Estimate based on projected credit value</ResultSubtext>
                 </ResultItem>
 
                 <ResultItem>
@@ -486,6 +512,18 @@ export default function ROICalculatorSection({ onGetQuote }) {
                   <ResultSubtext>Combined credits and monitoring savings</ResultSubtext>
                 </ResultItem>
               </ResultsGrid>
+              <MarketDisclaimer>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p>
+                  *Credit values are estimates only. Actual revenue depends on market supply and demand,
+                  regional credit programs, and verification requirements. Contact us for a detailed
+                  assessment of credit potential in your area.
+                </p>
+              </MarketDisclaimer>
             </ResultsPanel>
           </CalculatorGrid>
 
