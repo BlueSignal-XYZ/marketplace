@@ -12,7 +12,7 @@ import HeroSection from "./HeroSection";
 import ProductTiers from "./ProductTiers";
 import ProductCatalogSection from "./ProductCatalogSection";
 import ROICalculatorSection from "./ROICalculatorSection";
-import SectionDivider, { CurvedDivider } from "./SectionDivider";
+import SectionDivider, { CurvedDivider, GradientDivider } from "./SectionDivider";
 
 // Detail components from original configurator
 import {
@@ -222,14 +222,21 @@ const DetailTabs = styled.div`
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding: 0 12px;
+  min-height: 48px;
+  flex-shrink: 0;
 
   &::-webkit-scrollbar {
     display: none;
   }
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    min-height: 44px;
+    padding: 0 8px;
+  }
 `;
 
 const DetailTab = styled.button`
-  padding: 16px 28px;
+  padding: 12px 20px;
   font-size: 14px;
   font-weight: 600;
   border: none;
@@ -242,7 +249,10 @@ const DetailTab = styled.button`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-height: 44px;
+  flex-shrink: 0;
 
   &:hover {
     color: ${props => props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textDark};
@@ -250,8 +260,9 @@ const DetailTab = styled.button`
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
-    padding: 14px 20px;
+    padding: 10px 16px;
     font-size: 13px;
+    min-height: 40px;
   }
 `;
 
@@ -809,11 +820,10 @@ export default function SalesPage() {
           </div>
 
           {/* Section Divider: Light to Dark */}
-          <CurvedDivider
-            bgColor={salesTheme.colors.bgSurface}
-            color={salesTheme.colors.bgSecondary}
-            height="80px"
-            flip
+          <GradientDivider
+            fromColor={salesTheme.colors.bgSurface}
+            toColor={salesTheme.colors.bgSecondary}
+            height="100px"
           />
 
           {/* Benchmark Section */}

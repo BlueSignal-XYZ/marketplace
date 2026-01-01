@@ -7,9 +7,13 @@ import { FULL_SPECS, GPIO_PINOUT, GPIO_TYPE_COLORS } from "../../data";
 
 const QuickSpecsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 20px;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
 `;
 
 const QuickSpec = styled.div`
