@@ -93,7 +93,8 @@ const ProductDetailPanel = styled.div`
   background: ${salesTheme.colors.bgCard};
   border-radius: 28px 28px 0 0;
   width: 100%;
-  max-height: 92vh;
+  max-height: 95vh;
+  max-height: 95dvh; /* Dynamic viewport height for mobile browsers */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -260,6 +261,7 @@ const DetailContent = styled.div`
   -webkit-overflow-scrolling: touch;
   padding: 32px;
   background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  min-height: 0; /* Fix for flex child overflow scrolling */
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     padding: 24px 20px;
@@ -267,6 +269,9 @@ const DetailContent = styled.div`
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     padding: 20px 16px;
+    /* Ensure content is scrollable on mobile */
+    max-height: none;
+    overflow-y: auto;
   }
 `;
 

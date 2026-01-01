@@ -363,7 +363,7 @@ export const SectionTitle = styled.h4`
   font-size: 18px;
   font-weight: 600;
   margin: 0 0 16px;
-  color: #1f2937;
+  color: rgba(255, 255, 255, 0.95);
 `;
 
 export const FeatureList = styled.ul`
@@ -371,8 +371,12 @@ export const FeatureList = styled.ul`
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 8px;
+
+  ${media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 `;
 
 export const FeatureItem = styled.li`
@@ -380,12 +384,12 @@ export const FeatureItem = styled.li`
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
 
   &::before {
     content: "✓";
-    color: #16a34a;
+    color: #10b981;
     font-weight: bold;
     flex-shrink: 0;
   }
@@ -393,9 +397,18 @@ export const FeatureItem = styled.li`
 
 export const SpecGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
   margin-bottom: 24px;
+
+  ${media.sm} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  ${media.lg} {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
 `;
 
 export const SpecCard = styled.div`

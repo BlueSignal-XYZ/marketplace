@@ -151,8 +151,6 @@ const BenchmarkView = () => {
 
   return (
     <div>
-      <SectionTitle style={{ marginBottom: 24 }}>Market Comparison</SectionTitle>
-
       <BenchmarkGrid>
         {/* Enterprise Algae Control */}
         <BenchmarkCard>
