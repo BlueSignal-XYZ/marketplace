@@ -1,4 +1,4 @@
-# BlueSignal Sales - robots.txt
+# BlueSignal - robots.txt
 User-agent: *
 Allow: /
 
@@ -13,4 +13,4 @@ User-agent: DuckDuckBot
 Allow: /
 
 # Sitemap location
-Sitemap: https://sales.bluesignal.xyz/sitemap.xml
+Sitemap: https://bluesignal.xyz/sitemap.xml

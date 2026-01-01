@@ -13,8 +13,9 @@
 /**
  * Detect if the current hostname is Sales mode.
  * Sales mode includes:
- * - sales.bluesignal.xyz
- * - *.sales.bluesignal.xyz (subdomains)
+ * - bluesignal.xyz (primary domain)
+ * - *.bluesignal.xyz (subdomains, excluding cloud.*)
+ * - sales.bluesignal.xyz (legacy, redirects to bluesignal.xyz)
  * - sales-bluesignal.web.app (Firebase hosting)
  * - ?app=sales query param (dev/testing)
  *
@@ -24,7 +25,14 @@ export const isSalesMode = () => {
   const host = window.location.hostname;
   const params = new URLSearchParams(window.location.search);
 
+  // Explicitly exclude cloud subdomain
+  if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
+    return false;
+  }
+
   return (
+    host === "bluesignal.xyz" ||
+    host === "www.bluesignal.xyz" ||
     host === "sales.bluesignal.xyz" ||
     host.endsWith(".sales.bluesignal.xyz") ||
     host === "sales-bluesignal.web.app" ||

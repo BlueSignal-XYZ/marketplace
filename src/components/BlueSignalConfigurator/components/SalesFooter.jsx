@@ -510,7 +510,7 @@ export default function SalesFooter({ onNavigate }) {
             <ColumnTitle>Company</ColumnTitle>
             <FooterLinks>
               <FooterLinkItem>
-                <FooterLink href="https://bluesignal.xyz" target="_blank" rel="noopener noreferrer">
+                <FooterLink href="/about">
                   About Us
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -518,16 +518,16 @@ export default function SalesFooter({ onNavigate }) {
                 </FooterLink>
               </FooterLinkItem>
               <FooterLinkItem>
-                <FooterLink href="https://bluesignal.xyz/contact" target="_blank" rel="noopener noreferrer">
-                  Contact Sales
+                <FooterLink href="/contact">
+                  Contact
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
                 </FooterLink>
               </FooterLinkItem>
               <FooterLinkItem>
-                <FooterLink href="https://bluesignal.xyz/support" target="_blank" rel="noopener noreferrer">
-                  Support Center
+                <FooterLink href="/faq">
+                  FAQ
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
