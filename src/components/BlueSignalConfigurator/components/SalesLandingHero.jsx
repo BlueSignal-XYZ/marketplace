@@ -282,6 +282,30 @@ const ROIMetric = styled.div`
   }
 `;
 
+const MarketNote = styled.div`
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  .icon {
+    flex-shrink: 0;
+    font-size: 14px;
+    margin-top: 1px;
+  }
+
+  p {
+    font-size: 11px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+  }
+`;
+
 // DIY Section Styles
 const DIYSection = styled.div`
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -510,7 +534,7 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
       </HeroContent>
 
       <ROISection>
-        <ROITitle>Calculate Your ROI</ROITitle>
+        <ROITitle>Estimate Your Potential ROI</ROITitle>
         <ROIGrid>
           <ROIInputs>
             <ROIInput>
@@ -548,20 +572,24 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
 
           <ROIResults>
             <ROIMetric>
-              <div className="label">Estimated Monthly Credits</div>
+              <div className="label">Estimated Monthly Credits*</div>
               <div className="value">${estimatedCredits.toLocaleString()}</div>
-              <div className="subtext">Based on water quality data value</div>
+              <div className="subtext">Based on illustrative market rates</div>
             </ROIMetric>
             <ROIMetric>
               <div className="label">Payback Period</div>
               <div className="value">{paybackMonths} months</div>
-              <div className="subtext">Time to recover system cost</div>
+              <div className="subtext">Estimate based on projected value</div>
             </ROIMetric>
             <ROIMetric>
               <div className="label">5-Year Value</div>
               <div className="value">${fiveYearValue.toLocaleString()}</div>
               <div className="subtext">Credits + monitoring savings</div>
             </ROIMetric>
+            <MarketNote>
+              <span className="icon">*</span>
+              <p>Credit values vary based on market supply/demand and regional programs.</p>
+            </MarketNote>
           </ROIResults>
         </ROIGrid>
       </ROISection>
