@@ -439,7 +439,7 @@ export default function SalesPage() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfError, setPdfError] = useState(null);
 
-  // Parse URL params on load
+  // Parse URL params and hash on load
   useEffect(() => {
     const productParam = searchParams.get('product');
     const tabParam = searchParams.get('tab');
@@ -472,6 +472,12 @@ export default function SalesPage() {
 
     if (sectionParam) {
       setTimeout(() => scrollToSection(sectionParam), 100);
+    }
+
+    // Handle ?quote=true param to open quote builder
+    const quoteOpen = searchParams.get('quote');
+    if (quoteOpen === 'true' || quoteOpen === '1') {
+      setShowQuoteBuilder(true);
     }
   }, []);
 
