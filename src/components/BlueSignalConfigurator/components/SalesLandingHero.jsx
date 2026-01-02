@@ -519,16 +519,16 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
 
         <StatsGrid>
           <StatCard>
-            <div className="value">500+</div>
-            <div className="label">Devices Deployed</div>
+            <div className="value">24/7</div>
+            <div className="label">Real-Time Monitoring</div>
           </StatCard>
           <StatCard>
-            <div className="value">$2M+</div>
-            <div className="label">Credits Generated</div>
+            <div className="value">LTE</div>
+            <div className="label">Cloud Connected</div>
           </StatCard>
           <StatCard>
-            <div className="value">98%</div>
-            <div className="label">Uptime</div>
+            <div className="value">DIY</div>
+            <div className="label">Open Source</div>
           </StatCard>
         </StatsGrid>
       </HeroContent>

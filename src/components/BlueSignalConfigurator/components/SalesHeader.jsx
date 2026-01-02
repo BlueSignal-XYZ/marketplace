@@ -86,11 +86,7 @@ const LogoImage = styled.img`
 const Nav = styled.nav`
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 6px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 8px;
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     display: none;
@@ -98,43 +94,23 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled.button`
-  background: ${props => props.$active
-    ? 'rgba(16, 185, 129, 0.15)'
-    : 'transparent'};
+  background: transparent;
   border: none;
-  border-radius: 10px;
-  padding: 12px 20px;
+  border-radius: 8px;
+  padding: 10px 16px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: ${props => props.$active
     ? salesTheme.colors.accentPrimary
     : 'rgba(255, 255, 255, 0.7)'};
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    opacity: ${props => props.$active ? 1 : 0.6};
-    transition: opacity 0.2s ease;
-  }
 
   &:hover {
-    background: ${props => props.$active
-      ? 'rgba(16, 185, 129, 0.2)'
-      : 'rgba(255, 255, 255, 0.08)'};
     color: ${props => props.$active
       ? salesTheme.colors.accentPrimary
       : 'rgba(255, 255, 255, 0.95)'};
-
-    svg {
-      opacity: 1;
-    }
   }
 
   &:focus-visible {
@@ -305,10 +281,10 @@ const MobileNavLink = styled.button`
     ? 'rgba(16, 185, 129, 0.12)'
     : 'transparent'};
   border: none;
-  border-radius: 12px;
-  padding: 16px 18px;
+  border-radius: 10px;
+  padding: 14px 18px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   color: ${props => props.$active
     ? salesTheme.colors.accentPrimary
     : 'rgba(255, 255, 255, 0.75)'};
@@ -316,15 +292,6 @@ const MobileNavLink = styled.button`
   text-align: left;
   width: 100%;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-
-  svg {
-    width: 20px;
-    height: 20px;
-    opacity: ${props => props.$active ? 1 : 0.5};
-  }
 
   &:hover {
     background: ${props => props.$active
@@ -370,63 +337,11 @@ const MobileQuoteCount = styled.span`
 `;
 
 const navItems = [
-  {
-    id: 'hero',
-    label: 'Home',
-    href: '/',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    )
-  },
-  {
-    id: 'products',
-    label: 'Products',
-    href: '/?section=products',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="3" y="3" width="7" height="7" rx="1"/>
-        <rect x="14" y="3" width="7" height="7" rx="1"/>
-        <rect x="3" y="14" width="7" height="7" rx="1"/>
-        <rect x="14" y="14" width="7" height="7" rx="1"/>
-      </svg>
-    )
-  },
-  {
-    id: 'about',
-    label: 'About',
-    href: '/about',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 16v-4M12 8h.01"/>
-      </svg>
-    )
-  },
-  {
-    id: 'faq',
-    label: 'FAQ',
-    href: '/faq',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-        <path d="M12 17h.01"/>
-      </svg>
-    )
-  },
-  {
-    id: 'contact',
-    label: 'Contact',
-    href: '/contact',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-      </svg>
-    )
-  },
+  { id: 'hero', label: 'Home', href: '/' },
+  { id: 'products', label: 'Products', href: '/?section=products' },
+  { id: 'about', label: 'About', href: '/about' },
+  { id: 'faq', label: 'FAQ', href: '/faq' },
+  { id: 'contact', label: 'Contact', href: '/contact' },
 ];
 
 export default function SalesHeader({
@@ -537,7 +452,6 @@ export default function SalesHeader({
                 onClick={() => handleNavClick(item)}
                 aria-current={currentActive === item.id ? 'page' : undefined}
               >
-                {item.icon}
                 {item.label}
               </NavLink>
             ))}
@@ -588,7 +502,6 @@ export default function SalesHeader({
             onClick={() => handleNavClick(item)}
             aria-current={currentActive === item.id ? 'page' : undefined}
           >
-            {item.icon}
             {item.label}
           </MobileNavLink>
         ))}
