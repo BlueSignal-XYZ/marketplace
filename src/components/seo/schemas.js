@@ -284,7 +284,7 @@ export const BLUESIGNAL_WEBSITE_SCHEMA = createWebSiteSchema({
 });
 
 export const SALES_WEBSITE_SCHEMA = createWebSiteSchema({
-  name: 'BlueSignal Sales Portal',
-  url: 'https://sales.bluesignal.xyz',
-  description: 'Configure, quote, and manage BlueSignal water quality device installations',
+  name: 'BlueSignal',
+  url: 'https://bluesignal.xyz',
+  description: 'Water quality monitoring hardware and pressure washing services in Austin, TX',
 });

@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage - Product Configurator -->
+  <!-- Homepage - Products -->
   <url>
-    <loc>https://sales.bluesignal.xyz/</loc>
-    <lastmod>2025-12-07</lastmod>
+    <loc>https://bluesignal.xyz/</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Product Configurator (explicit route) -->
+  <!-- About Page -->
   <url>
-    <loc>https://sales.bluesignal.xyz/configurator</loc>
-    <lastmod>2025-12-07</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://bluesignal.xyz/about</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- FAQ Page -->
+  <url>
+    <loc>https://bluesignal.xyz/faq</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://bluesignal.xyz/contact</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Enclosure Details -->
+  <!-- Legacy Configurator (redirects to /) -->
   <url>
-    <loc>https://sales.bluesignal.xyz/enclosure</loc>
-    <lastmod>2025-12-07</lastmod>
+    <loc>https://bluesignal.xyz/configurator</loc>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
 </urlset>

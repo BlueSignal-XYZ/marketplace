@@ -745,13 +745,13 @@ export default function SalesPage() {
   const productSchema = product ? createProductSchema({
     name: product.name,
     description: product.tagline || `${product.name} water quality monitoring system`,
-    image: `https://sales.bluesignal.xyz/products/${selectedProduct}.png`,
+    image: `https://bluesignal.xyz/products/${selectedProduct}.png`,
     brand: 'BlueSignal',
     sku: selectedProduct.toUpperCase(),
     price: product.price,
     currency: 'USD',
     availability: 'InStock',
-    url: `https://sales.bluesignal.xyz?product=${selectedProduct}`,
+    url: `https://bluesignal.xyz?product=${selectedProduct}`,
   }) : null;
 
   return (

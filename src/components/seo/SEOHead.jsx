@@ -29,15 +29,9 @@ const SITE_CONFIG = {
     twitterHandle: '@BlueSignalHQ',
     baseUrl: 'https://cloud.bluesignal.xyz',
   },
-  'sales.bluesignal.xyz': {
-    siteName: 'BlueSignal Sales Portal',
-    defaultImage: 'https://sales.bluesignal.xyz/bluesignal-logo.png',
-    twitterHandle: '@BlueSignalHQ',
-    baseUrl: 'https://sales.bluesignal.xyz',
-  },
   'bluesignal.xyz': {
     siteName: 'BlueSignal',
-    defaultImage: 'https://bluesignal.xyz/social/bluesignal-preview.png',
+    defaultImage: 'https://bluesignal.xyz/bluesignal-logo.png',
     twitterHandle: '@BlueSignalHQ',
     baseUrl: 'https://bluesignal.xyz',
   },
@@ -55,13 +49,16 @@ const getCurrentSite = () => {
   const params = new URLSearchParams(window.location.search);
   const appMode = params.get('app');
 
-  if (appMode === 'sales' || hostname.includes('sales')) {
-    return 'sales.bluesignal.xyz';
-  }
+  // Cloud mode check first (explicit subdomain)
   if (appMode === 'cloud' || hostname.includes('cloud')) {
     return 'cloud.bluesignal.xyz';
   }
-  if (hostname.includes('bluesignal') && !hostname.includes('cloud') && !hostname.includes('sales')) {
+
+  // Sales mode: bluesignal.xyz (primary) or sales.bluesignal.xyz (legacy)
+  if (appMode === 'sales' ||
+      hostname === 'bluesignal.xyz' ||
+      hostname === 'www.bluesignal.xyz' ||
+      hostname.includes('sales')) {
     return 'bluesignal.xyz';
   }
 

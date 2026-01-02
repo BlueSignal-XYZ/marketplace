@@ -21,13 +21,16 @@ const getBaseUrl = () => {
   const params = new URLSearchParams(window.location.search);
   const appMode = params.get('app');
 
-  if (appMode === 'sales' || hostname.includes('sales')) {
-    return 'https://sales.bluesignal.xyz';
-  }
+  // Cloud mode check first
   if (appMode === 'cloud' || hostname.includes('cloud')) {
     return 'https://cloud.bluesignal.xyz';
   }
-  if (hostname.includes('bluesignal')) {
+
+  // Sales mode: bluesignal.xyz (primary) or sales.bluesignal.xyz (legacy)
+  if (appMode === 'sales' ||
+      hostname === 'bluesignal.xyz' ||
+      hostname === 'www.bluesignal.xyz' ||
+      hostname.includes('sales')) {
     return 'https://bluesignal.xyz';
   }
 

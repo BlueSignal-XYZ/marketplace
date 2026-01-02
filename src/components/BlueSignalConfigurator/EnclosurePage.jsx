@@ -465,9 +465,9 @@ const EnclosurePage = () => {
   };
 
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: 'Home', url: 'https://sales.bluesignal.xyz/' },
-    { name: 'Configurator', url: 'https://sales.bluesignal.xyz/configurator' },
-    { name: 'Enclosure', url: 'https://sales.bluesignal.xyz/enclosure' },
+    { name: 'Home', url: 'https://bluesignal.xyz/' },
+    { name: 'Products', url: 'https://bluesignal.xyz/?section=products' },
+    { name: 'Enclosure', url: 'https://bluesignal.xyz/enclosure' },
   ]);
 
   return (
