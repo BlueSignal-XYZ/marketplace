@@ -22,10 +22,11 @@ const float = keyframes`
 const HeroWrapper = styled.section`
   background: ${salesTheme.gradients.heroBg};
   color: ${salesTheme.colors.textPrimary};
-  padding: 160px 24px 120px;
+  padding: 120px 24px 80px;
   position: relative;
   overflow: hidden;
-  min-height: 90vh;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
   display: flex;
   align-items: center;
 
@@ -53,12 +54,15 @@ const HeroWrapper = styled.section`
   }
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
-    padding: 140px 20px 80px;
-    min-height: auto;
+    padding: 100px 20px 60px;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    padding: 120px 16px 60px;
+    padding: 100px 16px 60px;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 `;
 

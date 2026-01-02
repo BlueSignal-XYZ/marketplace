@@ -29,7 +29,6 @@ import {
   BenchmarkView,
   ProductComparisonView,
   QuoteBuilder,
-  QuoteFloatingButton,
   CustomerNameModal,
 } from "./index";
 
@@ -1860,13 +1859,6 @@ export default function SalesPage() {
           error={pdfError}
         />
 
-        {/* Floating Quote Button */}
-        {!showQuoteBuilder && (
-          <QuoteFloatingButton
-            itemCount={quoteItemCount}
-            onClick={() => setShowQuoteBuilder(true)}
-          />
-        )}
       </PageWrapper>
     </>
   );
