@@ -186,6 +186,7 @@ const NewsletterColumn = styled.div`
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     grid-column: span 2;
+    max-width: 100%;
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
@@ -213,6 +214,12 @@ const NewsletterDescription = styled.p`
 const NewsletterForm = styled.form`
   display: flex;
   gap: 10px;
+  max-width: 100%;
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     flex-direction: column;
@@ -221,6 +228,7 @@ const NewsletterForm = styled.form`
 
 const NewsletterInput = styled.input`
   flex: 1;
+  min-width: 0;
   padding: 14px 18px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -238,6 +246,11 @@ const NewsletterInput = styled.input`
     border-color: rgba(16, 185, 129, 0.5);
     background: rgba(255, 255, 255, 0.06);
   }
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    flex: 1 1 auto;
+    min-width: 180px;
+  }
 `;
 
 const NewsletterButton = styled.button`
@@ -251,10 +264,15 @@ const NewsletterButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  }
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    flex: 0 0 auto;
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {

@@ -72,14 +72,14 @@ const HeroContainer = styled.div`
 
 const HeroContent = styled.div`
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 80px;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
   align-items: center;
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 56px;
+    gap: 48px;
   }
 `;
 
@@ -276,6 +276,10 @@ const TrustBadge = styled.div`
 
 const FeaturesContainer = styled.div`
   animation: ${fadeInUp} 0.8s ease-out 0.2s both;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     max-width: 100%;
@@ -292,11 +296,14 @@ const FeaturesGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
     gap: 12px;
+    max-width: 100%;
   }
 `;
 
