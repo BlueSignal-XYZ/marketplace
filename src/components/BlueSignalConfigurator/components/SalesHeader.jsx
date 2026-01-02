@@ -125,21 +125,8 @@ const QuoteButton = styled.button`
   }
 `;
 
-const QuoteBadge = styled.span`
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 100px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 800;
-  min-width: 24px;
-  text-align: center;
-`;
-
 export default function SalesHeader({
-  quoteItemCount = 0,
-  onOpenQuote,
-  isQuoteMode = false,
-  onEnableQuoteMode,
+  onScrollToContact,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -156,15 +143,11 @@ export default function SalesHeader({
 
   const handleQuoteClick = useCallback(() => {
     if (location.pathname !== '/') {
-      navigate('/?quote=true');
-    } else if (isQuoteMode && onOpenQuote) {
-      // If already in quote mode, just open the quote builder
-      onOpenQuote();
-    } else if (onEnableQuoteMode) {
-      // Enable quote mode (adds ?quote=true to URL)
-      onEnableQuoteMode();
+      navigate('/?section=contact');
+    } else if (onScrollToContact) {
+      onScrollToContact();
     }
-  }, [onOpenQuote, onEnableQuoteMode, isQuoteMode, navigate, location.pathname]);
+  }, [onScrollToContact, navigate, location.pathname]);
 
   const handleLogoClick = useCallback((e) => {
     e.preventDefault();
@@ -217,16 +200,11 @@ export default function SalesHeader({
           </LogoSvg>
         </LogoLink>
 
-        <QuoteButton onClick={handleQuoteClick} aria-label={`View quote with ${quoteItemCount} items`}>
+        <QuoteButton onClick={handleQuoteClick} aria-label="Get a quote - scroll to contact form">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 0 1-8 0"/>
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
           <span>Get a Quote</span>
-          {quoteItemCount > 0 && (
-            <QuoteBadge>{quoteItemCount}</QuoteBadge>
-          )}
         </QuoteButton>
       </HeaderContainer>
     </HeaderWrapper>

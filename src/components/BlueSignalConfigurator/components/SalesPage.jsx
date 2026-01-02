@@ -1533,10 +1533,7 @@ export default function SalesPage() {
 
       <PageWrapper>
         <SalesHeader
-          quoteItemCount={quoteItemCount}
-          onOpenQuote={() => setShowQuoteBuilder(true)}
-          isQuoteMode={isQuoteMode}
-          onEnableQuoteMode={enableQuoteMode}
+          onScrollToContact={() => scrollToSection('contact')}
         />
 
         <MainContent>
