@@ -26,7 +26,7 @@ const CatalogSection = styled.section`
 `;
 
 const CatalogContainer = styled.div`
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto;
 `;
 
@@ -300,11 +300,15 @@ const SortSelect = styled.select`
 
 const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
   margin-bottom: 48px;
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 1100px) {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -423,7 +427,11 @@ const CompareCheckbox = styled.div`
 `;
 
 const CardContent = styled.div`
-  padding: 24px;
+  padding: 20px;
+
+  @media (max-width: 1400px) {
+    padding: 18px;
+  }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     padding: 20px;
@@ -449,7 +457,7 @@ const ProductSubtitle = styled.p`
 `;
 
 const ProductPrice = styled.div`
-  font-size: 32px;
+  font-size: clamp(24px, 2vw, 32px);
   font-weight: 800;
   color: ${salesTheme.colors.accentPrimary};
   font-family: ${salesTheme.typography.fontMono};
