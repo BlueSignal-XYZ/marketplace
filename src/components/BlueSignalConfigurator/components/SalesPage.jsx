@@ -13,7 +13,7 @@ import HeroSection from "./HeroSection";
 import ProductTiers from "./ProductTiers";
 import ProductCatalogSection from "./ProductCatalogSection";
 import ROICalculatorSection from "./ROICalculatorSection";
-import SectionDivider, { CurvedDivider, GradientDivider } from "./SectionDivider";
+// Dividers removed for cleaner look
 
 // Detail components from original configurator
 import {
@@ -1548,24 +1548,10 @@ export default function SalesPage() {
             />
           </div>
 
-          {/* Section Divider: Dark to Dark */}
-          <CurvedDivider
-            bgColor={salesTheme.colors.bgPrimary}
-            color={salesTheme.colors.bgSecondary}
-            height="80px"
-          />
-
           {/* Product Tiers Section */}
           <div ref={sectionRefs.tiers}>
             <ProductTiers onNavigate={handleNavigate} />
           </div>
-
-          {/* Section Divider: Dark to Light */}
-          <CurvedDivider
-            bgColor={salesTheme.colors.bgSecondary}
-            color={salesTheme.colors.bgSurface}
-            height="80px"
-          />
 
           {/* Product Catalog Section */}
           <div ref={sectionRefs.products}>
@@ -1592,13 +1578,6 @@ export default function SalesPage() {
               onGetQuote={() => scrollToSection('products')}
             />
           </div>
-
-          {/* Section Divider: Light to Dark */}
-          <GradientDivider
-            fromColor={salesTheme.colors.bgSurface}
-            toColor={salesTheme.colors.bgSecondary}
-            height="100px"
-          />
 
           {/* Benchmark Section */}
           <div ref={sectionRefs.benchmark}>
@@ -1636,46 +1615,6 @@ export default function SalesPage() {
                 </AboutGrid>
               </AboutContainer>
             </AboutSection>
-          </div>
-
-          {/* FAQ Section */}
-          <div ref={sectionRefs.faq}>
-            <FAQSection id="faq">
-              <FAQContainer>
-                <FAQHeader>
-                  <SectionLabel>FAQ</SectionLabel>
-                  <SectionTitle>Frequently Asked Questions</SectionTitle>
-                  <FAQSubtitle>
-                    Everything you need to know about our products, ordering, and support.
-                  </FAQSubtitle>
-                </FAQHeader>
-                <AccordionList>
-                  {faqItems.map((item, index) => (
-                    <AccordionItem key={index}>
-                      <AccordionButton
-                        onClick={() => toggleFAQ(index)}
-                        aria-expanded={expandedFAQ === index}
-                      >
-                        <QuestionText>{item.question}</QuestionText>
-                        <ExpandIcon $expanded={expandedFAQ === index}>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M12 5v14M5 12h14" />
-                          </svg>
-                        </ExpandIcon>
-                      </AccordionButton>
-                      <AccordionContent $expanded={expandedFAQ === index}>
-                        <AnswerText>{item.answer}</AnswerText>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </AccordionList>
-                <FAQContactCTA>
-                  <FAQCTATitle>For all other questions email us at</FAQCTATitle>
-                  <FAQCTAEmail href="mailto:hi@bluesignal.xyz">hi@bluesignal.xyz</FAQCTAEmail>
-                  <FAQCTAPhone>Text or call +1.512.730.0843</FAQCTAPhone>
-                </FAQContactCTA>
-              </FAQContainer>
-            </FAQSection>
           </div>
 
           {/* Contact Section */}
@@ -1801,6 +1740,46 @@ export default function SalesPage() {
                 </ServicesGrid>
               </ServicesContainer>
             </ServicesSection>
+          </div>
+
+          {/* FAQ Section - Immediately above footer */}
+          <div ref={sectionRefs.faq}>
+            <FAQSection id="faq">
+              <FAQContainer>
+                <FAQHeader>
+                  <SectionLabel>FAQ</SectionLabel>
+                  <SectionTitle>Frequently Asked Questions</SectionTitle>
+                  <FAQSubtitle>
+                    Everything you need to know about our products, ordering, and support.
+                  </FAQSubtitle>
+                </FAQHeader>
+                <AccordionList>
+                  {faqItems.map((item, index) => (
+                    <AccordionItem key={index}>
+                      <AccordionButton
+                        onClick={() => toggleFAQ(index)}
+                        aria-expanded={expandedFAQ === index}
+                      >
+                        <QuestionText>{item.question}</QuestionText>
+                        <ExpandIcon $expanded={expandedFAQ === index}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 5v14M5 12h14" />
+                          </svg>
+                        </ExpandIcon>
+                      </AccordionButton>
+                      <AccordionContent $expanded={expandedFAQ === index}>
+                        <AnswerText>{item.answer}</AnswerText>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </AccordionList>
+                <FAQContactCTA>
+                  <FAQCTATitle>For all other questions email us at</FAQCTATitle>
+                  <FAQCTAEmail href="mailto:hi@bluesignal.xyz">hi@bluesignal.xyz</FAQCTAEmail>
+                  <FAQCTAPhone>Text or call +1.512.730.0843</FAQCTAPhone>
+                </FAQContactCTA>
+              </FAQContainer>
+            </FAQSection>
           </div>
         </MainContent>
 
