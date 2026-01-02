@@ -340,6 +340,9 @@ const ProductCard = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
   animation: ${fadeIn} 0.4s ease-out;
   animation-fill-mode: both;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &:nth-child(1) { animation-delay: 0s; }
   &:nth-child(2) { animation-delay: 0.05s; }
@@ -362,15 +365,25 @@ const ProductCard = styled.div`
 `;
 
 const CardImageArea = styled.div`
-  height: 140px;
+  height: 160px;
   background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 50%, #f0f9ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   border-bottom: 1px solid ${salesTheme.colors.border};
+  overflow: hidden;
 
-  svg {
+  /* Product image styling */
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 16px;
+  }
+
+  /* Fallback icon when no image */
+  svg.product-placeholder {
     width: 64px;
     height: 64px;
     color: ${salesTheme.colors.accentPrimary};
@@ -431,6 +444,9 @@ const CompareCheckbox = styled.div`
 
 const CardContent = styled.div`
   padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1400px) {
     padding: 18px;
@@ -527,6 +543,8 @@ const SpecBadge = styled.span`
 const CardActions = styled.div`
   display: flex;
   gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
 
   > div {
     flex: 1;
@@ -756,7 +774,7 @@ export default function ProductCatalogSection({
         )}
 
         <FilterBar>
-          <FilterGroup style={{ flex: 2, maxWidth: '300px' }}>
+          <FilterGroup>
             <FilterLabel htmlFor="search">Search Products</FilterLabel>
             <SearchInput
               id="search"
@@ -887,7 +905,45 @@ export default function ProductCatalogSection({
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>
                     </CompareCheckbox>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    {/*
+                      Product Image Placeholder
+                      ====================================
+                      Replace with actual product mockup images.
+
+                      File naming convention: product-{product.id}.png
+                      Files location: /public/images/products/
+                      Example files to add:
+                        - product-s-ac.png        (Shore Monitor AC)
+                        - product-s-sol.png       (Shore Monitor Solar)
+                        - product-s-mon.png       (Shore Monitor Lite)
+                        - product-smart-buoy.png  (Smart Buoy)
+                        - product-smart-buoy-xl.png (Smart Buoy XL)
+
+                      Recommended image specs: 400x300px PNG with transparent background
+                    */}
+                    <img
+                      src={`/images/products/product-${product.id}.png`}
+                      alt={`${product.name} - ${product.subtitle}`}
+                      data-product-id={product.id}
+                      style={{ display: 'none' }}
+                      onLoad={(e) => {
+                        // Show image, hide placeholder when loaded
+                        e.target.style.display = 'block';
+                        if (e.target.nextSibling) e.target.nextSibling.style.display = 'none';
+                      }}
+                      onError={(e) => {
+                        // Keep placeholder visible if image not found
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                    {/* Placeholder icon - visible by default until image loads */}
+                    <svg
+                      className="product-placeholder"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    >
                       <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                       <path d="M2 17l10 5 10-5"/>
                       <path d="M2 12l10 5 10-5"/>

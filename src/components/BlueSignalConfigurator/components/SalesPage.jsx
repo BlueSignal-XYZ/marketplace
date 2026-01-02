@@ -718,11 +718,26 @@ const MapContainer = styled.div`
   overflow: hidden;
   border: 1px solid ${salesTheme.colors.border};
   background: #e5e7eb;
+  position: relative;
+
+  /* Overlay to prevent map interactions (scroll/zoom) */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    pointer-events: auto;
+    z-index: 1;
+  }
 
   iframe {
     width: 100%;
     height: 100%;
     border: none;
+    pointer-events: none; /* Disable iframe interactions */
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
@@ -921,10 +936,11 @@ const ServicesSubtitle = styled.p`
 const ServicesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 28px;
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
@@ -937,16 +953,23 @@ const ServiceCard = styled.div`
   background: ${salesTheme.colors.bgSecondary};
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 32px;
+  padding: 28px 24px;
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &:hover {
     border-color: rgba(16, 185, 129, 0.3);
     transform: translateY(-2px);
   }
 
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    padding: 24px 20px;
+  }
+
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
-    padding: 24px;
+    padding: 24px 20px;
   }
 `;
 
@@ -974,6 +997,7 @@ const ServiceDescription = styled.p`
   line-height: 1.6;
   color: ${salesTheme.colors.textSecondary};
   margin: 0 0 16px;
+  flex: 1;
 `;
 
 const ServicePrice = styled.span`
@@ -982,8 +1006,10 @@ const ServicePrice = styled.span`
   font-weight: 600;
   color: ${salesTheme.colors.accentPrimary};
   background: rgba(16, 185, 129, 0.1);
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-top: auto;
+  align-self: flex-start;
 `;
 
 // ============================================

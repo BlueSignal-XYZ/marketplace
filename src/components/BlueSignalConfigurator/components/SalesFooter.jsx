@@ -534,11 +534,19 @@ export default function SalesFooter({ onNavigate }) {
           </FooterColumn>
 
           <FooterColumn>
-            <ColumnTitle>Resources</ColumnTitle>
+            <ColumnTitle>Developer</ColumnTitle>
             <FooterLinks>
               <FooterLinkItem>
-                <FooterLink href="https://docs.bluesignal.xyz" target="_blank" rel="noopener noreferrer">
-                  Documentation
+                <FooterLink href="https://github.com/NeptuneChain-Inc/bluesignal-firmware" target="_blank" rel="noopener noreferrer">
+                  Firmware Source
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </FooterLink>
+              </FooterLinkItem>
+              <FooterLinkItem>
+                <FooterLink href="https://github.com/NeptuneChain-Inc/bluesignal-hardware" target="_blank" rel="noopener noreferrer">
+                  Hardware Designs
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -555,14 +563,6 @@ export default function SalesFooter({ onNavigate }) {
               <FooterLinkItem>
                 <FooterLink href="#benchmark" onClick={(e) => handleNavClick(e, 'benchmark')}>
                   Benchmark Data
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </FooterLink>
-              </FooterLinkItem>
-              <FooterLinkItem>
-                <FooterLink href="https://github.com/bluesignal" target="_blank" rel="noopener noreferrer">
-                  GitHub
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -690,16 +690,16 @@ export default function SalesFooter({ onNavigate }) {
           </Copyright>
 
           <LegalLinks>
-            <LegalLink href="https://bluesignal.xyz/privacy" target="_blank" rel="noopener noreferrer">
+            <LegalLink href="/privacy">
               Privacy Policy
             </LegalLink>
-            <LegalLink href="https://bluesignal.xyz/terms" target="_blank" rel="noopener noreferrer">
+            <LegalLink href="/terms">
               Terms of Service
             </LegalLink>
-            <LegalLink href="https://bluesignal.xyz/warranty" target="_blank" rel="noopener noreferrer">
+            <LegalLink href="/warranty">
               Warranty Info
             </LegalLink>
-            <LegalLink href="https://bluesignal.xyz/accessibility" target="_blank" rel="noopener noreferrer">
+            <LegalLink href="/accessibility">
               Accessibility
             </LegalLink>
           </LegalLinks>
