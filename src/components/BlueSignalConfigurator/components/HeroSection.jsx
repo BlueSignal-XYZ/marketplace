@@ -79,6 +79,7 @@ const HeroContent = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 64px;
   align-items: center;
+  text-align: left; /* Ensure left alignment on desktop */
 
   /* Tablet (768px-1024px): Stack but keep LEFT-aligned */
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
@@ -130,6 +131,7 @@ const HeroTitle = styled.h1`
   margin: 0 0 24px;
   letter-spacing: -0.03em;
   color: #ffffff;
+  text-align: left;
 
   span {
     display: inline-block;
@@ -142,6 +144,7 @@ const HeroTitle = styled.h1`
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     font-size: clamp(28px, 8vw, 36px);
     margin-bottom: 20px;
+    text-align: center;
   }
 `;
 
