@@ -76,10 +76,16 @@ const HeroContent = styled.div`
   gap: 64px;
   align-items: center;
 
+  /* Tablet (768px-1024px): Stack but keep LEFT-aligned */
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     grid-template-columns: 1fr;
-    text-align: center;
+    text-align: left;
     gap: 48px;
+  }
+
+  /* Mobile only (< 768px): Center-aligned */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    text-align: center;
   }
 `;
 
@@ -106,7 +112,8 @@ const Eyebrow = styled.div`
     height: 16px;
   }
 
-  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+  /* Mobile only: center the eyebrow */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
     margin-left: auto;
     margin-right: auto;
   }
@@ -142,15 +149,13 @@ const HeroSubtitle = styled.p`
   max-width: 520px;
   font-weight: 400;
 
-  @media (max-width: ${salesTheme.breakpoints.laptop}) {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
+  /* Mobile only: center the subtitle */
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
     font-size: 16px;
     margin-bottom: 32px;
     line-height: 1.7;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -160,7 +165,8 @@ const HeroActions = styled.div`
   flex-wrap: wrap;
   margin-bottom: 48px;
 
-  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+  /* Mobile only: center buttons */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
     justify-content: center;
   }
 
@@ -238,13 +244,13 @@ const TrustBadges = styled.div`
   gap: 32px;
   flex-wrap: wrap;
 
-  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+  /* Mobile only: center badges */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
     justify-content: center;
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     gap: 20px;
-    justify-content: center;
   }
 `;
 
@@ -283,6 +289,10 @@ const FeaturesContainer = styled.div`
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     max-width: 100%;
+  }
+
+  /* Mobile only: center features */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
     margin: 0 auto;
   }
 `;
@@ -297,6 +307,10 @@ const FeaturesGrid = styled.div`
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     max-width: 600px;
+  }
+
+  /* Mobile only: center and single column */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
     margin: 0 auto;
   }
 
@@ -323,6 +337,7 @@ const FeatureCard = styled.div`
     border-color: rgba(16, 185, 129, 0.2);
   }
 
+  /* Tablet: horizontal cards, left-aligned */
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     flex-direction: column;
     text-align: center;
@@ -330,6 +345,7 @@ const FeatureCard = styled.div`
     gap: 12px;
   }
 
+  /* Mobile: horizontal layout */
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     flex-direction: row;
     text-align: left;

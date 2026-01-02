@@ -439,6 +439,11 @@ export default function SalesPage() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfError, setPdfError] = useState(null);
 
+  // Quote mode - only show "Add to Quote" buttons when explicitly enabled via URL
+  const isQuoteMode = searchParams.get('quote') === 'true' ||
+                      searchParams.get('quote') === '1' ||
+                      showQuoteBuilder;
+
   // Parse URL params and hash on load
   useEffect(() => {
     const productParam = searchParams.get('product');
@@ -610,6 +615,22 @@ export default function SalesPage() {
     setQuoteItems([]);
   };
 
+  // Quote mode handlers
+  const enableQuoteMode = () => {
+    setSearchParams(prev => {
+      prev.set('quote', 'true');
+      return prev;
+    });
+  };
+
+  const disableQuoteMode = () => {
+    setSearchParams(prev => {
+      prev.delete('quote');
+      return prev;
+    });
+    setShowQuoteBuilder(false);
+  };
+
   const handleAddBundle = (bundle) => {
     setQuoteItems(prev => {
       const newItems = [...prev];
@@ -771,6 +792,8 @@ export default function SalesPage() {
           onNavigate={handleNavigate}
           quoteItemCount={quoteItemCount}
           onOpenQuote={() => setShowQuoteBuilder(true)}
+          isQuoteMode={isQuoteMode}
+          onEnableQuoteMode={enableQuoteMode}
         />
 
         <MainContent>
@@ -815,6 +838,8 @@ export default function SalesPage() {
               showBundles={showBundles}
               onToggleBundles={() => setShowBundles(!showBundles)}
               onAddBundle={handleAddBundle}
+              isQuoteMode={isQuoteMode}
+              onExitQuoteMode={disableQuoteMode}
             />
           </div>
 

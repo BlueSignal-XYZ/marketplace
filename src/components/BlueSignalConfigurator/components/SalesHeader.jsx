@@ -349,6 +349,8 @@ export default function SalesHeader({
   onNavigate,
   quoteItemCount = 0,
   onOpenQuote,
+  isQuoteMode = false,
+  onEnableQuoteMode,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -422,10 +424,14 @@ export default function SalesHeader({
     setMobileMenuOpen(false);
     if (location.pathname !== '/') {
       navigate('/?quote=true');
-    } else if (onOpenQuote) {
+    } else if (isQuoteMode && onOpenQuote) {
+      // If already in quote mode, just open the quote builder
       onOpenQuote();
+    } else if (onEnableQuoteMode) {
+      // Enable quote mode (adds ?quote=true to URL)
+      onEnableQuoteMode();
     }
-  }, [onOpenQuote, navigate, location.pathname]);
+  }, [onOpenQuote, onEnableQuoteMode, isQuoteMode, navigate, location.pathname]);
 
   const handleLogoClick = useCallback((e) => {
     e.preventDefault();

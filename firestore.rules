@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Quote requests - anyone can create, only admins read
+    match /quote_requests/{document} {
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() > 0;
+      allow read, update, delete: if false; // Admin SDK only
+    }
+
+    // Newsletter subscribers - anyone can create
+    match /newsletter_subscribers/{document} {
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.matches('.*@.*');
+      allow read, update, delete: if false; // Admin SDK only
+    }
+
+    // Contact form submissions
+    match /contact_submissions/{document} {
+      allow create: if request.resource.data.email is string;
+      allow read, update, delete: if false; // Admin SDK only
+    }
+
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
