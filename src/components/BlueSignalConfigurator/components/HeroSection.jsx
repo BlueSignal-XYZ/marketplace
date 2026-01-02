@@ -274,19 +274,19 @@ const TrustBadge = styled.div`
   }
 `;
 
-const StatsContainer = styled.div`
+const FeaturesContainer = styled.div`
   animation: ${fadeInUp} 0.8s ease-out 0.2s both;
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
-    max-width: 480px;
+    max-width: 100%;
     margin: 0 auto;
   }
 `;
 
-const StatsGrid = styled.div`
+const FeaturesGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     display: grid;
@@ -300,50 +300,41 @@ const StatsGrid = styled.div`
   }
 `;
 
-const StatCard = styled.div`
+const FeatureCard = styled.div`
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 28px 32px;
+  border-radius: 16px;
+  padding: 24px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   backdrop-filter: blur(12px);
   transition: all 0.3s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border-color: rgba(16, 185, 129, 0.2);
-    transform: translateX(4px);
   }
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
     flex-direction: column;
     text-align: center;
-    padding: 24px 16px;
-    gap: 8px;
-
-    &:hover {
-      transform: translateY(-4px);
-    }
+    padding: 20px 16px;
+    gap: 12px;
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     flex-direction: row;
     text-align: left;
-    padding: 20px 24px;
-    gap: 16px;
-
-    &:hover {
-      transform: translateX(4px);
-    }
+    padding: 16px 20px;
+    gap: 14px;
   }
 `;
 
-const StatIcon = styled.div`
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+const FeatureIcon = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   background: rgba(16, 185, 129, 0.12);
   display: flex;
   align-items: center;
@@ -351,71 +342,60 @@ const StatIcon = styled.div`
   flex-shrink: 0;
 
   svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     color: ${salesTheme.colors.accentPrimary};
   }
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
 
     svg {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
     }
   }
 `;
 
-const StatContent = styled.div``;
+const FeatureContent = styled.div``;
 
-const StatValue = styled.div`
-  font-size: 32px;
-  font-weight: 800;
-  background: ${salesTheme.gradients.greenText};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.1;
+const FeatureTitle = styled.div`
+  font-size: 18px;
+  font-weight: 700;
+  color: ${salesTheme.colors.textPrimary};
+  line-height: 1.2;
   margin-bottom: 4px;
-  font-family: ${salesTheme.typography.fontMono};
 
   @media (max-width: ${salesTheme.breakpoints.laptop}) {
-    font-size: 28px;
-  }
-
-  @media (max-width: ${salesTheme.breakpoints.mobile}) {
-    font-size: 26px;
+    font-size: 16px;
   }
 `;
 
-const StatLabel = styled.div`
+const FeatureDescription = styled.div`
   font-size: 14px;
   color: rgba(255, 255, 255, 0.55);
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-weight: 400;
+  line-height: 1.4;
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     font-size: 13px;
   }
 `;
 
-const stats = [
+const features = [
   {
-    value: '500+',
-    label: 'Devices Deployed',
+    title: 'Real-Time Data',
+    description: 'Continuous monitoring with instant cloud sync',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-        <line x1="8" y1="21" x2="16" y2="21"/>
-        <line x1="12" y1="17" x2="12" y2="21"/>
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     )
   },
   {
-    value: '$2M+',
-    label: 'Credits Generated',
+    title: 'Credit Ready',
+    description: 'Data formatted for marketplace trading',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <line x1="12" y1="1" x2="12" y2="23"/>
@@ -424,11 +404,11 @@ const stats = [
     )
   },
   {
-    value: '98%',
-    label: 'System Uptime',
+    title: 'Open Source',
+    description: 'Full hardware specs and build guides',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
       </svg>
     )
   },
@@ -488,19 +468,19 @@ export default function HeroSection({ onNavigateToProducts, onNavigateToBenchmar
             </TrustBadges>
           </HeroText>
 
-          <StatsContainer>
-            <StatsGrid>
-              {stats.map((stat, index) => (
-                <StatCard key={index}>
-                  <StatIcon>{stat.icon}</StatIcon>
-                  <StatContent>
-                    <StatValue>{stat.value}</StatValue>
-                    <StatLabel>{stat.label}</StatLabel>
-                  </StatContent>
-                </StatCard>
+          <FeaturesContainer>
+            <FeaturesGrid>
+              {features.map((feature, index) => (
+                <FeatureCard key={index}>
+                  <FeatureIcon>{feature.icon}</FeatureIcon>
+                  <FeatureContent>
+                    <FeatureTitle>{feature.title}</FeatureTitle>
+                    <FeatureDescription>{feature.description}</FeatureDescription>
+                  </FeatureContent>
+                </FeatureCard>
               ))}
-            </StatsGrid>
-          </StatsContainer>
+            </FeaturesGrid>
+          </FeaturesContainer>
         </HeroContent>
       </HeroContainer>
     </HeroWrapper>
