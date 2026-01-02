@@ -304,22 +304,25 @@ const ProductGrid = styled.div`
   gap: 20px;
   margin-bottom: 48px;
 
-  @media (max-width: 1400px) {
+  /* Large desktop (1280px+): 5 products in one row */
+  @media (max-width: 1280px) {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  @media (max-width: 1100px) {
+  /* Tablet/small desktop (1024px-1280px): 4 products */
+  @media (max-width: ${salesTheme.breakpoints.laptop}) {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  @media (max-width: ${salesTheme.breakpoints.laptop}) {
+  /* Tablet (768px-1024px): 2-3 products */
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 16px;
   }
 
+  /* Mobile (< 480px): 1 product per row */
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     grid-template-columns: 1fr;
-    gap: 16px;
   }
 `;
 
@@ -583,6 +586,56 @@ const NoResults = styled.div`
   }
 `;
 
+const QuoteModeBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: ${salesTheme.colors.textDark};
+
+  @media (max-width: ${salesTheme.breakpoints.mobile}) {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+`;
+
+const QuoteModeText = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: ${salesTheme.colors.accentPrimary};
+  }
+`;
+
+const ExitQuoteModeButton = styled.button`
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid ${salesTheme.colors.border};
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: ${salesTheme.colors.textMuted};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: ${salesTheme.colors.textDark};
+    border-color: #d1d5db;
+  }
+`;
+
 export default function ProductCatalogSection({
   selectedProduct,
   onSelectProduct,
@@ -595,6 +648,8 @@ export default function ProductCatalogSection({
   showBundles,
   onToggleBundles,
   onAddBundle,
+  isQuoteMode = false,
+  onExitQuoteMode,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [deploymentFilter, setDeploymentFilter] = useState("all");
@@ -680,6 +735,25 @@ export default function ProductCatalogSection({
             find the perfect fit for your water quality monitoring needs.
           </SectionDescription>
         </SectionHeader>
+
+        {/* Quote Mode Indicator */}
+        {isQuoteMode && (
+          <QuoteModeBar>
+            <QuoteModeText>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              Quote Mode Active — Select products to add to your quote
+            </QuoteModeText>
+            {onExitQuoteMode && (
+              <ExitQuoteModeButton onClick={onExitQuoteMode}>
+                Exit Quote Mode
+              </ExitQuoteModeButton>
+            )}
+          </QuoteModeBar>
+        )}
 
         <FilterBar>
           <FilterGroup style={{ flex: 2, maxWidth: '300px' }}>
@@ -861,12 +935,15 @@ export default function ProductCatalogSection({
                       <ViewDetailsButton onClick={() => onSelectProduct(product.id)}>
                         View Details
                       </ViewDetailsButton>
-                      <div>
-                        <AddToQuoteBtn
-                          onClick={() => onAddToQuote(product.id)}
-                          inQuote={isInQuote(product.id)}
-                        />
-                      </div>
+                      {/* Only show Add to Quote button when quote mode is active */}
+                      {isQuoteMode && (
+                        <div>
+                          <AddToQuoteBtn
+                            onClick={() => onAddToQuote(product.id)}
+                            inQuote={isInQuote(product.id)}
+                          />
+                        </div>
+                      )}
                     </CardActions>
                   </CardContent>
                 </ProductCard>

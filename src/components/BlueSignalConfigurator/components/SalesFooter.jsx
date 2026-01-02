@@ -1,8 +1,9 @@
 // SalesFooter - Unified footer for the sales portal
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { salesTheme } from "../styles/theme";
 import bluesignalLogo from "../../../assets/bluesignal-logo.png";
+import useFormSubmit from "../hooks/useFormSubmit";
 
 const FooterWrapper = styled.footer`
   background: ${salesTheme.colors.bgPrimary};
@@ -229,7 +230,8 @@ const NewsletterForm = styled.form`
 const NewsletterInput = styled.input`
   flex: 1;
   min-width: 0;
-  padding: 14px 18px;
+  height: 44px;
+  padding: 0 18px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.04);
@@ -254,7 +256,8 @@ const NewsletterInput = styled.input`
 `;
 
 const NewsletterButton = styled.button`
-  padding: 14px 24px;
+  height: 44px;
+  padding: 0 24px;
   background: ${salesTheme.gradients.greenCta};
   border: none;
   border-radius: 10px;
@@ -266,9 +269,14 @@ const NewsletterButton = styled.button`
   white-space: nowrap;
   flex-shrink: 0;
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
@@ -278,6 +286,27 @@ const NewsletterButton = styled.button`
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
     width: 100%;
   }
+`;
+
+const NewsletterSuccess = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: ${salesTheme.colors.accentPrimary};
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 0;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+const NewsletterError = styled.div`
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 8px;
 `;
 
 const TrustSection = styled.div`
@@ -382,10 +411,28 @@ const LegalLink = styled.a`
 `;
 
 export default function SalesFooter({ onNavigate }) {
+  const [email, setEmail] = useState('');
+  const { formState, submitForm, reset } = useFormSubmit('newsletter_subscribers');
+
   const handleNavClick = (e, sectionId) => {
     e.preventDefault();
     if (onNavigate) {
       onNavigate(sectionId);
+    }
+  };
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email || !email.includes('@')) {
+      return;
+    }
+
+    const success = await submitForm({ email });
+    if (success) {
+      setEmail('');
+      // Auto-reset after 5 seconds
+      setTimeout(reset, 5000);
     }
   };
 
@@ -528,7 +575,7 @@ export default function SalesFooter({ onNavigate }) {
             <ColumnTitle>Company</ColumnTitle>
             <FooterLinks>
               <FooterLinkItem>
-                <FooterLink href="/about">
+                <FooterLink href="#about" onClick={(e) => handleNavClick(e, 'about')}>
                   About Us
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -536,7 +583,7 @@ export default function SalesFooter({ onNavigate }) {
                 </FooterLink>
               </FooterLinkItem>
               <FooterLinkItem>
-                <FooterLink href="/contact">
+                <FooterLink href="#contact" onClick={(e) => handleNavClick(e, 'contact')}>
                   Contact
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -544,7 +591,7 @@ export default function SalesFooter({ onNavigate }) {
                 </FooterLink>
               </FooterLinkItem>
               <FooterLinkItem>
-                <FooterLink href="/faq">
+                <FooterLink href="#faq" onClick={(e) => handleNavClick(e, 'faq')}>
                   FAQ
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -567,16 +614,37 @@ export default function SalesFooter({ onNavigate }) {
             <NewsletterDescription>
               Get the latest on water quality monitoring innovations and credit opportunities.
             </NewsletterDescription>
-            <NewsletterForm onSubmit={(e) => e.preventDefault()}>
-              <NewsletterInput
-                type="email"
-                placeholder="Enter your email"
-                aria-label="Email address for newsletter"
-              />
-              <NewsletterButton type="submit">
-                Subscribe
-              </NewsletterButton>
-            </NewsletterForm>
+            {formState.status === 'success' ? (
+              <NewsletterSuccess>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Subscribed! Check your inbox.
+              </NewsletterSuccess>
+            ) : (
+              <>
+                <NewsletterForm onSubmit={handleNewsletterSubmit}>
+                  <NewsletterInput
+                    type="email"
+                    placeholder="Enter your email"
+                    aria-label="Email address for newsletter"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={formState.status === 'submitting'}
+                    required
+                  />
+                  <NewsletterButton
+                    type="submit"
+                    disabled={formState.status === 'submitting'}
+                  >
+                    {formState.status === 'submitting' ? 'Sending...' : 'Subscribe'}
+                  </NewsletterButton>
+                </NewsletterForm>
+                {formState.status === 'error' && (
+                  <NewsletterError>{formState.error}</NewsletterError>
+                )}
+              </>
+            )}
           </NewsletterColumn>
         </FooterTop>
 
