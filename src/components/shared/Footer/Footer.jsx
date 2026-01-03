@@ -46,8 +46,8 @@ function Footer() {
 
   // Use BlueSignal branding for sales/cloud modes, WaterQuality.Trading for marketplace
   const copyrightText = isBlueSignalMode
-    ? "© 2024 BlueSignal LTD"
-    : "© 2024 WaterQuality.Trading — powered by BlueSignal LTD";
+    ? "© 2026 BlueSignal LTD"
+    : "© 2026 WaterQuality.Trading — powered by BlueSignal LTD";
 
   const termsUrl = isBlueSignalMode
     ? "https://bluesignal.xyz/terms"

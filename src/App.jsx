@@ -52,6 +52,7 @@ import {
 import {
   ListingPage,
   CreateListingPage,
+  TransactionPage,
 } from "./components/elements/marketplace";
 
 import { Livepeer } from "./components/elements/livepeer";
@@ -70,6 +71,8 @@ import {
   Confirmation,
   ResultPopup,
 } from "./components/popups";
+
+import Footer from "./components/shared/Footer/Footer";
 
 import { useAppContext } from "./context/AppContext";
 
@@ -272,13 +275,22 @@ function AppShell({ mode, user, authLoading }) {
         />
       )}
 
-      {/* ROUTES */}
-      {mode === "sales" ? (
-        <SalesRoutes />
-      ) : mode === "cloud" ? (
-        <CloudRoutes user={user} authLoading={authLoading} />
-      ) : (
-        <MarketplaceRoutes user={user} authLoading={authLoading} />
+      {/* MAIN CONTENT WITH ROUTES */}
+      <MainContent>
+        {mode === "sales" ? (
+          <SalesRoutes />
+        ) : mode === "cloud" ? (
+          <CloudRoutes user={user} authLoading={authLoading} />
+        ) : (
+          <MarketplaceRoutes user={user} authLoading={authLoading} />
+        )}
+      </MainContent>
+
+      {/* GLOBAL FOOTER - shown on all pages except sales mode (has its own footer) */}
+      {mode !== "sales" && (
+        <FooterWrapper>
+          <Footer />
+        </FooterWrapper>
       )}
 
       {/* BADGE PORTAL */}
@@ -834,6 +846,7 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
           element={<CreateListingPage />}
         />
         <Route path="/dashboard/financial" element={<FinancialDashboard />} />
+        <Route path="/marketplace/transactions" element={<TransactionPage />} />
       </>
     )}
 
@@ -865,6 +878,19 @@ const AppContainer = styled.div`
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
+`;
+
+const MainContent = styled.main`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const FooterWrapper = styled.div`
+  padding: 24px 20px;
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  margin-top: auto;
 `;
 
 const LoadingContainer = styled.div`

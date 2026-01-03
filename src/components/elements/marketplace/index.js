@@ -5,6 +5,7 @@ import UserProfile from './UserProfile'
 import SellerDashboard from './SellerDashboard'
 import CreateListingPage from './CreateListingPage'
 import PurchaseFlow from './PurchaseFlow'
+import TransactionPage from './TransactionPage'
 
 export {
     ListingPage,
@@ -14,4 +15,5 @@ export {
     SellerDashboard,
     CreateListingPage,
     PurchaseFlow,
+    TransactionPage,
 }

@@ -8,7 +8,6 @@ import LoginForm from "./components/welcome/LoginForm";
 import RegisterForm from "./components/welcome/RegisterForm";
 import { WelcomeHome } from "./components/welcome";
 
-import Footer from "../components/shared/Footer/Footer";
 import { useAppContext } from "../context/AppContext";
 import { getDefaultDashboardRoute } from "../utils/roleRouting";
 import { isCloudMode, getAppMode } from "../utils/modeDetection";
@@ -153,8 +152,6 @@ const Welcome = () => {
           </div>
         </CardShell>
       </Content>
-
-      <Footer />
     </FullScreenWrapper>
   );
 };

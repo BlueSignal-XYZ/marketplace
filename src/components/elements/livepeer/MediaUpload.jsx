@@ -16,7 +16,8 @@ import ButtonLoading from "../../shared/button/ButtonLoading";
 import { DashboardPage } from "../../shared/DashboardPage/DashboardPage";
 import { logoColors } from "../../../styles/colors";
 import { useAppContext } from "../../../context/AppContext";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { isCloudMode } from "../../../utils/modeDetection";
 
 const colors = {
   primaryBlue: "#1B3B6F",
@@ -257,8 +258,11 @@ const MediaUpload = () => {
   });
 
   const handleOpenUploads = () => {
-    navigate('/features/verification');
-  }
+    const verificationPath = isCloudMode()
+      ? "/cloud/tools/verification"
+      : "/features/verification";
+    navigate(verificationPath);
+  };
 
   const handleUpload = async () => {
     if (!activeFile) {

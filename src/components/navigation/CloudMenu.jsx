@@ -426,7 +426,7 @@ export function CloudMenu({ open, onClose, user }) {
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
           <ExternalLink
-            href="https://sales.bluesignal.xyz"
+            href="https://bluesignal.xyz"
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
