@@ -833,6 +833,9 @@ export default function OverviewDashboard() {
         <CTAButton to="/cloud/commissioning/new">
           + Commission Device
         </CTAButton>
+        <SecondaryButton to="/cloud/devices/add">
+          + Add Device
+        </SecondaryButton>
         <SecondaryButton to="/cloud/sites/new">
           + Add Site
         </SecondaryButton>

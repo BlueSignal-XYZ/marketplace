@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, isFirebaseConfigured } from "../apis/firebase";
 import { UserAPI } from "../scripts/back_door";
+import { clearDeviceCache } from "../hooks/useUserDevices";
 
 const AppContext = createContext();
 
@@ -136,7 +137,10 @@ export const AppProvider = ({ children }) => {
       if (isFirebaseConfigured && auth) {
         await signOut(auth);
       }
+      // Clear all cached user data
       sessionStorage.removeItem("user");
+      clearDeviceCache(); // Clear device detection cache
+      localStorage.removeItem("cloud_welcome_dismissed"); // Reset welcome banner
       setUser(null);
       window.location.href = "/";
     } catch (error) {
