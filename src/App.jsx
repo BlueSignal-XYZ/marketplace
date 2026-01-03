@@ -87,6 +87,7 @@ import AlertDetailPage from "./components/cloud/AlertDetailPage";
 import DeviceOnboardingWizard from "./components/cloud/DeviceOnboardingWizard";
 import ProfilePage from "./components/cloud/ProfilePage";
 import OnboardingWizard from "./components/cloud/OnboardingWizard";
+import AddDevicePage from "./components/cloud/AddDevicePage";
 
 import {
   CloudNutrientCalculator,
@@ -104,6 +105,7 @@ import InstallerDashboard from "./components/dashboards/InstallerDashboard";
 import { getDefaultDashboardRoute } from "./utils/roleRouting";
 import { isCloudMode, isSalesMode, getAppMode } from "./utils/modeDetection";
 import { isFirebaseConfigured, firebaseConfigError } from "./apis/firebase";
+import { useUserDevices } from "./hooks/useUserDevices";
 
 /* -------------------------------------------------------------------------- */
 /*                              DEBUG VERSION TAG                              */
@@ -291,37 +293,70 @@ function AppShell({ mode, user, authLoading }) {
 
 /**
  * CloudLanding - Handles / route for Cloud mode
- * Waits for auth to complete, then redirects authenticated users
+ * Waits for auth to complete, then redirects based on user status:
+ * - Returning users (with devices) → Dashboard
+ * - New users (no devices) → Onboarding
  */
 const CloudLanding = ({ user, authLoading }) => {
   const navigate = useNavigate();
+  const { hasDevices, isLoading: devicesLoading } = useUserDevices();
 
   React.useEffect(() => {
     console.log("🚀 CloudLanding useEffect fired:", {
       user: user?.uid || "null",
       authLoading,
+      hasDevices,
+      devicesLoading,
     });
 
+    // Wait for auth to complete
     if (authLoading) {
       console.log("⏳ CloudLanding: Auth loading, waiting...");
       return;
     }
 
-    if (user?.uid) {
-      const route = getDefaultDashboardRoute(user, "cloud");
-      console.log("✅ CloudLanding: User authenticated, redirecting to:", route);
-      navigate(route, { replace: true });
-    } else {
+    // Not logged in - show login page
+    if (!user?.uid) {
       console.log("❌ CloudLanding: No user, showing login");
+      return;
     }
-  }, [user, authLoading, navigate]);
 
+    // Wait for device check to complete
+    if (devicesLoading) {
+      console.log("⏳ CloudLanding: Checking devices, waiting...");
+      return;
+    }
+
+    // User has devices OR has completed onboarding → go to Dashboard
+    // This handles returning users and users who completed onboarding but haven't added devices yet
+    if (hasDevices || user.onboardingCompleted) {
+      console.log("✅ CloudLanding: Returning user, redirecting to dashboard");
+      navigate("/dashboard/main", { replace: true });
+    } else {
+      // New user with no devices and no onboarding → go to Onboarding
+      console.log("🆕 CloudLanding: New user, redirecting to onboarding");
+      navigate("/cloud/onboarding", { replace: true });
+    }
+  }, [user, authLoading, hasDevices, devicesLoading, navigate]);
+
+  // Show loading while checking auth
   if (authLoading) {
     return (
       <LoadingContainer>
         <LoadingSpinner />
         <LoadingText>Loading BlueSignal Cloud...</LoadingText>
         <LoadingSubtext>Preparing your dashboard</LoadingSubtext>
+      </LoadingContainer>
+    );
+  }
+
+  // Show loading while checking devices for authenticated users
+  if (user?.uid && devicesLoading) {
+    return (
+      <LoadingContainer>
+        <LoadingSpinner />
+        <LoadingText>Loading BlueSignal Cloud...</LoadingText>
+        <LoadingSubtext>Checking your devices</LoadingSubtext>
       </LoadingContainer>
     );
   }
@@ -375,8 +410,27 @@ const MarketplaceLanding = ({ user, authLoading }) => {
 /**
  * CloudAuthGate - Protects Cloud routes
  * Shows loading → login → or protected content
+ * Also handles redirect logic for onboarding routes
  */
-const CloudAuthGate = ({ children, authLoading }) => {
+const CloudAuthGate = ({ children, authLoading, isOnboardingRoute = false }) => {
+  const navigate = useNavigate();
+  const { STATES } = useAppContext();
+  const { user } = STATES || {};
+  const { hasDevices, isLoading: devicesLoading } = useUserDevices();
+
+  // Handle redirects for onboarding routes
+  React.useEffect(() => {
+    if (authLoading || devicesLoading) return;
+    if (!user?.uid) return;
+    if (!isOnboardingRoute) return;
+
+    // If user has devices or completed onboarding, redirect away from onboarding
+    if (hasDevices || user.onboardingCompleted) {
+      console.log("🔄 CloudAuthGate: User already has devices/onboarding, redirecting to dashboard");
+      navigate("/dashboard/main", { replace: true });
+    }
+  }, [authLoading, devicesLoading, user, hasDevices, isOnboardingRoute, navigate]);
+
   if (authLoading) {
     return (
       <LoadingContainer>
@@ -387,12 +441,20 @@ const CloudAuthGate = ({ children, authLoading }) => {
     );
   }
 
-  const { STATES } = useAppContext();
-  const { user } = STATES || {};
-
   if (!user?.uid) {
     console.log("🚫 CloudAuthGate: Not authenticated");
     return <Welcome />;
+  }
+
+  // For onboarding routes, wait for device check before rendering
+  if (isOnboardingRoute && devicesLoading) {
+    return (
+      <LoadingContainer>
+        <LoadingSpinner />
+        <LoadingText>Loading...</LoadingText>
+        <LoadingSubtext>Checking your account status</LoadingSubtext>
+      </LoadingContainer>
+    );
   }
 
   console.log("✅ CloudAuthGate: Authenticated, rendering protected route");
@@ -479,7 +541,7 @@ const CloudRoutes = ({ user, authLoading }) => (
     <Route
       path="/cloud/onboarding"
       element={
-        <CloudAuthGate authLoading={authLoading}>
+        <CloudAuthGate authLoading={authLoading} isOnboardingRoute={true}>
           <OnboardingWizard />
         </CloudAuthGate>
       }
@@ -499,6 +561,16 @@ const CloudRoutes = ({ user, authLoading }) => (
       element={
         <CloudAuthGate authLoading={authLoading}>
           <DeviceOnboardingWizard />
+        </CloudAuthGate>
+      }
+    />
+
+    {/* Streamlined add device for returning users (no onboarding experience) */}
+    <Route
+      path="/cloud/devices/add"
+      element={
+        <CloudAuthGate authLoading={authLoading}>
+          <AddDevicePage />
         </CloudAuthGate>
       }
     />
