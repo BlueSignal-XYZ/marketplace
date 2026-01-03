@@ -101,6 +101,30 @@ const FilterBar = styled.div`
   }
 `;
 
+const FilterActionsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    min-width: auto;
+  }
+`;
+
+const FilterActionsLabel = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+
+  @media (max-width: ${salesTheme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
 const FilterGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -812,26 +836,29 @@ export default function ProductCatalogSection({
             </FilterSelect>
           </FilterGroup>
 
-          <FilterActions>
-            <CompareButton
-              $active={compareMode}
-              onClick={onToggleCompareMode}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
-              </svg>
-              {compareMode ? "Exit Compare" : "Compare"}
-            </CompareButton>
-
-            {hasActiveFilters && (
-              <ClearButton onClick={clearFilters}>
+          <FilterActionsWrapper>
+            <FilterActionsLabel>Actions</FilterActionsLabel>
+            <FilterActions>
+              <CompareButton
+                $active={compareMode}
+                onClick={onToggleCompareMode}
+              >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M18 6L6 18M6 6l12 12"/>
+                  <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
                 </svg>
-                Clear
-              </ClearButton>
-            )}
-          </FilterActions>
+                {compareMode ? "Exit Compare" : "Compare"}
+              </CompareButton>
+
+              {hasActiveFilters && (
+                <ClearButton onClick={clearFilters}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                  Clear
+                </ClearButton>
+              )}
+            </FilterActions>
+          </FilterActionsWrapper>
         </FilterBar>
 
         <BundlesSection

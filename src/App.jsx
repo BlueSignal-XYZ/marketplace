@@ -57,7 +57,7 @@ import {
 import { Livepeer } from "./components/elements/livepeer";
 import { VerificationUI } from "./components/elements/contractUI";
 import BlueSignalConfigurator from "./components/BlueSignalConfigurator";
-import { SalesPage, AboutPage, FAQPage, ContactPage, LegalPage } from "./components/BlueSignalConfigurator/components";
+import { SalesPage, AboutPage, FAQPage, ContactPage, LegalPage, DeveloperDocsPage } from "./components/BlueSignalConfigurator/components";
 
 // Installer portal components (used in Cloud commissioning routes)
 import {
@@ -691,6 +691,8 @@ const SalesRoutes = () => (
     <Route path="/about" element={<AboutPage />} />
     <Route path="/faq" element={<FAQPage />} />
     <Route path="/contact" element={<ContactPage />} />
+    <Route path="/developers" element={<DeveloperDocsPage />} />
+    <Route path="/docs" element={<DeveloperDocsPage />} />
 
     {/* Legal pages */}
     <Route path="/privacy" element={<LegalPage />} />
