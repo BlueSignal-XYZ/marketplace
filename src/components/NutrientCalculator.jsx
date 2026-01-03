@@ -438,28 +438,93 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
     }
 
     const ctx = chartRef.current.getContext("2d");
+
+    // BlueSignal brand-aligned color palette
+    const brandColors = [
+      "#1D7072", // Primary teal
+      "#38BDBE", // Light teal
+      "#0284c7", // Sky blue
+      "#059669", // Emerald
+      "#6366f1", // Indigo
+    ];
+
     chartInstanceRef.current = new ChartJS(ctx, {
       type: "bar",
       data: {
         labels: Object.keys(nutrientValues),
         datasets: [
           {
-            label: "Nutrient Removal",
+            label: "lbs/acre removed",
             data: Object.values(nutrientValues),
-            backgroundColor: [
-              "#3b82f6",
-              "#e5e5e5",
-              "#6366f1",
-              "#eab308",
-              "#a3a3a3",
-            ],
+            backgroundColor: brandColors,
+            borderColor: brandColors.map(c => c + "dd"),
+            borderWidth: 1,
+            borderRadius: 4,
           },
         ],
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Nutrient Removal by Harvest",
+            font: {
+              size: 16,
+              weight: "600",
+            },
+            color: "#374151",
+            padding: {
+              bottom: 20,
+            },
+          },
+          tooltip: {
+            backgroundColor: "#1f2937",
+            titleColor: "#ffffff",
+            bodyColor: "#ffffff",
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: false,
+            callbacks: {
+              label: function(context) {
+                return `${context.parsed.y.toFixed(1)} lbs/acre`;
+              },
+            },
+          },
+        },
         scales: {
           y: {
             beginAtZero: true,
+            title: {
+              display: true,
+              text: "lbs/acre",
+              font: {
+                size: 12,
+                weight: "500",
+              },
+              color: "#6b7280",
+            },
+            grid: {
+              color: "#e5e7eb",
+            },
+            ticks: {
+              color: "#6b7280",
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              color: "#374151",
+              font: {
+                weight: "500",
+              },
+            },
           },
         },
       },
@@ -520,15 +585,8 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
               </Result>
               <Footer>
                 <p>
-                  Nutrient removal coefficients based on IPNI Nutrient Removal
-                  Calculator (Jan. 2018) and various sources including Alabama
-                  Extension: ANR-449, CFI, and North Carolina: AG-439-16. For
-                  more details, visit{" "}
-                  <a href="http://www.ipni.net/article/IPNI-3346">IPNI</a>.
-                </p>
-                <p>
-                  *Nutrient removal values may vary regionally. Use locally
-                  available data for accurate nutrient recommendations.
+                  Based on <a href="http://www.ipni.net/article/IPNI-3346" target="_blank" rel="noopener noreferrer">IPNI Nutrient Removal Calculator</a>.
+                  Values may vary by region—consult local data for precise recommendations.
                 </p>
               </Footer>
             </ResultsWrapper>

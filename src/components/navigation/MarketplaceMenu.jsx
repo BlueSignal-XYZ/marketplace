@@ -371,18 +371,11 @@ export function MarketplaceMenu({ open, onClose, user }) {
                     + Create Listing
                   </NavItem>
                   <NavItem
-                    to="/marketplace/my-listings"
-                    $active={isActive("/marketplace/my-listings")}
-                    onClick={onClose}
-                  >
-                    My Listings
-                  </NavItem>
-                  <NavItem
                     to="/marketplace/tools/verification"
                     $active={isActive("/marketplace/tools/verification")}
                     onClick={onClose}
                   >
-                    Verification Portal
+                    Upload & Verify
                   </NavItem>
                 </NavList>
               </>
@@ -397,13 +390,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
                 onClick={onClose}
               >
                 Credit Calculator
-              </NavItem>
-              <NavItem
-                to="/marketplace/tools/live"
-                $active={isActive("/marketplace/tools/live")}
-                onClick={onClose}
-              >
-                Live Streams
               </NavItem>
             </NavList>
           </>
@@ -422,7 +408,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
           <ExternalLink
-            href="https://sales.bluesignal.xyz"
+            href="https://bluesignal.xyz"
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}

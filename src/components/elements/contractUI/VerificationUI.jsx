@@ -16,6 +16,8 @@ import {
   NoDisputesState,
   NoApprovalsState,
 } from "../../shared/EmptyState/EmptyState";
+import { useNavigate } from "react-router-dom";
+import { isCloudMode } from "../../../utils/modeDetection";
 
 const neptuneColorPalette = {
   lightBlue: "#8abbd0",
@@ -206,6 +208,42 @@ const Button = styled.button`
   }
 `;
 
+// Upload CTA Button
+const UploadCTAButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #1D7072;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+
+  &:hover {
+    background: #155e5f;
+    transform: translateY(-1px);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+`;
+
 // Framer Motion variants for animations
 const tabVariants = {
   initial: { x: -10, opacity: 0 },
@@ -215,6 +253,7 @@ const tabVariants = {
 
 function VerificationUI() {
   const { STATES, ACTIONS } = useAppContext();
+  const navigate = useNavigate();
   const [accessibleTabs, setAccessibleTabs] = useState([]);
   const [activeTab, setActiveTab] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -223,6 +262,14 @@ function VerificationUI() {
   const [submissions, setSubmissions] = useState([]);
   const [disputes, setDisputes] = useState([]);
   const [approvals, setApprovals] = useState([]);
+
+  // Navigate to upload page based on mode
+  const handleUploadMedia = () => {
+    const uploadPath = isCloudMode()
+      ? "/cloud/tools/upload-media"
+      : "/features/upload-media";
+    navigate(uploadPath);
+  };
 
   const { user, verificationUIOpen, verificationData } = STATES || {};
   const { setTxPopupVisible, setResult, setVerificationData } = ACTIONS || {};
@@ -373,21 +420,31 @@ function VerificationUI() {
 
   return (
     <Page>
-      <TabContainer>
-        {accessibleTabs.map((tab) => (
-          <Badge
-            key={tab}
-            active={activeTab === tab}
-            onClick={() => setActiveTab(tab)}
-            variants={tabVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            {STRING.toTitleCase(tab)}
-          </Badge>
-        ))}
-      </TabContainer>
+      <HeaderRow>
+        <TabContainer>
+          {accessibleTabs.map((tab) => (
+            <Badge
+              key={tab}
+              active={activeTab === tab}
+              onClick={() => setActiveTab(tab)}
+              variants={tabVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              {STRING.toTitleCase(tab)}
+            </Badge>
+          ))}
+        </TabContainer>
+        {activeTab === "uploads" && (
+          <UploadCTAButton onClick={handleUploadMedia}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            Upload Media
+          </UploadCTAButton>
+        )}
+      </HeaderRow>
       {isLoading ? (
         <Loading>
           <FontAwesomeIcon icon={faSpinner} />
