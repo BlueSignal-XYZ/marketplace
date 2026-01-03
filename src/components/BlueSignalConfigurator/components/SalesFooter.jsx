@@ -537,6 +537,14 @@ export default function SalesFooter({ onNavigate }) {
             <ColumnTitle>Developer</ColumnTitle>
             <FooterLinks>
               <FooterLinkItem>
+                <FooterLink href="/developers">
+                  Documentation
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </FooterLink>
+              </FooterLinkItem>
+              <FooterLinkItem>
                 <FooterLink href="https://github.com/NeptuneChain-Inc/bluesignal-firmware" target="_blank" rel="noopener noreferrer">
                   Firmware Source
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -555,14 +563,6 @@ export default function SalesFooter({ onNavigate }) {
               <FooterLinkItem>
                 <FooterLink href="#calculator" onClick={(e) => handleNavClick(e, 'calculator')}>
                   ROI Calculator
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </FooterLink>
-              </FooterLinkItem>
-              <FooterLinkItem>
-                <FooterLink href="#benchmark" onClick={(e) => handleNavClick(e, 'benchmark')}>
-                  Benchmark Data
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>

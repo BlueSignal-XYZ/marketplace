@@ -1,10 +1,11 @@
 // ContactPage - Contact form with Austin location map
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { salesTheme } from "../styles/theme";
 import SalesHeader from "./SalesHeader";
 import SalesFooter from "./SalesFooter";
 import { useNavigate } from "react-router-dom";
+import useFormSubmit from "../hooks/useFormSubmit";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -254,6 +255,16 @@ const SuccessMessage = styled.div`
   text-align: center;
 `;
 
+const ErrorMessage = styled.div`
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
 const ServicesSection = styled.section`
   padding: 80px 24px;
   background: ${salesTheme.colors.bgPrimary};
@@ -432,8 +443,7 @@ export default function ContactPage() {
     message: "",
     product: ""
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const { formState, submitForm, reset } = useFormSubmit('contact_submissions');
 
   const handleNavigate = (sectionId) => {
     navigate(`/?section=${sectionId}`);
@@ -446,15 +456,27 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    // Simulate form submission - replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const success = await submitForm({
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      product: formData.product,
+      type: 'contact'
+    });
 
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setIsSubmitting(false);
+    if (success) {
+      setFormData({ name: "", email: "", message: "", product: "" });
+    }
   };
+
+  // Auto-reset form state after showing success for 10 seconds
+  useEffect(() => {
+    if (formState.status === 'success') {
+      const timer = setTimeout(reset, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [formState.status, reset]);
 
   return (
     <PageWrapper>
@@ -491,7 +513,7 @@ export default function ContactPage() {
 
               <FormSection>
                 <SectionTitle>Drop us a line...</SectionTitle>
-                {submitted ? (
+                {formState.status === 'success' ? (
                   <SuccessMessage>
                     Thank you for your message! We'll get back to you within 24 hours.
                   </SuccessMessage>
@@ -506,6 +528,7 @@ export default function ContactPage() {
                         placeholder="Jane Smith"
                         value={formData.name}
                         onChange={handleChange}
+                        disabled={formState.status === 'submitting'}
                         required
                       />
                     </FormGroup>
@@ -519,6 +542,7 @@ export default function ContactPage() {
                         placeholder="jane@gmail.com"
                         value={formData.email}
                         onChange={handleChange}
+                        disabled={formState.status === 'submitting'}
                         required
                       />
                     </FormGroup>
@@ -531,6 +555,7 @@ export default function ContactPage() {
                         placeholder="Hi team..."
                         value={formData.message}
                         onChange={handleChange}
+                        disabled={formState.status === 'submitting'}
                         required
                       />
                     </FormGroup>
@@ -542,6 +567,7 @@ export default function ContactPage() {
                         name="product"
                         value={formData.product}
                         onChange={handleChange}
+                        disabled={formState.status === 'submitting'}
                       >
                         {productOptions.map(opt => (
                           <option key={opt.value} value={opt.value}>
@@ -551,9 +577,13 @@ export default function ContactPage() {
                       </Select>
                     </FormGroup>
 
-                    <SubmitButton type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? "Sending..." : "Submit"}
+                    <SubmitButton type="submit" disabled={formState.status === 'submitting'}>
+                      {formState.status === 'submitting' ? "Sending..." : "Submit"}
                     </SubmitButton>
+
+                    {formState.status === 'error' && (
+                      <ErrorMessage>{formState.error}</ErrorMessage>
+                    )}
 
                     <ContactInfo>
                       <strong>Text or call</strong> +1.512.730.0843

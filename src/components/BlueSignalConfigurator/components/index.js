@@ -25,3 +25,4 @@ export { default as AboutPage } from './AboutPage';
 export { default as FAQPage } from './FAQPage';
 export { default as ContactPage } from './ContactPage';
 export { default as LegalPage } from './LegalPage';
+export { default as DeveloperDocsPage } from './DeveloperDocsPage';
