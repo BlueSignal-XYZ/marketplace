@@ -1,3 +1,9 @@
+/**
+ * LEGACY: NFT-based UserProfile component from NeptuneChain era.
+ * Moved to src/legacy/ -- references undefined NFT_CONTRACT_ADDRESS and ethers globals.
+ * This file is preserved for reference only and should not be imported.
+ */
+
 import { useEffect, useState } from "react";
 
 const  UserProfile = ({ signer }) => {

@@ -1,0 +1,70 @@
+# BlueSignal BS-WQM-100 Configuration
+# Copy this file to /etc/bluesignal/config.yaml on the device
+
+device:
+  id: "bs-wqm-0001"                  # Unique device identifier
+  model: "BS-WQM-100"
+  firmware_version: "1.0.0"
+
+sampling:
+  interval_seconds: 300               # Sample every 5 minutes
+  warmup_seconds: 5                   # Sensor warmup before reading
+  averaging_samples: 3                # ADC samples to average per reading
+
+lorawan:
+  dev_eui: ""                          # 16 hex chars - from TTN device registration
+  app_eui: ""                          # 16 hex chars - from TTN application
+  app_key: ""                          # 32 hex chars - from TTN device registration
+  region: "US915"                      # LoRaWAN region (US915, EU868, AU915, etc.)
+  spreading_factor: 7                  # 7-12 (lower = faster, higher = longer range)
+  tx_power: 14                         # dBm (max 14 for US915)
+  join_retries: 3                      # OTAA join attempts
+  join_timeout: 30                     # Seconds to wait for join accept
+
+sensors:
+  ph:
+    enabled: true
+    adc_channel: 3                     # ADS1115 channel for pH (via OPA340 BNC)
+    calibration:
+      ph4_voltage: 3.04               # Voltage at pH 4.0 buffer
+      ph7_voltage: 2.50               # Voltage at pH 7.0 buffer
+
+  tds:
+    enabled: true
+    adc_channel: 0                     # ADS1115 channel for TDS/conductivity
+    calibration:
+      factor: 500.0                    # ppm per volt (adjust per probe)
+      offset: 0.0
+
+  turbidity:
+    enabled: true
+    adc_channel: 1                     # ADS1115 channel for turbidity
+    calibration:
+      coeff_a: -1120.4                 # Polynomial coefficients (voltage -> NTU)
+      coeff_b: 5742.3
+      coeff_c: -4352.9
+
+  temperature:
+    enabled: true
+    device_id: null                    # DS18B20 1-Wire ID (null = auto-detect)
+
+  gps:
+    enabled: true
+    port: "/dev/ttyAMA0"
+    baud: 9600
+    fix_timeout: 120                   # Seconds to wait for GPS fix at startup
+
+antifouling:
+  enabled: true
+  on_duration: 30                      # Seconds ultrasonic is ON
+  off_duration: 270                    # Seconds ultrasonic is OFF (5 min total cycle)
+
+storage:
+  db_path: "/var/lib/bluesignal/readings.db"
+  cleanup_days: 30                     # Auto-delete synced readings older than this
+
+logging:
+  level: "INFO"                        # DEBUG, INFO, WARNING, ERROR
+  file: "/var/log/bluesignal/wqm.log"
+  max_size_mb: 10
+  backup_count: 3

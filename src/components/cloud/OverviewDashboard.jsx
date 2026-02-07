@@ -4,8 +4,11 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+import { DeviceAPI, AlertsAPI, SiteAPI } from "../../scripts/back_door";
 import { DemoHint } from "../DemoHint";
 import SEOHead from "../seo/SEOHead";
+
+const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== "false";
 
 const Grid = styled.div`
   display: grid;
@@ -683,20 +686,65 @@ export default function OverviewDashboard() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [statsData, sitesData, commissioningData, tasksData] =
-        await Promise.all([
-          CloudMockAPI.overview.getStats(),
-          CloudMockAPI.sites.getAll(),
-          CloudMockAPI.overview.getRecentCommissioning(),
-          CloudMockAPI.overview.getTodayTasks(),
-        ]);
+      if (USE_MOCK) {
+        // Mock data path (demo/development)
+        const [statsData, sitesData, commissioningData, tasksData] =
+          await Promise.all([
+            CloudMockAPI.overview.getStats(),
+            CloudMockAPI.sites.getAll(),
+            CloudMockAPI.overview.getRecentCommissioning(),
+            CloudMockAPI.overview.getTodayTasks(),
+          ]);
 
-      setStats(statsData);
-      setSites(sitesData);
-      setRecentCommissioning(commissioningData);
-      setTodayTasks(tasksData);
+        setStats(statsData);
+        setSites(sitesData);
+        setRecentCommissioning(commissioningData);
+        setTodayTasks(tasksData);
+      } else {
+        // Real API path
+        const [devicesResult, alertsResult, sitesResult, commissioningData, tasksData] =
+          await Promise.all([
+            DeviceAPI.getDevices().catch(() => null),
+            AlertsAPI.getActive().catch(() => null),
+            SiteAPI.list().catch(() => null),
+            CloudMockAPI.overview.getRecentCommissioning(), // still mock until commissioning API is wired
+            CloudMockAPI.overview.getTodayTasks(),          // still mock until tasks API is wired
+          ]);
+
+        // Compute stats from real device/alert data
+        const devices = devicesResult?.devices || [];
+        const alerts = alertsResult?.alerts || [];
+        const sitesData = sitesResult?.sites || [];
+
+        const onlineDevices = devices.filter(
+          (d) => d.health?.lastSeen && Date.now() - d.health.lastSeen < 30 * 60 * 1000
+        );
+
+        setStats({
+          totalDevices: devices.length,
+          onlineDevices: onlineDevices.length,
+          offlineDevices: devices.length - onlineDevices.length,
+          openAlerts: alerts.length,
+          totalSites: sitesData.length,
+        });
+
+        setSites(sitesData);
+        setRecentCommissioning(commissioningData);
+        setTodayTasks(tasksData);
+      }
     } catch (error) {
       console.error("Error loading overview dashboard:", error);
+      // Fall back to mock data on error
+      try {
+        const [statsData, sitesData] = await Promise.all([
+          CloudMockAPI.overview.getStats(),
+          CloudMockAPI.sites.getAll(),
+        ]);
+        setStats(statsData);
+        setSites(sitesData);
+      } catch (fallbackError) {
+        console.error("Mock fallback also failed:", fallbackError);
+      }
     } finally {
       setLoading(false);
     }

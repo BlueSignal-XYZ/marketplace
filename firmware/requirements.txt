@@ -1,0 +1,24 @@
+# BlueSignal BS-WQM-100 Firmware Dependencies
+# Install on Raspberry Pi Zero 2 W:
+#   pip install -r requirements.txt
+
+# I2C / ADC
+smbus2>=0.4.3
+adafruit-circuitpython-ads1x15>=2.2.23
+
+# 1-Wire temperature (DS18B20)
+# Uses kernel driver via /sys/bus/w1 -- no pip package needed
+
+# GPS (UART/serial)
+pyserial>=3.5
+
+# LoRa SX1262
+pySX126x>=0.3.1
+
+# GPIO control (relay, LED)
+RPi.GPIO>=0.7.1
+
+# Configuration
+PyYAML>=6.0.1
+
+# SQLite is part of Python stdlib -- no install needed

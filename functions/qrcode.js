@@ -261,7 +261,7 @@ const validateDeviceQR = async (req, res) => {
  * Register a device to a user (after QR scan)
  */
 const registerDevice = async (req, res) => {
-  const { serialNumber, purchaseOrderId } = req.body;
+  const { serialNumber, purchaseOrderId, devEUI } = req.body;
 
   if (!serialNumber) {
     return res.status(400).json({ error: "Missing serialNumber" });
@@ -324,6 +324,12 @@ const registerDevice = async (req, res) => {
     // Associate with purchase order if provided
     if (purchaseOrderId) {
       updates[`devices/${serialNumber}/purchaseOrderId`] = purchaseOrderId;
+    }
+
+    // Associate LoRaWAN DevEUI if provided
+    if (devEUI) {
+      updates[`devices/${serialNumber}/lorawan/devEUI`] = devEUI.toUpperCase();
+      updates[`devices/${serialNumber}/lorawan/registeredAt`] = now;
     }
 
     await db.ref().update(updates);

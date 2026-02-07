@@ -1,0 +1,31 @@
+[Unit]
+Description=BlueSignal BS-WQM-100 Water Quality Monitor
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/bluesignal/firmware
+ExecStart=/usr/bin/python3 /opt/bluesignal/firmware/src/main.py --config /etc/bluesignal/config.yaml
+Restart=always
+RestartSec=10
+WatchdogSec=600
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=bluesignal-wqm
+
+# Resource limits
+MemoryMax=128M
+CPUQuota=50%
+
+# Security hardening
+ProtectSystem=strict
+ReadWritePaths=/var/lib/bluesignal /var/log/bluesignal /sys/bus/w1 /dev
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

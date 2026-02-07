@@ -584,3 +584,21 @@ exports.ingestReading = functions
  * Runs every 15 minutes to monitor device connectivity
  */
 exports.deviceHealthCheck = readings.deviceHealthCheck;
+
+// =============================================================================
+// TTN v3 LORAWAN WEBHOOK
+// =============================================================================
+
+/**
+ * HTTP Endpoint: TTN v3 Webhook
+ * Receives LoRaWAN uplinks from The Things Network.
+ * Authenticates via shared secret (TTN_WEBHOOK_SECRET).
+ * Separate Cloud Function -- not behind Express CORS/auth.
+ */
+exports.ttnWebhook = functions
+  .runWith({
+    secrets: ["TTN_WEBHOOK_SECRET"],
+    timeoutSeconds: 30,
+    memory: "256MB",
+  })
+  .https.onRequest(readings.ttnWebhook);

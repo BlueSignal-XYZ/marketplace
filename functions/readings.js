@@ -14,6 +14,7 @@ const SENSOR_RANGES = {
   temperature: { min: -10, max: 50, unit: "C" },
   ph: { min: 0, max: 14, unit: "" },
   turbidity: { min: 0, max: 1000, unit: "NTU" },
+  tds: { min: 0, max: 5000, unit: "ppm" },
   conductivity: { min: 0, max: 5000, unit: "µS/cm" },
   salinity: { min: 0, max: 50, unit: "ppt" },
   chlorophyll: { min: 0, max: 500, unit: "µg/L" },
@@ -798,6 +799,221 @@ const updateAlertThresholds = async (req, res) => {
   }
 };
 
+/**
+ * TTN v3 Webhook Handler
+ *
+ * Receives uplink messages from The Things Network v3 and feeds them
+ * into the existing ingestReading pipeline. TTN sends a JSON payload
+ * containing end_device_ids (with dev_eui) and uplink_message (with
+ * decoded_payload from Cayenne LPP decoder).
+ *
+ * Auth: Shared secret via X-TTN-Webhook-Secret header or ?secret= query param.
+ * This endpoint is registered as a separate Cloud Function (not behind Express CORS).
+ */
+
+// Cayenne LPP field name -> BlueSignal canonical sensor name mapping
+const CAYENNE_TO_CANONICAL = {
+  temperature_1: "temperature",
+  analog_input_2: "ph",
+  analog_input_3: "turbidity",
+  analog_input_4: "tds",
+};
+
+/**
+ * Look up a BlueSignal device by its LoRaWAN DevEUI.
+ * Returns { deviceId, device } or null if not found.
+ */
+const findDeviceByDevEUI = async (db, devEUI) => {
+  // Normalize to uppercase for consistent lookup
+  const normalized = devEUI.toUpperCase();
+
+  const snapshot = await db.ref("devices").once("value");
+  const devices = snapshot.val() || {};
+
+  for (const [deviceId, device] of Object.entries(devices)) {
+    const storedEUI = device.lorawan?.devEUI;
+    if (storedEUI && storedEUI.toUpperCase() === normalized) {
+      return { deviceId, device };
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Parse TTN v3 uplink payload into BlueSignal reading format.
+ */
+const parseTTNPayload = (body) => {
+  const endDeviceIds = body.end_device_ids;
+  const uplinkMessage = body.uplink_message;
+
+  if (!endDeviceIds || !uplinkMessage) {
+    return null;
+  }
+
+  const devEUI = endDeviceIds.dev_eui;
+  if (!devEUI) return null;
+
+  // Get decoded payload (from TTN Cayenne LPP decoder)
+  const decoded = uplinkMessage.decoded_payload || {};
+
+  // Map Cayenne LPP fields to canonical sensor names
+  const sensors = {};
+  for (const [cayenneKey, canonicalName] of Object.entries(CAYENNE_TO_CANONICAL)) {
+    if (decoded[cayenneKey] !== undefined) {
+      sensors[canonicalName] = { value: decoded[cayenneKey] };
+    }
+  }
+
+  // Extract GPS if present (Cayenne LPP GPS type)
+  const gps = decoded.gps_5 || decoded.gps_1 || null;
+
+  // Extract RF metadata
+  const rxMeta = uplinkMessage.rx_metadata?.[0] || {};
+  const metadata = {
+    source: "ttn_v3",
+    devEUI,
+    rssi: rxMeta.rssi || null,
+    snr: rxMeta.snr || null,
+    frameCounter: uplinkMessage.f_cnt || null,
+    frequency: uplinkMessage.settings?.frequency || null,
+    spreadingFactor: uplinkMessage.settings?.data_rate?.lora?.spreading_factor || null,
+    gateway: rxMeta.gateway_ids?.gateway_id || null,
+  };
+
+  // Use received_at timestamp from TTN, fall back to now
+  const timestamp = uplinkMessage.received_at
+    ? new Date(uplinkMessage.received_at).getTime()
+    : Date.now();
+
+  return { devEUI, sensors, metadata, gps, timestamp };
+};
+
+const ttnWebhook = async (req, res) => {
+  // CORS not needed -- TTN sends direct POST, not from a browser
+  if (req.method === "OPTIONS") {
+    res.status(204).send("");
+    return;
+  }
+
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
+  }
+
+  // Verify shared secret
+  const secret =
+    req.headers["x-ttn-webhook-secret"] ||
+    req.headers["x-downlink-apikey"] ||
+    req.query.secret;
+
+  const expectedSecret = process.env.TTN_WEBHOOK_SECRET;
+
+  if (!expectedSecret) {
+    console.error("TTN_WEBHOOK_SECRET not configured");
+    res.status(500).json({ error: "Webhook secret not configured" });
+    return;
+  }
+
+  if (secret !== expectedSecret) {
+    console.warn("TTN webhook: invalid secret");
+    res.status(401).json({ error: "Invalid webhook secret" });
+    return;
+  }
+
+  const db = admin.database();
+
+  try {
+    const parsed = parseTTNPayload(req.body);
+
+    if (!parsed) {
+      console.warn("TTN webhook: could not parse payload");
+      res.status(400).json({ error: "Invalid TTN payload format" });
+      return;
+    }
+
+    const { devEUI, sensors, metadata, gps, timestamp } = parsed;
+
+    if (Object.keys(sensors).length === 0) {
+      console.warn(`TTN webhook: no sensor data in payload for ${devEUI}`);
+      res.status(400).json({ error: "No sensor data in decoded payload" });
+      return;
+    }
+
+    // Look up device by DevEUI
+    const result = await findDeviceByDevEUI(db, devEUI);
+
+    if (!result) {
+      console.warn(`TTN webhook: unknown DevEUI ${devEUI}`);
+      res.status(404).json({ error: `Device not found for DevEUI: ${devEUI}` });
+      return;
+    }
+
+    const { deviceId, device } = result;
+
+    // Validate sensors through existing pipeline
+    const processedSensors = validateSensors(sensors);
+
+    // Store reading (same path as ingestReading)
+    const readingData = {
+      timestamp,
+      deviceId,
+      siteId: device.installation?.siteId || null,
+      sensors: processedSensors,
+      metadata: {
+        ...metadata,
+        batteryLevel: null,
+        signalStrength: metadata.rssi,
+        firmware: null,
+      },
+    };
+
+    if (gps) {
+      readingData.metadata.gps = gps;
+    }
+
+    await db.ref(`readings/${deviceId}/${timestamp}`).set(readingData);
+
+    // Update device health
+    const healthUpdate = {
+      lastSeen: timestamp,
+    };
+    if (metadata.rssi !== null) {
+      healthUpdate.signalStrength = metadata.rssi;
+    }
+
+    await db.ref(`devices/${deviceId}/health`).update(healthUpdate);
+
+    // Update LoRaWAN metadata on device
+    const lorawanUpdate = {
+      lastFrameCounter: metadata.frameCounter,
+      lastRSSI: metadata.rssi,
+      lastSNR: metadata.snr,
+      lastGateway: metadata.gateway,
+      lastUplinkAt: timestamp,
+    };
+    await db.ref(`devices/${deviceId}/lorawan`).update(lorawanUpdate);
+
+    // Check alert thresholds
+    await checkAlertThresholds(db, deviceId, device, processedSensors);
+
+    console.log(
+      `TTN webhook: stored reading for device ${deviceId} (DevEUI: ${devEUI}), ` +
+      `sensors: ${Object.keys(processedSensors).join(", ")}`
+    );
+
+    res.status(200).json({
+      success: true,
+      deviceId,
+      timestamp,
+      sensors: Object.keys(processedSensors),
+    });
+  } catch (error) {
+    console.error("TTN webhook error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   ingestReading,
   getDeviceReadings,
@@ -807,5 +1023,6 @@ module.exports = {
   acknowledgeAlert,
   resolveAlert,
   updateAlertThresholds,
+  ttnWebhook,
   SENSOR_RANGES,
 };

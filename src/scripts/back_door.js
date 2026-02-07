@@ -1518,7 +1518,7 @@ const MetricsAPI = {
 
 // Optional mock mode flag
 const USE_MARKETPLACE_MOCKS =
-  process.env.REACT_APP_USE_MARKETPLACE_MOCKS === "true";
+  import.meta.env.VITE_USE_MARKETPLACE_MOCKS === "true";
 
 const handleMarketplacePost = async (endpoint, body) => {
   if (USE_MARKETPLACE_MOCKS) {

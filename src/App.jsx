@@ -6,7 +6,7 @@
  * - Shared components must be brand-neutral (no hardcoded branding)
  */
 import "./App.css";
-import React from "react";
+import React, { Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -76,21 +76,21 @@ import Footer from "./components/shared/Footer/Footer";
 
 import { useAppContext } from "./context/AppContext";
 
-// Cloud console components
-import OverviewDashboard from "./components/cloud/OverviewDashboard";
-import DevicesListPage from "./components/cloud/DevicesListPage";
-import DeviceDetailPage from "./components/cloud/DeviceDetailPage";
-import SitesListPage from "./components/cloud/SitesListPage";
-import SiteDetailPage from "./components/cloud/SiteDetailPage";
-import CreateSitePage from "./components/cloud/CreateSitePage";
-import CommissioningPage from "./components/cloud/CommissioningPage";
-import FullCommissioningWizard from "./components/cloud/FullCommissioningWizard";
-import AlertsPage from "./components/cloud/AlertsPage";
-import AlertDetailPage from "./components/cloud/AlertDetailPage";
-import DeviceOnboardingWizard from "./components/cloud/DeviceOnboardingWizard";
-import ProfilePage from "./components/cloud/ProfilePage";
-import OnboardingWizard from "./components/cloud/OnboardingWizard";
-import AddDevicePage from "./components/cloud/AddDevicePage";
+// Cloud console components (lazy-loaded for code splitting)
+const OverviewDashboard = React.lazy(() => import("./components/cloud/OverviewDashboard"));
+const DevicesListPage = React.lazy(() => import("./components/cloud/DevicesListPage"));
+const DeviceDetailPage = React.lazy(() => import("./components/cloud/DeviceDetailPage"));
+const SitesListPage = React.lazy(() => import("./components/cloud/SitesListPage"));
+const SiteDetailPage = React.lazy(() => import("./components/cloud/SiteDetailPage"));
+const CreateSitePage = React.lazy(() => import("./components/cloud/CreateSitePage"));
+const CommissioningPage = React.lazy(() => import("./components/cloud/CommissioningPage"));
+const FullCommissioningWizard = React.lazy(() => import("./components/cloud/FullCommissioningWizard"));
+const AlertsPage = React.lazy(() => import("./components/cloud/AlertsPage"));
+const AlertDetailPage = React.lazy(() => import("./components/cloud/AlertDetailPage"));
+const DeviceOnboardingWizard = React.lazy(() => import("./components/cloud/DeviceOnboardingWizard"));
+const ProfilePage = React.lazy(() => import("./components/cloud/ProfilePage"));
+const OnboardingWizard = React.lazy(() => import("./components/cloud/OnboardingWizard"));
+const AddDevicePage = React.lazy(() => import("./components/cloud/AddDevicePage"));
 
 import {
   CloudNutrientCalculator,
@@ -277,13 +277,22 @@ function AppShell({ mode, user, authLoading }) {
 
       {/* MAIN CONTENT WITH ROUTES */}
       <MainContent>
-        {mode === "sales" ? (
-          <SalesRoutes />
-        ) : mode === "cloud" ? (
-          <CloudRoutes user={user} authLoading={authLoading} />
-        ) : (
-          <MarketplaceRoutes user={user} authLoading={authLoading} />
-        )}
+        <Suspense
+          fallback={
+            <LoadingContainer>
+              <LoadingSpinner />
+              <LoadingText>Loading...</LoadingText>
+            </LoadingContainer>
+          }
+        >
+          {mode === "sales" ? (
+            <SalesRoutes />
+          ) : mode === "cloud" ? (
+            <CloudRoutes user={user} authLoading={authLoading} />
+          ) : (
+            <MarketplaceRoutes user={user} authLoading={authLoading} />
+          )}
+        </Suspense>
       </MainContent>
 
       {/* GLOBAL FOOTER - shown on all pages except sales mode (has its own footer) */}
@@ -314,39 +323,20 @@ const CloudLanding = ({ user, authLoading }) => {
   const { hasDevices, isLoading: devicesLoading } = useUserDevices();
 
   React.useEffect(() => {
-    console.log("🚀 CloudLanding useEffect fired:", {
-      user: user?.uid || "null",
-      authLoading,
-      hasDevices,
-      devicesLoading,
-    });
-
     // Wait for auth to complete
-    if (authLoading) {
-      console.log("⏳ CloudLanding: Auth loading, waiting...");
-      return;
-    }
+    if (authLoading) return;
 
     // Not logged in - show login page
-    if (!user?.uid) {
-      console.log("❌ CloudLanding: No user, showing login");
-      return;
-    }
+    if (!user?.uid) return;
 
     // Wait for device check to complete
-    if (devicesLoading) {
-      console.log("⏳ CloudLanding: Checking devices, waiting...");
-      return;
-    }
+    if (devicesLoading) return;
 
     // User has devices OR has completed onboarding → go to Dashboard
-    // This handles returning users and users who completed onboarding but haven't added devices yet
     if (hasDevices || user.onboardingCompleted) {
-      console.log("✅ CloudLanding: Returning user, redirecting to dashboard");
       navigate("/dashboard/main", { replace: true });
     } else {
       // New user with no devices and no onboarding → go to Onboarding
-      console.log("🆕 CloudLanding: New user, redirecting to onboarding");
       navigate("/cloud/onboarding", { replace: true });
     }
   }, [user, authLoading, hasDevices, devicesLoading, navigate]);
@@ -383,22 +373,11 @@ const MarketplaceLanding = ({ user, authLoading }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    console.log("🚀 MarketplaceLanding useEffect fired:", {
-      user: user?.uid || "null",
-      authLoading,
-    });
-
-    if (authLoading) {
-      console.log("⏳ MarketplaceLanding: Auth loading, waiting...");
-      return;
-    }
+    if (authLoading) return;
 
     if (user?.uid) {
       const route = getDefaultDashboardRoute(user, "marketplace");
-      console.log("✅ MarketplaceLanding: User authenticated, redirecting to:", route);
       navigate(route, { replace: true });
-    } else {
-      console.log("❌ MarketplaceLanding: No user, showing login");
     }
   }, [user, authLoading, navigate]);
 
@@ -438,7 +417,6 @@ const CloudAuthGate = ({ children, authLoading, isOnboardingRoute = false }) => 
 
     // If user has devices or completed onboarding, redirect away from onboarding
     if (hasDevices || user.onboardingCompleted) {
-      console.log("🔄 CloudAuthGate: User already has devices/onboarding, redirecting to dashboard");
       navigate("/dashboard/main", { replace: true });
     }
   }, [authLoading, devicesLoading, user, hasDevices, isOnboardingRoute, navigate]);
@@ -454,7 +432,6 @@ const CloudAuthGate = ({ children, authLoading, isOnboardingRoute = false }) => 
   }
 
   if (!user?.uid) {
-    console.log("🚫 CloudAuthGate: Not authenticated");
     return <Welcome />;
   }
 
@@ -469,7 +446,6 @@ const CloudAuthGate = ({ children, authLoading, isOnboardingRoute = false }) => 
     );
   }
 
-  console.log("✅ CloudAuthGate: Authenticated, rendering protected route");
   return children;
 };
 
