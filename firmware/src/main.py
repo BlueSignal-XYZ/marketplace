@@ -274,9 +274,12 @@ def main():
     signal.signal(signal.SIGINT, signal_handler)
 
     # Initialize calibration manager
+    # Derive calibration path from the db_path directory, not by replacing
+    # the filename — that breaks when db_path uses a non-default name.
+    _db_path = config.get("storage.db_path", "/var/lib/bluesignal/readings.db")
+    _cal_dir = os.path.dirname(_db_path) or "/var/lib/bluesignal"
     cal_manager = CalibrationManager(
-        cal_path=config.get("storage.db_path", "").replace("readings.db", "calibration.json")
-        or "/var/lib/bluesignal/calibration.json"
+        cal_path=os.path.join(_cal_dir, "calibration.json")
     )
     cal_manager.load()
 

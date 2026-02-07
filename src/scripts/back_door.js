@@ -1516,9 +1516,14 @@ const MetricsAPI = {
 
 /*************************MARKETPLACE_ENDPOINTS************************************* */
 
-// Optional mock mode flag
-const USE_MARKETPLACE_MOCKS =
-  import.meta.env.VITE_USE_MARKETPLACE_MOCKS === "true";
+// Mock mode flag — unified with VITE_USE_MOCK_DATA so cloud dashboard pages
+// and marketplace API calls always agree on data source.
+// VITE_USE_MARKETPLACE_MOCKS overrides if explicitly set; otherwise falls
+// through to the global flag (mock ON by default, OFF only when "false").
+// Uses the same !== "false" opt-out pattern as Cloud components for consistency.
+const USE_MARKETPLACE_MOCKS = import.meta.env.VITE_USE_MARKETPLACE_MOCKS
+  ? import.meta.env.VITE_USE_MARKETPLACE_MOCKS !== "false"
+  : import.meta.env.VITE_USE_MOCK_DATA !== "false";
 
 const handleMarketplacePost = async (endpoint, body) => {
   if (USE_MARKETPLACE_MOCKS) {
