@@ -6,7 +6,7 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { theme } from "../../../styles/colors";
 import { ButtonSecondary } from "../../shared/button/Button";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { DeviceAPI } from "../../../scripts/back_door";
 import Spinner from "../../shared/Spinner/Spinner";
 
