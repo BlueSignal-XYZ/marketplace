@@ -53,6 +53,7 @@ const Grid = styled.div`
 const Card = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   padding: 32px;
+  height: 100%;
   transition: background 0.2s;
 
   &:hover {

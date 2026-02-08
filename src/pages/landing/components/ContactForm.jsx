@@ -287,16 +287,15 @@ const ContactForm = () => {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Firebase submission error:', err);
-        if (err.message === 'Request timed out') {
-          setErrorMsg(
-            `Request timed out. Please email us directly at ${CONTACT_EMAIL}`
-          );
-        } else {
-          setErrorMsg(
-            `Something went wrong. Please email us directly at ${CONTACT_EMAIL}`
-          );
-        }
-        setStatus('error');
+        // Auto-fallback to mailto so the inquiry still reaches the team
+        const subject = encodeURIComponent(
+          `BlueSignal ${inquiryLabel} — ${form.name}`
+        );
+        const body = encodeURIComponent(
+          `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nInquiry Type: ${inquiryLabel}\n\n${form.message}`
+        );
+        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+        setTimeout(() => setStatus('mailto'), 500);
       }
     } else {
       // Fallback: mailto — opens user's email client with pre-filled message

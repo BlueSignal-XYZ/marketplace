@@ -70,8 +70,8 @@ const TermTitle = styled.span`
 const TermBody = styled.pre`
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 13px;
-  line-height: 1.8;
-  padding: 24px;
+  line-height: 2.2;
+  padding: 40px 24px;
   overflow-x: auto;
   color: ${({ theme }) => theme.colors.w50};
   min-width: 0;
