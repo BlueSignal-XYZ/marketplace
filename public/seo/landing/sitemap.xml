@@ -1,42 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage - Products -->
   <url>
-    <loc>https://bluesignal.xyz/</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://bluesignal.xyz</loc>
+    <lastmod>2026-02-08</lastmod>
     <priority>1.0</priority>
   </url>
-
-  <!-- About Page -->
   <url>
-    <loc>https://bluesignal.xyz/about</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://bluesignal.xyz/privacy</loc>
+    <lastmod>2026-02-08</lastmod>
+    <priority>0.3</priority>
   </url>
-
-  <!-- FAQ Page -->
   <url>
-    <loc>https://bluesignal.xyz/faq</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://bluesignal.xyz/terms</loc>
+    <lastmod>2026-02-08</lastmod>
+    <priority>0.3</priority>
   </url>
-
-  <!-- Contact Page -->
   <url>
-    <loc>https://bluesignal.xyz/contact</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Legacy Configurator (redirects to /) -->
-  <url>
-    <loc>https://bluesignal.xyz/configurator</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://bluesignal.xyz/warranty</loc>
+    <lastmod>2026-02-08</lastmod>
+    <priority>0.3</priority>
   </url>
 </urlset>

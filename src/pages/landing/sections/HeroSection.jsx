@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Container } from '../styles/typography';
 import SystemScene from '../components/SystemScene';
+import { trackCTA } from '../utils/analytics';
 
 const HeroWrapper = styled.section`
   padding-top: 140px;
@@ -219,7 +220,7 @@ const SpecLabel = styled.div`
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: ${({ theme }) => theme.colors.w30};
+  color: ${({ theme }) => theme.colors.w50};
   margin-bottom: 4px;
 
   ${({ theme }) => theme.media.sm} {
@@ -254,13 +255,13 @@ const HeroSection = () => (
       </Subhead>
 
       <CTARow>
-        <PrimaryBtn href="#order">
-          Order Dev Kit — $349
+        <PrimaryBtn href="#order" onClick={() => trackCTA('order_devkit_hero', 'Hero CTA')}>
+          Order Dev Kit — $499
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </PrimaryBtn>
-        <SecondaryBtn href="#specs">Full Specifications</SecondaryBtn>
+        <SecondaryBtn href="#specs" onClick={() => trackCTA('view_specs', 'Hero Specs')}>Full Specifications</SecondaryBtn>
       </CTARow>
 
       <SceneWrapper>

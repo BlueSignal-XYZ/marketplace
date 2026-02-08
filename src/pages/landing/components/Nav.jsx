@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { trackCTA } from '../utils/analytics';
 
 const NavBar = styled.nav`
   position: fixed;
@@ -14,6 +15,7 @@ const NavBar = styled.nav`
   transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
   background: ${({ $scrolled }) => $scrolled ? 'rgba(8,9,10,0.8)' : 'transparent'};
   backdrop-filter: ${({ $scrolled }) => $scrolled ? 'blur(40px)' : 'none'};
+  -webkit-backdrop-filter: ${({ $scrolled }) => $scrolled ? 'blur(40px)' : 'none'};
   border-bottom: 1px solid ${({ $scrolled, theme }) => $scrolled ? theme.colors.w08 : 'transparent'};
 `;
 
@@ -163,6 +165,7 @@ const MobileOverlay = styled.div`
     z-index: 999;
     background: rgba(8, 9, 10, 0.95);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     opacity: ${({ $open }) => ($open ? 1 : 0)};
     visibility: ${({ $open }) => ($open ? 'visible' : 'hidden')};
     transition: opacity 0.3s ${({ theme }) => theme.ease},
@@ -199,7 +202,10 @@ const MobileLink = styled.a`
   color: ${({ theme }) => theme.colors.w70};
   padding: 14px 0;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s, opacity 0.3s, transform 0.3s;
+  transition-delay: ${({ $index }) => ($index || 0) * 0.05}s;
+  opacity: ${({ $open }) => ($open ? 1 : 0)};
+  transform: ${({ $open }) => ($open ? 'translateY(0)' : 'translateY(-8px)')};
 
   &:hover, &:active {
     color: ${({ theme }) => theme.colors.white};
@@ -221,7 +227,20 @@ const MobileCTA = styled.a`
   margin-top: 24px;
   width: 100%;
   max-width: 280px;
+  transition: opacity 0.3s, transform 0.3s;
+  transition-delay: ${({ $index }) => ($index || 0) * 0.05}s;
+  opacity: ${({ $open }) => ($open ? 1 : 0)};
+  transform: ${({ $open }) => ($open ? 'translateY(0)' : 'translateY(-8px)')};
 `;
+
+const mobileLinks = [
+  { href: '#sensors', label: 'Sensors' },
+  { href: '#architecture', label: 'Architecture' },
+  { href: '#installation', label: 'Installation' },
+  { href: '#specs', label: 'Specs' },
+  { href: 'https://cloud.bluesignal.xyz', label: 'Cloud', external: true },
+  { href: 'https://waterquality.trading', label: 'WQT', external: true },
+];
 
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -231,6 +250,15 @@ const Nav = () => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close menu on Escape key
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
   // Prevent body scroll when mobile menu is open
@@ -245,15 +273,16 @@ const Nav = () => {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (eventLabel) => {
     closeMenu();
+    if (eventLabel) trackCTA(eventLabel, 'Nav');
   };
 
   return (
     <>
-      <NavBar $scrolled={scrolled || menuOpen}>
+      <NavBar $scrolled={scrolled || menuOpen} aria-label="Main navigation">
         <NavInner>
-          <Brand href="#top">
+          <Brand href="/">
             <LogoSvg />
             <BrandName>BlueSignal</BrandName>
             <ModelBadge>WQM-1</ModelBadge>
@@ -264,11 +293,11 @@ const Nav = () => {
             <NavLink href="#architecture">Architecture</NavLink>
             <NavLink href="#installation">Installation</NavLink>
             <NavLink href="#specs">Specs</NavLink>
-            <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer">Cloud</NavLink>
-            <NavLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer">WQT</NavLink>
+            <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Nav')}>Cloud</NavLink>
+            <NavLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_wqt', 'Nav')}>WQT</NavLink>
           </NavLinks>
 
-          <CTAButton href="#order">Order Dev Kit</CTAButton>
+          <CTAButton href="#order" onClick={() => trackCTA('order_devkit_hero', 'Nav CTA')}>Order Dev Kit</CTAButton>
 
           <HamburgerBtn
             onClick={() => setMenuOpen(prev => !prev)}
@@ -285,14 +314,33 @@ const Nav = () => {
       </NavBar>
 
       <MobileOverlay $open={menuOpen} onClick={closeMenu} />
-      <MobileMenu $open={menuOpen}>
-        <MobileLink href="#sensors" onClick={handleLinkClick}>Sensors</MobileLink>
-        <MobileLink href="#architecture" onClick={handleLinkClick}>Architecture</MobileLink>
-        <MobileLink href="#installation" onClick={handleLinkClick}>Installation</MobileLink>
-        <MobileLink href="#specs" onClick={handleLinkClick}>Specs</MobileLink>
-        <MobileLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>Cloud</MobileLink>
-        <MobileLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>WQT</MobileLink>
-        <MobileCTA href="#order" onClick={handleLinkClick}>Order Dev Kit</MobileCTA>
+      <MobileMenu
+        $open={menuOpen}
+        role="dialog"
+        aria-modal={menuOpen ? 'true' : undefined}
+        aria-hidden={!menuOpen}
+        aria-label="Mobile navigation"
+      >
+        {mobileLinks.map((link, i) => (
+          <MobileLink
+            key={link.href}
+            href={link.href}
+            $index={i}
+            $open={menuOpen}
+            onClick={() => handleLinkClick(link.external ? `external_${link.label.toLowerCase()}` : undefined)}
+            {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {link.label}
+          </MobileLink>
+        ))}
+        <MobileCTA
+          href="#order"
+          $index={mobileLinks.length}
+          $open={menuOpen}
+          onClick={() => handleLinkClick('order_devkit_hero')}
+        >
+          Order Dev Kit
+        </MobileCTA>
       </MobileMenu>
     </>
   );

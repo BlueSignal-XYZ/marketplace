@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { trackCTA } from '../utils/analytics';
 
 const FooterWrapper = styled.footer`
   background: ${({ theme }) => theme.colors.surface};
@@ -56,7 +57,7 @@ const BrandTitle = styled.span`
 const BrandDesc = styled.p`
   font-size: 14px;
   line-height: 1.7;
-  color: ${({ theme }) => theme.colors.w30};
+  color: ${({ theme }) => theme.colors.w50};
   max-width: 300px;
   margin-bottom: 20px;
 `;
@@ -97,7 +98,7 @@ const ColTitle = styled.h4`
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: ${({ theme }) => theme.colors.w30};
+  color: ${({ theme }) => theme.colors.w50};
   margin-bottom: 20px;
 `;
 
@@ -207,10 +208,10 @@ const Footer = () => (
 
         <LinkCol>
           <ColTitle>Platform</ColTitle>
-          <FooterLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer">Cloud Dashboard</FooterLink>
-          <FooterLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer">WQT Marketplace</FooterLink>
+          <FooterLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Footer')}>Cloud Dashboard</FooterLink>
+          <FooterLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_wqt', 'Footer')}>WQT Marketplace</FooterLink>
           <FooterLink href="https://waterquality.trading/registry" target="_blank" rel="noopener noreferrer">Credit Registry</FooterLink>
-          <FooterLink href="#">Documentation</FooterLink>
+          <FooterLink href="https://github.com/BlueSignal" target="_blank" rel="noopener noreferrer">GitHub</FooterLink>
         </LinkCol>
 
         <LinkCol>
@@ -225,9 +226,9 @@ const Footer = () => (
       <BottomBar>
         <Copyright>&copy; 2026 BlueSignal. All rights reserved.</Copyright>
         <LegalLinks>
-          <LegalLink href="#">Privacy Policy</LegalLink>
-          <LegalLink href="#">Terms of Service</LegalLink>
-          <LegalLink href="#">Warranty</LegalLink>
+          <LegalLink href="/privacy">Privacy Policy</LegalLink>
+          <LegalLink href="/terms">Terms of Service</LegalLink>
+          <LegalLink href="/warranty">Warranty</LegalLink>
         </LegalLinks>
       </BottomBar>
     </FooterInner>

@@ -10,6 +10,7 @@ export const GlobalStyles = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 76px;
     background: ${({ theme }) => theme.colors.bg};
   }
 
@@ -62,10 +63,33 @@ export const GlobalStyles = createGlobalStyle`
 
   /* Focus states for keyboard accessibility */
   a:focus-visible,
-  button:focus-visible {
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
     outline: 2px solid #2d8cf0;
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  /* Skip-to-content link */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 16px;
+    z-index: 10000;
+    padding: 12px 24px;
+    background: #2d8cf0;
+    color: #fff;
+    font-family: ${({ theme }) => theme.fonts.display};
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s;
+
+    &:focus {
+      top: 0;
+    }
   }
 
   /* Prevent iOS text size adjust on orientation change */
@@ -122,5 +146,15 @@ export const GlobalStyles = createGlobalStyle`
   @keyframes waveMove {
     from { transform: translateX(0); }
     to { transform: translateX(-40px); }
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 `;

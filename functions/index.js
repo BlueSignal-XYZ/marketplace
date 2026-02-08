@@ -28,6 +28,7 @@ const sites = require("./sites");
 const readings = require("./readings");
 const marketplace = require("./marketplace");
 const virginia = require("./virginia");
+const preorder = require("./preorder");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -37,10 +38,11 @@ const allowedOrigins = [
   'https://waterquality.trading',
   'https://www.waterquality.trading',
   'https://cloud.bluesignal.xyz',
-  'https://sales.bluesignal.xyz',
+  'https://bluesignal.xyz',
+  'https://www.bluesignal.xyz',
   'https://waterquality-trading.web.app',
   'https://cloud-bluesignal.web.app',
-  'https://sales-bluesignal.web.app',
+  'https://landing-bluesignal.web.app',
   // Allow localhost for development
   'http://localhost:3000',
   'http://localhost:5173',
@@ -169,6 +171,12 @@ app.post("/marketplace/orders", marketplace.getOrders);
 app.post("/marketplace/stats", marketplace.getMarketplaceStats);
 app.post("/credits/create", marketplace.createCredit);
 app.post("/credits/user", marketplace.getUserCredits);
+
+// =============================================================================
+// PRE-ORDER CAPTURE (Landing Page)
+// =============================================================================
+
+app.post("/preOrderCapture", preorder.capturePreOrder);
 
 // =============================================================================
 // VIRGINIA NUTRIENT CREDIT EXCHANGE ENDPOINTS

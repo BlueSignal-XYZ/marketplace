@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
+import { trackCTA } from '../utils/analytics';
 
 const Banner = styled.div`
   background: ${({ theme }) => theme.colors.surface};
@@ -126,7 +127,10 @@ const InstallationBanner = () => (
                 </StateTag>
               </StateTags>
             </Content>
-            <CTAButton href="mailto:hello@bluesignal.xyz?subject=Installation%20Quote">
+            <CTAButton
+              href="mailto:install@bluesignal.xyz?subject=Installation%20Quote%20Request&body=Location:%20%0AProperty%20Type:%20%0AWater%20Source:%20%0APreferred%20Contact%20Method:%20"
+              onClick={() => trackCTA('request_install_quote', 'Installation Banner')}
+            >
               Request Installation Quote
             </CTAButton>
           </Inner>

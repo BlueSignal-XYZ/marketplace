@@ -86,7 +86,7 @@ const TagRow = styled.div`
 const Tag = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 11px;
-  color: ${({ theme }) => theme.colors.w30};
+  color: ${({ theme }) => theme.colors.w50};
   background: ${({ theme }) => theme.colors.w04};
   padding: 3px 8px;
   border-radius: 4px;

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
+import { trackCTA } from '../utils/analytics';
 
 const Grid = styled.div`
   display: grid;
@@ -65,7 +66,7 @@ const TableTitle = styled.h4`
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: ${({ theme }) => theme.colors.w30};
+  color: ${({ theme }) => theme.colors.w50};
   padding-bottom: 12px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.w08};
   margin-bottom: 0;
@@ -164,8 +165,8 @@ const SpecsSection = () => (
               full visibility into hardware capabilities before committing.
               No marketing abstractions — just the&nbsp;datasheet.
             </SectionDesc>
-            <CTAButton href="#order">
-              Order Dev Kit — $349
+            <CTAButton href="#order" onClick={() => trackCTA('order_devkit_specs', 'Specs CTA')}>
+              Order Dev Kit — $499
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

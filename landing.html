@@ -5,22 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary Meta Tags -->
-    <title>BlueSignal | WQM-1 Water Quality Monitor</title>
-    <meta name="title" content="BlueSignal | WQM-1 Water Quality Monitor">
-    <meta name="description" content="Continuous water quality monitoring for tanks, ponds, and treatment systems. 6-channel sensing, LoRaWAN telemetry, and relay control on a Raspberry Pi HAT.">
+    <title>BlueSignal — Water Quality Monitoring for Raspberry Pi</title>
+    <meta name="description" content="6-channel water quality monitoring HAT for Raspberry Pi Zero 2W. pH, TDS, turbidity, ORP, temperature, GPS. LoRaWAN uplink. SQLite buffer. Relay control. Professional installation in Texas.">
     <meta name="keywords" content="BlueSignal, WQM-1, water quality monitoring, Raspberry Pi HAT, pH sensor, TDS sensor, LoRaWAN, algae control, water treatment, IoT">
     <meta name="author" content="BlueSignal">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://bluesignal.xyz/">
+    <link rel="canonical" href="https://bluesignal.xyz">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph (Facebook, LinkedIn, Slack, iMessage) -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://bluesignal.xyz/">
-    <meta property="og:title" content="BlueSignal | WQM-1 Water Quality Monitor">
-    <meta property="og:description" content="Continuous water quality monitoring for tanks, ponds, and treatment systems. 6-channel sensing, LoRaWAN telemetry, and relay control on a Raspberry Pi HAT.">
-    <meta property="og:image" content="https://bluesignal.xyz/bluesignal-logo.png">
+    <meta property="og:url" content="https://bluesignal.xyz">
+    <meta property="og:title" content="BlueSignal — Water Quality Monitoring for Raspberry Pi">
+    <meta property="og:description" content="6-channel water quality monitor with LoRaWAN, GPS, offline storage, and relay control. Ships Q2 2026.">
+    <meta property="og:image" content="https://bluesignal.xyz/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="BlueSignal">
@@ -28,15 +27,16 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://bluesignal.xyz/">
-    <meta name="twitter:title" content="BlueSignal | WQM-1 Water Quality Monitor">
-    <meta name="twitter:description" content="Continuous water quality monitoring for tanks, ponds, and treatment systems. 6-channel sensing, LoRaWAN telemetry, and relay control on a Raspberry Pi HAT.">
-    <meta name="twitter:image" content="https://bluesignal.xyz/bluesignal-logo.png">
     <meta name="twitter:site" content="@BlueSignalHQ">
+    <meta name="twitter:title" content="BlueSignal — Water Quality Monitoring for Raspberry Pi">
+    <meta name="twitter:description" content="6-channel water quality monitor with LoRaWAN, GPS, offline storage, and relay control.">
+    <meta name="twitter:image" content="https://bluesignal.xyz/og-image.png">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/icon.png">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <!-- Favicon Suite -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#08090a">
@@ -49,43 +49,59 @@
     <!-- Google Fonts: Outfit (display) + IBM Plex Mono (specs/labels) -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- JSON-LD Structured Data -->
+    <!-- JSON-LD Structured Data: Product -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "BlueSignal WQM-1",
+      "description": "6-channel water quality monitoring HAT for Raspberry Pi Zero 2W with LoRaWAN, GPS, offline SQLite storage, and relay control.",
+      "brand": { "@type": "Brand", "name": "BlueSignal" },
+      "offers": {
+        "@type": "Offer",
+        "price": "499.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/PreOrder",
+        "url": "https://bluesignal.xyz#order"
+      },
+      "url": "https://bluesignal.xyz",
+      "image": "https://bluesignal.xyz/og-image.png"
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: Organization -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "BlueSignal",
       "url": "https://bluesignal.xyz",
-      "logo": "https://bluesignal.xyz/bluesignal-logo.png",
+      "logo": "https://bluesignal.xyz/favicon.svg",
       "description": "Water quality monitoring hardware. Smart sensors, LoRaWAN telemetry, and algae control systems for tanks, ponds, and watersheds.",
       "sameAs": [
-        "https://linkedin.com/company/bluesignal",
-        "https://twitter.com/BlueSignalHQ"
+        "https://github.com/BlueSignal",
+        "https://twitter.com/BlueSignalHQ",
+        "https://linkedin.com/company/bluesignal"
       ]
     }
     </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "BlueSignal WQM-1",
-      "description": "6-channel water quality monitoring HAT for Raspberry Pi with LoRaWAN telemetry and relay control.",
-      "brand": {
-        "@type": "Brand",
-        "name": "BlueSignal"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "349",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/PreOrder",
-        "url": "https://bluesignal.xyz/"
-      }
-    }
+
+    <!-- Google Analytics (gtag.js) — Replace G-XXXXXXXXXX with actual ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
     </script>
   </head>
 
   <body>
+    <noscript>
+      <div style="padding:2rem;text-align:center;color:#b3b3b3;font-family:sans-serif;background:#08090a;min-height:100vh;display:flex;align-items:center;justify-content:center;">
+        <p>Please enable JavaScript to view BlueSignal.xyz</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/pages/landing/main.jsx"></script>
   </body>

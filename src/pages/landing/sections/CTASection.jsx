@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Container, Section } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
+import PreOrderForm from '../components/PreOrderForm';
+import { trackCTA } from '../utils/analytics';
 
 const Wrapper = styled.div`
   text-align: center;
@@ -58,44 +60,14 @@ const Desc = styled.p`
   }
 `;
 
-const CTARow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 24px;
+const FormArea = styled.div`
   position: relative;
-
-  ${({ theme }) => theme.media.sm} {
-    flex-direction: column;
-    width: 100%;
-    padding: 0 16px;
-  }
+  margin-bottom: 24px;
 `;
 
-const PrimaryBtn = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: ${({ theme }) => theme.fonts.display};
-  font-size: 15px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.black};
-  background: ${({ theme }) => theme.colors.white};
-  padding: 14px 28px;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-
-  &:hover {
-    transform: scale(1.04);
-    box-shadow: 0 0 24px rgba(255,255,255,0.15);
-  }
-
-  ${({ theme }) => theme.media.sm} {
-    width: 100%;
-    justify-content: center;
-  }
+const DashboardLink = styled.div`
+  position: relative;
+  margin-top: 20px;
 `;
 
 const SecondaryBtn = styled.a`
@@ -125,7 +97,7 @@ const SecondaryBtn = styled.a`
 
 const Note = styled.p`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.w30};
+  color: ${({ theme }) => theme.colors.w50};
   position: relative;
 `;
 
@@ -140,18 +112,15 @@ const CTASection = () => (
             The dev kit includes the WQM-1 HAT, Pi Zero 2W, pH and TDS probes,
             waterproof temperature sensor, LoRa antenna, and power&nbsp;supply.
           </Desc>
-          <CTARow>
-            <PrimaryBtn href="mailto:hello@bluesignal.xyz?subject=Order%20Dev%20Kit">
-              Order Dev Kit — $349
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </PrimaryBtn>
-            <SecondaryBtn href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer">
+          <FormArea>
+            <PreOrderForm />
+          </FormArea>
+          <DashboardLink>
+            <SecondaryBtn href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('try_dashboard', 'CTA Section')}>
               Try the Dashboard
             </SecondaryBtn>
-          </CTARow>
-          <Note>Ships Q2 2026 &middot; Free shipping in the US &middot; Volume pricing&nbsp;available</Note>
+          </DashboardLink>
+          <Note style={{ marginTop: 24 }}>Ships Q2 2026 &middot; Free shipping in the US &middot; Volume pricing&nbsp;available</Note>
         </Wrapper>
       </RevealOnScroll>
     </Container>
