@@ -186,7 +186,7 @@ const MobileVizWrapper = styled.div`
     gap: 0;
     width: 100%;
     max-width: 280px;
-    margin: 0 auto 8px;
+    margin: 0 auto 48px;
     animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.6s both;
   }
 `;

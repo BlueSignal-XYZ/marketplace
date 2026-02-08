@@ -69,9 +69,9 @@ const TermTitle = styled.span`
 
 const TermBody = styled.pre`
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 13px;
-  line-height: 2.2;
-  padding: 40px 24px;
+  font-size: 15px;
+  line-height: 2.4;
+  padding: 48px;
   overflow-x: auto;
   color: ${({ theme }) => theme.colors.w50};
   min-width: 0;
@@ -335,22 +335,15 @@ const ArchitectureSection = () => (
               <Dot color="#28c840" />
               <TermTitle>bluesignal-wqm — pipeline</TermTitle>
             </TermBar>
-            <TermBody>{`  `}<span className="n">SENSORS</span>
-{`    `}<span className="d">pH · TDS · Turbidity · ORP · Temp · GPS</span>
-{`    `}<span className="a">│</span>
-{`    `}<span className="a">▼</span>
-{`  `}<span className="n">Pi Zero 2W</span>
-{`    `}<span className="d">ADS1115 16-bit ADC · SQLite WAL buffer</span>
-{`    `}<span className="a">│</span>
-{`    `}<span className="a">▼</span>
-{`  `}<span className="n">SX1262 LoRa Radio</span>
-{`    `}<span className="y">Cayenne LPP</span><span className="d"> · AES-128 · 15 km range</span>
-{`    `}<span className="a">│</span>
-{`    `}<span className="a">▼</span>
-{`  `}<span className="g">BlueSignal Cloud</span>
-{`    `}<span className="d">Ingest · Store · Alert · Dashboard</span>
-{`    `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>{` `}<span className="d">cloud.bluesignal.xyz</span>
-{`    `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span></TermBody>
+            <TermBody>{`  `}<span className="n">SENSORS</span>{`                `}<span className="d">pH · TDS · Turbidity · ORP · Temp · GPS</span>
+{`  `}<span className="a">────────────────────────────────────────────────────────────────────────</span>
+{`  `}<span className="n">Pi Zero 2W</span>{`             `}<span className="d">ADS1115 16-bit ADC · SQLite WAL buffer</span>
+{`  `}<span className="a">────────────────────────────────────────────────────────────────────────</span>
+{`  `}<span className="n">SX1262 LoRa Radio</span>{`      `}<span className="y">Cayenne LPP</span><span className="d"> · AES-128 · 15 km range</span>
+{`  `}<span className="a">────────────────────────────────────────────────────────────────────────</span>
+{`  `}<span className="g">BlueSignal Cloud</span>{`       `}<span className="d">Ingest · Store · Alert · Dashboard</span>
+{`      `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>{`        `}<span className="d">cloud.bluesignal.xyz</span>
+{`      `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span>{`  `}<span className="d">waterquality.trading</span></TermBody>
             <MobilePipeline />
           </Terminal>
         </RevealOnScroll>
