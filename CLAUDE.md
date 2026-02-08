@@ -7,18 +7,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Bluesignal Marketplace is a React SPA that operates in **tri-mode architecture**:
 - **Marketplace** (waterquality.trading) - Nutrient credit marketplace
 - **Cloud** (cloud.bluesignal.xyz) - Device monitoring dashboard
-- **Sales** (sales.bluesignal.xyz) - Hardware sales and product configurator
+- **Landing** (bluesignal.xyz) - WQM-1 product landing page (isolated entry point)
 
-All modes share the same codebase but have different routing, navigation, and features based on hostname detection.
+The Cloud and Marketplace modes share the same codebase (`src/main.jsx`) with different routing based on hostname detection. The Landing page is a completely separate entry point (`src/pages/landing/main.jsx`) with no shared dependencies.
 
 ## Tech Stack
 
 - **Frontend**: React 18 + Vite (SPA)
-- **Routing**: React Router v6
-- **State**: AppContext (React Context API) in `src/context/AppContext.jsx`
+- **Routing**: React Router v6 (Cloud/Marketplace only; Landing uses anchor links)
+- **State**: AppContext (React Context API) in `src/context/AppContext.jsx` (Cloud/Marketplace only)
 - **Styling**: Styled Components
-- **Auth & Database**: Firebase Authentication + Realtime Database
-- **Hosting**: Firebase Hosting (multi-site: waterquality-trading, cloud-bluesignal, sales-bluesignal)
+- **Auth & Database**: Firebase Authentication + Realtime Database (Cloud/Marketplace only)
+- **Hosting**: Firebase Hosting (multi-site: waterquality-trading, cloud-bluesignal, landing-bluesignal)
 - **Backend API**: Cloud Functions at `us-central1-app-neptunechain.cloudfunctions.net/app`
 - **Blockchain**: Polygon (Amoy testnet / mainnet) via Alchemy, ethers.js
 - **Media**: Livepeer for video upload/streaming
@@ -35,55 +35,58 @@ npm run dev
 npm run build
 
 # Build for specific sites
-npm run build:wqt    # WaterQuality.Trading
-npm run build:cloud  # BlueSignal Cloud
-npm run build:sales  # BlueSignal Sales
+npm run build:wqt      # WaterQuality.Trading
+npm run build:cloud    # BlueSignal Cloud
+npm run build:landing  # BlueSignal Landing (bluesignal.xyz)
 
 # Deploy to Firebase
 firebase deploy
 
 # Deploy specific sites
-npm run deploy:wqt    # Build + deploy waterquality.trading
-npm run deploy:cloud  # Build + deploy cloud.bluesignal.xyz
-npm run deploy:sales  # Build + deploy sales.bluesignal.xyz
+npm run deploy:wqt      # Build + deploy waterquality.trading
+npm run deploy:cloud    # Build + deploy cloud.bluesignal.xyz
+npm run deploy:landing  # Build + deploy bluesignal.xyz
 
 # Deploy all sites (Firebase + Cloudflare)
-npm run deploy:all    # Build all, deploy to Firebase, trigger Cloudflare
+npm run deploy:all      # Build all, deploy to Firebase, trigger Cloudflare
 
 # Full deployment (Firebase + Cloudflare) per site
-npm run deploy:full:wqt    # Deploy WQT to Firebase then trigger Cloudflare
-npm run deploy:full:cloud  # Deploy Cloud to Firebase then trigger Cloudflare
-npm run deploy:full:sales  # Deploy Sales to Firebase then trigger Cloudflare
+npm run deploy:full:wqt      # Deploy WQT to Firebase then trigger Cloudflare
+npm run deploy:full:cloud    # Deploy Cloud to Firebase then trigger Cloudflare
+npm run deploy:full:landing  # Deploy Landing to Firebase then trigger Cloudflare
 
 # Trigger Cloudflare builds only (no Firebase deploy)
-npm run cloudflare:trigger       # Trigger all sites
-npm run cloudflare:trigger:wqt   # Trigger WQT only
-npm run cloudflare:trigger:cloud # Trigger Cloud only
-npm run cloudflare:trigger:sales # Trigger Sales only
+npm run cloudflare:trigger         # Trigger all sites
+npm run cloudflare:trigger:wqt     # Trigger WQT only
+npm run cloudflare:trigger:cloud   # Trigger Cloud only
+npm run cloudflare:trigger:landing # Trigger Landing only
 
-# Test sales mode locally
-npm run dev          # Then visit localhost:3000?app=sales
+# Test landing mode locally
+# Landing has its own entry point — run: BUILD_TARGET=landing npm run dev
 ```
 
 ## Architecture
 
 ### Mode Detection (`src/utils/modeDetection.js`)
 
-The app detects mode based on hostname:
-- **Sales mode**: `sales.bluesignal.xyz`, `*.sales.bluesignal.xyz`, `sales-bluesignal.web.app`, or `?app=sales`
+The app detects mode based on hostname (used by Cloud/Marketplace builds only):
+- **Landing mode**: `bluesignal.xyz`, `www.bluesignal.xyz`, `sales-bluesignal.web.app`, or `?app=landing`
 - **Cloud mode**: `cloud.bluesignal.xyz`, `*.cloud.bluesignal.xyz`, `cloud-bluesignal.web.app`, or `?app=cloud`
 - **Marketplace mode**: `waterquality.trading`, `*.waterquality.trading`, `waterquality-trading.web.app`, or default
 
-Mode determines which header, menu, and route set to render. Sales mode has no header/menu (clean product-focused layout).
+Note: In production, the landing page uses its own entry point (`landing.html` → `src/pages/landing/main.jsx`) and does NOT go through `App.jsx` or mode detection. The detection exists only so Cloud/Marketplace builds correctly exclude landing hostnames.
+
+### Landing Page Architecture (`src/pages/landing/`)
+
+The landing page is a **completely isolated subtree** with:
+- Its own `main.jsx` entry point (no React Router, no Firebase, no AppContext)
+- Its own theme (`styles/theme.js`), global styles, and typography system
+- Styled Components + CSS-only animations (IntersectionObserver for scroll reveals)
+- Zero imports from `src/components/`, `src/context/`, `src/scripts/`, or `src/styles/`
 
 ### Routing Structure
 
-Routes are split into `SalesRoutes`, `CloudRoutes`, and `MarketplaceRoutes` in `src/App.jsx`:
-
-**Sales Routes** (public, no auth):
-- `/` - Product configurator (default landing)
-- `/configurator` - BlueSignal product configurator
-- `/enclosure` - Enclosure details page
+Routes are split into `CloudRoutes` and `MarketplaceRoutes` in `src/App.jsx`:
 
 **Cloud Routes** (auth-gated):
 - `/dashboard/:dashID` - Dynamic dashboards
@@ -97,10 +100,16 @@ Routes are split into `SalesRoutes`, `CloudRoutes`, and `MarketplaceRoutes` in `
 - `/marketplace/tools/*` - Auth-gated tools (calculator, live, upload, verification)
 - `/marketplace/seller-dashboard` - Auth-gated seller account
 
-Landing route (`/`) redirects authenticated users to `/marketplace` or `/dashboard/main` based on mode. Sales mode always shows the configurator.
+Landing route (`/`) redirects authenticated users to `/marketplace` or `/dashboard/main` based on mode.
 
 ### Key Directories
 
+- `src/pages/landing/` - Landing page (bluesignal.xyz) — isolated entry point
+  - `main.jsx` - React entry point
+  - `LandingPage.jsx` - Root component
+  - `sections/` - HeroSection, SensorGrid, ArchitectureSection, UseCasesSection, InstallationBanner, SpecsSection, CTASection
+  - `components/` - Nav, Footer, SystemScene, RevealOnScroll
+  - `styles/` - theme.js, GlobalStyles.js, typography.js
 - `src/routes/` - Top-level route components (Welcome, Home, NotFound, etc.)
 - `src/components/` - Shared components, organized by domain:
   - `navigation/` - CloudHeader, MarketplaceHeader, CloudMenu, MarketplaceMenu
@@ -137,11 +146,11 @@ All APIs use axios to call Cloud Functions at `configs.server_url`.
 Multi-site hosting in `firebase.json`:
 - `waterquality-trading` target → `dist-wqt/`
 - `cloud-bluesignal` target → `dist-cloud/`
-- `sales-bluesignal` target → `dist-sales/`
+- `landing-bluesignal` target → `dist-landing/`
 
 All sites use SPA rewrites (`** → /index.html`).
 
-Vite config builds separate entry points (`index.html`, `cloud.html`, `sales.html`) per target. Each build outputs to its own dist directory. Mode detection happens at runtime via hostname.
+Vite config builds separate entry points (`index.html`, `cloud.html`, `landing.html`) per target. Each build outputs to its own dist directory.
 
 ### Cloudflare Integration
 
@@ -154,20 +163,20 @@ The deployment pipeline automatically triggers Cloudflare builds after Firebase 
 **Required GitHub Secrets (deploy hooks method)**:
 - `CLOUDFLARE_DEPLOY_HOOK_WQT` - Deploy hook URL for waterquality-trading
 - `CLOUDFLARE_DEPLOY_HOOK_CLOUD` - Deploy hook URL for cloud-bluesignal
-- `CLOUDFLARE_DEPLOY_HOOK_SALES` - Deploy hook URL for sales-bluesignal
+- `CLOUDFLARE_DEPLOY_HOOK_LANDING` - Deploy hook URL for bluesignal.xyz
 
 **Alternative (API method)** - Set `USE_CLOUDFLARE_API=true` in GitHub Variables:
 - `CLOUDFLARE_ACCOUNT_ID` (secret) - Cloudflare account ID
 - `CLOUDFLARE_API_TOKEN` (secret) - API token with Pages permissions
 - `CLOUDFLARE_PROJECT_WQT` (variable) - Project name for WQT
 - `CLOUDFLARE_PROJECT_CLOUD` (variable) - Project name for Cloud
-- `CLOUDFLARE_PROJECT_SALES` (variable) - Project name for Sales
+- `CLOUDFLARE_PROJECT_LANDING` (variable) - Project name for Landing
 
 **Local environment variables** (for npm scripts):
 ```bash
 export CLOUDFLARE_DEPLOY_HOOK_WQT="https://api.cloudflare.com/..."
 export CLOUDFLARE_DEPLOY_HOOK_CLOUD="https://api.cloudflare.com/..."
-export CLOUDFLARE_DEPLOY_HOOK_SALES="https://api.cloudflare.com/..."
+export CLOUDFLARE_DEPLOY_HOOK_LANDING="https://api.cloudflare.com/..."
 ```
 
 ### Blockchain Integration
@@ -240,7 +249,7 @@ Firebase config and API keys should be in environment variables (typically `.env
 Cloudflare deployment (for local use):
 - `CLOUDFLARE_DEPLOY_HOOK_WQT` - Deploy hook URL for waterquality-trading
 - `CLOUDFLARE_DEPLOY_HOOK_CLOUD` - Deploy hook URL for cloud-bluesignal
-- `CLOUDFLARE_DEPLOY_HOOK_SALES` - Deploy hook URL for sales-bluesignal
+- `CLOUDFLARE_DEPLOY_HOOK_LANDING` - Deploy hook URL for bluesignal.xyz
 
 Check Firebase config files and existing `.env` examples for exact variable names.
 
@@ -249,4 +258,5 @@ Check Firebase config files and existing `.env` examples for exact variable name
 - Node.js v20+ required
 - Some features use cookies for temporary state where DB integration is incomplete
 - Build version tag in App.jsx for debugging deployed versions
-- Mode detection is runtime-based, not build-time (both builds are identical)
+- Landing page uses its own entry point (`landing.html`) and is completely isolated from the main app
+- Cloud and Marketplace mode detection is runtime-based, not build-time

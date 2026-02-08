@@ -13,7 +13,7 @@ pnpm-debug.log*
 dist/
 dist-wqt/
 dist-cloud/
-dist-sales/
+dist-landing/
 *.local
 
 # Vite Temp

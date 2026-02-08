@@ -2,7 +2,7 @@
 
 # Copy SEO files (robots.txt, sitemap.xml) to the correct dist folders
 # Usage: ./scripts/copy-seo-files.sh <target>
-# Targets: wqt, cloud, sales, all
+# Targets: wqt, cloud, landing, all
 
 TARGET=$1
 SCRIPT_DIR="$(dirname "$0")"
@@ -31,16 +31,16 @@ case $TARGET in
     cloud)
         copy_seo_files "cloud" "$ROOT_DIR/dist-cloud"
         ;;
-    sales)
-        copy_seo_files "sales" "$ROOT_DIR/dist-sales"
+    landing)
+        copy_seo_files "landing" "$ROOT_DIR/dist-landing"
         ;;
     all)
         copy_seo_files "wqt" "$ROOT_DIR/dist-wqt"
         copy_seo_files "cloud" "$ROOT_DIR/dist-cloud"
-        copy_seo_files "sales" "$ROOT_DIR/dist-sales"
+        copy_seo_files "landing" "$ROOT_DIR/dist-landing"
         ;;
     *)
-        echo "Usage: $0 <wqt|cloud|sales|all>"
+        echo "Usage: $0 <wqt|cloud|landing|all>"
         exit 1
         ;;
 esac

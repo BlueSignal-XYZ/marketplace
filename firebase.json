@@ -126,8 +126,8 @@
       ]
     },
     {
-      "target": "sales-bluesignal",
-      "public": "dist-sales",
+      "target": "landing-bluesignal",
+      "public": "dist-landing",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "headers": [
         {

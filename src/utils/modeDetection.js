@@ -1,6 +1,6 @@
 /**
  * Mode Detection Utilities
- * Centralizes hostname-based mode detection for Cloud, Sales, and Marketplace.
+ * Centralizes hostname-based mode detection for Cloud, Landing, and Marketplace.
  *
  * This avoids code duplication across:
  * - firebase.js
@@ -11,17 +11,21 @@
  */
 
 /**
- * Detect if the current hostname is Sales mode.
- * Sales mode includes:
+ * Detect if the current hostname is Landing mode (bluesignal.xyz).
+ * Landing mode includes:
  * - bluesignal.xyz (primary domain)
- * - *.bluesignal.xyz (subdomains, excluding cloud.*)
+ * - www.bluesignal.xyz
  * - sales.bluesignal.xyz (legacy, redirects to bluesignal.xyz)
- * - sales-bluesignal.web.app (Firebase hosting)
- * - ?app=sales query param (dev/testing)
+ * - sales-bluesignal.web.app (Firebase hosting — legacy name)
+ * - ?app=landing query param (dev/testing)
  *
- * @returns {boolean} - true if Sales mode
+ * Note: In production, the landing page uses its own entry point (landing.html)
+ * and does NOT go through App.jsx. This detection is only relevant for the
+ * Cloud/Marketplace builds to correctly exclude landing hostnames.
+ *
+ * @returns {boolean} - true if Landing mode
  */
-export const isSalesMode = () => {
+export const isLandingMode = () => {
   const host = window.location.hostname;
   const params = new URLSearchParams(window.location.search);
 
@@ -36,9 +40,12 @@ export const isSalesMode = () => {
     host === "sales.bluesignal.xyz" ||
     host.endsWith(".sales.bluesignal.xyz") ||
     host === "sales-bluesignal.web.app" ||
-    params.get("app") === "sales"
+    params.get("app") === "landing"
   );
 };
+
+// Legacy alias — kept for backward compatibility with any external references
+export const isSalesMode = isLandingMode;
 
 /**
  * Detect if the current hostname is Cloud mode.
@@ -74,16 +81,16 @@ export const isCloudMode = () => {
  * @returns {boolean} - true if Marketplace mode
  */
 export const isMarketplaceMode = () => {
-  return !isCloudMode() && !isSalesMode();
+  return !isCloudMode() && !isLandingMode();
 };
 
 /**
  * Get the current mode as a string.
  *
- * @returns {'cloud' | 'marketplace' | 'sales'} - The current mode
+ * @returns {'cloud' | 'marketplace' | 'landing'} - The current mode
  */
 export const getAppMode = () => {
-  if (isSalesMode()) return "sales";
+  if (isLandingMode()) return "landing";
   if (isCloudMode()) return "cloud";
   return "marketplace";
 };

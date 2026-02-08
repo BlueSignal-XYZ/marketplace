@@ -70,7 +70,7 @@ jobs:
         env:
           HOOK_WQT: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_WQT }}
           HOOK_CLOUD: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_CLOUD }}
-          HOOK_SALES: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_SALES }}
+          HOOK_LANDING: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_LANDING }}
         run: |
           trigger_hook() {
             local hook_url="$1"
@@ -102,6 +102,11 @@ jobs:
                 return 0
               fi
 
+              if [ "$HTTP_CODE" = "304" ]; then
+                echo "✅ Cloudflare build already queued/in-progress for $site_name (HTTP 304 - Not Modified)"
+                return 0
+              fi
+
               echo "⚠️ Build trigger failed with HTTP $HTTP_CODE"
               echo "Response body: $BODY"
 
@@ -118,10 +123,12 @@ jobs:
 
           failed=0
 
-          # Trigger all three sites
+          # Trigger all three sites (with delays to avoid Cloudflare 304 deduplication)
           trigger_hook "$HOOK_WQT" "wqt" || failed=$((failed + 1))
+          sleep 5
           trigger_hook "$HOOK_CLOUD" "cloud" || failed=$((failed + 1))
-          trigger_hook "$HOOK_SALES" "sales" || failed=$((failed + 1))
+          sleep 5
+          trigger_hook "$HOOK_LANDING" "landing" || failed=$((failed + 1))
 
           if [ $failed -gt 0 ]; then
             echo "❌ $failed Cloudflare deployment(s) failed"

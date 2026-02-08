@@ -106,7 +106,7 @@ import SellerDashboard_Role from "./components/dashboards/SellerDashboard";
 import InstallerDashboard from "./components/dashboards/InstallerDashboard";
 
 import { getDefaultDashboardRoute } from "./utils/roleRouting";
-import { isCloudMode, isSalesMode, getAppMode } from "./utils/modeDetection";
+import { isCloudMode, isLandingMode, getAppMode } from "./utils/modeDetection";
 import { isFirebaseConfigured, firebaseConfigError } from "./apis/firebase";
 import { useUserDevices } from "./hooks/useUserDevices";
 
@@ -198,7 +198,7 @@ function AppShell({ mode, user, authLoading }) {
   React.useEffect(() => {
     const titles = {
       cloud: "BlueSignal Cloud Monitoring",
-      sales: "BlueSignal Sales Portal",
+      landing: "BlueSignal",
       marketplace: "WaterQuality.Trading",
     };
     document.title = titles[mode] || "WaterQuality.Trading";
@@ -244,7 +244,7 @@ function AppShell({ mode, user, authLoading }) {
         </div>
       )}
 
-      {/* HEADERS - Sales mode has no header (clean product-focused layout) */}
+      {/* HEADERS - Landing mode has its own entry point and never reaches here */}
       {!isAuthLanding && mode === "cloud" && (
         <CloudHeader onMenuClick={toggleCloudMenu} />
       )}
@@ -253,7 +253,7 @@ function AppShell({ mode, user, authLoading }) {
         <MarketplaceHeader onMenuClick={toggleMarketMenu} />
       )}
 
-      {/* Sales mode intentionally has no header - configurator has its own navigation */}
+      {/* Landing mode uses its own entry point (landing.html) — this code path is legacy */}
 
       {/* GLOBAL POPUPS */}
       <Popups />
@@ -285,7 +285,7 @@ function AppShell({ mode, user, authLoading }) {
             </LoadingContainer>
           }
         >
-          {mode === "sales" ? (
+          {mode === "landing" ? (
             <SalesRoutes />
           ) : mode === "cloud" ? (
             <CloudRoutes user={user} authLoading={authLoading} />
@@ -295,8 +295,8 @@ function AppShell({ mode, user, authLoading }) {
         </Suspense>
       </MainContent>
 
-      {/* GLOBAL FOOTER - shown on all pages except sales mode (has its own footer) */}
-      {mode !== "sales" && (
+      {/* GLOBAL FOOTER - shown on all pages except landing mode (has its own footer) */}
+      {mode !== "landing" && (
         <FooterWrapper>
           <Footer />
         </FooterWrapper>
@@ -738,13 +738,14 @@ const CloudRoutes = ({ user, authLoading }) => (
 /* -------------------------------------------------------------------------- */
 
 /**
- * SalesRoutes - Dedicated routes for sales.bluesignal.xyz
- * Unified single-page sales portal with clean URL structure.
- * Uses query params for state instead of hash routes.
+ * SalesRoutes - Legacy routes for bluesignal.xyz (landing mode).
+ * In production, the landing page uses its own entry point (landing.html -> src/pages/landing/main.jsx)
+ * and never reaches this code. These routes exist only for backward compatibility
+ * when accessed via ?app=landing in development.
  */
 const SalesRoutes = () => (
   <Routes>
-    {/* Main unified sales page - handles all product/quote state via query params */}
+    {/* Legacy: redirects to landing page in production */}
     <Route path="/" element={<SalesPage />} />
 
     {/* Information pages */}
@@ -766,7 +767,7 @@ const SalesRoutes = () => (
     {/* Product deep links - redirect to main with product param */}
     <Route path="/products/:productId" element={<ProductRedirect />} />
 
-    {/* Catch-all: redirect to main sales page */}
+    {/* Catch-all: redirect to landing */}
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
@@ -798,7 +799,7 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
     <Route path="/presale" element={<PresalePage />} />
 
     {/* Redirects for relocated features */}
-    {/* Sales configurator moved to sales.bluesignal.xyz */}
+    {/* Landing page at bluesignal.xyz (separate entry point) */}
     {/* Installer dashboard moved to cloud.bluesignal.xyz */}
 
     {/* Auth-gated marketplace */}

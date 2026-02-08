@@ -51,6 +51,9 @@ trigger_cloudflare_hook() {
             log_success "Cloudflare build triggered successfully for $site_name"
             echo "$body"
             return 0
+        elif [ "$http_code" -eq 304 ]; then
+            log_success "Cloudflare build already queued/in-progress for $site_name (HTTP 304 - Not Modified)"
+            return 0
         else
             log_warning "Build trigger failed with HTTP $http_code"
 
@@ -160,9 +163,9 @@ main() {
     case "$mode" in
         "hook")
             # Deploy hook mode - uses pre-configured webhook URLs
-            if [ -z "$CLOUDFLARE_DEPLOY_HOOK_WQT" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_CLOUD" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_SALES" ]; then
+            if [ -z "$CLOUDFLARE_DEPLOY_HOOK_WQT" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_CLOUD" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_LANDING" ]; then
                 log_error "No Cloudflare deploy hooks configured"
-                log_info "Set CLOUDFLARE_DEPLOY_HOOK_WQT, CLOUDFLARE_DEPLOY_HOOK_CLOUD, or CLOUDFLARE_DEPLOY_HOOK_SALES"
+                log_info "Set CLOUDFLARE_DEPLOY_HOOK_WQT, CLOUDFLARE_DEPLOY_HOOK_CLOUD, or CLOUDFLARE_DEPLOY_HOOK_LANDING"
                 exit 1
             fi
 
@@ -170,14 +173,16 @@ main() {
 
             if [ -n "$CLOUDFLARE_DEPLOY_HOOK_WQT" ]; then
                 trigger_cloudflare_hook "$CLOUDFLARE_DEPLOY_HOOK_WQT" "waterquality-trading" || failed=$((failed + 1))
+                sleep 5
             fi
 
             if [ -n "$CLOUDFLARE_DEPLOY_HOOK_CLOUD" ]; then
                 trigger_cloudflare_hook "$CLOUDFLARE_DEPLOY_HOOK_CLOUD" "cloud-bluesignal" || failed=$((failed + 1))
+                sleep 5
             fi
 
-            if [ -n "$CLOUDFLARE_DEPLOY_HOOK_SALES" ]; then
-                trigger_cloudflare_hook "$CLOUDFLARE_DEPLOY_HOOK_SALES" "sales-bluesignal" || failed=$((failed + 1))
+            if [ -n "$CLOUDFLARE_DEPLOY_HOOK_LANDING" ]; then
+                trigger_cloudflare_hook "$CLOUDFLARE_DEPLOY_HOOK_LANDING" "landing-bluesignal" || failed=$((failed + 1))
             fi
 
             if [ $failed -gt 0 ]; then
@@ -203,8 +208,8 @@ main() {
                 trigger_cloudflare_api "$CLOUDFLARE_ACCOUNT_ID" "$CLOUDFLARE_PROJECT_CLOUD" "$CLOUDFLARE_API_TOKEN" "${2:-main}" || failed=$((failed + 1))
             fi
 
-            if [ -n "$CLOUDFLARE_PROJECT_SALES" ]; then
-                trigger_cloudflare_api "$CLOUDFLARE_ACCOUNT_ID" "$CLOUDFLARE_PROJECT_SALES" "$CLOUDFLARE_API_TOKEN" "${2:-main}" || failed=$((failed + 1))
+            if [ -n "$CLOUDFLARE_PROJECT_LANDING" ]; then
+                trigger_cloudflare_api "$CLOUDFLARE_ACCOUNT_ID" "$CLOUDFLARE_PROJECT_LANDING" "$CLOUDFLARE_API_TOKEN" "${2:-main}" || failed=$((failed + 1))
             fi
 
             if [ $failed -gt 0 ]; then
@@ -234,19 +239,19 @@ main() {
             echo "Modes:"
             echo "  hook              Trigger all configured deploy hooks (default)"
             echo "  api [branch]      Trigger builds via Cloudflare API"
-            echo "  single <site>     Trigger a single site (wqt, cloud, or sales)"
+            echo "  single <site>     Trigger a single site (wqt, cloud, or landing)"
             echo ""
             echo "Environment Variables (hook mode):"
-            echo "  CLOUDFLARE_DEPLOY_HOOK_WQT    Deploy hook URL for waterquality-trading"
-            echo "  CLOUDFLARE_DEPLOY_HOOK_CLOUD  Deploy hook URL for cloud-bluesignal"
-            echo "  CLOUDFLARE_DEPLOY_HOOK_SALES  Deploy hook URL for sales-bluesignal"
+            echo "  CLOUDFLARE_DEPLOY_HOOK_WQT      Deploy hook URL for waterquality-trading"
+            echo "  CLOUDFLARE_DEPLOY_HOOK_CLOUD    Deploy hook URL for cloud-bluesignal"
+            echo "  CLOUDFLARE_DEPLOY_HOOK_LANDING  Deploy hook URL for bluesignal.xyz"
             echo ""
             echo "Environment Variables (API mode):"
-            echo "  CLOUDFLARE_ACCOUNT_ID         Cloudflare account ID"
-            echo "  CLOUDFLARE_API_TOKEN          Cloudflare API token with Pages permissions"
-            echo "  CLOUDFLARE_PROJECT_WQT        Project name for waterquality-trading"
-            echo "  CLOUDFLARE_PROJECT_CLOUD      Project name for cloud-bluesignal"
-            echo "  CLOUDFLARE_PROJECT_SALES      Project name for sales-bluesignal"
+            echo "  CLOUDFLARE_ACCOUNT_ID           Cloudflare account ID"
+            echo "  CLOUDFLARE_API_TOKEN            Cloudflare API token with Pages permissions"
+            echo "  CLOUDFLARE_PROJECT_WQT          Project name for waterquality-trading"
+            echo "  CLOUDFLARE_PROJECT_CLOUD        Project name for cloud-bluesignal"
+            echo "  CLOUDFLARE_PROJECT_LANDING      Project name for bluesignal.xyz"
             exit 1
             ;;
     esac
