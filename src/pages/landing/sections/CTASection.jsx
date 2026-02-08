@@ -6,6 +6,10 @@ const Wrapper = styled.div`
   text-align: center;
   position: relative;
   padding: 40px 0;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 16px 0;
+  }
 `;
 
 const BlueGlow = styled.div`
@@ -48,6 +52,10 @@ const Desc = styled.p`
   max-width: 520px;
   margin: 0 auto 36px;
   position: relative;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 28px;
+  }
 `;
 
 const CTARow = styled.div`

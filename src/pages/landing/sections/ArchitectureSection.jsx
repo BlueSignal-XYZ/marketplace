@@ -4,6 +4,10 @@ import RevealOnScroll from '../components/RevealOnScroll';
 
 const SectionHeader = styled.div`
   margin-bottom: 48px;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 32px;
+  }
 `;
 
 const Grid = styled.div`
@@ -14,6 +18,10 @@ const Grid = styled.div`
 
   ${({ theme }) => theme.media.lg} {
     grid-template-columns: 1fr;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    gap: 24px;
   }
 `;
 

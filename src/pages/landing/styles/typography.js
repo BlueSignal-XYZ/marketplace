@@ -20,6 +20,10 @@ export const SectionTitle = styled.h2`
   color: ${({ theme }) => theme.colors.white};
   margin-bottom: 20px;
   text-wrap: balance;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 16px;
+  }
 `;
 
 export const SectionDesc = styled.p`
@@ -50,6 +54,10 @@ export const Section = styled.section`
   padding: 120px 0;
 
   ${({ theme }) => theme.media.md} {
-    padding: 80px 0;
+    padding: 64px 0;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 48px 0;
   }
 `;

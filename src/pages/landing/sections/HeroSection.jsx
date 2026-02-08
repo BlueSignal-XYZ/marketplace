@@ -10,7 +10,11 @@ const HeroWrapper = styled.section`
   overflow: hidden;
 
   ${({ theme }) => theme.media.md} {
-    padding-top: 120px;
+    padding-top: 110px;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    padding-top: 100px;
   }
 `;
 
@@ -27,6 +31,10 @@ const Badge = styled.div`
   border-radius: 100px;
   margin-bottom: 32px;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.1s both;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 24px;
+  }
 `;
 
 const PulseDot = styled.span`
@@ -71,6 +79,10 @@ const Subhead = styled.p`
   max-width: 540px;
   margin: 0 auto 40px;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.4s both;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 32px;
+  }
 `;
 
 const CTARow = styled.div`
@@ -82,7 +94,7 @@ const CTARow = styled.div`
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.55s both;
 
   ${({ theme }) => theme.media.md} {
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
 
   ${({ theme }) => theme.media.sm} {

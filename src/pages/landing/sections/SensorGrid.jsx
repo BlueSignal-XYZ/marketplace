@@ -10,6 +10,10 @@ const Header = styled.div`
     margin-left: auto;
     margin-right: auto;
   }
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 32px;
+  }
 `;
 
 const Grid = styled.div`

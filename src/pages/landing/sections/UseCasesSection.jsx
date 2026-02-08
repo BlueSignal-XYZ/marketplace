@@ -5,6 +5,10 @@ import RevealOnScroll from '../components/RevealOnScroll';
 const Header = styled.div`
   text-align: center;
   margin-bottom: 48px;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 32px;
+  }
 `;
 
 const Grid = styled.div`
@@ -43,12 +47,30 @@ const Card = styled.div`
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
   }
+
+  ${({ theme }) => theme.media.md} {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    text-align: left;
+    padding: 20px 24px;
+  }
 `;
 
 const Emoji = styled.div`
   font-size: 32px;
   margin-bottom: 16px;
   line-height: 1;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 0;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+`;
+
+const CardContent = styled.div`
+  min-width: 0;
 `;
 
 const CardTitle = styled.h3`
@@ -65,6 +87,11 @@ const CardDesc = styled.p`
   color: ${({ theme }) => theme.colors.w50};
   max-width: 240px;
   margin: 0 auto;
+
+  ${({ theme }) => theme.media.md} {
+    max-width: none;
+    margin: 0;
+  }
 `;
 
 const useCases = [
@@ -105,8 +132,10 @@ const UseCasesSection = () => (
           <RevealOnScroll key={uc.title} delay={i * 0.08}>
             <Card>
               <Emoji>{uc.emoji}</Emoji>
-              <CardTitle>{uc.title}</CardTitle>
-              <CardDesc>{uc.desc}</CardDesc>
+              <CardContent>
+                <CardTitle>{uc.title}</CardTitle>
+                <CardDesc>{uc.desc}</CardDesc>
+              </CardContent>
             </Card>
           </RevealOnScroll>
         ))}

@@ -9,7 +9,7 @@ const Banner = styled.div`
   padding: 56px 48px;
 
   ${({ theme }) => theme.media.md} {
-    padding: 40px 24px;
+    padding: 32px 20px;
     border-radius: 16px;
   }
 `;
@@ -23,6 +23,10 @@ const Inner = styled.div`
   ${({ theme }) => theme.media.lg} {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    gap: 24px;
   }
 `;
 

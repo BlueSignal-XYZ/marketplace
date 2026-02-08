@@ -12,6 +12,10 @@ const Grid = styled.div`
     grid-template-columns: 1fr;
     gap: 48px;
   }
+
+  ${({ theme }) => theme.media.md} {
+    gap: 32px;
+  }
 `;
 
 const Left = styled.div``;
