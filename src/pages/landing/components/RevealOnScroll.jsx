@@ -7,6 +7,8 @@ const Wrapper = styled.div`
   transition: opacity 0.7s ${({ theme }) => theme.ease},
               transform 0.7s ${({ theme }) => theme.ease};
   transition-delay: ${({ $delay }) => $delay || 0}s;
+  min-width: 0;
+  max-width: 100%;
 
   &.visible {
     opacity: 1;

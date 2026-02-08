@@ -23,6 +23,7 @@ const Left = styled.div``;
 const CTAButton = styled.a`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   font-family: ${({ theme }) => theme.fonts.display};
   font-size: 15px;
@@ -39,12 +40,21 @@ const CTAButton = styled.a`
     transform: scale(1.04);
     box-shadow: 0 0 24px rgba(255,255,255,0.15);
   }
+
+  ${({ theme }) => theme.media.sm} {
+    width: 100%;
+    margin-top: 24px;
+  }
 `;
 
 const Tables = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+
+  ${({ theme }) => theme.media.md} {
+    gap: 24px;
+  }
 `;
 
 const TableGroup = styled.div``;
@@ -69,9 +79,8 @@ const Row = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.w04};
   gap: 16px;
 
-  ${({ theme }) => theme.media.sm} {
-    flex-wrap: wrap;
-    gap: 4px;
+  ${({ theme }) => theme.media.md} {
+    gap: 12px;
   }
 `;
 
@@ -79,6 +88,7 @@ const RowKey = styled.span`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.w70};
   white-space: nowrap;
+  flex-shrink: 0;
 `;
 
 const RowVal = styled.span`
@@ -88,10 +98,9 @@ const RowVal = styled.span`
   text-align: right;
   white-space: nowrap;
 
-  ${({ theme }) => theme.media.sm} {
+  ${({ theme }) => theme.media.md} {
     white-space: normal;
-    text-align: left;
-    flex: 1;
+    word-break: break-word;
     min-width: 0;
   }
 `;

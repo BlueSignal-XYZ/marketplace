@@ -22,6 +22,8 @@ const Grid = styled.div`
 
   ${({ theme }) => theme.media.md} {
     gap: 24px;
+    /* Prevent <pre> intrinsic width from blowing out the grid */
+    overflow: hidden;
   }
 `;
 
@@ -32,6 +34,8 @@ const Terminal = styled.div`
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  max-width: 100%;
+  min-width: 0;
 `;
 
 const TermBar = styled.div`
@@ -40,6 +44,11 @@ const TermBar = styled.div`
   gap: 8px;
   padding: 14px 18px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.w08};
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 10px 14px;
+    gap: 6px;
+  }
 `;
 
 const Dot = styled.span`
@@ -47,6 +56,11 @@ const Dot = styled.span`
   height: 12px;
   border-radius: 50%;
   background: ${({ color }) => color};
+
+  ${({ theme }) => theme.media.sm} {
+    width: 10px;
+    height: 10px;
+  }
 `;
 
 const TermTitle = styled.span`
@@ -63,6 +77,7 @@ const TermBody = styled.pre`
   padding: 24px;
   overflow-x: auto;
   color: ${({ theme }) => theme.colors.w50};
+  min-width: 0;
 
   .n { color: ${({ theme }) => theme.colors.white}; font-weight: 600; }
   .a { color: ${({ theme }) => theme.colors.blue}; }
@@ -71,9 +86,17 @@ const TermBody = styled.pre`
   .y { color: ${({ theme }) => theme.colors.amber}; }
 
   ${({ theme }) => theme.media.md} {
-    font-size: 12px;
-    padding: 16px;
+    font-size: clamp(9.5px, 2.8vw, 12px);
+    padding: 14px;
     line-height: 1.7;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 12px;
+    font-size: clamp(8.5px, 2.5vw, 11px);
   }
 `;
 
@@ -82,6 +105,7 @@ const Cards = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 
   /* Unified corner radius on children (RevealOnScroll wrappers) */
   > :first-child { border-radius: 16px 16px 0 0; overflow: hidden; }
@@ -98,7 +122,11 @@ const FeatureCard = styled.div`
   }
 
   ${({ theme }) => theme.media.md} {
-    padding: 24px;
+    padding: 20px;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 16px;
   }
 `;
 

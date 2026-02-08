@@ -23,6 +23,11 @@ export const GlobalStyles = createGlobalStyle`
     line-height: 1.6;
   }
 
+  #root, main {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   h1, h2, h3 {
     text-wrap: balance;
   }
