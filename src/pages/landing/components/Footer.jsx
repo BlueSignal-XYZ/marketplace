@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { trackCTA } from '../utils/analytics';
+import BlueSignalLogo from './Logo';
 
 const FooterWrapper = styled.footer`
   background: ${({ theme }) => theme.colors.surface};
@@ -39,14 +40,6 @@ const LogoRow = styled.div`
   margin-bottom: 16px;
 `;
 
-const LogoSvg = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <path d="M4 8 C8 5, 16 5, 24 8" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 14 C8 11, 16 11, 24 14" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 20 C8 17, 16 17, 24 20" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-  </svg>
-);
-
 const BrandTitle = styled.span`
   font-family: ${({ theme }) => theme.fonts.display};
   font-size: 20px;
@@ -60,6 +53,13 @@ const BrandDesc = styled.p`
   color: ${({ theme }) => theme.colors.w50};
   max-width: 300px;
   margin-bottom: 20px;
+`;
+
+const BrandTagline = styled.span`
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.75;
 `;
 
 const SocialRow = styled.div`
@@ -179,11 +179,12 @@ const Footer = () => (
       <FooterGrid>
         <BrandCol>
           <LogoRow>
-            <LogoSvg />
+            <BlueSignalLogo size={28} color="#2d8cf0" />
             <BrandTitle>BlueSignal</BrandTitle>
           </LogoRow>
           <BrandDesc>
-            Water quality monitoring hardware for tanks, ponds, and treatment systems. Built in&nbsp;Austin,&nbsp;TX.
+            Water quality monitoring hardware for tanks, ponds, and treatment&nbsp;systems.
+            <BrandTagline>Made with ❤️ in Austin, Texas</BrandTagline>
           </BrandDesc>
           <SocialRow>
             <SocialBtn href="https://github.com/bluesignal" target="_blank" rel="noopener noreferrer" aria-label="GitHub">

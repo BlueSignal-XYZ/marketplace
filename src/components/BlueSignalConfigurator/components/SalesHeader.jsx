@@ -169,22 +169,10 @@ export default function SalesHeader({
         >
           {/* White BlueSignal Logo */}
           <LogoSvg viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Wave icon */}
-            <path
-              d="M4 20c4-6 8-6 12 0s8 6 12 0"
-              stroke="#10B981"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
-            />
-            <path
-              d="M4 28c4-6 8-6 12 0s8 6 12 0"
-              stroke="#10B981"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.5"
-            />
+            {/* Three-wave icon */}
+            <path d="M3 12 C8 8, 19 8, 29 12" stroke="#2d8cf0" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+            <path d="M3 20 C8 16, 19 16, 29 20" stroke="#2d8cf0" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+            <path d="M3 28 C8 24, 19 24, 29 28" stroke="#2d8cf0" strokeWidth="2.5" strokeLinecap="round" fill="none" />
             {/* BlueSignal text */}
             <text
               x="38"

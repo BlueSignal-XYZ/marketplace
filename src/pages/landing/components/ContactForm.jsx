@@ -1,12 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { trackCTA } from '../utils/analytics';
+import { firestore } from '../utils/firebase';
 
 // ─── Configuration ───────────────────────────────────────────────────────────
-// For seamless server-side form handling, sign up at formspree.io, create a
-// form, and paste your endpoint URL below. While this is empty, the form
-// gracefully falls back to mailto: (opens the user's email client).
-const FORMSPREE_ENDPOINT = ''; // e.g. 'https://formspree.io/f/xyzabcde'
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -201,6 +199,7 @@ const SuccessDesc = styled.p`
 const INQUIRY_TYPES = [
   { value: '', label: 'Select...' },
   { value: 'general', label: 'General Inquiry' },
+  { value: 'quote', label: 'Installation Quote' },
   { value: 'pilot', label: 'Pilot Program' },
   { value: 'devkit', label: 'Dev Kit Order' },
   { value: 'partnership', label: 'Partnership' },
@@ -218,6 +217,17 @@ const ContactForm = () => {
   const [status, setStatus] = useState('idle'); // idle | submitting | success | mailto | error
   const [errors, setErrors] = useState({});
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Listen for prefill-inquiry events (e.g. from Installation Quote CTA)
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail) {
+        setForm((prev) => ({ ...prev, inquiryType: e.detail }));
+      }
+    };
+    window.addEventListener('prefill-inquiry', handler);
+    return () => window.removeEventListener('prefill-inquiry', handler);
+  }, []);
 
   const validate = () => {
     const errs = {};
@@ -252,30 +262,31 @@ const ContactForm = () => {
     const inquiryLabel =
       INQUIRY_TYPES.find((t) => t.value === form.inquiryType)?.label || 'General Inquiry';
 
-    if (FORMSPREE_ENDPOINT) {
+    // Primary: Firestore write
+    if (firestore) {
       try {
-        const res = await fetch(FORMSPREE_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            company: form.company || 'N/A',
-            inquiryType: inquiryLabel,
-            message: form.message,
-            _subject: `BlueSignal ${inquiryLabel} from ${form.name}`,
-          }),
+        await addDoc(collection(firestore, 'leads'), {
+          name: form.name,
+          email: form.email,
+          company: form.company || null,
+          phone: null,
+          inquiryType: inquiryLabel,
+          message: form.message,
+          source: 'landing-contact',
+          createdAt: serverTimestamp(),
+          status: 'new',
         });
-        if (!res.ok) throw new Error('Request failed');
         setStatus('success');
-      } catch {
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Firebase submission error:', err);
         setErrorMsg(
           `Something went wrong. Please email us directly at ${CONTACT_EMAIL}`
         );
         setStatus('error');
       }
     } else {
-      // Mailto fallback — opens user's email client with pre-filled message
+      // Fallback: mailto — opens user's email client with pre-filled message
       const subject = encodeURIComponent(
         `BlueSignal ${inquiryLabel} — ${form.name}`
       );

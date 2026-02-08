@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
@@ -90,30 +91,135 @@ const TermBody = styled.pre`
   }
 `;
 
-const MobileTermBody = styled.pre`
-  display: none;
-  font-family: ${({ theme }) => theme.fonts.mono};
-  color: ${({ theme }) => theme.colors.w50};
-  min-width: 0;
+/* ---- Mobile Pipeline Accordion ---- */
 
-  .n { color: ${({ theme }) => theme.colors.white}; font-weight: 600; }
-  .a { color: ${({ theme }) => theme.colors.blue}; }
-  .g { color: ${({ theme }) => theme.colors.green}; }
+const PIPELINE_STAGES = [
+  { icon: '\u{1F4E1}', name: 'Sensor Probes', details: ['pH, TDS, Turbidity, ORP, Temp', 'DS18B20, BNC, JST-XH connectors'] },
+  { icon: '\u{1F527}', name: 'Pi Zero 2W', details: ['ADS1115 16-bit ADC', 'SQLite WAL local buffer'] },
+  { icon: '\u{1F4FB}', name: 'SX1262 LoRa Radio', details: ['Cayenne LPP encoding', 'AES-128 encryption, 15\u00a0km range'] },
+  { icon: '\u2601\uFE0F', name: 'BlueSignal Cloud', details: ['Data ingestion & storage', 'API endpoints & alert engine'] },
+  { icon: '\u{1F4CA}', name: 'Dashboard', details: ['Real-time sensor readings', 'Trend charts & data export'] },
+];
+
+const MobilePipelineWrap = styled.div`
+  display: none;
 
   ${({ theme }) => theme.media.md} {
     display: block;
-    font-size: 12px;
-    line-height: 2;
-    padding: 16px;
-    overflow-x: hidden;
-    white-space: pre;
+    padding: 12px;
   }
 
   ${({ theme }) => theme.media.sm} {
-    font-size: 11px;
-    padding: 14px;
+    padding: 10px;
   }
 `;
+
+const PipelineStage = styled.div`
+  margin-left: ${({ $index }) => Math.min($index * 10, 40)}px;
+`;
+
+const StageHeader = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  background: ${({ theme, $active }) => ($active ? theme.colors.surface2 : 'transparent')};
+  border: 1px solid ${({ theme, $active }) => ($active ? theme.colors.w15 : theme.colors.w08)};
+  border-radius: ${({ $active }) => ($active ? '10px 10px 0 0' : '10px')};
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, border-radius 0.15s;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    background: ${({ theme }) => theme.colors.surface2};
+  }
+`;
+
+const StageIcon = styled.span`
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+`;
+
+const StageName = styled.span`
+  font-family: ${({ theme }) => theme.fonts.display};
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.white};
+  text-align: left;
+`;
+
+const StageChevron = styled.span`
+  margin-left: auto;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.w30};
+  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0)')};
+  transition: transform 0.25s ease;
+`;
+
+const StageBody = styled.div`
+  max-height: ${({ $open }) => ($open ? '160px' : '0')};
+  overflow: hidden;
+  transition: max-height 0.25s ease, border-color 0.25s ease;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ $open, theme }) => ($open ? theme.colors.w15 : 'transparent')};
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+`;
+
+const StageBodyInner = styled.div`
+  padding: 6px 14px 12px;
+`;
+
+const DetailLine = styled.p`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.w50};
+  line-height: 1.7;
+`;
+
+const StageConnector = styled.div`
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin-left: ${({ $index }) => Math.min($index * 10, 40) + 20}px;
+  color: ${({ theme }) => theme.colors.blue};
+  opacity: 0.5;
+  font-size: 12px;
+`;
+
+const MobilePipeline = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const toggle = (i) => setActiveIndex((prev) => (prev === i ? -1 : i));
+
+  return (
+    <MobilePipelineWrap>
+      {PIPELINE_STAGES.map((stage, i) => (
+        <div key={stage.name}>
+          <PipelineStage $index={i}>
+            <StageHeader $active={activeIndex === i} onClick={() => toggle(i)} aria-expanded={activeIndex === i}>
+              <StageIcon>{stage.icon}</StageIcon>
+              <StageName>{stage.name}</StageName>
+              <StageChevron $open={activeIndex === i}>{'\u25BE'}</StageChevron>
+            </StageHeader>
+            <StageBody $open={activeIndex === i}>
+              <StageBodyInner>
+                {stage.details.map((d) => (
+                  <DetailLine key={d}>{d}</DetailLine>
+                ))}
+              </StageBodyInner>
+            </StageBody>
+          </PipelineStage>
+          {i < PIPELINE_STAGES.length - 1 && (
+            <StageConnector $index={i}>{'\u25BC'}</StageConnector>
+          )}
+        </div>
+      ))}
+    </MobilePipelineWrap>
+  );
+};
 
 /* Feature cards */
 const Cards = styled.div`
@@ -232,15 +338,7 @@ const ArchitectureSection = () => (
 {`    `}<span className="d">Ingest · Store · Alert · Dashboard</span>
 {`    `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>{` `}<span className="d">cloud.bluesignal.xyz</span>
 {`    `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span></TermBody>
-            <MobileTermBody>{`  `}<span className="n">SENSORS</span>
-{`  `}<span className="a">▼</span>
-{`  `}<span className="n">Pi Zero 2W</span>
-{`  `}<span className="a">▼</span>
-{`  `}<span className="n">SX1262 LoRa Radio</span>
-{`  `}<span className="a">▼</span>
-{`  `}<span className="g">BlueSignal Cloud</span>
-{`    `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>
-{`    `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span></MobileTermBody>
+            <MobilePipeline />
           </Terminal>
         </RevealOnScroll>
 

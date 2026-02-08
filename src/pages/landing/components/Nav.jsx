@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { trackCTA } from '../utils/analytics';
+import BlueSignalLogo from './Logo';
 
 const NavBar = styled.nav`
   position: fixed;
@@ -34,14 +35,6 @@ const Brand = styled.a`
   gap: 10px;
   text-decoration: none;
 `;
-
-const LogoSvg = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <path d="M4 8 C8 5, 16 5, 24 8" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 14 C8 11, 16 11, 24 14" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 20 C8 17, 16 17, 24 20" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-  </svg>
-);
 
 const BrandName = styled.span`
   font-family: ${({ theme }) => theme.fonts.display};
@@ -282,7 +275,7 @@ const Nav = () => {
       <NavBar $scrolled={scrolled || menuOpen} aria-label="Main navigation">
         <NavInner>
           <Brand href="/">
-            <LogoSvg />
+            <BlueSignalLogo size={28} color="#2d8cf0" />
             <BrandName>BlueSignal</BrandName>
             <ModelBadge>WQM-1</ModelBadge>
           </Brand>

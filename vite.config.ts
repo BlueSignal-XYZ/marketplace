@@ -91,9 +91,9 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: input,
         output: {
-          // Landing page is isolated — no react-router-dom or firebase
+          // Landing page uses a minimal Firebase set (Firestore only for lead capture)
           manualChunks: buildTarget === 'landing'
-            ? { vendor: ['react', 'react-dom'] }
+            ? { vendor: ['react', 'react-dom'], firebase: ['firebase/app', 'firebase/firestore'] }
             : {
                 vendor: ['react', 'react-dom', 'react-router-dom'],
                 firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
