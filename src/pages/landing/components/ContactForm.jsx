@@ -265,7 +265,7 @@ const ContactForm = () => {
     // Primary: Firestore write
     if (firestore) {
       try {
-        await addDoc(collection(firestore, 'leads'), {
+        await addDoc(collection(firestore, 'contact_submissions'), {
           name: form.name,
           email: form.email,
           company: form.company || null,

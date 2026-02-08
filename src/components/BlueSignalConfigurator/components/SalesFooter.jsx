@@ -453,7 +453,7 @@ export default function SalesFooter({ onNavigate }) {
             </BrandTagline>
             <SocialLinks>
               <SocialLink
-                href="https://github.com/bluesignal"
+                href="https://github.com/BlueSignal-XYZ"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"

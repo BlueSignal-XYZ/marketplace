@@ -661,7 +661,7 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
           <ResourceLink href="#install" onClick={onGetStarted}>
             Installation Guide
           </ResourceLink>
-          <ResourceLink href="https://github.com/bluesignal" target="_blank" rel="noopener noreferrer">
+          <ResourceLink href="https://github.com/BlueSignal-XYZ" target="_blank" rel="noopener noreferrer">
             GitHub Repository
           </ResourceLink>
         </DIYResources>
