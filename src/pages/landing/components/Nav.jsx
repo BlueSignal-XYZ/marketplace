@@ -239,7 +239,6 @@ const mobileLinks = [
   { href: '#installation', label: 'Installation' },
   { href: '#specs', label: 'Specs' },
   { href: 'https://cloud.bluesignal.xyz', label: 'Cloud', external: true },
-  { href: 'https://waterquality.trading', label: 'WQT', external: true },
 ];
 
 const Nav = () => {
@@ -294,7 +293,6 @@ const Nav = () => {
             <NavLink href="#installation">Installation</NavLink>
             <NavLink href="#specs">Specs</NavLink>
             <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Nav')}>Cloud</NavLink>
-            <NavLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_wqt', 'Nav')}>WQT</NavLink>
           </NavLinks>
 
           <CTAButton href="#order" onClick={() => trackCTA('order_devkit_hero', 'Nav CTA')}>Order Dev Kit</CTAButton>

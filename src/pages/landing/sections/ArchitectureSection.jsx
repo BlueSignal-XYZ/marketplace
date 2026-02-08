@@ -12,7 +12,7 @@ const SectionHeader = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.15fr 1fr;
   gap: 48px;
   align-items: start;
 
@@ -86,17 +86,32 @@ const TermBody = styled.pre`
   .y { color: ${({ theme }) => theme.colors.amber}; }
 
   ${({ theme }) => theme.media.md} {
-    font-size: clamp(9.5px, 2.8vw, 12px);
-    padding: 14px;
-    line-height: 1.7;
+    display: none;
+  }
+`;
+
+const MobileTermBody = styled.pre`
+  display: none;
+  font-family: ${({ theme }) => theme.fonts.mono};
+  color: ${({ theme }) => theme.colors.w50};
+  min-width: 0;
+
+  .n { color: ${({ theme }) => theme.colors.white}; font-weight: 600; }
+  .a { color: ${({ theme }) => theme.colors.blue}; }
+  .g { color: ${({ theme }) => theme.colors.green}; }
+
+  ${({ theme }) => theme.media.md} {
+    display: block;
+    font-size: 12px;
+    line-height: 2;
+    padding: 16px;
     overflow-x: hidden;
-    white-space: pre-wrap;
-    word-break: break-word;
+    white-space: pre;
   }
 
   ${({ theme }) => theme.media.sm} {
-    padding: 12px;
-    font-size: clamp(8.5px, 2.5vw, 11px);
+    font-size: 11px;
+    padding: 14px;
   }
 `;
 
@@ -216,7 +231,16 @@ const ArchitectureSection = () => (
 {`  `}<span className="g">BlueSignal Cloud</span>
 {`    `}<span className="d">Ingest · Store · Alert · Dashboard</span>
 {`    `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>{` `}<span className="d">cloud.bluesignal.xyz</span>
-{`    `}<span className="a">└──▶</span>{` `}<span className="n">WQT Registry</span>{` `}<span className="d">waterquality.trading</span></TermBody>
+{`    `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span></TermBody>
+            <MobileTermBody>{`  `}<span className="n">SENSORS</span>
+{`  `}<span className="a">▼</span>
+{`  `}<span className="n">Pi Zero 2W</span>
+{`  `}<span className="a">▼</span>
+{`  `}<span className="n">SX1262 LoRa Radio</span>
+{`  `}<span className="a">▼</span>
+{`  `}<span className="g">BlueSignal Cloud</span>
+{`    `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>
+{`    `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span></MobileTermBody>
           </Terminal>
         </RevealOnScroll>
 

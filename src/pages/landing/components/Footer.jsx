@@ -209,8 +209,6 @@ const Footer = () => (
         <LinkCol>
           <ColTitle>Platform</ColTitle>
           <FooterLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Footer')}>Cloud Dashboard</FooterLink>
-          <FooterLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_wqt', 'Footer')}>WQT Marketplace</FooterLink>
-          <FooterLink href="https://waterquality.trading/registry" target="_blank" rel="noopener noreferrer">Credit Registry</FooterLink>
           <FooterLink href="https://github.com/BlueSignal" target="_blank" rel="noopener noreferrer">GitHub</FooterLink>
         </LinkCol>
 

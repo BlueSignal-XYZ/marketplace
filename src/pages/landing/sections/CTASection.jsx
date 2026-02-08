@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Container, Section } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
-import PreOrderForm from '../components/PreOrderForm';
+import ContactForm from '../components/ContactForm';
 import { trackCTA } from '../utils/analytics';
 
 const Wrapper = styled.div`
@@ -107,20 +107,20 @@ const CTASection = () => (
       <RevealOnScroll>
         <Wrapper>
           <BlueGlow />
-          <Title>Start monitoring water quality&nbsp;today.</Title>
+          <Title>Let&rsquo;s talk water&nbsp;quality.</Title>
           <Desc>
-            The dev kit includes the WQM-1 HAT, Pi Zero 2W, pH and TDS probes,
-            waterproof temperature sensor, LoRa antenna, and power&nbsp;supply.
+            Whether you&rsquo;re ready to order a dev kit, explore a pilot program,
+            or just have questions &mdash; we&rsquo;d love to hear from&nbsp;you.
           </Desc>
           <FormArea>
-            <PreOrderForm />
+            <ContactForm />
           </FormArea>
           <DashboardLink>
             <SecondaryBtn href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('try_dashboard', 'CTA Section')}>
               Try the Dashboard
             </SecondaryBtn>
           </DashboardLink>
-          <Note style={{ marginTop: 24 }}>Ships Q2 2026 &middot; Free shipping in the US &middot; Volume pricing&nbsp;available</Note>
+          <Note style={{ marginTop: 24 }}>Dev kits ship Q2 2026 &middot; hello@bluesignal.xyz &middot; Free shipping in the&nbsp;US</Note>
         </Wrapper>
       </RevealOnScroll>
     </Container>
