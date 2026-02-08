@@ -19,6 +19,7 @@ const theme = {
     green: '#34d399',
     greenDim: 'rgba(52,211,153,0.15)',
     algae: '#22c55e',
+    algaeLight: '#86efac',
     algaeDark: '#15803d',
     amber: '#fbbf24',
     red: '#f87171',

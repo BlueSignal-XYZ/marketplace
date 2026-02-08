@@ -48,6 +48,14 @@ export const GlobalStyles = createGlobalStyle`
     background: none;
   }
 
+  /* Focus states for keyboard accessibility */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid #2d8cf0;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   /* Keyframe Animations */
   @keyframes fadeUp {
     from {

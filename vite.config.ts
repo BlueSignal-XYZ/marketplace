@@ -91,10 +91,13 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: input,
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router-dom'],
-            firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
-          }
+          // Landing page is isolated — no react-router-dom or firebase
+          manualChunks: buildTarget === 'landing'
+            ? { vendor: ['react', 'react-dom'] }
+            : {
+                vendor: ['react', 'react-dom', 'react-router-dom'],
+                firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
+              }
         }
       }
     }

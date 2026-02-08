@@ -5,6 +5,11 @@ import RevealOnScroll from '../components/RevealOnScroll';
 const Header = styled.div`
   text-align: center;
   margin-bottom: 48px;
+
+  ${SectionDesc} {
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const Grid = styled.div`
@@ -12,8 +17,18 @@ const Grid = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
 
+  /* Unified corner radius on grid children (RevealOnScroll wrappers) */
+  > :nth-child(1) { border-radius: 16px 0 0 0; overflow: hidden; }
+  > :nth-child(3) { border-radius: 0 16px 0 0; overflow: hidden; }
+  > :nth-child(4) { border-radius: 0 0 0 16px; overflow: hidden; }
+  > :nth-child(6) { border-radius: 0 0 16px 0; overflow: hidden; }
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+
+    > :nth-child(1) { border-radius: 16px 16px 0 0; }
+    > :nth-child(3), > :nth-child(4) { border-radius: 0; overflow: hidden; }
+    > :nth-child(6) { border-radius: 0 0 16px 16px; }
   }
 `;
 
@@ -24,19 +39,6 @@ const Card = styled.div`
 
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
-  }
-
-  /* Unified corner radius pattern */
-  &:first-child { border-radius: 16px 0 0 0; }
-  &:nth-child(3) { border-radius: 0 16px 0 0; }
-  &:nth-child(4) { border-radius: 0 0 0 16px; }
-  &:last-child { border-radius: 0 0 16px 0; }
-
-  @media (max-width: 768px) {
-    &:first-child { border-radius: 16px 16px 0 0; }
-    &:nth-child(3) { border-radius: 0; }
-    &:nth-child(4) { border-radius: 0; }
-    &:last-child { border-radius: 0 0 16px 16px; }
   }
 `;
 
@@ -129,7 +131,7 @@ const SensorGrid = () => (
         <RevealOnScroll>
           <SectionLabel>Sensor Channels</SectionLabel>
           <SectionTitle>Six parameters. One&nbsp;board.</SectionTitle>
-          <SectionDesc style={{ margin: '0 auto' }}>
+          <SectionDesc>
             Each channel reads through a 16-bit ADS1115 ADC with programmable gain.
             Factory-calibrated with NIST-traceable references. Field-recalibrate with standard&nbsp;buffers.
           </SectionDesc>

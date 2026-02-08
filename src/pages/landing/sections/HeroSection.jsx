@@ -47,7 +47,12 @@ const Headline = styled.h1`
 `;
 
 const GradientWord = styled.span`
-  background: linear-gradient(135deg, #22c55e, #86efac, #15803d);
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.algae},
+    ${({ theme }) => theme.colors.algaeLight},
+    ${({ theme }) => theme.colors.algaeDark}
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

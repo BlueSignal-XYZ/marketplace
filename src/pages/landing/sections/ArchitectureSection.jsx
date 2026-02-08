@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
 
+const SectionHeader = styled.div`
+  margin-bottom: 48px;
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -64,6 +68,10 @@ const Cards = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+
+  /* Unified corner radius on children (RevealOnScroll wrappers) */
+  > :first-child { border-radius: 16px 16px 0 0; overflow: hidden; }
+  > :last-child { border-radius: 0 0 16px 16px; overflow: hidden; }
 `;
 
 const FeatureCard = styled.div`
@@ -74,9 +82,6 @@ const FeatureCard = styled.div`
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
   }
-
-  &:first-child { border-radius: 16px 16px 0 0; }
-  &:last-child { border-radius: 0 0 16px 16px; }
 `;
 
 const FeatureTag = styled.span`
@@ -130,7 +135,7 @@ const features = [
 const ArchitectureSection = () => (
   <Section id="architecture">
     <Container>
-      <div style={{ marginBottom: 48 }}>
+      <SectionHeader>
         <RevealOnScroll>
           <SectionLabel>Architecture</SectionLabel>
           <SectionTitle>From probe to&nbsp;dashboard.</SectionTitle>
@@ -139,7 +144,7 @@ const ArchitectureSection = () => (
             BlueSignal Cloud. Threshold alerts and relay control close the&nbsp;loop.
           </SectionDesc>
         </RevealOnScroll>
-      </div>
+      </SectionHeader>
 
       <Grid>
         <RevealOnScroll>
