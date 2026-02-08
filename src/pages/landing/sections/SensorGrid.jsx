@@ -23,7 +23,7 @@ const Grid = styled.div`
   > :nth-child(4) { border-radius: 0 0 0 16px; overflow: hidden; }
   > :nth-child(6) { border-radius: 0 0 16px 0; overflow: hidden; }
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     grid-template-columns: 1fr;
 
     > :nth-child(1) { border-radius: 16px 16px 0 0; }
@@ -39,6 +39,10 @@ const Card = styled.div`
 
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
+  }
+
+  ${({ theme }) => theme.media.md} {
+    padding: 24px;
   }
 `;
 

@@ -8,6 +8,10 @@ const HeroWrapper = styled.section`
   text-align: center;
   position: relative;
   overflow: hidden;
+
+  ${({ theme }) => theme.media.md} {
+    padding-top: 120px;
+  }
 `;
 
 const Badge = styled.div`
@@ -77,7 +81,11 @@ const CTARow = styled.div`
   margin-bottom: 72px;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.55s both;
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 48px;
+  }
+
+  ${({ theme }) => theme.media.sm} {
     flex-direction: column;
     width: 100%;
     padding: 0 16px;
@@ -103,7 +111,7 @@ const PrimaryBtn = styled.a`
     box-shadow: 0 0 24px rgba(255,255,255,0.15);
   }
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     width: 100%;
     justify-content: center;
   }
@@ -128,7 +136,7 @@ const SecondaryBtn = styled.a`
     color: ${({ theme }) => theme.colors.white};
   }
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     width: 100%;
     justify-content: center;
   }
@@ -137,6 +145,10 @@ const SecondaryBtn = styled.a`
 const SceneWrapper = styled.div`
   position: relative;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.6s both;
+
+  ${({ theme }) => theme.media.md} {
+    display: none;
+  }
 `;
 
 const SceneFade = styled.div`
@@ -163,13 +175,14 @@ const SpecsBar = styled.div`
   margin: 48px auto 0;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.9s both;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     gap: 24px;
     padding: 16px 20px;
     flex-wrap: wrap;
+    margin-top: 0;
   }
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
@@ -180,7 +193,7 @@ const SpecsBar = styled.div`
 const SpecItem = styled.div`
   text-align: center;
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -197,7 +210,7 @@ const SpecLabel = styled.div`
   color: ${({ theme }) => theme.colors.w30};
   margin-bottom: 4px;
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     margin-bottom: 0;
     min-width: 60px;
   }

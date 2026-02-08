@@ -34,6 +34,7 @@ export const GlobalStyles = createGlobalStyle`
   a {
     color: inherit;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   img, svg {
@@ -46,6 +47,12 @@ export const GlobalStyles = createGlobalStyle`
     cursor: pointer;
     border: none;
     background: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Remove 300ms tap delay on interactive elements */
+  a, button, input, select, textarea {
+    touch-action: manipulation;
   }
 
   /* Focus states for keyboard accessibility */
@@ -54,6 +61,14 @@ export const GlobalStyles = createGlobalStyle`
     outline: 2px solid #2d8cf0;
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  /* Prevent iOS text size adjust on orientation change */
+  @media (max-width: 768px) {
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
   }
 
   /* Keyframe Animations */

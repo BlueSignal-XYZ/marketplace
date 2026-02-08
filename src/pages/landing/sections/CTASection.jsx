@@ -20,6 +20,13 @@ const BlueGlow = styled.div`
   filter: blur(80px);
   opacity: 0.6;
   pointer-events: none;
+
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    filter: blur(60px);
+  }
 `;
 
 const Title = styled.h2`
@@ -51,7 +58,7 @@ const CTARow = styled.div`
   margin-bottom: 24px;
   position: relative;
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     flex-direction: column;
     width: 100%;
     padding: 0 16px;
@@ -77,7 +84,7 @@ const PrimaryBtn = styled.a`
     box-shadow: 0 0 24px rgba(255,255,255,0.15);
   }
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     width: 100%;
     justify-content: center;
   }
@@ -102,7 +109,7 @@ const SecondaryBtn = styled.a`
     color: ${({ theme }) => theme.colors.white};
   }
 
-  @media (max-width: 480px) {
+  ${({ theme }) => theme.media.sm} {
     width: 100%;
     justify-content: center;
   }

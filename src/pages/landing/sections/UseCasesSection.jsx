@@ -16,7 +16,7 @@ const Grid = styled.div`
   > :nth-child(1) { border-radius: 16px 0 0 16px; overflow: hidden; }
   > :nth-child(4) { border-radius: 0 16px 16px 0; overflow: hidden; }
 
-  @media (max-width: 1100px) {
+  ${({ theme }) => theme.media.lg} {
     grid-template-columns: repeat(2, 1fr);
 
     > :nth-child(1) { border-radius: 16px 0 0 0; }
@@ -25,7 +25,7 @@ const Grid = styled.div`
     > :nth-child(4) { border-radius: 0 0 16px 0; }
   }
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     grid-template-columns: 1fr;
 
     > :nth-child(1) { border-radius: 16px 16px 0 0; }

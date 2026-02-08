@@ -12,7 +12,7 @@ const Grid = styled.div`
   gap: 48px;
   align-items: start;
 
-  @media (max-width: 1100px) {
+  ${({ theme }) => theme.media.lg} {
     grid-template-columns: 1fr;
   }
 `;
@@ -61,6 +61,12 @@ const TermBody = styled.pre`
   .g { color: ${({ theme }) => theme.colors.green}; }
   .d { color: ${({ theme }) => theme.colors.w30}; }
   .y { color: ${({ theme }) => theme.colors.amber}; }
+
+  ${({ theme }) => theme.media.md} {
+    font-size: 12px;
+    padding: 16px;
+    line-height: 1.7;
+  }
 `;
 
 /* Feature cards */
@@ -81,6 +87,10 @@ const FeatureCard = styled.div`
 
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
+  }
+
+  ${({ theme }) => theme.media.md} {
+    padding: 24px;
   }
 `;
 

@@ -8,8 +8,9 @@ const Banner = styled.div`
   border-radius: 20px;
   padding: 56px 48px;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     padding: 40px 24px;
+    border-radius: 16px;
   }
 `;
 
@@ -19,7 +20,7 @@ const Inner = styled.div`
   gap: 48px;
   align-items: center;
 
-  @media (max-width: 1100px) {
+  ${({ theme }) => theme.media.lg} {
     grid-template-columns: 1fr;
     gap: 32px;
   }
@@ -74,6 +75,7 @@ const StateDot = styled.span`
 const CTAButton = styled.a`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   font-family: ${({ theme }) => theme.fonts.display};
   font-size: 15px;
   font-weight: 600;
@@ -88,6 +90,10 @@ const CTAButton = styled.a`
   &:hover {
     transform: scale(1.04);
     box-shadow: 0 0 24px rgba(255,255,255,0.15);
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    width: 100%;
   }
 `;
 

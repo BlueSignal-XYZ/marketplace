@@ -56,6 +56,10 @@ const ModelBadge = styled.span`
   background: ${({ theme }) => theme.colors.w04};
   padding: 3px 8px;
   border-radius: 100px;
+
+  ${({ theme }) => theme.media.sm} {
+    display: none;
+  }
 `;
 
 const NavLinks = styled.div`
@@ -63,7 +67,7 @@ const NavLinks = styled.div`
   align-items: center;
   gap: 32px;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     display: none;
   }
 `;
@@ -96,10 +100,132 @@ const CTAButton = styled.a`
     transform: scale(1.04);
     box-shadow: 0 0 20px rgba(255,255,255,0.15);
   }
+
+  ${({ theme }) => theme.media.md} {
+    display: none;
+  }
+`;
+
+/* ---- Mobile Menu ---- */
+
+const HamburgerBtn = styled.button`
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1002;
+
+  ${({ theme }) => theme.media.md} {
+    display: flex;
+  }
+`;
+
+const HamburgerIcon = styled.div`
+  width: 22px;
+  height: 14px;
+  position: relative;
+
+  span {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: ${({ theme }) => theme.colors.white};
+    border-radius: 1px;
+    transition: transform 0.3s ${({ theme }) => theme.ease},
+                opacity 0.3s ${({ theme }) => theme.ease};
+
+    &:nth-child(1) {
+      top: 0;
+      ${({ $open }) => $open && 'transform: translateY(6px) rotate(45deg);'}
+    }
+    &:nth-child(2) {
+      top: 6px;
+      ${({ $open }) => $open && 'opacity: 0;'}
+    }
+    &:nth-child(3) {
+      top: 12px;
+      ${({ $open }) => $open && 'transform: translateY(-6px) rotate(-45deg);'}
+    }
+  }
+`;
+
+const MobileOverlay = styled.div`
+  display: none;
+
+  ${({ theme }) => theme.media.md} {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(8, 9, 10, 0.95);
+    backdrop-filter: blur(20px);
+    opacity: ${({ $open }) => ($open ? 1 : 0)};
+    visibility: ${({ $open }) => ($open ? 'visible' : 'hidden')};
+    transition: opacity 0.3s ${({ theme }) => theme.ease},
+                visibility 0.3s ${({ theme }) => theme.ease};
+  }
+`;
+
+const MobileMenu = styled.div`
+  display: none;
+
+  ${({ theme }) => theme.media.md} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 1001;
+    padding: 100px 24px 60px;
+    gap: 8px;
+    opacity: ${({ $open }) => ($open ? 1 : 0)};
+    visibility: ${({ $open }) => ($open ? 'visible' : 'hidden')};
+    transform: ${({ $open }) => ($open ? 'translateY(0)' : 'translateY(-12px)')};
+    transition: opacity 0.35s ${({ theme }) => theme.ease},
+                visibility 0.35s ${({ theme }) => theme.ease},
+                transform 0.35s ${({ theme }) => theme.ease};
+  }
+`;
+
+const MobileLink = styled.a`
+  font-family: ${({ theme }) => theme.fonts.display};
+  font-size: 24px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.w70};
+  padding: 14px 0;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover, &:active {
+    color: ${({ theme }) => theme.colors.white};
+  }
+`;
+
+const MobileCTA = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ${({ theme }) => theme.fonts.display};
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.white};
+  padding: 14px 32px;
+  border-radius: 100px;
+  text-decoration: none;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 280px;
 `;
 
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -107,27 +233,68 @@ const Nav = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
+  const handleLinkClick = () => {
+    closeMenu();
+  };
+
   return (
-    <NavBar $scrolled={scrolled}>
-      <NavInner>
-        <Brand href="#top">
-          <LogoSvg />
-          <BrandName>BlueSignal</BrandName>
-          <ModelBadge>WQM-1</ModelBadge>
-        </Brand>
+    <>
+      <NavBar $scrolled={scrolled || menuOpen}>
+        <NavInner>
+          <Brand href="#top">
+            <LogoSvg />
+            <BrandName>BlueSignal</BrandName>
+            <ModelBadge>WQM-1</ModelBadge>
+          </Brand>
 
-        <NavLinks>
-          <NavLink href="#sensors">Sensors</NavLink>
-          <NavLink href="#architecture">Architecture</NavLink>
-          <NavLink href="#installation">Installation</NavLink>
-          <NavLink href="#specs">Specs</NavLink>
-          <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer">Cloud</NavLink>
-          <NavLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer">WQT</NavLink>
-        </NavLinks>
+          <NavLinks>
+            <NavLink href="#sensors">Sensors</NavLink>
+            <NavLink href="#architecture">Architecture</NavLink>
+            <NavLink href="#installation">Installation</NavLink>
+            <NavLink href="#specs">Specs</NavLink>
+            <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer">Cloud</NavLink>
+            <NavLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer">WQT</NavLink>
+          </NavLinks>
 
-        <CTAButton href="#order">Order Dev Kit</CTAButton>
-      </NavInner>
-    </NavBar>
+          <CTAButton href="#order">Order Dev Kit</CTAButton>
+
+          <HamburgerBtn
+            onClick={() => setMenuOpen(prev => !prev)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <HamburgerIcon $open={menuOpen}>
+              <span />
+              <span />
+              <span />
+            </HamburgerIcon>
+          </HamburgerBtn>
+        </NavInner>
+      </NavBar>
+
+      <MobileOverlay $open={menuOpen} onClick={closeMenu} />
+      <MobileMenu $open={menuOpen}>
+        <MobileLink href="#sensors" onClick={handleLinkClick}>Sensors</MobileLink>
+        <MobileLink href="#architecture" onClick={handleLinkClick}>Architecture</MobileLink>
+        <MobileLink href="#installation" onClick={handleLinkClick}>Installation</MobileLink>
+        <MobileLink href="#specs" onClick={handleLinkClick}>Specs</MobileLink>
+        <MobileLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>Cloud</MobileLink>
+        <MobileLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>WQT</MobileLink>
+        <MobileCTA href="#order" onClick={handleLinkClick}>Order Dev Kit</MobileCTA>
+      </MobileMenu>
+    </>
   );
 };
 

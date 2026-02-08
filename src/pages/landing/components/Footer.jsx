@@ -9,6 +9,10 @@ const FooterInner = styled.div`
   max-width: 1320px;
   margin: 0 auto;
   padding: 64px 24px 0;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 48px 16px 0;
+  }
 `;
 
 const FooterGrid = styled.div`
@@ -16,11 +20,12 @@ const FooterGrid = styled.div`
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 48px;
 
-  @media (max-width: 1100px) {
+  ${({ theme }) => theme.media.lg} {
     grid-template-columns: 1fr 1fr;
   }
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     grid-template-columns: 1fr;
+    gap: 40px;
   }
 `;
 
@@ -62,8 +67,8 @@ const SocialRow = styled.div`
 `;
 
 const SocialBtn = styled.a`
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,8 +84,8 @@ const SocialBtn = styled.a`
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 `;
 
@@ -107,6 +112,14 @@ const FooterLink = styled.a`
   &:hover {
     color: ${({ theme }) => theme.colors.white};
   }
+
+  ${({ theme }) => theme.media.md} {
+    padding: 6px 0;
+    margin-bottom: 4px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const SoonBadge = styled.span`
@@ -127,10 +140,11 @@ const BottomBar = styled.div`
   margin-top: 48px;
   padding: 20px 0;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     text-align: center;
+    padding: 24px 0;
   }
 `;
 
@@ -142,6 +156,8 @@ const Copyright = styled.span`
 const LegalLinks = styled.div`
   display: flex;
   gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const LegalLink = styled.a`
@@ -149,6 +165,7 @@ const LegalLink = styled.a`
   color: ${({ theme }) => theme.colors.w15};
   text-decoration: none;
   transition: color 0.2s;
+  padding: 4px 0;
 
   &:hover {
     color: ${({ theme }) => theme.colors.w50};

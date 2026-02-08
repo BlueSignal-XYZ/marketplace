@@ -8,7 +8,7 @@ const Grid = styled.div`
   gap: 64px;
   align-items: start;
 
-  @media (max-width: 1100px) {
+  ${({ theme }) => theme.media.lg} {
     grid-template-columns: 1fr;
     gap: 48px;
   }
@@ -63,6 +63,12 @@ const Row = styled.div`
   align-items: baseline;
   padding: 10px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.w04};
+  gap: 16px;
+
+  ${({ theme }) => theme.media.sm} {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
 `;
 
 const RowKey = styled.span`
@@ -77,6 +83,13 @@ const RowVal = styled.span`
   color: ${({ theme }) => theme.colors.w50};
   text-align: right;
   white-space: nowrap;
+
+  ${({ theme }) => theme.media.sm} {
+    white-space: normal;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+  }
 `;
 
 const specTables = [

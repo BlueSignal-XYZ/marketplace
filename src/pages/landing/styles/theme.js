@@ -28,6 +28,16 @@ const theme = {
     display: "'Outfit', -apple-system, sans-serif",
     mono: "'IBM Plex Mono', monospace",
   },
+  breakpoints: {
+    sm: '480px',
+    md: '768px',
+    lg: '1100px',
+  },
+  media: {
+    sm: '@media (max-width: 480px)',
+    md: '@media (max-width: 768px)',
+    lg: '@media (max-width: 1100px)',
+  },
   ease: 'cubic-bezier(0.16, 1, 0.3, 1)',
 };
 

@@ -41,7 +41,7 @@ export const Container = styled.div`
   margin: 0 auto;
   padding: 0 24px;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     padding: 0 16px;
   }
 `;
@@ -49,7 +49,7 @@ export const Container = styled.div`
 export const Section = styled.section`
   padding: 120px 0;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.md} {
     padding: 80px 0;
   }
 `;
