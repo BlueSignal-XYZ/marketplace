@@ -265,24 +265,37 @@ const ContactForm = () => {
     // Primary: Firestore write
     if (firestore) {
       try {
-        await addDoc(collection(firestore, 'contact_submissions'), {
-          name: form.name,
-          email: form.email,
-          company: form.company || null,
-          phone: null,
-          inquiryType: inquiryLabel,
-          message: form.message,
-          source: 'landing-contact',
-          createdAt: serverTimestamp(),
-          status: 'new',
-        });
+        // Race addDoc against a 10-second timeout so the form never hangs
+        const timeout = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Request timed out')), 10000)
+        );
+        await Promise.race([
+          addDoc(collection(firestore, 'contact_submissions'), {
+            name: form.name,
+            email: form.email,
+            company: form.company || null,
+            phone: null,
+            inquiryType: inquiryLabel,
+            message: form.message,
+            source: 'landing-contact',
+            createdAt: serverTimestamp(),
+            status: 'new',
+          }),
+          timeout,
+        ]);
         setStatus('success');
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Firebase submission error:', err);
-        setErrorMsg(
-          `Something went wrong. Please email us directly at ${CONTACT_EMAIL}`
-        );
+        if (err.message === 'Request timed out') {
+          setErrorMsg(
+            `Request timed out. Please email us directly at ${CONTACT_EMAIL}`
+          );
+        } else {
+          setErrorMsg(
+            `Something went wrong. Please email us directly at ${CONTACT_EMAIL}`
+          );
+        }
         setStatus('error');
       }
     } else {

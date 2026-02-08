@@ -175,6 +175,154 @@ const SceneFade = styled.div`
   z-index: 1;
 `;
 
+/* ── Mobile Hero Visualization ────────────────────────────────── */
+const MobileVizWrapper = styled.div`
+  display: none;
+
+  ${({ theme }) => theme.media.md} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto 8px;
+    animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.6s both;
+  }
+`;
+
+const MobileStage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme, $highlight }) => $highlight ? 'rgba(52,211,153,0.3)' : theme.colors.w08};
+  border-radius: 12px;
+  padding: 12px 16px;
+  position: relative;
+`;
+
+const MobileStageIcon = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: ${({ $bg }) => $bg || 'rgba(45,140,240,0.1)'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+`;
+
+const MobileStageText = styled.div`
+  min-width: 0;
+`;
+
+const MobileStageName = styled.div`
+  font-family: ${({ theme }) => theme.fonts.display};
+  font-size: 13px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.white};
+  line-height: 1.3;
+`;
+
+const MobileStageDetail = styled.div`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 10px;
+  color: ${({ theme }) => theme.colors.w50};
+  margin-top: 2px;
+`;
+
+const MobileConnector = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 20px;
+  position: relative;
+
+  &::before {
+    content: '';
+    width: 1.5px;
+    height: 100%;
+    background: ${({ theme }) => theme.colors.blue};
+    opacity: 0.4;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    border-left: 1.5px solid ${({ theme }) => theme.colors.blue};
+    border-bottom: 1.5px solid ${({ theme }) => theme.colors.blue};
+    transform: translateX(-50%) rotate(-45deg);
+    opacity: 0.4;
+  }
+`;
+
+const PulseDotMobile = styled.span`
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.green};
+  animation: pulse 2s ease-in-out infinite;
+`;
+
+const MobileHeroViz = () => (
+  <MobileVizWrapper>
+    <MobileStage>
+      <MobileStageIcon $bg="rgba(45,140,240,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2d8cf0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+        </svg>
+      </MobileStageIcon>
+      <MobileStageText>
+        <MobileStageName>Water Source</MobileStageName>
+        <MobileStageDetail>Tank, pond, or well</MobileStageDetail>
+      </MobileStageText>
+    </MobileStage>
+
+    <MobileConnector />
+
+    <MobileStage $highlight>
+      <MobileStageIcon $bg="rgba(52,211,153,0.12)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="4" y="4" width="16" height="16" rx="2" /><line x1="9" y1="9" x2="15" y2="9" /><line x1="9" y1="13" x2="13" y2="13" />
+        </svg>
+      </MobileStageIcon>
+      <MobileStageText>
+        <MobileStageName>BlueSignal WQM-1</MobileStageName>
+        <MobileStageDetail>pH &middot; TDS &middot; Turbidity &middot; ORP &middot; Temp</MobileStageDetail>
+      </MobileStageText>
+      <PulseDotMobile />
+    </MobileStage>
+
+    <MobileConnector />
+
+    <MobileStage>
+      <MobileStageIcon $bg="rgba(45,140,240,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#5badff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+      </MobileStageIcon>
+      <MobileStageText>
+        <MobileStageName>Cloud Dashboard</MobileStageName>
+        <MobileStageDetail>Alerts &middot; Charts &middot; Relay control</MobileStageDetail>
+      </MobileStageText>
+    </MobileStage>
+  </MobileVizWrapper>
+);
+
 const SpecsBar = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.w08};
@@ -268,6 +416,8 @@ const HeroSection = () => (
         <SystemScene />
         <SceneFade />
       </SceneWrapper>
+
+      <MobileHeroViz />
 
       <SpecsBar>
         <SpecItem>

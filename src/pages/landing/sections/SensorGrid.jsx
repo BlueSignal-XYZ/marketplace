@@ -20,18 +20,32 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
+  width: 100%;
 
   /* Unified corner radius on grid children (RevealOnScroll wrappers) */
+  > * {
+    min-width: 0;
+  }
   > :nth-child(1) { border-radius: 16px 0 0 0; overflow: hidden; }
   > :nth-child(3) { border-radius: 0 16px 0 0; overflow: hidden; }
   > :nth-child(4) { border-radius: 0 0 0 16px; overflow: hidden; }
   > :nth-child(6) { border-radius: 0 0 16px 0; overflow: hidden; }
 
   ${({ theme }) => theme.media.md} {
+    grid-template-columns: repeat(2, 1fr);
+
+    > :nth-child(1) { border-radius: 16px 0 0 0; }
+    > :nth-child(2) { border-radius: 0 16px 0 0; overflow: hidden; }
+    > :nth-child(3), > :nth-child(4) { border-radius: 0; overflow: hidden; }
+    > :nth-child(5) { border-radius: 0 0 0 16px; overflow: hidden; }
+    > :nth-child(6) { border-radius: 0 0 16px 0; }
+  }
+
+  ${({ theme }) => theme.media.sm} {
     grid-template-columns: 1fr;
 
     > :nth-child(1) { border-radius: 16px 16px 0 0; }
-    > :nth-child(3), > :nth-child(4) { border-radius: 0; overflow: hidden; }
+    > :nth-child(2), > :nth-child(3), > :nth-child(4), > :nth-child(5) { border-radius: 0; overflow: hidden; }
     > :nth-child(6) { border-radius: 0 0 16px 16px; }
   }
 `;

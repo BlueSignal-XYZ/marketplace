@@ -13,13 +13,9 @@ const SectionHeader = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: 1fr;
   gap: 48px;
   align-items: start;
-
-  ${({ theme }) => theme.media.lg} {
-    grid-template-columns: 1fr;
-  }
 
   ${({ theme }) => theme.media.md} {
     gap: 24px;
@@ -223,14 +219,31 @@ const MobilePipeline = () => {
 
 /* Feature cards */
 const Cards = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 2px;
   min-width: 0;
 
   /* Unified corner radius on children (RevealOnScroll wrappers) */
-  > :first-child { border-radius: 16px 16px 0 0; overflow: hidden; }
-  > :last-child { border-radius: 0 0 16px 16px; overflow: hidden; }
+  > :first-child { border-radius: 16px 0 0 16px; overflow: hidden; }
+  > :last-child { border-radius: 0 16px 16px 0; overflow: hidden; }
+
+  ${({ theme }) => theme.media.lg} {
+    grid-template-columns: repeat(2, 1fr);
+
+    > :first-child { border-radius: 16px 0 0 0; overflow: hidden; }
+    > :nth-child(2) { border-radius: 0 16px 0 0; overflow: hidden; }
+    > :nth-child(3) { border-radius: 0 0 0 16px; overflow: hidden; }
+    > :last-child { border-radius: 0 0 16px 0; overflow: hidden; }
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: 1fr;
+
+    > :first-child { border-radius: 16px 16px 0 0; overflow: hidden; }
+    > :nth-child(2), > :nth-child(3) { border-radius: 0; overflow: hidden; }
+    > :last-child { border-radius: 0 0 16px 16px; overflow: hidden; }
+  }
 `;
 
 const FeatureCard = styled.div`
