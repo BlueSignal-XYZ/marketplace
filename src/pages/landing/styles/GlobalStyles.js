@@ -12,6 +12,11 @@ export const GlobalStyles = createGlobalStyle`
     scroll-behavior: smooth;
     scroll-padding-top: 76px;
     background: ${({ theme }) => theme.colors.bg};
+    /* FIX: overflow-x: hidden was only on body, #root, and main — but in
+       some browsers (notably Safari), body-level overflow-x: hidden does NOT
+       prevent horizontal scroll on the document. Adding it to html ensures
+       no page-level horizontal scroll regardless of browser. */
+    overflow-x: hidden;
   }
 
   body {

@@ -247,6 +247,18 @@ const ContactForm = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
+  // FIX: Helper to build a mailto URL for the fallback path.
+  // Extracted to reduce duplication between the two fallback branches.
+  const buildMailtoUrl = (inquiryLabel) => {
+    const subject = encodeURIComponent(
+      `BlueSignal ${inquiryLabel} — ${form.name}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nInquiry Type: ${inquiryLabel}\n\n${form.message}`
+    );
+    return `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
@@ -262,14 +274,18 @@ const ContactForm = () => {
     const inquiryLabel =
       INQUIRY_TYPES.find((t) => t.value === form.inquiryType)?.label || 'General Inquiry';
 
-    // Primary: Firestore write
+    // ── Primary path: Firestore write ───────────────────────────────────
+    // Writes to the 'contact_submissions' collection. The Firestore rules
+    // in firestore.rules must allow create on this collection. If the
+    // deployed rules use a different collection name (e.g. 'leads'),
+    // redeploy from the repo: firebase deploy --only firestore:rules
     if (firestore) {
       try {
         // Race addDoc against a 10-second timeout so the form never hangs
         const timeout = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Request timed out')), 10000)
         );
-        await Promise.race([
+        const docRef = await Promise.race([
           addDoc(collection(firestore, 'contact_submissions'), {
             name: form.name,
             email: form.email,
@@ -283,29 +299,43 @@ const ContactForm = () => {
           }),
           timeout,
         ]);
+        // FIX: Log the document ID on success so submissions are verifiable
+        // eslint-disable-next-line no-console
+        console.log('[ContactForm] Lead saved with ID:', docRef?.id);
         setStatus('success');
       } catch (err) {
+        // FIX: Log detailed error info so Firestore permission/network
+        // issues are diagnosable from the browser console.
+        // Previously, errors were caught and silently redirected to mailto
+        // with no indication that data was lost.
         // eslint-disable-next-line no-console
-        console.error('Firebase submission error:', err);
-        // Auto-fallback to mailto so the inquiry still reaches the team
-        const subject = encodeURIComponent(
-          `BlueSignal ${inquiryLabel} — ${form.name}`
+        console.error('[ContactForm] Firestore submission failed:', err);
+        // eslint-disable-next-line no-console
+        console.error('[ContactForm] Error code:', err?.code, '| Message:', err?.message);
+
+        // FIX: Show user-facing error with mailto fallback link instead of
+        // silently opening the email client. The old behavior opened mailto
+        // immediately, which was confusing — users saw "Email prepared!" and
+        // assumed their data was saved, but it was not.
+        setErrorMsg(
+          'Could not save your message (network or config issue). ' +
+          `Please email us directly at ${CONTACT_EMAIL}`
         );
-        const body = encodeURIComponent(
-          `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nInquiry Type: ${inquiryLabel}\n\n${form.message}`
-        );
-        window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-        setTimeout(() => setStatus('mailto'), 500);
+        setStatus('error');
       }
     } else {
+      // FIX: Log a clear warning when firestore is null. This is the #1
+      // reason the form never worked — env vars were missing at build time,
+      // so Firebase never initialised, and every submission silently opened
+      // the email client with no console output whatsoever.
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[ContactForm] Firestore is not available — falling back to mailto. ' +
+        'This means VITE_FIREBASE_* env vars were missing at build time. ' +
+        'See .env.example for the required variables.'
+      );
       // Fallback: mailto — opens user's email client with pre-filled message
-      const subject = encodeURIComponent(
-        `BlueSignal ${inquiryLabel} — ${form.name}`
-      );
-      const body = encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nInquiry Type: ${inquiryLabel}\n\n${form.message}`
-      );
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      window.location.href = buildMailtoUrl(inquiryLabel);
       setTimeout(() => setStatus('mailto'), 500);
     }
   };
@@ -341,6 +371,36 @@ const ContactForm = () => {
           If it didn&rsquo;t, email us directly at{' '}
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
         </SuccessDesc>
+      </SuccessWrapper>
+    );
+  }
+
+  {/* FIX: Added an explicit error state so users see what went wrong
+      instead of being silently redirected to mailto. Includes a direct
+      email link and a retry button so the user isn't stuck. */}
+  if (status === 'error') {
+    return (
+      <SuccessWrapper>
+        <SuccessIcon style={{ background: 'rgba(248,113,113,0.15)' }}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#f87171' }}>
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+        </SuccessIcon>
+        <SuccessTitle>Something went wrong</SuccessTitle>
+        <SuccessDesc>
+          {errorMsg || 'We could not submit your message.'}{' '}
+          You can email us directly at{' '}
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        </SuccessDesc>
+        <SubmitBtn
+          type="button"
+          onClick={() => { setStatus('idle'); setErrorMsg(''); }}
+          style={{ marginTop: '16px' }}
+        >
+          Try Again
+        </SubmitBtn>
       </SuccessWrapper>
     );
   }

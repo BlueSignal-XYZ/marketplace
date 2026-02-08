@@ -16,11 +16,15 @@ const Grid = styled.div`
   grid-template-columns: 1fr;
   gap: 48px;
   align-items: start;
+  /* FIX: overflow: hidden was only applied at the md breakpoint (mobile),
+     which meant the <pre> element's intrinsic content width could push the
+     grid track wider than the container on desktop, causing page-level
+     horizontal scroll. Moved to all breakpoints so it constrains at every
+     viewport width. */
+  overflow: hidden;
 
   ${({ theme }) => theme.media.md} {
     gap: 24px;
-    /* Prevent <pre> intrinsic width from blowing out the grid */
-    overflow: hidden;
   }
 `;
 
@@ -69,12 +73,24 @@ const TermTitle = styled.span`
 
 const TermBody = styled.pre`
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 15px;
+  /* FIX: Fixed 15px font-size caused the ~74-char ASCII separator lines to
+     exceed the viewport at widths between 769px and ~884px. clamp() scales
+     the font down at narrow desktop widths so the content fits without
+     horizontal scroll, while preserving 15px at wide viewports. */
+  font-size: clamp(11px, 1.15vw, 15px);
   line-height: 2.4;
-  padding: 48px;
+  /* FIX: Fixed 48px padding consumed 96px total, squeezing the already-wide
+     monospace content. clamp() reduces padding at narrow desktop widths. */
+  padding: clamp(16px, 3.5vw, 48px);
   overflow-x: auto;
   color: ${({ theme }) => theme.colors.w50};
   min-width: 0;
+  /* FIX: white-space: pre (the <pre> default) prevents any line wrapping,
+     so extremely long lines push the element's intrinsic width beyond the
+     container. pre-wrap allows wrapping as a safety net while still
+     preserving intentional whitespace in the ASCII art. */
+  white-space: pre-wrap;
+  word-break: break-all;
 
   .n { color: ${({ theme }) => theme.colors.white}; font-weight: 600; }
   .a { color: ${({ theme }) => theme.colors.blue}; }
@@ -82,6 +98,7 @@ const TermBody = styled.pre`
   .d { color: ${({ theme }) => theme.colors.w30}; }
   .y { color: ${({ theme }) => theme.colors.amber}; }
 
+  /* MOBILE — hidden; MobilePipeline accordion shows instead. DO NOT CHANGE. */
   ${({ theme }) => theme.media.md} {
     display: none;
   }
