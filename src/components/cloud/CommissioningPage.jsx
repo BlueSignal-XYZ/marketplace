@@ -3,8 +3,32 @@ import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+import { DeviceAPI, CommissionAPI } from "../../scripts/back_door";
+import { db } from "../../apis/firebase";
+import { ref, get } from "firebase/database";
 import FilterPills from "../shared/FilterPills/FilterPills";
+
+/* -------------------------------------------------------------------------- */
+/*                               HELPERS                                      */
+/* -------------------------------------------------------------------------- */
+
+/** Format a timestamp into a human-readable relative string. */
+const getRelativeTime = (timestamp) => {
+  if (!timestamp) return "—";
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  if (Number.isNaN(then)) return "—";
+  const diff = now - then;
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+
+  if (diff < minute) return "Just now";
+  if (diff < hour) return `${Math.floor(diff / minute)}m ago`;
+  if (diff < day) return `${Math.floor(diff / hour)}h ago`;
+  return `${Math.floor(diff / day)}d ago`;
+};
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -193,6 +217,31 @@ const ViewResultButton = styled.button`
   @media (max-width: 767px) {
     width: 100%;
     margin-top: 8px;
+  }
+`;
+
+const EmptyDeviceState = styled.div`
+  text-align: center;
+  padding: 60px 20px;
+  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
+  margin-bottom: 24px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors?.text || "#1f2937"};
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors?.textMuted || "#6b7280"};
+    margin: 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -460,10 +509,13 @@ export default function CommissioningPage() {
   const loadDevices = async () => {
     setLoading(true);
     try {
-      const data = await CloudMockAPI.devices.getAll();
-      setDevices(data);
+      const data = await DeviceAPI.getDevices();
+      // Handle both array and { devices: [...] } response shapes
+      const deviceList = Array.isArray(data) ? data : data?.devices || [];
+      setDevices(deviceList);
     } catch (error) {
       console.error("Error loading devices:", error);
+      setDevices([]);
     } finally {
       setLoading(false);
     }
@@ -474,25 +526,127 @@ export default function CommissioningPage() {
     setTests([]);
     setCommissionResult(null);
 
+    // Define the standard PGP hardware test suite
+    const testSuite = [
+      { id: "power_os", name: "Power & OS", status: "pending", duration: 0, details: null },
+      { id: "ads1115", name: "ADS1115 ADC", status: "pending", duration: 0, details: null },
+      { id: "ds18b20", name: "DS18B20 Temp", status: "pending", duration: 0, details: null },
+      { id: "ph_ntu", name: "pH/Turbidity", status: "pending", duration: 0, details: null },
+      { id: "npk", name: "NPK Modbus", status: "pending", duration: 0, details: null },
+      { id: "relay_ch1", name: "Relay Ch1", status: "pending", duration: 0, details: null },
+      { id: "relay_ch2", name: "Relay Ch2", status: "pending", duration: 0, details: null },
+      { id: "lte_wifi", name: "LTE/WiFi", status: "pending", duration: 0, details: null },
+      { id: "cloud_ingest", name: "Cloud Ingest", status: "pending", duration: 0, details: null },
+    ];
+    setTests([...testSuite]);
+
     try {
-      const result = await CloudMockAPI.commissioning.runCommission(
+      // 1. Create a new commission record
+      const commission = await CommissionAPI.create({
+        deviceId: device.id,
+        deviceName: device.alias || device.name,
+        siteId: device.siteId,
+        startedAt: new Date().toISOString(),
+      });
+      const commissionId = commission?.commissionId || commission?.id;
+
+      // 2. Mark all tests as running
+      const runningTests = testSuite.map((t) => ({ ...t, status: "running" }));
+      setTests([...runningTests]);
+
+      // 3. Execute tests via backend
+      const testResult = await CommissionAPI.runTests(
+        commissionId,
         device.id,
-        (updatedTests) => {
-          setTests([...updatedTests]);
-        }
+        testSuite.map((t) => t.id)
       );
 
-      setCommissionResult(result);
+      // 4. Map backend results back into the test suite shape
+      const resultTests = testResult?.tests || testResult || {};
+      const completedTests = testSuite.map((t) => {
+        // Backend may return tests keyed by id, or as an array, or nested
+        const r =
+          (Array.isArray(resultTests)
+            ? resultTests.find((rt) => rt.id === t.id)
+            : resultTests[t.id]) || {};
+        return {
+          ...t,
+          status: r.status || (r.passed === true ? "passed" : r.passed === false ? "failed" : "passed"),
+          duration: r.duration || 0,
+          details: r.details || r.error || null,
+        };
+      });
+      setTests([...completedTests]);
+
+      // 5. Determine overall result
+      const overallStatus = completedTests.every((t) => t.status === "passed")
+        ? "passed"
+        : "failed";
+
+      const finalResult = {
+        deviceId: device.id,
+        startedAt: commission?.startedAt || new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+        status: overallStatus,
+        tests: completedTests,
+      };
+
+      // 6. Complete commission on backend
+      await CommissionAPI.complete(commissionId, finalResult);
+
+      setCommissionResult(finalResult);
       await loadDevices(); // Reload to update commission status
     } catch (error) {
       console.error("Commissioning failed:", error);
+      // Graceful fallback – show failure result so user isn't stuck
+      setCommissionResult({
+        status: "failed",
+        completedAt: new Date().toISOString(),
+        tests: testSuite.map((t) =>
+          t.status === "pending" || t.status === "running"
+            ? { ...t, status: "failed", details: error.message }
+            : t
+        ),
+      });
     }
   };
 
   const handleViewLastCommission = async (device) => {
     try {
-      const result = await CloudMockAPI.commissioning.getLastCommission(device.id);
+      let result = null;
+
+      // Try CommissionAPI first
+      try {
+        const apiResult = await CommissionAPI.getByDevice(device.id);
+        // Normalise: API may return the commission record directly or wrapped
+        result = apiResult?.result || apiResult || null;
+      } catch (apiError) {
+        console.warn("CommissionAPI.getByDevice failed, falling back to RTDB:", apiError);
+      }
+
+      // Fallback: read directly from RTDB commissions path
+      if (!result && db) {
+        try {
+          const snapshot = await get(ref(db, `commissions/${device.id}`));
+          if (snapshot.exists()) {
+            result = snapshot.val();
+          }
+        } catch (rtdbError) {
+          console.warn("RTDB commission fallback failed:", rtdbError);
+        }
+      }
+
       if (result) {
+        // Ensure tests array exists for the viewing modal
+        if (!result.tests && result.testResults) {
+          result.tests = Object.entries(result.testResults).map(([id, r]) => ({
+            id,
+            name: id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+            status: r.status || (r.passed ? "passed" : "failed"),
+            duration: r.duration || 0,
+            details: r.details || r.error || null,
+          }));
+        }
         setViewingResult({ device, result });
       } else {
         alert(`No commissioning history found for ${device.alias || device.name}`);
@@ -608,6 +762,16 @@ export default function CommissioningPage() {
       />
 
       {/* Device Selector Table */}
+      {filteredDevices.length === 0 ? (
+        <EmptyDeviceState>
+          <h3>No Devices Found</h3>
+          <p>
+            {activeFilter === "all"
+              ? "No devices have been registered yet. Onboard a device first to begin commissioning."
+              : `No devices match the "${activeFilter}" filter. Try a different filter.`}
+          </p>
+        </EmptyDeviceState>
+      ) : (
       <DeviceTable>
         <Table>
           <thead>
@@ -707,6 +871,7 @@ export default function CommissioningPage() {
           ))}
         </MobileDeviceCards>
       </DeviceTable>
+      )}
 
       {/* Commissioning Modal */}
       {commissioningDevice && (

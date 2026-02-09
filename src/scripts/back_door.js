@@ -2148,6 +2148,181 @@ const VirginiaAPI = {
   },
 };
 
+/*************************TRADING_PROGRAM_ENDPOINTS************************************* */
+
+const listTradingPrograms = async (filters = {}) => {
+  try {
+    const response = await authGet(`${configs.server_url}/trading-programs`, filters);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch trading programs:", error);
+    return { programs: [] };
+  }
+};
+
+const getTradingProgram = async (programId) => {
+  try {
+    const response = await authGet(`${configs.server_url}/trading-programs/${programId}`);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch trading program:", error);
+    return null;
+  }
+};
+
+const createTradingProgram = async (programData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/trading-programs`, programData);
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to create trading program");
+  }
+};
+
+const updateTradingProgram = async (programId, updates) => {
+  try {
+    const response = await authPost(`${configs.server_url}/trading-programs/${programId}/update`, updates);
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update trading program");
+  }
+};
+
+const getEligibleDevices = async (programId) => {
+  try {
+    const response = await authGet(`${configs.server_url}/trading-programs/${programId}/eligible-devices`);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch eligible devices:", error);
+    return { devices: [] };
+  }
+};
+
+const TradingProgramAPI = {
+  list: listTradingPrograms,
+  get: getTradingProgram,
+  create: createTradingProgram,
+  update: updateTradingProgram,
+  getEligibleDevices: getEligibleDevices,
+};
+
+/*************************ENROLLMENT_ENDPOINTS************************************* */
+
+const createEnrollment = async (enrollmentData) => {
+  try {
+    const response = await authPost(`${configs.server_url}/enrollments`, enrollmentData);
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to create enrollment");
+  }
+};
+
+const getUserEnrollments = async (userId) => {
+  try {
+    const response = await authGet(`${configs.server_url}/enrollments`, { userId });
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch enrollments:", error);
+    return { enrollments: [] };
+  }
+};
+
+const getEnrollment = async (enrollmentId) => {
+  try {
+    const response = await authGet(`${configs.server_url}/enrollments/${enrollmentId}`);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch enrollment:", error);
+    return null;
+  }
+};
+
+const updateEnrollmentStatus = async (enrollmentId, status) => {
+  try {
+    const response = await authPost(`${configs.server_url}/enrollments/${enrollmentId}/status`, { status });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to update enrollment status");
+  }
+};
+
+const withdrawEnrollment = async (enrollmentId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/enrollments/${enrollmentId}/withdraw`);
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to withdraw enrollment");
+  }
+};
+
+const EnrollmentAPI = {
+  create: createEnrollment,
+  list: getUserEnrollments,
+  get: getEnrollment,
+  updateStatus: updateEnrollmentStatus,
+  withdraw: withdrawEnrollment,
+};
+
+/*************************NOTIFICATION_ENDPOINTS************************************* */
+
+const getUserNotifications = async (userId, filters = {}) => {
+  try {
+    const response = await authGet(`${configs.server_url}/notifications`, { userId, ...filters });
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch notifications:", error);
+    return { notifications: [] };
+  }
+};
+
+const markNotificationRead = async (notificationId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/notifications/${notificationId}/read`);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to mark notification as read:", error);
+    return null;
+  }
+};
+
+const dismissNotification = async (notificationId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/notifications/${notificationId}/dismiss`);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to dismiss notification:", error);
+    return null;
+  }
+};
+
+const markAllNotificationsRead = async (userId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/notifications/mark-all-read`, { userId });
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to mark all notifications as read:", error);
+    return null;
+  }
+};
+
+const getUnreadNotificationCount = async (userId) => {
+  try {
+    const response = await authGet(`${configs.server_url}/notifications/unread-count`, { userId });
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch unread count:", error);
+    return { count: 0 };
+  }
+};
+
+const NotificationsAPI = {
+  list: getUserNotifications,
+  markRead: markNotificationRead,
+  dismiss: dismissNotification,
+  markAllRead: markAllNotificationsRead,
+  getUnreadCount: getUnreadNotificationCount,
+};
+
 export {
   AccountAPI,
   UserAPI,
@@ -2175,4 +2350,8 @@ export {
   UserProfileAPI,
   // Virginia Nutrient Credit Exchange
   VirginiaAPI,
+  // Cross-platform APIs
+  TradingProgramAPI,
+  EnrollmentAPI,
+  NotificationsAPI,
 };

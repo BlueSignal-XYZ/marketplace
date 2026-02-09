@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../context/AppContext";
+import { fetchUserOrders } from "../../../services/wqtDataService";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -354,102 +355,31 @@ const TransactionPage = () => {
   const loadTransactions = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      // Fetch real orders from RTDB
+      const realOrders = await fetchUserOrders(user?.uid);
 
-      // Mock transaction data
-      setTransactions([
-        {
-          id: "tx1",
-          type: "purchase",
-          title: "Nitrogen Credits Purchase",
-          description: "100 lbs N from Johnson Farm Co-op",
-          amount: -3000,
-          date: "2025-12-01",
-          status: "completed",
-          counterparty: "Johnson Farm Co-op",
-          creditType: "Nitrogen",
-        },
-        {
-          id: "tx2",
-          type: "sale",
-          title: "Phosphorus Credits Sale",
-          description: "200 lbs P to Patuxent River Commission",
-          amount: 10400,
-          date: "2025-11-28",
-          status: "completed",
-          counterparty: "Patuxent River Commission",
-          creditType: "Phosphorus",
-        },
-        {
-          id: "tx3",
-          type: "purchase",
-          title: "Stormwater Retention Purchase",
-          description: "5000 gal from Green Infrastructure LLC",
-          amount: -750,
-          date: "2025-11-25",
-          status: "pending",
-          counterparty: "Green Infrastructure LLC",
-          creditType: "Stormwater",
-        },
-        {
-          id: "tx4",
-          type: "sale",
-          title: "Thermal Credits Sale",
-          description: "1000 BTU to Montgomery County DPW",
-          amount: 15000,
-          date: "2025-11-22",
-          status: "completed",
-          counterparty: "Montgomery County DPW",
-          creditType: "Thermal",
-        },
-        {
-          id: "tx5",
-          type: "fee",
-          title: "Platform Fee",
-          description: "2.5% transaction fee",
-          amount: -260,
-          date: "2025-11-22",
-          status: "completed",
-          counterparty: "WaterQuality.Trading",
-          creditType: null,
-        },
-        {
-          id: "tx6",
-          type: "payout",
-          title: "Bank Payout",
-          description: "Transfer to bank account ****4521",
-          amount: -15000,
-          date: "2025-11-20",
-          status: "completed",
-          counterparty: "Your Bank",
-          creditType: null,
-        },
-        {
-          id: "tx7",
-          type: "sale",
-          title: "Nitrogen Credits Sale",
-          description: "500 lbs N to City of Baltimore",
-          amount: 22500,
-          date: "2025-11-15",
-          status: "completed",
-          counterparty: "City of Baltimore",
-          creditType: "Nitrogen",
-        },
-        {
-          id: "tx8",
-          type: "purchase",
-          title: "Nitrogen Credits Purchase",
-          description: "50 lbs N from Maryland Farms Inc",
-          amount: -1500,
-          date: "2025-11-10",
-          status: "completed",
-          counterparty: "Maryland Farms Inc",
-          creditType: "Nitrogen",
-        },
-      ]);
+      if (realOrders.length > 0) {
+        setTransactions(realOrders.map(o => ({
+          id: o.id,
+          type: o.buyerId === user?.uid ? 'purchase' : 'sale',
+          title: `${o.type === 'credit_purchase' ? 'Credit' : 'Device'} ${o.buyerId === user?.uid ? 'Purchase' : 'Sale'}`,
+          description: o.buyerId === user?.uid
+            ? `Purchase from ${o.sellerCompany || o.sellerEmail || 'Seller'}`
+            : `Sale to ${o.buyerCompany || o.buyerEmail || 'Buyer'}`,
+          amount: o.buyerId === user?.uid ? -(o.amount || 0) : (o.amount || 0),
+          date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
+          status: o.status || 'pending',
+          counterparty: o.buyerId === user?.uid
+            ? (o.sellerCompany || o.sellerEmail || 'Unknown')
+            : (o.buyerCompany || o.buyerEmail || 'Unknown'),
+          creditType: o.type === 'credit_purchase' ? 'Credit' : 'Device',
+        })));
+      } else {
+        setTransactions([]);
+      }
     } catch (error) {
       console.error("Error loading transactions:", error);
+      setTransactions([]);
     } finally {
       setLoading(false);
     }

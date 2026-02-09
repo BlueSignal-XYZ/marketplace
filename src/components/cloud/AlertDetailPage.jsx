@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+import { AlertsAPI } from "../../scripts/back_door";
+import { getRelativeTime } from "../../services/cloudMockAPI";
 
 const ContentWrapper = styled.div`
   background: #ffffff;
@@ -212,7 +213,7 @@ export default function AlertDetailPage() {
   const loadAlertData = async () => {
     setLoading(true);
     try {
-      const alerts = await CloudMockAPI.alerts.getAll();
+      const alerts = await AlertsAPI.getActive();
       const alertData = alerts.find((a) => a.id === alertId);
       setAlert(alertData);
     } catch (error) {
@@ -222,16 +223,22 @@ export default function AlertDetailPage() {
     }
   };
 
-  const handleAcknowledge = () => {
-    // TODO: Implement actual API call to acknowledge alert
-    setAlert({ ...alert, status: "acknowledged" });
-    console.log("Alert acknowledged:", alertId);
+  const handleAcknowledge = async () => {
+    try {
+      await AlertsAPI.acknowledge(alertId);
+      setAlert({ ...alert, status: "acknowledged" });
+    } catch (error) {
+      console.error("Error acknowledging alert:", error);
+    }
   };
 
-  const handleResolve = () => {
-    // TODO: Implement actual API call to resolve alert
-    setAlert({ ...alert, status: "resolved" });
-    console.log("Alert resolved:", alertId);
+  const handleResolve = async () => {
+    try {
+      await AlertsAPI.resolve(alertId);
+      setAlert({ ...alert, status: "resolved" });
+    } catch (error) {
+      console.error("Error resolving alert:", error);
+    }
   };
 
   const handleReopen = () => {

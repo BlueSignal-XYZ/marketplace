@@ -3,6 +3,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import NotificationBell from "../shared/NotificationBell";
 import logoImg from "../../assets/logo.png";
 import { APP_NAME } from "../../constants/constants";
 
@@ -137,9 +138,12 @@ export function MarketplaceHeader({ onMenuClick }) {
           <LogoImg src={logoImg} alt={APP_NAME || "WaterQuality.Trading"} />
           <ModeBadge>Marketplace</ModeBadge>
         </LogoWrapper>
-        <MenuButton onClick={handleClick} aria-label="Open menu">
-          <FontAwesomeIcon icon={faBars} />
-        </MenuButton>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <NotificationBell />
+          <MenuButton onClick={handleClick} aria-label="Open menu">
+            <FontAwesomeIcon icon={faBars} />
+          </MenuButton>
+        </div>
       </HeaderInner>
     </HeaderOuter>
   );

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Line, Doughnut } from "react-chartjs-2";
+import { useAppContext } from "../../../context/AppContext";
+import { fetchUserOrders } from "../../../services/wqtDataService";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -368,61 +370,57 @@ const LoadingSpinner = styled.div`
 `;
 
 const FinancialDashboard = () => {
+  const { STATES } = useAppContext();
+  const { user } = STATES || {};
   const navigate = useNavigate();
   const [period, setPeriod] = useState("30d");
   const [loading, setLoading] = useState(true);
 
+  const [transactions, setTransactions] = useState([]);
+  const [stats, setStats] = useState({
+    totalRevenue: 0,
+    pendingPayouts: 0,
+    completedPayouts: 0,
+    activeListings: 0,
+  });
+
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+    let cancelled = false;
+    const loadFinancialData = async () => {
+      setLoading(true);
+      try {
+        const realOrders = await fetchUserOrders(user?.uid);
+        if (!cancelled && realOrders.length > 0) {
+          const txns = realOrders.map(o => ({
+            id: o.id,
+            date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
+            type: o.sellerId === user?.uid ? 'sale' : 'purchase',
+            description: `${o.type || 'Credit'} - ${o.buyerCompany || o.buyerEmail || 'Transaction'}`,
+            amount: o.sellerId === user?.uid ? (o.amount || 0) : -(o.amount || 0),
+          }));
+          setTransactions(txns);
 
-  // Mock data
-  const stats = {
-    totalRevenue: 61400,
-    pendingPayouts: 22500,
-    completedPayouts: 38900,
-    activeListings: 3,
-  };
-
-  const transactions = [
-    {
-      id: "t1",
-      date: "2025-11-28",
-      type: "sale",
-      description: "Nitrogen credits - City of Baltimore",
-      amount: 22500,
-    },
-    {
-      id: "t2",
-      date: "2025-11-25",
-      type: "payout",
-      description: "Payout to bank account ****4521",
-      amount: -15000,
-    },
-    {
-      id: "t3",
-      date: "2025-11-22",
-      type: "sale",
-      description: "Phosphorus credits - Patuxent River Commission",
-      amount: 10400,
-    },
-    {
-      id: "t4",
-      date: "2025-11-20",
-      type: "fee",
-      description: "Platform fee (2.5%)",
-      amount: -260,
-    },
-    {
-      id: "t5",
-      date: "2025-11-15",
-      type: "sale",
-      description: "Thermal credits - Montgomery County DPW",
-      amount: 15000,
-    },
-  ];
+          const totalRev = txns.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+          const completed = txns.filter(t => t.type === 'sale').reduce((s, t) => s + Math.abs(t.amount), 0);
+          setStats({
+            totalRevenue: totalRev,
+            pendingPayouts: Math.max(0, totalRev - completed),
+            completedPayouts: completed,
+            activeListings: 0,
+          });
+        } else if (!cancelled) {
+          setTransactions([]);
+        }
+      } catch (error) {
+        console.error('Error loading financial data:', error);
+        if (!cancelled) setTransactions([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    loadFinancialData();
+    return () => { cancelled = true; };
+  }, [user?.uid]);
 
   // Revenue chart data
   const revenueChartData = {

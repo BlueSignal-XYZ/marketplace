@@ -3,6 +3,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import NotificationBell from "../shared/NotificationBell";
 
 import blueSignalLogo from "../../assets/bluesignal-logo.png";
 
@@ -134,9 +135,12 @@ export function CloudHeader({ onMenuClick }) {
           <ModeBadge>Cloud</ModeBadge>
         </LogoWrapper>
 
-        <MenuButton onClick={onMenuClick} aria-label="Open cloud menu">
-          <FontAwesomeIcon icon={faBars} />
-        </MenuButton>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <NotificationBell />
+          <MenuButton onClick={onMenuClick} aria-label="Open cloud menu">
+            <FontAwesomeIcon icon={faBars} />
+          </MenuButton>
+        </div>
       </HeaderInner>
     </HeaderOuter>
   );

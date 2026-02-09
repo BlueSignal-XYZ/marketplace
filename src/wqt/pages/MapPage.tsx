@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { mockMapProjects, MapProject, getProjectsByType, getCreditTypeColor } from '../../data/mockMapData';
+import { fetchMapProjects } from '../../services/wqtDataService';
 import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
@@ -440,15 +441,34 @@ export function MapPage() {
   const [filterType, setFilterType] = useState<string>('all');
   // Default to list view if no valid token, map view if token is valid
   const [viewMode, setViewMode] = useState<ViewMode>(HAS_VALID_TOKEN ? 'map' : 'list');
+  const [allProjects, setAllProjects] = useState<MapProject[]>(mockMapProjects);
   const [filteredProjects, setFilteredProjects] = useState<MapProject[]>(mockMapProjects);
+
+  // Fetch real data on mount, fall back to mock
+  useEffect(() => {
+    let cancelled = false;
+    const loadProjects = async () => {
+      try {
+        const realProjects = await fetchMapProjects();
+        if (!cancelled && realProjects.length > 0) {
+          setAllProjects(realProjects as MapProject[]);
+          setFilteredProjects(realProjects as MapProject[]);
+        }
+      } catch {
+        // Keep mock data
+      }
+    };
+    loadProjects();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     if (filterType === 'all') {
-      setFilteredProjects(mockMapProjects);
+      setFilteredProjects(allProjects);
     } else {
-      setFilteredProjects(getProjectsByType(filterType));
+      setFilteredProjects(allProjects.filter(p => p.creditTypes?.includes(filterType)));
     }
-  }, [filterType]);
+  }, [filterType, allProjects]);
 
   // Retry map initialization
   const retryMapInit = () => {

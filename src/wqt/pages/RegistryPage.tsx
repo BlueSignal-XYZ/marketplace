@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { mockRegistryCredits, RegistryCredit, getCreditsByType, searchCredits } from '../../data/mockRegistryData';
+import { mockRegistryCredits, RegistryCredit, getCreditsByType, searchCredits as mockSearchCredits } from '../../data/mockRegistryData';
+import { fetchRegistryCredits, searchCredits as realSearchCredits } from '../../services/wqtDataService';
 import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
@@ -332,22 +333,50 @@ type SortField = 'id' | 'type' | 'quantity' | 'issueDate' | 'status';
 type SortDirection = 'asc' | 'desc';
 
 export function RegistryPage() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [allCredits, setAllCredits] = useState<RegistryCredit[]>([]);
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCredit, setSelectedCredit] = useState<RegistryCredit | null>(null);
   const [sortField, setSortField] = useState<SortField>('issueDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
+  // Fetch real data on mount, fall back to mock
+  useEffect(() => {
+    let cancelled = false;
+    const loadCredits = async () => {
+      setLoading(true);
+      try {
+        const realCredits = await fetchRegistryCredits();
+        if (!cancelled) {
+          setAllCredits(realCredits.length > 0 ? realCredits : mockRegistryCredits);
+        }
+      } catch {
+        if (!cancelled) {
+          setAllCredits(mockRegistryCredits);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    loadCredits();
+    return () => { cancelled = true; };
+  }, []);
+
   const filteredAndSortedCredits = useMemo(() => {
-    let credits = mockRegistryCredits;
+    let credits = allCredits;
 
     if (filterType !== 'all') {
-      credits = getCreditsByType(filterType);
+      credits = credits.filter(c => c.type === filterType);
     }
 
     if (searchQuery) {
-      credits = searchCredits(searchQuery);
+      const q = searchQuery.toLowerCase();
+      credits = credits.filter(c =>
+        c.id.toLowerCase().includes(q) ||
+        c.projectName.toLowerCase().includes(q) ||
+        c.location.toLowerCase().includes(q)
+      );
     }
 
     credits = [...credits].sort((a, b) => {

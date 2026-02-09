@@ -395,6 +395,83 @@
           "lastInstall": { ".validate": "newData.isNumber()" }
         }
       }
+    },
+
+    "tradingPrograms": {
+      ".read": true,
+      "$programId": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin'",
+        ".validate": "newData.hasChildren(['name', 'type', 'status'])",
+
+        "name": { ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 300" },
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(nutrient|stormwater|thermal)$/)" },
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(active|upcoming|closed)$/)" },
+
+        "geography": {
+          "postalCodes": { ".validate": true },
+          "boundingBox": {
+            "neLat": { ".validate": "newData.isNumber()" },
+            "neLng": { ".validate": "newData.isNumber()" },
+            "swLat": { ".validate": "newData.isNumber()" },
+            "swLng": { ".validate": "newData.isNumber()" }
+          }
+        },
+
+        "incentives": {
+          "description": { ".validate": "newData.isString()" },
+          "ratePerUnit": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+          "unit": { ".validate": "newData.isString()" }
+        },
+
+        "requirements": {
+          "minReadingFrequency": { ".validate": "newData.isNumber() && newData.val() >= 60" },
+          "minSensors": { ".validate": true },
+          "complianceStandard": { ".validate": "newData.isString()" }
+        },
+
+        "createdAt": { ".validate": "newData.isNumber()" },
+        "activatedAt": { ".validate": "newData.isNumber()" }
+      }
+    },
+
+    "enrollments": {
+      ".read": "auth != null",
+      "$enrollmentId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || !data.exists() || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".validate": "newData.hasChildren(['userId', 'deviceId', 'programId', 'status'])",
+
+        "userId": { ".validate": "newData.isString()" },
+        "deviceId": { ".validate": "newData.isString()" },
+        "programId": { ".validate": "newData.isString()" },
+        "status": { ".validate": "newData.isString() && newData.val().matches(/^(enrolled|pending-review|active|suspended|withdrawn)$/)" },
+
+        "enrolledAt": { ".validate": "newData.isNumber()" },
+        "activatedAt": { ".validate": "newData.isNumber()" },
+
+        "creditsGenerated": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+        "creditsTraded": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+        "creditsAvailable": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+      }
+    },
+
+    "notifications": {
+      "$notificationId": {
+        ".read": "auth != null && data.child('userId').val() === auth.uid",
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || !data.exists() || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')",
+        ".validate": "newData.hasChildren(['userId', 'type', 'title', 'createdAt'])",
+
+        "userId": { ".validate": "newData.isString()" },
+        "deviceId": { ".validate": "newData.isString()" },
+        "programId": { ".validate": "newData.isString()" },
+        "type": { ".validate": "newData.isString() && newData.val().matches(/^(trading-program-available|alert|credit-generated|enrollment-update|system)$/)" },
+        "title": { ".validate": "newData.isString() && newData.val().length <= 200" },
+        "body": { ".validate": "newData.isString() && newData.val().length <= 1000" },
+        "read": { ".validate": "newData.isBoolean()" },
+        "dismissed": { ".validate": "newData.isBoolean()" },
+        "actionUrl": { ".validate": "newData.isString()" },
+        "createdAt": { ".validate": "newData.isNumber()" }
+      }
     }
   }
 }

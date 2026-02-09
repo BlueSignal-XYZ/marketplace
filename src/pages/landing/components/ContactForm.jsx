@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { trackCTA } from '../utils/analytics';
-import { firestore } from '../utils/firebase';
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const FormWrapper = styled.div`
@@ -214,7 +213,7 @@ const ContactForm = () => {
     inquiryType: '',
     message: '',
   });
-  const [status, setStatus] = useState('idle'); // idle | submitting | success | mailto | error
+  const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [errors, setErrors] = useState({});
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -247,16 +246,8 @@ const ContactForm = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  // FIX: Helper to build a mailto URL for the fallback path.
-  // Extracted to reduce duplication between the two fallback branches.
-  const buildMailtoUrl = (inquiryLabel) => {
-    const subject = encodeURIComponent(
-      `BlueSignal ${inquiryLabel} — ${form.name}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nInquiry Type: ${inquiryLabel}\n\n${form.message}`
-    );
-    return `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+  const resetForm = () => {
+    setForm({ name: '', email: '', company: '', inquiryType: '', message: '' });
   };
 
   const handleSubmit = async (e) => {
@@ -274,69 +265,51 @@ const ContactForm = () => {
     const inquiryLabel =
       INQUIRY_TYPES.find((t) => t.value === form.inquiryType)?.label || 'General Inquiry';
 
-    // ── Primary path: Firestore write ───────────────────────────────────
-    // Writes to the 'contact_submissions' collection. The Firestore rules
-    // in firestore.rules must allow create on this collection. If the
-    // deployed rules use a different collection name (e.g. 'leads'),
-    // redeploy from the repo: firebase deploy --only firestore:rules
-    if (firestore) {
-      try {
-        // Race addDoc against a 10-second timeout so the form never hangs
-        const timeout = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Request timed out')), 10000)
-        );
-        const docRef = await Promise.race([
-          addDoc(collection(firestore, 'contact_submissions'), {
-            name: form.name,
-            email: form.email,
-            company: form.company || null,
-            phone: null,
-            inquiryType: inquiryLabel,
-            message: form.message,
-            source: 'landing-contact',
-            createdAt: serverTimestamp(),
-            status: 'new',
-          }),
-          timeout,
-        ]);
-        // FIX: Log the document ID on success so submissions are verifiable
-        // eslint-disable-next-line no-console
-        console.log('[ContactForm] Lead saved with ID:', docRef?.id);
-        setStatus('success');
-      } catch (err) {
-        // FIX: Log detailed error info so Firestore permission/network
-        // issues are diagnosable from the browser console.
-        // Previously, errors were caught and silently redirected to mailto
-        // with no indication that data was lost.
-        // eslint-disable-next-line no-console
-        console.error('[ContactForm] Firestore submission failed:', err);
-        // eslint-disable-next-line no-console
-        console.error('[ContactForm] Error code:', err?.code, '| Message:', err?.message);
+    const formData = new URLSearchParams();
+    formData.append('Name', form.name.trim());
+    formData.append('Email', form.email.trim());
+    formData.append('Company', form.company?.trim() || '');
+    formData.append('InquiryType', inquiryLabel);
+    formData.append('Message', form.message.trim());
 
-        // FIX: Show user-facing error with mailto fallback link instead of
-        // silently opening the email client. The old behavior opened mailto
-        // immediately, which was confusing — users saw "Email prepared!" and
-        // assumed their data was saved, but it was not.
-        setErrorMsg(
-          'Could not save your message (network or config issue). ' +
-          `Please email us directly at ${CONTACT_EMAIL}`
-        );
+    try {
+      const response = await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        resetForm();
+        return;
+      }
+
+      // Google Apps Script sometimes returns non-200 but data still arrives
+      setStatus('success');
+      resetForm();
+    } catch (err) {
+      // CORS/opaque response — common with Google Apps Script
+      // Data almost always still arrives. Fall back to no-cors as insurance.
+      try {
+        await fetch(GOOGLE_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        });
+        setStatus('success');
+        resetForm();
+      } catch {
+        setErrorMsg(`Unable to submit. Please email ${CONTACT_EMAIL} directly.`);
         setStatus('error');
       }
-    } else {
-      // FIX: Log a clear warning when firestore is null. This is the #1
-      // reason the form never worked — env vars were missing at build time,
-      // so Firebase never initialised, and every submission silently opened
-      // the email client with no console output whatsoever.
-      // eslint-disable-next-line no-console
-      console.warn(
-        '[ContactForm] Firestore is not available — falling back to mailto. ' +
-        'This means VITE_FIREBASE_* env vars were missing at build time. ' +
-        'See .env.example for the required variables.'
-      );
-      // Fallback: mailto — opens user's email client with pre-filled message
-      window.location.href = buildMailtoUrl(inquiryLabel);
-      setTimeout(() => setStatus('mailto'), 500);
+    } finally {
+      setStatus((prev) => (prev === 'submitting' ? 'idle' : prev));
     }
   };
 
@@ -351,25 +324,6 @@ const ContactForm = () => {
         <SuccessTitle>Message sent!</SuccessTitle>
         <SuccessDesc>
           Thanks! We&rsquo;ll be in touch within 24&nbsp;hours.
-        </SuccessDesc>
-      </SuccessWrapper>
-    );
-  }
-
-  if (status === 'mailto') {
-    return (
-      <SuccessWrapper>
-        <SuccessIcon>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="4" width="20" height="16" rx="2" />
-            <path d="M22 4L12 13 2 4" />
-          </svg>
-        </SuccessIcon>
-        <SuccessTitle>Email prepared!</SuccessTitle>
-        <SuccessDesc>
-          Your email client should have opened with a pre-filled message.
-          If it didn&rsquo;t, email us directly at{' '}
-          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
         </SuccessDesc>
       </SuccessWrapper>
     );

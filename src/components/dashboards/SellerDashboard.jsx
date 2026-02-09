@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { Bar } from 'react-chartjs-2';
+import { fetchSellerListings, fetchUserOrders, fetchUserDevices } from '../../services/wqtDataService';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -605,98 +606,60 @@ const SellerDashboard = () => {
 
   const [listings, setListings] = useState([]);
   const [sales, setSales] = useState([]);
+  const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadDashboardData();
+    fetchUserDevices().then(d => setDevices(Array.isArray(d) ? d : [])).catch(() => setDevices([]));
   }, [user?.uid]);
 
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      // Simulated API delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Enhanced mock data
-      setListings([
-        {
-          id: 'l1',
-          type: 'Nitrogen',
-          name: 'Chesapeake Bay Nitrogen Reduction Credits',
-          amount: 2500,
-          unit: 'lbs N',
-          price: 45.0,
-          status: 'Active',
-          listedDate: '2025-11-15',
-          views: 142,
-          inquiries: 8,
-        },
-        {
-          id: 'l2',
-          type: 'Phosphorus',
-          name: 'Maryland Agricultural P Credits',
-          amount: 800,
-          unit: 'lbs P',
-          price: 52.0,
-          status: 'Active',
-          listedDate: '2025-11-20',
-          views: 67,
-          inquiries: 3,
-        },
-        {
-          id: 'l3',
-          type: 'Stormwater',
-          name: 'Urban Stormwater Retention Credits',
-          amount: 15000,
-          unit: 'gal',
-          price: 0.15,
-          status: 'Pending',
-          listedDate: '2025-12-01',
-          views: 23,
-          inquiries: 1,
-        },
+      // Fetch real data from RTDB
+      const [realListings, realOrders] = await Promise.all([
+        user?.uid ? fetchSellerListings(user.uid) : [],
+        user?.uid ? fetchUserOrders(user.uid) : [],
       ]);
 
-      setSales([
-        {
-          id: 's1',
-          date: '2025-11-28',
-          type: 'Nitrogen',
-          amount: 500,
-          unit: 'lbs N',
-          buyer: 'City of Baltimore',
-          price: 22500,
-        },
-        {
-          id: 's2',
-          date: '2025-11-22',
-          type: 'Phosphorus',
-          amount: 200,
-          unit: 'lbs P',
-          buyer: 'Patuxent River Commission',
-          price: 10400,
-        },
-        {
-          id: 's3',
-          date: '2025-11-15',
-          type: 'Thermal',
-          amount: 1000,
-          unit: 'BTU/day',
-          buyer: 'Montgomery County DPW',
-          price: 15000,
-        },
-        {
-          id: 's4',
-          date: '2025-11-08',
-          type: 'Nitrogen',
-          amount: 300,
-          unit: 'lbs N',
-          buyer: 'Anne Arundel County',
-          price: 13500,
-        },
-      ]);
+      if (realListings.length > 0) {
+        setListings(realListings.map(l => ({
+          id: l.id,
+          type: l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : 'Nitrogen',
+          name: l.name || 'Water Quality Credits',
+          amount: l.quantity || 0,
+          unit: l.type === 'stormwater' ? 'gal' : `lbs ${(l.type || 'N').charAt(0).toUpperCase()}`,
+          price: l.pricePerUnit || 0,
+          status: l.status === 'active' ? 'Active' : 'Pending',
+          listedDate: l.createdAt ? new Date(l.createdAt).toISOString().split('T')[0] : '',
+          views: l.views || 0,
+          inquiries: 0,
+        })));
+      } else {
+        setListings([]);
+      }
+
+      if (realOrders.length > 0) {
+        setSales(realOrders
+          .filter(o => o.sellerId === user?.uid && o.status === 'completed')
+          .map(o => ({
+            id: o.id,
+            date: o.completedAt ? new Date(o.completedAt).toISOString().split('T')[0] : '',
+            type: 'Credit Sale',
+            amount: 0,
+            unit: '',
+            buyer: o.buyerCompany || o.buyerEmail || 'Unknown',
+            price: o.amount || 0,
+          }))
+        );
+      } else {
+        setSales([]);
+      }
     } catch (error) {
       console.error('Error loading seller dashboard:', error);
+      setListings([]);
+      setSales([]);
     } finally {
       setLoading(false);
     }
@@ -974,6 +937,31 @@ const SellerDashboard = () => {
             </Section>
           </div>
         </SectionGrid>
+
+        {/* Cross-platform: Devices from BlueSignal Cloud */}
+        {devices.length > 0 && (
+          <Section style={{ marginTop: '24px' }}>
+            <SectionHeader>
+              <h2>My Devices</h2>
+              <ViewAllLink onClick={() => window.open('https://cloud.bluesignal.xyz/cloud/devices', '_blank')}>
+                Manage in Cloud
+              </ViewAllLink>
+            </SectionHeader>
+            <Grid>
+              {devices.slice(0, 4).map((device) => (
+                <StatusCard key={device.id || device.serialNumber}>
+                  <CardLabel>{device.name || device.serialNumber || device.id}</CardLabel>
+                  <CardValue style={{ fontSize: '16px' }}>
+                    {device.type || device.deviceType || 'WQM-1'}
+                  </CardValue>
+                  <CardSubtext positive={device.installation?.status === 'active' || device.lifecycle === 'active'}>
+                    {device.installation?.status || device.lifecycle || 'Unknown'}
+                  </CardSubtext>
+                </StatusCard>
+              ))}
+            </Grid>
+          </Section>
+        )}
       </Shell>
     </Page>
   );

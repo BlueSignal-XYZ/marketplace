@@ -7,6 +7,7 @@ import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import { DeviceAPI, AlertsAPI, SiteAPI } from "../../scripts/back_door";
 import { DemoHint } from "../DemoHint";
 import SEOHead from "../seo/SEOHead";
+import VirtualDeviceSimulator from "./VirtualDeviceSimulator";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== "false";
 
@@ -875,6 +876,9 @@ export default function OverviewDashboard() {
           <div className="link-arrow">→</div>
         </CrossSiteLink>
       )}
+
+      {/* Virtual Device Simulator (dev mode) */}
+      <VirtualDeviceSimulator />
 
       {/* Quick Action Buttons */}
       <QuickActions>

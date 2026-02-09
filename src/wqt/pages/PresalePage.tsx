@@ -11,6 +11,7 @@ import {
   getStatusColor,
   formatStatus
 } from '../../data/mockPresaleData';
+import { fetchListings } from '../../services/wqtDataService';
 import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
@@ -425,10 +426,47 @@ export function PresalePage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [creditFilter, setCreditFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
+  const [allProjects, setAllProjects] = useState<PresaleProject[]>(mockPresaleProjects);
   const [filteredProjects, setFilteredProjects] = useState<PresaleProject[]>(mockPresaleProjects);
 
+  // Fetch real listings on mount, fall back to mock presale data
   useEffect(() => {
-    let result = mockPresaleProjects;
+    let cancelled = false;
+    const loadListings = async () => {
+      try {
+        const realListings = await fetchListings();
+        if (!cancelled && realListings.length > 0) {
+          // Transform listings to presale shape where possible
+          const transformed = realListings.map((l: any) => ({
+            id: l.id,
+            name: l.name || 'Water Quality Credits',
+            location: l.location || l.watershed || 'Unknown',
+            creditType: l.type || 'nitrogen',
+            status: 'active' as const,
+            description: `${l.quantity || 0} ${l.type || 'nutrient'} credits available`,
+            pricePerCredit: l.pricePerUnit || 0,
+            availableSupply: l.quantity || 0,
+            totalLandArea: 0,
+            minimumPurchase: l.minPurchase || 1,
+            verifier: 'BlueSignal Verification',
+            features: [l.type, l.watershed].filter(Boolean),
+            lat: l.lat || 0,
+            lng: l.lng || 0,
+          }));
+          setAllProjects(transformed as PresaleProject[]);
+        }
+      } catch {
+        // Keep mock data
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    loadListings();
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    let result = allProjects;
 
     if (statusFilter !== 'all') {
       result = result.filter(p => p.status === statusFilter);
@@ -439,7 +477,7 @@ export function PresalePage() {
     }
 
     setFilteredProjects(result);
-  }, [statusFilter, creditFilter]);
+  }, [statusFilter, creditFilter, allProjects]);
 
   useEffect(() => {
     if (!mapContainer.current || viewMode !== 'map') return;

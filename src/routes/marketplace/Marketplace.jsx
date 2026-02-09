@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { getCredits } from "../../apis/creditsApi";
+import { fetchListings } from "../../services/wqtDataService";
 import SEOHead from "../../components/seo/SEOHead";
 import { WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, createItemListSchema } from "../../components/seo/schemas";
 import { media, safeAreaInsets } from "../../styles/breakpoints";
@@ -278,7 +279,14 @@ const Marketplace = () => {
       setLoading(true);
       setLoadError(null);
       try {
-        const data = await getCredits();
+        // Try real RTDB listings first, fall back to mock credits
+        let data;
+        try {
+          const realListings = await fetchListings();
+          data = realListings.length > 0 ? realListings : await getCredits();
+        } catch {
+          data = await getCredits();
+        }
         if (!cancelled) {
           setListings(Array.isArray(data) ? data : []);
         }

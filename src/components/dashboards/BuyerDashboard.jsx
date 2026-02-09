@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
+import { fetchUserCredits, fetchUserOrders, fetchUserDevices } from '../../services/wqtDataService';
 
 const Page = styled.main`
   width: 100%;
@@ -594,72 +595,67 @@ const BuyerDashboard = () => {
 
   const [credits, setCredits] = useState([]);
   const [purchases, setPurchases] = useState([]);
+  const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadDashboardData();
+    loadDevices();
   }, [user?.uid]);
+
+  const loadDevices = async () => {
+    try {
+      const userDevices = await fetchUserDevices();
+      setDevices(Array.isArray(userDevices) ? userDevices : []);
+    } catch {
+      setDevices([]);
+    }
+  };
 
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      // TODO: Replace with real API calls
-      // const availableCredits = await CreditAPI.getAvailableCredits();
-      // const userPurchases = await UserAPI.purchases.getHistory(user.uid);
-
-      // Mock data for now
-      setCredits([
-        {
-          id: 'c1',
-          type: 'Nutrient Reduction',
-          amount: 150,
-          unit: 'lbs N',
-          price: 45.0,
-          location: 'Upper Chesapeake Bay',
-          seller: 'Johnson Farm Co-op',
-        },
-        {
-          id: 'c2',
-          type: 'Stormwater Retention',
-          amount: 3200,
-          unit: 'gal',
-          price: 120.0,
-          location: 'Baltimore County',
-          seller: 'Green Infrastructure LLC',
-        },
-        {
-          id: 'c3',
-          type: 'Thermal Mitigation',
-          amount: 500,
-          unit: 'BTU',
-          price: 75.0,
-          location: 'Patuxent River Watershed',
-          seller: 'Riverkeep Solutions',
-        },
+      // Fetch real data from RTDB
+      const [realCredits, realOrders] = await Promise.all([
+        user?.uid ? fetchUserCredits(user.uid) : [],
+        user?.uid ? fetchUserOrders(user.uid) : [],
       ]);
 
-      setPurchases([
-        {
-          id: 'p1',
-          date: '2025-11-20',
-          type: 'Nutrient Reduction',
-          amount: 100,
-          unit: 'lbs N',
-          price: 30.0,
-          status: 'Completed',
-        },
-        {
-          id: 'p2',
-          date: '2025-11-15',
-          type: 'Stormwater Retention',
-          amount: 2000,
-          unit: 'gal',
-          price: 80.0,
-          status: 'Pending Verification',
-        },
-      ]);
+      if (realCredits.length > 0) {
+        setCredits(realCredits.map(c => ({
+          id: c.id,
+          type: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1) : 'Nutrient Reduction',
+          amount: c.quantity || 0,
+          unit: c.unit || 'lbs',
+          price: 0,
+          location: c.location || 'Unknown',
+          seller: c.verifier || 'Unknown',
+        })));
+      } else {
+        // Fallback mock data for empty state
+        setCredits([]);
+      }
+
+      if (realOrders.length > 0) {
+        setPurchases(realOrders
+          .filter(o => o.buyerId === user?.uid)
+          .map(o => ({
+            id: o.id,
+            date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
+            type: o.type === 'credit_purchase' ? 'Credit Purchase' : o.type,
+            amount: 0,
+            unit: '',
+            price: o.amount || 0,
+            status: o.status === 'completed' ? 'Completed' : 'Pending Verification',
+          }))
+        );
+      } else {
+        setPurchases([]);
+      }
     } catch (error) {
       console.error('Error loading buyer dashboard:', error);
+      setCredits([]);
+      setPurchases([]);
     } finally {
       setLoading(false);
     }
@@ -879,6 +875,31 @@ const BuyerDashboard = () => {
             </Section>
           </div>
         </SectionGrid>
+
+        {/* Cross-platform: Devices from BlueSignal Cloud */}
+        {devices.length > 0 && (
+          <Section style={{ marginTop: '24px' }}>
+            <SectionHeader>
+              <h2>My Devices</h2>
+              <ViewAllLink onClick={() => window.open('https://cloud.bluesignal.xyz/cloud/devices', '_blank')}>
+                Manage in Cloud
+              </ViewAllLink>
+            </SectionHeader>
+            <Grid>
+              {devices.slice(0, 4).map((device) => (
+                <StatusCard key={device.id || device.serialNumber}>
+                  <CardLabel>{device.name || device.serialNumber || device.id}</CardLabel>
+                  <CardValue style={{ fontSize: '16px' }}>
+                    {device.type || device.deviceType || 'WQM-1'}
+                  </CardValue>
+                  <CardSubtext positive={device.installation?.status === 'active' || device.lifecycle === 'active'}>
+                    {device.installation?.status || device.lifecycle || 'Unknown'}
+                  </CardSubtext>
+                </StatusCard>
+              ))}
+            </Grid>
+          </Section>
+        )}
       </Shell>
     </Page>
   );

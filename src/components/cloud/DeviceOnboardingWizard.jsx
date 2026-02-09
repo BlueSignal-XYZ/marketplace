@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI from "../../services/cloudMockAPI";
+import { DeviceAPI, SiteAPI } from "../../scripts/back_door";
 import { useAppContext } from "../../context/AppContext";
 import QRScanner from "./QRScanner";
 
@@ -430,7 +430,8 @@ const DEVICE_TYPES = [
 
 export default function DeviceOnboardingWizard() {
   const navigate = useNavigate();
-  const { ACTIONS } = useAppContext();
+  const { STATES, ACTIONS } = useAppContext();
+  const { user } = STATES || {};
   const { logNotification } = ACTIONS || {};
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -459,8 +460,8 @@ export default function DeviceOnboardingWizard() {
   useEffect(() => {
     const loadSites = async () => {
       try {
-        const data = await CloudMockAPI.sites.getAll();
-        setSites(data);
+        const result = await SiteAPI.list();
+        setSites(result?.sites || result || []);
       } catch (error) {
         console.error("Error loading sites:", error);
       }
@@ -531,17 +532,21 @@ export default function DeviceOnboardingWizard() {
     setSubmitting(true);
 
     try {
-      // Simulate API call to create device
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const devicePayload = {
+        serialNumber: formData.serialNumber,
+        name: formData.name,
+        type: formData.deviceType,
+        ...(formData.hardwareId && { hardwareId: formData.hardwareId }),
+        ...(formData.siteId && { siteId: formData.siteId }),
+        ...(formData.latitude && { latitude: parseFloat(formData.latitude) }),
+        ...(formData.longitude && { longitude: parseFloat(formData.longitude) }),
+        ...(formData.notes && { notes: formData.notes }),
+        ...(user?.uid && { ownerUid: user.uid }),
+      };
 
-      // Generate a mock device ID
-      const mockDeviceId = `pgw-${String(Math.floor(Math.random() * 9000) + 1000).padStart(4, "0")}`;
-      setNewDeviceId(mockDeviceId);
-
-      console.log("Device created:", {
-        id: mockDeviceId,
-        ...formData,
-      });
+      const result = await DeviceAPI.addDevice(devicePayload);
+      const deviceId = result?.deviceId || result?.id || formData.serialNumber;
+      setNewDeviceId(deviceId);
 
       setSuccess(true);
       if (logNotification) {
@@ -550,7 +555,7 @@ export default function DeviceOnboardingWizard() {
     } catch (error) {
       console.error("Error creating device:", error);
       if (logNotification) {
-        logNotification("error", "Failed to add device. Please try again.");
+        logNotification("error", error?.message || "Failed to add device. Please try again.");
       }
     } finally {
       setSubmitting(false);

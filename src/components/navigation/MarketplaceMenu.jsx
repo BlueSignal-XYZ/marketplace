@@ -328,6 +328,13 @@ export function MarketplaceMenu({ open, onClose, user }) {
           >
             Recent Removals
           </NavItem>
+          <NavItem
+            to="/programs"
+            $active={isActive("/programs")}
+            onClick={onClose}
+          >
+            Trading Programs
+          </NavItem>
         </NavList>
 
         {user?.uid && (
@@ -355,6 +362,13 @@ export function MarketplaceMenu({ open, onClose, user }) {
                 onClick={onClose}
               >
                 My Transactions
+              </NavItem>
+              <NavItem
+                to="/credits"
+                $active={isActive("/credits")}
+                onClick={onClose}
+              >
+                My Credits
               </NavItem>
             </NavList>
 

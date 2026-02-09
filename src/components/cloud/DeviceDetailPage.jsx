@@ -429,9 +429,9 @@ const formatSensorLabel = (fieldName) => {
     ph: "pH Level",
     ntu: "Turbidity (NTU)",
     tds_ppm: "TDS (ppm)",
-    npk_n: "Nitrogen (ppm)",
-    npk_p: "Phosphorus (ppm)",
-    npk_k: "Potassium (ppm)",
+    conductivity: "Conductivity (µS/cm)",
+    gps_lat: "GPS Latitude",
+    gps_lng: "GPS Longitude",
   };
   return labels[fieldName] || fieldName;
 };
@@ -992,50 +992,44 @@ export default function DeviceDetailPage() {
                         </ChartContainer>
                       )}
 
-                      {device.latestReadings.npk_n !== null && (
-                        <>
-                          <ChartContainer>
-                            <h4>Nitrogen (ppm)</h4>
-                            <div className="chart-wrapper">
-                              <Line
-                                data={createChartData(
-                                  "npk_n",
-                                  "Nitrogen",
-                                  "#3b82f6"
-                                )}
-                                options={chartOptions}
-                              />
-                            </div>
-                          </ChartContainer>
+                      {device.latestReadings.conductivity != null && (
+                        <ChartContainer>
+                          <h4>Conductivity (µS/cm)</h4>
+                          <div className="chart-wrapper">
+                            <Line
+                              data={createChartData(
+                                "conductivity",
+                                "Conductivity",
+                                "#3b82f6"
+                              )}
+                              options={chartOptions}
+                            />
+                          </div>
+                        </ChartContainer>
+                      )}
 
-                          <ChartContainer>
-                            <h4>Phosphorus (ppm)</h4>
-                            <div className="chart-wrapper">
-                              <Line
-                                data={createChartData(
-                                  "npk_p",
-                                  "Phosphorus",
-                                  "#ec4899"
-                                )}
-                                options={chartOptions}
-                              />
-                            </div>
-                          </ChartContainer>
-
-                          <ChartContainer>
-                            <h4>Potassium (ppm)</h4>
-                            <div className="chart-wrapper">
-                              <Line
-                                data={createChartData(
-                                  "npk_k",
-                                  "Potassium",
-                                  "#14b8a6"
-                                )}
-                                options={chartOptions}
-                              />
-                            </div>
-                          </ChartContainer>
-                        </>
+                      {/* GPS Coordinates Display */}
+                      {(device.latestReadings.gps_lat != null || device.installation?.location) && (
+                        <div style={{
+                          background: '#f8fafc',
+                          borderRadius: '10px',
+                          padding: '16px 20px',
+                          marginTop: '16px',
+                        }}>
+                          <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#475569' }}>
+                            GPS Coordinates
+                          </h4>
+                          <div style={{ display: 'flex', gap: '24px', fontSize: '15px', color: '#1e293b' }}>
+                            <span>
+                              <strong>Lat:</strong>{' '}
+                              {device.latestReadings.gps_lat ?? device.installation?.location?.lat ?? 'N/A'}
+                            </span>
+                            <span>
+                              <strong>Lng:</strong>{' '}
+                              {device.latestReadings.gps_lng ?? device.installation?.location?.lng ?? 'N/A'}
+                            </span>
+                          </div>
+                        </div>
                       )}
                     </>
                   )}

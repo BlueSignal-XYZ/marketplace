@@ -1,59 +1,186 @@
-# BlueSignal Audit Findings — 2025-02-08
+# BlueSignal Ecosystem — Audit Findings
 
-## Form Investigation
-
-- **Form component location:** `src/pages/landing/components/ContactForm.jsx`
-- **Submit handler function:** `handleSubmit` (lines 250–311)
-- **Submission method:** Firebase `addDoc` to Firestore collection `contact_submissions`, with mailto fallback
-- **Firebase config file:** Exists at `src/pages/landing/utils/firebase.js` (landing-specific, separate from main app config at `src/apis/firebase.js`)
-- **Firebase installed:** Yes — `firebase` v^10.8.1 in `dependencies`
-- **Bundler:** Vite (vite.config.ts)
-- **Env var prefix in config:** `VITE_` (e.g. `import.meta.env.VITE_FIREBASE_API_KEY`)
-- **Env var prefix required by bundler:** `VITE_`
-- **Prefix match:** Yes — prefixes are correct for Vite
-- **.env files present:** **NONE** — zero `.env*` files exist in the project root
-- **Firestore rules in repo (`firestore.rules`):** Allows `create` on `contact_submissions` (with email string validation)
-- **Firestore rules stated by owner:** Allows `create` on `leads` — **MISMATCH with code and repo rules**
-
-### Diagnosis: A + E hybrid
-
-Firebase is properly configured in code — the landing page has its own lightweight Firebase init (`src/pages/landing/utils/firebase.js`) that creates a named app instance (`'landing'`) with Firestore only. The `ContactForm` imports this and writes to `contact_submissions` via `addDoc`.
-
-**However, the form has NEVER worked because:**
-
-1. **No `.env` file exists locally or was committed.** The `vite.config.ts` injects missing env vars as empty strings (`JSON.stringify(value || '')`). The firebase.js config checks `requiredKeys.every((k) => firebaseConfig[k])` — empty strings are falsy, so `isConfigured` evaluates to `false`, `firestore` stays `null`, and the form **always** enters the mailto fallback branch.
-
-2. **Potential rules mismatch in production.** The code writes to `contact_submissions`, matching the repo's `firestore.rules`. But the owner states they deployed rules allowing `leads` (not `contact_submissions`). If the deployed rules only permit `leads`, Firestore would deny the write → caught by the `catch` block → mailto fallback.
-
-3. **Silent fallback hides the problem.** When `firestore` is `null`, the form opens mailto with zero console output. When Firestore write fails, the error is caught and the user sees "Email prepared!" with no indication that data was lost. No developer has ever seen an error message because none is emitted.
-
-### Required actions (configuration — cannot be done by code changes alone)
-
-1. Owner must create `.env.local` in the project root with all `VITE_FIREBASE_*` variables set to real values from the Firebase Console.
-2. Owner must ensure the same variables are set in Cloudflare Pages → Settings → Environment variables.
-3. Owner must deploy the repo's `firestore.rules` to align rules with code: `firebase deploy --only firestore:rules`
-4. Alternatively, if owner wants to use `leads` collection, the code must be updated to write to `leads` instead of `contact_submissions`.
+**Date:** February 8, 2026
+**Repo:** `marketplace` (single repo, tri-mode architecture)
+**Database:** Firebase Realtime Database (project: `waterquality-trading`)
 
 ---
 
-## Pipeline Investigation
+## Architecture Overview
 
-- **Pipeline component location:** `src/pages/landing/sections/ArchitectureSection.jsx`
-- **Desktop representation:** `TermBody` (`<pre>` with ASCII art) — visible above 768px, hidden at `md` breakpoint
-- **Mobile representation:** `MobilePipeline` (accordion) — hidden by default, shown at `md` breakpoint (max-width: 768px)
-- **Mobile layout shares same component:** No — completely separate styled components
-- **Root cause of horizontal scroll:** The `<pre>` element's intrinsic content width (72+ box-drawing chars at 15px mono + 96px padding) exceeds the viewport at widths between 769px and ~884px. Multiple containment failures allow this to leak to page-level scroll.
+| Mode | Hostname | Entry Point | Build Target |
+|---|---|---|---|
+| Landing | bluesignal.xyz | `src/pages/landing/main.jsx` | `dist-landing/` |
+| Cloud | cloud.bluesignal.xyz | `src/main.jsx` → `App.jsx` | `dist-cloud/` |
+| Marketplace | waterquality.trading | `src/main.jsx` → `App.jsx` | `dist-wqt/` |
 
-### Specific CSS issues
+Mode detection: `src/utils/modeDetection.js` (runtime hostname check).
+Cloud and Marketplace share the same entry point and context; Landing is fully isolated.
 
-1. **`TermBody` (line 70):** `font-size: 15px`, `padding: 48px`, `overflow-x: auto`. The ASCII separator lines are ~72 box-drawing characters. At 15px IBM Plex Mono (~9–10px/glyph), content width is ~666–740px + 96px padding = ~762–836px minimum. Exceeds available width at narrow desktop.
-2. **`Grid` (line 14):** `overflow: hidden` is only applied at the `md` breakpoint (mobile). On desktop, no overflow constraint exists, so the grid track can expand beyond the container.
-3. **`html` element (GlobalStyles.js):** Does NOT have `overflow-x: hidden`. Only `body`, `#root`, and `main` do. In some browsers, `overflow-x: hidden` on `body` alone does not prevent document-level horizontal scroll.
-4. **CSS Grid min-width behavior:** Even though `Terminal` and `RevealOnScroll` set `min-width: 0`, the `<pre>` element's default `white-space: pre` creates an intrinsic minimum content size that can push the grid track wider.
+---
 
-### Fix approach
+## BlueSignal Cloud Dashboard — Component Status
 
-- Add `overflow-x: hidden` to `html` in GlobalStyles.js
-- Move `overflow: hidden` on `Grid` to all breakpoints (not just `md`)
-- Scale `TermBody` font-size and padding with `clamp()` for smaller desktop widths
-- All changes gated to desktop-only (`min-width: 769px` or applied to desktop-visible elements). **Mobile layout is NOT touched.**
+| Component | File | Status | Notes |
+|---|---|---|---|
+| Firebase Auth (sign up/in/Google/reset) | `src/routes/Welcome.jsx`, `src/routes/components/welcome/LoginForm.jsx`, `RegisterForm.jsx` | FUNCTIONAL | Email + Google sign-in, password reset, `onAuthStateChanged` in AppContext |
+| Onboarding Wizard | `src/components/cloud/OnboardingWizard.jsx` | FUNCTIONAL | 3-step wizard (role, profile, review), sets `onboardingCompleted: true` via `UserProfileAPI` |
+| Overview Dashboard | `src/components/cloud/OverviewDashboard.jsx` | FUNCTIONAL | Real device/alert/site data via `DeviceAPI`, `AlertsAPI`, `SiteAPI`; mock fallbacks for commissioning/tasks |
+| Devices List | `src/components/cloud/DevicesListPage.jsx` | FUNCTIONAL | Reads from RTDB `/devices/` via `DeviceService.getAllDevices()`, merges with mock; filters by status/type/lifecycle |
+| Device Detail | `src/components/cloud/DeviceDetailPage.jsx` | FUNCTIONAL | Tabs: Overview, Live Data (Chart.js), Configuration, Logs; reads via `DeviceAPI`, `AlertsAPI`, `ReadingsAPI` |
+| Add Device | `src/components/cloud/AddDevicePage.jsx` | FUNCTIONAL | Serial validation (PGW-XXXX or BS-XXXXXX format), writes via `DeviceAPI.addDevice()` |
+| Device Onboarding Wizard | `src/components/cloud/DeviceOnboardingWizard.jsx` | STUB | 4-step wizard (type, identity, location, confirm); uses `CloudMockAPI`, device creation does NOT persist |
+| Full Commissioning Wizard | `src/components/cloud/FullCommissioningWizard.jsx` | FUNCTIONAL | 7-step wizard (scan, site, location, photos, tests, calibrate, review); Firebase RTDB via `useCommission` hook |
+| Commissioning List | `src/components/cloud/CommissioningPage.jsx` | STUB | Filter pills, device table, commission modal; ALL data from `CloudMockAPI` |
+| Commission Workflow | `src/components/installer/CommissionWorkflow.jsx` | FUNCTIONAL | 6-step installer workflow; real backend API via `commissionService` |
+| Device Activation | `src/components/installer/DeviceActivation.jsx` | FUNCTIONAL | Activates device post-commission, updates lifecycle to "active" |
+| Sites List | `src/components/cloud/SitesListPage.jsx` | FUNCTIONAL | Reads via `GeocodingAPI.listSites({ ownerId })`, mock fallback |
+| Create Site | `src/components/cloud/CreateSitePage.jsx` | FUNCTIONAL | Multi-section form, writes via `GeocodingAPI.createSite()` |
+| Site Detail | `src/components/cloud/SiteDetailPage.jsx` | STUB | Google Maps integration exists; ALL data from `CloudMockAPI` |
+| Alerts List | `src/components/cloud/AlertsPage.jsx` | PARTIAL | Reads real alerts via `AlertsAPI.getActive()`; acknowledge/resolve actions are local-only (TODO) |
+| Alert Detail | `src/components/cloud/AlertDetailPage.jsx` | STUB | Uses `CloudMockAPI.alerts.getAll()`; actions don't persist |
+| Profile | `src/components/cloud/ProfilePage.jsx` | FUNCTIONAL | Reads/writes via `UserProfileAPI.getProfile()` / `updateProfile()` |
+| Installer Dashboard | `src/components/dashboards/InstallerDashboard.jsx` | FUNCTIONAL | Installer-specific view |
+
+---
+
+## WaterQuality.Trading Marketplace — Component Status
+
+| Component | File | Status | Data Source | Notes |
+|---|---|---|---|---|
+| Marketplace Browse | `src/routes/marketplace/Marketplace.jsx` | FUNCTIONAL (mock) | `creditsApi` mock | Grid of credit listings with cards |
+| Listing Detail | `src/routes/marketplace/ListingDetail.jsx` | FUNCTIONAL (mock) | `creditsApi` mock | Full listing with map, stats, request quote |
+| NFT Listing Page | `src/components/elements/marketplace/ListingPage.jsx` | FUNCTIONAL | `MarketplaceAPI.Events` (blockchain) | NFT buy/bid with PoSPopup |
+| Credit Registry | `src/wqt/pages/RegistryPage.tsx` | FUNCTIONAL (mock) | `mockRegistryData` | Sortable table, filters, detail modal |
+| Project Map | `src/wqt/pages/MapPage.tsx` | FUNCTIONAL (mock) | `mockMapData` | Mapbox integration, project markers/boundaries |
+| Recent Removals | `src/wqt/pages/RecentRemovalsPage.tsx` | FUNCTIONAL (mock) | `mockRegistryData` (filtered) | Date range filters, retired credits |
+| Presale | `src/wqt/pages/PresalePage.tsx` | FUNCTIONAL (mock) | `mockPresaleData` | Card grid/map, status filters |
+| Buyer Dashboard | `src/components/dashboards/BuyerDashboard.jsx` | FUNCTIONAL (mock) | Hardcoded mock | Stats, credits list, purchases, quick actions |
+| Seller Dashboard | `src/components/dashboards/SellerDashboard.jsx` | FUNCTIONAL (mock) | Hardcoded mock | Stats, listings, revenue chart, sales |
+| Financial Dashboard | `src/routes/marketplace/account/FinancialDashboard.jsx` | FUNCTIONAL (mock) | Hardcoded mock | Revenue/type charts (Chart.js), transactions, payout |
+| Create Listing | `src/components/elements/marketplace/CreateListingPage.jsx` | FUNCTIONAL | `CreditsMarketplaceAPI.createListing()` | Real API, loads sites via GeocodingAPI |
+| Transaction Page | `src/components/elements/marketplace/TransactionPage.jsx` | FUNCTIONAL (mock) | Hardcoded mock | Filterable list, pagination UI |
+| Certificate | `src/components/routes/CertificatePage.jsx` | FUNCTIONAL | Backend API `/npc_credits/certificates/` | Social share links |
+| Verification UI | `src/components/elements/contractUI/VerificationUI.jsx` | FUNCTIONAL | `UserAPI.media`, `UserAPI.assets` | Role-based tabs (farmer/verifier/admin) |
+
+---
+
+## Cross-Platform Features — Gap Analysis
+
+| Feature | Cloud | WQT | Cross-Platform | Status |
+|---|---|---|---|---|
+| Firebase Auth (shared) | Yes | Yes | Same Firebase project | WORKING |
+| Device commissioning | Full wizard + workflow | N/A | N/A | WORKING (Cloud only) |
+| Device visibility | Full (list, detail, charts) | Not visible | Devices not shown in WQT | MISSING |
+| Trading programs | N/A | N/A | No data model or UI | MISSING |
+| Device-to-program enrollment | N/A | N/A | No enrollment flow | MISSING |
+| Notifications (cross-platform) | N/A | N/A | No notification system | MISSING |
+| Credit generation from readings | N/A | Backend function exists | No frontend UI | MISSING |
+| Credit portfolio | N/A | Partial (buyer dashboard) | No dedicated view | MISSING |
+| Virtual device simulator | N/A | N/A | N/A | MISSING |
+
+---
+
+## RTDB Schema — Current Paths
+
+| Path | Purpose | Used By | Has Rules |
+|---|---|---|---|
+| `/users/{uid}/` | User profiles, settings, wallets, activity | Cloud + WQT | Yes |
+| `/devices/{serialNumber}/` | Device inventory, ownership, installation, health | Cloud | Yes |
+| `/sites/{siteId}/` | Site management, location, devices, credits | Cloud | Yes |
+| `/commissions/{commissionId}/` | Commission workflows | Cloud | Yes |
+| `/readings/{deviceId}/{timestamp}/` | Sensor time-series data | Cloud (backend write-only) | Yes |
+| `/credits/{creditId}/` | Credit records (nitrogen/phosphorus/stormwater/thermal) | WQT | Yes |
+| `/listings/{listingId}/` | Marketplace listings | WQT | Yes |
+| `/alerts/{alertId}/` | Device alerts | Cloud | Yes |
+| `/orders/{orderId}/` | Purchase orders (Stripe) | WQT | Yes |
+| `/customers/{customerId}/` | Admin customer management | Cloud | Yes |
+| `/installers/{installerId}/` | Installer stats | Cloud | Yes |
+| `/tradingPrograms/{programId}/` | Trading program definitions | — | **MISSING** |
+| `/enrollments/{enrollmentId}/` | Device-program enrollments | — | **MISSING** |
+| `/notifications/{notificationId}/` | Cross-platform notifications | — | **MISSING** |
+
+---
+
+## Sensor Channel Alignment (WQM-1 HAT)
+
+| HAT Component | Sensor | Current RTDB Field | Dashboard Shows | Status |
+|---|---|---|---|---|
+| BNC Female (A0) | pH Probe | `ph` | Yes | OK |
+| JST-XH (A1) | TDS / Conductivity | `tds_ppm` / `conductivity` | Yes | OK |
+| JST-XH (A2) | Turbidity | `ntu` | Yes | OK |
+| DS18B20 (GPIO) | Temperature | `temp_c` | Yes | OK |
+| GPS (UART) | GPS Coordinates | `gps.lat`, `gps.lng` | Not in readings view | NEEDS FIX |
+| JST-XH (A3) | Reserved | — | Not shown | OK (future) |
+| N/A | NPK (n/p/k) | `npk_n`, `npk_p`, `npk_k` | Yes (shown) | NEEDS REMOVAL |
+
+---
+
+## First-Run Behavior
+
+| Element | Implemented | Persistence | Notes |
+|---|---|---|---|
+| Onboarding Wizard | Yes | RTDB (`onboardingCompleted: true`) | Shows only when no devices AND not completed |
+| Welcome Banner (Dashboard) | Yes | `localStorage` | Should migrate to RTDB for cross-device |
+| Empty Device State | Yes | Checks device count | Redirects to `/cloud/onboarding` |
+| Tooltip Hints | No | — | Not implemented |
+
+---
+
+## Backend API Coverage
+
+All APIs are in `src/scripts/back_door.js` calling Cloud Functions at `us-central1-app-neptunechain.cloudfunctions.net/app`:
+
+| API | Endpoints | Used By |
+|---|---|---|
+| `UserAPI` | getUserFromUID, getUserFromUsername, media, assets | Cloud + WQT |
+| `AccountAPI` | create, register, verify (role/registered/blacklist) | Cloud + WQT |
+| `DeviceAPI` | CRUD, lifecycle, emulate, getDeviceData | Cloud |
+| `CommissionAPI` | initiate, runTests, complete, cancel | Cloud |
+| `SiteAPI` | CRUD | Cloud |
+| `AlertsAPI` | getActive, acknowledge, resolve | Cloud |
+| `ReadingsAPI` | get (with pagination/time range) | Cloud |
+| `CustomerAPI` | CRUD | Cloud |
+| `OrderAPI` | CRUD | WQT |
+| `MarketplaceAPI` | NFT operations | WQT |
+| `NPCCreditsAPI` | issue, buy, transfer, donate, getCreditTypes | WQT |
+| `CreditsMarketplaceAPI` | createListing, getListings | WQT |
+| `StripeAPI` | config, createPaymentIntent, getPrice | WQT |
+| `UserProfileAPI` | getProfile, updateProfile, updateRole | Cloud + WQT |
+| `GeocodingAPI` | listSites, createSite | Cloud |
+| `QRCodeAPI` | generate, validate | Cloud |
+| `VirginiaAPI` | Virginia-specific credit exchange | WQT |
+| `TradingProgramAPI` | — | **MISSING** |
+| `EnrollmentAPI` | — | **MISSING** |
+| `NotificationsAPI` | — | **MISSING** |
+
+---
+
+## Mock Data Files (to be replaced with real APIs)
+
+| File | Used By | Replacement API |
+|---|---|---|
+| `src/apis/creditsApi.js` | Marketplace browse, ListingDetail | `CreditsMarketplaceAPI.getListings()` |
+| `src/data/mockRegistryData.ts` | RegistryPage, RecentRemovalsPage | Backend `/credits` endpoint |
+| `src/data/mockMapData.ts` | MapPage | `SiteAPI.list()` / `GeocodingAPI.listSites()` |
+| `src/data/mockPresaleData.ts` | PresalePage | `CreditsMarketplaceAPI` (filtered) |
+| `src/services/cloudMockAPI.js` | SiteDetailPage, AlertDetailPage, CommissioningPage, DeviceOnboardingWizard | Real `SiteAPI`, `AlertsAPI`, `CommissionAPI`, `DeviceAPI` |
+
+---
+
+## Summary
+
+**What works well:**
+- Firebase Auth is shared and functional across all modes
+- Cloud dashboard has a mature device management pipeline (commission, activate, monitor)
+- Backend API layer is comprehensive with 20+ API modules
+- RTDB schema is well-defined with validation rules
+- UI components exist for nearly all pages (even if using mock data)
+
+**What needs immediate attention:**
+1. 9 WQT marketplace pages use mock data instead of real RTDB APIs
+2. 5 Cloud dashboard pages are stubs using `CloudMockAPI`
+3. No cross-platform device visibility (Cloud devices not shown in WQT)
+4. No trading program / enrollment / notification infrastructure
+5. No virtual device simulator for pre-hardware testing
+6. Device detail page shows NPK sensors that don't exist on WQM-1 HAT

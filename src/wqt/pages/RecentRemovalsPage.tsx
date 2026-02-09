@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { mockRegistryCredits, RegistryCredit, getCreditsByStatus } from '../../data/mockRegistryData';
+import { fetchRetiredCredits } from '../../services/wqtDataService';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
@@ -270,13 +271,36 @@ const CloseButton = styled.button`
 type DateRange = '30' | '90' | '365' | 'all';
 
 export function RecentRemovalsPage() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [allRetiredCredits, setAllRetiredCredits] = useState<RegistryCredit[]>([]);
   const [filterType, setFilterType] = useState<string>('all');
   const [dateRange, setDateRange] = useState<DateRange>('90');
   const [selectedCredit, setSelectedCredit] = useState<RegistryCredit | null>(null);
 
+  // Fetch real data on mount, fall back to mock
+  useEffect(() => {
+    let cancelled = false;
+    const loadCredits = async () => {
+      setLoading(true);
+      try {
+        const realCredits = await fetchRetiredCredits();
+        if (!cancelled) {
+          setAllRetiredCredits(realCredits.length > 0 ? realCredits : getCreditsByStatus('retired'));
+        }
+      } catch {
+        if (!cancelled) {
+          setAllRetiredCredits(getCreditsByStatus('retired'));
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    loadCredits();
+    return () => { cancelled = true; };
+  }, []);
+
   const filteredCredits = useMemo(() => {
-    let credits = getCreditsByStatus('retired');
+    let credits = allRetiredCredits;
 
     if (filterType !== 'all') {
       credits = credits.filter(credit => credit.type === filterType);

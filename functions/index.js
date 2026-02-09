@@ -29,6 +29,7 @@ const readings = require("./readings");
 const marketplace = require("./marketplace");
 const virginia = require("./virginia");
 const preorder = require("./preorder");
+const creditGeneration = require("./creditGeneration");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -200,6 +201,152 @@ app.post("/virginia/credits/calculate", virginia.calculateCredits);
 app.post("/virginia/credits/generate", virginia.generateCredits);
 app.post("/virginia/credits", virginia.getCredits);
 app.post("/virginia/credits/validate-transfer", virginia.validateTransfer);
+
+// --- Credit Generation ---
+app.post("/credits/calculate-from-readings", creditGeneration.calculateCredits);
+
+// --- Trading Programs ---
+app.get("/trading-programs", async (req, res) => {
+  try {
+    const db = admin.database();
+    const snapshot = await db.ref("tradingPrograms").once("value");
+    const programs = snapshot.exists()
+      ? Object.entries(snapshot.val()).map(([id, p]) => ({ id, ...p }))
+      : [];
+    res.json({ programs });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch trading programs" });
+  }
+});
+
+app.get("/trading-programs/:programId", async (req, res) => {
+  try {
+    const db = admin.database();
+    const snapshot = await db.ref(`tradingPrograms/${req.params.programId}`).once("value");
+    if (!snapshot.exists()) return res.status(404).json({ error: "Program not found" });
+    res.json({ id: req.params.programId, ...snapshot.val() });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch trading program" });
+  }
+});
+
+// --- Enrollments ---
+app.post("/enrollments", async (req, res) => {
+  try {
+    const { userId, deviceId, programId } = req.body;
+    if (!userId || !deviceId || !programId) {
+      return res.status(400).json({ error: "userId, deviceId, and programId are required" });
+    }
+    const db = admin.database();
+    const enrollmentRef = db.ref("enrollments").push();
+    const enrollment = {
+      userId,
+      deviceId,
+      programId,
+      status: "enrolled",
+      enrolledAt: admin.database.ServerValue.TIMESTAMP,
+      activatedAt: null,
+      creditsGenerated: 0,
+      creditsTraded: 0,
+      creditsAvailable: 0,
+    };
+    await enrollmentRef.set(enrollment);
+    res.json({ id: enrollmentRef.key, ...enrollment });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create enrollment" });
+  }
+});
+
+app.get("/enrollments", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const db = admin.database();
+    const snapshot = await db.ref("enrollments").orderByChild("userId").equalTo(userId).once("value");
+    const enrollments = snapshot.exists()
+      ? Object.entries(snapshot.val()).map(([id, e]) => ({ id, ...e }))
+      : [];
+    res.json({ enrollments });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch enrollments" });
+  }
+});
+
+// --- Notifications ---
+app.get("/notifications", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const db = admin.database();
+    const snapshot = await db.ref("notifications").orderByChild("userId").equalTo(userId).once("value");
+    const notifications = snapshot.exists()
+      ? Object.entries(snapshot.val())
+          .map(([id, n]) => ({ id, ...n }))
+          .filter(n => !n.dismissed)
+          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+      : [];
+    res.json({ notifications });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
+
+app.post("/notifications/:notificationId/read", async (req, res) => {
+  try {
+    const db = admin.database();
+    await db.ref(`notifications/${req.params.notificationId}`).update({ read: true });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to mark notification as read" });
+  }
+});
+
+app.post("/notifications/:notificationId/dismiss", async (req, res) => {
+  try {
+    const db = admin.database();
+    await db.ref(`notifications/${req.params.notificationId}`).update({ dismissed: true });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to dismiss notification" });
+  }
+});
+
+app.post("/notifications/mark-all-read", async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const db = admin.database();
+    const snapshot = await db.ref("notifications").orderByChild("userId").equalTo(userId).once("value");
+    if (snapshot.exists()) {
+      const updates = {};
+      snapshot.forEach(child => {
+        if (!child.val().read) {
+          updates[`notifications/${child.key}/read`] = true;
+        }
+      });
+      if (Object.keys(updates).length > 0) {
+        await db.ref().update(updates);
+      }
+    }
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to mark all as read" });
+  }
+});
+
+app.get("/notifications/unread-count", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const db = admin.database();
+    const snapshot = await db.ref("notifications").orderByChild("userId").equalTo(userId).once("value");
+    let count = 0;
+    if (snapshot.exists()) {
+      snapshot.forEach(child => {
+        if (!child.val().read && !child.val().dismissed) count++;
+      });
+    }
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get unread count" });
+  }
+});
 
 // Export the Express app as a Cloud Function
 exports.app = functions
@@ -582,6 +729,15 @@ exports.ingestReading = functions
     memory: "256MB",
   })
   .https.onRequest(readings.ingestReading);
+
+// =============================================================================
+// CREDIT GENERATION
+// =============================================================================
+
+/**
+ * Database Trigger: Auto-generate credits when enrolled devices submit readings
+ */
+exports.onReadingCreated = creditGeneration.onReadingCreated;
 
 // =============================================================================
 // SCHEDULED FUNCTIONS

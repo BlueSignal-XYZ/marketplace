@@ -43,6 +43,9 @@ import { RegistryPage } from "./wqt/pages/RegistryPage";
 import { RecentRemovalsPage } from "./wqt/pages/RecentRemovalsPage";
 import { MapPage } from "./wqt/pages/MapPage";
 import { PresalePage } from "./wqt/pages/PresalePage";
+import { TradingProgramsPage } from "./wqt/pages/TradingProgramsPage";
+import { TradingProgramDetailPage } from "./wqt/pages/TradingProgramDetailPage";
+import { CreditPortfolioPage } from "./wqt/pages/CreditPortfolioPage";
 
 import {
   NotificationBar,
@@ -797,6 +800,8 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
     <Route path="/registry" element={<RegistryPage />} />
     <Route path="/map" element={<MapPage />} />
     <Route path="/presale" element={<PresalePage />} />
+    <Route path="/programs" element={<TradingProgramsPage />} />
+    <Route path="/programs/:programId" element={<TradingProgramDetailPage />} />
 
     {/* Redirects for relocated features */}
     {/* Landing page at bluesignal.xyz (separate entry point) */}
@@ -807,6 +812,7 @@ const MarketplaceRoutes = ({ user, authLoading }) => (
       <>
         <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
         <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
+        <Route path="/credits" element={<CreditPortfolioPage />} />
 
         <Route
           path="/marketplace/tools/verification"
