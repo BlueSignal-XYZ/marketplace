@@ -250,8 +250,45 @@ const ContactForm = () => {
     setForm({ name: '', email: '', company: '', inquiryType: '', message: '' });
   };
 
+  // Submit form data via a hidden <form> targeting a hidden <iframe>.
+  // Native HTML form submissions bypass CORS entirely, avoiding Google Apps
+  // Script's 302 redirect chain that causes fetch() to silently lose POST data
+  // in browsers (the 302 converts POST→GET, dropping the body, and the script
+  // has no doGet handler).
+  const submitViaIframe = (data) => {
+    const frameName = 'gs-submit-' + Date.now();
+
+    const iframe = document.createElement('iframe');
+    iframe.name = frameName;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    const hiddenForm = document.createElement('form');
+    hiddenForm.method = 'POST';
+    hiddenForm.action = GOOGLE_SHEETS_URL;
+    hiddenForm.target = frameName;
+
+    Object.entries(data).forEach(([key, value]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      hiddenForm.appendChild(input);
+    });
+
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
+
+    // Clean up DOM after the submission has time to complete
+    setTimeout(() => {
+      if (document.body.contains(hiddenForm)) document.body.removeChild(hiddenForm);
+      if (document.body.contains(iframe)) document.body.removeChild(iframe);
+    }, 5000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const errs = validate();
     if (Object.keys(errs).length) {
       setErrors(errs);
@@ -265,42 +302,29 @@ const ContactForm = () => {
     const inquiryLabel =
       INQUIRY_TYPES.find((t) => t.value === form.inquiryType)?.label || 'General Inquiry';
 
-    const formData = new URLSearchParams();
-    formData.append('Name', form.name.trim());
-    formData.append('Email', form.email.trim());
-    formData.append('Company', form.company?.trim() || '');
-    formData.append('InquiryType', inquiryLabel);
-    formData.append('Message', form.message.trim());
+    const data = {
+      Name: form.name.trim(),
+      Email: form.email.trim(),
+      Company: form.company?.trim() || '',
+      InquiryType: inquiryLabel,
+      Message: form.message.trim(),
+    };
 
     try {
-      const response = await fetch(GOOGLE_SHEETS_URL, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        resetForm();
-        return;
-      }
-
-      // Google Apps Script sometimes returns non-200 but data still arrives
+      // Primary: hidden iframe form submission (bypasses CORS entirely)
+      submitViaIframe(data);
       setStatus('success');
       resetForm();
     } catch (err) {
-      // CORS/opaque response — common with Google Apps Script
-      // Data almost always still arrives. Fall back to no-cors as insurance.
+      // Fallback: fetch with no-cors (best-effort)
       try {
+        const formData = new URLSearchParams();
+        Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+
         await fetch(GOOGLE_SHEETS_URL, {
           method: 'POST',
           mode: 'no-cors',
           body: formData,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
         });
         setStatus('success');
         resetForm();
@@ -308,8 +332,6 @@ const ContactForm = () => {
         setErrorMsg(`Unable to submit. Please email ${CONTACT_EMAIL} directly.`);
         setStatus('error');
       }
-    } finally {
-      setStatus((prev) => (prev === 'submitting' ? 'idle' : prev));
     }
   };
 

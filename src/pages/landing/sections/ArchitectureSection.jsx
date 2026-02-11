@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
+
+/* ── Section layout ─────────────────────────────────────── */
 
 const SectionHeader = styled.div`
   margin-bottom: 48px;
@@ -16,11 +17,6 @@ const Grid = styled.div`
   grid-template-columns: 1fr;
   gap: 48px;
   align-items: start;
-  /* FIX: overflow: hidden was only applied at the md breakpoint (mobile),
-     which meant the <pre> element's intrinsic content width could push the
-     grid track wider than the container on desktop, causing page-level
-     horizontal scroll. Moved to all breakpoints so it constrains at every
-     viewport width. */
   overflow: hidden;
 
   ${({ theme }) => theme.media.md} {
@@ -28,13 +24,15 @@ const Grid = styled.div`
   }
 `;
 
-/* Terminal */
+/* ── IDE Terminal chrome ────────────────────────────────── */
+
 const Terminal = styled.div`
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.w08};
-  border-radius: 14px;
+  background: #0D1117;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45),
+              0 0 0 1px rgba(255,255,255,0.03);
   max-width: 100%;
   min-width: 0;
 `;
@@ -42,21 +40,26 @@ const Terminal = styled.div`
 const TermBar = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 18px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.w08};
+  padding: 12px 16px;
+  background: #161B22;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 
   ${({ theme }) => theme.media.sm} {
     padding: 10px 14px;
-    gap: 6px;
   }
+`;
+
+const DotsGroup = styled.div`
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
 `;
 
 const Dot = styled.span`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: ${({ color }) => color};
+  background: ${({ $c }) => $c};
 
   ${({ theme }) => theme.media.sm} {
     width: 10px;
@@ -64,184 +67,168 @@ const Dot = styled.span`
   }
 `;
 
-const TermTitle = styled.span`
+const TabLabel = styled.span`
+  margin-left: 14px;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 12px;
-  color: ${({ theme }) => theme.colors.w30};
-  margin-left: 8px;
-`;
-
-const TermBody = styled.pre`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  /* FIX: Fixed 15px font-size caused the ~74-char ASCII separator lines to
-     exceed the viewport at widths between 769px and ~884px. clamp() scales
-     the font down at narrow desktop widths so the content fits without
-     horizontal scroll, while preserving 15px at wide viewports. */
-  font-size: clamp(11px, 1.15vw, 15px);
-  line-height: 2.4;
-  /* FIX: Fixed 48px padding consumed 96px total, squeezing the already-wide
-     monospace content. clamp() reduces padding at narrow desktop widths. */
-  padding: clamp(16px, 3.5vw, 48px);
-  overflow-x: auto;
-  color: ${({ theme }) => theme.colors.w50};
-  min-width: 0;
-  /* FIX: white-space: pre (the <pre> default) prevents any line wrapping,
-     so extremely long lines push the element's intrinsic width beyond the
-     container. pre-wrap allows wrapping as a safety net while still
-     preserving intentional whitespace in the ASCII art. */
-  white-space: pre-wrap;
-  word-break: break-all;
-
-  .n { color: ${({ theme }) => theme.colors.white}; font-weight: 600; }
-  .a { color: ${({ theme }) => theme.colors.blue}; }
-  .g { color: ${({ theme }) => theme.colors.green}; }
-  .d { color: ${({ theme }) => theme.colors.w30}; }
-  .y { color: ${({ theme }) => theme.colors.amber}; }
-
-  /* MOBILE — hidden; MobilePipeline accordion shows instead. DO NOT CHANGE. */
-  ${({ theme }) => theme.media.md} {
-    display: none;
-  }
-`;
-
-/* ---- Mobile Pipeline Accordion ---- */
-
-const PIPELINE_STAGES = [
-  { icon: '\u{1F4E1}', name: 'Sensor Probes', details: ['pH, TDS, Turbidity, ORP, Temp', 'DS18B20, BNC, JST-XH connectors'] },
-  { icon: '\u{1F527}', name: 'Pi Zero 2W', details: ['ADS1115 16-bit ADC', 'SQLite WAL local buffer'] },
-  { icon: '\u{1F4FB}', name: 'SX1262 LoRa Radio', details: ['Cayenne LPP encoding', 'AES-128 encryption, 15\u00a0km range'] },
-  { icon: '\u2601\uFE0F', name: 'BlueSignal Cloud', details: ['Data ingestion & storage', 'API endpoints & alert engine'] },
-  { icon: '\u{1F4CA}', name: 'Dashboard', details: ['Real-time sensor readings', 'Trend charts & data export'] },
-];
-
-const MobilePipelineWrap = styled.div`
-  display: none;
-
-  ${({ theme }) => theme.media.md} {
-    display: block;
-    padding: 12px;
-  }
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
 
   ${({ theme }) => theme.media.sm} {
-    padding: 10px;
+    font-size: 11px;
+    margin-left: 10px;
+    padding: 3px 8px;
   }
 `;
 
-const PipelineStage = styled.div`
-  margin-left: ${({ $index }) => Math.min($index * 10, 40)}px;
+/* ── Code area with line-number gutter ──────────────────── */
+
+const CodeScroll = styled.div`
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.12) transparent;
+
+  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+  }
 `;
 
-const StageHeader = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 12px;
+const CodeTable = styled.div`
+  display: table;
+  min-width: 540px;
   width: 100%;
-  min-height: 44px;
-  padding: 10px 14px;
-  background: ${({ theme, $active }) => ($active ? theme.colors.surface2 : 'transparent')};
-  border: 1px solid ${({ theme, $active }) => ($active ? theme.colors.w15 : theme.colors.w08)};
-  border-radius: ${({ $active }) => ($active ? '10px 10px 0 0' : '10px')};
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, border-radius 0.15s;
-  -webkit-tap-highlight-color: transparent;
+  padding: 16px 0;
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: clamp(12px, 1.05vw, 14px);
+  line-height: 1.75;
+`;
 
-  &:active {
-    background: ${({ theme }) => theme.colors.surface2};
+const Row = styled.div`
+  display: table-row;
+`;
+
+const Gutter = styled.span`
+  display: table-cell;
+  width: 48px;
+  padding: 0 14px 0 20px;
+  text-align: right;
+  user-select: none;
+  color: rgba(139,148,158,0.35);
+  font-size: 0.85em;
+  vertical-align: top;
+  border-right: 1px solid rgba(255,255,255,0.06);
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 0 10px 0 12px;
   }
 `;
 
-const StageIcon = styled.span`
-  font-size: 18px;
-  line-height: 1;
-  flex-shrink: 0;
+const Code = styled.span`
+  display: table-cell;
+  padding-left: 16px;
+  padding-right: 24px;
+  white-space: pre;
+  color: rgba(255,255,255,0.5);
+
+  ${({ theme }) => theme.media.sm} {
+    padding-left: 12px;
+    padding-right: 14px;
+  }
 `;
 
-const StageName = styled.span`
-  font-family: ${({ theme }) => theme.fonts.display};
-  font-size: 14px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.white};
-  text-align: left;
+/* ── Syntax-highlight tokens ────────────────────────────── */
+
+const Cm = styled.span`color: #6A9955;`;                        /* comments  */
+const Ky = styled.span`color: #9CDCFE;`;                        /* keys      */
+const St = styled.span`color: #CE9178;`;                        /* strings   */
+const Ar = styled.span`color: #4EC9B0;`;                        /* arrows →  */
+const Ds = styled.span`color: rgba(255,255,255,0.7);`;          /* dashes -  */
+
+/* ── Blinking cursor ────────────────────────────────────── */
+
+const blink = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 `;
 
-const StageChevron = styled.span`
-  margin-left: auto;
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.w30};
-  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0)')};
-  transition: transform 0.25s ease;
+const Cursor = styled.span`
+  display: inline-block;
+  width: 8px;
+  height: 1.15em;
+  background: rgba(255,255,255,0.45);
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  animation: ${blink} 1.1s step-end infinite;
 `;
 
-const StageBody = styled.div`
-  max-height: ${({ $open }) => ($open ? '160px' : '0')};
-  overflow: hidden;
-  transition: max-height 0.25s ease, border-color 0.25s ease;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ $open, theme }) => ($open ? theme.colors.w15 : 'transparent')};
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-`;
+/* ── Line helper ────────────────────────────────────────── */
 
-const StageBodyInner = styled.div`
-  padding: 6px 14px 12px;
-`;
+const L = ({ n, children }) => (
+  <Row>
+    <Gutter>{String(n).padStart(2, '0')}</Gutter>
+    <Code>{children ?? '\u00A0'}</Code>
+  </Row>
+);
 
-const DetailLine = styled.p`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.w50};
-  line-height: 1.7;
-`;
+/* ── Pipeline terminal content ──────────────────────────── */
 
-const StageConnector = styled.div`
-  display: flex;
-  align-items: center;
-  height: 24px;
-  margin-left: ${({ $index }) => Math.min($index * 10, 40) + 20}px;
-  color: ${({ theme }) => theme.colors.blue};
-  opacity: 0.5;
-  font-size: 12px;
-`;
+const PipelineTerminal = () => (
+  <Terminal>
+    <TermBar>
+      <DotsGroup>
+        <Dot $c="#ff5f57" />
+        <Dot $c="#febc2e" />
+        <Dot $c="#28c840" />
+      </DotsGroup>
+      <TabLabel>bluesignal-wqm {'\u2014'} pipeline</TabLabel>
+    </TermBar>
 
-const MobilePipeline = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const toggle = (i) => setActiveIndex((prev) => (prev === i ? -1 : i));
+    <CodeScroll>
+      <CodeTable>
+        <L n={1}><Cm># WQM-1 Data Pipeline</Cm></L>
+        <L n={2} />
+        <L n={3}><Ky>sensors</Ky>:</L>
+        <L n={4}>{'  '}<Ds>-</Ds>{' '}<St>pH</St>{'          '}<Cm># BNC analog → ADS1115</Cm></L>
+        <L n={5}>{'  '}<Ds>-</Ds>{' '}<St>TDS</St>{'         '}<Cm># JST-XH analog → ADS1115</Cm></L>
+        <L n={6}>{'  '}<Ds>-</Ds>{' '}<St>turbidity</St>{'   '}<Cm># JST-XH analog → ADS1115</Cm></L>
+        <L n={7}>{'  '}<Ds>-</Ds>{' '}<St>ORP</St>{'         '}<Cm># JST-XH analog → ADS1115</Cm></L>
+        <L n={8}>{'  '}<Ds>-</Ds>{' '}<St>temperature</St>{' '}<Cm># DS18B20 OneWire</Cm></L>
+        <L n={9}>{'  '}<Ds>-</Ds>{' '}<St>GPS</St>{'         '}<Cm># UART serial</Cm></L>
+        <L n={10} />
+        <L n={11}><Ky>processor</Ky>:</L>
+        <L n={12}>{'  '}<Ky>board</Ky>:{' '}<St>Pi Zero 2W</St></L>
+        <L n={13}>{'  '}<Ky>adc</Ky>:{' '}<St>ADS1115 16-bit</St></L>
+        <L n={14}>{'  '}<Ky>storage</Ky>:{' '}<St>SQLite WAL buffer</St></L>
+        <L n={15} />
+        <L n={16}><Ky>radio</Ky>:</L>
+        <L n={17}>{'  '}<Ky>module</Ky>:{' '}<St>SX1262 LoRa</St></L>
+        <L n={18}>{'  '}<Ky>encoding</Ky>:{' '}<St>Cayenne LPP</St></L>
+        <L n={19}>{'  '}<Ky>encryption</Ky>:{' '}<St>AES-128</St></L>
+        <L n={20}>{'  '}<Ky>range</Ky>:{' '}<St>15 km line-of-sight</St></L>
+        <L n={21} />
+        <L n={22}><Ky>upstream</Ky>:</L>
+        <L n={23}>{'  '}<St>ingest</St>{' '}<Ar>→</Ar>{' '}<St>store</St>{' '}<Ar>→</Ar>{' '}<St>alert</St>{' '}<Ar>→</Ar>{' '}<St>dashboard</St></L>
+        <L n={24}>{'  '}<Ky>dashboard</Ky>:{'  '}<St>cloud.bluesignal.xyz</St></L>
+        <L n={25}>{'  '}<Ky>registry</Ky>:{'   '}<St>waterquality.trading</St><Cursor /></L>
+      </CodeTable>
+    </CodeScroll>
+  </Terminal>
+);
 
-  return (
-    <MobilePipelineWrap>
-      {PIPELINE_STAGES.map((stage, i) => (
-        <div key={stage.name}>
-          <PipelineStage $index={i}>
-            <StageHeader $active={activeIndex === i} onClick={() => toggle(i)} aria-expanded={activeIndex === i}>
-              <StageIcon>{stage.icon}</StageIcon>
-              <StageName>{stage.name}</StageName>
-              <StageChevron $open={activeIndex === i}>{'\u25BE'}</StageChevron>
-            </StageHeader>
-            <StageBody $open={activeIndex === i}>
-              <StageBodyInner>
-                {stage.details.map((d) => (
-                  <DetailLine key={d}>{d}</DetailLine>
-                ))}
-              </StageBodyInner>
-            </StageBody>
-          </PipelineStage>
-          {i < PIPELINE_STAGES.length - 1 && (
-            <StageConnector $index={i}>{'\u25BC'}</StageConnector>
-          )}
-        </div>
-      ))}
-    </MobilePipelineWrap>
-  );
-};
+/* ── Feature cards ──────────────────────────────────────── */
 
-/* Feature cards */
 const Cards = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2px;
   min-width: 0;
 
-  /* Unified corner radius on children (RevealOnScroll wrappers) */
   > :first-child { border-radius: 16px 0 0 16px; overflow: hidden; }
   > :last-child { border-radius: 0 16px 16px 0; overflow: hidden; }
 
@@ -325,9 +312,11 @@ const features = [
   {
     tag: 'Expansion',
     title: 'I\u00b2C Expansion Bus',
-    desc: 'Exposed I\u00b2C header for additional sensors — barometric pressure, dissolved oxygen, or custom\u00a0probes.',
+    desc: 'Exposed I\u00b2C header for additional sensors \u2014 barometric pressure, dissolved oxygen, or custom\u00a0probes.',
   },
 ];
+
+/* ── Main section ───────────────────────────────────────── */
 
 const ArchitectureSection = () => (
   <Section id="architecture">
@@ -345,24 +334,7 @@ const ArchitectureSection = () => (
 
       <Grid>
         <RevealOnScroll>
-          <Terminal>
-            <TermBar>
-              <Dot color="#ff5f57" />
-              <Dot color="#febc2e" />
-              <Dot color="#28c840" />
-              <TermTitle>bluesignal-wqm — pipeline</TermTitle>
-            </TermBar>
-            <TermBody>{`  `}<span className="n">SENSORS</span>{`                `}<span className="d">pH · TDS · Turbidity · ORP · Temp · GPS</span>
-{`  `}<span className="a">────────────────────────────────────────────────────────────────────────</span>
-{`  `}<span className="n">Pi Zero 2W</span>{`             `}<span className="d">ADS1115 16-bit ADC · SQLite WAL buffer</span>
-{`  `}<span className="a">────────────────────────────────────────────────────────────────────────</span>
-{`  `}<span className="n">SX1262 LoRa Radio</span>{`      `}<span className="y">Cayenne LPP</span><span className="d"> · AES-128 · 15 km range</span>
-{`  `}<span className="a">────────────────────────────────────────────────────────────────────────</span>
-{`  `}<span className="g">BlueSignal Cloud</span>{`       `}<span className="d">Ingest · Store · Alert · Dashboard</span>
-{`      `}<span className="a">├──▶</span>{` `}<span className="n">Dashboard</span>{`        `}<span className="d">cloud.bluesignal.xyz</span>
-{`      `}<span className="a">└──▶</span>{` `}<span className="n">Credit Registry</span>{`  `}<span className="d">waterquality.trading</span></TermBody>
-            <MobilePipeline />
-          </Terminal>
+          <PipelineTerminal />
         </RevealOnScroll>
 
         <Cards>
