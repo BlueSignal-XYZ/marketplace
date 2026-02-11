@@ -250,41 +250,10 @@ const ContactForm = () => {
     setForm({ name: '', email: '', company: '', inquiryType: '', message: '' });
   };
 
-  // Submit form data via a hidden <form> targeting a hidden <iframe>.
-  // Native HTML form submissions bypass CORS entirely, avoiding Google Apps
-  // Script's 302 redirect chain that causes fetch() to silently lose POST data
-  // in browsers (the 302 converts POST→GET, dropping the body, and the script
-  // has no doGet handler).
-  const submitViaIframe = (data) => {
-    const frameName = 'gs-submit-' + Date.now();
-
-    const iframe = document.createElement('iframe');
-    iframe.name = frameName;
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-
-    const hiddenForm = document.createElement('form');
-    hiddenForm.method = 'POST';
-    hiddenForm.action = GOOGLE_SHEETS_URL;
-    hiddenForm.target = frameName;
-
-    Object.entries(data).forEach(([key, value]) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = value;
-      hiddenForm.appendChild(input);
-    });
-
-    document.body.appendChild(hiddenForm);
-    hiddenForm.submit();
-
-    // Clean up DOM after the submission has time to complete
-    setTimeout(() => {
-      if (document.body.contains(hiddenForm)) document.body.removeChild(hiddenForm);
-      if (document.body.contains(iframe)) document.body.removeChild(iframe);
-    }, 5000);
-  };
+  // ── Submit to Google Sheets via cascading strategies ─────────────────────
+  // CSP must allow connect-src + frame-src for script.google.com (see firebase.json).
+  // Strategy order: fetch (awaited) → sendBeacon → iframe (last resort).
+  // Only one strategy fires to avoid duplicate sheet rows.
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -310,28 +279,83 @@ const ContactForm = () => {
       Message: form.message.trim(),
     };
 
+    const body = new URLSearchParams();
+    Object.entries(data).forEach(([k, v]) => body.append(k, v));
+
+    // ── Strategy 1: fetch with no-cors (primary) ──────────────────────────
+    // Simple POST (no preflight). Opaque response is fine — we only need the
+    // request delivered. Resolves once the network round-trip completes.
     try {
-      // Primary: hidden iframe form submission (bypasses CORS entirely)
-      submitViaIframe(data);
+      console.log('[ContactForm] Strategy 1: fetch no-cors →', GOOGLE_SHEETS_URL);
+      await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body,
+      });
+      console.log('[ContactForm] fetch resolved — data sent');
+      setStatus('success');
+      resetForm();
+      return;
+    } catch (err) {
+      console.warn('[ContactForm] fetch failed:', err.message);
+    }
+
+    // ── Strategy 2: navigator.sendBeacon (fire-and-forget) ────────────────
+    if (navigator.sendBeacon) {
+      try {
+        console.log('[ContactForm] Strategy 2: sendBeacon');
+        const blob = new Blob([body.toString()], {
+          type: 'application/x-www-form-urlencoded',
+        });
+        const queued = navigator.sendBeacon(GOOGLE_SHEETS_URL, blob);
+        console.log('[ContactForm] sendBeacon queued:', queued);
+        if (queued) {
+          setStatus('success');
+          resetForm();
+          return;
+        }
+      } catch (err) {
+        console.warn('[ContactForm] sendBeacon failed:', err.message);
+      }
+    }
+
+    // ── Strategy 3: hidden iframe form POST (last resort) ─────────────────
+    try {
+      console.log('[ContactForm] Strategy 3: iframe form POST');
+      const frameName = 'gs-submit-' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = frameName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const hiddenForm = document.createElement('form');
+      hiddenForm.method = 'POST';
+      hiddenForm.action = GOOGLE_SHEETS_URL;
+      hiddenForm.target = frameName;
+
+      Object.entries(data).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        hiddenForm.appendChild(input);
+      });
+
+      document.body.appendChild(hiddenForm);
+      hiddenForm.submit();
+
+      // Clean up after Google Apps Script cold-start window (30 s)
+      setTimeout(() => {
+        if (document.body.contains(hiddenForm)) document.body.removeChild(hiddenForm);
+        if (document.body.contains(iframe)) document.body.removeChild(iframe);
+      }, 30000);
+
       setStatus('success');
       resetForm();
     } catch (err) {
-      // Fallback: fetch with no-cors (best-effort)
-      try {
-        const formData = new URLSearchParams();
-        Object.entries(data).forEach(([k, v]) => formData.append(k, v));
-
-        await fetch(GOOGLE_SHEETS_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: formData,
-        });
-        setStatus('success');
-        resetForm();
-      } catch {
-        setErrorMsg(`Unable to submit. Please email ${CONTACT_EMAIL} directly.`);
-        setStatus('error');
-      }
+      console.error('[ContactForm] All strategies failed:', err);
+      setErrorMsg(`Unable to submit. Please email ${CONTACT_EMAIL} directly.`);
+      setStatus('error');
     }
   };
 
