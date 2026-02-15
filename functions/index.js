@@ -31,6 +31,9 @@ const virginia = require("./virginia");
 const preorder = require("./preorder");
 const creditGeneration = require("./creditGeneration");
 
+// v2 API modules (DO NOT modify v1 endpoints above)
+const v2Market = require("./v2/market");
+
 // Create Express app for HTTP endpoints
 const app = express();
 
@@ -698,6 +701,14 @@ exports.hubspotWebhook = functions
       res.status(500).send("Error processing webhook");
     }
   });
+
+// =============================================================================
+// V2 API ENDPOINTS (all new backend work under /v2/)
+// =============================================================================
+
+// Market Data
+app.get("/v2/market/stats", v2Market.getMarketStats);
+app.get("/v2/market/ticker", v2Market.getMarketTicker);
 
 // =============================================================================
 // AUTHENTICATION TRIGGERS

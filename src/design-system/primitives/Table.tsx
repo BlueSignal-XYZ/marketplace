@@ -1,0 +1,205 @@
+/**
+ * Table — sortable, filterable columns. CRITICAL for WQT.
+ * Data-dense, monospace numbers, Bloomberg-terminal feel.
+ */
+
+import React, { useState, useMemo, useCallback } from 'react';
+import styled from 'styled-components';
+
+// ── Types ─────────────────────────────────────────────────
+
+export type SortDir = 'asc' | 'desc' | null;
+
+export interface Column<T> {
+  key: string;
+  header: string;
+  /** Render cell content. Defaults to row[key] */
+  render?: (row: T, index: number) => React.ReactNode;
+  /** Sortable? Default false */
+  sortable?: boolean;
+  /** Compare function for custom sort */
+  compare?: (a: T, b: T) => number;
+  /** Column width (CSS string) */
+  width?: string;
+  /** Right-align (for numbers) */
+  align?: 'left' | 'center' | 'right';
+  /** Use monospace font (for data values) */
+  mono?: boolean;
+}
+
+export interface TableProps<T> {
+  columns: Column<T>[];
+  data: T[];
+  /** Unique key extractor for each row */
+  rowKey: (row: T) => string;
+  /** Row click handler */
+  onRowClick?: (row: T) => void;
+  /** Empty message when no data */
+  emptyMessage?: string;
+  /** Loading state — shows skeleton rows */
+  loading?: boolean;
+  /** Compact density */
+  compact?: boolean;
+  className?: string;
+}
+
+// ── Styled ────────────────────────────────────────────────
+
+const Wrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid ${({ theme }) => theme.components.tableBorder};
+  border-radius: ${({ theme }) => theme.radius.md}px;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  font-family: ${({ theme }) => theme.fonts.sans};
+`;
+
+const Thead = styled.thead`
+  background: ${({ theme }) => theme.components.tableHeaderBg};
+`;
+
+const Th = styled.th<{ $align: string; $sortable: boolean }>`
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  text-align: ${({ $align }) => $align};
+  cursor: ${({ $sortable }) => ($sortable ? 'pointer' : 'default')};
+  user-select: none;
+  white-space: nowrap;
+  border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder};
+
+  &:hover {
+    ${({ $sortable, theme }) => $sortable && `color: ${theme.colors.text};`}
+  }
+`;
+
+const SortArrow = styled.span<{ $active: boolean }>`
+  margin-left: 4px;
+  opacity: ${({ $active }) => ($active ? 1 : 0.3)};
+`;
+
+const Tbody = styled.tbody``;
+
+const Tr = styled.tr<{ $clickable: boolean }>`
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+  transition: background ${({ theme }) => theme.animation.fast};
+  &:hover { background: ${({ theme }) => theme.components.tableRowHover}; }
+  &:not(:last-child) > td { border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder}; }
+`;
+
+const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean }>`
+  padding: ${({ $compact }) => ($compact ? '8px 14px' : '12px 14px')};
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.text};
+  text-align: ${({ $align }) => $align};
+  font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : 'inherit')};
+  white-space: nowrap;
+`;
+
+const Empty = styled.td`
+  padding: 40px 16px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 14px;
+`;
+
+// ── Component ─────────────────────────────────────────────
+
+export function Table<T>({
+  columns,
+  data,
+  rowKey,
+  onRowClick,
+  emptyMessage = 'No data',
+  loading = false,
+  compact = false,
+  className,
+}: TableProps<T>) {
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>(null);
+
+  const handleSort = useCallback((col: Column<T>) => {
+    if (!col.sortable) return;
+    setSortKey((prev) => {
+      if (prev === col.key) {
+        setSortDir((d) => (d === 'asc' ? 'desc' : d === 'desc' ? null : 'asc'));
+        return col.key;
+      }
+      setSortDir('asc');
+      return col.key;
+    });
+  }, []);
+
+  const sortedData = useMemo(() => {
+    if (!sortKey || !sortDir) return data;
+    const col = columns.find((c) => c.key === sortKey);
+    if (!col) return data;
+
+    return [...data].sort((a, b) => {
+      if (col.compare) {
+        return sortDir === 'asc' ? col.compare(a, b) : col.compare(b, a);
+      }
+      const aVal = (a as any)[col.key];
+      const bVal = (b as any)[col.key];
+      if (aVal < bVal) return sortDir === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [data, sortKey, sortDir, columns]);
+
+  return (
+    <Wrapper className={className}>
+      <StyledTable>
+        <Thead>
+          <tr>
+            {columns.map((col) => (
+              <Th
+                key={col.key}
+                $align={col.align || 'left'}
+                $sortable={!!col.sortable}
+                style={col.width ? { width: col.width } : undefined}
+                onClick={() => handleSort(col)}
+              >
+                {col.header}
+                {col.sortable && (
+                  <SortArrow $active={sortKey === col.key && sortDir !== null}>
+                    {sortKey === col.key && sortDir === 'desc' ? '↓' : '↑'}
+                  </SortArrow>
+                )}
+              </Th>
+            ))}
+          </tr>
+        </Thead>
+        <Tbody>
+          {sortedData.length === 0 && !loading ? (
+            <tr>
+              <Empty colSpan={columns.length}>{emptyMessage}</Empty>
+            </tr>
+          ) : (
+            sortedData.map((row, i) => (
+              <Tr key={rowKey(row)} $clickable={!!onRowClick} onClick={() => onRowClick?.(row)}>
+                {columns.map((col) => (
+                  <Td
+                    key={col.key}
+                    $align={col.align || 'left'}
+                    $mono={!!col.mono}
+                    $compact={compact}
+                  >
+                    {col.render ? col.render(row, i) : (row as any)[col.key]}
+                  </Td>
+                ))}
+              </Tr>
+            ))
+          )}
+        </Tbody>
+      </StyledTable>
+    </Wrapper>
+  );
+}
