@@ -87,16 +87,7 @@ const TabLabel = styled.span`
 /* ── Code area with line-number gutter ──────────────────── */
 
 const CodeScroll = styled.div`
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.12) transparent;
-
-  &::-webkit-scrollbar { height: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.12);
-    border-radius: 3px;
-  }
+  overflow: hidden;
 `;
 
 const CodeTable = styled.div`

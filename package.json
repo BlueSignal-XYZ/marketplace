@@ -55,6 +55,7 @@
     "http-proxy-middleware": "^3.0.0",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.4",
+    "lucide-react": "^0.564.0",
     "mapbox-gl": "^2.15.0",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
@@ -94,6 +95,7 @@
     "happy-dom": "^20.0.11",
     "jsdom": "^27.2.0",
     "sharp": "^0.34.5",
+    "typescript": "^5.9.3",
     "vite": "^4.4.5",
     "vitest": "^4.0.14"
   }
