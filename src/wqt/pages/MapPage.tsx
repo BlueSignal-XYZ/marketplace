@@ -673,7 +673,7 @@ export function MapPage() {
       markers.current.push(marker);
     });
 
-    if (filteredProjects.length > 0) {
+    if (filteredProjects.length > 0 && map.current) {
       const bounds = new mapboxgl.LngLatBounds();
       filteredProjects.forEach(project => {
         bounds.extend([project.lng, project.lat]);
