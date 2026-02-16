@@ -5,7 +5,7 @@ export const RadioButton = styled.input.attrs({ type: "radio" })`
   width: 20px;
   border-radius: 50%;
   margin-bottom: 0px;
-  accent-color: ${({ theme }) => theme.colors.primary500};
+  accent-color: ${({ theme }) => theme.colors.primary};
 `;
 
 const StyledRadioButtonWithLabel = styled.div`
@@ -15,12 +15,18 @@ const StyledRadioButtonWithLabel = styled.div`
   label {
     font-size: 14px;
     font-weight: 400;
-    color: ${({ theme }) => theme.colors.ui800};
+    color: ${({ theme }) => theme.colors.text};
     margin-bottom: 0px;
   }
 `;
 
-export function RadioWithLabel({ label, onChange, checked }) {
+export interface RadioWithLabelProps {
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+}
+
+export function RadioWithLabel({ label, onChange, checked }: RadioWithLabelProps) {
   return (
     <StyledRadioButtonWithLabel>
       <RadioButton onChange={onChange} checked={checked} id="radio" />
