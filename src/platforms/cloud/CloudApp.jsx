@@ -28,6 +28,11 @@ import {
   CloudMediaPlayer,
 } from '../../components/cloud/CloudToolsWrapper';
 
+// Phase 8 — Rebuilt Cloud pages with new design system
+import { CloudDashboardPage } from './pages/CloudDashboardPage';
+import { DeviceDetailPage as NewDeviceDetailPage } from './pages/DeviceDetailPage';
+import { CommissioningWizardPage } from './pages/CommissioningWizardPage';
+
 // Cloud console components (lazy-loaded for code splitting)
 const OverviewDashboard = React.lazy(() => import('../../components/cloud/OverviewDashboard'));
 const DevicesListPage = React.lazy(() => import('../../components/cloud/DevicesListPage'));
@@ -143,6 +148,11 @@ export function CloudApp({ user, authLoading }) {
               {/* Alerts */}
               <Route path="/cloud/alerts" element={<CloudAuthGate authLoading={authLoading}><AlertsPage /></CloudAuthGate>} />
               <Route path="/cloud/alerts/:alertId" element={<CloudAuthGate authLoading={authLoading}><AlertDetailPage /></CloudAuthGate>} />
+
+              {/* v2 Cloud pages (Phase 8 rebuild) */}
+              <Route path="/v2/dashboard" element={<CloudAuthGate authLoading={authLoading}><CloudDashboardPage /></CloudAuthGate>} />
+              <Route path="/device/:deviceId" element={<CloudAuthGate authLoading={authLoading}><NewDeviceDetailPage /></CloudAuthGate>} />
+              <Route path="/commission" element={<CloudAuthGate authLoading={authLoading}><CommissioningWizardPage /></CloudAuthGate>} />
 
               {/* Cloud tools */}
               <Route path="/cloud/tools/nutrient-calculator" element={<CloudAuthGate authLoading={authLoading}><CloudNutrientCalculator /></CloudAuthGate>} />

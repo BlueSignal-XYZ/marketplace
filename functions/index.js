@@ -33,6 +33,11 @@ const creditGeneration = require("./creditGeneration");
 
 // v2 API modules (DO NOT modify v1 endpoints above)
 const v2Market = require("./v2/market");
+const v2Search = require("./v2/search");
+const v2Data = require("./v2/data");
+const v2Credits = require("./v2/credits");
+const v2Blockchain = require("./v2/blockchain");
+const v2Programs = require("./v2/programs");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -709,6 +714,27 @@ exports.hubspotWebhook = functions
 // Market Data
 app.get("/v2/market/stats", v2Market.getMarketStats);
 app.get("/v2/market/ticker", v2Market.getMarketTicker);
+app.post("/v2/market/search", v2Search.searchListings);
+
+// Data endpoints
+app.get("/v2/data/sensors/public", v2Data.getPublicSensors);
+app.get("/v2/data/watersheds", v2Data.getWatersheds);
+
+// Credits endpoints
+app.post("/v2/credits/purchase", v2Credits.purchaseCredits);
+app.post("/v2/credits/submit", v2Credits.submitCredits);
+app.post("/v2/credits/approve", v2Credits.approveCredits);
+app.post("/v2/credits/reject", v2Credits.rejectCredits);
+
+// Blockchain endpoints
+app.post("/v2/blockchain/mint", v2Blockchain.mintCertificate);
+app.post("/v2/wallet/link", v2Blockchain.linkWallet);
+app.get("/v2/blockchain/certificate/:id", v2Blockchain.getCertificate);
+
+// Programs endpoints
+app.get("/v2/programs", v2Programs.listPrograms);
+app.get("/v2/programs/:id", v2Programs.getProgram);
+app.post("/v2/programs/:id/calculate", v2Programs.calculateCredits);
 
 // =============================================================================
 // AUTHENTICATION TRIGGERS

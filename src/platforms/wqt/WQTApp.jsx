@@ -15,6 +15,26 @@ import { useAppContext } from '../../context/AppContext';
 // WQT Landing page (unauthenticated visitors)
 import { WQTLandingPage } from './landing/WQTLandingPage';
 
+// New WQT pages (Phase 4+)
+import { MarketplacePage } from './pages/MarketplacePage';
+import { ListingDetailPage } from './pages/ListingDetailPage';
+import { CertificateDetailPage } from './pages/CertificateDetailPage';
+
+// Phase 5 — Environmental data
+import { EnvironmentalMapPage } from './pages/EnvironmentalMapPage';
+import { WatershedDashboardPage } from './pages/WatershedDashboardPage';
+
+// Phase 6 — Purchase flow
+import { PurchaseFlowPage } from './pages/PurchaseFlowPage';
+
+// Phase 7 — Portfolio, Seller, Dashboard
+import { PortfolioPage } from './pages/PortfolioPage';
+import { SellerOnboardingPage } from './pages/SellerOnboardingPage';
+import { WQTDashboardPage } from './pages/WQTDashboardPage';
+
+// Phase 9 — Programs
+import { ProgramsPage } from './pages/ProgramsPage';
+
 // Existing route components
 import { Welcome, Marketplace, NotFound, FinancialDashboard } from '../../routes';
 import { CertificatePage } from '../../components/routes';
@@ -77,20 +97,26 @@ export function WQTApp({ user, authLoading }) {
               <Route path="/" element={<MarketplaceLanding user={user} authLoading={authLoading} />} />
               <Route path="/login" element={<Welcome />} />
 
-              {/* Public routes */}
-              <Route path="/marketplace" element={<Marketplace />} />
-              <Route path="/marketplace/listing/:id" element={<ListingPage />} />
+              {/* Public routes — v2 marketplace pages */}
+              <Route path="/marketplace" element={<MarketplacePage />} />
+              <Route path="/marketplace/listing/:id" element={<ListingDetailPage />} />
               <Route path="/recent-removals" element={<RecentRemovalsPage />} />
-              <Route path="/certificate/:id" element={<CertificatePage />} />
+              <Route path="/certificate/:id" element={<CertificateDetailPage />} />
               <Route path="/registry" element={<RegistryPage />} />
               <Route path="/map" element={<MapPage />} />
+              <Route path="/data" element={<EnvironmentalMapPage />} />
+              <Route path="/data/watersheds" element={<WatershedDashboardPage />} />
               <Route path="/presale" element={<PresalePage />} />
-              <Route path="/programs" element={<TradingProgramsPage />} />
+              <Route path="/programs" element={<ProgramsPage />} />
               <Route path="/programs/:programId" element={<TradingProgramDetailPage />} />
 
               {/* Auth-gated marketplace */}
               {user?.uid && (
                 <>
+                  <Route path="/dashboard" element={<WQTDashboardPage />} />
+                  <Route path="/portfolio" element={<PortfolioPage />} />
+                  <Route path="/seller/onboarding" element={<SellerOnboardingPage />} />
+                  <Route path="/purchase/:id" element={<PurchaseFlowPage />} />
                   <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
                   <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
                   <Route path="/credits" element={<CreditPortfolioPage />} />
