@@ -246,3 +246,5 @@ export function EnvironmentalMapPage() {
     </Page>
   );
 }
+
+export default EnvironmentalMapPage;

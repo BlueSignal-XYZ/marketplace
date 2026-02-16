@@ -9,7 +9,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { getFirestore } from "firebase/firestore";
 import { getAppMode } from '../utils/modeDetection';
 
 // Firebase configuration for waterquality-trading project
@@ -39,18 +38,26 @@ export const firebaseConfigError = missingKeys.length > 0
 let app = null;
 let auth = null;
 let db = null;
-let firestore = null;
 let googleProvider = null;
 
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getDatabase(app);
-  firestore = getFirestore(app);
   googleProvider = new GoogleAuthProvider();
 }
 
 const mode = getAppMode();
-// Debug logging removed for security - mode detection happens silently
 
-export { auth, db, firestore, googleProvider };
+// Lazy-load Firestore — only import firebase/firestore when actually needed.
+// This avoids pulling ~180KB into the main bundle for features that rarely use it.
+let _firestore = null;
+export async function getFirestoreInstance() {
+  if (_firestore) return _firestore;
+  const { getFirestore } = await import('firebase/firestore');
+  _firestore = getFirestore(app);
+  return _firestore;
+}
+
+// Synchronous export kept for legacy callers — null until getFirestoreInstance() is called.
+export { auth, db, _firestore as firestore, googleProvider };

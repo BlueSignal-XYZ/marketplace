@@ -38,6 +38,8 @@ const v2Data = require("./v2/data");
 const v2Credits = require("./v2/credits");
 const v2Blockchain = require("./v2/blockchain");
 const v2Programs = require("./v2/programs");
+const v2Devices = require("./v2/devices");
+const v2Sites = require("./v2/sites");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -715,6 +717,7 @@ exports.hubspotWebhook = functions
 app.get("/v2/market/stats", v2Market.getMarketStats);
 app.get("/v2/market/ticker", v2Market.getMarketTicker);
 app.post("/v2/market/search", v2Search.searchListings);
+app.get("/v2/market/listing/:id", v2Search.getListing);
 
 // Data endpoints
 app.get("/v2/data/sensors/public", v2Data.getPublicSensors);
@@ -725,6 +728,7 @@ app.post("/v2/credits/purchase", v2Credits.purchaseCredits);
 app.post("/v2/credits/submit", v2Credits.submitCredits);
 app.post("/v2/credits/approve", v2Credits.approveCredits);
 app.post("/v2/credits/reject", v2Credits.rejectCredits);
+app.get("/v2/credits/portfolio", v2Credits.getPortfolio);
 
 // Blockchain endpoints
 app.post("/v2/blockchain/mint", v2Blockchain.mintCertificate);
@@ -735,6 +739,20 @@ app.get("/v2/blockchain/certificate/:id", v2Blockchain.getCertificate);
 app.get("/v2/programs", v2Programs.listPrograms);
 app.get("/v2/programs/:id", v2Programs.getProgram);
 app.post("/v2/programs/:id/calculate", v2Programs.calculateCredits);
+
+// Device endpoints
+app.get("/v2/devices", v2Devices.listDevices);
+app.get("/v2/devices/:id", v2Devices.getDevice);
+app.get("/v2/devices/:id/metrics", v2Devices.getDeviceMetrics);
+app.get("/v2/devices/:id/alerts", v2Devices.getDeviceAlerts);
+app.post("/v2/devices/check", v2Devices.checkDevice);
+app.post("/v2/devices/test-connection", v2Devices.testConnection);
+app.post("/v2/devices/commission", v2Devices.commissionDevice);
+app.get("/v2/alerts", v2Devices.listAlerts);
+
+// Site endpoints
+app.get("/v2/sites", v2Sites.listSites);
+app.post("/v2/sites", v2Sites.createSite);
 
 // =============================================================================
 // AUTHENTICATION TRIGGERS

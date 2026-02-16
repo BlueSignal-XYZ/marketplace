@@ -1,10 +1,25 @@
 /**
  * v2 Data Endpoints
- * GET /v2/data/sensors/public — List public sensor feeds
- * GET /v2/data/watersheds     — List watershed summaries
+ * GET /v2/data/sensors/public — List public sensor feeds (→ PublicSensor[])
+ * GET /v2/data/watersheds     — List watershed summaries (→ Watershed[])
  */
 
 const admin = require("firebase-admin");
+
+// Helper: convert raw device metrics to SensorReading[]
+function toReadings(metrics) {
+  if (!metrics || typeof metrics !== "object") return [];
+  const typeMap = { ph: "pH", tds: "TDS", turbidity: "turbidity", temperature: "temperature", orp: "ORP" };
+  const unitMap = { pH: "", TDS: "ppm", turbidity: "NTU", temperature: "°C", ORP: "mV" };
+  return Object.entries(metrics)
+    .filter(([, v]) => v != null && typeof v === "number")
+    .map(([key, value]) => ({
+      type: typeMap[key.toLowerCase()] || key,
+      value,
+      unit: unitMap[typeMap[key.toLowerCase()] || key] || "",
+      timestamp: new Date().toISOString(),
+    }));
+}
 
 async function getPublicSensors(req, res) {
   try {
@@ -14,21 +29,32 @@ async function getPublicSensors(req, res) {
 
     const sensors = Object.entries(raw)
       .map(([id, val]) => ({
+        // PublicSensor shape
         id,
+        deviceId: val.deviceId || id,
         name: val.name || id,
-        region: val.region || val.location || "",
-        latitude: val.latitude || val.lat || null,
-        longitude: val.longitude || val.lng || null,
+        location: {
+          latitude: val.latitude || val.lat || 0,
+          longitude: val.longitude || val.lng || 0,
+          address: val.address || "",
+          city: val.city || "",
+          state: val.state || "",
+          country: val.country || "US",
+        },
         status: val.status || "unknown",
-        lastReading: val.lastReading || null,
-        metrics: val.latestMetrics || {},
+        lastReadingAt: val.lastReadingAt || val.lastReading || "",
+        latestReadings: toReadings(val.latestMetrics || val.metrics || {}),
+        waterQualityIndex: val.waterQualityIndex || val.wqi || 0,
+        isPublic: true,
+        watershedId: val.watershedId || val.watershed || undefined,
+        createdAt: val.createdAt || "",
+        updatedAt: val.updatedAt || "",
       }))
       .filter((s) => s.status !== "decommissioned");
 
     res.json({
       success: true,
       data: sensors,
-      total: sensors.length,
     });
   } catch (error) {
     console.error("v2/data/sensors error:", error);
@@ -43,20 +69,31 @@ async function getWatersheds(req, res) {
     const raw = snap.val() || {};
 
     const watersheds = Object.entries(raw).map(([id, val]) => ({
+      // Watershed shape
       id,
       name: val.name || id,
       state: val.state || "",
-      area: val.area || "",
-      sensorCount: val.sensorCount || 0,
-      health: val.health || "unknown",
-      totalCredits: val.totalCredits || 0,
-      metrics: val.aggregateMetrics || {},
+      region: val.region || val.area || "",
+      stats: {
+        activeSensors: val.sensorCount || val.activeSensors || 0,
+        totalReadings: val.totalReadings || 0,
+        avgWaterQualityIndex: val.avgWaterQualityIndex || val.wqi || 0,
+        qualityTrend: val.qualityTrend || "stable",
+        nutrientLoading: {
+          nitrogen: val.nutrientLoading?.nitrogen || 0,
+          phosphorus: val.nutrientLoading?.phosphorus || 0,
+        },
+        activeCredits: val.totalCredits || val.activeCredits || 0,
+        participatingSensors: val.participatingSensors || val.sensorCount || 0,
+        regulatoryContext: val.regulatoryContext || undefined,
+      },
+      createdAt: val.createdAt || "",
+      updatedAt: val.updatedAt || "",
     }));
 
     res.json({
       success: true,
       data: watersheds,
-      total: watersheds.length,
     });
   } catch (error) {
     console.error("v2/data/watersheds error:", error);

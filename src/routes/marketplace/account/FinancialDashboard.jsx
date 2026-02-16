@@ -1,10 +1,13 @@
 // /src/routes/FinancialDashboard.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Line, Doughnut } from "react-chartjs-2";
 import { useAppContext } from "../../../context/AppContext";
-import { fetchUserOrders } from "../../../services/wqtDataService";
+import { getPortfolio } from "../../../services/v2/client";
+import { Skeleton } from "../../../design-system/primitives/Skeleton";
+import { Button } from "../../../design-system/primitives/Button";
+import { EmptyState } from "../../../design-system/primitives/EmptyState";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -347,26 +350,32 @@ const SummaryRow = styled.div`
   }
 `;
 
-const LoadingSpinner = styled.div`
+const SkeletonGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+`;
+
+const ErrorBanner = styled.div`
+  padding: 20px 24px;
+  background: rgba(255, 77, 77, 0.06);
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  border-radius: 8px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 60px;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+`;
 
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid #e5e7eb;
-    border-top-color: #0284c7;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
+const ErrorText = styled.span`
+  font-size: 14px;
+  color: #1f2937;
 `;
 
 const FinancialDashboard = () => {
@@ -375,60 +384,76 @@ const FinancialDashboard = () => {
   const navigate = useNavigate();
   const [period, setPeriod] = useState("30d");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [portfolio, setPortfolio] = useState(null);
 
-  const [transactions, setTransactions] = useState([]);
-  const [stats, setStats] = useState({
-    totalRevenue: 0,
-    pendingPayouts: 0,
-    completedPayouts: 0,
-    activeListings: 0,
-  });
-
-  useEffect(() => {
-    let cancelled = false;
-    const loadFinancialData = async () => {
-      setLoading(true);
-      try {
-        const realOrders = await fetchUserOrders(user?.uid);
-        if (!cancelled && realOrders.length > 0) {
-          const txns = realOrders.map(o => ({
-            id: o.id,
-            date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
-            type: o.sellerId === user?.uid ? 'sale' : 'purchase',
-            description: `${o.type || 'Credit'} - ${o.buyerCompany || o.buyerEmail || 'Transaction'}`,
-            amount: o.sellerId === user?.uid ? (o.amount || 0) : -(o.amount || 0),
-          }));
-          setTransactions(txns);
-
-          const totalRev = txns.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-          const completed = txns.filter(t => t.type === 'sale').reduce((s, t) => s + Math.abs(t.amount), 0);
-          setStats({
-            totalRevenue: totalRev,
-            pendingPayouts: Math.max(0, totalRev - completed),
-            completedPayouts: completed,
-            activeListings: 0,
-          });
-        } else if (!cancelled) {
-          setTransactions([]);
-        }
-      } catch (error) {
-        console.error('Error loading financial data:', error);
-        if (!cancelled) setTransactions([]);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-    loadFinancialData();
-    return () => { cancelled = true; };
+  const loadFinancialData = useCallback(async () => {
+    if (!user?.uid) {
+      setLoading(false);
+      setPortfolio(null);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getPortfolio(user.uid);
+      setPortfolio(data);
+    } catch (err) {
+      setError(err?.message || "Failed to load financial data.");
+      setPortfolio(null);
+    } finally {
+      setLoading(false);
+    }
   }, [user?.uid]);
 
-  // Revenue chart data
+  useEffect(() => {
+    loadFinancialData();
+  }, [loadFinancialData]);
+
+  // Derive transactions for table
+  const transactions = (portfolio?.transactions || []).map((t) => ({
+    id: t.id,
+    date: t.timestamp ? new Date(t.timestamp).toISOString().split("T")[0] : "",
+    type: t.type,
+    description: `${t.nutrientType || "Credit"} - ${t.counterparty || "Transaction"}`,
+    amount: t.type === "sale" ? (t.price || 0) : t.type === "purchase" ? -(t.price || 0) : 0,
+  }));
+
+  // Derive stats from portfolio
+  const summary = portfolio?.summary || {};
+  const saleTotal = transactions.filter((t) => t.type === "sale").reduce((s, t) => s + (t.amount > 0 ? t.amount : 0), 0);
+  const stats = {
+    totalRevenue: saleTotal,
+    pendingPayouts: 0,
+    completedPayouts: saleTotal,
+    activeListings: summary.listedCredits ?? 0,
+  };
+
+  // Revenue chart: bucket transactions by date (period)
+  const getBucketKey = (d) => {
+    const date = new Date(d);
+    if (period === "7d") return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    if (period === "30d" || period === "90d") return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return date.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
+  };
+  const now = Date.now();
+  const periodMs = { "7d": 7 * 864e5, "30d": 30 * 864e5, "90d": 90 * 864e5, "1y": 365 * 864e5 }[period] || 30 * 864e5;
+  const cutoff = now - periodMs;
+  const saleTxns = (portfolio?.transactions || [])
+    .filter((t) => t.type === "sale" && new Date(t.timestamp).getTime() >= cutoff)
+    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  const revenueByBucket = {};
+  saleTxns.forEach((t) => {
+    const k = getBucketKey(t.timestamp);
+    revenueByBucket[k] = (revenueByBucket[k] || 0) + (t.price || 0);
+  });
+  const sortedBuckets = [...new Set(saleTxns.map((t) => getBucketKey(t.timestamp)))];
   const revenueChartData = {
-    labels: ["Oct 1", "Oct 8", "Oct 15", "Oct 22", "Nov 1", "Nov 8", "Nov 15", "Nov 22", "Nov 28"],
+    labels: sortedBuckets.length > 0 ? sortedBuckets : ["—"],
     datasets: [
       {
         label: "Revenue",
-        data: [5200, 8400, 12000, 18500, 25000, 38500, 53500, 48900, 61400],
+        data: sortedBuckets.length > 0 ? sortedBuckets.map((k) => revenueByBucket[k]) : [0],
         fill: true,
         borderColor: "#0284c7",
         backgroundColor: "rgba(2, 132, 199, 0.1)",
@@ -470,13 +495,21 @@ const FinancialDashboard = () => {
     },
   };
 
-  // Credit type distribution
+  // Credit type distribution: derive from transactions
+  const typeColors = { nitrogen: "#3b82f6", phosphorus: "#10b981", thermal: "#f97316", stormwater: "#06b6d4" };
+  const typeTotals = {};
+  (portfolio?.transactions || []).filter((t) => t.type === "sale").forEach((t) => {
+    const k = (t.nutrientType || "nitrogen").toLowerCase();
+    typeTotals[k] = (typeTotals[k] || 0) + (t.price || 0);
+  });
+  const typeLabels = Object.keys(typeTotals).length > 0 ? Object.keys(typeTotals) : ["—"];
+  const typeValues = typeLabels[0] === "—" ? [0] : typeLabels.map((k) => typeTotals[k]);
   const creditTypeData = {
-    labels: ["Nitrogen", "Phosphorus", "Thermal", "Stormwater"],
+    labels: typeLabels.map((k) => k.charAt(0).toUpperCase() + k.slice(1)),
     datasets: [
       {
-        data: [45, 25, 20, 10],
-        backgroundColor: ["#3b82f6", "#10b981", "#f97316", "#06b6d4"],
+        data: typeValues,
+        backgroundColor: typeLabels.map((k) => typeColors[k] || "#94a3b8"),
         borderWidth: 0,
       },
     ],
@@ -497,9 +530,13 @@ const FinancialDashboard = () => {
     return (
       <PageWrapper>
         <Shell>
-          <LoadingSpinner>
-            <div className="spinner" />
-          </LoadingSpinner>
+          <SkeletonGrid>
+            {[1, 2, 3, 4].map((i) => (
+              <Skeleton key={i} height={100} />
+            ))}
+          </SkeletonGrid>
+          <Skeleton width="100%" height={280} style={{ marginBottom: 24 }} />
+          <Skeleton width="100%" height={200} />
         </Shell>
       </PageWrapper>
     );
@@ -512,6 +549,15 @@ const FinancialDashboard = () => {
           <h1>Financial Dashboard</h1>
           <p>Track your revenue, payouts, and marketplace activity.</p>
         </Header>
+
+        {error && (
+          <ErrorBanner>
+            <ErrorText>{error}</ErrorText>
+            <Button variant="outline" size="sm" onClick={loadFinancialData}>
+              Retry
+            </Button>
+          </ErrorBanner>
+        )}
 
         <HeaderActions>
           <ActionButton onClick={() => navigate("/dashboard/seller")}>
@@ -527,7 +573,7 @@ const FinancialDashboard = () => {
             <StatIcon color="#d1fae5">$</StatIcon>
             <StatLabel>Total Revenue</StatLabel>
             <StatValue>${(stats.totalRevenue / 1000).toFixed(1)}k</StatValue>
-            <StatChange positive>+23% from last month</StatChange>
+            <StatChange positive>{stats.totalRevenue > 0 ? "From sales" : "—"}</StatChange>
           </StatCard>
 
           <StatCard>
@@ -574,34 +620,43 @@ const FinancialDashboard = () => {
                 <h2>Recent Transactions</h2>
               </SectionHeader>
               <TransactionTable>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Type</th>
-                      <th>Description</th>
-                      <th>Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactions.map((tx) => (
-                      <tr key={tx.id}>
-                        <td>{tx.date}</td>
-                        <td>
-                          <TypeBadge type={tx.type}>
-                            {tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}
-                          </TypeBadge>
-                        </td>
-                        <td>{tx.description}</td>
-                        <td>
-                          <AmountCell positive={tx.amount > 0}>
-                            {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toLocaleString()}
-                          </AmountCell>
-                        </td>
+                {transactions.length === 0 ? (
+                  <EmptyState
+                    compact
+                    title="No transactions yet"
+                    description="Your sales and purchases will appear here."
+                    action={{ label: "Browse Marketplace", onClick: () => navigate("/marketplace") }}
+                  />
+                ) : (
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Amount</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {transactions.map((tx) => (
+                        <tr key={tx.id}>
+                          <td>{tx.date}</td>
+                          <td>
+                            <TypeBadge type={tx.type}>
+                              {tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}
+                            </TypeBadge>
+                          </td>
+                          <td>{tx.description}</td>
+                          <td>
+                            <AmountCell positive={tx.amount > 0}>
+                              {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toLocaleString()}
+                            </AmountCell>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
               </TransactionTable>
             </Section>
           </div>
@@ -615,22 +670,16 @@ const FinancialDashboard = () => {
                 <Doughnut data={creditTypeData} options={creditTypeOptions} />
               </DonutContainer>
               <LegendContainer>
-                <LegendItem>
-                  <LegendDot color="#3b82f6" />
-                  Nitrogen (45%)
-                </LegendItem>
-                <LegendItem>
-                  <LegendDot color="#10b981" />
-                  Phosphorus (25%)
-                </LegendItem>
-                <LegendItem>
-                  <LegendDot color="#f97316" />
-                  Thermal (20%)
-                </LegendItem>
-                <LegendItem>
-                  <LegendDot color="#06b6d4" />
-                  Stormwater (10%)
-                </LegendItem>
+                {creditTypeData.labels.map((label, i) => {
+                  const total = creditTypeData.datasets[0].data.reduce((a, b) => a + b, 0);
+                  const pct = total > 0 ? Math.round((creditTypeData.datasets[0].data[i] / total) * 100) : 0;
+                  return (
+                    <LegendItem key={label}>
+                      <LegendDot color={creditTypeData.datasets[0].backgroundColor[i]} />
+                      {label} ({pct}%)
+                    </LegendItem>
+                  );
+                })}
               </LegendContainer>
             </Section>
 
@@ -640,19 +689,19 @@ const FinancialDashboard = () => {
               </SectionHeader>
               <SummaryRow>
                 <span className="label">Available Balance</span>
-                <span className="value">$22,500</span>
+                <span className="value">$0</span>
               </SummaryRow>
               <SummaryRow>
                 <span className="label">Next Payout Date</span>
-                <span className="value">Dec 1, 2025</span>
+                <span className="value">—</span>
               </SummaryRow>
               <SummaryRow>
                 <span className="label">Payout Method</span>
-                <span className="value">Bank ****4521</span>
+                <span className="value">—</span>
               </SummaryRow>
               <SummaryRow>
                 <span className="label">Platform Fee Rate</span>
-                <span className="value">2.5%</span>
+                <span className="value">—</span>
               </SummaryRow>
             </Section>
           </div>

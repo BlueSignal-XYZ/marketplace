@@ -1,15 +1,19 @@
 /**
  * WQT Dashboard — personalized market overview for authenticated users.
- * Shows portfolio snapshot, market trends, recent activity, quick actions.
+ * Wired to /v2/market/stats, /v2/credits/portfolio.
  */
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
 import { Button } from '../../../design-system/primitives/Button';
 import { Table } from '../../../design-system/primitives/Table';
+import { Skeleton } from '../../../design-system/primitives/Skeleton';
+import { EmptyState } from '../../../design-system/primitives/EmptyState';
+import { getMarketStats, getPortfolio, ApiError } from '../../../services/v2/client';
+import { useAppContext } from '../../../context/AppContext';
 
 const Page = styled.div`
   max-width: 1280px;
@@ -102,34 +106,94 @@ const ActionDesc = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const RECENT_TX = [
-  { id: 't1', date: '2025-11-15', type: 'buy', credits: '150 kg N', amount: '$1,263', status: 'completed' },
-  { id: 't2', date: '2025-10-20', type: 'buy', credits: '75 kg P', amount: '$862', status: 'completed' },
-  { id: 't3', date: '2025-12-01', type: 'retire', credits: '50 kg N', amount: '—', status: 'completed' },
-];
+const SkeletonStats = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+  @media (max-width: 640px) { grid-template-columns: 1fr 1fr; }
+`;
 
 const TX_COLS = [
-  { key: 'date', header: 'Date', mono: true, width: '110px' },
-  { key: 'type', header: 'Type', render: (r) => <Badge variant={r.type === 'buy' ? 'info' : 'warning'} size="sm">{r.type}</Badge> },
-  { key: 'credits', header: 'Credits', mono: true },
-  { key: 'amount', header: 'Amount', align: 'right', mono: true },
-  { key: 'status', header: 'Status', render: () => <Badge variant="positive" size="sm">completed</Badge> },
+  { key: 'timestamp', header: 'Date', mono: true, width: '110px', render: (r) => r.timestamp ? new Date(r.timestamp).toLocaleDateString() : '\u2014' },
+  { key: 'type', header: 'Type', render: (r) => <Badge variant={r.type === 'purchase' ? 'info' : 'warning'} size="sm">{r.type}</Badge> },
+  { key: 'quantity', header: 'Credits', mono: true, render: (r) => `${(r.quantity || 0).toLocaleString()} kg ${r.nutrientType === 'nitrogen' ? 'N' : 'P'}` },
+  { key: 'price', header: 'Amount', align: 'right', mono: true, render: (r) => r.price ? `$${(r.price || 0).toLocaleString()}` : '\u2014' },
 ];
 
 export function WQTDashboardPage() {
   const navigate = useNavigate();
+  const { STATES } = useAppContext();
+  const user = STATES?.user;
+
+  const [stats, setStats] = useState(null);
+  const [portfolio, setPortfolio] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      try {
+        const [statsData, portfolioData] = await Promise.allSettled([
+          getMarketStats(),
+          user?.uid ? getPortfolio(user.uid) : Promise.resolve(null),
+        ]);
+        if (!cancelled) {
+          setStats(statsData.status === 'fulfilled' ? statsData.value : null);
+          setPortfolio(portfolioData.status === 'fulfilled' ? portfolioData.value : null);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, [user?.uid]);
+
+  const holdings = portfolio?.holdings || [];
+  const transactions = portfolio?.transactions || [];
+  const totalValue = portfolio?.totalValue || 0;
+  const totalKg = holdings.reduce((s, h) => s + (h.quantity || 0), 0);
+  const retiredKg = holdings.filter(h => h.status === 'retired').reduce((s, h) => s + (h.quantity || 0), 0);
+  const hasActivity = holdings.length > 0 || transactions.length > 0;
+  const recentTx = transactions.slice(0, 5);
+
+  const displayName = user?.displayName || user?.username || 'there';
 
   return (
     <Page>
-      <Greeting>Dashboard</Greeting>
+      <Greeting>Welcome back, {displayName}</Greeting>
       <SubGreeting>Your personalized market overview and portfolio summary.</SubGreeting>
 
-      <StatsGrid>
-        <DataCard label="Portfolio Value" value="$2,546" trend={{ value: 12.3, direction: 'up' }} compact />
-        <DataCard label="Total Holdings" value="225" unit="kg" compact />
-        <DataCard label="Credits Retired" value="50" unit="kg" compact />
-        <DataCard label="Market Avg Price" value="$8.42" unit="/kg N" compact />
-      </StatsGrid>
+      {loading ? (
+        <SkeletonStats>
+          {[1,2,3,4].map(i => <Skeleton key={i} height={80} />)}
+        </SkeletonStats>
+      ) : hasActivity ? (
+        <StatsGrid>
+          <DataCard
+            label="Portfolio Value"
+            value={`$${totalValue.toLocaleString()}`}
+            compact
+          />
+          <DataCard label="Total Holdings" value={totalKg.toLocaleString()} unit="kg" compact />
+          <DataCard label="Credits Retired" value={retiredKg.toLocaleString()} unit="kg" compact />
+          <DataCard
+            label="Market Avg N Price"
+            value={stats ? `$${stats.avgNitrogenPrice?.toFixed(2) || '\u2014'}` : '\u2014'}
+            unit="/kg"
+            compact
+          />
+        </StatsGrid>
+      ) : (
+        <StatsGrid>
+          <DataCard label="Active Listings" value={stats?.activeListings?.toLocaleString() || '\u2014'} compact />
+          <DataCard label="Total Credits Traded" value={stats?.totalCreditsTraded?.toLocaleString() || '\u2014'} compact />
+          <DataCard label="Active Sensors" value={stats?.activeSensors?.toLocaleString() || '\u2014'} compact />
+          <DataCard label="Avg N Price" value={stats ? `$${stats.avgNitrogenPrice?.toFixed(2) || '\u2014'}` : '\u2014'} unit="/kg" compact />
+        </StatsGrid>
+      )}
 
       <Section>
         <SectionHeader>
@@ -158,10 +222,24 @@ export function WQTDashboardPage() {
       <Section>
         <SectionHeader>
           <SectionTitle>Recent Transactions</SectionTitle>
-          <SectionLink onClick={() => navigate('/portfolio')}>View all →</SectionLink>
+          {hasActivity && <SectionLink onClick={() => navigate('/portfolio')}>View all {'\u2192'}</SectionLink>}
         </SectionHeader>
-        <Table columns={TX_COLS} data={RECENT_TX} rowKey={(r) => r.id} compact />
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[1,2,3].map(i => <Skeleton key={i} height={48} />)}
+          </div>
+        ) : recentTx.length > 0 ? (
+          <Table columns={TX_COLS} data={recentTx} rowKey={(r) => r.id} compact />
+        ) : (
+          <EmptyState
+            title="No transactions yet"
+            description="Start by browsing the marketplace and purchasing your first credits."
+            action={{ label: 'Browse Marketplace', onClick: () => navigate('/marketplace') }}
+          />
+        )}
       </Section>
     </Page>
   );
 }
+
+export default WQTDashboardPage;

@@ -441,3 +441,5 @@ export function TradingProgramDetailPage() {
     </PageShell>
   );
 }
+
+export default TradingProgramDetailPage;

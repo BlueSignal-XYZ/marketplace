@@ -784,3 +784,5 @@ export function PresalePage() {
     </PageContainer>
   );
 }
+
+export default PresalePage;

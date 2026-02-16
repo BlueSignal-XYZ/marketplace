@@ -3,54 +3,50 @@
  * Wraps all marketplace routes with the WQT design system theme.
  */
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { wqtTheme } from '../../design-system/themes/wqtTheme';
 import { ToastProvider } from '../../shared/providers/ToastProvider';
+import { QueryProvider } from '../../shared/providers/QueryProvider';
 import { WQTShell } from './layouts/WQTShell';
-import { useAppContext } from '../../context/AppContext';
-
-// WQT Landing page (unauthenticated visitors)
-import { WQTLandingPage } from './landing/WQTLandingPage';
-
-// New WQT pages (Phase 4+)
-import { MarketplacePage } from './pages/MarketplacePage';
-import { ListingDetailPage } from './pages/ListingDetailPage';
-import { CertificateDetailPage } from './pages/CertificateDetailPage';
-
-// Phase 5 — Environmental data
-import { EnvironmentalMapPage } from './pages/EnvironmentalMapPage';
-import { WatershedDashboardPage } from './pages/WatershedDashboardPage';
-
-// Phase 6 — Purchase flow
-import { PurchaseFlowPage } from './pages/PurchaseFlowPage';
-
-// Phase 7 — Portfolio, Seller, Dashboard
-import { PortfolioPage } from './pages/PortfolioPage';
-import { SellerOnboardingPage } from './pages/SellerOnboardingPage';
-import { WQTDashboardPage } from './pages/WQTDashboardPage';
-
-// Phase 9 — Programs
-import { ProgramsPage } from './pages/ProgramsPage';
-
-// Existing route components
-import { Welcome, Marketplace, NotFound, FinancialDashboard } from '../../routes';
-import { CertificatePage } from '../../components/routes';
-import { RegistryPage } from '../../wqt/pages/RegistryPage';
-import { RecentRemovalsPage } from '../../wqt/pages/RecentRemovalsPage';
-import { MapPage } from '../../wqt/pages/MapPage';
-import { PresalePage } from '../../wqt/pages/PresalePage';
-import { TradingProgramsPage } from '../../wqt/pages/TradingProgramsPage';
-import { TradingProgramDetailPage } from '../../wqt/pages/TradingProgramDetailPage';
-import { CreditPortfolioPage } from '../../wqt/pages/CreditPortfolioPage';
-import { ListingPage, CreateListingPage, TransactionPage } from '../../components/elements/marketplace';
-import { VerificationUI } from '../../components/elements/contractUI';
-import BuyerDashboard from '../../components/dashboards/BuyerDashboard';
-import SellerDashboard_Role from '../../components/dashboards/SellerDashboard';
 import { getDefaultDashboardRoute } from '../../utils/roleRouting';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
+import { AuthGate } from '../../shared/components/AuthGate';
+import { ErrorBoundary } from '../../shared/components/ErrorBoundary';
+import { AuthModal } from '../../shared/components/AuthModal';
+import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
+
+// WQT Landing page (unauthenticated visitors — not lazy, above fold)
+import { WQTLandingPage } from './landing/WQTLandingPage';
+
+// Eagerly loaded (used in routing logic)
+import { Welcome, NotFound } from '../../routes';
+
+// ── Lazy-loaded pages ─────────────────────────────────────
+const MarketplacePage = React.lazy(() => import('./pages/MarketplacePage'));
+const ListingDetailPage = React.lazy(() => import('./pages/ListingDetailPage'));
+const CertificateDetailPage = React.lazy(() => import('./pages/CertificateDetailPage'));
+const EnvironmentalMapPage = React.lazy(() => import('./pages/EnvironmentalMapPage'));
+const WatershedDashboardPage = React.lazy(() => import('./pages/WatershedDashboardPage'));
+const PurchaseFlowPage = React.lazy(() => import('./pages/PurchaseFlowPage'));
+const PortfolioPage = React.lazy(() => import('./pages/PortfolioPage'));
+const SellerOnboardingPage = React.lazy(() => import('./pages/SellerOnboardingPage'));
+const WQTDashboardPage = React.lazy(() => import('./pages/WQTDashboardPage'));
+const ProgramsPage = React.lazy(() => import('./pages/ProgramsPage'));
+const FinancialDashboard = React.lazy(() => import('../../routes/marketplace/account/FinancialDashboard'));
+const RegistryPage = React.lazy(() => import('../../wqt/pages/RegistryPage'));
+const RecentRemovalsPage = React.lazy(() => import('../../wqt/pages/RecentRemovalsPage'));
+const MapPage = React.lazy(() => import('../../wqt/pages/MapPage'));
+const PresalePage = React.lazy(() => import('../../wqt/pages/PresalePage'));
+const TradingProgramDetailPage = React.lazy(() => import('../../wqt/pages/TradingProgramDetailPage'));
+const CreditPortfolioPage = React.lazy(() => import('../../wqt/pages/CreditPortfolioPage'));
+const CreateListingPage = React.lazy(() => import('../../components/elements/marketplace/CreateListingPage'));
+const TransactionPage = React.lazy(() => import('../../components/elements/marketplace/TransactionPage'));
+const VerificationUI = React.lazy(() => import('../../components/elements/contractUI/VerificationUI'));
+const BuyerDashboard = React.lazy(() => import('../../components/dashboards/BuyerDashboard'));
+const SellerDashboard_Role = React.lazy(() => import('../../components/dashboards/SellerDashboard'));
 
 // ── Loading fallback ──────────────────────────────────────
 
@@ -82,14 +78,33 @@ function MarketplaceLanding({ user, authLoading }) {
   return <Welcome />;
 }
 
+// ── WQT Auth Gate (delegates to shared AuthGate) ──────────
+
+function WQTAuthGate({ children, user, authLoading }) {
+  return (
+    <AuthGate user={user} authLoading={authLoading} platform="wqt">
+      {children}
+    </AuthGate>
+  );
+}
+
 // ── WQT App ───────────────────────────────────────────────
 
 export function WQTApp({ user, authLoading }) {
   const location = useLocation();
   const isAuthLanding = location.pathname === '/';
+  const [sessionExpiredOpen, setSessionExpiredOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setSessionExpiredOpen(true);
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handler);
+    return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handler);
+  }, []);
 
   return (
+    <QueryProvider>
     <ThemeProvider theme={wqtTheme}>
+      <ErrorBoundary platform="wqt">
       <ToastProvider>
         <WQTShell user={user} isAuthLanding={isAuthLanding}>
           <Suspense fallback={<LoadingFallback />}>
@@ -110,29 +125,33 @@ export function WQTApp({ user, authLoading }) {
               <Route path="/programs" element={<ProgramsPage />} />
               <Route path="/programs/:programId" element={<TradingProgramDetailPage />} />
 
-              {/* Auth-gated marketplace */}
-              {user?.uid && (
-                <>
-                  <Route path="/dashboard" element={<WQTDashboardPage />} />
-                  <Route path="/portfolio" element={<PortfolioPage />} />
-                  <Route path="/seller/onboarding" element={<SellerOnboardingPage />} />
-                  <Route path="/purchase/:id" element={<PurchaseFlowPage />} />
-                  <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
-                  <Route path="/dashboard/seller" element={<SellerDashboard_Role />} />
-                  <Route path="/credits" element={<CreditPortfolioPage />} />
-                  <Route path="/marketplace/tools/verification" element={<VerificationUI />} />
-                  <Route path="/marketplace/seller-dashboard" element={<Navigate to="/dashboard/seller" replace />} />
-                  <Route path="/marketplace/create-listing" element={<CreateListingPage />} />
-                  <Route path="/dashboard/financial" element={<FinancialDashboard />} />
-                  <Route path="/marketplace/transactions" element={<TransactionPage />} />
-                </>
-              )}
+              {/* Auth-gated routes — WQTAuthGate redirects to /login */}
+              <Route path="/dashboard" element={<WQTAuthGate user={user} authLoading={authLoading}><WQTDashboardPage /></WQTAuthGate>} />
+              <Route path="/portfolio" element={<WQTAuthGate user={user} authLoading={authLoading}><PortfolioPage /></WQTAuthGate>} />
+              <Route path="/seller/onboarding" element={<WQTAuthGate user={user} authLoading={authLoading}><SellerOnboardingPage /></WQTAuthGate>} />
+              <Route path="/purchase/:id" element={<WQTAuthGate user={user} authLoading={authLoading}><PurchaseFlowPage /></WQTAuthGate>} />
+              <Route path="/dashboard/buyer" element={<WQTAuthGate user={user} authLoading={authLoading}><BuyerDashboard /></WQTAuthGate>} />
+              <Route path="/dashboard/seller" element={<WQTAuthGate user={user} authLoading={authLoading}><SellerDashboard_Role /></WQTAuthGate>} />
+              <Route path="/credits" element={<WQTAuthGate user={user} authLoading={authLoading}><CreditPortfolioPage /></WQTAuthGate>} />
+              <Route path="/marketplace/tools/verification" element={<WQTAuthGate user={user} authLoading={authLoading}><VerificationUI /></WQTAuthGate>} />
+              <Route path="/marketplace/seller-dashboard" element={<Navigate to="/dashboard/seller" replace />} />
+              <Route path="/marketplace/create-listing" element={<WQTAuthGate user={user} authLoading={authLoading}><CreateListingPage /></WQTAuthGate>} />
+              <Route path="/dashboard/financial" element={<WQTAuthGate user={user} authLoading={authLoading}><FinancialDashboard /></WQTAuthGate>} />
+              <Route path="/marketplace/transactions" element={<WQTAuthGate user={user} authLoading={authLoading}><TransactionPage /></WQTAuthGate>} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </WQTShell>
+        <AuthModal
+          isOpen={sessionExpiredOpen}
+          onClose={() => setSessionExpiredOpen(false)}
+          platform="wqt"
+          message="Your session has expired. Please sign in again."
+        />
       </ToastProvider>
+      </ErrorBoundary>
     </ThemeProvider>
+    </QueryProvider>
   );
 }

@@ -1,14 +1,20 @@
 /**
  * Cloud Dashboard — Apple-like device monitoring overview.
- * Clean cards, one-chart-at-a-time philosophy, status-first.
+ * Fetches real device fleet + alerts from /v2/ APIs.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
-import { Tabs } from '../../../design-system/primitives/Tabs';
+import { EmptyState } from '../../../design-system/primitives/EmptyState';
+import { Skeleton } from '../../../design-system/primitives/Skeleton';
+import { Button } from '../../../design-system/primitives/Button';
+import { useAppContext } from '../../../context/AppContext';
+import { useDevicesQuery, useAlertsQuery } from '../../../shared/hooks/useApiQueries';
+
+/* ── Styled ─────────────────────────────────────────────── */
 
 const Page = styled.div`
   max-width: 1280px;
@@ -95,7 +101,7 @@ const DeviceName = styled.div`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const DeviceId = styled.div`
+const DeviceIdText = styled.div`
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 12px;
   color: ${({ theme }) => theme.colors.textMuted};
@@ -135,28 +141,15 @@ const MetricUnit = styled.span`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const SparklineBox = styled.div`
-  height: 48px;
-  margin-top: 16px;
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: ${({ theme }) => theme.radius.sm}px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.textMuted};
-`;
-
 const AlertBanner = styled.div`
   padding: 16px 20px;
-  background: ${({ $type, theme }) =>
-    $type === 'warning' ? 'rgba(255,176,32,0.08)' :
-    $type === 'error' ? 'rgba(255,77,77,0.08)' :
+  background: ${({ $severity }) =>
+    $severity === 'critical' ? 'rgba(255,77,77,0.08)' :
+    $severity === 'warning' ? 'rgba(255,176,32,0.08)' :
     'rgba(0,196,140,0.08)'};
-  border: 1px solid ${({ $type }) =>
-    $type === 'warning' ? 'rgba(255,176,32,0.2)' :
-    $type === 'error' ? 'rgba(255,77,77,0.2)' :
+  border: 1px solid ${({ $severity }) =>
+    $severity === 'critical' ? 'rgba(255,77,77,0.2)' :
+    $severity === 'warning' ? 'rgba(255,176,32,0.2)' :
     'rgba(0,196,140,0.2)'};
   border-radius: ${({ theme }) => theme.radius.md}px;
   display: flex;
@@ -165,28 +158,109 @@ const AlertBanner = styled.div`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text};
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  &:hover { opacity: 0.9; }
 `;
 
-// ── Placeholder data ──────────────────────────────────────
+const ErrorBox = styled.div`
+  background: rgba(255, 77, 77, 0.06);
+  border: 1px solid rgba(255, 77, 77, 0.15);
+  border-radius: ${({ theme }) => theme.radius.md}px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 24px;
+`;
 
-const DEVICES = [
-  { id: 'BS-WQM-1042', name: 'James River Station A', status: 'online', battery: 92, signal: 'strong', ph: 7.2, tds: 342, turbidity: 4.1, temp: 18.3, uptime: '99.8%' },
-  { id: 'BS-WQM-1043', name: 'Potomac Intake B', status: 'online', battery: 78, signal: 'good', ph: 7.5, tds: 298, turbidity: 3.8, temp: 17.1, uptime: '98.2%' },
-  { id: 'BS-WQM-1044', name: 'York River Monitor', status: 'online', battery: 85, signal: 'strong', ph: 7.0, tds: 410, turbidity: 5.2, temp: 19.0, uptime: '99.5%' },
-  { id: 'BS-WQM-1045', name: 'Chesapeake Bay Buoy', status: 'maintenance', battery: 34, signal: 'weak', ph: 7.8, tds: 520, turbidity: 6.1, temp: 16.5, uptime: '87.1%' },
-  { id: 'BS-WQM-1046', name: 'Rappahannock Station', status: 'online', battery: 95, signal: 'strong', ph: 6.9, tds: 275, turbidity: 3.4, temp: 18.7, uptime: '99.9%' },
-  { id: 'BS-WQM-1047', name: 'Shenandoah Outflow', status: 'offline', battery: 0, signal: 'none', ph: null, tds: null, turbidity: null, temp: null, uptime: '0%' },
-];
+const ErrorText = styled.p`
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0 0 12px;
+`;
 
-const ALERTS = [
-  { id: 'a1', type: 'warning', message: 'Chesapeake Bay Buoy — battery below 40%. Schedule maintenance.' },
-  { id: 'a2', type: 'error', message: 'Shenandoah Outflow — device offline for 48+ hours.' },
-];
+/* ── Skeletons ──────────────────────────────────────────── */
+
+function DashboardSkeleton() {
+  return (
+    <Page>
+      <Header>
+        <Skeleton width={180} height={32} />
+        <div style={{ marginTop: 8 }}><Skeleton width={280} height={14} /></div>
+      </Header>
+      <StatusRow>
+        {[1, 2, 3, 4].map((i) => <Skeleton key={i} height={80} />)}
+      </StatusRow>
+      <DeviceGrid>
+        {[1, 2, 3].map((i) => <Skeleton key={i} height={200} />)}
+      </DeviceGrid>
+    </Page>
+  );
+}
+
+/* ── Helpers ────────────────────────────────────────────── */
+
+function statusVariant(onlineStatus) {
+  if (onlineStatus === 'online') return 'positive';
+  if (onlineStatus === 'offline') return 'negative';
+  return 'warning';
+}
+
+function severityIcon(severity) {
+  if (severity === 'critical') return '🔴';
+  if (severity === 'warning') return '🟡';
+  return '🔵';
+}
+
+/* ── Component ──────────────────────────────────────────── */
 
 export function CloudDashboardPage() {
   const navigate = useNavigate();
-  const online = DEVICES.filter((d) => d.status === 'online').length;
+  const { STATES } = useAppContext();
+  const user = STATES?.user;
+
+  const { data: devices = [], isLoading: devicesLoading, error: devicesError, refetch: refetchDevices } = useDevicesQuery(user?.uid);
+  const { data: alerts = [], isLoading: alertsLoading } = useAlertsQuery(user?.uid);
+
+  const loading = devicesLoading || alertsLoading;
+  const error = devicesError?.message || null;
+
+  if (loading) return <DashboardSkeleton />;
+
+  if (error) {
+    return (
+      <Page>
+        <Header><Title>Devices</Title></Header>
+        <ErrorBox>
+          <ErrorText>{error}</ErrorText>
+          <Button size="sm" onClick={() => refetchDevices()}>Retry</Button>
+        </ErrorBox>
+      </Page>
+    );
+  }
+
+  if (devices.length === 0) {
+    return (
+      <Page>
+        <Header>
+          <Title>Devices</Title>
+          <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
+        </Header>
+        <EmptyState
+          title="No Devices Yet"
+          description="Commission your first BlueSignal WQM-1 device to start monitoring water quality."
+          action={{ label: 'Commission Your First Device', onClick: () => navigate('/commission') }}
+        />
+      </Page>
+    );
+  }
+
+  const online = devices.filter((d) => d.onlineStatus === 'online').length;
+  const offline = devices.filter((d) => d.onlineStatus === 'offline').length;
+  const warning = devices.filter((d) => d.status === 'maintenance' || d.onlineStatus === 'unknown').length;
+  const avgBattery = devices.filter((d) => d.battery > 0).length > 0
+    ? Math.round(devices.filter((d) => d.battery > 0).reduce((s, d) => s + d.battery, 0) / devices.filter((d) => d.battery > 0).length)
+    : 0;
+  const activeAlerts = alerts.filter((a) => a.status === 'active');
 
   return (
     <Page>
@@ -195,26 +269,33 @@ export function CloudDashboardPage() {
         <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
       </Header>
 
-      {ALERTS.map((alert) => (
-        <AlertBanner key={alert.id} $type={alert.type}>
-          <span>{alert.type === 'error' ? '🔴' : '🟡'}</span>
-          <span>{alert.message}</span>
+      {activeAlerts.slice(0, 5).map((alert) => (
+        <AlertBanner
+          key={alert.id}
+          $severity={alert.severity}
+          onClick={() => navigate(`/device/${alert.deviceId}`)}
+        >
+          <span>{severityIcon(alert.severity)}</span>
+          <span>{alert.deviceName ? `${alert.deviceName} — ` : ''}{alert.message}</span>
         </AlertBanner>
       ))}
 
       <StatusRow>
-        <DataCard label="Devices Online" value={`${online}`} unit={`of ${DEVICES.length}`} compact />
-        <DataCard label="Avg Battery" value={Math.round(DEVICES.filter(d => d.battery > 0).reduce((s,d) => s + d.battery, 0) / DEVICES.filter(d => d.battery > 0).length).toString()} unit="%" compact />
-        <DataCard label="Fleet Uptime" value="96.4" unit="%" compact />
-        <DataCard label="Alerts" value={ALERTS.length.toString()} compact />
+        <DataCard label="Online" value={`${online}`} unit={`of ${devices.length}`} compact />
+        <DataCard label="Offline" value={`${offline}`} compact />
+        <DataCard label="Avg Battery" value={`${avgBattery}`} unit="%" compact />
+        <DataCard label="Active Alerts" value={`${activeAlerts.length}`} compact />
       </StatusRow>
 
       <Section>
         <SectionHeader>
           <SectionTitle>Fleet Overview</SectionTitle>
+          <Button variant="outline" size="sm" onClick={() => navigate('/commission')}>
+            + Add Device
+          </Button>
         </SectionHeader>
         <DeviceGrid>
-          {DEVICES.map((device) => (
+          {devices.map((device) => (
             <DeviceCard
               key={device.id}
               onClick={() => navigate(`/device/${device.id}`)}
@@ -222,33 +303,30 @@ export function CloudDashboardPage() {
               <DeviceHeader>
                 <div>
                   <DeviceName>{device.name}</DeviceName>
-                  <DeviceId>{device.id}</DeviceId>
+                  <DeviceIdText>{device.id}</DeviceIdText>
                 </div>
                 <Badge
-                  variant={device.status === 'online' ? 'positive' : device.status === 'maintenance' ? 'warning' : 'negative'}
+                  variant={statusVariant(device.onlineStatus)}
                   size="sm"
                   dot
                 >
-                  {device.status}
+                  {device.onlineStatus}
                 </Badge>
               </DeviceHeader>
-              {device.status !== 'offline' ? (
-                <>
-                  <MetricRow>
-                    <Metric>
-                      <MetricLabel>pH</MetricLabel>
-                      <MetricValue>{device.ph}</MetricValue>
-                    </Metric>
-                    <Metric>
-                      <MetricLabel>TDS</MetricLabel>
-                      <MetricValue>{device.tds}<MetricUnit> ppm</MetricUnit></MetricValue>
-                    </Metric>
-                  </MetricRow>
-                  <SparklineBox>▁▂▃▄▅▆▇█ — sparkline placeholder</SparklineBox>
-                </>
+              {device.onlineStatus !== 'offline' ? (
+                <MetricRow>
+                  <Metric>
+                    <MetricLabel>Battery</MetricLabel>
+                    <MetricValue>{device.battery}<MetricUnit>%</MetricUnit></MetricValue>
+                  </Metric>
+                  <Metric>
+                    <MetricLabel>Credits</MetricLabel>
+                    <MetricValue>{device.creditsGenerated}<MetricUnit> kg</MetricUnit></MetricValue>
+                  </Metric>
+                </MetricRow>
               ) : (
                 <div style={{ padding: '32px 0', textAlign: 'center', color: '#999', fontSize: 13 }}>
-                  Device offline
+                  Device offline{device.lastReadingAt ? ` · Last seen ${new Date(device.lastReadingAt).toLocaleDateString()}` : ''}
                 </div>
               )}
             </DeviceCard>
@@ -258,3 +336,5 @@ export function CloudDashboardPage() {
     </Page>
   );
 }
+
+export default CloudDashboardPage;

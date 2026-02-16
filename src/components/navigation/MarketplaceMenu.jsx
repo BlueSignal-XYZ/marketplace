@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
+import { Avatar } from "../../design-system/primitives/Avatar";
 import { safeAreaInsets } from "../../styles/breakpoints";
 
 const Backdrop = styled.div`
@@ -169,6 +170,12 @@ const NavItem = styled(Link)`
   &:active {
     transform: scale(0.98);
   }
+`;
+
+const UserRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 const SmallText = styled.div`
@@ -434,7 +441,10 @@ export function MarketplaceMenu({ open, onClose, user }) {
 
         <SmallText>
           {user?.uid ? (
-            <>Signed in as <strong>{user?.email || user?.username}</strong></>
+            <UserRow>
+              <Avatar name={user?.displayName || user?.username || user?.email} size="sm" />
+              <span>Signed in as <strong>{user?.email || user?.username}</strong></span>
+            </UserRow>
           ) : (
             <>Welcome, <strong>guest</strong> - <a href="/login" style={{ color: '#1D7072' }}>Sign in</a></>
           )}

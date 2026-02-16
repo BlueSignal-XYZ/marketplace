@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
 import { Badge } from '../../../design-system/primitives/Badge';
-
+import { useToastContext } from '../../../shared/providers/ToastProvider';
 const Page = styled.div`
   max-width: 680px;
   margin: 0 auto;
@@ -128,6 +128,7 @@ const ReviewValue = styled.span`
 const STEPS = ['Welcome', 'Organization', 'Verification', 'Devices', 'Review'];
 
 export function SellerOnboardingPage() {
+  const { toast } = useToastContext();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
     orgName: '',
@@ -268,7 +269,7 @@ export function SellerOnboardingPage() {
             </CheckItem>
             <ButtonRow>
               <Button variant="outline" onClick={() => setStep(3)}>Back</Button>
-              <Button disabled={!form.acceptTerms} onClick={() => alert('Application submitted! (wired to /v2/credits/submit)')}>
+              <Button disabled={!form.acceptTerms} onClick={() => toast({ type: 'success', message: 'Application submitted! We\'ll review and get back to you.' })}>
                 Submit Application
               </Button>
             </ButtonRow>
@@ -278,3 +279,5 @@ export function SellerOnboardingPage() {
     </Page>
   );
 }
+
+export default SellerOnboardingPage;

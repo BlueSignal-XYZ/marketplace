@@ -96,18 +96,36 @@ async function searchListings(req, res) {
     const total = listings.length;
     const totalPages = Math.ceil(total / limit);
     const start = (page - 1) * limit;
-    const data = listings.slice(start, start + limit);
+    const page_data = listings.slice(start, start + limit);
 
+    // Project to ListingSummary shape (not full DB objects)
+    const data = page_data.map((l) => ({
+      id: l.id,
+      creditId: l.creditId || l.id,
+      nutrientType: l.nutrientType || l.pollutant || "nitrogen",
+      quantity: l.quantity || l.quantityAvailable || 0,
+      pricePerCredit: l.pricePerCredit || l.pricePerUnit || 0,
+      region: l.region || l.location || "",
+      verificationLevel: l.verificationLevel || "self-reported",
+      sellerName: l.sellerName || l.seller || "",
+      vintage: l.vintage || "",
+      status: l.status || "active",
+      createdAt: l.createdAt || l.listedAt || "",
+    }));
+
+    // Wrap in ApiResponse<PaginatedResponse<ListingSummary>> envelope
     res.json({
       success: true,
-      data,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages,
-        hasNext: page < totalPages,
-        hasPrev: page > 1,
+      data: {
+        data,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNext: page < totalPages,
+          hasPrev: page > 1,
+        },
       },
     });
   } catch (error) {
@@ -119,4 +137,47 @@ async function searchListings(req, res) {
   }
 }
 
-module.exports = { searchListings };
+async function getListing(req, res) {
+  try {
+    const { id } = req.params;
+    const db = admin.database();
+    const snap = await db.ref(`marketplace/listings/${id}`).once("value");
+    const val = snap.val();
+
+    if (!val) {
+      return res.status(404).json({ success: false, error: "Listing not found" });
+    }
+
+    // Return full Listing shape
+    res.json({
+      success: true,
+      data: {
+        id,
+        creditId: val.creditId || id,
+        sellerId: val.sellerUid || val.sellerId || "",
+        sellerName: val.sellerName || val.seller || "",
+        nutrientType: val.nutrientType || val.pollutant || "nitrogen",
+        quantity: val.quantity || val.quantityAvailable || 0,
+        pricePerCredit: val.pricePerCredit || val.pricePerUnit || 0,
+        totalPrice: (val.quantity || 0) * (val.pricePerCredit || val.pricePerUnit || 0),
+        region: val.region || val.location || "",
+        watershed: val.watershed || "",
+        vintage: val.vintage || "",
+        verificationLevel: val.verificationLevel || "self-reported",
+        status: val.status || "active",
+        deviceId: val.deviceId || undefined,
+        programId: val.programId || undefined,
+        certificateId: val.certificateId || undefined,
+        description: val.description || "",
+        createdAt: val.createdAt || val.listedAt || "",
+        updatedAt: val.updatedAt || "",
+        expiresAt: val.expiresAt || undefined,
+      },
+    });
+  } catch (error) {
+    console.error("v2/market/listing error:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch listing" });
+  }
+}
+
+module.exports = { searchListings, getListing };

@@ -3,35 +3,38 @@
  * Wraps all Cloud routes with the Cloud design system theme.
  */
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { cloudTheme } from '../../design-system/themes/cloudTheme';
 import { ToastProvider } from '../../shared/providers/ToastProvider';
+import { QueryProvider } from '../../shared/providers/QueryProvider';
 import { CloudShell } from './layouts/CloudShell';
 import { useAppContext } from '../../context/AppContext';
 import { useUserDevices } from '../../hooks/useUserDevices';
+import { AuthGate } from '../../shared/components/AuthGate';
+import { ErrorBoundary } from '../../shared/components/ErrorBoundary';
+import { AuthModal } from '../../shared/components/AuthModal';
+import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
 
-// Existing route components
-import { Welcome, Home } from '../../routes';
-import { Livepeer } from '../../components/elements/livepeer';
-import { CommissionWorkflow, DeviceActivation } from '../../components/installer';
-import InstallerDashboard from '../../components/dashboards/InstallerDashboard';
+import { Welcome } from '../../routes';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 
-import {
-  CloudNutrientCalculator,
-  CloudVerification,
-  CloudLiveStream,
-  CloudUploadMedia,
-  CloudMediaPlayer,
-} from '../../components/cloud/CloudToolsWrapper';
-
-// Phase 8 — Rebuilt Cloud pages with new design system
-import { CloudDashboardPage } from './pages/CloudDashboardPage';
-import { DeviceDetailPage as NewDeviceDetailPage } from './pages/DeviceDetailPage';
-import { CommissioningWizardPage } from './pages/CommissioningWizardPage';
+// ── Lazy-loaded pages ─────────────────────────────────────
+const Home = React.lazy(() => import('../../routes/Home'));
+const Livepeer = React.lazy(() => import('../../components/elements/livepeer/Livepeer'));
+const CommissionWorkflow = React.lazy(() => import('../../components/installer/CommissionWorkflow'));
+const DeviceActivation = React.lazy(() => import('../../components/installer/DeviceActivation'));
+const InstallerDashboard = React.lazy(() => import('../../components/dashboards/InstallerDashboard'));
+const CloudNutrientCalculator = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudNutrientCalculator })));
+const CloudVerification = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudVerification })));
+const CloudLiveStream = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudLiveStream })));
+const CloudUploadMedia = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudUploadMedia })));
+const CloudMediaPlayer = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudMediaPlayer })));
+const CloudDashboardPage = React.lazy(() => import('./pages/CloudDashboardPage'));
+const NewDeviceDetailPage = React.lazy(() => import('./pages/DeviceDetailPage'));
+const CommissioningWizardPage = React.lazy(() => import('./pages/CommissioningWizardPage'));
 
 // Cloud console components (lazy-loaded for code splitting)
 const OverviewDashboard = React.lazy(() => import('../../components/cloud/OverviewDashboard'));
@@ -80,7 +83,7 @@ function CloudLanding({ user, authLoading }) {
   return <Welcome />;
 }
 
-// ── Cloud Auth Gate ───────────────────────────────────────
+// ── Cloud Auth Gate (delegates to shared AuthGate + onboarding logic) ──
 
 function CloudAuthGate({ children, authLoading, isOnboardingRoute = false }) {
   const navigate = useNavigate();
@@ -97,10 +100,11 @@ function CloudAuthGate({ children, authLoading, isOnboardingRoute = false }) {
     }
   }, [authLoading, devicesLoading, user, hasDevices, isOnboardingRoute, navigate]);
 
-  if (authLoading) return <LoadingFallback />;
-  if (!user?.uid) return <Welcome />;
-  if (isOnboardingRoute && devicesLoading) return <LoadingFallback />;
-  return children;
+  return (
+    <AuthGate user={user} authLoading={authLoading} platform="cloud">
+      {isOnboardingRoute && devicesLoading ? <LoadingFallback /> : children}
+    </AuthGate>
+  );
 }
 
 // ── Cloud App ─────────────────────────────────────────────
@@ -108,9 +112,17 @@ function CloudAuthGate({ children, authLoading, isOnboardingRoute = false }) {
 export function CloudApp({ user, authLoading }) {
   const location = useLocation();
   const isAuthLanding = location.pathname === '/';
+  const [sessionExpiredOpen, setSessionExpiredOpen] = useState(false);
+  useEffect(() => {
+    const handler = () => setSessionExpiredOpen(true);
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handler);
+    return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handler);
+  }, []);
 
   return (
+    <QueryProvider>
     <ThemeProvider theme={cloudTheme}>
+      <ErrorBoundary platform="cloud">
       <ToastProvider>
         <CloudShell user={user} isAuthLanding={isAuthLanding}>
           <Suspense fallback={<LoadingFallback />}>
@@ -176,7 +188,15 @@ export function CloudApp({ user, authLoading }) {
             </Routes>
           </Suspense>
         </CloudShell>
+        <AuthModal
+          isOpen={sessionExpiredOpen}
+          onClose={() => setSessionExpiredOpen(false)}
+          platform="cloud"
+          message="Your session has expired. Please sign in again."
+        />
       </ToastProvider>
+      </ErrorBoundary>
     </ThemeProvider>
+    </QueryProvider>
   );
 }

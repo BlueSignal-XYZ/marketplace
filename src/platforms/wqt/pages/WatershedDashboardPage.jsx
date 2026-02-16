@@ -214,3 +214,5 @@ export function WatershedDashboardPage() {
     </Page>
   );
 }
+
+export default WatershedDashboardPage;

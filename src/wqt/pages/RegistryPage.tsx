@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { mockRegistryCredits, RegistryCredit, getCreditsByType, searchCredits as mockSearchCredits } from '../../data/mockRegistryData';
+import { RegistryCredit } from '../../data/mockRegistryData';
 import { fetchRegistryCredits, searchCredits as realSearchCredits } from '../../services/wqtDataService';
 import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
@@ -341,27 +341,25 @@ export function RegistryPage() {
   const [sortField, setSortField] = useState<SortField>('issueDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-  // Fetch real data on mount, fall back to mock
-  useEffect(() => {
-    let cancelled = false;
-    const loadCredits = async () => {
-      setLoading(true);
-      try {
-        const realCredits = await fetchRegistryCredits();
-        if (!cancelled) {
-          setAllCredits(realCredits.length > 0 ? realCredits : mockRegistryCredits);
-        }
-      } catch {
-        if (!cancelled) {
-          setAllCredits(mockRegistryCredits);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-    loadCredits();
-    return () => { cancelled = true; };
+  const [error, setError] = useState<string | null>(null);
+
+  const loadCredits = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const realCredits = await fetchRegistryCredits();
+      setAllCredits(Array.isArray(realCredits) ? realCredits : []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load registry credits.');
+      setAllCredits([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadCredits();
+  }, [loadCredits]);
 
   const filteredAndSortedCredits = useMemo(() => {
     let credits = allCredits;
@@ -465,6 +463,25 @@ export function RegistryPage() {
             Thermal
           </FilterChip>
         </FilterChipsContainer>
+
+        {error && (
+          <div style={{
+            padding: '20px 24px',
+            background: 'rgba(255, 77, 77, 0.06)',
+            border: '1px solid rgba(255, 77, 77, 0.2)',
+            borderRadius: 8,
+            marginBottom: 16,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 16,
+          }}>
+            <span style={{ fontSize: 14, color: '#1e293b' }}>{error}</span>
+            <button onClick={loadCredits} style={{ padding: '6px 12px', cursor: 'pointer', fontSize: 13 }}>
+              Retry
+            </button>
+          </div>
+        )}
 
         <TableContainer style={{ marginTop: 24 }}>
           <Table>
@@ -640,3 +657,5 @@ export function RegistryPage() {
     </PageContainer>
   );
 }
+
+export default RegistryPage;

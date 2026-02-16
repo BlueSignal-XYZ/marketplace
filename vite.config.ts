@@ -93,9 +93,9 @@ export default defineConfig(({ mode }) => {
         output: {
           // Landing page uses a minimal Firebase set (Firestore only for lead capture)
           manualChunks: buildTarget === 'landing'
-            ? { vendor: ['react', 'react-dom'], firebase: ['firebase/app', 'firebase/firestore'] }
+            ? { vendor: ['react', 'react-dom'] }
             : {
-                vendor: ['react', 'react-dom', 'react-router-dom'],
+                vendor: ['react', 'react-dom', 'react-router-dom', 'styled-components', '@tanstack/react-query'],
                 firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
               }
         }

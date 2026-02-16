@@ -300,3 +300,5 @@ export function ProgramsPage() {
     </Page>
   );
 }
+
+export default ProgramsPage;

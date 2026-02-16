@@ -1,7 +1,6 @@
 // useFormSubmit - Hook for submitting forms to Firestore
 import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { firestore, isFirebaseConfigured } from '../../../apis/firebase';
+import { isFirebaseConfigured, getFirestoreInstance } from '../../../apis/firebase';
 
 /**
  * Hook for submitting form data to Firestore
@@ -15,8 +14,7 @@ const useFormSubmit = (collectionName) => {
   });
 
   const submitForm = async (data) => {
-    // Check if Firestore is configured
-    if (!isFirebaseConfigured || !firestore) {
+    if (!isFirebaseConfigured) {
       console.warn('Firebase not configured - form submission disabled');
       setFormState({
         status: 'error',
@@ -28,7 +26,9 @@ const useFormSubmit = (collectionName) => {
     setFormState({ status: 'submitting', error: null });
 
     try {
-      await addDoc(collection(firestore, collectionName), {
+      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+      const db = await getFirestoreInstance();
+      await addDoc(collection(db, collectionName), {
         ...data,
         createdAt: serverTimestamp(),
         source: window.location.pathname,

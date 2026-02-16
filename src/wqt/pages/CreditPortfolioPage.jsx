@@ -407,3 +407,5 @@ export function CreditPortfolioPage() {
     </PageShell>
   );
 }
+
+export default CreditPortfolioPage;

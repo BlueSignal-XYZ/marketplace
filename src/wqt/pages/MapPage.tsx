@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { mockMapProjects, MapProject, getProjectsByType, getCreditTypeColor } from '../../data/mockMapData';
+import { MapProject, getProjectsByType, getCreditTypeColor } from '../../data/mockMapData';
 import { fetchMapProjects } from '../../services/wqtDataService';
 import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
@@ -441,26 +441,27 @@ export function MapPage() {
   const [filterType, setFilterType] = useState<string>('all');
   // Default to list view if no valid token, map view if token is valid
   const [viewMode, setViewMode] = useState<ViewMode>(HAS_VALID_TOKEN ? 'map' : 'list');
-  const [allProjects, setAllProjects] = useState<MapProject[]>(mockMapProjects);
-  const [filteredProjects, setFilteredProjects] = useState<MapProject[]>(mockMapProjects);
+  const [error, setError] = useState<string | null>(null);
+  const [allProjects, setAllProjects] = useState<MapProject[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<MapProject[]>([]);
 
-  // Fetch real data on mount, fall back to mock
-  useEffect(() => {
-    let cancelled = false;
-    const loadProjects = async () => {
-      try {
-        const realProjects = await fetchMapProjects();
-        if (!cancelled && realProjects.length > 0) {
-          setAllProjects(realProjects as MapProject[]);
-          setFilteredProjects(realProjects as MapProject[]);
-        }
-      } catch {
-        // Keep mock data
-      }
-    };
-    loadProjects();
-    return () => { cancelled = true; };
+  const loadProjects = React.useCallback(async () => {
+    setError(null);
+    try {
+      const realProjects = await fetchMapProjects();
+      const projects = Array.isArray(realProjects) ? (realProjects as MapProject[]) : [];
+      setAllProjects(projects);
+      setFilteredProjects(projects);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load map projects.');
+      setAllProjects([]);
+      setFilteredProjects([]);
+    }
   }, []);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
 
   useEffect(() => {
     if (filterType === 'all') {
@@ -733,6 +734,13 @@ export function MapPage() {
           </ViewToggle>
         </ControlsRow>
 
+        {error && (
+          <div style={{ padding: '20px 24px', background: 'rgba(255,77,77,0.06)', border: '1px solid rgba(255,77,77,0.2)', borderRadius: 8, marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+            <span style={{ fontSize: 14, color: '#1e293b' }}>{error}</span>
+            <button onClick={loadProjects} style={{ padding: '6px 12px', cursor: 'pointer', fontSize: 13 }}>Retry</button>
+          </div>
+        )}
+
         {viewMode === 'map' ? (
           <MapContainer>
             {loading && !mapError && (
@@ -813,3 +821,5 @@ export function MapPage() {
     </PageContainer>
   );
 }
+
+export default MapPage;

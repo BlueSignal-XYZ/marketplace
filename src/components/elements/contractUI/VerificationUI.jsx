@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
 import { motion } from "framer-motion";
@@ -10,6 +10,9 @@ import AssetCard from "./AssetCard";
 import { ButtonPrimary } from "../../shared/button/Button";
 import { Badge } from "../../shared/Badge/Badge";
 import { useAppContext } from "../../../context/AppContext";
+import { useToastContext } from "../../../shared/providers/ToastProvider";
+import { Button as DesignButton } from "../../../design-system/primitives/Button";
+import { Skeleton } from "../../../design-system/primitives/Skeleton";
 import {
   NoUploadsState,
   NoSubmissionsState,
@@ -244,6 +247,24 @@ const HeaderRow = styled.div`
   gap: 12px;
 `;
 
+const ErrorBanner = styled.div`
+  padding: 20px 24px;
+  background: rgba(255, 77, 77, 0.06);
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  border-radius: ${({ theme }) => theme.radius?.md ?? 8}px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+`;
+
+const ErrorText = styled.span`
+  font-family: ${({ theme }) => theme.fonts?.sans ?? 'system-ui, sans-serif'};
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors?.text ?? '#1e293b'};
+`;
+
 // Framer Motion variants for animations
 const tabVariants = {
   initial: { x: -10, opacity: 0 },
@@ -254,9 +275,12 @@ const tabVariants = {
 function VerificationUI() {
   const { STATES, ACTIONS } = useAppContext();
   const navigate = useNavigate();
+  const toast = useToastContext();
   const [accessibleTabs, setAccessibleTabs] = useState([]);
   const [activeTab, setActiveTab] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [loadErrors, setLoadErrors] = useState([]);
 
   const [uploads, setUploads] = useState([]);
   const [submissions, setSubmissions] = useState([]);
@@ -276,60 +300,53 @@ function VerificationUI() {
 
   const { assetID } = verificationData || {};
 
+  const loadData = useCallback(async () => {
+    if (!user?.uid) return;
+    setDataLoading(true);
+    setLoadErrors([]);
+
+    const uid = user.uid;
+    const results = await Promise.allSettled([
+      UserAPI.media.getUserMedia(uid).then((r) => r?.user_media),
+      UserAPI.assets.getUserAssets(uid).then((r) => r?.user_assets),
+      UserAPI.assets.getUserAssetDisputes(uid).then((r) => r?.user_disputes),
+      UserAPI.assets.getUserAssetApprovals(uid).then((r) => r?.user_approvals),
+    ]);
+
+    const labels = ["uploads", "submissions", "disputes", "approvals"];
+    const setters = [setUploads, setSubmissions, setDisputes, setApprovals];
+    const errors = [];
+
+    results.forEach((result, i) => {
+      if (result.status === "fulfilled") {
+        const data = Array.isArray(result.value) ? result.value : [];
+        setters[i](data);
+      } else {
+        const msg = result.reason?.message || result.reason || "Unknown error";
+        errors.push({ label: labels[i], message: msg });
+        setters[i]([]);
+      }
+    });
+
+    setLoadErrors(errors);
+    setDataLoading(false);
+
+    if (errors.length > 0) {
+      const errMsg = errors.map((e) => `${e.label}: ${e.message}`).join("; ");
+      toast({ type: "error", message: errMsg });
+    }
+  }, [user?.uid, toast]);
+
   useEffect(() => {
     if (user?.uid) {
-      // Default to farmer role (full access) for users without explicit role
-      const role = user?.role || 'farmer';
+      const role = user?.role || "farmer";
       const accessible = getAccessibleTabs(role);
-
-      // Ensure we have at least uploads tab available
-      const finalTabs = accessible.length > 0 ? accessible : ['uploads', 'submissions'];
+      const finalTabs = accessible.length > 0 ? accessible : ["uploads", "submissions"];
       setAccessibleTabs(finalTabs);
       setActiveTab(finalTabs[0]);
-
-      getUploads();
-      getSubmissions();
-      getDisputes();
-      getApprovals();
+      loadData();
     }
-  }, [user]);
-
-  useEffect(() => {
-    console.log("activeTab: ", activeTab)
-  }, [activeTab])
-  
-
-  const getUploads = async () => {
-    const { user_media } = await UserAPI.media.getUserMedia(user.uid);
-    if (Array.isArray(user_media)) {
-      setUploads(user_media);
-    }
-  };
-
-  const getSubmissions = async () => {
-    const { user_assets } = await UserAPI.assets.getUserAssets(user.uid);
-    if (Array.isArray(user_assets)) {
-      setSubmissions(user_assets);
-    }
-  };
-
-  const getDisputes = async () => {
-    const { user_disputes } = await UserAPI.assets.getUserAssetDisputes(
-      user.uid
-    );
-    if (Array.isArray(user_disputes)) {
-      setDisputes(user_disputes);
-    }
-  };
-
-  const getApprovals = async () => {
-    const { user_approvals } = await UserAPI.assets.getUserAssetApprovals(
-      user.uid
-    );
-    if (Array.isArray(user_approvals)) {
-      setApprovals(user_approvals);
-    }
-  };
+  }, [user?.uid, loadData]);
 
   const submitMutation = useMutation(AssetAPI.submit);
   const approveMutation = useMutation(AssetAPI.approve);
@@ -445,7 +462,23 @@ function VerificationUI() {
           </UploadCTAButton>
         )}
       </HeaderRow>
-      {isLoading ? (
+      {loadErrors.length > 0 && (
+        <ErrorBanner>
+          <ErrorText>
+            Failed to load: {loadErrors.map((e) => e.label).join(", ")}. {loadErrors[0]?.message}
+          </ErrorText>
+          <DesignButton variant="outline" size="sm" onClick={loadData}>
+            Retry
+          </DesignButton>
+        </ErrorBanner>
+      )}
+      {dataLoading ? (
+        <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+          <Skeleton width="100%" height={120} />
+          <Skeleton width="100%" height={120} />
+          <Skeleton width="100%" height={120} />
+        </div>
+      ) : isLoading ? (
         <Loading>
           <FontAwesomeIcon icon={faSpinner} />
         </Loading>

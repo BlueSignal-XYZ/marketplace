@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
-import { getCredits } from "../../apis/creditsApi";
 import { fetchListings } from "../../services/wqtDataService";
 import SEOHead from "../../components/seo/SEOHead";
 import { WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, createItemListSchema } from "../../components/seo/schemas";
@@ -272,42 +271,23 @@ const Marketplace = () => {
     },
   ];
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setLoading(true);
-      setLoadError(null);
-      try {
-        // Try real RTDB listings first, fall back to mock credits
-        let data;
-        try {
-          const realListings = await fetchListings();
-          data = realListings.length > 0 ? realListings : await getCredits();
-        } catch {
-          data = await getCredits();
-        }
-        if (!cancelled) {
-          setListings(Array.isArray(data) ? data : []);
-        }
-      } catch (err) {
-        console.error("Failed to load marketplace credits", err);
-        if (!cancelled) {
-          setLoadError("Unable to load listings right now.");
-          setListings([]);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
+  const loadListings = React.useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const data = await fetchListings();
+      setListings(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setLoadError(err?.message || "Unable to load listings right now.");
+      setListings([]);
+    } finally {
+      setLoading(false);
     }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
   }, []);
+
+  useEffect(() => {
+    loadListings();
+  }, [loadListings]);
 
   // Build dynamic JSON-LD schema for listings
   const marketplaceSchema = listings.length > 0
@@ -362,6 +342,9 @@ const Marketplace = () => {
             <EmptyState>
               <h2>We couldn’t load listings</h2>
               <p>{loadError}</p>
+              <button onClick={loadListings} style={{ marginTop: 16, padding: '10px 20px', cursor: 'pointer' }}>
+                Retry
+              </button>
             </EmptyState>
           </>
         ) : listings.length === 0 ? (

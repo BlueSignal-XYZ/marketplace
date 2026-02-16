@@ -1,13 +1,26 @@
 /**
  * Cloud Commissioning Wizard — full-screen step-by-step device setup.
  * Steps: Scan → Connect → Calibrate → Location → Confirm
+ * Wired to /v2/devices/check, /v2/devices/test-connection, /v2/devices/commission
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
+import { Skeleton } from '../../../design-system/primitives/Skeleton';
+import { useAppContext } from '../../../context/AppContext';
+import { useToastContext } from '../../../shared/providers/ToastProvider';
+import {
+  checkDevice,
+  testDeviceConnection,
+  getSites,
+  ApiError,
+} from '../../../services/v2/client';
+import { useCommissionDeviceMutation } from '../../../shared/hooks/useApiQueries';
+
+/* ── Styled ─────────────────────────────────────────────── */
 
 const Page = styled.div`
   min-height: 100vh;
@@ -89,7 +102,7 @@ const StatusDot = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: ${({ $connected, theme }) => ($connected ? '#00C48C' : theme.colors.primary)};
+  background: ${({ $connected }) => ($connected ? '#00C48C' : '#0066FF')};
   animation: ${pulse} 2s ease-in-out infinite;
   margin: 0 auto 16px;
 `;
@@ -101,10 +114,55 @@ const StatusText = styled.div`
   margin-bottom: 24px;
 `;
 
+const SimBadge = styled.span`
+  display: inline-block;
+  background: rgba(255, 176, 32, 0.1);
+  color: #b8860b;
+  border: 1px solid rgba(255, 176, 32, 0.2);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+`;
+
+const ErrorMsg = styled.div`
+  background: rgba(255, 77, 77, 0.08);
+  border: 1px solid rgba(255, 77, 77, 0.15);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #c33;
+  margin-bottom: 16px;
+  text-align: left;
+`;
+
+const SensorRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+`;
+
+const ReviewRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+`;
+
 const STEPS = ['Scan', 'Connect', 'Calibrate', 'Location', 'Confirm'];
+
+/* ── Component ──────────────────────────────────────────── */
 
 export function CommissioningWizardPage() {
   const navigate = useNavigate();
+  const { STATES } = useAppContext();
+  const user = STATES?.user;
+  const toast = useToastContext();
+  const commissionMutation = useCommissionDeviceMutation();
+
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
     serialNumber: '',
@@ -113,8 +171,100 @@ export function CommissioningWizardPage() {
     longitude: '',
     siteName: '',
   });
+  const [stepError, setStepError] = useState(null);
+  const [processing, setProcessing] = useState(false);
+
+  // Step 1 state
+  const [deviceCheck, setDeviceCheck] = useState(null);
+
+  // Step 2 state
+  const [connectionResult, setConnectionResult] = useState(null);
+
+  // Step 3 state (calibration simulation)
+  const [calibrationDone, setCalibrationDone] = useState(false);
+  const [calibrating, setCalibrating] = useState(false);
 
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  // ── Step 0 → 1: Validate device ID ──────────────────────
+  const handleScanNext = useCallback(async () => {
+    if (!form.serialNumber.trim()) return;
+    setProcessing(true);
+    setStepError(null);
+
+    try {
+      const result = await checkDevice(form.serialNumber.trim());
+      setDeviceCheck(result);
+
+      if (result.isCommissioned) {
+        setStepError(`Device ${form.serialNumber} is already commissioned (status: ${result.status}).`);
+        setProcessing(false);
+        return;
+      }
+
+      setStep(1);
+    } catch (err) {
+      setStepError(err instanceof ApiError ? err.message : 'Failed to validate device ID.');
+    } finally {
+      setProcessing(false);
+    }
+  }, [form.serialNumber]);
+
+  // ── Step 1 → 2: Test connection ─────────────────────────
+  const handleConnect = useCallback(async () => {
+    setProcessing(true);
+    setStepError(null);
+
+    try {
+      const result = await testDeviceConnection(form.serialNumber.trim());
+      setConnectionResult(result);
+      setStep(2);
+    } catch (err) {
+      setStepError(err instanceof ApiError ? err.message : 'Connection test failed.');
+    } finally {
+      setProcessing(false);
+    }
+  }, [form.serialNumber]);
+
+  // ── Step 2 → 3: Calibrate (simulated) ──────────────────
+  const handleCalibrate = useCallback(async () => {
+    setCalibrating(true);
+    // Simulate calibration with a delay
+    await new Promise((r) => setTimeout(r, 2000));
+    setCalibrationDone(true);
+    setCalibrating(false);
+  }, []);
+
+  // ── Step 4: Commission device ───────────────────────────
+  const handleCommission = useCallback(() => {
+    setProcessing(true);
+    setStepError(null);
+
+    commissionMutation.mutate(
+      {
+        deviceId: form.serialNumber.trim(),
+        deviceName: form.deviceName || form.serialNumber.trim(),
+        siteName: form.siteName || undefined,
+        latitude: form.latitude ? parseFloat(form.latitude) : undefined,
+        longitude: form.longitude ? parseFloat(form.longitude) : undefined,
+        userId: user?.uid,
+      },
+      {
+        onSuccess: (result) => {
+          toast({ type: 'success', message: `Device ${form.serialNumber} commissioned successfully!` });
+          navigate(`/device/${result.deviceId}`);
+        },
+        onError: (err) => {
+          const msg = err instanceof ApiError ? err.message : 'Failed to commission device. Please try again.';
+          setStepError(msg);
+          toast({ type: 'error', message: msg });
+        },
+        onSettled: () => {
+          setProcessing(false);
+        },
+      },
+    );
+  }, [form, user?.uid, toast, navigate, commissionMutation]);
 
   return (
     <Page>
@@ -125,11 +275,13 @@ export function CommissioningWizardPage() {
       </Progress>
 
       <Card>
+        {/* ── Step 0: Scan Device ────────────────────────── */}
         {step === 0 && (
           <>
             <StepIcon>📡</StepIcon>
             <Title>Scan Device</Title>
             <Desc>Enter or scan the serial number from your BlueSignal WQM-1 device.</Desc>
+            {stepError && <ErrorMsg>{stepError}</ErrorMsg>}
             <FormArea>
               <Input
                 label="Serial Number"
@@ -139,58 +291,78 @@ export function CommissioningWizardPage() {
               />
             </FormArea>
             <ButtonRow>
-              <Button variant="outline" onClick={() => navigate('/dashboard/main')}>Cancel</Button>
-              <Button onClick={() => setStep(1)} disabled={!form.serialNumber}>Next</Button>
+              <Button variant="outline" onClick={() => navigate('/v2/dashboard')}>Cancel</Button>
+              <Button onClick={handleScanNext} disabled={!form.serialNumber.trim() || processing}>
+                {processing ? 'Checking…' : 'Next'}
+              </Button>
             </ButtonRow>
           </>
         )}
 
+        {/* ── Step 1: Connect ────────────────────────────── */}
         {step === 1 && (
           <>
-            <StatusDot $connected={false} />
+            <StatusDot $connected={connectionResult?.connected} />
             <Title>Connecting…</Title>
-            <Desc>Establishing connection to {form.serialNumber || 'device'}. Make sure the device is powered on and in range.</Desc>
-            <StatusText>Searching for device via LTE-M / BLE…</StatusText>
+            <Desc>
+              Establishing connection to {form.serialNumber}.
+              Make sure the device is powered on and in range.
+            </Desc>
+            {stepError && <ErrorMsg>{stepError}</ErrorMsg>}
+            <StatusText>
+              {processing ? 'Testing device connection…' : 'Ready to connect'}
+            </StatusText>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(0)}>Back</Button>
-              <Button onClick={() => setStep(2)}>Simulate Connect</Button>
+              <Button variant="outline" onClick={() => { setStep(0); setStepError(null); }}>Back</Button>
+              <Button onClick={handleConnect} disabled={processing}>
+                {processing ? 'Connecting…' : 'Test Connection'}
+              </Button>
             </ButtonRow>
           </>
         )}
 
+        {/* ── Step 2: Calibrate ──────────────────────────── */}
         {step === 2 && (
           <>
             <StepIcon>🔧</StepIcon>
             <Title>Calibrate Sensors</Title>
             <Desc>
-              Follow the on-screen instructions to calibrate each sensor.
-              This typically takes 2-3 minutes.
+              {connectionResult?.simulated
+                ? <>Calibration in simulation mode. <SimBadge>Simulation Mode (no device connected)</SimBadge></>
+                : 'Follow the on-screen instructions to calibrate each sensor.'
+              }
             </Desc>
             <div style={{ padding: '20px 0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, color: '#666' }}>pH Sensor</span>
-                <span style={{ fontSize: 13, color: '#00C48C', fontWeight: 600 }}>✓ Calibrated</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, color: '#666' }}>TDS Sensor</span>
-                <span style={{ fontSize: 13, color: '#00C48C', fontWeight: 600 }}>✓ Calibrated</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, color: '#666' }}>Turbidity Sensor</span>
-                <span style={{ fontSize: 13, color: '#0066FF', fontWeight: 600 }}>Calibrating…</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 13, color: '#666' }}>Temperature Sensor</span>
-                <span style={{ fontSize: 13, color: '#999' }}>Waiting</span>
-              </div>
+              {['pH Sensor', 'TDS Sensor', 'Turbidity Sensor', 'Temperature Sensor'].map((sensor, i) => (
+                <SensorRow key={sensor}>
+                  <span style={{ color: '#666' }}>{sensor}</span>
+                  <span style={{
+                    fontWeight: 600,
+                    color: calibrationDone ? '#00C48C' :
+                      (calibrating && i === 2) ? '#0066FF' :
+                      (calibrating && i < 2) ? '#00C48C' : '#999'
+                  }}>
+                    {calibrationDone ? '✓ Calibrated' :
+                      (calibrating && i === 2) ? 'Calibrating…' :
+                      (calibrating && i < 2) ? '✓ Calibrated' : 'Waiting'}
+                  </span>
+                </SensorRow>
+              ))}
             </div>
             <ButtonRow>
               <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
-              <Button onClick={() => setStep(3)}>Continue</Button>
+              {!calibrationDone ? (
+                <Button onClick={handleCalibrate} disabled={calibrating}>
+                  {calibrating ? 'Calibrating…' : 'Start Calibration'}
+                </Button>
+              ) : (
+                <Button onClick={() => setStep(3)}>Continue</Button>
+              )}
             </ButtonRow>
           </>
         )}
 
+        {/* ── Step 3: Location ───────────────────────────── */}
         {step === 3 && (
           <>
             <StepIcon>📍</StepIcon>
@@ -226,34 +398,38 @@ export function CommissioningWizardPage() {
             </FormArea>
             <ButtonRow>
               <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
-              <Button onClick={() => setStep(4)}>Review</Button>
+              <Button onClick={() => { setStepError(null); setStep(4); }}>Review</Button>
             </ButtonRow>
           </>
         )}
 
+        {/* ── Step 4: Confirm ────────────────────────────── */}
         {step === 4 && (
           <>
             <StepIcon>✅</StepIcon>
             <Title>Ready to Go</Title>
             <Desc>Your device is configured and will begin collecting data immediately.</Desc>
+            {stepError && <ErrorMsg>{stepError}</ErrorMsg>}
             <div style={{ textAlign: 'left', marginBottom: 24 }}>
               {[
                 ['Serial', form.serialNumber],
                 ['Name', form.deviceName || '—'],
                 ['Site', form.siteName || '—'],
-                ['Location', `${form.latitude || '—'}, ${form.longitude || '—'}`],
-                ['Sensors', '4 calibrated'],
-                ['Network', 'LTE-M connected'],
+                ['Location', form.latitude && form.longitude ? `${form.latitude}, ${form.longitude}` : '—'],
+                ['Sensors', calibrationDone ? '4 calibrated' : 'Not calibrated'],
+                ['Connection', connectionResult?.connected ? `Connected (${connectionResult.signal})` : `Simulation mode`],
               ].map(([label, value]) => (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #eee', fontSize: 14 }}>
+                <ReviewRow key={label}>
                   <span style={{ color: '#888' }}>{label}</span>
                   <span style={{ fontWeight: 600 }}>{value}</span>
-                </div>
+                </ReviewRow>
               ))}
             </div>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(3)}>Back</Button>
-              <Button onClick={() => navigate('/dashboard/main')}>Activate Device</Button>
+              <Button variant="outline" onClick={() => setStep(3)} disabled={processing}>Back</Button>
+              <Button onClick={handleCommission} disabled={processing}>
+                {processing ? 'Activating…' : 'Activate Device'}
+              </Button>
             </ButtonRow>
           </>
         )}
@@ -261,3 +437,5 @@ export function CommissioningWizardPage() {
     </Page>
   );
 }
+
+export default CommissioningWizardPage;

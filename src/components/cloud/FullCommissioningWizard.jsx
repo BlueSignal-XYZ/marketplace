@@ -8,6 +8,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import { useCommission } from "../../hooks/useCommission";
+import { useToastContext } from "../../shared/providers/ToastProvider";
+import { testDeviceConnection, ApiError } from "../../services/v2/client";
 import { QRScanner, LocationCapture } from "../installer";
 import CloudPageLayout from "./CloudPageLayout";
 import { ButtonPrimary, ButtonSecondary, ButtonDanger } from "../shared/button/Button";
@@ -256,12 +258,14 @@ const TestItem = styled.div`
     if ($status === "passed") return "#d1fae5";
     if ($status === "failed") return "#fee2e2";
     if ($status === "running") return "#dbeafe";
+    if ($status === "skipped") return "#fef3c7";
     return "#f9fafb";
   }};
   border: 1px solid ${({ $status }) => {
     if ($status === "passed") return "#86efac";
     if ($status === "failed") return "#fca5a5";
     if ($status === "running") return "#93c5fd";
+    if ($status === "skipped") return "#fde68a";
     return "#e5e7eb";
   }};
 `;
@@ -345,6 +349,18 @@ const ErrorMessage = styled.div`
   margin-bottom: 20px;
 `;
 
+const SimBanner = styled.div`
+  background: rgba(255, 176, 32, 0.12);
+  border: 1px solid rgba(255, 176, 32, 0.3);
+  color: #b8860b;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
 const SuccessMessage = styled.div`
   background: #d1fae5;
   border: 1px solid #86efac;
@@ -392,6 +408,7 @@ export default function FullCommissioningWizard() {
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
+  const toast = useToastContext();
 
   const {
     commission,
@@ -418,6 +435,7 @@ export default function FullCommissioningWizard() {
   const [testResults, setTestResults] = useState([]);
   const [calibrationData, setCalibrationData] = useState({});
   const [runningTests, setRunningTests] = useState(false);
+  const [isSimulatedTests, setIsSimulatedTests] = useState(false);
 
   const currentStep = STEPS[currentStepIndex];
 
@@ -490,13 +508,14 @@ export default function FullCommissioningWizard() {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    const ts = Date.now();
     const newPhotos = await Promise.all(
-      files.map(async (file) => {
+      files.map(async (file, idx) => {
         return new Promise((resolve) => {
           const reader = new FileReader();
           reader.onload = (event) => {
             resolve({
-              id: Date.now() + Math.random(),
+              id: `photo-${ts}-${idx}`,
               url: event.target.result,
               caption: file.name,
               type: "installation",
@@ -514,55 +533,47 @@ export default function FullCommissioningWizard() {
     setPhotos((prev) => prev.filter((p) => p.id !== photoId));
   };
 
-  // Run connectivity tests
+  // Run connectivity tests via v2 API
   const handleRunTests = async () => {
+    if (!deviceData?.serialNumber) {
+      setError("No device selected. Scan a device first.");
+      return;
+    }
     setRunningTests(true);
     setError(null);
 
-    const tests = [
-      { id: "power", name: "Power System", status: "pending" },
-      { id: "network", name: "Network Connectivity", status: "pending" },
-      { id: "sensors", name: "Sensor Response", status: "pending" },
-      { id: "data", name: "Data Transmission", status: "pending" },
-    ];
+    try {
+      const result = await testDeviceConnection(deviceData.serialNumber);
 
-    setTestResults(tests);
+      if (result.simulated) {
+        setTestResults([
+          { id: "power", name: "Power System", status: "skipped", details: "Simulation mode — no device connected" },
+          { id: "network", name: "Network Connectivity", status: "skipped", details: "Simulation mode — no device connected" },
+          { id: "sensors", name: "Sensor Response", status: "skipped", details: "Simulation mode — no device connected" },
+          { id: "data", name: "Data Transmission", status: "skipped", details: "Simulation mode — no device connected" },
+        ]);
+        setIsSimulatedTests(true);
+      } else {
+        const status = result.connected ? "passed" : "failed";
+        const details = result.connected ? `Connected (${result.signal || "OK"})` : (result.message || "Connection failed");
+        setTestResults([
+          { id: "connection", name: "Connection", status, details },
+        ]);
+        setIsSimulatedTests(false);
 
-    // Simulate running tests one by one
-    for (let i = 0; i < tests.length; i++) {
-      setTestResults((prev) =>
-        prev.map((t, idx) =>
-          idx === i ? { ...t, status: "running" } : t
-        )
-      );
-
-      await new Promise((r) => setTimeout(r, 1500));
-
-      const passed = Math.random() > 0.1; // 90% pass rate
-      setTestResults((prev) =>
-        prev.map((t, idx) =>
-          idx === i
-            ? {
-                ...t,
-                status: passed ? "passed" : "failed",
-                details: passed ? "OK" : "Check connection",
-              }
-            : t
-        )
-      );
-    }
-
-    setRunningTests(false);
-
-    if (commission?.commissionId) {
-      try {
-        await updateStep("connectivity_test", {
-          tests: testResults,
-          passed: testResults.every((t) => t.status === "passed"),
-        });
-      } catch (err) {
-        console.error("Error updating step:", err);
+        if (commission?.commissionId) {
+          await updateStep("connectivity_test", {
+            tests: [{ id: "connection", name: "Connection", status, details }],
+            passed: result.connected,
+          });
+        }
       }
+    } catch (err) {
+      const msg = err instanceof ApiError ? err.message : "Connection test failed.";
+      setError(msg);
+      setTestResults([]);
+    } finally {
+      setRunningTests(false);
     }
   };
 
@@ -610,7 +621,7 @@ export default function FullCommissioningWizard() {
       case 1: return !!selectedSite || !!newSiteName;
       case 2: return !!location;
       case 3: return photos.length >= 1;
-      case 4: return testResults.some((t) => t.status === "passed" || t.status === "failed");
+      case 4: return testResults.some((t) => t.status === "passed" || t.status === "failed" || t.status === "skipped");
       case 5: return Object.keys(calibrationData).length > 0;
       default: return false;
     }
@@ -620,9 +631,14 @@ export default function FullCommissioningWizard() {
   const handleComplete = async () => {
     setError(null);
 
+    if (isSimulatedTests) {
+      toast({ type: "error", message: "Cannot complete: connectivity tests were run in simulation mode. Connect a real device to commission." });
+      return;
+    }
+
     try {
       await complete();
-      ACTIONS?.logNotification?.("success", "Device commissioned successfully!");
+      toast({ type: "success", message: "Device commissioned successfully!" });
       navigate("/cloud/commissioning");
     } catch (err) {
       setError(err.message || "Failed to complete commissioning");
@@ -644,9 +660,10 @@ export default function FullCommissioningWizard() {
 
   const getTestIcon = (status) => {
     switch (status) {
-      case "passed": return "check";
-      case "failed": return "X";
+      case "passed": return "✓";
+      case "failed": return "✗";
       case "running": return "...";
+      case "skipped": return "—";
       default: return "-";
     }
   };
@@ -819,6 +836,12 @@ export default function FullCommissioningWizard() {
                 Run automated tests to verify device connectivity.
               </StepDescription>
 
+              {isSimulatedTests && (
+                <SimBanner>
+                  Simulation Mode — no device connected. Results are not saved. Connect a real device to complete commissioning.
+                </SimBanner>
+              )}
+
               {testResults.length === 0 ? (
                 <div style={{ textAlign: "center", padding: 32 }}>
                   <ButtonPrimary onClick={handleRunTests} disabled={runningTests}>
@@ -907,6 +930,12 @@ export default function FullCommissioningWizard() {
                 Review the commissioning details before completing.
               </StepDescription>
 
+              {isSimulatedTests && (
+                <SimBanner>
+                  Simulation Mode — connectivity tests were not run on a real device. Complete is disabled. Connect a real device and re-run tests to commission.
+                </SimBanner>
+              )}
+
               <SummaryGrid>
                 <SummaryCard>
                   <SummaryLabel>Device</SummaryLabel>
@@ -933,8 +962,9 @@ export default function FullCommissioningWizard() {
                 <SummaryCard>
                   <SummaryLabel>Tests</SummaryLabel>
                   <SummaryValue>
-                    {testResults.filter((t) => t.status === "passed").length}/
-                    {testResults.length} passed
+                    {isSimulatedTests
+                      ? "Simulation mode (not saved)"
+                      : `${testResults.filter((t) => t.status === "passed").length}/${testResults.length} passed`}
                   </SummaryValue>
                 </SummaryCard>
 
@@ -974,9 +1004,9 @@ export default function FullCommissioningWizard() {
             ) : (
               <ButtonPrimary
                 onClick={handleComplete}
-                disabled={loading}
+                disabled={loading || isSimulatedTests}
               >
-                {loading ? "Completing..." : "Complete Commission"}
+                {loading ? "Completing..." : isSimulatedTests ? "Complete (blocked — simulation mode)" : "Complete Commission"}
               </ButtonPrimary>
             )}
           </div>

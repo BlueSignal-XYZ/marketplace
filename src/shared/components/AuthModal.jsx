@@ -20,6 +20,11 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 
+// Wallet
+import { connectAndSign, hasWalletProvider } from '../utils/wallet';
+import { linkWallet, ApiError } from '../../services/v2/client';
+import { useToastContext } from '../providers/ToastProvider';
+
 const fadeIn = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
@@ -131,7 +136,7 @@ const WalletButton = styled(Button)`
   &:hover { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
 `;
 
-export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = 'wqt' }) {
+export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = 'wqt', message }) {
   const [mode, setMode] = useState(initialMode); // login | signup | reset
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -141,6 +146,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
   const [success, setSuccess] = useState('');
 
   const auth = getAuth();
+  const toast = useToastContext();
 
   const handleEmailAuth = useCallback(async (e) => {
     e.preventDefault();
@@ -196,10 +202,45 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
   }, [auth, onClose]);
 
   const handleWalletConnect = useCallback(async () => {
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      setError('Please sign in with email or Google first, then connect your wallet.');
+      return;
+    }
+
     setError('');
-    // Placeholder — will integrate with ethers.js / wagmi in production
-    setError('Wallet connect coming soon. Please use email for now.');
-  }, []);
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      const { address, signature, message } = await connectAndSign();
+
+      await linkWallet({
+        userId: currentUser.uid,
+        walletAddress: address,
+        signature,
+        message,
+      });
+
+      setSuccess(`Wallet connected: ${address.slice(0, 6)}…${address.slice(-4)}`);
+      toast({ type: 'success', message: `Wallet ${address.slice(0, 6)}…${address.slice(-4)} linked successfully.` });
+      onClose?.();
+    } catch (err) {
+      if (err.code === 4001 || err.message?.includes('rejected')) {
+        setError('Wallet connection cancelled.');
+        return;
+      }
+      const isNetworkError = err instanceof ApiError && (err.status === 0 || err.code === 'NETWORK_ERROR');
+      const msg = isNetworkError
+        ? 'Connection failed — please try again'
+        : (err instanceof ApiError ? err.message : err.message || 'Failed to connect wallet.');
+      setError(msg);
+      toast({ type: 'error', message: msg });
+    } finally {
+      setLoading(false);
+    }
+  }, [auth, onClose, toast]);
 
   if (!isOpen) return null;
 
@@ -211,9 +252,9 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
         <Brand>
           <BrandName>{platformName}</BrandName>
           <BrandSub>
-            {mode === 'login' ? 'Sign in to your account' :
+            {message || (mode === 'login' ? 'Sign in to your account' :
              mode === 'signup' ? 'Create your account' :
-             'Reset your password'}
+             'Reset your password')}
           </BrandSub>
         </Brand>
 
@@ -267,8 +308,17 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
               <Button variant="outline" fullWidth onClick={handleGoogle} disabled={loading}>
                 Continue with Google
               </Button>
-              <WalletButton fullWidth onClick={handleWalletConnect} disabled={loading}>
-                Connect Wallet
+              <WalletButton
+                fullWidth
+                onClick={handleWalletConnect}
+                disabled={loading || !auth.currentUser}
+                title={!auth.currentUser ? 'Sign in to connect wallet' : undefined}
+              >
+                {!auth.currentUser
+                  ? 'Sign in to connect wallet'
+                  : hasWalletProvider()
+                    ? 'Connect Wallet'
+                    : 'Install MetaMask'}
               </WalletButton>
             </div>
           </>

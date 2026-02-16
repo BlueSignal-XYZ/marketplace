@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import LoginForm from "./components/welcome/LoginForm";
 import RegisterForm from "./components/welcome/RegisterForm";
@@ -67,29 +67,37 @@ export const logoVariants = {
   visible: { y: 0, opacity: 1, transition: { duration: 1 } },
 };
 
-const Welcome = () => {
+function getRedirectTarget(redirectTo, user, mode) {
+  if (!redirectTo || redirectTo === '/' || redirectTo === '/login') {
+    return getDefaultDashboardRoute(user, mode);
+  }
+  return redirectTo;
+}
+
+const Welcome = ({ redirectTo: redirectToProp }) => {
   const { STATES, ACTIONS } = useAppContext();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectTo = redirectToProp ?? location.state?.redirectTo;
 
   const [cardState, setCardState] = useState("");
   const [googleData, setGoogleData] = useState({});
   const { user } = STATES || {};
   const { updateUser } = ACTIONS || {};
 
-  // If user already logged in, redirect by mode and role
+  // If user already logged in, redirect to saved destination or default
   useEffect(() => {
     if (!user?.uid) return;
 
     const mode = getAppMode();
-    const route = getDefaultDashboardRoute(user, mode);
-    console.log("🚀 Welcome: User authenticated, redirecting to:", route);
+    const route = getRedirectTarget(redirectTo, user, mode);
     navigate(route, { replace: true });
-  }, [user, navigate]);
+  }, [user, navigate, redirectTo]);
 
   const enterDash = () => {
     const mode = getAppMode();
-    const route = getDefaultDashboardRoute(user, mode);
-    console.log("🚀 Welcome: enterDash called, navigating to:", route);
+    const route = getRedirectTarget(redirectTo, user, mode);
     navigate(route);
   };
 

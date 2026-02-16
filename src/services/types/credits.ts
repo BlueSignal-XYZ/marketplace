@@ -166,22 +166,7 @@ export interface RetireResult {
   impactReport?: ImpactSummary;
 }
 
-// ── Portfolio (/v2/credits/portfolio/:userId) ─────────────
-
-export interface Portfolio {
-  userId: string;
-  holdings: PortfolioHolding[];
-  totalValue: number;
-  totalNitrogenRemoved: number;   // kg
-  totalPhosphorusRemoved: number; // kg
-  summary: {
-    activeCredits: number;
-    listedCredits: number;
-    retiredCredits: number;
-    totalPurchases: number;
-    totalSales: number;
-  };
-}
+// ── Portfolio (/v2/credits/portfolio) ─────────────────────
 
 export interface PortfolioHolding {
   creditId: string;
@@ -195,7 +180,7 @@ export interface PortfolioHolding {
   listingId?: string;
 }
 
-export interface TransactionHistory {
+export interface PortfolioTransaction {
   id: string;
   type: 'purchase' | 'sale' | 'retirement';
   creditId: string;
@@ -203,9 +188,33 @@ export interface TransactionHistory {
   quantity: number;
   price: number;
   counterparty?: string;
-  transactionHash?: string;
+  transactionHash?: string | null;
   timestamp: string;
 }
+
+/** @deprecated Use PortfolioTransaction instead */
+export type TransactionHistory = PortfolioTransaction;
+
+export interface PortfolioSummary {
+  activeCredits: number;
+  listedCredits: number;
+  retiredCredits: number;
+  totalPurchases: number;
+  totalSales: number;
+}
+
+export interface PortfolioResponse {
+  userId: string;
+  holdings: PortfolioHolding[];
+  totalValue: number;
+  totalNitrogenRemoved: number;   // kg
+  totalPhosphorusRemoved: number; // kg
+  summary: PortfolioSummary;
+  transactions: PortfolioTransaction[];
+}
+
+/** @deprecated Use PortfolioResponse instead */
+export type Portfolio = Omit<PortfolioResponse, 'transactions'>;
 
 export interface ImpactSummary {
   totalNitrogenRemoved: number;
