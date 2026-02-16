@@ -5,10 +5,16 @@
 
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const { Client } = require("@googlemaps/google-maps-services-js");
 
-// Google Maps client
-const mapsClient = new Client({});
+// Lazy-load Google Maps client to reduce cold-start time
+let _mapsClient;
+const getMapsClient = () => {
+  if (!_mapsClient) {
+    const { Client } = require("@googlemaps/google-maps-services-js");
+    _mapsClient = new Client({});
+  }
+  return _mapsClient;
+};
 
 /**
  * Get Google Maps API key from config
@@ -69,7 +75,7 @@ const geocodeAddress = async (req, res) => {
   }
 
   try {
-    const response = await mapsClient.geocode({
+    const response = await getMapsClient().geocode({
       params: {
         address,
         key: apiKey,
@@ -124,7 +130,7 @@ const reverseGeocode = async (req, res) => {
   }
 
   try {
-    const response = await mapsClient.reverseGeocode({
+    const response = await getMapsClient().reverseGeocode({
       params: {
         latlng: { lat, lng },
         key: apiKey,

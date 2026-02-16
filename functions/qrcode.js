@@ -6,7 +6,13 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
-const QRCode = require("qrcode");
+
+// Lazy-load qrcode to reduce cold-start time
+let _QRCode;
+const getQRCode = () => {
+  if (!_QRCode) _QRCode = require("qrcode");
+  return _QRCode;
+};
 
 // QR Secret from Firebase config
 const getQRSecret = () => process.env.QR_SECRET || functions.config().qr?.secret || "bluesignal-dev-secret";
@@ -112,7 +118,7 @@ const generateDeviceQR = async (req, res) => {
     const qrUrl = `https://cloud.bluesignal.xyz/commission?d=${qrData}`;
 
     // Generate QR code image
-    const qrImage = await QRCode.toDataURL(qrUrl, {
+    const qrImage = await getQRCode().toDataURL(qrUrl, {
       errorCorrectionLevel: "H",
       width: 300,
       margin: 2,
@@ -409,7 +415,7 @@ const batchGenerateQR = async (req, res) => {
       const qrUrl = `https://cloud.bluesignal.xyz/commission?d=${qrData}`;
 
       // Generate QR image
-      const qrImage = await QRCode.toDataURL(qrUrl, {
+      const qrImage = await getQRCode().toDataURL(qrUrl, {
         errorCorrectionLevel: "H",
         width: 300,
         margin: 2,

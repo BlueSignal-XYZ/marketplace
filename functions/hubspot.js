@@ -8,7 +8,6 @@
  * - Webhook processing
  */
 
-const axios = require("axios");
 const admin = require("firebase-admin");
 
 // HubSpot API base URL
@@ -31,10 +30,12 @@ const getAccessToken = () => {
   return process.env.HUBSPOT_ACCESS_TOKEN;
 };
 
-// Create axios instance for HubSpot API
+// Create axios instance for HubSpot API (lazy-loaded to reduce cold-start time)
+let _axios;
 const getHubSpotClient = () => {
+  if (!_axios) _axios = require("axios");
   const token = getAccessToken();
-  return axios.create({
+  return _axios.create({
     baseURL: HUBSPOT_API_BASE,
     headers: {
       Authorization: `Bearer ${token}`,

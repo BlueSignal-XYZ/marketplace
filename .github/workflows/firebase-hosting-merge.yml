@@ -61,6 +61,7 @@ jobs:
       - name: Deploy Cloud Functions
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
+          FUNCTIONS_DISCOVERY_TIMEOUT: 30
         run: npx firebase-tools deploy --only functions --project waterquality-trading --non-interactive --force
 
       # Deploy ALL hosting targets (wqt + cloud + landing)
