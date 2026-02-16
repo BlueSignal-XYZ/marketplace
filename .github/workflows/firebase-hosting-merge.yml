@@ -50,15 +50,31 @@ jobs:
           VITE_LIVEPEER_API_KEY: ${{ secrets.VITE_LIVEPEER_API_KEY }}
         run: npm run build
 
-      # Deploy to Firebase Hosting (all three sites)
-      - name: Deploy to Firebase
-        id: firebase_deploy
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WATERQUALITY_TRADING }}'
-          channelId: live
-          projectId: waterquality-trading
+      # Write service account key for Firebase CLI authentication
+      - name: Setup Firebase authentication
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WATERQUALITY_TRADING }}' > "$RUNNER_TEMP/firebase-sa.json"
+
+      # Deploy Cloud Functions (v2 endpoints must be live before hosting goes out)
+      - name: Install functions dependencies
+        run: cd functions && npm ci
+
+      - name: Deploy Cloud Functions
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
+        run: npx firebase-tools deploy --only functions --project waterquality-trading --non-interactive --force
+
+      # Deploy ALL hosting targets (wqt + cloud + landing)
+      # Note: The previous FirebaseExtended/action-hosting-deploy action only
+      # deployed the default site. Using firebase CLI directly ensures all three
+      # targets defined in firebase.json are deployed.
+      - name: Deploy all hosting targets
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
+        run: npx firebase-tools deploy --only hosting --project waterquality-trading --non-interactive --force
+
+      - name: Cleanup service account key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/firebase-sa.json"
 
   # Trigger Cloudflare builds after Firebase deployment succeeds
   cloudflare_deploy:
