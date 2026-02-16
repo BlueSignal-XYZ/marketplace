@@ -359,9 +359,13 @@ app.get("/notifications/unread-count", async (req, res) => {
 });
 
 // Export the Express app as a Cloud Function
+// NOTE: secrets removed from runWith to avoid needing secretmanager.admin
+// IAM permission during CI deploy. HubSpot routes on this Express app will
+// only work if HUBSPOT_ACCESS_TOKEN is configured on the function separately
+// (via Cloud Console or gcloud). The v2 marketplace endpoints do NOT need
+// any secrets and work without this configuration.
 exports.app = functions
   .runWith({
-    secrets: ["HUBSPOT_ACCESS_TOKEN"],
     timeoutSeconds: 60,
     memory: "256MB",
   })

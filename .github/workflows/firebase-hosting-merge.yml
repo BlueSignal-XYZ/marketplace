@@ -54,15 +54,29 @@ jobs:
       - name: Setup Firebase authentication
         run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_WATERQUALITY_TRADING }}' > "$RUNNER_TEMP/firebase-sa.json"
 
-      # Deploy Cloud Functions (v2 endpoints must be live before hosting goes out)
+      # Deploy Cloud Functions
+      # Only deploy the 6 functions that DON'T reference secrets in runWith().
+      # This avoids needing roles/secretmanager.admin IAM permission.
+      # The 8 HubSpot/TTN functions (which need Secret Manager) are deployed
+      # separately via manual gcloud/firebase CLI with proper IAM.
+      # Deployed: app, onUserCreate, onUserDelete, ingestReading,
+      #           onReadingCreated, deviceHealthCheck
+      # Excluded: hubspotWebhook, ttnWebhook, onCustomerCreated,
+      #           onCustomerUpdated, onOrderCreated, onOrderUpdated,
+      #           onCommissionCompleted, onDeviceActivated
       - name: Install functions dependencies
         run: cd functions && npm ci
 
-      - name: Deploy Cloud Functions
+      - name: Deploy Cloud Functions (marketplace core)
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-sa.json
           FUNCTIONS_DISCOVERY_TIMEOUT: 30
-        run: npx firebase-tools deploy --only functions --project waterquality-trading --non-interactive --force
+        run: >-
+          npx firebase-tools deploy
+          --only functions:app,functions:onUserCreate,functions:onUserDelete,functions:ingestReading,functions:onReadingCreated,functions:deviceHealthCheck
+          --project waterquality-trading
+          --non-interactive
+          --force
 
       # Deploy ALL hosting targets (wqt + cloud + landing)
       # Note: The previous FirebaseExtended/action-hosting-deploy action only
