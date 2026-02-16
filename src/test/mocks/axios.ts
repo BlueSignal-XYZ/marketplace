@@ -6,8 +6,8 @@ export const mockAxios = {
   put: vi.fn(() => Promise.resolve({ data: {} })),
   delete: vi.fn(() => Promise.resolve({ data: {} })),
   patch: vi.fn(() => Promise.resolve({ data: {} })),
-  create: vi.fn(function () {
-    return this
+  create: vi.fn(function (this: typeof mockAxios) {
+    return this;
   }),
   defaults: {
     headers: {

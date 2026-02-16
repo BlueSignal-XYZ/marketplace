@@ -13,7 +13,7 @@ export interface RegistryCredit {
   projectName: string;
   projectId: string;
   issueDate: string;
-  retirementDate?: string;
+  retirementDate?: string | null;
   status: 'active' | 'retired';
   verificationId: string;
   location: string;

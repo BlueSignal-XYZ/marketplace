@@ -438,7 +438,7 @@ export function MapPage() {
 
   const [loading, setLoading] = useState(true);
   const [mapError, setMapError] = useState<string | null>(null);
-  const [filterType, setFilterType] = useState<string>('all');
+  const [filterType, setFilterType] = useState<'all' | 'nitrogen' | 'phosphorus' | 'stormwater' | 'thermal'>('all');
   // Default to list view if no valid token, map view if token is valid
   const [viewMode, setViewMode] = useState<ViewMode>(HAS_VALID_TOKEN ? 'map' : 'list');
   const [error, setError] = useState<string | null>(null);
@@ -516,7 +516,7 @@ export function MapPage() {
           addBoundaryLayers();
         });
 
-        map.current.on('error', (e) => {
+        map.current.on('error', (e: { error?: Error }) => {
           clearTimeout(loadTimeout);
           console.error('Mapbox error:', e);
           setMapError('Failed to load the map. Please try again later.');

@@ -87,8 +87,8 @@ const Change = styled.span<{ $trend: 'up' | 'down' | 'neutral' }>`
   font-size: 13px;
   font-weight: 600;
   color: ${({ $trend, theme }) => {
-    if ($trend === 'up') return theme.colors.positive ?? theme.colors.success;
-    if ($trend === 'down') return theme.colors.negative ?? theme.colors.error;
+    if ($trend === 'up') return theme.colors.positive;
+    if ($trend === 'down') return theme.colors.negative;
     return theme.colors.textMuted;
   }};
 `;

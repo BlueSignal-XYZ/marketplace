@@ -284,7 +284,7 @@ export function RecentRemovalsPage() {
     setError(null);
     try {
       const realCredits = await fetchRetiredCredits();
-      setAllRetiredCredits(Array.isArray(realCredits) ? realCredits : []);
+      setAllRetiredCredits((Array.isArray(realCredits) ? realCredits : []) as RegistryCredit[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load retired credits.');
       setAllRetiredCredits([]);

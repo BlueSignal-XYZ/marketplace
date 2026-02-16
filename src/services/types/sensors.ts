@@ -2,6 +2,7 @@
  * Sensor / environmental data service types — /v2/data/* endpoints.
  * Public sensor feeds, readings, watersheds.
  */
+/// <reference types="geojson" />
 
 import type { GeoLocation, OnlineStatus, Timestamped, PaginationParams, PaginatedResponse } from './common';
 

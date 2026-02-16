@@ -348,7 +348,7 @@ export function RegistryPage() {
     setError(null);
     try {
       const realCredits = await fetchRegistryCredits();
-      setAllCredits(Array.isArray(realCredits) ? realCredits : []);
+      setAllCredits((Array.isArray(realCredits) ? realCredits : []) as RegistryCredit[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load registry credits.');
       setAllCredits([]);

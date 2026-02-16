@@ -4,14 +4,15 @@
  * This tells styled-components what shape `props.theme` has,
  * so every styled component gets full autocomplete and type safety
  * for theme tokens without manual casting.
+ *
+ * Both wqtTheme and cloudTheme share the same top-level structure.
+ * We extend WQTTheme to provide the full key set; CloudTheme has
+ * identical keys so runtime works for both.
  */
 
 import 'styled-components';
 import type { WQTTheme } from './themes/wqtTheme';
-import type { CloudTheme } from './themes/cloudTheme';
-
-type AppTheme = WQTTheme | CloudTheme;
 
 declare module 'styled-components' {
-  export interface DefaultTheme extends AppTheme {}
+  export interface DefaultTheme extends WQTTheme {}
 }
