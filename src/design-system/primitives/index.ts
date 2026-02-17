@@ -43,3 +43,15 @@ export type { TabsProps, Tab } from './Tabs';
 
 export { SearchBar } from './SearchBar';
 export type { SearchBarProps, FilterConfig, FilterOption } from './SearchBar';
+
+export { FilterChips } from './FilterChips';
+export type { FilterChipsProps, ChipOption } from './FilterChips';
+
+export { Pagination } from './Pagination';
+export type { PaginationProps } from './Pagination';
+
+export { SegmentedControl } from './SegmentedControl';
+export type { SegmentedControlProps, SegmentOption } from './SegmentedControl';
+
+export { ComingSoon } from './ComingSoon';
+export type { ComingSoonProps } from './ComingSoon';

@@ -22,13 +22,16 @@ export interface FilterConfig {
 export interface SearchBarProps {
   placeholder?: string;
   value?: string;
+  defaultValue?: string;
   onChange?: (value: string) => void;
   onSearch?: (value: string) => void;
   filters?: FilterConfig[];
   activeFilters?: Record<string, string>;
   onFilterChange?: (filterId: string, value: string) => void;
-  /** Search icon element */
+  /** Search icon element — defaults to magnifying glass SVG */
   icon?: React.ReactNode;
+  /** Hide the default search icon */
+  hideIcon?: boolean;
   className?: string;
 }
 
@@ -39,6 +42,11 @@ const Container = styled.div`
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -102,21 +110,31 @@ const Select = styled.select`
 
 // ── Component ─────────────────────────────────────────────
 
+const SearchIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.3-4.3" />
+  </svg>
+);
+
 export const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = 'Search...',
   value,
+  defaultValue,
   onChange,
   onSearch,
   filters,
   activeFilters = {},
   onFilterChange,
   icon,
+  hideIcon = false,
   className,
 }) => {
-  const [internal, setInternal] = useState(value ?? '');
+  const [internal, setInternal] = useState(value ?? defaultValue ?? '');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const val = value !== undefined ? value : internal;
+  const displayIcon = hideIcon ? null : (icon ?? <SearchIcon />);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,10 +155,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <Container className={className}>
       <InputWrapper>
-        {icon && <IconSlot>{icon}</IconSlot>}
+        {displayIcon && <IconSlot>{displayIcon}</IconSlot>}
         <StyledInput
           ref={inputRef}
-          $hasIcon={!!icon}
+          $hasIcon={!!displayIcon}
           placeholder={placeholder}
           value={val}
           onChange={handleChange}
