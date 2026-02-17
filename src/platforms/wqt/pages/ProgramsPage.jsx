@@ -16,6 +16,10 @@ const Page = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const Title = styled.h1`

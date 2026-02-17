@@ -20,6 +20,10 @@ const Page = styled.div`
   max-width: 680px;
   margin: 0 auto;
   padding: 48px 24px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const StepIndicator = styled.div`

@@ -11,12 +11,17 @@ import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Button } from '../../../design-system/primitives/Button';
 import { Tabs } from '../../../design-system/primitives/Tabs';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
+import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { getListing, ApiError } from '../../../services/v2/client';
 
 const Page = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const Back = styled(Link)`
@@ -319,9 +324,12 @@ export function ListingDetailPage() {
               </InfoItem>
             </InfoGrid>
           ) : (
-            <div style={{ textAlign: 'center', padding: 32, color: '#888', fontSize: 14 }}>
-              No on-chain certificate available for this listing yet.
-            </div>
+            <EmptyState
+              compact
+              icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>}
+              title="No certificate yet"
+              description="On-chain certificate will be available after verification is complete."
+            />
           )}
         </Section>
       )}
