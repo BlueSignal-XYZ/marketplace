@@ -78,6 +78,51 @@ const RetryButton = styled.button`
 `;
 
 /**
+ * ComingSoonState - Clean informational placeholder for features not yet available
+ */
+const ComingSoonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+`;
+
+const ComingSoonIcon = styled.div`
+  font-size: 48px;
+  margin-bottom: 16px;
+`;
+
+const ComingSoonTitle = styled.h3`
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px;
+`;
+
+const ComingSoonSubtitle = styled.p`
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.6;
+`;
+
+function ComingSoonState({ icon, title, subtitle }) {
+  return (
+    <ComingSoonContainer>
+      <ComingSoonIcon>{icon}</ComingSoonIcon>
+      <ComingSoonTitle>{title}</ComingSoonTitle>
+      <ComingSoonSubtitle>{subtitle}</ComingSoonSubtitle>
+    </ComingSoonContainer>
+  );
+}
+
+/**
  * LivepeerWrapper - Initializes Livepeer client and wraps child components
  */
 function LivepeerWrapper({ children }) {
@@ -167,11 +212,11 @@ export function CloudLiveStream() {
       title="Live Stream"
       subtitle="Stream live video from site locations"
     >
-      <div style={{ background: "#ffffff", borderRadius: "12px", padding: "24px" }}>
-        <LivepeerWrapper>
-          <Stream />
-        </LivepeerWrapper>
-      </div>
+      <ComingSoonState
+        icon="🎥"
+        title="Live Stream"
+        subtitle="Live video feeds from monitoring sites will appear here once cameras are configured."
+      />
     </CloudPageLayout>
   );
 }
@@ -179,14 +224,14 @@ export function CloudLiveStream() {
 export function CloudUploadMedia() {
   return (
     <CloudPageLayout
-      title="Upload Media"
-      subtitle="Upload photos and videos from site documentation"
+      title="Media Upload"
+      subtitle="Upload photos and documentation from site installations"
     >
-      <div style={{ background: "#ffffff", borderRadius: "12px", padding: "24px" }}>
-        <LivepeerWrapper>
-          <MediaUpload />
-        </LivepeerWrapper>
-      </div>
+      <ComingSoonState
+        icon="📤"
+        title="Media Upload"
+        subtitle="Upload photos and documentation from site installations. Coming soon."
+      />
     </CloudPageLayout>
   );
 }
