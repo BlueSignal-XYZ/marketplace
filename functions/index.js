@@ -715,6 +715,36 @@ exports.hubspotWebhook = functions
   });
 
 // =============================================================================
+// LEGACY STUB ENDPOINTS (return empty data for removed v1 endpoints)
+// These prevent "Network Error" on frontend components not yet migrated to v2.
+// =============================================================================
+
+app.post("/db/user/get/from/uid", (req, res) => {
+  res.json({ success: true, user: null });
+});
+app.post("/db/user/get/from/username", (req, res) => {
+  res.json({ success: true, user: null });
+});
+app.post("/db/user/get/uid/from/username", (req, res) => {
+  res.json({ success: true, uid: null });
+});
+app.post("/db/user/get/media", (req, res) => {
+  res.json({ success: true, user_media: [] });
+});
+app.post("/db/user/get/streams", (req, res) => {
+  res.json({ success: true, user_streams: [] });
+});
+app.post("/db/user/get/assets", (req, res) => {
+  res.json({ success: true, user_assets: [] });
+});
+app.post("/db/user/get/asset/disputes", (req, res) => {
+  res.json({ success: true, user_disputes: [] });
+});
+app.post("/db/user/get/asset/approvals", (req, res) => {
+  res.json({ success: true, user_approvals: [] });
+});
+
+// =============================================================================
 // V2 API ENDPOINTS (all new backend work under /v2/)
 // =============================================================================
 

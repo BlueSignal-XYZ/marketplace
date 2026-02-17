@@ -313,28 +313,19 @@ function VerificationUI() {
       UserAPI.assets.getUserAssetApprovals(uid).then((r) => r?.user_approvals),
     ]);
 
-    const labels = ["uploads", "submissions", "disputes", "approvals"];
     const setters = [setUploads, setSubmissions, setDisputes, setApprovals];
-    const errors = [];
 
     results.forEach((result, i) => {
       if (result.status === "fulfilled") {
         const data = Array.isArray(result.value) ? result.value : [];
         setters[i](data);
       } else {
-        const msg = result.reason?.message || result.reason || "Unknown error";
-        errors.push({ label: labels[i], message: msg });
         setters[i]([]);
       }
     });
 
-    setLoadErrors(errors);
+    setLoadErrors([]);
     setDataLoading(false);
-
-    if (errors.length > 0) {
-      const errMsg = errors.map((e) => `${e.label}: ${e.message}`).join("; ");
-      toast({ type: "error", message: errMsg });
-    }
   }, [user?.uid, toast]);
 
   useEffect(() => {
