@@ -13,6 +13,7 @@ import { Badge } from '../../../design-system/primitives/Badge';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { Button } from '../../../design-system/primitives/Button';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
+import { Pagination } from '../../../design-system/primitives/Pagination';
 import { usePortfolioQuery } from '../../../shared/hooks/useApiQueries';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -20,6 +21,10 @@ const Page = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const Header = styled.div`
@@ -236,14 +241,24 @@ export function PortfolioPage() {
               </StatsGrid>
               <SectionTitle>Impact Breakdown</SectionTitle>
               {totalN + totalP > 0 ? (
-                <div style={{ padding: 24, textAlign: 'center', color: '#666', fontSize: 14, background: '#f9fafb', borderRadius: 8 }}>
-                  {totalN > 0 && <div style={{ marginBottom: 8 }}>Nitrogen: {totalN.toLocaleString()} kg removed from waterways</div>}
-                  {totalP > 0 && <div>Phosphorus: {totalP.toLocaleString()} kg removed from waterways</div>}
-                </div>
+                <Table
+                  columns={[
+                    { key: 'nutrient', header: 'Nutrient' },
+                    { key: 'amount', header: 'Amount Removed', align: 'right', mono: true },
+                  ]}
+                  data={[
+                    ...(totalN > 0 ? [{ id: 'n', nutrient: 'Nitrogen', amount: `${totalN.toLocaleString()} kg` }] : []),
+                    ...(totalP > 0 ? [{ id: 'p', nutrient: 'Phosphorus', amount: `${totalP.toLocaleString()} kg` }] : []),
+                  ]}
+                  rowKey={(r) => r.id}
+                  compact
+                />
               ) : (
-                <div style={{ padding: 32, textAlign: 'center', color: '#888', fontSize: 14, background: '#f9fafb', borderRadius: 8 }}>
-                  Impact data will appear once you hold credits.
-                </div>
+                <EmptyState
+                  compact
+                  title="No impact data yet"
+                  description="Impact data will appear once you hold credits."
+                />
               )}
             </Section>
           )}

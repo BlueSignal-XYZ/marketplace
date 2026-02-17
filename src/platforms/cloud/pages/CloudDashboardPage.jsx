@@ -20,6 +20,10 @@ const Page = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const Header = styled.div`
@@ -43,9 +47,17 @@ const Subtitle = styled.p`
 
 const StatusRow = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin-bottom: 32px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
 `;
 
 const Section = styled.section`
@@ -285,10 +297,11 @@ export function CloudDashboardPage() {
       ))}
 
       <StatusRow>
-        <DataCard label="Online" value={`${online}`} unit={`of ${devices.length}`} compact />
-        <DataCard label="Offline" value={`${offline}`} compact />
-        <DataCard label="Avg Battery" value={`${avgBattery}`} unit="%" compact />
-        <DataCard label="Active Alerts" value={`${activeAlerts.length}`} compact />
+        <DataCard label="Total Devices" value={`${devices.length}`} icon={<span style={{ fontSize: 16 }}>📊</span>} compact />
+        <DataCard label="Online" value={`${online}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#10B981', fontSize: 16 }}>●</span>} compact />
+        <DataCard label="Warning" value={`${warning}`} icon={<span style={{ color: '#F59E0B', fontSize: 16 }}>●</span>} compact />
+        <DataCard label="Offline" value={`${offline}`} icon={<span style={{ color: '#EF4444', fontSize: 16 }}>●</span>} compact />
+        <DataCard label="Avg Battery" value={`${avgBattery}`} unit="%" icon={<span style={{ fontSize: 16 }}>🔋</span>} compact />
       </StatusRow>
 
       <Section>
@@ -329,8 +342,10 @@ export function CloudDashboardPage() {
                   </Metric>
                 </MetricRow>
               ) : (
-                <div style={{ padding: '32px 0', textAlign: 'center', color: '#999', fontSize: 13 }}>
-                  Device offline{device.lastReadingAt ? ` · Last seen ${new Date(device.lastReadingAt).toLocaleDateString()}` : ''}
+                <div style={{ padding: '32px 0', textAlign: 'center', fontSize: 13, fontFamily: 'inherit' }}>
+                  <span style={{ color: '#9CA3AF' }}>
+                    Device offline{device.lastReadingAt ? ` · Last seen ${new Date(device.lastReadingAt).toLocaleDateString()}` : ''}
+                  </span>
                 </div>
               )}
             </DeviceCard>

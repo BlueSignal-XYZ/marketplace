@@ -7,6 +7,7 @@ import SiteCard from "./SiteCard";
 import CloudMockAPI from "../../services/cloudMockAPI";
 import { GeocodingAPI } from "../../scripts/back_door";
 import { useAppContext } from "../../context/AppContext";
+import { EmptyState } from "../../design-system/primitives/EmptyState";
 
 const CreateSiteButton = styled.button`
   padding: 10px 20px;
@@ -112,23 +113,7 @@ const Grid = styled.div`
   }
 `;
 
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 48px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
-
-  h3 {
-    margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-  }
-
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
-`;
+/* EmptyState imported from design system */
 
 const Skeleton = styled.div`
   background: linear-gradient(
@@ -274,14 +259,16 @@ export default function SitesListPage() {
       </Controls>
 
       {filteredSites.length === 0 ? (
-        <EmptyState>
-          <h3>No sites found</h3>
-          <p>
-            {searchQuery || statusFilter !== "all"
+        <EmptyState
+          icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>}
+          title={searchQuery || statusFilter !== "all" ? "No sites found" : "No sites yet"}
+          description={
+            searchQuery || statusFilter !== "all"
               ? "Try adjusting your filters or search query."
-              : "No sites have been configured yet."}
-          </p>
-        </EmptyState>
+              : "Create your first site to start monitoring water quality."
+          }
+          action={!searchQuery && statusFilter === "all" ? { label: "Create Site", onClick: () => navigate("/cloud/sites/new") } : undefined}
+        />
       ) : (
         <Grid>
           {filteredSites.map((site) => (

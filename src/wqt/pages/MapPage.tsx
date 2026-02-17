@@ -307,14 +307,14 @@ const ProjectCount = styled.span`
 `;
 
 const MapUnavailableBanner = styled.div`
-  padding: 12px 24px;
-  background: #fef3c7;
-  border-bottom: 1px solid #fcd34d;
+  padding: 10px 20px;
+  background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #92400e;
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
 `;
 
 const BannerIcon = styled.span`
@@ -382,8 +382,8 @@ const MapErrorOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -395,27 +395,29 @@ const MapErrorOverlay = styled.div`
 `;
 
 const MapErrorIcon = styled.div`
-  font-size: 48px;
+  font-size: 36px;
   margin-bottom: 16px;
+  color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
 `;
 
 const MapErrorTitle = styled.h3`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  color: #dc2626;
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   margin: 0 0 8px 0;
 `;
 
 const MapErrorText = styled.p`
   font-size: 14px;
-  color: #7f1d1d;
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   margin: 0 0 16px 0;
   max-width: 400px;
+  line-height: 1.5;
 `;
 
 const RetryButton = styled.button`
   padding: 10px 24px;
-  background: #dc2626;
+  background: ${({ theme }) => theme.colors?.primary || '#0052CC'};
   color: white;
   border: none;
   border-radius: 8px;
@@ -425,7 +427,7 @@ const RetryButton = styled.button`
   transition: background 0.2s;
 
   &:hover {
-    background: #b91c1c;
+    opacity: 0.9;
   }
 `;
 
@@ -735,10 +737,10 @@ export function MapPage() {
         </ControlsRow>
 
         {error && (
-          <div style={{ padding: '20px 24px', background: 'rgba(255,77,77,0.06)', border: '1px solid rgba(255,77,77,0.2)', borderRadius: 8, marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-            <span style={{ fontSize: 14, color: '#1e293b' }}>{error}</span>
-            <button onClick={loadProjects} style={{ padding: '6px 12px', cursor: 'pointer', fontSize: 13 }}>Retry</button>
-          </div>
+          <MapUnavailableBanner style={{ marginBottom: 16, borderBottom: 'none', borderRadius: 8, border: `1px solid ${error ? 'rgba(239,68,68,0.15)' : '#E2E4E9'}`, background: 'rgba(239,68,68,0.06)' }}>
+            <span style={{ flex: 1, fontSize: 14 }}>{error}</span>
+            <RetryButton onClick={loadProjects} style={{ padding: '6px 14px', fontSize: 13 }}>Retry</RetryButton>
+          </MapUnavailableBanner>
         )}
 
         {viewMode === 'map' ? (
@@ -781,10 +783,10 @@ export function MapPage() {
               <ProjectCount>{filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}</ProjectCount>
             </ListViewHeader>
             {filteredProjects.length === 0 ? (
-              <div style={{ padding: '60px 20px', textAlign: 'center' }}>
-                <EmptyIcon>📋</EmptyIcon>
-                <EmptyTitle>No projects found</EmptyTitle>
-                <EmptyText>Try adjusting your filter criteria</EmptyText>
+              <div style={{ padding: '40px 20px' }}>
+                <EmptyIcon style={{ textAlign: 'center' }}>📍</EmptyIcon>
+                <EmptyTitle style={{ textAlign: 'center' }}>No projects found</EmptyTitle>
+                <EmptyText style={{ textAlign: 'center' }}>Try adjusting your filter criteria</EmptyText>
               </div>
             ) : (
               filteredProjects.map(project => (

@@ -10,13 +10,17 @@ import styled, { keyframes } from 'styled-components';
 // ── Types ─────────────────────────────────────────────────
 
 export interface ModalProps {
-  open: boolean;
+  /** Control open/close with boolean */
+  open?: boolean;
+  /** Alternative: use isOpen (alias for open) */
+  isOpen?: boolean;
   onClose: () => void;
   title: string;
   description?: string;
   confirmLabel?: string;
   cancelLabel?: string;
-  onConfirm: () => void;
+  /** If not provided, footer with confirm/cancel buttons is hidden (info modal) */
+  onConfirm?: () => void;
   /** Destructive styling for confirm button */
   destructive?: boolean;
   /** Loading state on confirm button */
@@ -56,7 +60,17 @@ const Dialog = styled.div`
   box-shadow: ${({ theme }) => theme.elevation.modal};
   max-width: 440px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   animation: ${scaleIn} 200ms ease-out;
+
+  @media (max-width: 640px) {
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    border-radius: 0;
+    animation: none;
+  }
 `;
 
 const Header = styled.div`
@@ -127,8 +141,32 @@ const Btn = styled.button<{ $variant: 'cancel' | 'confirm' | 'destructive' }>`
 
 // ── Component ─────────────────────────────────────────────
 
+const CloseBtn = styled.button`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: ${({ theme }) => theme.colors.background};
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  transition: all ${({ theme }) => theme.animation.fast};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.border};
+    color: ${({ theme }) => theme.colors.text};
+  }
+`;
+
 export const Modal: React.FC<ModalProps> = ({
   open,
+  isOpen,
   onClose,
   title,
   description,
@@ -139,39 +177,43 @@ export const Modal: React.FC<ModalProps> = ({
   loading = false,
   children,
 }) => {
-  // Close on Escape
+  const isVisible = open ?? isOpen ?? false;
+
   const handleKey = useCallback(
     (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); },
     [onClose],
   );
 
   useEffect(() => {
-    if (open) {
+    if (isVisible) {
       document.addEventListener('keydown', handleKey);
       return () => document.removeEventListener('keydown', handleKey);
     }
-  }, [open, handleKey]);
+  }, [isVisible, handleKey]);
 
-  if (!open) return null;
+  if (!isVisible) return null;
 
   return (
     <Overlay onClick={onClose}>
-      <Dialog onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+      <Dialog onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" style={{ position: 'relative', maxWidth: onConfirm ? 440 : 560 }}>
+        <CloseBtn onClick={onClose} aria-label="Close">×</CloseBtn>
         <Header>
           <Title>{title}</Title>
           {description && <Description>{description}</Description>}
         </Header>
         {children && <Body>{children}</Body>}
-        <Footer>
-          <Btn $variant="cancel" onClick={onClose}>{cancelLabel}</Btn>
-          <Btn
-            $variant={destructive ? 'destructive' : 'confirm'}
-            onClick={onConfirm}
-            disabled={loading}
-          >
-            {loading ? 'Processing...' : confirmLabel}
-          </Btn>
-        </Footer>
+        {onConfirm && (
+          <Footer>
+            <Btn $variant="cancel" onClick={onClose}>{cancelLabel}</Btn>
+            <Btn
+              $variant={destructive ? 'destructive' : 'confirm'}
+              onClick={onConfirm}
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : confirmLabel}
+            </Btn>
+          </Footer>
+        )}
       </Dialog>
     </Overlay>
   );

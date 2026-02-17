@@ -50,6 +50,18 @@ const Wrapper = styled.div`
   overflow-x: auto;
   border: 1px solid ${({ theme }) => theme.components.tableBorder};
   border-radius: ${({ theme }) => theme.radius.md}px;
+  -webkit-overflow-scrolling: touch;
+
+  @media (max-width: 640px) {
+    /* Sticky first column on mobile */
+    & th:first-child,
+    & td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: inherit;
+    }
+  }
 `;
 
 const StyledTable = styled.table`
@@ -90,6 +102,7 @@ const Tbody = styled.tbody``;
 const Tr = styled.tr<{ $clickable: boolean }>`
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   transition: background ${({ theme }) => theme.animation.fast};
+  &:nth-child(even) { background: ${({ theme }) => theme.components.tableHeaderBg}08; }
   &:hover { background: ${({ theme }) => theme.components.tableRowHover}; }
   &:not(:last-child) > td { border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder}; }
 `;

@@ -12,6 +12,7 @@ import { Badge } from '../../../design-system/primitives/Badge';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { Button } from '../../../design-system/primitives/Button';
+import { Pagination } from '../../../design-system/primitives/Pagination';
 import { useMarketplaceQuery } from '../../../shared/hooks/useApiQueries';
 
 // ── Page layout ───────────────────────────────────────────
@@ -20,6 +21,10 @@ const Page = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 `;
 
 const Header = styled.div`
@@ -332,11 +337,20 @@ export function MarketplacePage() {
       {loading ? (
         <TableSkeleton />
       ) : listings.length === 0 && !error ? (
-        <EmptyState
-          title="No listings found"
-          description="Try adjusting your filters or search terms."
-          action={{ label: 'Clear Filters', onClick: () => { setSearch(''); setFilters({}); setPage(1); } }}
-        />
+        search || filters.nutrientType || filters.verificationLevel ? (
+          <EmptyState
+            icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>}
+            title="No listings found"
+            description="Try adjusting your filters or search terms."
+            action={{ label: 'Clear Filters', onClick: () => { setSearch(''); setFilters({}); setPage(1); } }}
+          />
+        ) : (
+          <EmptyState
+            icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>}
+            title="No listings yet"
+            description="Check back soon — verified nutrient credits will appear here as they're listed."
+          />
+        )
       ) : listings.length > 0 ? (
         <>
           <Table
@@ -347,19 +361,11 @@ export function MarketplacePage() {
             compact
           />
           {totalPages > 1 && (
-            <PaginationRow>
-              <PageBtn disabled={page === 1} onClick={() => setPage((p) => p - 1)}>← Prev</PageBtn>
-              {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-                const pageNum = i + 1;
-                return (
-                  <PageBtn key={pageNum} $active={page === pageNum} onClick={() => setPage(pageNum)}>
-                    {pageNum}
-                  </PageBtn>
-                );
-              })}
-              {totalPages > 7 && <span>…</span>}
-              <PageBtn disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>Next →</PageBtn>
-            </PaginationRow>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
           )}
         </>
       ) : null}

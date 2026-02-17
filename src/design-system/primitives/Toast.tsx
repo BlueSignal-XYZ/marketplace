@@ -65,7 +65,14 @@ const Container = styled.div`
   gap: 8px;
   pointer-events: none;
   max-width: 420px;
-  width: 100%;
+  width: calc(100% - 32px);
+
+  @media (max-width: 640px) {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 32px);
+  }
 `;
 
 const ToastCard = styled.div<{ $type: ToastType }>`

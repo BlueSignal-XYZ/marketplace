@@ -77,50 +77,7 @@ const RetryButton = styled.button`
   }
 `;
 
-/**
- * ComingSoonState - Clean informational placeholder for features not yet available
- */
-const ComingSoonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  text-align: center;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-`;
-
-const ComingSoonIcon = styled.div`
-  font-size: 48px;
-  margin-bottom: 16px;
-`;
-
-const ComingSoonTitle = styled.h3`
-  font-size: 20px;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0 0 8px;
-`;
-
-const ComingSoonSubtitle = styled.p`
-  font-size: 14px;
-  color: #64748b;
-  margin: 0;
-  max-width: 400px;
-  line-height: 1.6;
-`;
-
-function ComingSoonState({ icon, title, subtitle }) {
-  return (
-    <ComingSoonContainer>
-      <ComingSoonIcon>{icon}</ComingSoonIcon>
-      <ComingSoonTitle>{title}</ComingSoonTitle>
-      <ComingSoonSubtitle>{subtitle}</ComingSoonSubtitle>
-    </ComingSoonContainer>
-  );
-}
+import { ComingSoon } from "../../design-system/primitives/ComingSoon";
 
 /**
  * LivepeerWrapper - Initializes Livepeer client and wraps child components
@@ -212,10 +169,10 @@ export function CloudLiveStream() {
       title="Live Stream"
       subtitle="Stream live video from site locations"
     >
-      <ComingSoonState
-        icon="🎥"
+      <ComingSoon
+        icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>}
         title="Live Stream"
-        subtitle="Live video feeds from monitoring sites will appear here once cameras are configured."
+        description="Live video feeds from monitoring sites will appear here once cameras are configured."
       />
     </CloudPageLayout>
   );
@@ -227,10 +184,10 @@ export function CloudUploadMedia() {
       title="Media Upload"
       subtitle="Upload photos and documentation from site installations"
     >
-      <ComingSoonState
-        icon="📤"
+      <ComingSoon
+        icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>}
         title="Media Upload"
-        subtitle="Upload photos and documentation from site installations. Coming soon."
+        description="Upload photos and documentation from site installations. Coming soon."
       />
     </CloudPageLayout>
   );

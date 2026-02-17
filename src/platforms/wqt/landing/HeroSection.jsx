@@ -18,6 +18,10 @@ const Section = styled.section`
   background: linear-gradient(135deg, #0B1120 0%, #0F1B35 50%, #091428 100%);
   color: #FFFFFF;
   text-align: center;
+
+  @media (max-width: 640px) {
+    padding: 80px 20px 60px;
+  }
 `;
 
 const GridOverlay = styled.div`
@@ -35,6 +39,10 @@ const DataDots = styled.div`
   inset: 0;
   pointer-events: none;
   opacity: 0.4;
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 const Dot = styled.div`
@@ -98,13 +106,20 @@ const CTARow = styled.div`
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const PrimaryBtn = styled.a`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 14px 28px;
+  min-height: 48px;
   font-size: 15px;
   font-weight: 600;
   color: #FFFFFF;
@@ -118,8 +133,10 @@ const PrimaryBtn = styled.a`
 const SecondaryBtn = styled.a`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 14px 28px;
+  min-height: 48px;
   font-size: 15px;
   font-weight: 600;
   color: rgba(255,255,255,0.9);
