@@ -226,14 +226,18 @@ export function CloudDashboardPage() {
 
   if (loading) return <DashboardSkeleton />;
 
-  if (error) {
+  if (error && devices.length === 0) {
     return (
       <Page>
-        <Header><Title>Devices</Title></Header>
-        <ErrorBox>
-          <ErrorText>{error}</ErrorText>
-          <Button size="sm" onClick={() => refetchDevices()}>Retry</Button>
-        </ErrorBox>
+        <Header>
+          <Title>Dashboard</Title>
+          <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
+        </Header>
+        <EmptyState
+          title="Unable to Load Devices"
+          description="We couldn't connect to the device service. This may be a temporary issue."
+          action={{ label: 'Retry', onClick: () => refetchDevices() }}
+        />
       </Page>
     );
   }
@@ -242,7 +246,7 @@ export function CloudDashboardPage() {
     return (
       <Page>
         <Header>
-          <Title>Devices</Title>
+          <Title>Dashboard</Title>
           <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
         </Header>
         <EmptyState
@@ -265,7 +269,7 @@ export function CloudDashboardPage() {
   return (
     <Page>
       <Header>
-        <Title>Devices</Title>
+        <Title>Dashboard</Title>
         <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
       </Header>
 
