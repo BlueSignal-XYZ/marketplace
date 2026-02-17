@@ -175,7 +175,7 @@ export const NoUploadsState = ({ onUpload }) => (
   <EmptyState
     icon="upload"
     title="No uploads yet"
-    description="Upload your first media file to get started. Supported formats include MP4 videos and PDF documents."
+    description="Upload site documentation to get started. Supported formats include MP4 videos and PDF documents."
     actionLabel={onUpload ? "Upload Media" : undefined}
     onAction={onUpload}
   />
@@ -185,7 +185,7 @@ export const NoSubmissionsState = ({ onSubmit }) => (
   <EmptyState
     icon="verification"
     title="No submissions"
-    description="You haven't submitted any assets for verification yet. Upload media first, then submit for verification."
+    description="Submit credits for verification. Upload media first, then submit for review."
     actionLabel={onSubmit ? "Upload Media" : undefined}
     onAction={onSubmit}
   />
@@ -195,7 +195,7 @@ export const NoDisputesState = () => (
   <EmptyState
     icon="dispute"
     title="No disputes"
-    description="Great news! There are no active disputes. All your submissions are in good standing."
+    description="All clear — there are no active disputes. All submissions are in good standing."
     variant="success"
   />
 );
@@ -203,8 +203,8 @@ export const NoDisputesState = () => (
 export const NoApprovalsState = () => (
   <EmptyState
     icon="approval"
-    title="No approvals yet"
-    description="Approved submissions will appear here. Once a verifier approves your submission, you'll see it listed."
+    title="No pending approvals"
+    description="Approved submissions will appear here once a verifier reviews your submission."
   />
 );
 

@@ -83,7 +83,7 @@ const TabContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px;
-  gap: 10px;
+  gap: 0;
   overflow: auto;
   @media (min-width: 768px) {
     flex-direction: row;
@@ -92,20 +92,49 @@ const TabContainer = styled.div`
 
 const TabContent = styled(TabContainer)`
   height: 100%;
+  gap: 10px;
+`;
+
+const TabBar = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
+  margin-bottom: 24px;
+  overflow-x: auto;
+  gap: 0;
 `;
 
 const Tab = styled(motion.button)`
-  padding: 10px 20px;
+  position: relative;
+  padding: 12px 20px;
+  min-height: 44px;
   border: none;
-  background-color: ${(props) =>
-    props.active ? neptuneColorPalette.darkBlue : "transparent"};
+  background: transparent;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 14px;
+  font-weight: ${(props) => (props.active ? 600 : 400)};
   color: ${(props) =>
-    props.active ? neptuneColorPalette.white : neptuneColorPalette.lightBlue};
+    props.active
+      ? (props.theme?.colors?.primary || '#0066FF')
+      : (props.theme?.colors?.textSecondary || '#6B7280')};
   cursor: pointer;
-  transition: background-color 0.3s;
+  white-space: nowrap;
+  transition: color 0.15s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: ${(props) =>
+      props.active ? (props.theme?.colors?.primary || '#0066FF') : 'transparent'};
+    border-radius: 1px 1px 0 0;
+    transition: background 0.15s;
+  }
 
   &:hover {
-    background-color: ${(props) => (props.active ? "#0056b3" : "#f0f0f0")};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   }
 `;
 const InputGroup = styled.div`
@@ -429,21 +458,17 @@ function VerificationUI() {
   return (
     <Page>
       <HeaderRow>
-        <TabContainer>
+        <TabBar>
           {accessibleTabs.map((tab) => (
-            <Badge
+            <Tab
               key={tab}
               active={activeTab === tab}
               onClick={() => setActiveTab(tab)}
-              variants={tabVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
             >
               {STRING.toTitleCase(tab)}
-            </Badge>
+            </Tab>
           ))}
-        </TabContainer>
+        </TabBar>
         {activeTab === "uploads" && (
           <UploadCTAButton onClick={handleUploadMedia}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
