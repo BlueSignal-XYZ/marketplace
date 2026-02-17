@@ -7,6 +7,7 @@ import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import DeviceService from "../../services/deviceService";
 import AddDeviceModal from "./AddDeviceModal";
 import { useAppContext } from "../../context/AppContext";
+import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
 
 const ActionButtonsWrapper = styled.div`
   display: flex;
@@ -638,14 +639,16 @@ export default function DevicesListPage() {
 
       <TableContainer>
         {filteredDevices.length === 0 ? (
-          <EmptyState>
-            <h3>No devices found</h3>
-            <p>
-              {searchQuery || statusFilter !== "all" || typeFilter !== "all"
+          <DSEmptyState
+            icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/></svg>}
+            title={searchQuery || statusFilter !== "all" || typeFilter !== "all" ? "No devices found" : "No devices yet"}
+            description={
+              searchQuery || statusFilter !== "all" || typeFilter !== "all"
                 ? "Try adjusting your filters or search query."
-                : "No devices have been connected yet. Commission your first device via the Gateway app."}
-            </p>
-          </EmptyState>
+                : "Commission your first device to start monitoring water quality."
+            }
+            action={!searchQuery && statusFilter === "all" ? { label: "Commission Device", onClick: () => navigate("/cloud/commissioning/new") } : undefined}
+          />
         ) : (
           <Table>
             <thead>

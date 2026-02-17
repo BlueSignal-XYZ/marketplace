@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import { getRelativeTime } from "../../services/cloudMockAPI";
 import { AlertsAPI } from "../../scripts/back_door";
+import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
 
 const DemoBanner = styled.div`
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -469,18 +470,23 @@ export default function AlertsPage() {
 
       <TableContainer>
         {filteredAlerts.length === 0 ? (
-          <EmptyState>
-            <h3>
-              {severityFilter !== "all" || statusFilter !== "all"
+          <DSEmptyState
+            icon={
+              severityFilter !== "all" || statusFilter !== "all"
+                ? <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                : <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            }
+            title={
+              severityFilter !== "all" || statusFilter !== "all"
                 ? "No alerts found"
-                : "All Clear"}
-            </h3>
-            <p>
-              {severityFilter !== "all" || statusFilter !== "all"
+                : "All Clear"
+            }
+            description={
+              severityFilter !== "all" || statusFilter !== "all"
                 ? "Try adjusting your filters."
-                : "No active alerts across your fleet. All devices are operating normally."}
-            </p>
-          </EmptyState>
+                : "No active alerts across your fleet. All devices are operating normally."
+            }
+          />
         ) : (
           <Table>
             <thead>
