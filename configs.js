@@ -8,7 +8,7 @@ const getEnvVar = (key, fallback = '') => {
 };
 
 export default {
-  server_url: getEnvVar('VITE_SERVER_URL', "https://us-central1-app-neptunechain.cloudfunctions.net/app"),
+  server_url: getEnvVar('VITE_SERVER_URL', "https://us-central1-waterquality-trading.cloudfunctions.net/app"),
   blockchain: {
     MODE: getEnvVar('VITE_BLOCKCHAIN_MODE', "test"),
     NETWORKS: {

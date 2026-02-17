@@ -37,7 +37,6 @@ const NewDeviceDetailPage = React.lazy(() => import('./pages/DeviceDetailPage'))
 const CommissioningWizardPage = React.lazy(() => import('./pages/CommissioningWizardPage'));
 
 // Cloud console components (lazy-loaded for code splitting)
-const OverviewDashboard = React.lazy(() => import('../../components/cloud/OverviewDashboard'));
 const DevicesListPage = React.lazy(() => import('../../components/cloud/DevicesListPage'));
 const DeviceDetailPage = React.lazy(() => import('../../components/cloud/DeviceDetailPage'));
 const SitesListPage = React.lazy(() => import('../../components/cloud/SitesListPage'));
@@ -130,7 +129,7 @@ export function CloudApp({ user, authLoading }) {
               <Route path="/" element={<CloudLanding user={user} authLoading={authLoading} />} />
 
               {/* Main dashboard */}
-              <Route path="/dashboard/main" element={<CloudAuthGate authLoading={authLoading}><OverviewDashboard /></CloudAuthGate>} />
+              <Route path="/dashboard/main" element={<CloudAuthGate authLoading={authLoading}><CloudDashboardPage /></CloudAuthGate>} />
               <Route path="/dashboard/installer" element={<CloudAuthGate authLoading={authLoading}><InstallerDashboard /></CloudAuthGate>} />
               <Route path="/dashboard/:dashID" element={<CloudAuthGate authLoading={authLoading}><Home /></CloudAuthGate>} />
 
