@@ -2,6 +2,8 @@ import React from "react";
 import { fetchDevices, type Device } from "../lib/api";
 
 export const ConnectivityBadge: React.FC = () => {
+  // Hide in production — this is a dev/debug tool
+  if (import.meta.env.PROD) return null;
   const [ok, setOk] = React.useState<boolean | null>(null);
   const [count, setCount] = React.useState<number>(0);
   const [lastSeen, setLastSeen] = React.useState<string | null>(null);

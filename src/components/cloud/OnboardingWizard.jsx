@@ -304,7 +304,7 @@ export default function OnboardingWizard() {
 
     try {
       // Save profile to backend
-      await UserProfileAPI.updateProfile(user.uid, {
+      await UserProfileAPI.update(user.uid, {
         displayName: formData.displayName,
         company: formData.company,
         phone: formData.phone,

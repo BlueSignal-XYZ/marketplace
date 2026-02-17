@@ -3,10 +3,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+import { getRelativeTime } from "../../services/cloudMockAPI";
 import { AlertsAPI } from "../../scripts/back_door";
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== "false";
 
 const DemoBanner = styled.div`
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -295,38 +293,23 @@ export default function AlertsPage() {
   const loadAlerts = async () => {
     setLoading(true);
     try {
-      if (USE_MOCK) {
-        const data = await CloudMockAPI.alerts.getAll();
-        setAlerts(data);
-      } else {
-        // Fetch all alerts (not just active) for the alerts page
-        const [activeResult, acknowledgedResult, resolvedResult] = await Promise.all([
-          AlertsAPI.getActive({ status: "active" }).catch(() => null),
-          AlertsAPI.getActive({ status: "acknowledged" }).catch(() => null),
-          AlertsAPI.getActive({ status: "resolved" }).catch(() => null),
-        ]);
+      // Fetch all alerts from the API
+      const [activeResult, acknowledgedResult, resolvedResult] = await Promise.all([
+        AlertsAPI.getActive({ status: "active" }).catch(() => null),
+        AlertsAPI.getActive({ status: "acknowledged" }).catch(() => null),
+        AlertsAPI.getActive({ status: "resolved" }).catch(() => null),
+      ]);
 
-        const all = [
-          ...(activeResult?.alerts || []),
-          ...(acknowledgedResult?.alerts || []),
-          ...(resolvedResult?.alerts || []),
-        ];
+      const all = [
+        ...(activeResult?.alerts || []),
+        ...(acknowledgedResult?.alerts || []),
+        ...(resolvedResult?.alerts || []),
+      ];
 
-        if (all.length > 0) {
-          setAlerts(all);
-        } else {
-          // No real alerts, fall back to mock for demo
-          const data = await CloudMockAPI.alerts.getAll();
-          setAlerts(data);
-        }
-      }
+      setAlerts(all);
     } catch (error) {
       console.error("Error loading alerts:", error);
-      // Fall back to mock on error
-      try {
-        const data = await CloudMockAPI.alerts.getAll();
-        setAlerts(data);
-      } catch (_) { /* ignore */ }
+      setAlerts([]);
     } finally {
       setLoading(false);
     }
@@ -422,10 +405,6 @@ export default function AlertsPage() {
       title="Alerts"
       subtitle="Monitor and manage device alerts"
     >
-      <DemoBanner>
-        <span className="icon">ℹ️</span>
-        <span><strong>Sample Data:</strong> Alerts shown are for demonstration. Actions update locally but don't persist to a database yet.</span>
-      </DemoBanner>
       <Controls>
         <Filters>
           <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
@@ -491,11 +470,15 @@ export default function AlertsPage() {
       <TableContainer>
         {filteredAlerts.length === 0 ? (
           <EmptyState>
-            <h3>No alerts found</h3>
+            <h3>
+              {severityFilter !== "all" || statusFilter !== "all"
+                ? "No alerts found"
+                : "All Clear"}
+            </h3>
             <p>
               {severityFilter !== "all" || statusFilter !== "all"
                 ? "Try adjusting your filters."
-                : "All clear! No alerts at this time."}
+                : "No active alerts across your fleet. All devices are operating normally."}
             </p>
           </EmptyState>
         ) : (

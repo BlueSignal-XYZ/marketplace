@@ -283,7 +283,7 @@ export default function ProfilePage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await UserProfileAPI.getProfile(user.uid);
+      const data = await UserProfileAPI.get(user.uid);
       if (data) {
         setProfile({
           displayName: data.displayName || user.displayName || "",
@@ -353,7 +353,7 @@ export default function ProfilePage() {
     setSuccess(null);
 
     try {
-      await UserProfileAPI.updateProfile(user.uid, profile);
+      await UserProfileAPI.update(user.uid, profile);
       setSuccess("Profile updated successfully!");
 
       // Update local user state if name changed
