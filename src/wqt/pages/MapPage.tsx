@@ -19,17 +19,20 @@ if (HAS_VALID_TOKEN) {
 const BOUNDARY_LAYER_PREFIX = 'project-boundary';
 
 const PageContainer = styled.div`
-  min-height: 100vh;
-  padding: 32px 24px;
+  padding: 24px 16px;
   background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
 
-  @media (max-width: 768px) {
-    padding: 24px 16px;
+  @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
+    padding: 28px 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
+    padding: 32px 48px;
   }
 `;
 
 const ContentWrapper = styled.div`
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 
