@@ -13,8 +13,9 @@ const CreateSiteButton = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
-  color: #ffffff;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  background: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  color: ${({ theme }) => theme.colors?.textOnPrimary || "#FFFFFF"};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -25,7 +26,7 @@ const CreateSiteButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    background: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
     transform: translateY(-1px);
   }
 
@@ -52,19 +53,21 @@ const SearchBar = styled.input`
   flex: 1;
   max-width: 400px;
   padding: 10px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
-    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.focus || "rgba(0,102,255,0.16)"};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
   }
 `;
 
@@ -79,23 +82,25 @@ const FilterChip = styled.button`
   border: 1px solid
     ${({ $active, theme }) =>
       $active
-        ? theme.colors?.primary500 || "#06b6d4"
-        : theme.colors?.ui200 || "#e5e7eb"};
+        ? theme.colors?.primary || "#0066FF"
+        : theme.colors?.border || "#E5E7EB"};
   padding: 6px 14px;
+  min-height: 32px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $active ? theme.colors?.primary || "#0066FF" : theme.colors?.surface || "#FFFFFF"};
   color: ${({ $active, theme }) =>
     $active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui700 || "#374151"};
+      ? theme.colors?.textOnPrimary || "#FFFFFF"
+      : theme.colors?.textSecondary || "#6B7280"};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   }
 `;
 

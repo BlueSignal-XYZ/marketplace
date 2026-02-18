@@ -80,14 +80,15 @@ const LogoImg = styled.img`
 const ModeBadge = styled.span`
   display: none;
   padding: 4px 10px;
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors?.success50 || "#ECFDF5"} 0%, ${({ theme }) => theme.colors?.success100 || "#D1FAE5"} 100%);
-  color: ${({ theme }) => theme.colors?.success700 || "#047857"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  background: ${({ theme }) => theme.colors?.primaryLight || "#E6EEFA"};
+  color: ${({ theme }) => theme.colors?.primary || "#0052CC"};
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors?.success200 || "#A7F3D0"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E2E4E9"};
 
   @media (min-width: 768px) {
     display: inline-flex;
@@ -105,19 +106,19 @@ const MenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   font-size: 20px;
   line-height: 1;
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
-    background: ${({ theme }) => theme.colors?.primary50 || "#E6F7F8"};
-    border-color: ${({ theme }) => theme.colors?.primary200 || "#8FDADB"};
+    color: ${({ theme }) => theme.colors?.primary || "#0052CC"};
+    background: ${({ theme }) => theme.colors?.hover || "rgba(0,82,204,0.04)"};
+    border-color: ${({ theme }) => theme.colors?.border || "#E2E4E9"};
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary400 || "#38BDBE"};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary || "#0052CC"};
     outline-offset: 2px;
   }
 

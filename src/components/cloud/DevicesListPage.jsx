@@ -24,8 +24,9 @@ const AddDeviceButton = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
-  color: #ffffff;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  background: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  color: ${({ theme }) => theme.colors?.textOnPrimary || "#FFFFFF"};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -36,7 +37,7 @@ const AddDeviceButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    background: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
     transform: translateY(-1px);
   }
 
@@ -49,9 +50,10 @@ const AddDeviceButton = styled.button`
 const CommissionButton = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
-  background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
-  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  background: ${({ theme }) => theme.colors?.primaryLight || "#E8F0FE"};
+  color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -62,7 +64,7 @@ const CommissionButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary100 || "#bae6fd"};
+    background: ${({ theme }) => theme.colors?.hover || "rgba(0,102,255,0.08)"};
     transform: translateY(-1px);
   }
 
@@ -89,19 +91,21 @@ const SearchBar = styled.input`
   flex: 1;
   max-width: 400px;
   padding: 10px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
-    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.focus || "rgba(0,102,255,0.16)"};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
   }
 `;
 
@@ -116,64 +120,67 @@ const FilterChip = styled.button`
   border: 1px solid
     ${({ $active, theme }) =>
       $active
-        ? theme.colors?.primary500 || "#06b6d4"
-        : theme.colors?.ui200 || "#e5e7eb"};
+        ? theme.colors?.primary || "#0066FF"
+        : theme.colors?.border || "#E5E7EB"};
   padding: 6px 14px;
+  min-height: 32px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $active ? theme.colors?.primary || "#0066FF" : theme.colors?.surface || "#FFFFFF"};
   color: ${({ $active, theme }) =>
     $active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui700 || "#374151"};
+      ? theme.colors?.textOnPrimary || "#FFFFFF"
+      : theme.colors?.textSecondary || "#6B7280"};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   }
 `;
 
 const TableContainer = styled.div`
-  background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-radius: 12px;
+  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  border-radius: ${({ theme }) => theme.radius?.md || 12}px;
   overflow: hidden;
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
 
   thead {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
   }
 
   th {
     text-align: left;
-    padding: 14px 16px;
+    padding: 10px 14px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-    font-size: 13px;
+    color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.04em;
   }
 
   td {
-    padding: 14px 16px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    padding: 12px 14px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || "#F3F4F6"};
+    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   }
 
   tbody tr {
     transition: background 0.15s ease-out;
 
     &:hover {
-      background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+      background: ${({ theme }) => theme.colors?.hover || "rgba(0,102,255,0.04)"};
     }
 
     &:last-child td {
@@ -183,8 +190,9 @@ const Table = styled.table`
 `;
 
 const DeviceLink = styled(Link)`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   text-decoration: none;
 
   &:hover {
@@ -193,18 +201,34 @@ const DeviceLink = styled(Link)`
 `;
 
 const StatusPill = styled.span`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #ffffff;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 12px;
+  font-weight: 500;
   background: ${({ $variant }) =>
     $variant === "warning"
-      ? "#f97316"
+      ? "rgba(245,158,11,0.1)"
       : $variant === "offline"
-      ? "#dc2626"
-      : "#16a34a"};
+      ? "rgba(239,68,68,0.1)"
+      : "rgba(16,185,129,0.1)"};
+  color: ${({ $variant }) =>
+    $variant === "warning"
+      ? "#D97706"
+      : $variant === "offline"
+      ? "#DC2626"
+      : "#059669"};
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
 `;
 
 const LifecycleBadge = styled.span`
@@ -297,9 +321,9 @@ const FleetSummary = styled.div`
 `;
 
 const SummaryCard = styled.div`
-  background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-radius: 10px;
+  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  border-radius: ${({ theme }) => theme.radius?.md || 12}px;
   padding: 16px;
   display: flex;
   align-items: center;
@@ -312,29 +336,42 @@ const SummaryCard = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
     background: ${({ $variant }) =>
       $variant === "online"
-        ? "#dcfce7"
+        ? "rgba(16,185,129,0.1)"
         : $variant === "warning"
-        ? "#fef3c7"
+        ? "rgba(245,158,11,0.1)"
         : $variant === "offline"
-        ? "#fee2e2"
-        : "#f3f4f6"};
+        ? "rgba(239,68,68,0.1)"
+        : "rgba(0,102,255,0.06)"};
+    color: ${({ $variant }) =>
+      $variant === "online"
+        ? "#10B981"
+        : $variant === "warning"
+        ? "#F59E0B"
+        : $variant === "offline"
+        ? "#EF4444"
+        : "#0066FF"};
   }
 
   .content {
     flex: 1;
 
     .value {
+      font-family: ${({ theme }) => theme.fonts?.mono || 'monospace'};
       font-size: 20px;
       font-weight: 700;
-      color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+      color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
     }
 
     .label {
-      font-size: 12px;
-      color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+      font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
     }
   }
 `;

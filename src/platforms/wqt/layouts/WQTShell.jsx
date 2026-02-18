@@ -70,10 +70,12 @@ export function WQTShell({ user, isAuthLanding, children }) {
       {/* Main content */}
       <MainContent>{children}</MainContent>
 
-      {/* Footer */}
-      <FooterWrapper>
-        <Footer />
-      </FooterWrapper>
+      {/* Footer — hidden on landing page (landing has its own footer) */}
+      {!isAuthLanding && (
+        <FooterWrapper>
+          <Footer />
+        </FooterWrapper>
+      )}
 
       {/* Link badge */}
       {user?.uid && <LinkBadgePortal />}

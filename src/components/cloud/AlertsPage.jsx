@@ -64,24 +64,25 @@ const FilterChip = styled.button`
   border: 1px solid
     ${({ $active, theme }) =>
       $active
-        ? theme.colors?.primary500 || "#06b6d4"
-        : theme.colors?.ui200 || "#e5e7eb"};
-  padding: 10px 16px;
-  min-height: 44px;
+        ? theme.colors?.primary || "#0066FF"
+        : theme.colors?.border || "#E5E7EB"};
+  padding: 8px 16px;
+  min-height: 36px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $active ? theme.colors?.primary || "#0066FF" : theme.colors?.surface || "#FFFFFF"};
   color: ${({ $active, theme }) =>
     $active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui700 || "#374151"};
+      ? theme.colors?.textOnPrimary || "#FFFFFF"
+      : theme.colors?.textSecondary || "#6B7280"};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   }
 
   &:active {

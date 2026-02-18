@@ -17,13 +17,14 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
 `;
 
 const Card = styled.div`
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
+  border-radius: ${({ theme }) => theme.radius?.lg || 16}px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   width: 100%;
   max-width: 600px;
   overflow: hidden;
@@ -31,27 +32,28 @@ const Card = styled.div`
 
 const ProgressBar = styled.div`
   display: flex;
-  background: ${({ theme }) => theme.colors?.ui100 || "#f4f4f5"};
+  background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
 `;
 
 const ProgressStep = styled.div`
   flex: 1;
   padding: 12px 16px;
   text-align: center;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 12px;
   font-weight: 600;
   color: ${({ $active, $completed, theme }) =>
     $active
-      ? theme.colors?.primary700 || "#0369a1"
+      ? theme.colors?.primary || "#0066FF"
       : $completed
-      ? theme.colors?.primary600 || "#0284c7"
-      : theme.colors?.ui400 || "#a1a1aa"};
+      ? theme.colors?.primary || "#0066FF"
+      : theme.colors?.textMuted || "#9CA3AF"};
   border-bottom: 3px solid
     ${({ $active, $completed, theme }) =>
       $active
-        ? theme.colors?.primary600 || "#0284c7"
+        ? theme.colors?.primary || "#0066FF"
         : $completed
-        ? theme.colors?.primary400 || "#22d3ee"
+        ? theme.colors?.accent || "#06B6D4"
         : "transparent"};
   transition: all 0.2s ease-out;
 `;
@@ -62,15 +64,17 @@ const Content = styled.div`
 
 const StepTitle = styled.h2`
   margin: 0 0 8px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 24px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
 `;
 
 const StepDescription = styled.p`
   margin: 0 0 32px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
   line-height: 1.6;
 `;
 
@@ -86,10 +90,10 @@ const RoleGrid = styled.div`
 
 const RoleCard = styled.button`
   background: ${({ $selected, theme }) =>
-    $selected ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $selected ? theme.colors?.primaryLight || "#E8F0FE" : theme.colors?.surface || "#FFFFFF"};
   border: 2px solid
     ${({ $selected, theme }) =>
-      $selected ? theme.colors?.primary500 || "#0284c7" : theme.colors?.ui200 || "#e5e7eb"};
+      $selected ? theme.colors?.primary || "#0066FF" : theme.colors?.border || "#E5E7EB"};
   border-radius: 12px;
   padding: 24px 16px;
   text-align: center;
@@ -97,8 +101,8 @@ const RoleCard = styled.button`
   transition: all 0.2s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
-    background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
   }
 `;
 
@@ -108,15 +112,17 @@ const RoleIcon = styled.div`
 `;
 
 const RoleName = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   margin-bottom: 8px;
 `;
 
 const RoleDescription = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
   line-height: 1.4;
 `;
 
