@@ -21,11 +21,11 @@ const BOUNDARY_LAYER_PREFIX = 'project-boundary';
 
 const PageContainer = styled.div`
   min-height: 100vh;
-  padding: 80px 20px 40px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  padding: 32px 24px;
+  background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
 
   @media (max-width: 768px) {
-    padding: 70px 16px 24px;
+    padding: 24px 16px;
   }
 `;
 
@@ -45,9 +45,10 @@ const TitleRow = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 32px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 28px;
   font-weight: 700;
-  color: #1a202c;
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   margin: 0;
 
   @media (max-width: 768px) {
@@ -56,8 +57,9 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.p`
-  font-size: 16px;
-  color: #64748b;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   margin: 0;
 `;
 
@@ -78,44 +80,48 @@ const FilterChipsContainer = styled.div`
 
 const FilterChip = styled.button<{ active: boolean }>`
   padding: 8px 16px;
-  border: 1px solid ${props => props.active ? '#1D7072' : '#cbd5e1'};
-  background: ${props => props.active ? '#1D7072' : 'white'};
-  color: ${props => props.active ? 'white' : '#475569'};
-  border-radius: 20px;
-  font-size: 14px;
+  min-height: 36px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  border: 1px solid ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : (props.theme.colors?.border || '#E2E4E9')};
+  background: ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : (props.theme.colors?.surface || 'white')};
+  color: ${props => props.active ? '#FFFFFF' : (props.theme.colors?.textSecondary || '#6B7280')};
+  border-radius: 999px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.active ? '#155e5f' : '#f8fafc'};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0052CC'};
   }
 `;
 
 const ViewToggle = styled.div`
   display: flex;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
+  background: ${({ theme }) => theme.colors?.surface || 'white'};
+  border-radius: 10px;
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   overflow: hidden;
 `;
 
 const ViewButton = styled.button<{ active: boolean }>`
   padding: 8px 20px;
+  min-height: 36px;
   border: none;
-  background: ${props => props.active ? '#1D7072' : 'white'};
-  color: ${props => props.active ? 'white' : '#475569'};
-  font-size: 14px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  background: ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : 'transparent'};
+  color: ${props => props.active ? '#FFFFFF' : (props.theme.colors?.textSecondary || '#6B7280')};
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 
   &:not(:last-child) {
-    border-right: 1px solid #cbd5e1;
+    border-right: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   }
 
   &:hover {
-    background: ${props => props.active ? '#155e5f' : '#f8fafc'};
+    background: ${props => props.active ? (props.theme.colors?.primaryDark || '#003D99') : (props.theme.colors?.hover || 'rgba(0,0,0,0.04)')};
   }
 `;
 
@@ -185,15 +191,15 @@ const EmptyText = styled.p`
 `;
 
 const ListView = styled.div`
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: ${({ theme }) => theme.colors?.surface || 'white'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
+  border-radius: ${({ theme }) => theme.radius?.lg || 16}px;
   overflow: hidden;
 `;
 
 const ProjectCard = styled.div`
   padding: 20px 24px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || '#F0F1F3'};
   cursor: pointer;
   transition: all 0.2s;
   display: grid;
@@ -202,8 +208,7 @@ const ProjectCard = styled.div`
   align-items: start;
 
   &:hover {
-    background: #f8fafc;
-    transform: translateX(4px);
+    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,0,0,0.02)'};
   }
 
   &:last-child {
@@ -236,28 +241,33 @@ const ProjectStats = styled.div`
 `;
 
 const StatValue = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.mono || 'monospace'};
   font-size: 20px;
   font-weight: 700;
-  color: #1D7072;
+  color: ${({ theme }) => theme.colors?.primary || '#0052CC'};
 `;
 
 const StatLabel = styled.div`
-  font-size: 12px;
-  color: #64748b;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 11px;
+  color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  font-weight: 600;
 `;
 
 const ProjectName = styled.h3`
-  font-size: 18px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 16px;
   font-weight: 600;
-  color: #1e293b;
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   margin: 0 0 6px 0;
 `;
 
 const ProjectDescription = styled.p`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
-  color: #64748b;
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   margin: 0 0 12px 0;
   line-height: 1.5;
 `;
