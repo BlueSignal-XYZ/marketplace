@@ -20,13 +20,17 @@ const pulse = keyframes`
 const Section = styled.section`
   position: relative;
   overflow: hidden;
-  padding: 140px 24px 120px;
+  padding: 80px 16px 64px;
   background: #0B1120;
   color: #FFFFFF;
   text-align: center;
 
-  @media (max-width: 640px) {
-    padding: 100px 20px 80px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 100px 24px 80px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 140px 24px 120px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -76,9 +80,9 @@ const TrustBadge = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 16px;
+  padding: 6px 12px;
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -86,7 +90,13 @@ const TrustBadge = styled.span`
   background: rgba(6, 182, 212, 0.08);
   border: 1px solid rgba(6, 182, 212, 0.15);
   border-radius: 999px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    font-size: 12px;
+    padding: 6px 16px;
+    margin-bottom: 32px;
+  }
 `;
 
 const Title = styled.h1`
@@ -176,9 +186,14 @@ const TrustRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-top: 56px;
+  gap: 12px;
+  margin-top: 40px;
   flex-wrap: wrap;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    gap: 24px;
+    margin-top: 56px;
+  }
 `;
 
 const TrustItem = styled.span`

@@ -54,12 +54,13 @@ const SectionSub = styled.p`
 
 const TrustGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
   margin-bottom: 48px;
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 `;
 
@@ -103,17 +104,17 @@ const CardDesc = styled.p`
 const EcosystemBanner = styled.div`
   background: linear-gradient(135deg, #0B1120 0%, #0F1B35 100%);
   border-radius: ${({ theme }) => theme.radius.lg}px;
-  padding: 48px 32px;
+  padding: 32px 20px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 32px;
+  grid-template-columns: 1fr;
+  gap: 24px;
   align-items: center;
+  text-align: center;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 32px 24px;
-    text-align: center;
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    padding: 48px 32px;
   }
 `;
 
