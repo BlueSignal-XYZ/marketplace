@@ -4,7 +4,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapProject, getProjectsByType, getCreditTypeColor } from '../../data/mockMapData';
 import { fetchMapProjects } from '../../services/wqtDataService';
-import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
@@ -712,7 +711,6 @@ export function MapPage() {
         <Header>
           <TitleRow>
             <Title>Project Map</Title>
-            <DemoHint screenName="wqt-map" customHint="Interactive map showing geographic distribution of credit-generating projects" />
           </TitleRow>
           <Subtitle>Geographic view of projects generating water quality credits</Subtitle>
         </Header>
@@ -762,7 +760,7 @@ export function MapPage() {
             )}
             {mapError ? (
               <MapErrorOverlay>
-                <MapErrorIcon>Map Error</MapErrorIcon>
+                <MapErrorIcon>🗺️</MapErrorIcon>
                 <MapErrorTitle>Unable to Load Map</MapErrorTitle>
                 <MapErrorText>{mapError}</MapErrorText>
                 <RetryButton onClick={retryMapInit}>

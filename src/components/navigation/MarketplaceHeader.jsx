@@ -80,14 +80,15 @@ const LogoImg = styled.img`
 const ModeBadge = styled.span`
   display: none;
   padding: 4px 10px;
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors?.success50 || "#ECFDF5"} 0%, ${({ theme }) => theme.colors?.success100 || "#D1FAE5"} 100%);
-  color: ${({ theme }) => theme.colors?.success700 || "#047857"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  background: ${({ theme }) => theme.colors?.primaryLight || "#E6EEFA"};
+  color: ${({ theme }) => theme.colors?.primary || "#0052CC"};
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors?.success200 || "#A7F3D0"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E2E4E9"};
 
   @media (min-width: 768px) {
     display: inline-flex;
