@@ -103,7 +103,7 @@ const ErrorCard = styled.div`
 `;
 const VersionBubble = styled.div`
   position: fixed; bottom: 8px; right: 12px; font-size: 11px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
   font-weight: 500; opacity: 0.6; z-index: 99999; background: #fff; color: #64748b;
   padding: 4px 10px; border-radius: 999px; border: 1px solid #e2e8f0;
   box-shadow: 0 2px 8px rgba(15,23,42,0.08); pointer-events: none; user-select: none;
