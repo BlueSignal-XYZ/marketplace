@@ -5,16 +5,16 @@ import styled from "styled-components";
 const Page = styled.main`
   width: 100%;
   min-height: calc(100vh - 72px);
-  padding: 32px 24px 64px;
+  padding: 24px 16px 48px;
   box-sizing: border-box;
-  background: linear-gradient(180deg, #FAFAFA 0%, #F4F5F7 100%);
+  background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
 
-  @media (max-width: 768px) {
-    padding: 20px 16px 48px;
+  @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
+    padding: 28px 24px 56px;
   }
 
-  @media (max-width: 480px) {
-    padding: 16px 12px 40px;
+  @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
+    padding: 32px 48px 64px;
   }
 `;
 
@@ -53,31 +53,25 @@ const TitleBlock = styled.div`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: 32px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 28px;
   line-height: 1.2;
-  font-weight: 800;
-  color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  letter-spacing: -0.02em;
 
-  @media (max-width: 768px) {
-    font-size: 26px;
-  }
-
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
     font-size: 22px;
   }
 `;
 
 const Subtitle = styled.p`
   margin: 0;
-  font-size: 15px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 14px;
   line-height: 1.6;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
   max-width: 600px;
-
-  @media (max-width: 480px) {
-    font-size: 14px;
-  }
 `;
 
 const Breadcrumbs = styled.nav`

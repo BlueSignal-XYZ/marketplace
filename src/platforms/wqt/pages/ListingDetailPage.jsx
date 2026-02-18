@@ -17,10 +17,14 @@ import { getListing, ApiError } from '../../../services/v2/client';
 const Page = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 24px 16px;
 
-  @media (max-width: 768px) {
-    padding: 24px 16px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 28px 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 32px 48px;
   }
 `;
 
@@ -42,7 +46,10 @@ const HeaderRow = styled.div`
   align-items: flex-start;
   gap: 24px;
   margin-bottom: 32px;
-  flex-wrap: wrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    flex-direction: column;
+  }
 `;
 
 const HeaderLeft = styled.div``;
@@ -56,6 +63,11 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    font-size: 20px;
+  }
 `;
 
 const MetaRow = styled.div`
@@ -77,6 +89,11 @@ const PriceCard = styled.div`
   border-radius: ${({ theme }) => theme.radius.md}px;
   padding: 24px;
   min-width: 260px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    min-width: 0;
+    width: 100%;
+  }
 `;
 
 const PriceLabel = styled.div`
@@ -106,7 +123,7 @@ const PriceSub = styled.div`
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
 `;

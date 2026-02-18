@@ -17,12 +17,16 @@ import { useDevicesQuery, useAlertsQuery } from '../../../shared/hooks/useApiQue
 /* ── Styled ─────────────────────────────────────────────── */
 
 const Page = styled.div`
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 24px 16px;
 
-  @media (max-width: 768px) {
-    padding: 24px 16px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 28px 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 32px 48px;
   }
 `;
 
@@ -48,15 +52,12 @@ const Subtitle = styled.p`
 const StatusRow = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 32px;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(5, 1fr);
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
   }
 `;
 
@@ -81,8 +82,16 @@ const SectionTitle = styled.h3`
 
 const DeviceGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
   gap: 16px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 const DeviceCard = styled.div`

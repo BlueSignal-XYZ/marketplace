@@ -5,17 +5,21 @@ import { Link } from "react-router-dom";
 
 const Card = styled(Link)`
   display: block;
-  background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-radius: 12px;
+  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  border-radius: ${({ theme }) => theme.radius?.lg || 16}px;
   padding: 20px;
   text-decoration: none;
   transition: all 0.15s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-    transform: translateY(-2px);
+    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    box-shadow: 0 4px 16px rgba(0, 102, 255, 0.06);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
+    padding: 16px;
   }
 `;
 
@@ -28,24 +32,41 @@ const Header = styled.div`
 
 const SiteName = styled.h3`
   margin: 0;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
 `;
 
 const StatusPill = styled.span`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #ffffff;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 12px;
+  font-weight: 500;
   background: ${({ $variant }) =>
     $variant === "warning"
-      ? "#f97316"
+      ? "rgba(245,158,11,0.1)"
       : $variant === "offline"
-      ? "#dc2626"
-      : "#16a34a"};
+      ? "rgba(239,68,68,0.1)"
+      : "rgba(16,185,129,0.1)"};
+  color: ${({ $variant }) =>
+    $variant === "warning"
+      ? "#D97706"
+      : $variant === "offline"
+      ? "#DC2626"
+      : "#059669"};
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
 `;
 
 const MetaInfo = styled.div`
@@ -56,12 +77,13 @@ const MetaInfo = styled.div`
 `;
 
 const MetaRow = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
 
   strong {
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   }
 `;
 
@@ -69,7 +91,7 @@ const StatsRow = styled.div`
   display: flex;
   gap: 20px;
   padding-top: 16px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.borderLight || "#F3F4F6"};
 `;
 
 const Stat = styled.div`
@@ -78,17 +100,19 @@ const Stat = styled.div`
   gap: 4px;
 
   .label {
+    font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    letter-spacing: 0.04em;
+    color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
   }
 
   .value {
+    font-family: ${({ theme }) => theme.fonts?.mono || 'monospace'};
     font-size: 18px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   }
 `;
 

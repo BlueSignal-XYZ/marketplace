@@ -54,13 +54,13 @@ const SectionSub = styled.p`
 
 const StepsGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  gap: 0;
+  grid-template-columns: 1fr;
+  gap: 32px;
   align-items: flex-start;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 32px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0;
   }
 `;
 
@@ -104,26 +104,33 @@ const StepDesc = styled.p`
 `;
 
 const Arrow = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding-top: 16px;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 20px;
 
-  @media (max-width: 768px) {
-    display: none;
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    display: flex;
   }
 `;
 
 const CreditTypesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 72px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 48px;
 
-  @media (max-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 64px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 72px;
   }
 
   @media (max-width: 480px) {

@@ -19,10 +19,14 @@ import { useToastContext } from '../../../shared/providers/ToastProvider';
 const Page = styled.div`
   max-width: 680px;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: 24px 16px;
 
-  @media (max-width: 768px) {
-    padding: 24px 16px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 32px 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 48px 24px;
   }
 `;
 
@@ -71,6 +75,10 @@ const StepLine = styled.div`
   width: 40px;
   height: 2px;
   background: ${({ $done, theme }) => $done ? theme.colors.primary : theme.colors.border};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    width: 20px;
+  }
 `;
 
 const Card = styled.div`
@@ -78,6 +86,11 @@ const Card = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg}px;
   padding: 32px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 20px 16px;
+    border-radius: ${({ theme }) => theme.radius.md}px;
+  }
 `;
 
 const Title = styled.h2`

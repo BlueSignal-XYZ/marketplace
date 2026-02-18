@@ -53,6 +53,10 @@ const TabRow = styled.div`
   max-width: 480px;
   margin-left: auto;
   margin-right: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 `;
 
 const Tab = styled.button`

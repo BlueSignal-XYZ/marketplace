@@ -107,13 +107,13 @@ const FilterChip = styled.button`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 16px;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
     grid-template-columns: repeat(3, 1fr);
   }
 `;

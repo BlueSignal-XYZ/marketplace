@@ -15,12 +15,16 @@ import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
 const Page = styled.div`
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 24px 16px;
 
-  @media (max-width: 768px) {
-    padding: 24px 16px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 28px 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 32px 48px;
   }
 `;
 

@@ -33,8 +33,15 @@ const Container = styled.div`
   gap: 8px;
   flex-wrap: wrap;
 
-  @media (max-width: 640px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     gap: 6px;
+    padding-bottom: 4px;
+
+    &::-webkit-scrollbar { display: none; }
   }
 `;
 

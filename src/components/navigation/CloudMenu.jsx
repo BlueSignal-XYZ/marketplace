@@ -25,8 +25,7 @@ const Panel = styled.aside`
   right: 0;
   height: 100%;
   height: 100dvh;
-  width: 300px;
-  max-width: 85%;
+  width: 100%;
   background: #ffffff;
   box-shadow: -16px 0 48px rgba(15, 23, 42, 0.12),
     -4px 0 12px rgba(15, 23, 42, 0.06);
@@ -44,8 +43,9 @@ const Panel = styled.aside`
   transform: translateX(${({ $open }) => ($open ? "0%" : "100%")});
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
     width: 340px;
+    max-width: 85%;
   }
 `;
 
