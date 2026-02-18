@@ -52,20 +52,23 @@ const Wrapper = styled.div`
   border-radius: ${({ theme }) => theme.radius.md}px;
   -webkit-overflow-scrolling: touch;
 
-  @media (max-width: 640px) {
-    /* Sticky first column on mobile */
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    border-radius: ${({ theme }) => theme.radius.sm}px;
+
     & th:first-child,
     & td:first-child {
       position: sticky;
       left: 0;
       z-index: 1;
       background: inherit;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.04);
     }
   }
 `;
 
 const StyledTable = styled.table`
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
   font-family: ${({ theme }) => theme.fonts.sans};
 `;

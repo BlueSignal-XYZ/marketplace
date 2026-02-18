@@ -67,7 +67,7 @@ const IconSlot = styled.span`
 
 const StyledInput = styled.input<{ $hasIcon: boolean }>`
   width: 100%;
-  height: 40px;
+  height: 44px;
   padding: 0 14px;
   ${({ $hasIcon }) => $hasIcon && 'padding-left: 38px;'}
   font-family: ${({ theme }) => theme.fonts.sans};
@@ -87,10 +87,10 @@ const StyledInput = styled.input<{ $hasIcon: boolean }>`
 `;
 
 const Select = styled.select`
-  height: 40px;
+  height: 44px;
   padding: 0 32px 0 12px;
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
+  font-size: 14px;
   color: ${({ theme }) => theme.colors.text};
   background: ${({ theme }) => theme.components.inputBg};
   border: 1px solid ${({ theme }) => theme.components.inputBorder};
@@ -105,6 +105,10 @@ const Select = styled.select`
 
   &:focus {
     border-color: ${({ theme }) => theme.components.inputFocusBorder};
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    width: 100%;
   }
 `;
 

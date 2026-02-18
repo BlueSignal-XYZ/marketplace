@@ -32,6 +32,10 @@ const TabList = styled.div<{ $fullWidth: boolean }>`
   gap: 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 `;
 
 const TabButton = styled.button<{ $active: boolean; $fullWidth: boolean }>`
@@ -39,7 +43,8 @@ const TabButton = styled.button<{ $active: boolean; $fullWidth: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 16px;
+  padding: 12px 16px;
+  min-height: 44px;
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 14px;
   font-weight: ${({ $active }) => ($active ? 600 : 400)};
@@ -49,6 +54,7 @@ const TabButton = styled.button<{ $active: boolean; $fullWidth: boolean }>`
   border: none;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: color ${({ theme }) => theme.animation.fast};
   ${({ $fullWidth }) => $fullWidth && 'flex: 1; justify-content: center;'}
 

@@ -52,6 +52,11 @@ const Overlay = styled.div`
   justify-content: center;
   padding: 16px;
   animation: ${fadeIn} 150ms ease-out;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 0;
+    align-items: stretch;
+  }
 `;
 
 const Dialog = styled.div`
@@ -64,9 +69,10 @@ const Dialog = styled.div`
   overflow-y: auto;
   animation: ${scaleIn} 200ms ease-out;
 
-  @media (max-width: 640px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
     height: 100%;
     border-radius: 0;
     animation: none;
