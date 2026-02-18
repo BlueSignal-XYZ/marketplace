@@ -1,92 +1,106 @@
 /**
- * WQT Hero — "The Water Quality Exchange."
- * Subtle animated data viz background. CTAs: Enter Platform, Connect Wallet.
+ * WQT Hero — premium dark hero with gradient mesh background.
+ * Punchy headline, single-sentence value prop, clear CTAs.
  */
 
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const float = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+const gradientShift = keyframes`
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+const pulse = keyframes`
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.8; }
 `;
 
 const Section = styled.section`
   position: relative;
   overflow: hidden;
-  padding: 120px 24px 100px;
-  background: linear-gradient(135deg, #0B1120 0%, #0F1B35 50%, #091428 100%);
+  padding: 140px 24px 120px;
+  background: #0B1120;
   color: #FFFFFF;
   text-align: center;
 
   @media (max-width: 640px) {
-    padding: 80px 20px 60px;
+    padding: 100px 20px 80px;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    & * { animation: none !important; }
+  }
+`;
+
+const GradientMesh = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 82, 204, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(6, 182, 212, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 90%, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+  animation: ${gradientShift} 20s ease-in-out infinite;
+  background-size: 200% 200%;
 `;
 
 const GridOverlay = styled.div`
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0,82,204,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,82,204,0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
   pointer-events: none;
 `;
 
-const DataDots = styled.div`
+const GlowOrb = styled.div`
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.4;
-
-  @media (max-width: 640px) {
-    display: none;
-  }
-`;
-
-const Dot = styled.div`
-  position: absolute;
-  width: ${({ $s }) => $s || 4}px;
-  height: ${({ $s }) => $s || 4}px;
   border-radius: 50%;
-  background: ${({ $c }) => $c || '#0052CC'};
-  animation: ${float} ${({ $d }) => $d || '4s'} ease-in-out infinite;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: ${pulse} ${({ $d }) => $d || '6s'} ease-in-out infinite;
   animation-delay: ${({ $del }) => $del || '0s'};
 `;
 
 const Content = styled.div`
   position: relative;
-  max-width: 800px;
+  max-width: 720px;
   margin: 0 auto;
   z-index: 1;
 `;
 
-const Badge = styled.span`
-  display: inline-block;
-  padding: 6px 14px;
+const TrustBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #06B6D4;
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.2);
+  color: rgba(6, 182, 212, 0.9);
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.15);
   border-radius: 999px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 `;
 
 const Title = styled.h1`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: clamp(40px, 6vw, 64px);
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: clamp(36px, 5.5vw, 60px);
+  font-weight: 800;
+  line-height: 1.08;
   letter-spacing: -0.03em;
-  margin: 0 0 20px;
+  margin: 0 0 24px;
+  color: #FFFFFF;
 `;
 
-const Accent = styled.span`
-  background: linear-gradient(135deg, #06B6D4, #0052CC);
+const GradientText = styled.span`
+  background: linear-gradient(135deg, #06B6D4 0%, #0052CC 50%, #8B5CF6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -94,16 +108,16 @@ const Accent = styled.span`
 
 const Subtitle = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 18px;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.7);
-  max-width: 580px;
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 520px;
   margin: 0 auto 40px;
 `;
 
 const CTARow = styled.div`
   display: flex;
-  gap: 12px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
 
@@ -118,16 +132,22 @@ const PrimaryBtn = styled.a`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px 28px;
-  min-height: 48px;
-  font-size: 15px;
+  padding: 16px 32px;
+  min-height: 52px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 16px;
   font-weight: 600;
   color: #FFFFFF;
-  background: #0052CC;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  border-radius: 10px;
   text-decoration: none;
-  transition: background 200ms;
-  &:hover { background: #003D99; }
+  transition: all 200ms;
+  box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
+  }
+  &:active { transform: translateY(0); }
 `;
 
 const SecondaryBtn = styled.a`
@@ -135,45 +155,96 @@ const SecondaryBtn = styled.a`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px 28px;
-  min-height: 48px;
-  font-size: 15px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.9);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
+  padding: 16px 28px;
+  min-height: 52px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   text-decoration: none;
-  transition: background 200ms;
-  &:hover { background: rgba(255,255,255,0.1); }
+  transition: all 200ms;
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const TrustRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 56px;
+  flex-wrap: wrap;
+`;
+
+const TrustItem = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.35);
+`;
+
+const TrustDot = styled.span`
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  @media (max-width: 640px) { display: none; }
 `;
 
 export function HeroSection() {
+  const handleLearnClick = (e) => {
+    e.preventDefault();
+    const el = document.getElementById('how-it-works');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <Section>
+      <GradientMesh />
       <GridOverlay />
-      <DataDots>
-        <Dot $s={6} $c="#0052CC" $d="5s" $del="0s" style={{ top: '15%', left: '12%' }} />
-        <Dot $s={4} $c="#06B6D4" $d="6s" $del="1s" style={{ top: '25%', right: '18%' }} />
-        <Dot $s={5} $c="#10B981" $d="4s" $del="0.5s" style={{ top: '60%', left: '8%' }} />
-        <Dot $s={3} $c="#8B5CF6" $d="7s" $del="2s" style={{ top: '70%', right: '10%' }} />
-        <Dot $s={4} $c="#0052CC" $d="5.5s" $del="1.5s" style={{ top: '40%', left: '25%' }} />
-        <Dot $s={5} $c="#06B6D4" $d="4.5s" $del="0.8s" style={{ bottom: '20%', right: '25%' }} />
-      </DataDots>
+      <GlowOrb
+        $d="8s" $del="0s"
+        style={{ top: '10%', left: '5%', width: 300, height: 300, background: 'rgba(0,82,204,0.08)' }}
+      />
+      <GlowOrb
+        $d="10s" $del="2s"
+        style={{ bottom: '10%', right: '5%', width: 250, height: 250, background: 'rgba(6,182,212,0.06)' }}
+      />
+
       <Content>
-        <Badge>Verified Environmental Credits</Badge>
+        <TrustBadge>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
+          Powered by BlueSignal Sensor Network
+        </TrustBadge>
         <Title>
-          The Water Quality<br />
-          <Accent>Exchange</Accent>
+          The Marketplace for{' '}
+          <GradientText>Nutrient Credits</GradientText>
         </Title>
         <Subtitle>
-          Buy and sell verified nutrient credits backed by real sensor data
-          and blockchain transparency. The trusted marketplace for environmental outcomes.
+          Buy and sell sensor-verified nutrient credits backed by real-time
+          water quality monitoring data and blockchain transparency.
         </Subtitle>
         <CTARow>
-          <PrimaryBtn href="/marketplace">Enter Platform →</PrimaryBtn>
-          <SecondaryBtn href="/registry">Explore Registry</SecondaryBtn>
+          <PrimaryBtn href="/marketplace">Enter Marketplace →</PrimaryBtn>
+          <SecondaryBtn href="#how-it-works" onClick={handleLearnClick}>
+            How It Works
+          </SecondaryBtn>
         </CTARow>
+        <TrustRow>
+          <TrustItem>Blockchain-verified certificates</TrustItem>
+          <TrustDot />
+          <TrustItem>Real-time sensor validation</TrustItem>
+          <TrustDot />
+          <TrustItem>EPA-compliant frameworks</TrustItem>
+        </TrustRow>
       </Content>
     </Section>
   );
