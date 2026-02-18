@@ -105,19 +105,19 @@ const MenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   font-size: 20px;
   line-height: 1;
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
-    background: ${({ theme }) => theme.colors?.primary50 || "#E6F7F8"};
-    border-color: ${({ theme }) => theme.colors?.primary200 || "#8FDADB"};
+    color: ${({ theme }) => theme.colors?.primary || "#0052CC"};
+    background: ${({ theme }) => theme.colors?.hover || "rgba(0,82,204,0.04)"};
+    border-color: ${({ theme }) => theme.colors?.border || "#E2E4E9"};
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary400 || "#38BDBE"};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary || "#0052CC"};
     outline-offset: 2px;
   }
 

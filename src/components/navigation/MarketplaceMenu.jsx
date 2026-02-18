@@ -58,15 +58,16 @@ const PanelHeader = styled.div`
 `;
 
 const PanelTitle = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 17px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   letter-spacing: -0.01em;
 `;
 
 const CloseButton = styled.button`
   border: none;
-  background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
+  background: ${({ theme }) => theme.colors?.background || "#F7F8FA"};
   padding: 0;
   width: 40px;
   height: 40px;
@@ -74,7 +75,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 22px;
   line-height: 1;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,8 +84,8 @@ const CloseButton = styled.button`
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
-    background: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
+    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+    background: ${({ theme }) => theme.colors?.border || "#E2E4E9"};
   }
 
   &:active {
@@ -103,11 +104,12 @@ const Divider = styled.div`
 `;
 
 const SectionLabel = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: ${({ theme }) => theme.colors?.ui400 || "#9CA3AF"};
+  color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
   margin: 16px 0 8px;
   padding-left: 4px;
 `;
@@ -126,8 +128,9 @@ const NavItem = styled(Link)`
 
   padding: 12px 16px;
   min-height: 44px;
-  border-radius: 12px;
+  border-radius: 10px;
   text-decoration: none;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
   font-weight: 500;
   touch-action: manipulation;
@@ -136,11 +139,11 @@ const NavItem = styled(Link)`
 
   color: ${({ $active, theme }) =>
     $active
-      ? theme.colors?.primary700 || "#0F393A"
-      : theme.colors?.ui700 || "#374151"};
+      ? theme.colors?.primary || "#0052CC"
+      : theme.colors?.text || "#1A1A1A"};
   background: ${({ $active, theme }) =>
     $active
-      ? theme.colors?.primary50 || "#E6F7F8"
+      ? theme.colors?.primaryLight || "#E6EEFA"
       : "transparent"};
 
   ${({ $active, theme }) =>
@@ -154,7 +157,7 @@ const NavItem = styled(Link)`
       transform: translateY(-50%);
       width: 3px;
       height: 20px;
-      background: ${theme.colors?.primary500 || "#1D7072"};
+      background: ${theme.colors?.primary || "#0052CC"};
       border-radius: 0 2px 2px 0;
     }
   `}
@@ -162,9 +165,9 @@ const NavItem = styled(Link)`
   &:hover {
     background: ${({ $active, theme }) =>
       $active
-        ? theme.colors?.primary100 || "#C0EAEB"
-        : theme.colors?.ui100 || "#F4F5F7"};
-    color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+        ? theme.colors?.primaryLight || "#E6EEFA"
+        : theme.colors?.background || "#F7F8FA"};
+    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
   }
 
   &:active {
@@ -446,7 +449,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
               <span>Signed in as <strong>{user?.email || user?.username}</strong></span>
             </UserRow>
           ) : (
-            <>Welcome, <strong>guest</strong> - <a href="/login" style={{ color: '#1D7072' }}>Sign in</a></>
+            <>Welcome, <strong>guest</strong> — <a href="/login" style={{ color: 'inherit', fontWeight: 600 }}>Sign in</a></>
           )}
         </SmallText>
 
