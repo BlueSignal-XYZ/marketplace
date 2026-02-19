@@ -1,5 +1,5 @@
 /**
- * Button — primary, secondary, ghost, destructive variants.
+ * Button — primary, secondary, ghost, destructive, outline variants.
  * Themed via styled-components ThemeProvider. No hardcoded colors.
  */
 
@@ -8,7 +8,7 @@ import styled, { css } from 'styled-components';
 
 // ── Types ─────────────────────────────────────────────────
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -71,6 +71,12 @@ const variantStyles = {
     border: 1px solid transparent;
     &:hover:not(:disabled) { background: #DC2626; }
     &:active:not(:disabled) { background: #B91C1C; }
+  `,
+  outline: css`
+    background: transparent;
+    color: ${({ theme }) => theme.components.buttonSecondaryText};
+    border: 1px solid ${({ theme }) => theme.components.buttonSecondaryBorder};
+    &:hover:not(:disabled) { background: ${({ theme }) => theme.components.buttonGhostHover}; }
   `,
 };
 
