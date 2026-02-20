@@ -51,11 +51,11 @@ function Footer() {
 
   const termsUrl = isBlueSignalMode
     ? "https://bluesignal.xyz/terms"
-    : "https://waterquality.trading/terms";
+    : "/terms";
 
   const privacyUrl = isBlueSignalMode
     ? "https://bluesignal.xyz/privacy"
-    : "https://waterquality.trading/privacy";
+    : "/privacy";
 
   return (
     <StyledFooter>
