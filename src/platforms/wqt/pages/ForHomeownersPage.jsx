@@ -399,11 +399,10 @@ export default function ForHomeownersPage() {
             <StepItem>
               <StepNum $bg="rgba(6, 182, 212, 0.1)" $color="#06B6D4">04</StepNum>
               <StepContent>
-                <StepTitle>Utility Account Credit</StepTitle>
+                <StepTitle>Rebate on Your Bill</StepTitle>
                 <StepDesc>
-                  Verified credits are settled as a rebate to your utility, which then
-                  credits your account proportionally. You see the credit on your regular
-                  utility bill.
+                  Your utility issues a rebate directly to your account as a credit on
+                  your regular water bill. The more your system produces, the more you earn.
                 </StepDesc>
               </StepContent>
             </StepItem>

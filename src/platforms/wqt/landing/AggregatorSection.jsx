@@ -52,69 +52,43 @@ const SectionSub = styled.p`
   line-height: 1.6;
 `;
 
-const MainCard = styled.div`
-  padding: 40px;
+const TopCardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+`;
+
+const TopCard = styled.div`
+  padding: 32px;
   background: linear-gradient(135deg, #0B1120 0%, #0F1B35 100%);
   border-radius: ${({ theme }) => theme.radius.lg}px;
   color: #FFFFFF;
-  margin-bottom: 32px;
 
   @media (max-width: 640px) {
-    padding: 28px 24px;
+    padding: 24px 20px;
   }
 `;
 
-const MainDesc = styled.p`
+const TopCardTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 17px;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.8;
-  margin: 0 0 32px;
-  max-width: 800px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 10px;
 `;
 
-const GreeksUsage = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    grid-template-columns: repeat(5, 1fr);
-  }
-`;
-
-const UsageItem = styled.div`
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-`;
-
-const UsageGreek = styled.div`
-  font-family: 'Times New Roman', 'Georgia', serif;
-  font-size: 24px;
-  color: ${({ $color }) => $color};
-  margin-bottom: 8px;
-`;
-
-const UsageLabel = styled.div`
+const TopCardDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 4px;
-`;
-
-const UsageDesc = styled.div`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.5;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+  margin: 0;
 `;
 
 const FeaturesGrid = styled.div`
@@ -153,30 +127,29 @@ const FeatureDesc = styled.p`
   margin: 0;
 `;
 
-const GREEKS_USAGE = [
-  { symbol: '\u0394', label: 'Delta', color: '#0052CC', desc: 'Price regional exposure' },
-  { symbol: '\u0393', label: 'Gamma', color: '#8B5CF6', desc: 'Assess nonlinear risk' },
-  { symbol: '\u0398', label: 'Theta', color: '#D97706', desc: 'Manage freshness' },
-  { symbol: '\u03BD', label: 'Vega', color: '#10B981', desc: 'Hedge uncertainty' },
-  { symbol: '\u03C1', label: 'Rho', color: '#06B6D4', desc: 'Optimize financing' },
+const TOP_CARDS = [
+  {
+    title: 'Bundled Supply',
+    desc: 'Individual homeowner credits are pooled into regional portfolios. Utilities purchase from the portfolio \u2014 one contract, one relationship \u2014 instead of managing thousands of individual accounts.',
+  },
+  {
+    title: 'Diversified Risk',
+    desc: 'Credits from different regions, climates, and system types are combined. Geographic and seasonal diversity means the portfolio produces reliably even when individual systems fluctuate.',
+  },
+  {
+    title: 'Market Depth',
+    desc: 'Aggregators create the liquidity that makes this a real market. Without them, it\u2019s a rebate program. With them, credits are tradeable, priceable, and financeable.',
+  },
 ];
 
 const FEATURES = [
   {
     title: 'Simplified Utility Engagement',
-    desc: 'Aggregators offer utilities a single bulk contract instead of managing thousands of individual homeowner relationships. This abstraction layer is what makes the system scalable.',
+    desc: 'One aggregator, one contract, one invoice. Utilities get verified water credits at scale without managing individual homeowner relationships. This abstraction layer is what makes the system work at municipal scale.',
   },
   {
     title: 'Portfolio Diversification',
-    desc: 'By managing credits from hundreds or thousands of homeowners across regions, aggregators achieve natural diversification of both quantity and quality risk.',
-  },
-  {
-    title: 'Structured Products',
-    desc: 'The Greeks framework supports building structured positions on credit pools. As the market grows, financial products become possible on top of credit portfolios.',
-  },
-  {
-    title: 'Market Liquidity',
-    desc: 'Aggregators create the liquidity necessary for a functioning market. Without them, the system remains a rebate program. With them, it becomes a tradeable market.',
+    desc: 'By managing credits across hundreds of homeowners in different regions, aggregators achieve natural diversification of both quantity and quality risk. The Greeks framework (see Risk section above) gives them the tools to price and hedge that portfolio.',
   },
 ];
 
@@ -187,29 +160,19 @@ export function AggregatorSection() {
         <SectionLabel>Aggregator Model</SectionLabel>
         <SectionTitle>From Rebate Program to Functioning Market</SectionTitle>
         <SectionSub>
-          Aggregators purchase or manage credit portfolios from hundreds or thousands
-          of participating homeowners, handling the complexity of individual account
-          management. This layer is what transforms the system.
+          Aggregators bundle credits from hundreds or thousands of homeowners into
+          portfolios that utilities can purchase through a single contract — turning
+          distributed water production into a scalable, tradeable resource.
         </SectionSub>
 
-        <MainCard>
-          <MainDesc>
-            Aggregators use the Greeks to price, hedge, and structure their positions
-            across regional portfolios. They offer utilities simple, bulk contracts
-            instead of thousands of individual relationships. The result is a real
-            market, not a collection of isolated rebate transactions.
-          </MainDesc>
-
-          <GreeksUsage>
-            {GREEKS_USAGE.map((g) => (
-              <UsageItem key={g.label}>
-                <UsageGreek $color={g.color}>{g.symbol}</UsageGreek>
-                <UsageLabel>{g.label}</UsageLabel>
-                <UsageDesc>{g.desc}</UsageDesc>
-              </UsageItem>
-            ))}
-          </GreeksUsage>
-        </MainCard>
+        <TopCardsGrid>
+          {TOP_CARDS.map((card) => (
+            <TopCard key={card.title}>
+              <TopCardTitle>{card.title}</TopCardTitle>
+              <TopCardDesc>{card.desc}</TopCardDesc>
+            </TopCard>
+          ))}
+        </TopCardsGrid>
 
         <FeaturesGrid>
           {FEATURES.map((f) => (

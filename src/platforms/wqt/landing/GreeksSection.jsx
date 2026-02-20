@@ -48,8 +48,19 @@ const SectionSub = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
   max-width: 640px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+`;
+
+const FramingNote = styled.p`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-align: center;
+  max-width: 640px;
   margin: 0 auto 64px;
   line-height: 1.6;
+  font-style: italic;
 `;
 
 const GreeksGrid = styled.div`
@@ -199,6 +210,12 @@ export function GreeksSection() {
           aggregators, utilities, and investors understand their exposure and
           make informed decisions.
         </SectionSub>
+        <FramingNote>
+          This section is designed for market participants managing credit portfolios.
+          Homeowners don't need to understand the Greeks — your credits are managed
+          automatically. This framework exists so that the institutions buying and
+          trading those credits can do so with proper risk tooling.
+        </FramingNote>
 
         <GreeksGrid>
           {GREEKS.map((greek) => (
