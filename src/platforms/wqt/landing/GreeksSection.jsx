@@ -150,40 +150,40 @@ const GREEKS = [
     name: 'Delta',
     color: '#0052CC',
     title: 'Price Sensitivity',
-    desc: 'Measures the sensitivity of credit value to changes in the underlying water price or utility treatment cost. A utility in arid West Texas where water is scarce will exhibit a higher delta than one in water-abundant East Texas.',
-    example: 'Enables aggregators to assess how regional water economics impact portfolio value.',
+    desc: 'How much credit value changes when the underlying water price or treatment cost shifts. A utility in dry West Texas will show a higher delta than one in water-rich East Texas.',
+    example: 'Helps aggregators understand how regional water economics affect portfolio value.',
   },
   {
     symbol: '\u0393',
     name: 'Gamma',
     color: '#8B5CF6',
     title: 'Acceleration of Price Sensitivity',
-    desc: 'Measures the rate of change of delta. When a drought hits and water prices spike, gamma indicates how rapidly credit values are accelerating. High gamma signals nonlinear risk exposure.',
-    example: 'Critical for aggregators determining whether positions can be hedged effectively.',
+    desc: 'How fast delta itself is changing. When a drought hits and prices spike, gamma shows how quickly credit values are accelerating. High gamma means risk is growing faster than expected.',
+    example: 'Important for aggregators deciding whether positions can be hedged effectively.',
   },
   {
     symbol: '\u0398',
     name: 'Theta',
     color: '#D97706',
     title: 'Time Decay',
-    desc: 'Water quality credits degrade over time. A credit generated today from verified clean water is worth more than one generated six months ago because conditions change: filters age, seasonal contamination patterns shift, system performance drifts.',
-    example: 'Enforces market freshness and prevents credit hoarding. Credits carry expiration windows tied to verification recency.',
+    desc: 'Water quality credits lose value over time. A credit from today is worth more than one from six months ago because conditions change — filters age, seasonal contamination shifts, and system performance drifts.',
+    example: 'Keeps the market fresh and prevents credit hoarding. Credits have expiration windows tied to how recently they were verified.',
   },
   {
     symbol: '\u03BD',
     name: 'Vega',
     color: '#10B981',
     title: 'Volatility Sensitivity',
-    desc: 'Measures how credit value responds to changes in market uncertainty itself. During regulatory shifts, contamination events, or infrastructure failures, vega spikes.',
-    example: 'Enables aggregators to understand exposure to uncertainty as a variable independent of price direction.',
+    desc: 'How credit value responds to changes in market uncertainty. During regulatory shifts, contamination events, or infrastructure failures, vega spikes.',
+    example: 'Helps aggregators understand their exposure to uncertainty, separate from price direction.',
   },
   {
     symbol: '\u03C1',
     name: 'Rho',
     color: '#06B6D4',
     title: 'Cost of Carry',
-    desc: 'Measures sensitivity to the time value of money. For aggregators financing credit portfolios, rho captures the difference between annual versus monthly rebate structures and the carrying cost of holding credits before settlement.',
-    example: 'Becomes particularly relevant as the market scales and financial products are built on top of credit pools.',
+    desc: 'How sensitive credit value is to the cost of money over time. For aggregators financing credit portfolios, rho captures the difference between annual vs. monthly rebate structures and the cost of holding credits before settlement.',
+    example: 'Becomes especially relevant as the market grows and financial products are built on credit pools.',
   },
 ];
 
@@ -194,10 +194,10 @@ export function GreeksSection() {
         <SectionLabel>Market Risk Framework</SectionLabel>
         <SectionTitle>The Greeks</SectionTitle>
         <SectionSub>
-          A mature market requires instruments to measure and price risk. This
-          framework adapts the Greeks of options pricing to water quality credits,
-          enabling aggregators, utilities, and investors to quantify exposure
-          and make informed decisions.
+          A healthy market needs tools to measure and price risk. This framework
+          adapts the Greeks from options pricing to water quality credits, helping
+          aggregators, utilities, and investors understand their exposure and
+          make informed decisions.
         </SectionSub>
 
         <GreeksGrid>

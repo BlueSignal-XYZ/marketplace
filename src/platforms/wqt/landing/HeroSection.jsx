@@ -20,10 +20,17 @@ const pulse = keyframes`
 const Section = styled.section`
   position: relative;
   overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 80px 16px 64px;
   background: #0B1120;
   color: #FFFFFF;
   text-align: center;
+  box-sizing: border-box;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 100px 24px 80px;
@@ -245,15 +252,15 @@ export function HeroSection() {
       <Content>
         <TrustBadge>
           <StatusDot />
-          Powered by BlueSignal + Aquaria
+          Powered by BlueSignal
         </TrustBadge>
         <Title>
           Deregulated{' '}
           <GradientText>Water Quality Trading</GradientText>
         </Title>
         <Subtitle>
-          A utility-grade credit system for distributed water production.
-          Dual-credit architecture, three-layer verification, and
+          A credit system for distributed water production.
+          Two credit types, three layers of verification, and
           utility-controlled pricing across the United States.
         </Subtitle>
         <CTARow>
@@ -265,9 +272,9 @@ export function HeroSection() {
           </SecondaryBtn>
         </CTARow>
         <TrustRow>
-          <TrustItem>100% Sensor-Verified Credits</TrustItem>
+          <TrustItem>Sensor-Verified Credits</TrustItem>
           <TrustDot />
-          <TrustItem>Three-Layer Independent Verification</TrustItem>
+          <TrustItem>Three-Layer Verification</TrustItem>
           <TrustDot />
           <TrustItem>Utility-Controlled Pricing</TrustItem>
         </TrustRow>

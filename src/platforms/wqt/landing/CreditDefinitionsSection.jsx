@@ -199,11 +199,11 @@ export function CreditDefinitionsSection() {
     <Section id="credit-definitions">
       <Inner>
         <SectionLabel>Credit Architecture</SectionLabel>
-        <SectionTitle>Two Credit Types, One Composite Value</SectionTitle>
+        <SectionTitle>Two Credit Types, One Combined Value</SectionTitle>
         <SectionSub>
-          The system operates on two distinct, interacting credit types.
-          Quantity measures production volume. Quality measures environmental impact.
-          Together they create a composite value signal that reflects both output and purity.
+          The system uses two credit types that work together.
+          Quantity measures how much water is produced. Quality measures
+          environmental benefit. Together they reflect both output and purity.
         </SectionSub>
 
         <CreditsGrid>
@@ -215,15 +215,15 @@ export function CreditDefinitionsSection() {
             <CreditTitle>Quantity Credit</CreditTitle>
             <CreditUnit>1 QC = 1 gallon produced</CreditUnit>
             <CreditDesc>
-              One quantity credit equals one gallon of water produced by an Aquaria
-              atmospheric water generator. QCs represent the baseline unit of production
-              and are the foundation of the credit system.
+              One quantity credit equals one gallon of water produced by an
+              atmospheric water generator. QCs are the baseline unit of production
+              and the foundation of the credit system.
             </CreditDesc>
             <VerificationNote>
               <VerificationLabel>Verification: </VerificationLabel>
-              Dual-source metering via Aquaria inline flow sensor cross-referenced
-              with the property water meter main. Two independent data sources for
-              every gallon, creating an auditable chain of custody.
+              Two-source metering via an inline flow sensor cross-referenced
+              with the property water meter. Two independent data sources for
+              every gallon, creating a clear chain of custody.
             </VerificationNote>
           </CreditCard>
 
@@ -237,13 +237,13 @@ export function CreditDefinitionsSection() {
             <CreditDesc>
               One quality credit equals one kilogram of nitrogen or phosphorus
               offset or removed from the water supply. KCs represent the environmental
-              value of water produced and map directly to utility treatment costs.
+              value of the water produced and relate directly to utility treatment costs.
             </CreditDesc>
             <VerificationNote>
               <VerificationLabel>Verification: </VerificationLabel>
               Continuous monitoring via BlueSignal WQM-1 devices measuring water
-              quality signals 24/7, validated by independent third-party sampling
-              of at least 25% of active sites annually.
+              quality around the clock, validated by independent third-party sampling
+              of at least 25% of active sites each year.
             </VerificationNote>
           </CreditCard>
         </CreditsGrid>
@@ -251,19 +251,19 @@ export function CreditDefinitionsSection() {
         <InteractionCard>
           <InteractionTitle>Credit Interaction</InteractionTitle>
           <InteractionDesc>
-            Quantity credits are enhanced or diminished by quality credits. A homeowner
-            producing 100 gallons per day of near-zero N/P water generates both QCs and
-            KCs simultaneously — their quantity output carries a quality premium. If water
-            quality degrades, quality credits decline and the effective value of quantity
-            credits is reduced proportionally. This interaction creates a self-correcting
-            incentive: system maintenance directly impacts earnings.
+            Quantity credits increase or decrease based on quality credits. A homeowner
+            producing 100 gallons per day of very clean water earns both QCs and KCs at
+            the same time — their output carries a quality bonus. If water quality drops,
+            quality credits decline and the value of quantity credits decreases too.
+            This creates a built-in incentive: maintaining your system directly
+            impacts your earnings.
           </InteractionDesc>
           <InteractionGrid>
             <InteractionItem>
               <InteractionItemLabel>High Quality</InteractionItemLabel>
               <InteractionItemValue>
-                Near-zero N/P water enhances QC value through KC premium.
-                Maximum composite credit earning.
+                Very clean water boosts QC value through a KC bonus.
+                Maximum combined credit earning.
               </InteractionItemValue>
             </InteractionItem>
             <InteractionItem>

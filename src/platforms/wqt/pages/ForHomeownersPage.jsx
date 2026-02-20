@@ -1,5 +1,5 @@
 /**
- * ForHomeownersPage — dedicated page for Aquaria homeowners.
+ * ForHomeownersPage — dedicated page for homeowners.
  * Covers credit earning, verification transparency, and ROI.
  */
 
@@ -304,10 +304,10 @@ export default function ForHomeownersPage() {
       <Hero>
         <HeroInner>
           <Breadcrumb href="/">&larr; Back to Overview</Breadcrumb>
-          <HeroTitle>Earn Credits From Your Aquaria Water Generator</HeroTitle>
+          <HeroTitle>Earn Credits From Your Water Generator</HeroTitle>
           <HeroSub>
-            Your Aquaria atmospheric water generator produces water and earns you
-            credits automatically. Dual credit types, fully automated verification,
+            Your atmospheric water generator produces water and earns you
+            credits automatically. Two credit types, fully automated verification,
             and credits applied directly to your utility account.
           </HeroSub>
         </HeroInner>
@@ -317,9 +317,9 @@ export default function ForHomeownersPage() {
         <SectionInner>
           <SectionTitle>How You Earn Credits</SectionTitle>
           <SectionDesc>
-            Your Aquaria unit generates two types of credits simultaneously. One
+            Your water generator earns two types of credits at the same time. One
             for every gallon produced, and one for the environmental quality of
-            that water. Both are verified automatically — you do not have to do anything.
+            that water. Both are verified automatically — you don't have to do anything.
           </SectionDesc>
           <CreditPair>
             <CreditCard $accent="#0052CC">
@@ -327,8 +327,8 @@ export default function ForHomeownersPage() {
               <CreditName>Per Gallon Produced</CreditName>
               <CreditUnit>1 QC = 1 gallon</CreditUnit>
               <CreditDesc>
-                Every gallon your Aquaria unit produces is metered by an inline flow
-                sensor and confirmed against your property water meter main. Two
+                Every gallon your unit produces is metered by an inline flow
+                sensor and confirmed against your property water meter. Two
                 independent measurements for every gallon.
               </CreditDesc>
             </CreditCard>
@@ -337,8 +337,8 @@ export default function ForHomeownersPage() {
               <CreditName>Per kg N/P Offset</CreditName>
               <CreditUnit>1 KC = 1 kg nitrogen or phosphorus</CreditUnit>
               <CreditDesc>
-                The BlueSignal WQM-1 device on your Aquaria unit continuously monitors
-                water quality. Cleaner water earns more quality credits, which enhance
+                The BlueSignal WQM-1 device on your unit continuously monitors
+                water quality. Cleaner water earns more quality credits, which boost
                 the value of your quantity credits.
               </CreditDesc>
             </CreditCard>
@@ -349,8 +349,8 @@ export default function ForHomeownersPage() {
             <HighlightText>
               System maintenance directly impacts your earnings. When your filters are
               fresh and your system runs well, both credit types are maximized. If water
-              quality drifts, quality credits decline and reduce your overall credit value.
-              The system rewards you for keeping your Aquaria unit in good condition.
+              quality drops, quality credits decline and reduce your overall credit value.
+              The system rewards you for keeping your unit in good condition.
             </HighlightText>
           </HighlightCard>
         </SectionInner>
@@ -360,8 +360,8 @@ export default function ForHomeownersPage() {
         <SectionInner>
           <SectionTitle>What Verification Looks Like For You</SectionTitle>
           <SectionDesc>
-            The short answer: you do not have to do anything. The system handles all
-            verification automatically. Here is what happens behind the scenes.
+            The short answer: you don't have to do anything. The system handles all
+            verification automatically. Here's what happens behind the scenes.
           </SectionDesc>
           <StepsList>
             <StepItem>
@@ -369,8 +369,8 @@ export default function ForHomeownersPage() {
               <StepContent>
                 <StepTitle>Automatic Metering</StepTitle>
                 <StepDesc>
-                  Your Aquaria unit's inline flow sensor records every gallon produced.
-                  This is cross-referenced with your property water meter main automatically.
+                  Your unit's inline flow sensor records every gallon produced.
+                  This is cross-referenced with your property water meter automatically.
                 </StepDesc>
               </StepContent>
             </StepItem>
@@ -415,16 +415,16 @@ export default function ForHomeownersPage() {
         <SectionInner>
           <SectionTitle>Your ROI</SectionTitle>
           <SectionDesc>
-            Your return depends on two factors: how much water your Aquaria unit produces,
-            and the rates your utility has selected. A template calculator tool is available
+            Your return depends on two factors: how much water your unit produces,
+            and the rates your utility has set. A calculator tool is available
             to project your expected earnings based on your utility's specific rates.
           </SectionDesc>
           <Grid>
             <Card>
               <CardTitle>Quantity Earnings</CardTitle>
               <CardDesc>
-                Based on your Aquaria unit's daily production (gallons) multiplied
-                by your utility's selected buyback rate (quarter, half, or full parity
+                Based on your unit's daily production (gallons) multiplied
+                by your utility's buyback rate (quarter, half, or full parity
                 relative to retail water price).
               </CardDesc>
             </Card>

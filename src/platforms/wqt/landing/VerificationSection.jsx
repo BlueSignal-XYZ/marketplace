@@ -179,13 +179,13 @@ const TrustHighlight = styled.span`
 const LAYERS = [
   {
     number: 'Layer 01',
-    title: 'Aquaria Flow Metering',
+    title: 'Inline Flow Metering',
     type: 'Quantity',
     typeColor: '#0052CC',
     typeBg: 'rgba(0, 82, 204, 0.1)',
     accent: '#0052CC',
-    desc: 'Each Aquaria unit is equipped with an inline flow sensor meter that records gallons produced. This data is cross-referenced against the property\'s water meter main, providing two independent quantity confirmation points.',
-    detail: 'Discrepancies between the Aquaria flow sensor and the property water meter main trigger automatic flags. Two independent data sources for every gallon produced.',
+    desc: 'Each water generator is equipped with an inline flow sensor that records gallons produced. This data is cross-referenced against the property\'s water meter, providing two independent confirmation points.',
+    detail: 'Discrepancies between the flow sensor and the property water meter trigger automatic flags. Two independent data sources for every gallon produced.',
   },
   {
     number: 'Layer 02',
@@ -194,8 +194,8 @@ const LAYERS = [
     typeColor: '#10B981',
     typeBg: 'rgba(16, 185, 129, 0.1)',
     accent: '#10B981',
-    desc: 'Each unit is equipped with a BlueSignal WQM-1 monitoring device \u2014 a 6-channel Raspberry Pi Hat that reads water quality signals in real time and transmits data to cloud.bluesignal.xyz. The device also controls a transducer for anti-fouling, actively maintaining system performance.',
-    detail: 'Continuous 24/7 quality data enables immediate detection of drift or degradation. Every unit monitored, every signal recorded, every anomaly flagged.',
+    desc: 'Each unit includes a BlueSignal WQM-1 monitoring device \u2014 a multi-channel sensor board that reads water quality signals in real time and sends data to cloud.bluesignal.xyz. It also controls anti-fouling to maintain system performance.',
+    detail: 'Round-the-clock quality data enables immediate detection of drift or degradation. Every unit monitored, every signal recorded, every anomaly flagged.',
   },
   {
     number: 'Layer 03',
@@ -204,8 +204,8 @@ const LAYERS = [
     typeColor: '#8B5CF6',
     typeBg: 'rgba(139, 92, 246, 0.1)',
     accent: '#8B5CF6',
-    desc: 'A minimum of 25% of all active sites must be physically sampled each year by an independent contractor selected through competitive bidding. This contractor has no affiliation with Aquaria, BlueSignal, or the homeowner.',
-    detail: 'Lab results serve as calibration checks against continuous monitoring data. Discrepancies trigger investigation and potential credit adjustment. An external, conflict-free audit trail for the market.',
+    desc: 'At least 25% of all active sites are physically sampled each year by an independent contractor selected through competitive bidding. This contractor has no connection to the hardware manufacturer, BlueSignal, or the homeowner.',
+    detail: 'Lab results serve as checks against continuous monitoring data. Discrepancies trigger investigation and potential credit adjustment — an external, conflict-free audit trail for the market.',
   },
 ];
 
@@ -216,8 +216,8 @@ export function VerificationSection() {
         <SectionLabel>Verification Architecture</SectionLabel>
         <SectionTitle>Three Layers of Independent Trust</SectionTitle>
         <SectionSub>
-          No single party \u2014 not the homeowner, not Aquaria, not BlueSignal \u2014
-          can unilaterally validate credits. This three-layer system is the
+          No single party — not the homeowner, not the manufacturer, not BlueSignal —
+          can validate credits on their own. This three-layer system is the
           trust foundation of the entire market.
         </SectionSub>
 
