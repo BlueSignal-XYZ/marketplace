@@ -308,7 +308,7 @@ export default function ForHomeownersPage() {
           <HeroSub>
             Your atmospheric water generator produces water and earns you
             credits automatically. Two credit types, fully automated verification,
-            and credits applied directly to your utility account.
+            and rebates credited directly to your monthly water bill.
           </HeroSub>
         </HeroInner>
       </Hero>
