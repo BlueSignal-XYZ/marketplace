@@ -214,21 +214,21 @@ const FLOW_STEPS = [
     bg: 'rgba(0, 82, 204, 0.1)',
     color: '#0052CC',
     title: 'Credit Generation',
-    desc: 'Water generators produce water. BlueSignal devices monitor quality. Credits are created based on verified quantity and quality data from both systems.',
+    desc: 'Your atmospheric water generator produces clean water and stores it on-site. Every gallon produced is metered by an inline flow sensor. BlueSignal\u2019s monitoring platform continuously verifies water quality. When production meets program thresholds, verified credits are automatically generated and registered on the platform.',
   },
   {
     num: '02',
     bg: 'rgba(16, 185, 129, 0.1)',
     color: '#10B981',
-    title: 'Rebate Issuance',
-    desc: 'The system issues a rebate \u2014 delivered via check \u2014 to the utility. The rebate amount is calculated from verified credit generation across all participating homeowners.',
+    title: 'Utility Rebate',
+    desc: 'Because you\u2019re producing your own water, you draw less from the municipal supply. Your utility recognizes this reduced demand and issues a rebate \u2014 it appears as a credit on your monthly water bill. The rebate rate is set by your utility based on their avoided cost of treatment and delivery.',
   },
   {
     num: '03',
     bg: 'rgba(139, 92, 246, 0.1)',
     color: '#8B5CF6',
-    title: 'Homeowner Credit',
-    desc: 'The utility credits homeowner accounts based on device readings and verified credit generation. The utility may pass the full rebate value or keep a portion as an administrative fee.',
+    title: 'Platform Services',
+    desc: 'The platform charges a small service fee for continuous monitoring, verification, and program management. This fee is transparent and deducted automatically \u2014 you always see your net rebate amount before opting in.',
   },
 ];
 
@@ -237,10 +237,10 @@ export function SettlementSection() {
     <Section id="settlement">
       <Inner>
         <SectionLabel>Billing & Settlement</SectionLabel>
-        <SectionTitle>Rebate-Based Settlement</SectionTitle>
+        <SectionTitle>How Credits Become Revenue</SectionTitle>
         <SectionSub>
-          Credits are settled through a rebate that works with existing utility
-          billing systems — no replacement or migration needed.
+          Your system produces water. You use less from the city. Your utility pays you
+          a rebate because that costs them less than delivering the water themselves.
         </SectionSub>
 
         <FlowContainer>
@@ -256,12 +256,13 @@ export function SettlementSection() {
         </FlowContainer>
 
         <HighlightCard>
-          <HighlightTitle>Zero Infrastructure Changes</HighlightTitle>
+          <HighlightTitle>Why Utilities Pay</HighlightTitle>
           <HighlightText>
-            Rebates flow through existing billing channels and homeowner credits
-            appear on their regular utility accounts. The utility's agreement
-            determines whether the full rebate value passes to the homeowner or
-            a portion is kept as an administrative fee.
+            It costs your utility more to treat and deliver one gallon of water
+            than to rebate you for producing it yourself. Self-generation reduces strain
+            on aging infrastructure, defers capital expenditure on new treatment plants,
+            and helps utilities meet conservation mandates. The rebate is not charity —
+            it's cheaper than the alternative.
           </HighlightText>
         </HighlightCard>
 

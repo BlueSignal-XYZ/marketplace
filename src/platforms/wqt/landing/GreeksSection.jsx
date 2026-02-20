@@ -48,8 +48,19 @@ const SectionSub = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
   max-width: 640px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+`;
+
+const FramingNote = styled.p`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-align: center;
+  max-width: 640px;
   margin: 0 auto 64px;
   line-height: 1.6;
+  font-style: italic;
 `;
 
 const GreeksGrid = styled.div`
@@ -199,6 +210,13 @@ export function GreeksSection() {
           aggregators, utilities, and investors understand their exposure and
           make informed decisions.
         </SectionSub>
+        <FramingNote>
+          For Institutional Participants: The following risk framework applies to
+          aggregators and institutional portfolios managing diversified credit
+          positions. Homeowners participating in rebate programs do not need to
+          understand these metrics — your rebate is straightforward and guaranteed
+          by your utility agreement.
+        </FramingNote>
 
         <GreeksGrid>
           {GREEKS.map((greek) => (

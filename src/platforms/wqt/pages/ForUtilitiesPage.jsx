@@ -322,29 +322,30 @@ export default function ForUtilitiesPage() {
           <FlowList>
             <FlowItem>
               <FlowContent>
-                <FlowTitle>Credits Generated</FlowTitle>
+                <FlowTitle>Homeowner Systems Produce Water</FlowTitle>
                 <FlowDesc>
-                  Water generators produce water. BlueSignal devices verify quality.
-                  Credits are calculated from verified data.
+                  Atmospheric water generators produce water at the home. BlueSignal
+                  devices verify quantity and quality. Credits are calculated from
+                  verified data automatically.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
             <FlowItem>
               <FlowContent>
-                <FlowTitle>Rebate Issued</FlowTitle>
+                <FlowTitle>Municipal Demand Drops</FlowTitle>
                 <FlowDesc>
-                  The system issues a rebate check to the utility based on aggregate
-                  verified credit production across all participating homeowners.
+                  Every gallon produced at home is a gallon not drawn from your system.
+                  Your utility saves on treatment, pumping, and distribution costs.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
             <FlowItem>
               <FlowContent>
-                <FlowTitle>Homeowner Accounts Credited</FlowTitle>
+                <FlowTitle>Rebate Credited to Homeowner</FlowTitle>
                 <FlowDesc>
-                  Your utility credits homeowner accounts proportionally. You may pass
-                  the full value or retain a portion as an administrative fee per your
-                  agreement structure.
+                  You issue a rebate as a credit on the homeowner's regular water bill.
+                  The rebate costs less than delivering the water would have. A small
+                  platform fee covers monitoring, verification, and program management.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>

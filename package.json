@@ -24,7 +24,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run --reporter=verbose"
+    "test:ci": "vitest run --reporter=verbose",
+    "seed": "node scripts/seed-data.js",
+    "seed:clear": "node scripts/seed-data.js --clear"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
