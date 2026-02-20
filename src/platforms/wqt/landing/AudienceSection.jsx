@@ -171,7 +171,7 @@ const AUDIENCES = [
     bg: 'rgba(16, 185, 129, 0.1)',
     accent: '#10B981',
     title: 'For Homeowners',
-    desc: 'Earn credits from your atmospheric water generator. Dual credit earning with quantity and quality measurements, all verified automatically.',
+    desc: 'Produce your own clean water, reduce your utility bill, and earn rebates. Your system generates verified credits automatically \u2014 rebates appear as credits on your monthly water bill.',
     features: [
       'Earn both quantity and quality credits',
       'ROI calculator based on your utility\'s rates',
@@ -185,7 +185,7 @@ const AUDIENCES = [
     bg: 'rgba(139, 92, 246, 0.1)',
     accent: '#8B5CF6',
     title: 'For Aggregators & Investors',
-    desc: 'Bundle homeowner credits into portfolios and offer utilities single-contract access to verified distributed water production.',
+    desc: 'Build and manage diversified water credit portfolios. Aggregate supply from distributed producers, apply institutional risk frameworks, and access utility-scale demand.',
     features: [
       'Portfolio management across regions and credit types',
       'Risk framework (the Greeks) for pricing and hedging',

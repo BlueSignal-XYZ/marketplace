@@ -213,22 +213,22 @@ const FLOW_STEPS = [
     num: '01',
     bg: 'rgba(0, 82, 204, 0.1)',
     color: '#0052CC',
-    title: 'Your System Produces Water',
-    desc: 'Your atmospheric water generator produces and stores clean water at home. BlueSignal devices verify how much you produce and confirm water quality automatically \u2014 no action required from you.',
+    title: 'Credit Generation',
+    desc: 'Your atmospheric water generator produces clean water and stores it on-site. Every gallon produced is metered by an inline flow sensor. BlueSignal\u2019s monitoring platform continuously verifies water quality. When production meets program thresholds, verified credits are automatically generated and registered on the platform.',
   },
   {
     num: '02',
     bg: 'rgba(16, 185, 129, 0.1)',
     color: '#10B981',
-    title: 'Your Municipal Usage Drops',
-    desc: 'Every gallon your system produces is a gallon you don\u2019t draw from the city. The utility sees your reduced consumption and saves on treatment and delivery costs \u2014 which is why they\u2019re willing to pay you for it.',
+    title: 'Utility Rebate',
+    desc: 'Because you\u2019re producing your own water, you draw less from the municipal supply. Your utility recognizes this reduced demand and issues a rebate \u2014 it appears as a credit on your monthly water bill. The rebate rate is set by your utility based on their avoided cost of treatment and delivery.',
   },
   {
     num: '03',
     bg: 'rgba(139, 92, 246, 0.1)',
     color: '#8B5CF6',
-    title: 'Rebate Hits Your Bill',
-    desc: 'The utility issues a rebate directly to your account as a credit on your regular water bill. The more your system produces, the more you earn. A small platform fee is deducted for monitoring, verification, and program management.',
+    title: 'Platform Services',
+    desc: 'The platform charges a small service fee for continuous monitoring, verification, and program management. This fee is transparent and deducted automatically \u2014 you always see your net rebate amount before opting in.',
   },
 ];
 
@@ -237,7 +237,7 @@ export function SettlementSection() {
     <Section id="settlement">
       <Inner>
         <SectionLabel>Billing & Settlement</SectionLabel>
-        <SectionTitle>How Homeowners Get Paid</SectionTitle>
+        <SectionTitle>How Credits Become Revenue</SectionTitle>
         <SectionSub>
           Your system produces water. You use less from the city. Your utility pays you
           a rebate because that costs them less than delivering the water themselves.
@@ -258,10 +258,11 @@ export function SettlementSection() {
         <HighlightCard>
           <HighlightTitle>Why Utilities Pay</HighlightTitle>
           <HighlightText>
-            Delivering water is expensive. When homeowners produce their own, the
-            utility avoids treatment, pumping, and infrastructure costs. Paying a rebate
-            that's a fraction of their delivery cost saves them money — which is why the
-            program works without any changes to existing billing systems.
+            It costs your utility more to treat and deliver one gallon of water
+            than to rebate you for producing it yourself. Self-generation reduces strain
+            on aging infrastructure, defers capital expenditure on new treatment plants,
+            and helps utilities meet conservation mandates. The rebate is not charity —
+            it's cheaper than the alternative.
           </HighlightText>
         </HighlightCard>
 

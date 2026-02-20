@@ -211,10 +211,11 @@ export function GreeksSection() {
           make informed decisions.
         </SectionSub>
         <FramingNote>
-          This section is designed for market participants managing credit portfolios.
-          Homeowners don't need to understand the Greeks — your credits are managed
-          automatically. This framework exists so that the institutions buying and
-          trading those credits can do so with proper risk tooling.
+          For Institutional Participants: The following risk framework applies to
+          aggregators and institutional portfolios managing diversified credit
+          positions. Homeowners participating in rebate programs do not need to
+          understand these metrics — your rebate is straightforward and guaranteed
+          by your utility agreement.
         </FramingNote>
 
         <GreeksGrid>

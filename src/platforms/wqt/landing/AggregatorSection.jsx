@@ -130,15 +130,15 @@ const FeatureDesc = styled.p`
 const TOP_CARDS = [
   {
     title: 'Bundled Supply',
-    desc: 'Individual homeowner credits are pooled into regional portfolios. Utilities purchase from the portfolio \u2014 one contract, one relationship \u2014 instead of managing thousands of individual accounts.',
+    desc: 'Aggregate credits from hundreds of distributed producers into institutional-grade portfolios. Minimum thresholds that individual homeowners can\u2019t meet become accessible through pooled supply.',
   },
   {
     title: 'Diversified Risk',
-    desc: 'Credits from different regions, climates, and system types are combined. Geographic and seasonal diversity means the portfolio produces reliably even when individual systems fluctuate.',
+    desc: 'Geographic and source diversification across your portfolio reduces exposure to any single producer, region, or weather pattern. Portfolio analytics track concentration risk in real time.',
   },
   {
     title: 'Market Depth',
-    desc: 'Aggregators create the liquidity that makes this a real market. Without them, it\u2019s a rebate program. With them, credits are tradeable, priceable, and financeable.',
+    desc: 'Create liquid secondary markets for water quality credits. Aggregated supply attracts utility buyers who need reliable, large-volume credit streams \u2014 not one-off transactions.',
   },
 ];
 
