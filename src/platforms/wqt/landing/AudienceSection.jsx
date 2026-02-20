@@ -1,14 +1,14 @@
 /**
- * AudienceSection — For Buyers / For Sellers / For Developers.
- * Tabbed layout with data panel showing value props for each audience.
+ * AudienceSection — three-audience gateway for Utilities, Homeowners, and Aggregators.
+ * Each card links to a dedicated page.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const Section = styled.section`
   padding: 96px 24px;
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => theme.colors.background};
 
   @media (max-width: 640px) {
     padding: 64px 20px;
@@ -16,7 +16,7 @@ const Section = styled.section`
 `;
 
 const Inner = styled.div`
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 `;
 
@@ -38,233 +38,195 @@ const SectionTitle = styled.h2`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   text-align: center;
-  margin: 0 0 48px;
+  margin: 0 0 12px;
   letter-spacing: -0.02em;
 `;
 
-const TabRow = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  margin-bottom: 48px;
-  background: ${({ theme }) => theme.colors.background};
-  border-radius: 12px;
-  padding: 4px;
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-`;
-
-const Tab = styled.button`
-  flex: 1;
-  padding: 10px 20px;
-  min-height: 44px;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  font-weight: ${({ $active }) => ($active ? 600 : 400)};
-  color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.textSecondary)};
-  background: ${({ $active, theme }) => ($active ? theme.colors.surface : 'transparent')};
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 200ms;
-  box-shadow: ${({ $active }) => ($active ? '0 1px 3px rgba(0,0,0,0.08)' : 'none')};
-  white-space: nowrap;
-`;
-
-const Panel = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: start;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-`;
-
-const PanelTitle = styled.h3`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 28px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 16px;
-  letter-spacing: -0.01em;
-`;
-
-const PanelDesc = styled.p`
+const SectionSub = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.7;
-  margin: 0 0 24px;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 64px;
+  line-height: 1.6;
 `;
 
-const FeatureList = styled.div`
+const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+`;
+
+const AudienceCard = styled.a`
+  padding: 36px 28px;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.lg}px;
+  text-decoration: none;
+  transition: all 200ms;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: ${({ theme }) => theme.elevation.cardHover};
+    transform: translateY(-2px);
+  }
 `;
 
-const FeatureItem = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-`;
-
-const FeatureCheck = styled.span`
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(16, 185, 129, 0.1);
-  color: #10B981;
+const AudienceIcon = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: ${({ $bg }) => $bg};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  margin-top: 2px;
+  margin-bottom: 20px;
 `;
 
-const FeatureText = styled.span`
+const IconSvg = styled.svg`
+  width: 24px;
+  height: 24px;
+`;
+
+const AudienceTitle = styled.h3`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 20px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+`;
+
+const AudienceDesc = styled.p`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.6;
+  margin: 0 0 20px;
+  flex: 1;
+`;
+
+const FeatureList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const FeatureItem = styled.li`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text};
-  line-height: 1.5;
+  line-height: 1.4;
+  padding-left: 18px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: ${({ $accent }) => $accent};
+  }
 `;
 
-const DataPanel = styled.div`
-  background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 16px;
-  padding: 28px;
-`;
-
-const DataRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
-  &:last-child { border-bottom: none; }
-`;
-
-const DataLabel = styled.span`
+const CardLink = styled.span`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-`;
-
-const DataValue = styled.span`
-  font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.primary};
+  margin-top: auto;
 `;
 
 const AUDIENCES = [
   {
-    id: 'buyers',
-    tabLabel: 'For Buyers',
-    title: 'Offset with Confidence',
-    desc: 'Purchase sensor-verified nutrient credits from a transparent marketplace. Full provenance on every credit, from generation to retirement.',
+    href: '/for-utilities',
+    bg: 'rgba(0, 82, 204, 0.1)',
+    accent: '#0052CC',
+    title: 'For Utilities & Municipalities',
+    desc: 'Reduce downstream treatment costs through distributed water production with utility-controlled pricing and zero billing infrastructure changes.',
     features: [
-      'Browse verified credits with full provenance',
-      'Pay with card (Stripe) or crypto wallet',
-      'On-chain certificate of retirement',
-      'Downloadable impact reports for ESG filings',
+      'Set your own buyback rates and quality multipliers',
+      'No modification to existing billing systems',
+      'Rebate-based settlement mechanics',
+      'Future VPP revenue opportunity',
     ],
-    data: [
-      { label: 'Avg. verification time', value: '< 24h' },
-      { label: 'Sensor-verified credits', value: '94%' },
-      { label: 'Quality rejection rate', value: '85-95%' },
-      { label: 'Certificate format', value: 'ERC-1155' },
-    ],
+    iconPath: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
   },
   {
-    id: 'sellers',
-    tabLabel: 'For Sellers',
-    title: 'Monetize Improvements',
-    desc: 'Turn environmental improvements into tradeable assets. BlueSignal device owners get automatic credit generation. Third-party sellers can submit for review.',
+    href: '/for-homeowners',
+    bg: 'rgba(16, 185, 129, 0.1)',
+    accent: '#10B981',
+    title: 'For Homeowners',
+    desc: 'Earn credits from your Aquaria atmospheric water generator. Dual credit earning with quantity and quality measurements, all verified automatically.',
     features: [
-      'Automatic credit generation from BS-WQM sensors',
-      'Third-party submission pipeline',
-      'Set your own prices, manage listings',
-      'Real-time dashboard with P&L tracking',
+      'Earn both quantity and quality credits',
+      'ROI calculator based on your utility\'s rates',
+      'Fully automated verification process',
+      'Credits applied directly to utility account',
     ],
-    data: [
-      { label: 'Avg. N credit price', value: '$8.42/kg' },
-      { label: 'Avg. P credit price', value: '$12.67/kg' },
-      { label: 'Settlement', value: 'T+1 day' },
-      { label: 'Seller fee', value: '2.5%' },
-    ],
+    iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   },
   {
-    id: 'developers',
-    tabLabel: 'For Developers',
-    title: 'Build on Open Data',
-    desc: 'Access public environmental data feeds, integrate credit trading into your applications, and build on top of the WQT exchange infrastructure.',
+    href: '/for-aggregators',
+    bg: 'rgba(139, 92, 246, 0.1)',
+    accent: '#8B5CF6',
+    title: 'For Aggregators & Investors',
+    desc: 'Manage credit portfolios at scale using the Greeks framework for pricing, hedging, and structured market participation across regions.',
     features: [
-      'RESTful API for market data and sensor feeds',
-      'Webhook notifications for trades and listings',
-      'Polygon smart contract integration',
-      'Comprehensive API documentation',
+      'Greeks framework for risk quantification',
+      'Portfolio management across regions',
+      'Hedging and structured product opportunities',
+      'Market maturity infrastructure',
     ],
-    data: [
-      { label: 'API format', value: 'REST + JSON' },
-      { label: 'Blockchain', value: 'Polygon' },
-      { label: 'Public endpoints', value: '12+' },
-      { label: 'Rate limit', value: '100 req/min' },
-    ],
+    iconPath: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
   },
 ];
 
 export function AudienceSection() {
-  const [active, setActive] = useState('buyers');
-  const audience = AUDIENCES.find((a) => a.id === active);
-
   return (
-    <Section>
+    <Section id="audiences">
       <Inner>
-        <SectionLabel>Who It's For</SectionLabel>
-        <SectionTitle>Built for Every Participant</SectionTitle>
-        <TabRow>
+        <SectionLabel>Built for Every Participant</SectionLabel>
+        <SectionTitle>Three Audiences, One System</SectionTitle>
+        <SectionSub>
+          The platform serves utilities managing water infrastructure, homeowners
+          producing distributed water, and aggregators building market depth.
+          Each participant has a distinct role and a clear value proposition.
+        </SectionSub>
+
+        <CardsGrid>
           {AUDIENCES.map((a) => (
-            <Tab key={a.id} $active={active === a.id} onClick={() => setActive(a.id)}>
-              {a.tabLabel}
-            </Tab>
-          ))}
-        </TabRow>
-        {audience && (
-          <Panel>
-            <div>
-              <PanelTitle>{audience.title}</PanelTitle>
-              <PanelDesc>{audience.desc}</PanelDesc>
+            <AudienceCard key={a.title} href={a.href}>
+              <AudienceIcon $bg={a.bg}>
+                <IconSvg viewBox="0 0 24 24" fill="none" stroke={a.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d={a.iconPath} />
+                </IconSvg>
+              </AudienceIcon>
+              <AudienceTitle>{a.title}</AudienceTitle>
+              <AudienceDesc>{a.desc}</AudienceDesc>
               <FeatureList>
-                {audience.features.map((f) => (
-                  <FeatureItem key={f}>
-                    <FeatureCheck>✓</FeatureCheck>
-                    <FeatureText>{f}</FeatureText>
-                  </FeatureItem>
+                {a.features.map((f) => (
+                  <FeatureItem key={f} $accent={a.accent}>{f}</FeatureItem>
                 ))}
               </FeatureList>
-            </div>
-            <DataPanel>
-              {audience.data.map((d) => (
-                <DataRow key={d.label}>
-                  <DataLabel>{d.label}</DataLabel>
-                  <DataValue>{d.value}</DataValue>
-                </DataRow>
-              ))}
-            </DataPanel>
-          </Panel>
-        )}
+              <CardLink>Learn more \u2192</CardLink>
+            </AudienceCard>
+          ))}
+        </CardsGrid>
       </Inner>
     </Section>
   );

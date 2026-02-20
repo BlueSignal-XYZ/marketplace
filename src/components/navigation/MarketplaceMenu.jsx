@@ -1,4 +1,8 @@
-// /src/components/navigation/MarketplaceMenu.jsx
+/**
+ * MarketplaceMenu — slide-out navigation panel for waterquality.trading.
+ * Updated for new site architecture: How It Works, Audiences, Registry, Ecosystem.
+ */
+
 import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
@@ -256,27 +260,9 @@ const ExternalIcon = styled.span`
   opacity: 0.6;
 `;
 
-// Role-based menu configuration for marketplace
-const getMarketplaceMenuConfig = (user) => {
-  const userRole = user?.role || 'buyer';
-  const isSeller = userRole === 'seller' || userRole === 'farmer';
-  const isBuyer = userRole === 'buyer' || userRole === 'utility';
-  const isAdmin = userRole === 'admin';
-
-  return {
-    isSeller,
-    isBuyer,
-    isAdmin,
-    showSellerTools: isSeller || isAdmin,
-    showBuyerTools: isBuyer || isAdmin,
-    showAdvancedFeatures: user?.uid,
-  };
-};
-
 export function MarketplaceMenu({ open, onClose, user }) {
   const location = useLocation();
   const { ACTIONS } = useAppContext();
-  const menuConfig = getMarketplaceMenuConfig(user);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget && onClose) {
@@ -289,7 +275,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
     onClose();
   };
 
-  // Treat nav as active for exact path or nested routes under it
   const isActive = (path) =>
     location.pathname === path ||
     location.pathname.startsWith(path + "/");
@@ -305,22 +290,74 @@ export function MarketplaceMenu({ open, onClose, user }) {
             aria-label="Close menu"
             onClick={onClose}
           >
-            ×
+            &times;
           </CloseButton>
         </PanelHeader>
 
         <Divider />
 
-        {/* Public Explore Section */}
-        <SectionLabel>Explore</SectionLabel>
+        {/* How It Works */}
+        <SectionLabel>How It Works</SectionLabel>
         <NavList>
           <NavItem
-            to="/marketplace"
-            $active={isActive("/marketplace")}
+            to="/#credit-definitions"
+            $active={false}
             onClick={onClose}
           >
-            Browse Credits
+            Credit Definitions
           </NavItem>
+          <NavItem
+            to="/#verification"
+            $active={false}
+            onClick={onClose}
+          >
+            Verification
+          </NavItem>
+          <NavItem
+            to="/#pricing"
+            $active={false}
+            onClick={onClose}
+          >
+            Pricing Mechanics
+          </NavItem>
+          <NavItem
+            to="/#risk-framework"
+            $active={false}
+            onClick={onClose}
+          >
+            Risk Framework
+          </NavItem>
+        </NavList>
+
+        {/* Audiences */}
+        <SectionLabel>For</SectionLabel>
+        <NavList>
+          <NavItem
+            to="/for-utilities"
+            $active={isActive("/for-utilities")}
+            onClick={onClose}
+          >
+            Utilities & Municipalities
+          </NavItem>
+          <NavItem
+            to="/for-homeowners"
+            $active={isActive("/for-homeowners")}
+            onClick={onClose}
+          >
+            Homeowners
+          </NavItem>
+          <NavItem
+            to="/for-aggregators"
+            $active={isActive("/for-aggregators")}
+            onClick={onClose}
+          >
+            Aggregators & Investors
+          </NavItem>
+        </NavList>
+
+        {/* Platform */}
+        <SectionLabel>Platform</SectionLabel>
+        <NavList>
           <NavItem
             to="/registry"
             $active={isActive("/registry")}
@@ -328,15 +365,12 @@ export function MarketplaceMenu({ open, onClose, user }) {
           >
             Credit Registry
           </NavItem>
-          <NavItem to="/map" $active={isActive("/map")} onClick={onClose}>
-            Project Map
-          </NavItem>
           <NavItem
-            to="/recent-removals"
-            $active={isActive("/recent-removals")}
+            to="/map"
+            $active={isActive("/map")}
             onClick={onClose}
           >
-            Recent Removals
+            Project Map
           </NavItem>
           <NavItem
             to="/programs"
@@ -349,29 +383,14 @@ export function MarketplaceMenu({ open, onClose, user }) {
 
         {user?.uid && (
           <>
-            {/* Account Dashboard */}
             <SectionLabel>My Account</SectionLabel>
             <NavList>
               <NavItem
-                to={menuConfig.isSeller ? "/dashboard/seller" : "/dashboard/buyer"}
-                $active={isActive("/dashboard/seller") || isActive("/dashboard/buyer")}
+                to="/dashboard"
+                $active={isActive("/dashboard")}
                 onClick={onClose}
               >
                 Dashboard
-              </NavItem>
-              <NavItem
-                to="/dashboard/financial"
-                $active={isActive("/dashboard/financial")}
-                onClick={onClose}
-              >
-                Financial Overview
-              </NavItem>
-              <NavItem
-                to="/marketplace/transactions"
-                $active={isActive("/marketplace/transactions")}
-                onClick={onClose}
-              >
-                My Transactions
               </NavItem>
               <NavItem
                 to="/credits"
@@ -379,41 +398,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
                 onClick={onClose}
               >
                 My Credits
-              </NavItem>
-            </NavList>
-
-            {/* Seller Tools */}
-            {menuConfig.showSellerTools && (
-              <>
-                <SectionLabel>Seller Tools</SectionLabel>
-                <NavList>
-                  <NavItem
-                    to="/marketplace/create-listing"
-                    $active={isActive("/marketplace/create-listing")}
-                    onClick={onClose}
-                  >
-                    + Create Listing
-                  </NavItem>
-                  <NavItem
-                    to="/marketplace/tools/verification"
-                    $active={isActive("/marketplace/tools/verification")}
-                    onClick={onClose}
-                  >
-                    Upload & Verify
-                  </NavItem>
-                </NavList>
-              </>
-            )}
-
-            {/* Tools - For all logged-in users */}
-            <SectionLabel>Tools</SectionLabel>
-            <NavList>
-              <NavItem
-                to="/marketplace/tools/calculator"
-                $active={isActive("/marketplace/tools/calculator")}
-                onClick={onClose}
-              >
-                Credit Calculator
               </NavItem>
             </NavList>
           </>
@@ -429,7 +413,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
             onClick={onClose}
           >
             Cloud Monitoring
-            <ExternalIcon>↗</ExternalIcon>
+            <ExternalIcon>&nearr;</ExternalIcon>
           </ExternalLink>
           <ExternalLink
             href="https://bluesignal.xyz"
@@ -437,8 +421,8 @@ export function MarketplaceMenu({ open, onClose, user }) {
             rel="noopener noreferrer"
             onClick={onClose}
           >
-            Hardware & Quotes
-            <ExternalIcon>↗</ExternalIcon>
+            BlueSignal Hardware
+            <ExternalIcon>&nearr;</ExternalIcon>
           </ExternalLink>
         </NavList>
 
@@ -449,7 +433,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
               <span>Signed in as <strong>{user?.email || user?.username}</strong></span>
             </UserRow>
           ) : (
-            <>Welcome, <strong>guest</strong> — <a href="/login" style={{ color: 'inherit', fontWeight: 600 }}>Sign in</a></>
+            <>Welcome, <strong>guest</strong> &mdash; <a href="/login" style={{ color: 'inherit', fontWeight: 600 }}>Sign in</a></>
           )}
         </SmallText>
 

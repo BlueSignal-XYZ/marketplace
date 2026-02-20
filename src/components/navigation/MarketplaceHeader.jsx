@@ -1,4 +1,8 @@
-// /src/components/navigation/MarketplaceHeader.jsx
+/**
+ * MarketplaceHeader — sticky header for waterquality.trading.
+ * Inline nav links for primary sections + hamburger for mobile.
+ */
+
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,7 +39,6 @@ const HeaderInner = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
-
   height: 64px;
   display: flex;
   justify-content: space-between;
@@ -51,11 +54,12 @@ const HeaderInner = styled.div`
   }
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled.a`
   height: 100%;
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
 `;
 
 const LogoImg = styled.img`
@@ -77,22 +81,37 @@ const LogoImg = styled.img`
   }
 `;
 
-const ModeBadge = styled.span`
+const NavLinks = styled.nav`
   display: none;
-  padding: 4px 10px;
-  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  background: ${({ theme }) => theme.colors?.primaryLight || "#E6EEFA"};
-  color: ${({ theme }) => theme.colors?.primary || "#0052CC"};
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E2E4E9"};
+  align-items: center;
+  gap: 4px;
 
-  @media (min-width: 768px) {
-    display: inline-flex;
+  @media (min-width: 1024px) {
+    display: flex;
   }
+`;
+
+const NavLink = styled.a`
+  padding: 8px 14px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors?.textSecondary || '#64748B'};
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 150ms;
+  white-space: nowrap;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,82,204,0.04)'};
+  }
+`;
+
+const RightGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const MenuButton = styled.button`
@@ -135,16 +154,24 @@ export function MarketplaceHeader({ onMenuClick }) {
   return (
     <HeaderOuter>
       <HeaderInner>
-        <LogoWrapper>
+        <LogoWrapper href="/">
           <LogoImg src={logoImg} alt={APP_NAME || "WaterQuality.Trading"} />
-          <ModeBadge>Marketplace</ModeBadge>
         </LogoWrapper>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+
+        <NavLinks>
+          <NavLink href="/#credit-definitions">How It Works</NavLink>
+          <NavLink href="/for-utilities">For Utilities</NavLink>
+          <NavLink href="/for-homeowners">For Homeowners</NavLink>
+          <NavLink href="/for-aggregators">For Aggregators</NavLink>
+          <NavLink href="/registry">Credit Registry</NavLink>
+        </NavLinks>
+
+        <RightGroup>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
             <FontAwesomeIcon icon={faBars} />
           </MenuButton>
-        </div>
+        </RightGroup>
       </HeaderInner>
     </HeaderOuter>
   );

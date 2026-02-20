@@ -1,6 +1,6 @@
 /**
- * WQT Hero — premium dark hero with gradient mesh background.
- * Punchy headline, single-sentence value prop, clear CTAs.
+ * WQT Hero — premium dark hero for waterquality.trading.
+ * Deregulated water quality trading platform messaging.
  */
 
 import React from 'react';
@@ -71,7 +71,7 @@ const GlowOrb = styled.div`
 
 const Content = styled.div`
   position: relative;
-  max-width: 720px;
+  max-width: 780px;
   margin: 0 auto;
   z-index: 1;
 `;
@@ -99,6 +99,14 @@ const TrustBadge = styled.span`
   }
 `;
 
+const StatusDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  display: inline-block;
+`;
+
 const Title = styled.h1`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(36px, 5.5vw, 60px);
@@ -121,7 +129,7 @@ const Subtitle = styled.p`
   font-size: clamp(16px, 2vw, 19px);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.6);
-  max-width: 520px;
+  max-width: 600px;
   margin: 0 auto 40px;
 `;
 
@@ -217,7 +225,7 @@ const TrustDot = styled.span`
 export function HeroSection() {
   const handleLearnClick = (e) => {
     e.preventDefault();
-    const el = document.getElementById('how-it-works');
+    const el = document.getElementById('credit-definitions');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -236,29 +244,32 @@ export function HeroSection() {
 
       <Content>
         <TrustBadge>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
-          Powered by BlueSignal Sensor Network
+          <StatusDot />
+          Powered by BlueSignal + Aquaria
         </TrustBadge>
         <Title>
-          The Marketplace for{' '}
-          <GradientText>Nutrient Credits</GradientText>
+          Deregulated{' '}
+          <GradientText>Water Quality Trading</GradientText>
         </Title>
         <Subtitle>
-          Buy and sell sensor-verified nutrient credits backed by real-time
-          water quality monitoring data and blockchain transparency.
+          A utility-grade credit system for distributed water production.
+          Dual-credit architecture, three-layer verification, and
+          utility-controlled pricing across the United States.
         </Subtitle>
         <CTARow>
-          <PrimaryBtn href="/marketplace">Enter Marketplace →</PrimaryBtn>
-          <SecondaryBtn href="#how-it-works" onClick={handleLearnClick}>
+          <PrimaryBtn href="#credit-definitions" onClick={handleLearnClick}>
             How It Works
+          </PrimaryBtn>
+          <SecondaryBtn href="/for-utilities">
+            For Utilities
           </SecondaryBtn>
         </CTARow>
         <TrustRow>
-          <TrustItem>Blockchain-verified certificates</TrustItem>
+          <TrustItem>100% Sensor-Verified Credits</TrustItem>
           <TrustDot />
-          <TrustItem>Real-time sensor validation</TrustItem>
+          <TrustItem>Three-Layer Independent Verification</TrustItem>
           <TrustDot />
-          <TrustItem>EPA-compliant frameworks</TrustItem>
+          <TrustItem>Utility-Controlled Pricing</TrustItem>
         </TrustRow>
       </Content>
     </Section>
