@@ -1,0 +1,21 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0A1628"/>
+      <stop offset="100%" stop-color="#1a2744"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="600" y="260" text-anchor="middle" fill="white"
+    font-family="Inter, system-ui, sans-serif" font-size="56" font-weight="700">
+    WaterQuality.Trading
+  </text>
+  <text x="600" y="330" text-anchor="middle" fill="#94a3b8"
+    font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="400">
+    Verified Water Quality Credit Marketplace
+  </text>
+  <text x="600" y="500" text-anchor="middle" fill="#475569"
+    font-family="Inter, system-ui, sans-serif" font-size="18">
+    Powered by BlueSignal
+  </text>
+</svg>
