@@ -52,6 +52,7 @@ const SellerDashboard_Role = React.lazy(() => import('../../components/dashboard
 const ForUtilitiesPage = React.lazy(() => import('./pages/ForUtilitiesPage'));
 const ForHomeownersPage = React.lazy(() => import('./pages/ForHomeownersPage'));
 const ForAggregatorsPage = React.lazy(() => import('./pages/ForAggregatorsPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 
 // ── Loading fallback ──────────────────────────────────────
 
@@ -121,6 +122,7 @@ export function WQTApp({ user, authLoading }) {
               <Route path="/for-utilities" element={<ForUtilitiesPage />} />
               <Route path="/for-homeowners" element={<ForHomeownersPage />} />
               <Route path="/for-aggregators" element={<ForAggregatorsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
 
               {/* Public routes — platform pages */}
               <Route path="/marketplace" element={<MarketplacePage />} />

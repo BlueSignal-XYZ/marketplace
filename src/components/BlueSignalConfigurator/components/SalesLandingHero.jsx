@@ -504,7 +504,8 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
           <TrustBadges>
             <TrustBadge>
               <span className="icon">✓</span>
-              EPA Compliant
+              {/* REVIEW: Verify EPA compliance status before claiming */}
+              EPA Framework Aligned
             </TrustBadge>
             <TrustBadge>
               <span className="icon">✓</span>

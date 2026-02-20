@@ -424,6 +424,13 @@ export function MarketplaceMenu({ open, onClose, user }) {
             BlueSignal Hardware
             <ExternalIcon>&nearr;</ExternalIcon>
           </ExternalLink>
+          <NavItem
+            to="/contact"
+            $active={isActive("/contact")}
+            onClick={onClose}
+          >
+            Contact
+          </NavItem>
         </NavList>
 
         <SmallText>

@@ -160,7 +160,7 @@ export function SellerOnboardingPage() {
             <Title>Become a Seller</Title>
             <Desc>
               List your verified environmental credits on WaterQuality.Trading.
-              Our sensor-verified marketplace ensures trust and transparency.
+              Our sensor-verified marketplace is designed for trust and transparency.
             </Desc>
             <InfoBox>
               <strong>Quality Commitment:</strong> All credits listed on WQT undergo verification.

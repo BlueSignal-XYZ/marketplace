@@ -1,5 +1,5 @@
 /**
- * SettlementSection — billing, rebate mechanics, and future VPP model.
+ * SettlementSection — billing, rebate mechanics, and future demand response model.
  */
 
 import React from 'react';
@@ -171,8 +171,41 @@ const FutureDesc = styled.p`
   font-size: 15px;
   color: rgba(255, 255, 255, 0.65);
   line-height: 1.7;
-  margin: 0;
+  margin: 0 0 20px;
   max-width: 800px;
+`;
+
+const FuturePointsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+`;
+
+const FuturePoint = styled.div`
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+`;
+
+const FuturePointTitle = styled.div`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 4px;
+`;
+
+const FuturePointDesc = styled.div`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
 `;
 
 const FLOW_STEPS = [
@@ -234,14 +267,40 @@ export function SettlementSection() {
 
         <FutureCard>
           <FutureLabel>Future Phase</FutureLabel>
-          <FutureTitle>Water Virtual Power Plant (VPP)</FutureTitle>
+          <FutureTitle>Water Demand Response</FutureTitle>
           <FutureDesc>
-            A future phase introduces a water VPP model where homeowners can pump
-            locally generated water back into treatment facilities or municipal water
-            tanks. This creates a secondary revenue stream for utilities and a
-            long-term reason to participate beyond credits alone, transforming
-            distributed water production into a grid-level resource.
+            Earn incentives by reducing municipal water draw during peak demand — the same
+            concept as electrical demand response, applied to water.
           </FutureDesc>
+          <FutureDesc>
+            During peak demand periods — summer heat, drought conditions, or system strain —
+            municipal water infrastructure is under the most pressure. Homeowners with
+            atmospheric water generators can be dispatched via API to increase local production,
+            reducing their draw on city supply exactly when it matters most.
+          </FutureDesc>
+          <FutureDesc>
+            The utility avoids costly peak infrastructure upgrades. The homeowner earns a small
+            demand response incentive on top of their standard rebate. The platform coordinates
+            dispatch signals and verifies reduced consumption through BlueSignal monitoring data.
+          </FutureDesc>
+          <FuturePointsGrid>
+            <FuturePoint>
+              <FuturePointTitle>Peak Dispatch</FuturePointTitle>
+              <FuturePointDesc>Systems receive signals to ramp production during high-demand windows</FuturePointDesc>
+            </FuturePoint>
+            <FuturePoint>
+              <FuturePointTitle>Verified Reduction</FuturePointTitle>
+              <FuturePointDesc>BlueSignal devices confirm the homeowner drew less municipal water</FuturePointDesc>
+            </FuturePoint>
+            <FuturePoint>
+              <FuturePointTitle>Stacked Incentive</FuturePointTitle>
+              <FuturePointDesc>Demand response payments layer on top of standard generation rebates</FuturePointDesc>
+            </FuturePoint>
+            <FuturePoint>
+              <FuturePointTitle>No Hardware Changes</FuturePointTitle>
+              <FuturePointDesc>The same system, same monitoring — just smarter scheduling</FuturePointDesc>
+            </FuturePoint>
+          </FuturePointsGrid>
         </FutureCard>
       </Inner>
     </Section>

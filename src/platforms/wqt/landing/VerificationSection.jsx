@@ -241,7 +241,7 @@ export function VerificationSection() {
 
         <TrustStatement>
           <TrustText>
-            <TrustHighlight>Three independent verification layers</TrustHighlight> ensure
+            <TrustHighlight>Three independent verification layers</TrustHighlight> are designed so
             that every credit traded on the system carries a complete, auditable chain of
             evidence from generation through settlement. No shortcuts, no self-reporting,
             no single points of trust failure.

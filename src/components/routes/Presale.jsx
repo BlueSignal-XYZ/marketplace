@@ -72,10 +72,11 @@ const Presale = () => {
 
       <div className="features-section">
         <FaLeaf />
-        <div className="features-section-title">Eliminate Pollution</div>
+        {/* REVIEW: Was "Eliminate Pollution" — credits offset, not eliminate */}
+        <div className="features-section-title">Offset Pollution</div>
         <div className="features-section-paragraph">
           Enhance water quality and reduce pollution. Each purchase includes a
-          real-time tracking certificate, ensuring verified digital impacts.
+          tracking certificate with verified digital impact records.
         </div>
       </div>
       <div className="features-section">
