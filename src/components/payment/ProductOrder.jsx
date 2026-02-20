@@ -8,10 +8,10 @@ import {Description, FormInfo, FormInputs, FormWrapper, InputBox, Title} from ".
 import {Button} from "react-bootstrap";
 
 const NPC_PRODUCT_DATA = {
-  title: 
-  `Eliminate Pollution`,
+  title:
+  `Offset Pollution`, // REVIEW: Was "Eliminate Pollution" — credits offset, not eliminate
   description:
-  `Enhance water quality and reduce pollution. Each purchase includes a real-time tracking certificate, ensuring verified digital impacts.`,
+  `Enhance water quality and reduce pollution. Each purchase includes a tracking certificate with verified digital impact records.`,
   formTitle:
   `Nutrient Pollution Certificates`,
   formText:

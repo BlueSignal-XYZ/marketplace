@@ -1,6 +1,6 @@
 /**
  * ForUtilitiesPage — dedicated page for utilities and municipalities.
- * Covers treatment cost reduction, pricing control, settlement, and VPP.
+ * Covers treatment cost reduction, pricing control, settlement, and demand response.
  */
 
 import React from 'react';
@@ -354,12 +354,13 @@ export default function ForUtilitiesPage() {
 
       <Section $alt>
         <SectionInner>
-          <SectionTitle>Future: Water Virtual Power Plant</SectionTitle>
+          <SectionTitle>Future: Water Demand Response</SectionTitle>
           <SectionDesc>
-            A future phase enables homeowners to pump locally generated water back
-            into treatment facilities or municipal water tanks. This creates a
-            secondary revenue stream and transforms distributed production from a
-            cost offset into a grid-level resource for your utility.
+            A future phase enables demand response for water. During peak demand
+            periods, homeowners with atmospheric water generators can be dispatched
+            via API to increase local production, reducing their draw on city supply.
+            The utility avoids costly peak infrastructure upgrades while homeowners
+            earn a demand response incentive on top of their standard rebate.
           </SectionDesc>
         </SectionInner>
       </Section>
