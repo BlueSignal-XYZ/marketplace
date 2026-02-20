@@ -48,6 +48,11 @@ const VerificationUI = React.lazy(() => import('../../components/elements/contra
 const BuyerDashboard = React.lazy(() => import('../../components/dashboards/BuyerDashboard'));
 const SellerDashboard_Role = React.lazy(() => import('../../components/dashboards/SellerDashboard'));
 
+// Audience-specific pages
+const ForUtilitiesPage = React.lazy(() => import('./pages/ForUtilitiesPage'));
+const ForHomeownersPage = React.lazy(() => import('./pages/ForHomeownersPage'));
+const ForAggregatorsPage = React.lazy(() => import('./pages/ForAggregatorsPage'));
+
 // ── Loading fallback ──────────────────────────────────────
 
 const LoadingFallback = () => (
@@ -112,7 +117,12 @@ export function WQTApp({ user, authLoading }) {
               <Route path="/" element={<MarketplaceLanding user={user} authLoading={authLoading} />} />
               <Route path="/login" element={<Welcome />} />
 
-              {/* Public routes — v2 marketplace pages */}
+              {/* Audience-specific pages */}
+              <Route path="/for-utilities" element={<ForUtilitiesPage />} />
+              <Route path="/for-homeowners" element={<ForHomeownersPage />} />
+              <Route path="/for-aggregators" element={<ForAggregatorsPage />} />
+
+              {/* Public routes — platform pages */}
               <Route path="/marketplace" element={<MarketplacePage />} />
               <Route path="/marketplace/listing/:id" element={<ListingDetailPage />} />
               <Route path="/recent-removals" element={<RecentRemovalsPage />} />

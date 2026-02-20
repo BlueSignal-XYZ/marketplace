@@ -1,25 +1,31 @@
 /**
- * WQTLandingPage — standalone marketing page for waterquality.trading.
- * Sells the PLATFORM, not the hardware.
- * Shown to unauthenticated visitors.
+ * WQTLandingPage — rebuilt marketing page for waterquality.trading.
+ * Deregulated water quality trading platform.
+ * All content traceable to the market mechanics document.
  */
 
 import React from 'react';
 import { HeroSection } from './HeroSection';
-import { MarketSnapshotBar } from './MarketSnapshotBar';
-import { PillarsSection } from './PillarsSection';
+import { CreditDefinitionsSection } from './CreditDefinitionsSection';
+import { VerificationSection } from './VerificationSection';
+import { PricingSection } from './PricingSection';
+import { SettlementSection } from './SettlementSection';
+import { GreeksSection } from './GreeksSection';
+import { AggregatorSection } from './AggregatorSection';
 import { AudienceSection } from './AudienceSection';
-import { TrustSection } from './TrustSection';
 import { WQTFooter } from './WQTFooter';
 
 export function WQTLandingPage() {
   return (
     <>
       <HeroSection />
-      <MarketSnapshotBar />
-      <PillarsSection />
+      <CreditDefinitionsSection />
+      <VerificationSection />
+      <PricingSection />
+      <SettlementSection />
+      <GreeksSection />
+      <AggregatorSection />
       <AudienceSection />
-      <TrustSection />
       <WQTFooter />
     </>
   );

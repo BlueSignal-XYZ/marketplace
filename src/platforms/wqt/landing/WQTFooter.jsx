@@ -1,9 +1,9 @@
 /**
- * WQTFooter — dark footer matching the hero.
- * Platform links, ecosystem, legal, and email capture.
+ * WQTFooter — dark footer for waterquality.trading.
+ * Updated navigation, ecosystem links, and legal.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const FooterSection = styled.footer`
@@ -54,45 +54,6 @@ const BrandDesc = styled.p`
   margin: 0 0 20px;
   max-width: 280px;
   color: rgba(255, 255, 255, 0.5);
-`;
-
-const EmailForm = styled.form`
-  display: flex;
-  gap: 8px;
-  max-width: 320px;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-  }
-`;
-
-const EmailInput = styled.input`
-  flex: 1;
-  padding: 10px 14px;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  outline: none;
-  &::placeholder { color: rgba(255, 255, 255, 0.3); }
-  &:focus { border-color: rgba(6, 182, 212, 0.4); }
-`;
-
-const EmailBtn = styled.button`
-  padding: 10px 16px;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  font-weight: 500;
-  color: #FFFFFF;
-  background: rgba(0, 82, 204, 0.8);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 200ms;
-  &:hover { background: rgba(0, 82, 204, 1); }
 `;
 
 const ColTitle = styled.h4`
@@ -150,13 +111,6 @@ const SmallLink = styled.a`
 `;
 
 export function WQTFooter() {
-  const [email, setEmail] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setEmail('');
-  };
-
   return (
     <FooterSection>
       <Inner>
@@ -164,41 +118,33 @@ export function WQTFooter() {
           <BrandCol>
             <BrandName>WaterQuality.Trading</BrandName>
             <BrandDesc>
-              The verified environmental credit exchange. Sensor-backed data,
-              blockchain transparency, institutional-grade infrastructure.
+              A deregulated water quality trading system for distributed water
+              production. Dual-credit architecture, three-layer verification,
+              and utility-controlled pricing.
             </BrandDesc>
-            <EmailForm onSubmit={handleSubmit}>
-              <EmailInput
-                type="email"
-                placeholder="Get notified about new listings"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <EmailBtn type="submit">Subscribe</EmailBtn>
-            </EmailForm>
           </BrandCol>
 
           <div>
-            <ColTitle>Platform</ColTitle>
-            <ColLink href="/marketplace">Marketplace</ColLink>
+            <ColTitle>How It Works</ColTitle>
+            <ColLink href="/#credit-definitions">Credit Definitions</ColLink>
+            <ColLink href="/#verification">Verification</ColLink>
+            <ColLink href="/#pricing">Pricing Mechanics</ColLink>
+            <ColLink href="/#settlement">Settlement</ColLink>
+            <ColLink href="/#risk-framework">Risk Framework</ColLink>
+          </div>
+
+          <div>
+            <ColTitle>For</ColTitle>
+            <ColLink href="/for-utilities">Utilities & Municipalities</ColLink>
+            <ColLink href="/for-homeowners">Homeowners</ColLink>
+            <ColLink href="/for-aggregators">Aggregators & Investors</ColLink>
             <ColLink href="/registry">Credit Registry</ColLink>
-            <ColLink href="/map">Project Map</ColLink>
-            <ColLink href="/programs">Trading Programs</ColLink>
-            <ColLink href="/recent-removals">Recent Removals</ColLink>
           </div>
 
           <div>
             <ColTitle>Ecosystem</ColTitle>
-            <ColLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener">Cloud Monitoring ↗</ColLink>
-            <ColLink href="https://bluesignal.xyz" target="_blank" rel="noopener">BlueSignal Hardware ↗</ColLink>
-            <ColLink href="/developers">API Documentation</ColLink>
-            <ColLink href="/certificate/verify">Verify Certificate</ColLink>
-          </div>
-
-          <div>
-            <ColTitle>Legal</ColTitle>
-            <ColLink href="/terms">Terms of Service</ColLink>
-            <ColLink href="/privacy">Privacy Policy</ColLink>
+            <ColLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener">Cloud Monitoring</ColLink>
+            <ColLink href="https://bluesignal.xyz" target="_blank" rel="noopener">BlueSignal Hardware</ColLink>
             <ColLink href="/contact">Contact</ColLink>
           </div>
         </TopRow>
@@ -207,11 +153,11 @@ export function WQTFooter() {
 
         <Bottom>
           <Copyright>
-            © {new Date().getFullYear()} WaterQuality.Trading — powered by BlueSignal LTD
+            &copy; {new Date().getFullYear()} WaterQuality.Trading &mdash; Powered by BlueSignal LTD
           </Copyright>
           <BottomLinks>
-            <SmallLink href="https://bluesignal.xyz" target="_blank" rel="noopener">BlueSignal ↗</SmallLink>
-            <SmallLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener">Cloud ↗</SmallLink>
+            <SmallLink href="https://bluesignal.xyz" target="_blank" rel="noopener">BlueSignal</SmallLink>
+            <SmallLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener">Cloud</SmallLink>
           </BottomLinks>
         </Bottom>
       </Inner>
