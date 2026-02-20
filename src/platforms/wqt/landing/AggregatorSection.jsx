@@ -168,11 +168,11 @@ const FEATURES = [
   },
   {
     title: 'Portfolio Diversification',
-    desc: 'By managing credits from hundreds or thousands of Aquaria homeowners across regions, aggregators achieve natural diversification of both quantity and quality risk.',
+    desc: 'By managing credits from hundreds or thousands of homeowners across regions, aggregators achieve natural diversification of both quantity and quality risk.',
   },
   {
     title: 'Structured Products',
-    desc: 'The Greeks framework enables construction of structured positions on top of credit pools. As the market scales, financial products become viable on underlying credit portfolios.',
+    desc: 'The Greeks framework supports building structured positions on credit pools. As the market grows, financial products become possible on top of credit portfolios.',
   },
   {
     title: 'Market Liquidity',
@@ -188,16 +188,16 @@ export function AggregatorSection() {
         <SectionTitle>From Rebate Program to Functioning Market</SectionTitle>
         <SectionSub>
           Aggregators purchase or manage credit portfolios from hundreds or thousands
-          of Aquaria homeowners, absorbing the complexity of individual account
+          of participating homeowners, handling the complexity of individual account
           management. This layer is what transforms the system.
         </SectionSub>
 
         <MainCard>
           <MainDesc>
             Aggregators use the Greeks to price, hedge, and structure their positions
-            across regional portfolios. They offer utilities simplified, bulk contracts
-            rather than thousands of individual relationships. The result is a market
-            with institutional depth, not a collection of isolated rebate transactions.
+            across regional portfolios. They offer utilities simple, bulk contracts
+            instead of thousands of individual relationships. The result is a real
+            market, not a collection of isolated rebate transactions.
           </MainDesc>
 
           <GreeksUsage>

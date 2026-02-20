@@ -252,35 +252,35 @@ const GREEKS = [
     color: '#0052CC',
     name: 'Delta',
     sub: 'Price Sensitivity',
-    desc: 'Sensitivity of credit value to underlying water price or treatment cost changes. Arid-region portfolios exhibit higher delta. Use delta to assess how regional water economics impact portfolio value and structure positions accordingly.',
+    desc: 'How much credit value changes when the underlying water price or treatment cost shifts. Arid-region portfolios show higher delta. Use it to assess how regional water economics affect portfolio value.',
   },
   {
     symbol: '\u0393',
     color: '#8B5CF6',
     name: 'Gamma',
     sub: 'Acceleration',
-    desc: 'Rate of change of delta. When droughts spike water prices, gamma indicates how rapidly credit values accelerate. High gamma signals nonlinear risk exposure — critical for determining whether positions can be hedged effectively.',
+    desc: 'How fast delta itself is changing. When droughts spike water prices, gamma shows how quickly credit values are accelerating. High gamma means risk is growing faster than expected — important for hedging decisions.',
   },
   {
     symbol: '\u0398',
     color: '#D97706',
     name: 'Theta',
     sub: 'Time Decay',
-    desc: 'Credits degrade over time as filters age, seasonal contamination patterns shift, and verification data becomes stale. Theta enforces portfolio freshness and prevents credit hoarding. Credits carry expiration windows tied to verification recency.',
+    desc: 'Credits lose value over time as filters age, seasonal contamination shifts, and verification data becomes stale. Theta keeps portfolios fresh and prevents credit hoarding. Credits have expiration windows tied to how recently they were verified.',
   },
   {
     symbol: '\u03BD',
     color: '#10B981',
     name: 'Vega',
     sub: 'Volatility Sensitivity',
-    desc: 'Measures credit value response to changes in market uncertainty. Spikes during regulatory shifts, contamination events, or infrastructure failures. Use vega to understand exposure to uncertainty as a variable independent of price direction.',
+    desc: 'How credit value responds to changes in market uncertainty. Spikes during regulatory shifts, contamination events, or infrastructure failures. Use vega to understand exposure to uncertainty separately from price direction.',
   },
   {
     symbol: '\u03C1',
     color: '#06B6D4',
     name: 'Rho',
     sub: 'Cost of Carry',
-    desc: 'Sensitivity to the time value of money. Captures the difference between annual versus monthly rebate structures and the carrying cost of holding credits before settlement. Increasingly relevant as financial products are built on credit pools.',
+    desc: 'How sensitive credit value is to the cost of money over time. Captures the difference between annual vs. monthly rebate structures and the cost of holding credits before settlement. Increasingly relevant as financial products are built on credit pools.',
   },
 ];
 
@@ -303,10 +303,9 @@ export default function ForAggregatorsPage() {
         <SectionInner>
           <SectionTitle>The Greeks Framework</SectionTitle>
           <SectionDesc>
-            A mature market requires instruments to measure and price risk. The
-            following framework adapts the Greeks of options pricing to water
-            quality credits, enabling quantified exposure assessment and informed
-            portfolio decisions.
+            A healthy market needs tools to measure and price risk. This framework
+            adapts the Greeks from options pricing to water quality credits, helping
+            you quantify exposure and make informed portfolio decisions.
           </SectionDesc>
           <GreeksTable>
             {GREEKS.map((g) => (
@@ -328,9 +327,9 @@ export default function ForAggregatorsPage() {
           <SectionTitle>Portfolio Management</SectionTitle>
           <SectionDesc>
             Aggregators purchase or manage credit portfolios from hundreds or
-            thousands of Aquaria homeowners across regions. This layer absorbs
+            thousands of participating homeowners across regions. This layer handles
             the complexity of individual account management and offers utilities
-            simplified, bulk contracts.
+            simple, bulk contracts.
           </SectionDesc>
           <Grid>
             <CardAlt>
@@ -391,9 +390,9 @@ export default function ForAggregatorsPage() {
             <Card>
               <CardTitle>Verification Infrastructure</CardTitle>
               <CardDesc>
-                Three-layer verification (Aquaria metering, BlueSignal continuous
+                Three-layer verification (inline metering, BlueSignal continuous
                 monitoring, independent third-party sampling) creates an institutional-grade
-                trust layer. No single party can unilaterally validate credits.
+                trust layer. No single party can validate credits on their own.
               </CardDesc>
             </Card>
           </Grid>

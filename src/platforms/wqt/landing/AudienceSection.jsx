@@ -157,7 +157,7 @@ const AUDIENCES = [
     bg: 'rgba(0, 82, 204, 0.1)',
     accent: '#0052CC',
     title: 'For Utilities & Municipalities',
-    desc: 'Reduce downstream treatment costs through distributed water production with utility-controlled pricing and zero billing infrastructure changes.',
+    desc: 'Reduce treatment costs through distributed water production with utility-controlled pricing and no changes to your billing systems.',
     features: [
       'Set your own buyback rates and quality multipliers',
       'No modification to existing billing systems',
@@ -171,7 +171,7 @@ const AUDIENCES = [
     bg: 'rgba(16, 185, 129, 0.1)',
     accent: '#10B981',
     title: 'For Homeowners',
-    desc: 'Earn credits from your Aquaria atmospheric water generator. Dual credit earning with quantity and quality measurements, all verified automatically.',
+    desc: 'Earn credits from your atmospheric water generator. Dual credit earning with quantity and quality measurements, all verified automatically.',
     features: [
       'Earn both quantity and quality credits',
       'ROI calculator based on your utility\'s rates',
@@ -185,7 +185,7 @@ const AUDIENCES = [
     bg: 'rgba(139, 92, 246, 0.1)',
     accent: '#8B5CF6',
     title: 'For Aggregators & Investors',
-    desc: 'Manage credit portfolios at scale using the Greeks framework for pricing, hedging, and structured market participation across regions.',
+    desc: 'Manage credit portfolios at scale using the Greeks framework for pricing, hedging, and structured participation across regions.',
     features: [
       'Greeks framework for risk quantification',
       'Portfolio management across regions',
@@ -223,7 +223,7 @@ export function AudienceSection() {
                   <FeatureItem key={f} $accent={a.accent}>{f}</FeatureItem>
                 ))}
               </FeatureList>
-              <CardLink>Learn more \u2192</CardLink>
+              <CardLink>Learn more →</CardLink>
             </AudienceCard>
           ))}
         </CardsGrid>

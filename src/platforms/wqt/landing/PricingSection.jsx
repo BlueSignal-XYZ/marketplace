@@ -163,9 +163,9 @@ export function PricingSection() {
         <SectionLabel>Pricing Mechanics</SectionLabel>
         <SectionTitle>Utility-Controlled Pricing</SectionTitle>
         <SectionSub>
-          Pricing authority rests with the utility or municipality. The system
-          provides a configurable template; the utility inputs values that reflect
-          their local economics.
+          Pricing is controlled by the utility or municipality. The system
+          provides a configurable template and the utility sets values that
+          reflect their local costs.
         </SectionSub>
 
         <ContentGrid>
@@ -173,8 +173,8 @@ export function PricingSection() {
             <CardTitle>Quantity Buyback Rate</CardTitle>
             <CardDesc>
               The utility sets the rate at which they compensate homeowners per
-              quantity credit (per gallon). The rate reflects the utility's assessment
-              of distributed generation value to their infrastructure and supply planning.
+              gallon produced. The rate reflects the utility's view of what
+              distributed water production is worth to their system.
             </CardDesc>
             <RateTable>
               <RateRow>
@@ -195,10 +195,9 @@ export function PricingSection() {
           <Card>
             <CardTitle>Quality Multiplier</CardTitle>
             <CardDesc>
-              The utility sets the quality multiplier based on their own environmental
-              impact assessment for their service area. A higher multiplier rewards
-              homeowners producing cleaner water, directly reflecting downstream
-              treatment cost savings.
+              The utility sets the quality multiplier based on their environmental
+              goals for their service area. A higher multiplier rewards homeowners
+              producing cleaner water, reflecting real treatment cost savings.
             </CardDesc>
             <RateTable>
               <RateRow>
@@ -211,7 +210,7 @@ export function PricingSection() {
               </RateRow>
               <RateRow>
                 <RateLabel>Recommendations</RateLabel>
-                <RateValue>BlueSignal / Aquaria</RateValue>
+                <RateValue>BlueSignal</RateValue>
               </RateRow>
               <RateRow>
                 <RateLabel>Final Decision</RateLabel>
@@ -223,11 +222,11 @@ export function PricingSection() {
           <NoteCard>
             <NoteTitle>Homeowner ROI Visibility</NoteTitle>
             <NoteDesc>
-              A template calculator tool allows homeowners to see their projected ROI
-              based on the specific rates their utility has selected. This transparency
-              drives adoption and reduces friction in the enrollment process. Utilities
-              already price their operations in cost-per-kilogram of N/P removal, making
-              quality credits immediately legible to their finance and operations teams.
+              A calculator tool lets homeowners see their projected return based on
+              the rates their utility has chosen. This transparency helps drive adoption
+              and makes enrollment simple. Utilities already track their costs per
+              kilogram of N/P removal, so quality credits are easy for their teams
+              to understand and evaluate.
             </NoteDesc>
           </NoteCard>
         </ContentGrid>

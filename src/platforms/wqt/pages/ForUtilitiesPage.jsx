@@ -241,10 +241,10 @@ export default function ForUtilitiesPage() {
         <SectionInner>
           <SectionTitle>How the System Reduces Treatment Costs</SectionTitle>
           <SectionDesc>
-            Every gallon produced by an Aquaria atmospheric water generator at a residential
-            or commercial site is a gallon that does not need to be treated and distributed
-            by the utility. Quality credits further reflect nutrient removal value that maps
-            directly to your per-kilogram N/P treatment costs.
+            Every gallon produced by an atmospheric water generator at a home or
+            business is a gallon that doesn't need to be treated and distributed
+            by your utility. Quality credits also reflect nutrient removal value that
+            ties directly to your per-kilogram N/P treatment costs.
           </SectionDesc>
           <Grid>
             <Card>
@@ -258,9 +258,9 @@ export default function ForUtilitiesPage() {
             <Card>
               <CardTitle>Quality Value</CardTitle>
               <CardDesc>
-                Nitrogen and phosphorus offset or removed by Aquaria systems directly
-                reduces your downstream nutrient load. Credits are measured in the same
-                units your operations teams use: cost per kilogram of N/P removal.
+                Nitrogen and phosphorus offset or removed by distributed water systems
+                directly reduces your downstream nutrient load. Credits are measured in
+                the same units your operations teams use: cost per kilogram of N/P removal.
               </CardDesc>
             </Card>
             <Card>
@@ -287,8 +287,8 @@ export default function ForUtilitiesPage() {
         <SectionInner>
           <SectionTitle>You Control the Pricing</SectionTitle>
           <SectionDesc>
-            Pricing authority rests entirely with your utility. BlueSignal and Aquaria
-            provide recommendations based on regional N/P treatment costs, but all
+            Pricing is controlled entirely by your utility. BlueSignal provides
+            recommendations based on regional N/P treatment costs, but all
             final rate decisions are yours.
           </SectionDesc>
           <Grid>
@@ -324,7 +324,7 @@ export default function ForUtilitiesPage() {
               <FlowContent>
                 <FlowTitle>Credits Generated</FlowTitle>
                 <FlowDesc>
-                  Aquaria units produce water. BlueSignal devices verify quality.
+                  Water generators produce water. BlueSignal devices verify quality.
                   Credits are calculated from verified data.
                 </FlowDesc>
               </FlowContent>
@@ -356,7 +356,7 @@ export default function ForUtilitiesPage() {
         <SectionInner>
           <SectionTitle>Future: Water Virtual Power Plant</SectionTitle>
           <SectionDesc>
-            A future phase enables homeowners to pump Aquaria-generated water back
+            A future phase enables homeowners to pump locally generated water back
             into treatment facilities or municipal water tanks. This creates a
             secondary revenue stream and transforms distributed production from a
             cost offset into a grid-level resource for your utility.

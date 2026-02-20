@@ -181,7 +181,7 @@ const FLOW_STEPS = [
     bg: 'rgba(0, 82, 204, 0.1)',
     color: '#0052CC',
     title: 'Credit Generation',
-    desc: 'Aquaria units produce water. BlueSignal devices monitor quality. Credits are generated based on verified quantity and quality data from both systems.',
+    desc: 'Water generators produce water. BlueSignal devices monitor quality. Credits are created based on verified quantity and quality data from both systems.',
   },
   {
     num: '02',
@@ -195,7 +195,7 @@ const FLOW_STEPS = [
     bg: 'rgba(139, 92, 246, 0.1)',
     color: '#8B5CF6',
     title: 'Homeowner Credit',
-    desc: 'The utility credits homeowner accounts proportionally based on device readings and verified credit generation. The utility may pass the full rebate value or retain a portion as an administrative fee.',
+    desc: 'The utility credits homeowner accounts based on device readings and verified credit generation. The utility may pass the full rebate value or keep a portion as an administrative fee.',
   },
 ];
 
@@ -206,9 +206,8 @@ export function SettlementSection() {
         <SectionLabel>Billing & Settlement</SectionLabel>
         <SectionTitle>Rebate-Based Settlement</SectionTitle>
         <SectionSub>
-          Credits are settled through a rebate mechanism that integrates with
-          existing utility billing infrastructure rather than replacing it.
-          No modifications to the utility's existing billing platform required.
+          Credits are settled through a rebate that works with existing utility
+          billing systems — no replacement or migration needed.
         </SectionSub>
 
         <FlowContainer>
@@ -226,11 +225,10 @@ export function SettlementSection() {
         <HighlightCard>
           <HighlightTitle>Zero Infrastructure Changes</HighlightTitle>
           <HighlightText>
-            The settlement mechanism is designed to integrate with existing utility
-            billing systems without modification. Rebates flow through established
-            channels, and homeowner credits appear on their existing utility accounts.
-            The utility's agreement structure determines whether the full rebate value
-            passes to the homeowner or a portion is retained as an administrative fee.
+            Rebates flow through existing billing channels and homeowner credits
+            appear on their regular utility accounts. The utility's agreement
+            determines whether the full rebate value passes to the homeowner or
+            a portion is kept as an administrative fee.
           </HighlightText>
         </HighlightCard>
 
@@ -238,11 +236,11 @@ export function SettlementSection() {
           <FutureLabel>Future Phase</FutureLabel>
           <FutureTitle>Water Virtual Power Plant (VPP)</FutureTitle>
           <FutureDesc>
-            A future phase introduces a water VPP model in which homeowners can pump
-            Aquaria-generated water back into treatment facilities or municipal water
-            tanks. This creates a secondary revenue stream for utilities and a long-term
-            incentive for participation beyond credits alone. The VPP model transforms
-            distributed water production from a cost offset into a grid-level resource.
+            A future phase introduces a water VPP model where homeowners can pump
+            locally generated water back into treatment facilities or municipal water
+            tanks. This creates a secondary revenue stream for utilities and a
+            long-term reason to participate beyond credits alone, transforming
+            distributed water production into a grid-level resource.
           </FutureDesc>
         </FutureCard>
       </Inner>
