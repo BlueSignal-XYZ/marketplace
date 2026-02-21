@@ -812,12 +812,19 @@ const updateAlertThresholds = async (req, res) => {
  */
 
 // Cayenne LPP field name -> BlueSignal canonical sensor name mapping
+// Channels 1-9 per firmware/src/radio/cayenne.py contract
 const CAYENNE_TO_CANONICAL = {
   temperature_1: "temperature",
   analog_input_2: "ph",
-  analog_input_3: "turbidity",
-  analog_input_4: "tds",
+  analog_input_3: "tds",
+  analog_input_4: "turbidity",
+  analog_input_5: "orp",
+  digital_output_7: "relay_state",
+  analog_input_8: "battery_voltage",
+  digital_output_9: "calibration_status",
 };
+
+const crypto = require("crypto");
 
 /**
  * Look up a BlueSignal device by its LoRaWAN DevEUI.
@@ -954,19 +961,43 @@ const ttnWebhook = async (req, res) => {
     // Validate sensors through existing pipeline
     const processedSensors = validateSensors(sensors);
 
+    // Extract raw payload for audit trail
+    const rawPayload = req.body.uplink_message?.frm_payload || null;
+    const receivedAt = Date.now();
+
+    // Gap 7: Tamper evidence — SHA-256 hash of raw_payload + received_at + device_id
+    let integrityHash = null;
+    if (rawPayload) {
+      integrityHash = crypto
+        .createHash("sha256")
+        .update(`${rawPayload}|${receivedAt}|${deviceId}`)
+        .digest("hex");
+    }
+
     // Store reading (same path as ingestReading)
     const readingData = {
       timestamp,
       deviceId,
-      siteId: device.installation?.siteId || null,
+      siteId: device.installation?.siteId || device.siteId || null,
       sensors: processedSensors,
       metadata: {
         ...metadata,
-        batteryLevel: null,
+        batteryLevel: sensors.battery_voltage?.value || null,
         signalStrength: metadata.rssi,
         firmware: null,
       },
+      rawPayload: rawPayload || null,
+      receivedAt,
+      integrityHash,
     };
+
+    // Add relay state and calibration status to reading if present
+    if (sensors.relay_state !== undefined) {
+      readingData.relayState = sensors.relay_state?.value ?? sensors.relay_state;
+    }
+    if (sensors.calibration_status !== undefined) {
+      readingData.calibrationStatus = sensors.calibration_status?.value ?? sensors.calibration_status;
+    }
 
     if (gps) {
       readingData.metadata.gps = gps;
@@ -974,15 +1005,60 @@ const ttnWebhook = async (req, res) => {
 
     await db.ref(`readings/${deviceId}/${timestamp}`).set(readingData);
 
-    // Update device health
+    // Update device health + online status
     const healthUpdate = {
-      lastSeen: timestamp,
+      lastSeen: receivedAt,
     };
     if (metadata.rssi !== null) {
       healthUpdate.signalStrength = metadata.rssi;
     }
 
     await db.ref(`devices/${deviceId}/health`).update(healthUpdate);
+
+    // Mark device as online + active
+    const prevStatus = device.onlineStatus || "offline";
+    const deviceUpdate = {
+      onlineStatus: "online",
+      status: "active",
+      lastSeen: receivedAt,
+      lastReadingAt: new Date(timestamp).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    if (sensors.battery_voltage?.value) {
+      deviceUpdate.battery = Math.round(sensors.battery_voltage.value * 100) / 100;
+    }
+    if (sensors.relay_state !== undefined) {
+      deviceUpdate.relayState = !!(sensors.relay_state?.value ?? sensors.relay_state);
+    }
+    await db.ref(`devices/${deviceId}`).update(deviceUpdate);
+
+    // Detect first-ever reading
+    const readingsCountSnap = await db.ref(`readings/${deviceId}`)
+      .limitToFirst(2).once("value");
+    const isFirstReading = readingsCountSnap.exists() &&
+      Object.keys(readingsCountSnap.val()).length === 1;
+
+    if (isFirstReading) {
+      const eventRef = db.ref("device_events").push();
+      await eventRef.set({
+        deviceId,
+        eventType: "first_reading",
+        details: { sensors: Object.keys(processedSensors), timestamp },
+        createdAt: new Date().toISOString(),
+      });
+      console.log(`First reading received for device ${deviceId}!`);
+    }
+
+    // Detect device came back online
+    if (prevStatus === "offline") {
+      const eventRef = db.ref("device_events").push();
+      await eventRef.set({
+        deviceId,
+        eventType: "came_online",
+        details: { previousStatus: prevStatus },
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     // Update LoRaWAN metadata on device
     const lorawanUpdate = {
@@ -999,7 +1075,8 @@ const ttnWebhook = async (req, res) => {
 
     console.log(
       `TTN webhook: stored reading for device ${deviceId} (DevEUI: ${devEUI}), ` +
-      `sensors: ${Object.keys(processedSensors).join(", ")}`
+      `sensors: ${Object.keys(processedSensors).join(", ")}` +
+      (isFirstReading ? " [FIRST READING]" : "")
     );
 
     res.status(200).json({
@@ -1007,6 +1084,7 @@ const ttnWebhook = async (req, res) => {
       deviceId,
       timestamp,
       sensors: Object.keys(processedSensors),
+      integrityHash,
     });
   } catch (error) {
     console.error("TTN webhook error:", error);

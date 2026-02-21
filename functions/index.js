@@ -40,6 +40,16 @@ const v2Blockchain = require("./v2/blockchain");
 const v2Programs = require("./v2/programs");
 const v2Devices = require("./v2/devices");
 const v2Sites = require("./v2/sites");
+const v2RevenueGrade = require("./v2/revenueGrade");
+const v2Calibrations = require("./v2/calibrations");
+const v2CreditProjects = require("./v2/creditProjects");
+const v2AccountLink = require("./v2/accountLink");
+
+// Scheduled functions
+const scheduledDeviceHealth = require("./scheduled/deviceHealth");
+const scheduledCalibrationExpiry = require("./scheduled/calibrationExpiry");
+const scheduledBaselineCompletion = require("./scheduled/baselineCompletion");
+const scheduledCreditAccrual = require("./scheduled/creditAccrual");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -780,13 +790,46 @@ app.get("/v2/devices", v2Devices.listDevices);
 app.get("/v2/devices/:id", v2Devices.getDevice);
 app.get("/v2/devices/:id/metrics", v2Devices.getDeviceMetrics);
 app.get("/v2/devices/:id/alerts", v2Devices.getDeviceAlerts);
+app.get("/v2/devices/:id/readings/export", v2Devices.exportReadings);
 app.post("/v2/devices/check", v2Devices.checkDevice);
 app.post("/v2/devices/test-connection", v2Devices.testConnection);
 app.post("/v2/devices/commission", v2Devices.commissionDevice);
+app.post("/v2/devices/claim", v2Devices.claimDevice);
+app.post("/v2/devices/:id/unclaim", v2Devices.unclaimDevice);
+app.post("/v2/devices/:id/factory-reset", v2Devices.factoryResetDevice);
+app.post("/v2/devices/:id/transfer", v2Devices.transferDevice);
+app.post("/v2/devices/:id/command", v2Devices.sendDeviceCommand);
 app.get("/v2/alerts", v2Devices.listAlerts);
+
+// Installer endpoints
+app.get("/v2/installer/fleet", v2Devices.installerFleet);
+app.get("/v2/installer/commissions", v2Devices.installerCommissions);
+
+// Revenue grade endpoints
+app.post("/v2/devices/:id/revenue-grade/enable", v2RevenueGrade.enableRevenueGrade);
+app.post("/v2/devices/:id/revenue-grade/disable", v2RevenueGrade.disableRevenueGrade);
+app.get("/v2/devices/:id/revenue-grade/status", v2RevenueGrade.getRevenueGradeStatus);
+app.patch("/v2/devices/:id/revenue-grade", v2RevenueGrade.updateRevenueGrade);
+
+// Calibration endpoints
+app.post("/v2/devices/:id/calibrations", v2Calibrations.logCalibration);
+app.get("/v2/devices/:id/calibrations", v2Calibrations.getCalibrations);
+
+// Credit project endpoints (WQT)
+app.post("/v2/projects", v2CreditProjects.registerProject);
+app.get("/v2/projects/:id", v2CreditProjects.getProject);
+app.get("/v2/projects/:id/accruals", v2CreditProjects.getAccruals);
+app.post("/v2/projects/:id/accruals/calculate", v2CreditProjects.calculateCredits);
+app.post("/v2/projects/:id/submit-verification", v2CreditProjects.submitVerification);
+
+// Account linking (BlueSignal Cloud ↔ WQT)
+app.post("/v2/account/link-wqt", v2AccountLink.linkWQT);
+app.delete("/v2/account/link-wqt", v2AccountLink.unlinkWQT);
+app.get("/v2/account/link-status", v2AccountLink.getLinkStatus);
 
 // Site endpoints
 app.get("/v2/sites", v2Sites.listSites);
+app.get("/v2/sites/huc-lookup", v2Sites.hucLookup);
 app.post("/v2/sites", v2Sites.createSite);
 
 // =============================================================================
@@ -834,10 +877,33 @@ exports.onReadingCreated = creditGeneration.onReadingCreated;
 // =============================================================================
 
 /**
- * Scheduled: Device Health Check
- * Runs every 15 minutes to monitor device connectivity
+ * Scheduled: Device Health Check (legacy — runs every 15 minutes)
  */
 exports.deviceHealthCheck = readings.deviceHealthCheck;
+
+/**
+ * Scheduled: Device Online/Offline Detection — runs every 5 minutes.
+ * Marks devices offline if last_seen > 2 × uplink_interval + 60s.
+ */
+exports.checkDeviceHealth = scheduledDeviceHealth.checkDeviceHealth;
+
+/**
+ * Scheduled: Calibration Expiry — runs daily at 06:00 UTC.
+ * Transitions calibration status and alerts users before expiry.
+ */
+exports.checkCalibrationExpiry = scheduledCalibrationExpiry.checkCalibrationExpiry;
+
+/**
+ * Scheduled: Baseline Completion — runs daily at 00:05 UTC.
+ * Computes baseline statistics when monitoring period completes.
+ */
+exports.checkBaselineCompletion = scheduledBaselineCompletion.checkBaselineCompletion;
+
+/**
+ * Scheduled: Daily Credit Accrual — runs daily at 01:00 UTC.
+ * Auto-calculates credits for all active revenue-grade devices.
+ */
+exports.calculateDailyCredits = scheduledCreditAccrual.calculateDailyCredits;
 
 // =============================================================================
 // TTN v3 LORAWAN WEBHOOK

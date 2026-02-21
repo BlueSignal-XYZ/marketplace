@@ -413,6 +413,524 @@ async function listAlerts(req, res) {
   }
 }
 
+// ── Device Claim (with TTN registration + AppKey generation) ──────────
+
+const crypto = require("crypto");
+
+async function claimDevice(req, res) {
+  try {
+    const { device_id, dev_eui, hw_revision, fw_version, sensors_detected } = req.body;
+
+    if (!device_id || !dev_eui) {
+      return res.status(400).json({ success: false, error: "Missing device_id or dev_eui" });
+    }
+
+    const uid = req.body.userId || req.user?.uid;
+    if (!uid) {
+      return res.status(401).json({ success: false, error: "Authentication required" });
+    }
+
+    const db = admin.database();
+    const now = new Date().toISOString();
+
+    // Check if device already claimed
+    const existingSnap = await db.ref(`devices/${device_id}`).once("value");
+    if (existingSnap.exists()) {
+      const existing = existingSnap.val();
+      if (existing.ownerId && existing.ownerId === uid) {
+        // Idempotent: same user re-claiming — return existing app_key
+        const loraSnap = await db.ref(`devices/${device_id}/lorawan`).once("value");
+        const appKey = loraSnap.val()?.appKey || null;
+        return res.json({ success: true, data: { device_id, app_key: appKey, already_claimed: true } });
+      }
+      if (existing.ownerId && existing.ownerId !== uid) {
+        return res.status(409).json({ success: false, error: "Device already claimed by another user" });
+      }
+    }
+
+    // Generate cryptographically random 128-bit AppKey (CSPRNG)
+    const appKey = crypto.randomBytes(16).toString("hex");
+
+    // Register on TTN via TTN v3 API (if configured)
+    const ttnAppId = process.env.TTN_APP_ID;
+    const ttnApiKey = process.env.TTN_API_KEY;
+    const ttnBaseUrl = process.env.TTN_BASE_URL || "https://nam1.cloud.thethings.network";
+    const appEui = process.env.BLUESIGNAL_APP_EUI || "70B3D57ED0000001";
+
+    if (ttnAppId && ttnApiKey) {
+      try {
+        const ttnBody = {
+          end_device: {
+            ids: {
+              device_id: dev_eui.toLowerCase(),
+              dev_eui: dev_eui.toUpperCase(),
+              join_eui: appEui.toUpperCase(),
+            },
+            root_keys: {
+              app_key: { key: appKey.toUpperCase() },
+            },
+            lorawan_version: "MAC_V1_0_3",
+            lorawan_phy_version: "PHY_V1_0_3_REV_A",
+            frequency_plan_id: "US_902_928_FSB_2",
+          },
+          field_mask: {
+            paths: ["ids", "root_keys", "lorawan_version", "lorawan_phy_version", "frequency_plan_id"],
+          },
+        };
+
+        const fetch = (await import("node-fetch")).default;
+        const ttnRes = await fetch(
+          `${ttnBaseUrl}/api/v3/applications/${ttnAppId}/devices`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${ttnApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(ttnBody),
+          }
+        );
+
+        if (!ttnRes.ok) {
+          const errBody = await ttnRes.text();
+          console.error("TTN registration failed:", ttnRes.status, errBody);
+          // Don't block claim if TTN is down — device can be registered later
+          // return res.status(502).json({ success: false, error: "TTN device registration failed" });
+        } else {
+          console.log(`TTN device registered: ${dev_eui}`);
+        }
+      } catch (ttnErr) {
+        console.error("TTN API error:", ttnErr.message);
+      }
+    }
+
+    // Create device record in Firebase RTDB
+    await db.ref(`devices/${device_id}`).set({
+      ownerId: uid,
+      devEui: dev_eui.toUpperCase(),
+      hwRevision: hw_revision || "WQM1-v1.0",
+      firmwareVersion: fw_version || "1.0.0",
+      sensorsDetected: sensors_detected || ["ph", "tds", "turbidity", "temperature", "orp", "gps"],
+      status: "commissioning",
+      onlineStatus: "offline",
+      loraJoinStatus: "pending",
+      name: device_id,
+      battery: 0,
+      relayState: false,
+      lastSeen: null,
+      lastReadingAt: null,
+      latestMetrics: {},
+      siteId: null,
+      createdAt: now,
+      updatedAt: now,
+      lorawan: {
+        devEUI: dev_eui.toUpperCase(),
+        appKey: appKey,
+        joinStatus: "pending",
+      },
+    });
+
+    // Log claim event
+    const eventRef = db.ref("device_events").push();
+    await eventRef.set({
+      deviceId: device_id,
+      eventType: "claimed",
+      actorId: uid,
+      details: { dev_eui, hw_revision, fw_version },
+      createdAt: now,
+    });
+
+    res.json({
+      success: true,
+      data: {
+        device_id,
+        app_key: appKey,
+        already_claimed: false,
+      },
+    });
+  } catch (error) {
+    console.error("v2/devices/claim error:", error);
+    res.status(500).json({ success: false, error: "Failed to claim device" });
+  }
+}
+
+// ── Device Unclaim ────────────────────────────────────────────────────
+
+async function unclaimDevice(req, res) {
+  try {
+    const { id } = req.params;
+    const uid = req.body.userId || req.user?.uid;
+    if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
+
+    const db = admin.database();
+    const snap = await db.ref(`devices/${id}`).once("value");
+    if (!snap.exists()) return res.status(404).json({ success: false, error: "Device not found" });
+
+    const device = snap.val();
+    if (device.ownerId !== uid) {
+      return res.status(403).json({ success: false, error: "Not the device owner" });
+    }
+
+    const now = new Date().toISOString();
+    await db.ref(`devices/${id}`).update({
+      ownerId: null,
+      siteId: null,
+      status: "commissioning",
+      onlineStatus: "offline",
+      "revenueGrade/enabled": false,
+      updatedAt: now,
+    });
+
+    // Remove from site device list
+    if (device.siteId) {
+      const siteDevicesSnap = await db.ref(`sites/${device.siteId}/devices`).once("value");
+      const devices = (siteDevicesSnap.val() || []).filter((d) => d !== id);
+      await db.ref(`sites/${device.siteId}/devices`).set(devices);
+    }
+
+    // Delete pending commands
+    await db.ref(`pending_commands/${id}`).remove();
+
+    // Log event
+    const eventRef = db.ref("device_events").push();
+    await eventRef.set({ deviceId: id, eventType: "unclaimed", actorId: uid, createdAt: now });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("v2/devices/:id/unclaim error:", error);
+    res.status(500).json({ success: false, error: "Failed to unclaim device" });
+  }
+}
+
+// ── Device Factory Reset ──────────────────────────────────────────────
+
+async function factoryResetDevice(req, res) {
+  try {
+    const { id } = req.params;
+    const uid = req.body.userId || req.user?.uid;
+    if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
+
+    const db = admin.database();
+    const snap = await db.ref(`devices/${id}`).once("value");
+    if (!snap.exists()) return res.status(404).json({ success: false, error: "Device not found" });
+
+    const device = snap.val();
+    if (device.ownerId !== uid) {
+      return res.status(403).json({ success: false, error: "Not the device owner" });
+    }
+
+    const now = new Date().toISOString();
+
+    // Delete all readings
+    await db.ref(`readings/${id}`).remove();
+    // Delete all alerts for this device
+    const alertSnap = await db.ref("alerts").orderByChild("deviceId").equalTo(id).once("value");
+    if (alertSnap.exists()) {
+      const updates = {};
+      alertSnap.forEach((child) => { updates[`alerts/${child.key}`] = null; });
+      await db.ref().update(updates);
+    }
+    // Delete calibrations
+    await db.ref(`calibrations/${id}`).remove();
+    // Delete pending commands
+    await db.ref(`pending_commands/${id}`).remove();
+    // Delete device events (except this one)
+    const eventsSnap = await db.ref("device_events").orderByChild("deviceId").equalTo(id).once("value");
+    if (eventsSnap.exists()) {
+      const updates = {};
+      eventsSnap.forEach((child) => { updates[`device_events/${child.key}`] = null; });
+      await db.ref().update(updates);
+    }
+
+    // Reset device record
+    await db.ref(`devices/${id}`).update({
+      ownerId: null,
+      siteId: null,
+      status: "commissioning",
+      onlineStatus: "offline",
+      revenueGrade: null,
+      lastSeen: null,
+      lastReadingAt: null,
+      latestMetrics: {},
+      battery: 0,
+      relayState: false,
+      updatedAt: now,
+    });
+
+    // Log the factory reset event
+    const eventRef = db.ref("device_events").push();
+    await eventRef.set({ deviceId: id, eventType: "factory_reset", actorId: uid, createdAt: now });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("v2/devices/:id/factory-reset error:", error);
+    res.status(500).json({ success: false, error: "Failed to factory reset device" });
+  }
+}
+
+// ── Device Transfer ───────────────────────────────────────────────────
+
+async function transferDevice(req, res) {
+  try {
+    const { id } = req.params;
+    const { new_owner_email } = req.body;
+    const uid = req.body.userId || req.user?.uid;
+    if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
+    if (!new_owner_email) return res.status(400).json({ success: false, error: "Missing new_owner_email" });
+
+    const db = admin.database();
+    const snap = await db.ref(`devices/${id}`).once("value");
+    if (!snap.exists()) return res.status(404).json({ success: false, error: "Device not found" });
+
+    const device = snap.val();
+    if (device.ownerId !== uid) {
+      return res.status(403).json({ success: false, error: "Not the device owner" });
+    }
+
+    const now = new Date().toISOString();
+    const transferRef = db.ref("device_transfers").push();
+    await transferRef.set({
+      deviceId: id,
+      fromUserId: uid,
+      toEmail: new_owner_email,
+      toUserId: null,
+      status: "pending",
+      createdAt: now,
+    });
+
+    const eventRef = db.ref("device_events").push();
+    await eventRef.set({
+      deviceId: id,
+      eventType: "transfer_initiated",
+      actorId: uid,
+      details: { new_owner_email },
+      createdAt: now,
+    });
+
+    res.json({ success: true, data: { transferId: transferRef.key, status: "pending" } });
+  } catch (error) {
+    console.error("v2/devices/:id/transfer error:", error);
+    res.status(500).json({ success: false, error: "Failed to initiate transfer" });
+  }
+}
+
+// ── Device Command (relay/config downlink) ────────────────────────────
+
+async function sendDeviceCommand(req, res) {
+  try {
+    const { id } = req.params;
+    const { type, state, duration_seconds, settings } = req.body;
+    const uid = req.body.userId || req.user?.uid;
+    if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
+
+    const db = admin.database();
+    const snap = await db.ref(`devices/${id}`).once("value");
+    if (!snap.exists()) return res.status(404).json({ success: false, error: "Device not found" });
+
+    const device = snap.val();
+    if (device.ownerId !== uid) {
+      return res.status(403).json({ success: false, error: "Not the device owner" });
+    }
+
+    // Check daily downlink budget (10/day per TTN fair use)
+    const today = new Date().toISOString().slice(0, 10);
+    const cmdCountSnap = await db.ref(`pending_commands/${id}`)
+      .orderByChild("createdAt")
+      .startAt(today)
+      .once("value");
+    const todayCount = cmdCountSnap.exists() ? Object.keys(cmdCountSnap.val()).length : 0;
+    if (todayCount >= 10) {
+      return res.status(429).json({
+        success: false,
+        error: "Daily remote command limit reached (10/day). Will be available tomorrow.",
+      });
+    }
+
+    const now = new Date().toISOString();
+    const cmdRef = db.ref(`pending_commands/${id}`).push();
+    const command = {
+      type: type || "relay",
+      state: state !== undefined ? state : null,
+      durationSeconds: duration_seconds || null,
+      settings: settings || null,
+      status: "pending",
+      createdBy: uid,
+      createdAt: now,
+    };
+    await cmdRef.set(command);
+
+    // Attempt TTN downlink push (if credentials available)
+    const ttnAppId = process.env.TTN_APP_ID;
+    const ttnApiKey = process.env.TTN_API_KEY;
+    const ttnBaseUrl = process.env.TTN_BASE_URL || "https://nam1.cloud.thethings.network";
+    const devEui = device.lorawan?.devEUI || device.devEui;
+
+    if (ttnAppId && ttnApiKey && devEui) {
+      try {
+        let downlinkPayload;
+        let fPort = 1;
+
+        if (type === "relay") {
+          // Cayenne LPP: Channel 7, Digital Output
+          downlinkPayload = Buffer.from([0x07, 0x01, state ? 0x01 : 0x00]).toString("base64");
+        } else if (type === "config") {
+          // Custom JSON on FPort 2
+          fPort = 2;
+          downlinkPayload = Buffer.from(JSON.stringify(settings || {})).toString("base64");
+        }
+
+        if (downlinkPayload) {
+          const fetch = (await import("node-fetch")).default;
+          await fetch(
+            `${ttnBaseUrl}/api/v3/as/applications/${ttnAppId}/devices/${devEui.toLowerCase()}/down/push`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${ttnApiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                downlinks: [{
+                  frm_payload: downlinkPayload,
+                  f_port: fPort,
+                  confirmed: false,
+                }],
+              }),
+            }
+          );
+          await cmdRef.update({ status: "queued", queuedAt: new Date().toISOString() });
+        }
+      } catch (ttnErr) {
+        console.error("TTN downlink error:", ttnErr.message);
+        // Command stays as pending — will be delivered when possible
+      }
+    }
+
+    const uplinkInterval = device.configuration?.sampleInterval || 900;
+    res.json({
+      success: true,
+      data: {
+        commandId: cmdRef.key,
+        status: "queued",
+        message: `Command queued — will be delivered on the device's next uplink (up to ${Math.ceil(uplinkInterval / 60)} minutes).`,
+      },
+    });
+  } catch (error) {
+    console.error("v2/devices/:id/command error:", error);
+    res.status(500).json({ success: false, error: "Failed to send command" });
+  }
+}
+
+// ── Readings Export (CSV) ─────────────────────────────────────────────
+
+async function exportReadings(req, res) {
+  try {
+    const { id } = req.params;
+    const uid = req.query.userId || req.user?.uid;
+    if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
+
+    const db = admin.database();
+    const deviceSnap = await db.ref(`devices/${id}`).once("value");
+    if (!deviceSnap.exists()) return res.status(404).json({ success: false, error: "Device not found" });
+    if (deviceSnap.val().ownerId !== uid) return res.status(403).json({ success: false, error: "Forbidden" });
+
+    const start = req.query.start ? parseInt(req.query.start) : Date.now() - 7 * 86400000;
+    const end = req.query.end ? parseInt(req.query.end) : Date.now();
+
+    const readingsSnap = await db.ref(`readings/${id}`)
+      .orderByChild("timestamp")
+      .startAt(start)
+      .endAt(end)
+      .limitToLast(10000)
+      .once("value");
+
+    const rows = [];
+    rows.push("timestamp,ph,tds_ppm,turbidity_ntu,orp_mv,temperature_c,latitude,longitude,relay_state");
+
+    const raw = readingsSnap.val() || {};
+    Object.values(raw)
+      .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+      .forEach((r) => {
+        const sensors = r.sensors || r;
+        rows.push([
+          r.timestamp ? new Date(r.timestamp).toISOString() : "",
+          sensors.ph?.value ?? sensors.ph ?? "",
+          sensors.tds?.value ?? sensors.tds_ppm ?? "",
+          sensors.turbidity?.value ?? sensors.turbidity_ntu ?? "",
+          sensors.orp?.value ?? sensors.orp_mv ?? "",
+          sensors.temperature?.value ?? sensors.temperature_c ?? "",
+          r.metadata?.gps?.latitude ?? r.latitude ?? "",
+          r.metadata?.gps?.longitude ?? r.longitude ?? "",
+          r.relay_state ?? "",
+        ].join(","));
+      });
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", `attachment; filename="${id}-readings.csv"`);
+    res.send(rows.join("\n"));
+  } catch (error) {
+    console.error("v2/devices/:id/readings/export error:", error);
+    res.status(500).json({ success: false, error: "Failed to export readings" });
+  }
+}
+
+// ── Installer Fleet ───────────────────────────────────────────────────
+
+async function installerFleet(req, res) {
+  try {
+    const uid = req.query.userId || req.user?.uid;
+    if (!uid) return res.status(400).json({ success: false, error: "Missing userId" });
+
+    const db = admin.database();
+    const snap = await db.ref("devices").orderByChild("commissionedBy").equalTo(uid).once("value");
+    const raw = snap.val() || {};
+
+    const devices = Object.entries(raw).map(([id, val]) => ({
+      id,
+      name: val.name || id,
+      ownerId: val.ownerId || "",
+      ownerEmail: val.ownerEmail || "",
+      siteId: val.siteId || null,
+      status: val.status || "inactive",
+      onlineStatus: val.onlineStatus || "offline",
+      lastReadingAt: val.lastReadingAt || "",
+      commissionedAt: val.commissionedAt || "",
+      hwRevision: val.hwRevision || "",
+      firmwareVersion: val.firmwareVersion || "",
+    }));
+
+    res.json({ success: true, data: devices });
+  } catch (error) {
+    console.error("v2/installer/fleet error:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch installer fleet" });
+  }
+}
+
+async function installerCommissions(req, res) {
+  try {
+    const uid = req.query.userId || req.user?.uid;
+    if (!uid) return res.status(400).json({ success: false, error: "Missing userId" });
+
+    const db = admin.database();
+    const snap = await db.ref("commissions").orderByChild("installerId").equalTo(uid).once("value");
+    const raw = snap.val() || {};
+
+    const commissions = Object.entries(raw).map(([id, val]) => ({
+      id,
+      deviceId: val.deviceId,
+      siteId: val.siteId || null,
+      status: val.status || "unknown",
+      completedAt: val.completedAt || "",
+      createdAt: val.createdAt || "",
+    }));
+
+    res.json({ success: true, data: commissions });
+  } catch (error) {
+    console.error("v2/installer/commissions error:", error);
+    res.status(500).json({ success: false, error: "Failed to fetch commissions" });
+  }
+}
+
 module.exports = {
   listDevices,
   getDevice,
@@ -422,4 +940,12 @@ module.exports = {
   checkDevice,
   testConnection,
   commissionDevice,
+  claimDevice,
+  unclaimDevice,
+  factoryResetDevice,
+  transferDevice,
+  sendDeviceCommand,
+  exportReadings,
+  installerFleet,
+  installerCommissions,
 };
