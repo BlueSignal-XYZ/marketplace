@@ -1,6 +1,6 @@
 /**
  * WQT Hero — premium dark hero for waterquality.trading.
- * Deregulated water quality trading platform messaging.
+ * Three audiences in under 4 seconds: homeowners, utility directors, aggregators.
  */
 
 import React from 'react';
@@ -20,24 +20,18 @@ const pulse = keyframes`
 const Section = styled.section`
   position: relative;
   overflow: hidden;
-  min-height: 100vh;
-  min-height: 100dvh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 80px 16px 64px;
+  text-align: center;
+  padding: 48px 20px 40px;
   background: #0B1120;
   color: #FFFFFF;
-  text-align: center;
   box-sizing: border-box;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 100px 24px 80px;
-  }
-
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 140px 24px 120px;
+    padding: 80px 32px 64px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -78,77 +72,63 @@ const GlowOrb = styled.div`
 
 const Content = styled.div`
   position: relative;
-  max-width: 780px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 1;
 `;
 
-const TrustBadge = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+const Eyebrow = styled.span`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(6, 182, 212, 0.9);
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.15);
-  border-radius: 999px;
-  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+`;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    font-size: 12px;
-    padding: 6px 16px;
-    margin-bottom: 32px;
+const Headline = styled.h1`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  max-width: 100%;
+  color: #FFFFFF;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    font-size: 48px;
+    margin-bottom: 24px;
+    max-width: 600px;
   }
 `;
 
-const StatusDot = styled.span`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #10B981;
-  display: inline-block;
-`;
-
-const Title = styled.h1`
+const Subheadline = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: clamp(36px, 5.5vw, 60px);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-  margin: 0 0 24px;
-  color: #FFFFFF;
-`;
-
-const GradientText = styled.span`
-  background: linear-gradient(135deg, #06B6D4 0%, #0052CC 50%, #8B5CF6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-`;
-
-const Subtitle = styled.p`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: clamp(16px, 2vw, 19px);
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.6);
-  max-width: 600px;
-  margin: 0 auto 40px;
+  max-width: 100%;
+  margin: 0 0 24px;
+  color: rgba(255, 255, 255, 0.7);
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    font-size: 18px;
+    margin-bottom: 32px;
+    max-width: 560px;
+  }
 `;
 
 const CTARow = styled.div`
   display: flex;
-  gap: 14px;
+  gap: 16px;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
 
-  @media (max-width: 480px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
     flex-direction: column;
-    align-items: stretch;
+    width: 100%;
   }
 `;
 
@@ -156,86 +136,95 @@ const PrimaryBtn = styled.a`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 32px;
-  min-height: 52px;
+  height: 48px;
+  padding: 0 24px;
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
   color: #FFFFFF;
-  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
-  border-radius: 10px;
+  background: ${({ theme }) => theme.colors.primary};
+  border-radius: 8px;
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
+
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
   }
   &:active { transform: translateY(0); }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+    width: 100%;
+  }
 `;
 
 const SecondaryBtn = styled.a`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 28px;
-  min-height: 52px;
+  height: 48px;
+  padding: 0 24px;
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
+  border-radius: 8px;
   text-decoration: none;
   transition: all 200ms;
+
   &:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.2);
   }
-`;
 
-const TrustRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    gap: 24px;
-    margin-top: 56px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+    width: 100%;
   }
 `;
 
-const TrustItem = styled.span`
-  display: inline-flex;
+const Pills = styled.div`
+  margin-top: 40px;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.35);
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+    margin-top: 24px;
+    flex-direction: column;
+    gap: 6px;
+  }
 `;
 
-const TrustDot = styled.span`
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  @media (max-width: 640px) { display: none; }
+const Pill = styled.span`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
 `;
+
+const PillSeparator = styled.span`
+  color: rgba(255, 255, 255, 0.25);
+  user-select: none;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+    display: none;
+  }
+`;
+
+const PILLS = [
+  'Every credit sensor-verified',
+  'Pricing set by your utility',
+  'Three-layer independent verification',
+];
 
 export function HeroSection() {
-  const handleLearnClick = (e) => {
-    e.preventDefault();
-    const el = document.getElementById('credit-definitions');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <Section>
       <GradientMesh />
@@ -250,34 +239,23 @@ export function HeroSection() {
       />
 
       <Content>
-        <TrustBadge>
-          <StatusDot />
-          Powered by BlueSignal
-        </TrustBadge>
-        <Title>
-          Deregulated{' '}
-          <GradientText>Water Quality Trading</GradientText>
-        </Title>
-        <Subtitle>
-          A credit system for distributed water production.
-          Two credit types, three layers of verification, and
-          utility-controlled pricing across the United States.
-        </Subtitle>
+        <Eyebrow>Powered by BlueSignal</Eyebrow>
+        <Headline>Trade Verified Water Quality Credits</Headline>
+        <Subheadline>
+          Earn rebates for producing your own water. Give utilities a cheaper path to compliance. Build portfolios in the first structured water credit marketplace.
+        </Subheadline>
         <CTARow>
-          <PrimaryBtn href="#credit-definitions" onClick={handleLearnClick}>
-            How It Works
-          </PrimaryBtn>
-          <SecondaryBtn href="/for-utilities">
-            For Utilities
-          </SecondaryBtn>
+          <PrimaryBtn href="/marketplace">Enter Marketplace</PrimaryBtn>
+          <SecondaryBtn href="/credit-registry">Explore Registry</SecondaryBtn>
         </CTARow>
-        <TrustRow>
-          <TrustItem>Sensor-Verified Credits</TrustItem>
-          <TrustDot />
-          <TrustItem>Three-Layer Verification</TrustItem>
-          <TrustDot />
-          <TrustItem>Utility-Controlled Pricing</TrustItem>
-        </TrustRow>
+        <Pills>
+          {PILLS.map((text, i) => (
+            <React.Fragment key={i}>
+              {i > 0 && <PillSeparator>·</PillSeparator>}
+              <Pill>{text}</Pill>
+            </React.Fragment>
+          ))}
+        </Pills>
       </Content>
     </Section>
   );
