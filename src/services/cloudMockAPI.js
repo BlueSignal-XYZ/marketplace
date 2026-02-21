@@ -84,9 +84,9 @@ const MOCK_DEVICES = [
       ph: 7.2,
       ntu: 2.3,
       tds_ppm: 245,
-      npk_n: null,
-      npk_p: null,
-      npk_k: null,
+      orp_mv: 310,
+      gps_lat: 39.5,
+      gps_lng: -79.3,
     },
   },
   {
@@ -166,9 +166,9 @@ const MOCK_DEVICES = [
       ph: 7.3,
       ntu: 2.1,
       tds_ppm: 238,
-      npk_n: null,
-      npk_p: null,
-      npk_k: null,
+      orp_mv: 295,
+      gps_lat: 39.51,
+      gps_lng: -79.31,
     },
   },
   {
@@ -686,9 +686,7 @@ export const CloudMockAPI = {
         ph: 7.0 + Math.random() * 0.5,
         ntu: 2 + Math.random() * 1,
         tds_ppm: 230 + Math.random() * 30,
-        npk_n: null, // Device-specific, varies by sensor type
-        npk_p: null,
-        npk_k: null,
+        orp_mv: 250 + Math.random() * 150,
       }));
     },
     getLogs: async (deviceId) => {
