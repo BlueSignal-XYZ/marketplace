@@ -130,20 +130,26 @@ const DetailValue = styled.div`
 
 const FILTER_OPTIONS = [
   { value: 'all', label: 'All Credits' },
+  { value: 'qc', label: 'QC (Quantity)' },
+  { value: 'kc', label: 'KC (Quality)' },
   { value: 'nitrogen', label: 'Nitrogen' },
   { value: 'phosphorus', label: 'Phosphorus' },
-  { value: 'stormwater', label: 'Stormwater' },
-  { value: 'thermal', label: 'Thermal' },
 ];
 
 function creditTypeBadge(type: string) {
   const variants: Record<string, any> = {
+    qc: 'info',
+    kc: 'positive',
     nitrogen: 'info',
     phosphorus: 'positive',
-    stormwater: 'neutral',
-    thermal: 'warning',
   };
-  return <Badge variant={variants[type] || 'neutral'} size="sm">{type}</Badge>;
+  const labels: Record<string, string> = {
+    qc: 'QC',
+    kc: 'KC',
+    nitrogen: 'Nitrogen',
+    phosphorus: 'Phosphorus',
+  };
+  return <Badge variant={variants[type] || 'neutral'} size="sm">{labels[type] || type}</Badge>;
 }
 
 function statusBadge(status: string) {

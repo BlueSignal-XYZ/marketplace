@@ -13,7 +13,7 @@ export interface MapProject {
   name: string;
   lat: number;
   lng: number;
-  creditTypes: ('nitrogen' | 'phosphorus' | 'stormwater' | 'thermal')[];
+  creditTypes: ('qc' | 'kc' | 'nitrogen' | 'phosphorus')[];
   totalCredits: number;
   status: 'active' | 'pending' | 'completed';
   description: string;
@@ -49,7 +49,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Smith Farm Cover Crop Initiative',
     lat: 40.0379,
     lng: -76.3055,
-    creditTypes: ['nitrogen'],
+    creditTypes: ['kc', 'nitrogen'],
     totalCredits: 2500,
     status: 'active',
     description: 'Cover crop implementation reducing nitrogen runoff',
@@ -62,7 +62,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Green Valley Wetland Restoration',
     lat: 39.2904,
     lng: -76.6122,
-    creditTypes: ['phosphorus', 'nitrogen'],
+    creditTypes: ['kc', 'phosphorus', 'nitrogen'],
     totalCredits: 3400,
     status: 'completed',
     description: 'Wetland restoration for nutrient sequestration',
@@ -75,10 +75,10 @@ export const mockMapProjects: MapProject[] = [
     name: 'Urban Green Infrastructure Project',
     lat: 39.3004,
     lng: -76.6222,
-    creditTypes: ['stormwater'],
+    creditTypes: ['qc'],
     totalCredits: 50000,
     status: 'active',
-    description: 'Rain gardens and bioswales for stormwater management',
+    description: 'Distributed water production — quantity verified',
     owner: 'Baltimore Green Infrastructure Initiative',
     acreage: 15,
     boundary: generateBoundary(39.3004, -76.6222, 15),
@@ -88,7 +88,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Johnson Dairy Nutrient Management',
     lat: 39.9626,
     lng: -76.7277,
-    creditTypes: ['nitrogen', 'phosphorus'],
+    creditTypes: ['kc', 'nitrogen', 'phosphorus'],
     totalCredits: 4000,
     status: 'active',
     description: 'Precision nutrient management on dairy operation',
@@ -101,7 +101,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Riverside Riparian Buffer Enhancement',
     lat: 40.2737,
     lng: -76.8844,
-    creditTypes: ['thermal', 'nitrogen'],
+    creditTypes: ['qc', 'kc', 'nitrogen'],
     totalCredits: 17500,
     status: 'completed',
     description: 'Riparian buffer providing shade and filtering nutrients',
@@ -114,7 +114,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Miller Farm Conservation Tillage',
     lat: 40.0479,
     lng: -76.3155,
-    creditTypes: ['phosphorus'],
+    creditTypes: ['kc', 'phosphorus'],
     totalCredits: 890,
     status: 'active',
     description: 'No-till farming reducing soil erosion and P loss',
@@ -127,7 +127,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Precision Agriculture Initiative',
     lat: 39.8709,
     lng: -77.2311,
-    creditTypes: ['nitrogen'],
+    creditTypes: ['kc', 'nitrogen'],
     totalCredits: 4100,
     status: 'completed',
     description: 'Variable rate fertilizer application using precision ag',
@@ -140,10 +140,10 @@ export const mockMapProjects: MapProject[] = [
     name: 'Commercial Rain Garden Network',
     lat: 39.0458,
     lng: -76.6413,
-    creditTypes: ['stormwater'],
+    creditTypes: ['qc'],
     totalCredits: 75000,
     status: 'active',
-    description: 'Network of rain gardens across commercial properties',
+    description: 'Distributed water production across commercial properties',
     owner: 'Anne Arundel Green Business Alliance',
     acreage: 8,
     boundary: generateBoundary(39.0458, -76.6413, 8),
@@ -153,7 +153,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Creek Restoration & Bank Stabilization',
     lat: 39.5593,
     lng: -76.3483,
-    creditTypes: ['phosphorus', 'nitrogen'],
+    creditTypes: ['kc', 'phosphorus', 'nitrogen'],
     totalCredits: 2100,
     status: 'active',
     description: 'Stream bank restoration reducing sediment and nutrients',
@@ -166,7 +166,7 @@ export const mockMapProjects: MapProject[] = [
     name: 'Integrated Crop-Livestock System',
     lat: 39.9187,
     lng: -77.7211,
-    creditTypes: ['nitrogen', 'phosphorus'],
+    creditTypes: ['qc', 'kc', 'nitrogen', 'phosphorus'],
     totalCredits: 3500,
     status: 'completed',
     description: 'Integrated grazing system with nutrient recycling',
@@ -187,10 +187,10 @@ export const getProjectsByStatus = (status: 'active' | 'pending' | 'completed'):
 
 export const getCreditTypeColor = (type: string): string => {
   const colors: Record<string, string> = {
+    qc: '#0052CC',
+    kc: '#10B981',
     nitrogen: '#3b82f6',
-    phosphorus: '#10b981',
-    stormwater: '#06b6d4',
-    thermal: '#f59e0b',
+    phosphorus: '#8B5CF6',
   };
   return colors[type] || '#6b7280';
 };

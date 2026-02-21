@@ -27,7 +27,7 @@ const cardVariants = {
 export const fetchDeviceData = async (deviceID) => {
   try {
     const { device } = await DeviceAPI.getDeviceDetails(deviceID);
-    console.log("DEVICE DETTTAAAAAAAAAls", device)
+    // device details loaded
     return device;
   } catch (error) {
     return error;

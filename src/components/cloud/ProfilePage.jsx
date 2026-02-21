@@ -7,6 +7,7 @@ import { useAppContext } from "../../context/AppContext";
 import { UserProfileAPI } from "../../scripts/back_door";
 import { ButtonPrimary, ButtonSecondary, ButtonDanger } from "../shared/button/Button";
 import { Input } from "../shared/input/Input";
+import { isDemoMode, setDemoMode } from "../../utils/demoMode";
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -240,6 +241,67 @@ const Skeleton = styled.div`
   }
 `;
 
+const ToggleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+`;
+
+const ToggleInfo = styled.div`
+  flex: 1;
+`;
+
+const ToggleLabel = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  margin-bottom: 4px;
+`;
+
+const ToggleDescription = styled.div`
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  line-height: 1.5;
+`;
+
+const ToggleSwitch = styled.button`
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease-out;
+  background: ${({ $active }) => ($active ? "#0066FF" : "#D1D5DB")};
+  min-height: 28px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: ${({ $active }) => ($active ? "22px" : "2px")};
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: left 0.2s ease-out;
+  }
+`;
+
+const DemoWarning = styled.div`
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #92400E;
+  line-height: 1.5;
+`;
+
 /* -------------------------------------------------------------------------- */
 /*                              MAIN COMPONENT                                */
 /* -------------------------------------------------------------------------- */
@@ -253,6 +315,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [demoEnabled, setDemoEnabled] = useState(isDemoMode());
   const [profile, setProfile] = useState({
     displayName: "",
     email: "",
@@ -602,6 +665,37 @@ export default function ProfilePage() {
                   <span style={{ fontSize: "14px" }}>SMS notifications for critical alerts</span>
                 </label>
               </FormGroup>
+            </Section>
+
+            <Section>
+              <SectionTitle>Demo Mode</SectionTitle>
+              <ToggleRow>
+                <ToggleInfo>
+                  <ToggleLabel>Enable Demo Mode</ToggleLabel>
+                  <ToggleDescription>
+                    Show sample devices, sites, and telemetry data across the platform.
+                    Useful for exploring the platform before connecting real hardware.
+                  </ToggleDescription>
+                </ToggleInfo>
+                <ToggleSwitch
+                  type="button"
+                  $active={demoEnabled}
+                  onClick={() => {
+                    const next = !demoEnabled;
+                    setDemoEnabled(next);
+                    setDemoMode(next);
+                    // Reload so all pages pick up the new demo state
+                    window.location.reload();
+                  }}
+                  aria-label={demoEnabled ? "Disable demo mode" : "Enable demo mode"}
+                />
+              </ToggleRow>
+              {demoEnabled && (
+                <DemoWarning>
+                  Demo mode is active. All data shown across the platform is sample data.
+                  Disable demo mode to see only your real devices and sites.
+                </DemoWarning>
+              )}
             </Section>
 
             <ButtonGroup>

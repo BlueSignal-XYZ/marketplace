@@ -7,7 +7,7 @@
 
 export interface RegistryCredit {
   id: string;
-  type: 'nitrogen' | 'phosphorus' | 'stormwater' | 'thermal';
+  type: 'qc' | 'kc' | 'nitrogen' | 'phosphorus';
   quantity: number;
   unit: string;
   projectName: string;
@@ -185,7 +185,7 @@ export const mockRegistryCredits: RegistryCredit[] = [
   },
   {
     id: 'WQT-2025-00140',
-    type: 'stormwater',
+    type: 'qc',
     quantity: 50000,
     unit: 'gallons',
     projectName: 'Urban Green Infrastructure Project',
@@ -211,7 +211,7 @@ export const mockRegistryCredits: RegistryCredit[] = [
   },
   {
     id: 'WQT-2024-00138',
-    type: 'thermal',
+    type: 'kc',
     quantity: 15000,
     unit: 'therms',
     projectName: 'Riverside Riparian Buffer Enhancement',
@@ -252,7 +252,7 @@ export const mockRegistryCredits: RegistryCredit[] = [
   },
   {
     id: 'WQT-2024-00135',
-    type: 'stormwater',
+    type: 'qc',
     quantity: 75000,
     unit: 'gallons',
     projectName: 'Commercial Rain Garden Network',

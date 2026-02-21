@@ -8,6 +8,7 @@ import DeviceService from "../../services/deviceService";
 import AddDeviceModal from "./AddDeviceModal";
 import { useAppContext } from "../../context/AppContext";
 import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
+import { isDemoMode } from "../../utils/demoMode";
 
 const ActionButtonsWrapper = styled.div`
   display: flex;
@@ -424,28 +425,24 @@ export default function DevicesListPage() {
   const loadDevices = async () => {
     setLoading(true);
     try {
-      // Load from both mock API (for legacy devices) and Firebase (for new inventory)
-      const [mockDevices, firebaseDevices] = await Promise.all([
-        CloudMockAPI.devices.getAll(),
-        DeviceService.getAllDevices().catch(() => []),
-      ]);
-
-      // Merge devices, preferring Firebase data for duplicates
       const deviceMap = new Map();
 
-      // Add mock devices first
-      mockDevices.forEach((d) => {
-        deviceMap.set(d.id, {
-          ...d,
-          lifecycle: d.lifecycle || "active", // Default for mock devices
+      // Only load mock devices in demo mode
+      if (isDemoMode()) {
+        const mockDevices = await CloudMockAPI.devices.getAll();
+        mockDevices.forEach((d) => {
+          deviceMap.set(d.id, {
+            ...d,
+            lifecycle: d.lifecycle || "active",
+          });
         });
-      });
+      }
 
-      // Add/override with Firebase devices
+      // Always try Firebase (real devices)
+      const firebaseDevices = await DeviceService.getAllDevices().catch(() => []);
       firebaseDevices.forEach((d) => {
         deviceMap.set(d.id, {
           ...d,
-          // Add display-friendly fields for new inventory devices
           siteName: d.siteName || "Unassigned",
           customer: d.customer || "-",
           status: d.lifecycle === "active" ? "online" : "offline",
@@ -678,11 +675,11 @@ export default function DevicesListPage() {
         {filteredDevices.length === 0 ? (
           <DSEmptyState
             icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/></svg>}
-            title={searchQuery || statusFilter !== "all" || typeFilter !== "all" ? "No devices found" : "No devices yet"}
+            title={searchQuery || statusFilter !== "all" || typeFilter !== "all" ? "No devices found" : "No Devices Yet"}
             description={
               searchQuery || statusFilter !== "all" || typeFilter !== "all"
                 ? "Try adjusting your filters or search query."
-                : "Commission your first device to start monitoring water quality."
+                : "No devices registered yet. Add your first device or enable Demo Mode in Profile to explore with sample data."
             }
             action={!searchQuery && statusFilter === "all" ? { label: "Commission Device", onClick: () => navigate("/cloud/commissioning/new") } : undefined}
           />

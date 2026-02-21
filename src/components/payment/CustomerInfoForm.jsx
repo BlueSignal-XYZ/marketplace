@@ -36,7 +36,7 @@ const CustomerInfoForm = ({ onNextClick }) => {
 
   const validateForm = () => {
     let tempErrors = {};
-    console.log(customerInfo)
+    // customer info submitted
     if (!customerInfo.firstName.trim()) {
       tempErrors.firstName = 'First name is required';
     }
@@ -51,7 +51,7 @@ const CustomerInfoForm = ({ onNextClick }) => {
       tempErrors.lastName = 'Last name is required for businesses';
     }
 
-    console.log(tempErrors)
+    // validation errors checked
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -70,7 +70,7 @@ const CustomerInfoForm = ({ onNextClick }) => {
   };
 
   const handleSubmit = async (event) => {
-    console.log(validateForm());
+    validateForm();
     event.preventDefault();
     if (validateForm()) {
       setLoading(true);

@@ -130,7 +130,7 @@ const ProfileSettingsTab = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Edit Profile Opted")
+    // edit profile mode activated
   }
 
   return (

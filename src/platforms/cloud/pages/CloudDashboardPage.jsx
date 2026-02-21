@@ -293,7 +293,7 @@ export function CloudDashboardPage() {
         </Header>
         <EmptyState
           title="No Devices Yet"
-          description="Commission your first BlueSignal WQM-1 device to start monitoring water quality."
+          description="No devices registered yet. Add your first device or enable Demo Mode to explore the platform with sample data."
           action={{ label: 'Commission Your First Device', onClick: () => navigate('/commission') }}
         />
       </Page>

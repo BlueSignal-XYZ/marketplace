@@ -12,13 +12,14 @@ import { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../context/AppContext";
 import CloudMockAPI from "../services/cloudMockAPI";
 import { DeviceAPI } from "../scripts/back_door";
+import { isDemoMode } from "../utils/demoMode";
 
 // Cache key for localStorage
 const CACHE_KEY = "bluesignal_has_devices";
 const CACHE_COUNT_KEY = "bluesignal_device_count";
 
-// Use mock API in development, real API in production
-const USE_MOCK_API = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK_API === "true";
+// Use mock API only when demo mode is active
+const USE_MOCK_API = isDemoMode();
 
 /**
  * Clear the device cache (call on logout)

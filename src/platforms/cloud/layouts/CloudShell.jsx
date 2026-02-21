@@ -11,7 +11,7 @@ import { CloudHeader } from '../../../components/navigation/CloudHeader';
 import { CloudMenu } from '../../../components/navigation/CloudMenu';
 import Footer from '../../../components/shared/Footer/Footer';
 import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
-import { NotificationBar, SettingsMenu } from '../../../components';
+import { SettingsMenu } from '../../../components';
 
 const AppContainer = styled.div`
   display: flex;
@@ -65,7 +65,6 @@ export function CloudShell({ user, isAuthLanding, children }) {
       />
 
       {/* Legacy globals (kept for backward compat until components migrated) */}
-      <NotificationBar />
       <SettingsMenu />
 
       {/* Main content */}

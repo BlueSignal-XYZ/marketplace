@@ -236,6 +236,7 @@ const NAV_LINKS = [
   { label: "For Homeowners", href: "/for-homeowners" },
   { label: "For Aggregators", href: "/for-aggregators" },
   { label: "Registry", href: "/registry" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function WebsiteNav() {
@@ -257,7 +258,7 @@ export function WebsiteNav() {
             ))}
           </NavLinks>
 
-          <CTALink href="/contact">Contact Us</CTALink>
+          <CTALink href="/login">Get Started</CTALink>
 
           <MobileMenuBtn
             onClick={() => setMobileOpen((p) => !p)}
@@ -278,8 +279,8 @@ export function WebsiteNav() {
             {link.label}
           </MobileNavLink>
         ))}
-        <MobileCTA href="/contact" onClick={() => setMobileOpen(false)}>
-          Contact Us
+        <MobileCTA href="/login" onClick={() => setMobileOpen(false)}>
+          Get Started
         </MobileCTA>
       </MobileMenu>
     </>

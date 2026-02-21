@@ -412,7 +412,7 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
             crop,
             yieldAcre
           );
-          console.log("nutrientRemovalResult", nutrientRemovalResult);
+          // nutrient removal result calculated
           setResult(nutrientRemovalResult);
         }, 500); // Adjust the timeout as needed
       } catch (error) {
@@ -535,9 +535,9 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
     <div>
       <StyledNutrientCalculator>
         <DashboardPage
-          title={"Nutrient Removal Calculator"}
+          title={"Nutrient Calculator"}
           description={`Each harvest depletes soil nutrients, varying by crop and yield.
-              Identify what's lost with our Nutrient Removal Calculator by
+              Identify what's lost with our Nutrient Calculator by
               selecting your crop and yield.`}
         >
           <div className="form-section-wrapper">
@@ -585,7 +585,7 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
               </Result>
               <Footer>
                 <p>
-                  Based on <a href="http://www.ipni.net/article/IPNI-3346" target="_blank" rel="noopener noreferrer">IPNI Nutrient Removal Calculator</a>.
+                  Based on <a href="http://www.ipni.net/article/IPNI-3346" target="_blank" rel="noopener noreferrer">IPNI Nutrient Calculator</a>.
                   Values may vary by region—consult local data for precise recommendations.
                 </p>
               </Footer>

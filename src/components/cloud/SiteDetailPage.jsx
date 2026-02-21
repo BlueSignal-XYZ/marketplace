@@ -411,7 +411,7 @@ export default function SiteDetailPage() {
           setAlerts(siteAlerts);
         } else {
           // Real API returned no valid site — fall back to mock
-          console.log("Real API returned no site, falling back to mock data");
+          // Real API returned no site, falling back to mock data
           const [mockSite, mockDevices, mockAlerts] = await Promise.all([
             CloudMockAPI.sites.getById(siteId),
             CloudMockAPI.devices.getBySite(siteId),

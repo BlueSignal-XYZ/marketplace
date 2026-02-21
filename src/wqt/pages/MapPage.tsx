@@ -341,23 +341,23 @@ const CreditTypeBadge = styled.span<{ type: string }>`
   font-weight: 500;
   background: ${props => {
     const colors: Record<string, string> = {
-      nitrogen: '#dbeafe',
-      phosphorus: '#d1fae5',
-      stormwater: '#cffafe',
-      thermal: '#fed7aa',
+      qc: '#DBEAFE',
+      kc: '#D1FAE5',
+      nitrogen: '#EFF6FF',
+      phosphorus: '#F5F3FF',
     };
     return colors[props.type] || '#f3f4f6';
   }};
   color: ${props => {
     const colors: Record<string, string> = {
-      nitrogen: '#1e40af',
-      phosphorus: '#065f46',
-      stormwater: '#155e75',
-      thermal: '#9a3412',
+      qc: '#1E40AF',
+      kc: '#065F46',
+      nitrogen: '#1D4ED8',
+      phosphorus: '#6D28D9',
     };
     return colors[props.type] || '#374151';
   }};
-  text-transform: capitalize;
+  text-transform: uppercase;
   margin-right: 4px;
 `;
 
@@ -452,7 +452,7 @@ export function MapPage() {
 
   const [loading, setLoading] = useState(true);
   const [mapError, setMapError] = useState<string | null>(null);
-  const [filterType, setFilterType] = useState<'all' | 'nitrogen' | 'phosphorus' | 'stormwater' | 'thermal'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'qc' | 'kc' | 'nitrogen' | 'phosphorus'>('all');
   // Default to list view if no valid token, map view if token is valid
   const [viewMode, setViewMode] = useState<ViewMode>(HAS_VALID_TOKEN ? 'map' : 'list');
   const [error, setError] = useState<string | null>(null);
@@ -723,17 +723,17 @@ export function MapPage() {
             <FilterChip active={filterType === 'all'} onClick={() => setFilterType('all')}>
               All Projects
             </FilterChip>
+            <FilterChip active={filterType === 'qc'} onClick={() => setFilterType('qc')}>
+              QC (Quantity)
+            </FilterChip>
+            <FilterChip active={filterType === 'kc'} onClick={() => setFilterType('kc')}>
+              KC (Quality)
+            </FilterChip>
             <FilterChip active={filterType === 'nitrogen'} onClick={() => setFilterType('nitrogen')}>
               Nitrogen
             </FilterChip>
             <FilterChip active={filterType === 'phosphorus'} onClick={() => setFilterType('phosphorus')}>
               Phosphorus
-            </FilterChip>
-            <FilterChip active={filterType === 'stormwater'} onClick={() => setFilterType('stormwater')}>
-              Stormwater
-            </FilterChip>
-            <FilterChip active={filterType === 'thermal'} onClick={() => setFilterType('thermal')}>
-              Thermal
             </FilterChip>
           </FilterChipsContainer>
 

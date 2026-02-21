@@ -6,6 +6,72 @@ import CloudPageLayout from "./CloudPageLayout";
 import { getRelativeTime } from "../../services/cloudMockAPI";
 import { AlertsAPI } from "../../scripts/back_door";
 import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
+import { isDemoMode } from "../../utils/demoMode";
+import { DemoBanner as DemoBannerComponent } from "../DemoBanner";
+
+// Realistic demo alerts based on WQM-1 sensor specs
+const DEMO_ALERTS = [
+  {
+    id: 'demo-alert-1',
+    severity: 'critical',
+    status: 'open',
+    siteName: 'Demo Pond',
+    siteId: 'demo-site-1',
+    deviceName: 'WQM-1 #001',
+    deviceId: 'pgw-demo-001',
+    message: 'pH threshold exceeded — 9.2 pH detected (threshold: > 9.0)',
+    firstSeen: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'demo-alert-2',
+    severity: 'warning',
+    status: 'open',
+    siteName: 'Demo Lake North',
+    siteId: 'demo-site-2',
+    deviceName: 'WQM-1 #003',
+    deviceId: 'pgw-demo-003',
+    message: 'Turbidity elevated — 85 NTU (threshold: > 100 NTU approaching)',
+    firstSeen: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'demo-alert-3',
+    severity: 'critical',
+    status: 'acknowledged',
+    siteName: 'Demo Farm Runoff',
+    siteId: 'demo-site-3',
+    deviceName: 'WQM-1 #005',
+    deviceId: 'pgw-demo-005',
+    message: 'TDS spike — 920 ppm detected (threshold: > 800 ppm)',
+    firstSeen: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'demo-alert-4',
+    severity: 'warning',
+    status: 'open',
+    siteName: 'Demo Creek',
+    siteId: 'demo-site-1',
+    deviceName: 'WQM-1 #002',
+    deviceId: 'pgw-demo-002',
+    message: 'ORP low — 140 mV detected (threshold: < 150 mV)',
+    firstSeen: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 'demo-alert-5',
+    severity: 'info',
+    status: 'resolved',
+    siteName: 'Demo Pond',
+    siteId: 'demo-site-1',
+    deviceName: 'WQM-1 #001',
+    deviceId: 'pgw-demo-001',
+    message: 'Temperature returned to normal range — 28°C (was 36°C)',
+    firstSeen: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    lastSeen: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(),
+  },
+];
 
 const DemoBanner = styled.div`
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -308,10 +374,20 @@ export default function AlertsPage() {
         ...(resolvedResult?.alerts || []),
       ];
 
-      setAlerts(all);
+      // If no real alerts and demo mode is on, show demo alerts
+      if (all.length === 0 && isDemoMode()) {
+        setAlerts(DEMO_ALERTS);
+      } else {
+        setAlerts(all);
+      }
     } catch (error) {
       console.error("Error loading alerts:", error);
-      setAlerts([]);
+      // Fall back to demo alerts in demo mode
+      if (isDemoMode()) {
+        setAlerts(DEMO_ALERTS);
+      } else {
+        setAlerts([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -407,6 +483,7 @@ export default function AlertsPage() {
       title="Alerts"
       subtitle="Monitor and manage device alerts"
     >
+      {isDemoMode() && <DemoBannerComponent />}
       <Controls>
         <Filters>
           <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
@@ -480,12 +557,12 @@ export default function AlertsPage() {
             title={
               severityFilter !== "all" || statusFilter !== "all"
                 ? "No alerts found"
-                : "All Clear"
+                : "No Alerts"
             }
             description={
               severityFilter !== "all" || statusFilter !== "all"
                 ? "Try adjusting your filters."
-                : "No active alerts across your fleet. All devices are operating normally."
+                : "No alerts. Alerts will appear here when your devices detect threshold events."
             }
           />
         ) : (

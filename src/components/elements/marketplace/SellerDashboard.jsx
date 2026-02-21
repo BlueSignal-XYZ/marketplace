@@ -266,13 +266,13 @@ const SellerDashboard = () => {
       const {wallet_nfts} = await NFT_API.get.wallet_nfts(signedUser);
 
       if (wallet_nfts) {
-        console.log("DEV: wallet_nfts", wallet_nfts);
+        // wallet NFTs loaded
         setUserNFTs(wallet_nfts);
         return true;
       }
       return null;
     } catch (error) {
-      console.log(error);
+      console.error("Error loading wallet NFTs:", error);
       setIsError(error.message);
     } finally {
       setIsLoading(false);
@@ -334,7 +334,6 @@ const SellerDashboard = () => {
           ethers.parseEther(price),
           listingFee
         );
-      console.log("@DEV Handle Result", result);
       if (result?.hash) {
         setResult({
           title: "Confirm",
@@ -366,7 +365,6 @@ const SellerDashboard = () => {
         await MarketplaceAPI.Seller.cancelListing(
           listingId
         );
-      console.log("@DEV Handle Result", result);
       if (result?.hash) {
         setResult({
           title: "Confirm",
@@ -397,7 +395,6 @@ const SellerDashboard = () => {
       const result = await MarketplaceAPI.Seller.acceptBid(
         listingId
       );
-      console.log("@DEV Handle Result", result);
       if (result?.hash) {
         setResult({
           title: "Confirm",

@@ -12,7 +12,7 @@ import { MarketplaceMenu } from '../../../components/navigation/MarketplaceMenu'
 import { WebsiteNav } from '../../../components/navigation/WebsiteNav';
 import Footer from '../../../components/shared/Footer/Footer';
 import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
-import { NotificationBar, SettingsMenu } from '../../../components';
+import { SettingsMenu } from '../../../components';
 
 // Marketing/content pages that should use the dark WebsiteNav instead of the app header
 const MARKETING_ROUTES = [
@@ -82,7 +82,6 @@ export function WQTShell({ user, isAuthLanding, children }) {
       )}
 
       {/* Legacy globals (kept for backward compat until components migrated) */}
-      <NotificationBar />
       <SettingsMenu />
 
       {/* Main content */}

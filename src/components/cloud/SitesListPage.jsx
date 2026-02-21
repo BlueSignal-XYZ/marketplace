@@ -8,6 +8,7 @@ import CloudMockAPI from "../../services/cloudMockAPI";
 import { GeocodingAPI } from "../../scripts/back_door";
 import { useAppContext } from "../../context/AppContext";
 import { EmptyState } from "../../design-system/primitives/EmptyState";
+import { isDemoMode } from "../../utils/demoMode";
 
 const CreateSiteButton = styled.button`
   padding: 10px 20px;
@@ -170,8 +171,11 @@ export default function SitesListPage() {
         const response = await GeocodingAPI.listSites({ ownerId: user?.uid });
         data = response.sites || [];
       } catch (apiErr) {
-        console.log("API unavailable, using mock data:", apiErr);
-        data = await CloudMockAPI.sites.getAll();
+        if (isDemoMode()) {
+          data = await CloudMockAPI.sites.getAll();
+        } else {
+          data = [];
+        }
       }
       setSites(data);
     } catch (error) {
@@ -266,11 +270,11 @@ export default function SitesListPage() {
       {filteredSites.length === 0 ? (
         <EmptyState
           icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>}
-          title={searchQuery || statusFilter !== "all" ? "No sites found" : "No sites yet"}
+          title={searchQuery || statusFilter !== "all" ? "No sites found" : "No Sites Yet"}
           description={
             searchQuery || statusFilter !== "all"
               ? "Try adjusting your filters or search query."
-              : "Create your first site to start monitoring water quality."
+              : "No sites registered yet. Create your first site or enable Demo Mode in Profile to explore with sample data."
           }
           action={!searchQuery && statusFilter === "all" ? { label: "Create Site", onClick: () => navigate("/cloud/sites/new") } : undefined}
         />

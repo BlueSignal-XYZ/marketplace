@@ -30,6 +30,7 @@ const HeroTitle = styled.h1`
   font-size: clamp(28px, 4vw, 40px);
   font-weight: 800;
   letter-spacing: -0.03em;
+  color: #FFFFFF;
   margin: 0 0 12px;
 `;
 

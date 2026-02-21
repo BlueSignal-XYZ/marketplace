@@ -304,28 +304,14 @@ export function MarketplaceMenu({ open, onClose, user }) {
             $active={false}
             onClick={onClose}
           >
-            Credit Definitions
+            How It Works
           </NavItem>
           <NavItem
-            to="/#verification"
+            to="/"
             $active={false}
             onClick={onClose}
           >
-            Verification
-          </NavItem>
-          <NavItem
-            to="/#pricing"
-            $active={false}
-            onClick={onClose}
-          >
-            Pricing Mechanics
-          </NavItem>
-          <NavItem
-            to="/#risk-framework"
-            $active={false}
-            onClick={onClose}
-          >
-            Risk Framework
+            Learn More
           </NavItem>
         </NavList>
 
@@ -413,7 +399,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
             onClick={onClose}
           >
             Cloud Monitoring
-            <ExternalIcon>&nearr;</ExternalIcon>
+            <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
           <ExternalLink
             href="https://bluesignal.xyz"
@@ -422,7 +408,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
             onClick={onClose}
           >
             BlueSignal Hardware
-            <ExternalIcon>&nearr;</ExternalIcon>
+            <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
           <NavItem
             to="/contact"
