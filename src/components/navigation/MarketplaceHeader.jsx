@@ -120,6 +120,31 @@ const NavLink = styled.a`
   }
 `;
 
+const SignUpButton = styled.a`
+  display: none;
+  align-items: center;
+  padding: 8px 20px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: ${({ theme }) => theme.colors?.primary || '#0052CC'};
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 150ms;
+  white-space: nowrap;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors?.primaryDark || '#003D99'};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
+  }
+
+  @media (min-width: 768px) {
+    display: inline-flex;
+  }
+`;
+
 const RightGroup = styled.div`
   display: flex;
   align-items: center;
@@ -181,6 +206,7 @@ export function MarketplaceHeader({ onMenuClick }) {
         </NavLinks>
 
         <RightGroup>
+          <SignUpButton href="/login">Get Started</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
             <FontAwesomeIcon icon={faBars} />
