@@ -163,6 +163,26 @@ const Label = styled.label`
   margin-bottom: 6px;
 `;
 
+const DisclaimerBanner = styled.div`
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  background: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md}px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.6;
+`;
+
+const DisclaimerIcon = styled.span`
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+`;
+
 // ── Program data (mirrors ProgramRegistry) ────────────────
 
 const PROGRAMS = [
@@ -236,6 +256,18 @@ export function ProgramsPage() {
           </StatsRow>
         </ProgramCard>
       ))}
+
+      {selectedProgram?.id === 'va-nce' && (
+        <DisclaimerBanner>
+          <DisclaimerIcon>ℹ️</DisclaimerIcon>
+          <div>
+            This program is operated by the Commonwealth of Virginia through a state-managed registry.
+            It is shown here as a reference example of an active nutrient trading program.
+            WaterQuality.Trading is not affiliated with this program. Our platform offers an
+            alternative, technology-driven approach to water quality credit registration and trading.
+          </div>
+        </DisclaimerBanner>
+      )}
 
       {selectedProgram && (
         <>
