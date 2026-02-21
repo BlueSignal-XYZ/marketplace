@@ -25,12 +25,12 @@ const Page = styled.div`
 `;
 
 const Hero = styled.section`
-  padding: 80px 24px 64px;
+  padding: 64px 24px 64px;
   background: #0B1120;
   color: #FFFFFF;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 120px 24px 96px;
+    padding: 96px 24px 80px;
   }
 `;
 
@@ -46,6 +46,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
+  color: #FFFFFF;
   margin: 0 0 16px;
 `;
 
