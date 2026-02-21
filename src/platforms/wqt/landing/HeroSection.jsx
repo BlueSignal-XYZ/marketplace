@@ -17,21 +17,34 @@ const pulse = keyframes`
   50%      { opacity: 0.8; }
 `;
 
+const bounce = keyframes`
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(8px); }
+`;
+
 const Section = styled.section`
   position: relative;
   overflow: hidden;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  padding-top: clamp(48px, 4vw + 32px, 80px);
-  padding-bottom: clamp(40px, 3.5vw + 26px, 64px);
-  padding-left: clamp(20px, 2vw + 12px, 32px);
-  padding-right: clamp(20px, 2vw + 12px, 32px);
+  padding-left: clamp(20px, 5vw, 48px);
+  padding-right: clamp(20px, 5vw, 48px);
   background: #0B1120;
   color: #FFFFFF;
   box-sizing: border-box;
+
+  @media (max-height: 700px) {
+    justify-content: flex-start;
+    padding-top: clamp(48px, 8vh, 80px);
+  }
 
   @media (prefers-reduced-motion: reduce) {
     & * { animation: none !important; }
@@ -95,6 +108,10 @@ const Headline = styled.h1`
   margin: 0 0 clamp(16px, 1.5vw + 10px, 24px);
   max-width: min(600px, 90%);
   color: #FFFFFF;
+
+  @media (max-height: 700px) {
+    margin-bottom: 12px;
+  }
 `;
 
 const Subheadline = styled.p`
@@ -105,6 +122,10 @@ const Subheadline = styled.p`
   max-width: min(560px, 90%);
   margin: 0 0 clamp(24px, 1.5vw + 18px, 32px);
   color: rgba(255, 255, 255, 0.7);
+
+  @media (max-height: 700px) {
+    margin-bottom: 16px;
+  }
 `;
 
 const CTARow = styled.div`
@@ -191,6 +212,10 @@ const Pills = styled.div`
     flex-direction: column;
     gap: 6px;
   }
+
+  @media (max-height: 700px) {
+    margin-top: 16px;
+  }
 `;
 
 const Pill = styled.span`
@@ -210,6 +235,30 @@ const PillSeparator = styled.span`
     display: none;
   }
 `;
+
+const ScrollIndicator = styled.div`
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.4;
+  animation: ${bounce} 2s ease infinite;
+  pointer-events: none;
+
+  @media (max-height: 700px) {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+const ChevronSvg = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
 
 const PILLS = [
   'Every credit sensor-verified',
@@ -250,6 +299,9 @@ export function HeroSection() {
           ))}
         </Pills>
       </Content>
+      <ScrollIndicator>
+        <ChevronSvg />
+      </ScrollIndicator>
     </Section>
   );
 }
