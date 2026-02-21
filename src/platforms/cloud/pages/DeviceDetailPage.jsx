@@ -11,14 +11,22 @@ import { Badge } from '../../../design-system/primitives/Badge';
 import { Tabs } from '../../../design-system/primitives/Tabs';
 import { Button } from '../../../design-system/primitives/Button';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
-import { getDevice, getDeviceMetrics, getDeviceAlerts, ApiError } from '../../../services/v2/client';
+import { getDevice, getDeviceMetrics, getDeviceAlerts, ApiError } from '../../../services/v2/api';
 
 /* ── Styled ─────────────────────────────────────────────── */
 
 const Page = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 16px;
+
+  @media (min-width: 640px) {
+    padding: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 32px 24px;
+  }
 `;
 
 const Back = styled(Link)`
@@ -30,6 +38,7 @@ const Back = styled(Link)`
   align-items: center;
   gap: 4px;
   margin-bottom: 20px;
+  min-height: 44px;
   &:hover { color: ${({ theme }) => theme.colors.primary}; }
 `;
 
@@ -44,13 +53,19 @@ const Header = styled.div`
 
 const Title = styled.h1`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 4px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  @media (min-width: 640px) {
+    font-size: 28px;
+    gap: 12px;
+  }
 `;
 
 const DeviceIdText = styled.div`
@@ -61,17 +76,28 @@ const DeviceIdText = styled.div`
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
 `;
 
 const ChartContainer = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg}px;
-  padding: 32px;
-  margin-bottom: 32px;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  @media (min-width: 640px) {
+    padding: 32px;
+    margin-bottom: 32px;
+  }
 `;
 
 const ChartTitle = styled.div`
@@ -84,10 +110,14 @@ const ChartTitle = styled.div`
 
 const ChartValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 4px;
+
+  @media (min-width: 640px) {
+    font-size: 36px;
+  }
 `;
 
 const ChartUnit = styled.span`
@@ -138,10 +168,16 @@ const RangePicker = styled.div`
   display: flex;
   gap: 4px;
   margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const RangeBtn = styled.button`
-  padding: 4px 12px;
+  padding: 6px 14px;
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 12px;
   font-weight: 500;
@@ -150,6 +186,9 @@ const RangeBtn = styled.button`
   border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : 'transparent')};
   border-radius: ${({ theme }) => theme.radius.sm}px;
   cursor: pointer;
+  min-height: 36px;
+  white-space: nowrap;
+  flex-shrink: 0;
   &:hover { background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.background)}; }
 `;
 
@@ -157,8 +196,13 @@ const InfoSection = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.lg}px;
-  padding: 24px;
-  margin-bottom: 32px;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  @media (min-width: 640px) {
+    padding: 24px;
+    margin-bottom: 32px;
+  }
 `;
 
 const InfoGrid = styled.div`
@@ -216,13 +260,20 @@ const OfflineBanner = styled.div`
   background: rgba(255, 77, 77, 0.08);
   border: 1px solid rgba(255, 77, 77, 0.15);
   border-radius: ${({ theme }) => theme.radius.md}px;
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  font-size: 14px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  font-size: 13px;
   color: ${({ theme }) => theme.colors.text};
   display: flex;
   align-items: center;
   gap: 10px;
+  word-break: break-word;
+
+  @media (min-width: 640px) {
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
 `;
 
 /* ── Constants ──────────────────────────────────────────── */

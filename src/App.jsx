@@ -5,13 +5,14 @@
  * ~90 lines. All routing and layout logic lives in src/platforms/.
  */
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { useAppContext } from "./context/AppContext";
 import { getAppMode } from "./utils/modeDetection";
 import { isFirebaseConfigured, firebaseConfigError } from "./apis/firebase";
+import { initGA, trackPageView } from "./utils/analytics";
 
 // Platform apps
 import { WQTApp } from "./platforms/wqt/WQTApp";
@@ -65,11 +66,23 @@ const ProductRedirect = () => {
   return <Navigate to={`/?product=${productId}`} replace />;
 };
 
+// ── GA4 page-view tracker (must be inside Router) ────────
+function PageTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
+  return null;
+}
+
 // ── App root ──────────────────────────────────────────────
 function App() {
   if (!isFirebaseConfigured) {
     return <ConfigurationError error={firebaseConfigError} />;
   }
+
+  // Initialize GA4 once (no-ops if env var is empty)
+  initGA(import.meta.env.VITE_GA4_MEASUREMENT_ID);
 
   const { STATES } = useAppContext();
   const { user, authLoading } = STATES || {};
@@ -80,6 +93,7 @@ function App() {
 
   return (
     <Router>
+      <PageTracker />
       {isDev && <VersionBubble>{BUILD_VERSION}</VersionBubble>}
       {mode === "landing" ? (
         <SalesRoutes />
