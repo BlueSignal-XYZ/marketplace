@@ -5,11 +5,12 @@ import { useAppContext } from '../../context/AppContext';
 import { NotificationsAPI } from '../../scripts/back_door';
 import { db } from '../../apis/firebase';
 import { ref, get, update } from 'firebase/database';
-import { notificationTypeColor } from '../../styles/uiPrimitives';
 
 const spin = keyframes`
   to { transform: rotate(360deg); }
 `;
+
+/* ── Container ─────────────────────────────────────────── */
 
 const BellContainer = styled.div`
   position: relative;
@@ -20,37 +21,44 @@ const BellButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.sm};
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  transition: ${({ theme }) => theme.transitions.default};
-  color: ${({ theme, $light }) => $light ? theme.colors.ui200 : theme.colors.ui600};
+  border-radius: 10px;
+  transition: all 0.15s ease-out;
+  color: ${({ $light }) => $light ? 'rgba(255,255,255,0.7)' : '#6B7280'};
   font-size: 20px;
+  min-height: 44px;
+  min-width: 44px;
 
   &:hover {
-    background: ${({ theme, $light }) => $light ? 'rgba(255,255,255,0.1)' : theme.colors.ui100};
+    background: ${({ $light }) => $light ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)'};
+    color: ${({ $light }) => $light ? '#FFFFFF' : '#1A1A1A'};
   }
 `;
 
 const Badge = styled.span`
   position: absolute;
-  top: 2px;
-  right: 2px;
-  background: ${({ theme }) => theme.colors.red500};
-  color: #fff;
+  top: 4px;
+  right: 4px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 10px;
   font-weight: 700;
   min-width: 18px;
   height: 18px;
-  border-radius: ${({ theme }) => theme.borderRadius.full};
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 4px;
   line-height: 1;
+  border: 2px solid white;
 `;
+
+/* ── Dropdown ──────────────────────────────────────────── */
 
 const Dropdown = styled.div`
   position: absolute;
@@ -58,16 +66,22 @@ const Dropdown = styled.div`
   right: 0;
   width: 380px;
   max-height: 480px;
-  background: #fff;
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-  box-shadow: ${({ theme }) => theme.shadows.xl};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   z-index: 1000;
   overflow: hidden;
 
   @media (max-width: 480px) {
-    width: calc(100vw - 32px);
-    right: -16px;
+    position: fixed;
+    top: 72px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: calc(100vh - 96px);
   }
 `;
 
@@ -75,44 +89,67 @@ const DropdownHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.xl}`};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ui100};
+  padding: 16px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  flex-shrink: 0;
 `;
 
 const DropdownTitle = styled.h3`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 16px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
+  font-weight: 700;
+  color: #1A1A1A;
   margin: 0;
+  letter-spacing: -0.01em;
 `;
 
 const MarkAllButton = styled.button`
   background: none;
   border: none;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.primary500};
+  color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   cursor: pointer;
   font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-height: 28px;
 
   &:hover {
-    text-decoration: underline;
+    background: ${({ theme }) => theme.colors?.primaryLight || 'rgba(0,102,255,0.06)'};
   }
 `;
 
 const NotificationList = styled.div`
-  max-height: 380px;
+  flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Smooth scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #E5E7EB;
+    border-radius: 2px;
+  }
 `;
 
 const NotificationItem = styled.div`
-  padding: 14px ${({ theme }) => theme.spacing.xl};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.ui50};
+  padding: 14px 20px;
   cursor: pointer;
-  transition: ${({ theme }) => theme.transitions.fast};
-  background: ${({ theme, $unread }) => $unread ? theme.colors.ui50 : '#fff'};
+  transition: background 0.1s ease-out;
+  background: ${({ $unread }) => $unread ? '#F8FAFF' : '#FFFFFF'};
+  border-bottom: 1px solid #F9FAFB;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.ui100};
+    background: #F3F4F6;
   }
 
   &:last-child {
@@ -120,56 +157,94 @@ const NotificationItem = styled.div`
   }
 `;
 
-const NotificationTitle = styled.div`
-  font-size: 14px;
-  font-weight: ${({ $unread }) => $unread ? '600' : '400'};
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: 4px;
+const TypeDot = styled.span`
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: ${({ $type }) => {
+    switch ($type) {
+      case 'alert': return '#EF4444';
+      case 'credit-generated': return '#0066FF';
+      case 'trading-program-available': return '#10B981';
+      case 'enrollment-update': return '#F59E0B';
+      default: return '#9CA3AF';
+    }
+  }};
 `;
 
-const NotificationBody = styled.div`
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.textMuted};
+const NotificationContent = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+const NotificationTitle = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 14px;
+  font-weight: ${({ $unread }) => $unread ? '600' : '400'};
+  color: #1A1A1A;
+  margin-bottom: 2px;
   line-height: 1.4;
 `;
 
+const NotificationBody = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
 const NotificationTime = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 11px;
-  color: ${({ theme }) => theme.colors.ui400};
+  color: #9CA3AF;
   margin-top: 4px;
 `;
 
 const EmptyNotifications = styled.div`
-  padding: 40px ${({ theme }) => theme.spacing.xl};
+  padding: 48px 20px;
   text-align: center;
-  color: ${({ theme }) => theme.colors.ui400};
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 `;
 
-const TypeIndicator = styled.span`
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: ${({ theme }) => theme.spacing.sm};
-  background: ${({ theme, $type }) => notificationTypeColor($type, theme)};
+const EmptyIcon = styled.div`
+  color: #D1D5DB;
+  margin-bottom: 4px;
+`;
+
+const EmptyTitle = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 15px;
+  font-weight: 600;
+  color: #6B7280;
+`;
+
+const EmptyText = styled.div`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 13px;
+  color: #9CA3AF;
 `;
 
 const MiniSpinner = styled.div`
   width: 20px;
   height: 20px;
-  border: 2px solid ${({ theme }) => theme.colors.ui200};
-  border-top-color: ${({ theme }) => theme.colors.primary500};
+  border: 2px solid #E5E7EB;
+  border-top-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   border-radius: 50%;
   animation: ${spin} 0.8s linear infinite;
-  margin: 20px auto;
+  margin: 24px auto;
 `;
 
-/**
- * NotificationBell — cross-platform notification component.
- * Reads from RTDB /notifications/ for the current user.
- * Used in both CloudHeader and MarketplaceHeader.
- */
+/* ── Component ─────────────────────────────────────────── */
+
 const NotificationBell = ({ light = false }) => {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
@@ -218,22 +293,24 @@ const NotificationBell = ({ light = false }) => {
       }
 
       // Direct RTDB read
-      const notificationsRef = ref(db, 'notifications');
-      const snapshot = await get(notificationsRef);
+      if (db) {
+        const notificationsRef = ref(db, 'notifications');
+        const snapshot = await get(notificationsRef);
 
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const userNotifications = Object.entries(data)
-          .map(([id, n]) => ({ id, ...n }))
-          .filter(n => n.userId === user.uid && !n.dismissed)
-          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
-          .slice(0, 20);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const userNotifications = Object.entries(data)
+            .map(([id, n]) => ({ id, ...n }))
+            .filter(n => n.userId === user.uid && !n.dismissed)
+            .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+            .slice(0, 20);
 
-        setNotifications(userNotifications);
-        setUnreadCount(userNotifications.filter(n => !n.read).length);
+          setNotifications(userNotifications);
+          setUnreadCount(userNotifications.filter(n => !n.read).length);
+        }
       }
     } catch (error) {
-      console.error('Failed to load notifications:', error);
+      // Silently handle notification load failures
     } finally {
       setLoading(false);
     }
@@ -244,10 +321,12 @@ const NotificationBell = ({ light = false }) => {
       await NotificationsAPI.markRead(notificationId);
     } catch {
       try {
-        const notifRef = ref(db, `notifications/${notificationId}`);
-        await update(notifRef, { read: true });
-      } catch (e) {
-        console.error('Failed to mark notification as read:', e);
+        if (db) {
+          const notifRef = ref(db, `notifications/${notificationId}`);
+          await update(notifRef, { read: true });
+        }
+      } catch {
+        // Silently handle
       }
     }
     setNotifications(prev => prev.map(n =>
@@ -262,8 +341,10 @@ const NotificationBell = ({ light = false }) => {
     } catch {
       for (const n of notifications.filter(n => !n.read)) {
         try {
-          const notifRef = ref(db, `notifications/${n.id}`);
-          await update(notifRef, { read: true });
+          if (db) {
+            const notifRef = ref(db, `notifications/${n.id}`);
+            await update(notifRef, { read: true });
+          }
         } catch { /* skip */ }
       }
     }
@@ -320,7 +401,14 @@ const NotificationBell = ({ light = false }) => {
               <MiniSpinner />
             ) : notifications.length === 0 ? (
               <EmptyNotifications>
-                No notifications yet
+                <EmptyIcon>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                  </svg>
+                </EmptyIcon>
+                <EmptyTitle>No new notifications</EmptyTitle>
+                <EmptyText>You're all caught up</EmptyText>
               </EmptyNotifications>
             ) : (
               notifications.map(notification => (
@@ -329,14 +417,16 @@ const NotificationBell = ({ light = false }) => {
                   $unread={!notification.read}
                   onClick={() => handleNotificationClick(notification)}
                 >
-                  <NotificationTitle $unread={!notification.read}>
-                    <TypeIndicator $type={notification.type} />
-                    {notification.title}
-                  </NotificationTitle>
-                  {notification.body && (
-                    <NotificationBody>{notification.body}</NotificationBody>
-                  )}
-                  <NotificationTime>{formatTime(notification.createdAt)}</NotificationTime>
+                  <TypeDot $type={notification.type} />
+                  <NotificationContent>
+                    <NotificationTitle $unread={!notification.read}>
+                      {notification.title}
+                    </NotificationTitle>
+                    {notification.body && (
+                      <NotificationBody>{notification.body}</NotificationBody>
+                    )}
+                    <NotificationTime>{formatTime(notification.createdAt)}</NotificationTime>
+                  </NotificationContent>
                 </NotificationItem>
               ))
             )}
