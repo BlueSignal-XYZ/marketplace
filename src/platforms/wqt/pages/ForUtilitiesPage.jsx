@@ -54,16 +54,16 @@ const HeroSub = styled.p`
 `;
 
 const Section = styled.section`
-  padding: 80px 24px;
+  padding: 96px 24px;
   background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
 
   @media (max-width: 640px) {
-    padding: 56px 20px;
+    padding: 64px 20px;
   }
 `;
 
 const SectionInner = styled.div`
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
 `;
 
@@ -78,11 +78,11 @@ const SectionTitle = styled.h2`
 
 const SectionDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 16px;
+  font-size: 17px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.7;
-  margin: 0 0 32px;
-  max-width: 700px;
+  line-height: 1.75;
+  margin: 0 0 36px;
+  max-width: 680px;
 `;
 
 const Grid = styled.div`
@@ -120,9 +120,9 @@ const CardTitle = styled.h3`
 
 const CardDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
 `;
 
@@ -230,9 +230,8 @@ export default function ForUtilitiesPage() {
           <Breadcrumb href="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>Reduce Treatment Costs Through Distributed Water Production</HeroTitle>
           <HeroSub>
-            The water quality trading system enables utilities to compensate distributed
-            water producers while reducing downstream treatment costs. You control the
-            pricing, set the rates, and integrate through existing billing infrastructure.
+            Every gallon produced at the home is a gallon you don't have to treat and deliver.
+            You control the pricing, set the rates, and integrate through existing billing infrastructure.
           </HeroSub>
         </HeroInner>
       </Hero>
@@ -369,10 +368,10 @@ export default function ForUtilitiesPage() {
       <CTASection>
         <CTATitle>Ready to Evaluate the System?</CTATitle>
         <CTADesc>
-          Contact us to discuss rate structures, integration requirements,
+          Discuss rate structures, integration requirements,
           and pilot program design for your service area.
         </CTADesc>
-        <CTAButton href="/contact">Contact Us</CTAButton>
+        <CTAButton href="/contact">Schedule a Pilot Discussion</CTAButton>
       </CTASection>
     </Page>
   );

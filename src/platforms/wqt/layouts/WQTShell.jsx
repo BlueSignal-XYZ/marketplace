@@ -9,9 +9,20 @@ import styled from 'styled-components';
 
 import { MarketplaceHeader } from '../../../components/navigation/MarketplaceHeader';
 import { MarketplaceMenu } from '../../../components/navigation/MarketplaceMenu';
+import { WebsiteNav } from '../../../components/navigation/WebsiteNav';
 import Footer from '../../../components/shared/Footer/Footer';
 import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
 import { NotificationBar, SettingsMenu } from '../../../components';
+
+// Marketing/content pages that should use the dark WebsiteNav instead of the app header
+const MARKETING_ROUTES = [
+  '/contact',
+  '/for-utilities',
+  '/for-homeowners',
+  '/for-aggregators',
+  '/terms',
+  '/privacy',
+];
 
 const AppContainer = styled.div`
   display: flex;
@@ -39,6 +50,8 @@ export function WQTShell({ user, isAuthLanding, children }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const isMarketingRoute = MARKETING_ROUTES.includes(location.pathname);
+
   // Set page title
   useEffect(() => {
     document.title = 'WaterQuality.Trading';
@@ -51,17 +64,22 @@ export function WQTShell({ user, isAuthLanding, children }) {
 
   return (
     <AppContainer>
-      {/* Header — hidden on auth landing */}
-      {!isAuthLanding && (
+      {/* Navigation: marketing pages get dark WebsiteNav, app pages get MarketplaceHeader */}
+      {!isAuthLanding && isMarketingRoute && (
+        <WebsiteNav />
+      )}
+      {!isAuthLanding && !isMarketingRoute && (
         <MarketplaceHeader onMenuClick={() => setMenuOpen((p) => !p)} />
       )}
 
-      {/* Mobile menu */}
-      <MarketplaceMenu
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        user={user}
-      />
+      {/* Mobile menu (app pages only — WebsiteNav has its own mobile menu) */}
+      {!isMarketingRoute && (
+        <MarketplaceMenu
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          user={user}
+        />
+      )}
 
       {/* Legacy globals (kept for backward compat until components migrated) */}
       <NotificationBar />

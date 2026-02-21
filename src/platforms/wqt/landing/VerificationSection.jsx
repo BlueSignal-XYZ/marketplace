@@ -184,8 +184,8 @@ const LAYERS = [
     typeColor: '#0052CC',
     typeBg: 'rgba(0, 82, 204, 0.1)',
     accent: '#0052CC',
-    desc: 'Each water generator is equipped with an inline flow sensor that records gallons produced. This data is cross-referenced against the property\'s water meter, providing two independent confirmation points.',
-    detail: 'Discrepancies between the flow sensor and the property water meter trigger automatic flags. Two independent data sources for every gallon produced.',
+    desc: 'Inline flow sensor records every gallon produced, cross-referenced against the property water meter. Two independent measurements per gallon.',
+    detail: 'Discrepancies trigger automatic flags. No single data source can validate production alone.',
   },
   {
     number: 'Layer 02',
@@ -194,8 +194,8 @@ const LAYERS = [
     typeColor: '#10B981',
     typeBg: 'rgba(16, 185, 129, 0.1)',
     accent: '#10B981',
-    desc: 'Each unit includes a BlueSignal WQM-1 monitoring device \u2014 a multi-channel sensor board that reads water quality signals in real time and sends data to cloud.bluesignal.xyz. It also controls anti-fouling to maintain system performance.',
-    detail: 'Round-the-clock quality data enables immediate detection of drift or degradation. Every unit monitored, every signal recorded, every anomaly flagged.',
+    desc: 'BlueSignal WQM-1 reads water quality 24/7 and transmits to the cloud. Controls anti-fouling to maintain system performance.',
+    detail: 'Every unit monitored, every signal recorded, every anomaly flagged in real time.',
   },
   {
     number: 'Layer 03',
@@ -204,8 +204,8 @@ const LAYERS = [
     typeColor: '#8B5CF6',
     typeBg: 'rgba(139, 92, 246, 0.1)',
     accent: '#8B5CF6',
-    desc: 'At least 25% of all active sites are physically sampled each year by an independent contractor selected through competitive bidding. This contractor has no connection to the hardware manufacturer, BlueSignal, or the homeowner.',
-    detail: 'Lab results serve as checks against continuous monitoring data. Discrepancies trigger investigation and potential credit adjustment — an external, conflict-free audit trail for the market.',
+    desc: '25% of active sites physically sampled annually by an independent contractor with no ties to the hardware manufacturer or homeowner.',
+    detail: 'Lab results check continuous monitoring data. Discrepancies trigger investigation and credit adjustment.',
   },
 ];
 

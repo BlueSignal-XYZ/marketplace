@@ -199,7 +199,7 @@ export function CreditDefinitionsSection() {
     <Section id="credit-definitions">
       <Inner>
         <SectionLabel>Credit Architecture</SectionLabel>
-        <SectionTitle>Two Credit Types, One Combined Value</SectionTitle>
+        <SectionTitle>Two Credits. One Verified Value.</SectionTitle>
         <SectionSub>
           The system uses two credit types that work together.
           Quantity measures how much water is produced. Quality measures

@@ -1,0 +1,71 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1120"/>
+      <stop offset="100%" stop-color="#0F1B35"/>
+    </linearGradient>
+    <!-- Subtle grid pattern -->
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Decorative gradient orbs -->
+  <circle cx="200" cy="200" r="200" fill="rgba(15,76,129,0.15)" filter="url(#blur1)"/>
+  <circle cx="1000" cy="450" r="180" fill="rgba(14,165,233,0.08)" filter="url(#blur1)"/>
+
+  <!-- Logo mark (centered, larger) -->
+  <g transform="translate(540, 120) scale(1.8)">
+    <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#3B82F6"/>
+    <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M20 34L23 37L29 31" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="600" y="250" text-anchor="middle" fill="#0EA5E9"
+    font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="600" letter-spacing="3">
+    SENSOR-VERIFIED WATER CREDITS
+  </text>
+
+  <!-- Headline -->
+  <text x="600" y="320" text-anchor="middle" fill="white"
+    font-family="Inter, system-ui, sans-serif" font-size="52" font-weight="700">
+    Your Water Has Value.
+  </text>
+  <text x="600" y="380" text-anchor="middle" fill="white"
+    font-family="Inter, system-ui, sans-serif" font-size="52" font-weight="700">
+    Now You Can Prove It.
+  </text>
+
+  <!-- Subhead -->
+  <text x="600" y="440" text-anchor="middle" fill="#94A3B8"
+    font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="400">
+    Produce clean water. Earn utility rebates. Every gallon verified.
+  </text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="570" width="1200" height="60" fill="rgba(0,0,0,0.3)"/>
+
+  <!-- WaterQuality.Trading wordmark -->
+  <text x="600" y="608" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="20">
+    <tspan fill="#F1F5F9" font-weight="700">WaterQuality</tspan><tspan fill="#0EA5E9" font-weight="400">.Trading</tspan>
+  </text>
+
+  <!-- Three trust badges -->
+  <text x="200" y="540" text-anchor="middle" fill="#64748B"
+    font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500">
+    Every credit sensor-verified
+  </text>
+  <text x="600" y="540" text-anchor="middle" fill="#64748B"
+    font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500">
+    Pricing set by your utility
+  </text>
+  <text x="1000" y="540" text-anchor="middle" fill="#64748B"
+    font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500">
+    Three-layer independent verification
+  </text>
+</svg>

@@ -163,8 +163,8 @@ export function PricingSection() {
         <SectionLabel>Pricing Mechanics</SectionLabel>
         <SectionTitle>Utility-Controlled Pricing</SectionTitle>
         <SectionSub>
-          Pricing is controlled by the utility or municipality. The system
-          provides a configurable template and the utility sets values that
+          No speculative pricing. No token volatility. Your utility sets the rate.
+          The system provides a configurable template and the utility sets values that
           reflect their local costs.
         </SectionSub>
 

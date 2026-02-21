@@ -158,7 +158,7 @@ export function AggregatorSection() {
     <Section id="aggregators">
       <Inner>
         <SectionLabel>Aggregator Model</SectionLabel>
-        <SectionTitle>From Rebate Program to Functioning Market</SectionTitle>
+        <SectionTitle>From Rebates to a Functioning Market</SectionTitle>
         <SectionSub>
           Aggregators bundle credits from hundreds or thousands of homeowners into
           portfolios that utilities can purchase through a single contract — turning

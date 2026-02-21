@@ -54,16 +54,16 @@ const HeroSub = styled.p`
 `;
 
 const Section = styled.section`
-  padding: 80px 24px;
+  padding: 96px 24px;
   background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
 
   @media (max-width: 640px) {
-    padding: 56px 20px;
+    padding: 64px 20px;
   }
 `;
 
 const SectionInner = styled.div`
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
 `;
 
@@ -78,11 +78,11 @@ const SectionTitle = styled.h2`
 
 const SectionDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 16px;
+  font-size: 17px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.7;
-  margin: 0 0 32px;
-  max-width: 700px;
+  line-height: 1.75;
+  margin: 0 0 36px;
+  max-width: 680px;
 `;
 
 const GreeksTable = styled.div`
@@ -130,9 +130,9 @@ const GreekSub = styled.div`
 
 const GreekDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
 `;
 
@@ -171,9 +171,9 @@ const CardTitle = styled.h3`
 
 const CardDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
 `;
 
@@ -292,9 +292,9 @@ export default function ForAggregatorsPage() {
           <Breadcrumb href="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>Build and Manage Water Credit Portfolios at Scale</HeroTitle>
           <HeroSub>
-            The Greeks framework enables sophisticated pricing, hedging, and
-            structured market participation. This is where a rebate program
-            becomes a functioning market.
+            Turn distributed water production into structured, tradeable portfolios.
+            Apply institutional risk frameworks and access utility-scale demand
+            through a single contract.
           </HeroSub>
         </HeroInner>
       </Hero>
@@ -414,10 +414,10 @@ export default function ForAggregatorsPage() {
       <CTASection>
         <CTATitle>Interested in Aggregation?</CTATitle>
         <CTADesc>
-          Contact us to discuss portfolio construction, regional availability,
+          Discuss portfolio construction, regional availability,
           and market access for institutional participants.
         </CTADesc>
-        <CTAButton href="/contact">Contact Us</CTAButton>
+        <CTAButton href="/contact">Request Portfolio Access</CTAButton>
       </CTASection>
     </Page>
   );

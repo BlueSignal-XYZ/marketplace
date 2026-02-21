@@ -282,14 +282,14 @@ export function HeroSection() {
       />
 
       <Content>
-        <Eyebrow>Powered by BlueSignal</Eyebrow>
-        <Headline>Trade Verified Water Quality Credits</Headline>
+        <Eyebrow>Sensor-Verified Water Credits</Eyebrow>
+        <Headline>Your Water Has Value. Now You Can Prove It.</Headline>
         <Subheadline>
-          Earn rebates for producing your own water. Give utilities a cheaper path to compliance. Build portfolios in the first structured water credit marketplace.
+          Produce clean water. Earn utility rebates. Every gallon metered, every credit verified, every rebate on your bill.
         </Subheadline>
         <CTARow>
-          <PrimaryBtn href="/marketplace">Enter Marketplace</PrimaryBtn>
-          <SecondaryBtn href="/credit-registry">Explore Registry</SecondaryBtn>
+          <PrimaryBtn href="/#credit-definitions">See How Credits Work</PrimaryBtn>
+          <SecondaryBtn href="/registry">View Credit Registry</SecondaryBtn>
         </CTARow>
         <Pills>
           {PILLS.map((text, i) => (
