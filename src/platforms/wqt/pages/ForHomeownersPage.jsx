@@ -1,9 +1,10 @@
 /**
  * ForHomeownersPage — dedicated page for homeowners.
- * Covers credit earning, verification transparency, and ROI.
+ * Content: Property-level credit generation from water quality improvements.
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Page = styled.div`
@@ -14,7 +15,6 @@ const Hero = styled.section`
   padding: 80px 24px 64px;
   background: #0B1120;
   color: #FFFFFF;
-
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px 24px 96px;
   }
@@ -25,7 +25,7 @@ const HeroInner = styled.div`
   margin: 0 auto;
 `;
 
-const Breadcrumb = styled.a`
+const Breadcrumb = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13px;
   color: rgba(255, 255, 255, 0.4);
@@ -57,10 +57,7 @@ const HeroSub = styled.p`
 const Section = styled.section`
   padding: 96px 24px;
   background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
-
-  @media (max-width: 640px) {
-    padding: 64px 20px;
-  }
+  @media (max-width: 640px) { padding: 64px 20px; }
 `;
 
 const SectionInner = styled.div`
@@ -86,133 +83,41 @@ const SectionDesc = styled.p`
   max-width: 680px;
 `;
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-`;
-
-const Card = styled.div`
-  padding: 28px;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg}px;
-`;
-
-const CardAlt = styled.div`
-  padding: 28px;
-  background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg}px;
-`;
-
-const CardTitle = styled.h3`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 17px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 8px;
-`;
-
-const CardDesc = styled.p`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 15px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.7;
+const FlowList = styled.ol`
+  list-style: none;
+  counter-reset: flow;
+  padding: 0;
   margin: 0;
-`;
-
-const CreditPair = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-`;
-
-const CreditCard = styled.div`
-  padding: 32px;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg}px;
-  border-top: 3px solid ${({ $accent }) => $accent};
-`;
-
-const CreditLabel = styled.span`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 12px;
-  font-weight: 600;
-  color: ${({ $color }) => $color};
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 8px;
-`;
-
-const CreditName = styled.h3`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 20px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 8px;
-`;
-
-const CreditUnit = styled.p`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.textMuted};
-  margin: 0 0 12px;
-`;
-
-const CreditDesc = styled.p`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
-  margin: 0;
-`;
-
-const StepsList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 20px;
 `;
 
-const StepItem = styled.div`
+const FlowItem = styled.li`
+  counter-increment: flow;
   display: grid;
-  grid-template-columns: 48px 1fr;
+  grid-template-columns: 40px 1fr;
   gap: 16px;
-  padding: 24px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
   align-items: start;
-  &:last-child { border-bottom: none; }
+  &::before {
+    content: counter(flow, decimal-leading-zero);
+    font-family: ${({ theme }) => theme.fonts.mono};
+    font-size: 14px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.primary};
+    background: rgba(0, 82, 204, 0.08);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
-const StepNum = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: ${({ $bg }) => $bg};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 14px;
-  font-weight: 700;
-  color: ${({ $color }) => $color};
-`;
+const FlowContent = styled.div``;
 
-const StepContent = styled.div``;
-
-const StepTitle = styled.h4`
+const FlowTitle = styled.h4`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
@@ -220,7 +125,7 @@ const StepTitle = styled.h4`
   margin: 0 0 4px;
 `;
 
-const StepDesc = styled.p`
+const FlowDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 14px;
   color: ${({ theme }) => theme.colors.textSecondary};
@@ -228,30 +133,43 @@ const StepDesc = styled.p`
   margin: 0;
 `;
 
-const HighlightCard = styled.div`
-  padding: 28px 32px;
-  background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+const Callout = styled.div`
+  padding: 32px;
+  background: rgba(0, 82, 204, 0.04);
+  border: 1px solid rgba(0, 82, 204, 0.12);
   border-radius: ${({ theme }) => theme.radius.lg}px;
-  margin-top: 24px;
+  margin-top: 8px;
 `;
 
-const HighlightTitle = styled.h4`
+const CalloutTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.primary};
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin: 0 0 8px;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0 0 12px;
 `;
 
-const HighlightText = styled.p`
+const CalloutDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.7;
   margin: 0;
+`;
+
+const BulletList = styled.ul`
+  padding-left: 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const BulletItem = styled.li`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.6;
 `;
 
 const CTASection = styled.section`
@@ -266,7 +184,6 @@ const CTATitle = styled.h2`
   font-weight: 700;
   color: #FFFFFF;
   margin: 0 0 16px;
-  letter-spacing: -0.02em;
 `;
 
 const CTADesc = styled.p`
@@ -278,7 +195,14 @@ const CTADesc = styled.p`
   max-width: 520px;
 `;
 
-const CTAButton = styled.a`
+const CTAButtons = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
+const CTAButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -293,10 +217,25 @@ const CTAButton = styled.a`
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
-  }
+  &:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4); }
+`;
+
+const CTAButtonOutline = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  min-height: 52px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 200ms;
+  &:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
 `;
 
 export default function ForHomeownersPage() {
@@ -304,149 +243,106 @@ export default function ForHomeownersPage() {
     <Page>
       <Hero>
         <HeroInner>
-          <Breadcrumb href="/">&larr; Back to Overview</Breadcrumb>
-          <HeroTitle>Earn Credits From Your Water Generator</HeroTitle>
+          <Breadcrumb to="/">&larr; Back to Overview</Breadcrumb>
+          <HeroTitle>Your Property Generates Water Quality Credits</HeroTitle>
           <HeroSub>
-            Your water has value — now your utility will pay you for it.
-            Two credit types, fully automated verification,
-            and rebates credited directly to your monthly water bill.
+            If you manage stormwater, treat well water, or maintain a rainwater system,
+            the improvements you make can be measured, verified, and sold.
           </HeroSub>
         </HeroInner>
       </Hero>
 
       <Section>
         <SectionInner>
-          <SectionTitle>How You Earn Credits</SectionTitle>
+          <SectionTitle>You're Already Doing the Work</SectionTitle>
           <SectionDesc>
-            Every gallon your system produces earns you money back on your water bill.
-            You earn two types of credits simultaneously — one for volume, one for
-            water quality. Both are verified automatically. You don't have to do anything.
+            You installed a rain garden. You maintain a septic system that outperforms
+            county minimums. You run a residential water treatment system. You've invested
+            in your property's water quality — but until now, there's been no way to
+            capture the value of that investment beyond your own property line.
           </SectionDesc>
-          <CreditPair>
-            <CreditCard $accent="#0052CC">
-              <CreditLabel $color="#0052CC">Quantity Credit (QC)</CreditLabel>
-              <CreditName>Per Gallon Produced</CreditName>
-              <CreditUnit>1 QC = 1 gallon</CreditUnit>
-              <CreditDesc>
-                Every gallon your unit produces is metered by an inline flow
-                sensor and confirmed against your property water meter. Two
-                independent measurements for every gallon.
-              </CreditDesc>
-            </CreditCard>
-            <CreditCard $accent="#10B981">
-              <CreditLabel $color="#10B981">Quality Credit (KC)</CreditLabel>
-              <CreditName>Per kg N/P Offset</CreditName>
-              <CreditUnit>1 KC = 1 kg nitrogen or phosphorus</CreditUnit>
-              <CreditDesc>
-                The BlueSignal WQM-1 device on your unit continuously monitors
-                water quality. Cleaner water earns more quality credits, which boost
-                the value of your quantity credits.
-              </CreditDesc>
-            </CreditCard>
-          </CreditPair>
-
-          <HighlightCard>
-            <HighlightTitle>Self-Correcting Incentive</HighlightTitle>
-            <HighlightText>
-              System maintenance directly impacts your earnings. When your filters are
-              fresh and your system runs well, both credit types are maximized. If water
-              quality drops, quality credits decline and reduce your overall credit value.
-              The system rewards you for keeping your unit in good condition.
-            </HighlightText>
-          </HighlightCard>
         </SectionInner>
       </Section>
 
       <Section $alt>
         <SectionInner>
-          <SectionTitle>What Verification Looks Like For You</SectionTitle>
-          <SectionDesc>
-            The short answer: you don't have to do anything. The system handles all
-            verification automatically. Here's what happens behind the scenes.
-          </SectionDesc>
-          <StepsList>
-            <StepItem>
-              <StepNum $bg="rgba(0, 82, 204, 0.1)" $color="#0052CC">01</StepNum>
-              <StepContent>
-                <StepTitle>Automatic Metering</StepTitle>
-                <StepDesc>
-                  Your unit's inline flow sensor records every gallon produced.
-                  This is cross-referenced with your property water meter automatically.
-                </StepDesc>
-              </StepContent>
-            </StepItem>
-            <StepItem>
-              <StepNum $bg="rgba(16, 185, 129, 0.1)" $color="#10B981">02</StepNum>
-              <StepContent>
-                <StepTitle>Continuous Quality Monitoring</StepTitle>
-                <StepDesc>
-                  The BlueSignal WQM-1 device reads water quality signals 24/7 and
-                  transmits data to the cloud. It also controls anti-fouling to keep
-                  your system performing well.
-                </StepDesc>
-              </StepContent>
-            </StepItem>
-            <StepItem>
-              <StepNum $bg="rgba(139, 92, 246, 0.1)" $color="#8B5CF6">03</StepNum>
-              <StepContent>
-                <StepTitle>Periodic Independent Sampling</StepTitle>
-                <StepDesc>
-                  An independent contractor may visit your property for a physical water
-                  sample as part of the 25% annual site audit. This is a brief, non-invasive
-                  calibration check.
-                </StepDesc>
-              </StepContent>
-            </StepItem>
-            <StepItem>
-              <StepNum $bg="rgba(6, 182, 212, 0.1)" $color="#06B6D4">04</StepNum>
-              <StepContent>
-                <StepTitle>Rebate on Your Bill</StepTitle>
-                <StepDesc>
-                  Your utility issues a rebate directly to your account as a credit on
-                  your regular water bill. The more your system produces, the more you earn.
-                </StepDesc>
-              </StepContent>
-            </StepItem>
-          </StepsList>
+          <SectionTitle>How It Works for You</SectionTitle>
+          <FlowList>
+            <FlowItem>
+              <FlowContent>
+                <FlowTitle>Install a Monitor</FlowTitle>
+                <FlowDesc>
+                  A BlueSignal WQM-1 device at your discharge point or well head continuously
+                  measures water quality — pH, nutrients, sediment, temperature. It runs on
+                  solar or AC power and transmits data automatically.
+                </FlowDesc>
+              </FlowContent>
+            </FlowItem>
+            <FlowItem>
+              <FlowContent>
+                <FlowTitle>Establish a Baseline</FlowTitle>
+                <FlowDesc>
+                  The platform compares your current water quality against a regulatory
+                  baseline or your pre-improvement condition. The difference is your
+                  credit-generating capacity.
+                </FlowDesc>
+              </FlowContent>
+            </FlowItem>
+            <FlowItem>
+              <FlowContent>
+                <FlowTitle>Earn Credits</FlowTitle>
+                <FlowDesc>
+                  As your system continues to perform, verified credits accumulate in your
+                  WaterQuality.Trading account. You can hold them, sell them on the
+                  marketplace, or retire them as a personal environmental offset.
+                </FlowDesc>
+              </FlowContent>
+            </FlowItem>
+          </FlowList>
         </SectionInner>
       </Section>
 
       <Section>
         <SectionInner>
-          <SectionTitle>Your ROI</SectionTitle>
-          <SectionDesc>
-            Your return depends on two factors: how much water your unit produces,
-            and the rates your utility has set. A calculator tool is available
-            to project your expected earnings based on your utility's specific rates.
-          </SectionDesc>
-          <Grid>
-            <Card>
-              <CardTitle>Quantity Earnings</CardTitle>
-              <CardDesc>
-                Based on your unit's daily production (gallons) multiplied
-                by your utility's buyback rate (quarter, half, or full parity
-                relative to retail water price).
-              </CardDesc>
-            </Card>
-            <Card>
-              <CardTitle>Quality Premium</CardTitle>
-              <CardDesc>
-                Additional earnings from quality credits based on your water's N/P
-                reduction performance. Cleaner water means a higher quality multiplier
-                enhances your quantity credit value.
-              </CardDesc>
-            </Card>
-          </Grid>
+          <SectionTitle>What This Looks Like in Practice</SectionTitle>
+          <Callout>
+            <CalloutTitle>Example: 5-Acre Chesapeake Bay Property</CalloutTitle>
+            <CalloutDesc>
+              A homeowner with a 5-acre property in a Chesapeake Bay watershed installs a
+              bioretention system and a BlueSignal monitor. The system reduces phosphorus
+              runoff by 12 lbs/year compared to the pre-project baseline. After a 6-month
+              verification period, the platform issues 12 phosphorus credits. At current
+              regional prices, those credits have market value — potentially enough to offset
+              the cost of the monitoring equipment within 2–3 years.
+            </CalloutDesc>
+          </Callout>
+        </SectionInner>
+      </Section>
+
+      <Section $alt>
+        <SectionInner>
+          <SectionTitle>Who This Works For</SectionTitle>
+          <BulletList>
+            <BulletItem>Waterfront property owners (docks, ponds, lakefront)</BulletItem>
+            <BulletItem>Rural well and spring water system operators</BulletItem>
+            <BulletItem>Rainwater harvesting system owners</BulletItem>
+            <BulletItem>Homeowners with rain gardens, bioswales, or constructed wetlands</BulletItem>
+            <BulletItem>Residential septic system operators exceeding baseline performance</BulletItem>
+          </BulletList>
         </SectionInner>
       </Section>
 
       <CTASection>
-        <CTATitle>Start Earning From Your Water</CTATitle>
+        <CTATitle>Ready to see if your property qualifies?</CTATitle>
         <CTADesc>
-          Check if your utility participates in the program or
-          contact us to learn about availability in your area.
+          Create an account to check eligibility, or learn about BlueSignal monitoring devices.
         </CTADesc>
-        <CTAButton href="/contact">Calculate Your Rebate</CTAButton>
+        <CTAButtons>
+          <CTAButton to="/login">See If Your Property Qualifies</CTAButton>
+          <CTAButtonOutline href="https://bluesignal.xyz" target="_blank" rel="noopener noreferrer">
+            Learn About BlueSignal Devices
+          </CTAButtonOutline>
+        </CTAButtons>
       </CTASection>
     </Page>
   );
