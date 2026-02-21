@@ -244,7 +244,7 @@ export default function AlertDetailPage() {
   const handleReopen = () => {
     // TODO: Implement actual API call to reopen alert
     setAlert({ ...alert, status: "open" });
-    console.log("Alert reopened:", alertId);
+    // alert reopened
   };
 
   const getSeverityLabel = (severity) => {

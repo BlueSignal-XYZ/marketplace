@@ -46,8 +46,7 @@ const ProductDisplay = ({ isLoading, supplyManagement, handlePayment }) => {
 
   // ##TO_DO Check if amount is available from credit supply
   function isValidAmount(amount) {
-    console.log(amount)
-    console.log(parseInt(amount))
+    // amount parsed
     if(parseInt(amount) > 0) {
       handlePayment()
     } else {

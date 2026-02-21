@@ -8,7 +8,7 @@ export const listenToEvent = (eventKey, callback) => {
     querySnapshot.forEach((doc) => {
       resultEvents.push(doc.data());
     });
-    console.log("Current result events: ", resultEvents);
+    // result events updated
     // Update your UI with the new events
     callback?.(resultEvents)
   });

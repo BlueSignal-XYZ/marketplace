@@ -387,7 +387,7 @@ function VerificationUI() {
       if (params) await mutation.mutateAsync(params);
       else await mutation.mutateAsync();
       const _receipt = mutation.data;
-      console.log(mutation);
+      // mutation handled
       setTxPopupVisible(true);
       if (_receipt?.hash) {
         setResult?.({

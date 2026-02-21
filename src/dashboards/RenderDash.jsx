@@ -12,7 +12,7 @@ const RenderDash = ({ route }) => {
   const { user, searchResults } = STATES || {};
   const { uid } = user || {};
 
-  console.log({userDashes, uid, user})
+  // dashboard data loaded
 
   useEffect(() => {
     if (uid) {

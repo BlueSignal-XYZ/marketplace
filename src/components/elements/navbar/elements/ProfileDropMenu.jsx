@@ -18,7 +18,7 @@ const ProfileDropMenu = () => {
   const { handleSettingsTab, handleLogOut } = ACTIONS || {};
 
   const handleSettings = (action) => {
-    console.log(typeof action)
+    // action type handled
     setIsOpen(false);
     if (typeof action === 'string' && action.startsWith('/')) {
       navigate(action);

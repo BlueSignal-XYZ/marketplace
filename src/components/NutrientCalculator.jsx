@@ -412,7 +412,7 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
             crop,
             yieldAcre
           );
-          console.log("nutrientRemovalResult", nutrientRemovalResult);
+          // nutrient removal result calculated
           setResult(nutrientRemovalResult);
         }, 500); // Adjust the timeout as needed
       } catch (error) {

@@ -68,7 +68,7 @@ const PrivacySettingsTab = () => {
 
   const { user } = STATES || {};
   const accountType = user?.role;
-  console.log({ accountType })
+  // account type loaded
 
   return (
     <PrivacyContainer>
