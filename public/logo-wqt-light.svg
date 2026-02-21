@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="48" viewBox="0 0 320 48" fill="none">
+  <!-- Logomark: water droplet + data line + checkmark (light variant for dark backgrounds) -->
+  <g>
+    <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#3B82F6"/>
+    <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M20 34L23 37L29 31" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <!-- Wordmark: WaterQuality.Trading (light for dark backgrounds) -->
+  <text x="50" y="32" font-family="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="22" fill="#F1F5F9">
+    <tspan font-weight="700">WaterQuality</tspan><tspan font-weight="400" fill="#0EA5E9">.Trading</tspan>
+  </text>
+</svg>

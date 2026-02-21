@@ -6,8 +6,8 @@
     { "src": "/favicon-wqt-32.png", "sizes": "32x32", "type": "image/png" },
     { "src": "/apple-touch-icon-wqt.png", "sizes": "180x180", "type": "image/png" }
   ],
-  "theme_color": "#0A1628",
-  "background_color": "#ffffff",
+  "theme_color": "#0F4C81",
+  "background_color": "#0B1120",
   "display": "standalone",
   "start_url": "/"
 }

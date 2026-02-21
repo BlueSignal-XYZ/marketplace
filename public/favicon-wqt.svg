@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <!-- Rounded background -->
+  <rect width="32" height="32" rx="6" fill="#0F4C81"/>
+  <!-- Simplified water droplet -->
+  <path d="M16 5C16 5 8 14 8 20C8 24.418 11.582 28 16 28C20.418 28 24 24.418 24 20C24 14 16 5 16 5Z" fill="#1E6CB5"/>
+  <!-- Data line -->
+  <path d="M11 20L13.5 17L16 22L18.5 15L21 18" stroke="#0EA5E9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Checkmark -->
+  <path d="M13.5 23L15.5 25L19.5 21" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
