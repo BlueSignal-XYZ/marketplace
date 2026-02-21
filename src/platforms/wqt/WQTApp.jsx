@@ -52,6 +52,8 @@ const SellerDashboard_Role = React.lazy(() => import('../../components/dashboard
 const ForUtilitiesPage = React.lazy(() => import('./pages/ForUtilitiesPage'));
 const ForHomeownersPage = React.lazy(() => import('./pages/ForHomeownersPage'));
 const ForAggregatorsPage = React.lazy(() => import('./pages/ForAggregatorsPage'));
+const HowItWorksPage = React.lazy(() => import('./pages/HowItWorksPage'));
+const ForCreditGeneratorsPage = React.lazy(() => import('./pages/ForCreditGeneratorsPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
@@ -124,6 +126,9 @@ export function WQTApp({ user, authLoading }) {
               <Route path="/for-utilities" element={<ForUtilitiesPage />} />
               <Route path="/for-homeowners" element={<ForHomeownersPage />} />
               <Route path="/for-aggregators" element={<ForAggregatorsPage />} />
+              <Route path="/how-it-works" element={<HowItWorksPage />} />
+              <Route path="/generate-credits" element={<ForCreditGeneratorsPage />} />
+              <Route path="/learn-more" element={<Navigate to="/" replace />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />

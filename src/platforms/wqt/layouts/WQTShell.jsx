@@ -20,6 +20,8 @@ const MARKETING_ROUTES = [
   '/for-utilities',
   '/for-homeowners',
   '/for-aggregators',
+  '/how-it-works',
+  '/generate-credits',
   '/terms',
   '/privacy',
 ];

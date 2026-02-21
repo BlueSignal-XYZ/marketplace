@@ -231,7 +231,7 @@ const WQTLogoLight = () => (
 );
 
 const NAV_LINKS = [
-  { label: "How It Works", href: "/#credit-definitions" },
+  { label: "How It Works", href: "/how-it-works" },
   { label: "For Utilities", href: "/for-utilities" },
   { label: "For Homeowners", href: "/for-homeowners" },
   { label: "For Aggregators", href: "/for-aggregators" },
