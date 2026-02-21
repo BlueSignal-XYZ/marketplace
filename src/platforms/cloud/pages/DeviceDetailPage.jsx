@@ -12,6 +12,7 @@ import { Tabs } from '../../../design-system/primitives/Tabs';
 import { Button } from '../../../design-system/primitives/Button';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { getDevice, getDeviceMetrics, getDeviceAlerts, ApiError } from '../../../services/v2/api';
+import { useRevenueGradeQuery, useSendCommandMutation } from '../../../shared/hooks/useApiQueries';
 
 /* ── Styled ─────────────────────────────────────────────── */
 
@@ -485,6 +486,12 @@ export function DeviceDetailPage() {
         </InfoSection>
       )}
 
+      {/* Relay Control */}
+      <RelayControlSection deviceId={deviceId} device={device} />
+
+      {/* Revenue Grade */}
+      <RevenueGradeSection deviceId={deviceId} device={device} />
+
       <InfoSection>
         <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>
           Device Information
@@ -505,6 +512,171 @@ export function DeviceDetailPage() {
         </InfoGrid>
       </InfoSection>
     </Page>
+  );
+}
+
+/* ── Relay Control Section ──────────────────────────────── */
+
+function RelayControlSection({ deviceId, device }) {
+  const navigate = useNavigate();
+  const commandMutation = useSendCommandMutation();
+  const [duration, setDuration] = useState('');
+  const relayOn = device?.relayState || false;
+
+  const handleRelay = (state) => {
+    const cmd = { type: 'relay', state: state ? 1 : 0 };
+    if (duration && state) cmd.duration_seconds = parseInt(duration) || undefined;
+    commandMutation.mutate({ deviceId, command: cmd });
+  };
+
+  return (
+    <InfoSection>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div style={{ fontSize: 16, fontWeight: 600 }}>Relay Control</div>
+        <Badge variant={relayOn ? 'positive' : 'neutral'} size="sm" dot>
+          {relayOn ? 'On' : 'Off'}
+        </Badge>
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Button
+          size="sm"
+          variant={relayOn ? 'outline' : 'primary'}
+          onClick={() => handleRelay(!relayOn)}
+          disabled={commandMutation.isPending}
+        >
+          {commandMutation.isPending ? 'Sending...' : relayOn ? 'Turn Off' : 'Turn On'}
+        </Button>
+        <input
+          type="number"
+          placeholder="Duration (sec)"
+          value={duration}
+          onChange={(e) => setDuration(e.target.value)}
+          style={{
+            padding: '6px 12px', borderRadius: 6, border: '1px solid #ddd',
+            width: 120, fontSize: 13, fontFamily: 'inherit',
+          }}
+        />
+      </div>
+      {commandMutation.isSuccess && (
+        <div style={{ fontSize: 12, color: '#888', marginTop: 8 }}>
+          ⏱ {commandMutation.data?.message || 'Command queued — will be delivered on next uplink.'}
+        </div>
+      )}
+    </InfoSection>
+  );
+}
+
+/* ── Revenue Grade Section ─────────────────────────────── */
+
+function RevenueGradeSection({ deviceId, device }) {
+  const navigate = useNavigate();
+  const { data: rgStatus, isLoading } = useRevenueGradeQuery(deviceId);
+
+  if (isLoading) return (
+    <InfoSection>
+      <Skeleton width={200} height={20} />
+      <div style={{ marginTop: 16 }}><Skeleton height={100} /></div>
+    </InfoSection>
+  );
+
+  if (!rgStatus?.enabled) {
+    return (
+      <InfoSection>
+        <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Credit Generation</div>
+        <div style={{ fontSize: 14, color: '#888', marginBottom: 16 }}>
+          Status: <span style={{ fontWeight: 600 }}>Not Enabled</span>
+        </div>
+        <div style={{ fontSize: 14, color: '#666', marginBottom: 16, lineHeight: 1.6 }}>
+          Enable revenue-grade monitoring to generate tradeable water quality credits
+          on WaterQuality.Trading.
+        </div>
+        <Button size="sm" onClick={() => navigate(`/cloud/devices/${deviceId}/revenue-grade/setup`)}>
+          Enable Revenue Grade
+        </Button>
+      </InfoSection>
+    );
+  }
+
+  const calStatus = rgStatus.calibrationStatus || {};
+  const statusIcon = (s) => s === 'valid' ? '✓' : s === 'expiring_soon' ? '⚠️' : s === 'expired' ? '✗' : '—';
+  const statusColor = (s) => s === 'valid' ? '#10B981' : s === 'expiring_soon' ? '#F59E0B' : s === 'expired' ? '#EF4444' : '#888';
+
+  return (
+    <InfoSection>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div style={{ fontSize: 16, fontWeight: 600 }}>Credit Generation</div>
+        <Badge variant={rgStatus.baselineComplete ? 'positive' : 'warning'} size="sm">
+          {rgStatus.baselineComplete ? 'Active' : 'Pending Baseline'}
+        </Badge>
+      </div>
+
+      {rgStatus.wqtProjectId && (
+        <div style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>
+          WQT Project: {rgStatus.wqtProjectId}
+        </div>
+      )}
+
+      {/* Baseline */}
+      <div style={{ fontSize: 14, marginBottom: 12 }}>
+        <strong>Baseline:</strong>{' '}
+        {rgStatus.baselineType === 'monitoring' ? 'Monitoring' :
+         rgStatus.baselineType === 'regulatory' ? 'Regulatory (NPDES permit)' : 'Historical'}
+        {rgStatus.baselineProgress && !rgStatus.baselineComplete && (
+          <span style={{ color: '#888' }}>
+            {' '}— Day {rgStatus.baselineProgress.daysCurrent} of {rgStatus.baselineProgress.daysTotal}
+            {' '}({rgStatus.baselineProgress.percentComplete}%)
+          </span>
+        )}
+      </div>
+
+      {/* Calibration Status */}
+      <div style={{ fontSize: 14, marginBottom: 12 }}>
+        <strong>Calibration:</strong>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginTop: 6 }}>
+          {['ph', 'tds', 'turbidity', 'orp'].map((probe) => (
+            <div key={probe} style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}>
+              <span style={{ color: statusColor(calStatus[probe]) }}>{statusIcon(calStatus[probe])}</span>
+              <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>{probe}</span>
+              <span style={{ color: '#888' }}>{calStatus[probe] || 'unknown'}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Uptime */}
+      {rgStatus.uptime30d !== null && (
+        <div style={{ fontSize: 14, marginBottom: 12 }}>
+          <strong>Data Continuity:</strong>{' '}
+          <span style={{ color: rgStatus.uptime30d >= 95 ? '#10B981' : '#F59E0B' }}>
+            {rgStatus.uptime30d}% (30-day)
+          </span>
+          {rgStatus.uptime30d >= 95 ? ' ✓' : ' ⚠️'}
+        </div>
+      )}
+
+      {/* Credits */}
+      {Object.keys(rgStatus.creditTotals || {}).length > 0 && (
+        <div style={{ fontSize: 14, marginBottom: 12 }}>
+          <strong>Credits:</strong>
+          {Object.entries(rgStatus.creditTotals).map(([type, amount]) => (
+            <div key={type} style={{ fontSize: 13, color: '#666', marginLeft: 8 }}>
+              {type}: {amount} lbs
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
+        {rgStatus.wqtProjectId && (
+          <Button size="sm" variant="outline" onClick={() => window.open('https://waterquality.trading/portfolio', '_blank')}>
+            View on WQT →
+          </Button>
+        )}
+        <Button size="sm" variant="outline" onClick={() => navigate(`/cloud/devices/${deviceId}/revenue-grade/setup`)}>
+          Recalibrate Probes
+        </Button>
+      </div>
+    </InfoSection>
   );
 }
 

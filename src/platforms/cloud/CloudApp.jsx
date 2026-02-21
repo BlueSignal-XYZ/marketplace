@@ -35,6 +35,7 @@ const CloudMediaPlayer = React.lazy(() => import('../../components/cloud/CloudTo
 const CloudDashboardPage = React.lazy(() => import('./pages/CloudDashboardPage'));
 const NewDeviceDetailPage = React.lazy(() => import('./pages/DeviceDetailPage'));
 const CommissioningWizardPage = React.lazy(() => import('./pages/CommissioningWizardPage'));
+const RevenueGradeWizardPage = React.lazy(() => import('./pages/RevenueGradeWizardPage'));
 
 // Cloud console components (lazy-loaded for code splitting)
 const DevicesListPage = React.lazy(() => import('../../components/cloud/DevicesListPage'));
@@ -163,6 +164,7 @@ export function CloudApp({ user, authLoading }) {
               {/* v2 Cloud pages (Phase 8 rebuild) */}
               <Route path="/v2/dashboard" element={<CloudAuthGate authLoading={authLoading}><CloudDashboardPage /></CloudAuthGate>} />
               <Route path="/device/:deviceId" element={<CloudAuthGate authLoading={authLoading}><NewDeviceDetailPage /></CloudAuthGate>} />
+              <Route path="/cloud/devices/:deviceId/revenue-grade/setup" element={<CloudAuthGate authLoading={authLoading}><RevenueGradeWizardPage /></CloudAuthGate>} />
               <Route path="/commission" element={<CloudAuthGate authLoading={authLoading}><CommissioningWizardPage /></CloudAuthGate>} />
 
               {/* Cloud tools */}
