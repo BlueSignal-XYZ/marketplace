@@ -229,8 +229,8 @@ const MobileCTA = styled.a`
 const mobileLinks = [
   { href: '#sensors', label: 'Sensors' },
   { href: '#architecture', label: 'Architecture' },
-  { href: '#installation', label: 'Installation' },
   { href: '#specs', label: 'Specs' },
+  { href: '/download', label: 'Downloads' },
   { href: 'https://cloud.bluesignal.xyz', label: 'Cloud', external: true },
 ];
 
@@ -283,8 +283,8 @@ const Nav = () => {
           <NavLinks>
             <NavLink href="#sensors">Sensors</NavLink>
             <NavLink href="#architecture">Architecture</NavLink>
-            <NavLink href="#installation">Installation</NavLink>
             <NavLink href="#specs">Specs</NavLink>
+            <NavLink href="/download">Downloads</NavLink>
             <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Nav')}>Cloud</NavLink>
           </NavLinks>
 
