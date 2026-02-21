@@ -44,6 +44,60 @@ export const getAlerts = demo ? demoClient.getAlerts : realClient.getAlerts;
 export const getSites = demo ? demoClient.getSites : realClient.getSites;
 export const createSite = demo ? demoClient.createSite : realClient.createSite;
 
+// ── Cloud: Revenue Grade endpoints ───────────────────────
+
+export const getRevenueGradeStatus = demo
+  ? demoClient.getRevenueGradeStatus
+  : realClient.getRevenueGradeStatus;
+export const enableRevenueGrade = demo
+  ? demoClient.enableRevenueGrade
+  : realClient.enableRevenueGrade;
+export const disableRevenueGrade = demo
+  ? demoClient.disableRevenueGrade
+  : realClient.disableRevenueGrade;
+
+// ── Cloud: Calibration endpoints ─────────────────────────
+
+export const getCalibrations = demo
+  ? demoClient.getCalibrations
+  : realClient.getCalibrations;
+export const logCalibration = demo
+  ? demoClient.logCalibration
+  : realClient.logCalibration;
+
+// ── Cloud: Command endpoints ─────────────────────────────
+
+export const sendDeviceCommand = demo
+  ? demoClient.sendDeviceCommand
+  : realClient.sendDeviceCommand;
+
+// ── Cloud: HUC Lookup ────────────────────────────────────
+
+export const lookupHUC = demo
+  ? demoClient.lookupHUC
+  : realClient.lookupHUC;
+
+// ── Cloud: Account Linking ───────────────────────────────
+
+export const getWQTLinkStatus = demo
+  ? demoClient.getWQTLinkStatus
+  : realClient.getWQTLinkStatus;
+export const linkWQTAccount = demo
+  ? demoClient.linkWQTAccount
+  : realClient.linkWQTAccount;
+
+// ── Cloud: Credit Projects ───────────────────────────────
+
+export const registerCreditProject = demo
+  ? demoClient.registerCreditProject
+  : realClient.registerCreditProject;
+export const getCreditProject = demo
+  ? demoClient.getCreditProject
+  : realClient.getCreditProject;
+export const getCreditAccruals = demo
+  ? demoClient.getCreditAccruals
+  : realClient.getCreditAccruals;
+
 // ── Pass-through: everything else routes to real client ──
 
 export {
@@ -69,4 +123,10 @@ export {
   getPrograms,
   getProgram,
   calculateCredits,
+  // Device lifecycle (pass through — no demo intercept needed)
+  claimDevice,
+  updateRevenueGrade,
+  unlinkWQTAccount,
+  calculateProjectCredits,
+  submitProjectVerification,
 } from './client';

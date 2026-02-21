@@ -372,3 +372,215 @@ export function createSite(params: CreateSiteRequest): Promise<Site> {
 export function getAlerts(userId: string): Promise<Alert[]> {
   return get<Alert[]>(`/v2/alerts?userId=${userId}`, true);
 }
+
+// ── Device Claim ─────────────────────────────────────────
+
+export interface ClaimRequest {
+  device_id: string;
+  dev_eui: string;
+  hw_revision?: string;
+  fw_version?: string;
+  sensors_detected?: string[];
+}
+
+export interface ClaimResult {
+  device_id: string;
+  app_key: string;
+  already_claimed: boolean;
+}
+
+export function claimDevice(params: ClaimRequest): Promise<ClaimResult> {
+  return post<ClaimResult>('/v2/devices/claim', params, true);
+}
+
+// ── Device Commands ──────────────────────────────────────
+
+export interface DeviceCommandRequest {
+  type: 'relay' | 'config';
+  state?: number;
+  duration_seconds?: number;
+  settings?: Record<string, unknown>;
+}
+
+export interface DeviceCommandResult {
+  commandId: string;
+  status: string;
+  message: string;
+}
+
+export function sendDeviceCommand(
+  deviceId: string,
+  command: DeviceCommandRequest,
+): Promise<DeviceCommandResult> {
+  return post<DeviceCommandResult>(`/v2/devices/${deviceId}/command`, command, true);
+}
+
+// ── Revenue Grade ────────────────────────────────────────
+
+export interface RevenueGradeStatus {
+  enabled: boolean;
+  enabledAt: string | null;
+  baselineType: string | null;
+  baselineComplete: boolean;
+  baselineProgress: { daysCurrent: number; daysTotal: number; percentComplete: number } | null;
+  baselineParams: Record<string, number> | null;
+  baselineLockedAt: string | null;
+  wqtProjectId: string | null;
+  wqtLinked: boolean;
+  calibrationStatus: Record<string, string>;
+  uptime30d: number | null;
+  creditTotals: Record<string, number>;
+  flowEstimate: { method: string; value: number; unit: string } | null;
+  huc12Code: string | null;
+  watershedName: string | null;
+  eligibleCredits: string[];
+}
+
+export function getRevenueGradeStatus(deviceId: string): Promise<RevenueGradeStatus> {
+  return get<RevenueGradeStatus>(`/v2/devices/${deviceId}/revenue-grade/status`, true);
+}
+
+export function enableRevenueGrade(
+  deviceId: string,
+  params?: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  return post(`/v2/devices/${deviceId}/revenue-grade/enable`, params || {}, true);
+}
+
+export function disableRevenueGrade(deviceId: string): Promise<void> {
+  return post(`/v2/devices/${deviceId}/revenue-grade/disable`, {}, true);
+}
+
+export function updateRevenueGrade(
+  deviceId: string,
+  updates: Record<string, unknown>,
+): Promise<void> {
+  return request('PUT', `/v2/devices/${deviceId}/revenue-grade`, updates, true);
+}
+
+// ── Calibrations ─────────────────────────────────────────
+
+export interface CalibrationRecord {
+  id: string;
+  deviceId: string;
+  probeType: string;
+  calibratedAt: number;
+  calibratedBy: string;
+  standardsUsed: string[];
+  offsetValue: number;
+  slopeValue: number | null;
+  photoUrls: string[];
+  expiresAt: number;
+  status: string;
+}
+
+export function getCalibrations(deviceId: string): Promise<CalibrationRecord[]> {
+  return get<CalibrationRecord[]>(`/v2/devices/${deviceId}/calibrations`, true);
+}
+
+export function logCalibration(
+  deviceId: string,
+  calibration: {
+    probe_type: string;
+    standards_used: string[];
+    calibrated_at?: string;
+    offset_value?: number;
+    slope_value?: number;
+    photo_urls?: string[];
+  },
+): Promise<CalibrationRecord> {
+  return post<CalibrationRecord>(`/v2/devices/${deviceId}/calibrations`, calibration, true);
+}
+
+// ── HUC/Watershed Lookup ─────────────────────────────────
+
+export interface HUCLookupResult {
+  huc12: string | null;
+  name: string;
+  state: string | null;
+  impairments: string[];
+  activeTmdl: boolean;
+  tradingProgram: string | null;
+  distance: number;
+}
+
+export function lookupHUC(lat: number, lng: number): Promise<HUCLookupResult> {
+  return get<HUCLookupResult>(`/v2/sites/huc-lookup?lat=${lat}&lng=${lng}`, true);
+}
+
+// ── Account Linking ──────────────────────────────────────
+
+export interface WQTLinkStatus {
+  linked: boolean;
+  linkedAt?: string;
+  consentedDevices: string[];
+  revokedAt?: string | null;
+}
+
+export function getWQTLinkStatus(): Promise<WQTLinkStatus> {
+  return get<WQTLinkStatus>('/v2/account/link-status', true);
+}
+
+export function linkWQTAccount(deviceIds?: string[]): Promise<{ linked: boolean; linkedAt: string }> {
+  return post('/v2/account/link-wqt', { device_ids: deviceIds || [] }, true);
+}
+
+export function unlinkWQTAccount(): Promise<void> {
+  return request('DELETE', '/v2/account/link-wqt', {}, true);
+}
+
+// ── Credit Projects ──────────────────────────────────────
+
+export interface CreditProject {
+  id: string;
+  deviceId: string;
+  siteName: string;
+  huc12Code: string | null;
+  watershedName: string | null;
+  baselineType: string;
+  baselineComplete: boolean;
+  eligibleCredits: string[];
+  status: string;
+  totalCredits: Record<string, number>;
+  createdAt: string;
+}
+
+export interface CreditAccrual {
+  id: string;
+  projectId: string;
+  periodStart: number;
+  periodEnd: number;
+  creditType: string;
+  amount: number;
+  unit: string;
+  baselineValue: number;
+  measuredValue: number;
+  uptimePct: number;
+  calibrationValid: boolean;
+  status: string;
+}
+
+export function registerCreditProject(
+  params: Record<string, unknown>,
+): Promise<CreditProject> {
+  return post<CreditProject>('/v2/projects', params, true);
+}
+
+export function getCreditProject(projectId: string): Promise<CreditProject> {
+  return get<CreditProject>(`/v2/projects/${projectId}`, true);
+}
+
+export function getCreditAccruals(projectId: string): Promise<CreditAccrual[]> {
+  return get<CreditAccrual[]>(`/v2/projects/${projectId}/accruals`, true);
+}
+
+export function calculateProjectCredits(projectId: string): Promise<Record<string, unknown>> {
+  return post(`/v2/projects/${projectId}/accruals/calculate`, {}, true);
+}
+
+export function submitProjectVerification(
+  projectId: string,
+  accrualIds?: string[],
+): Promise<Record<string, unknown>> {
+  return post(`/v2/projects/${projectId}/submit-verification`, { accrual_ids: accrualIds }, true);
+}
