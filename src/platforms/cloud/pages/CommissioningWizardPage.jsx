@@ -28,8 +28,17 @@ const Page = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 24px;
+  padding: 24px 16px;
   background: ${({ theme }) => theme.colors.background};
+
+  @media (max-width: 640px) {
+    justify-content: flex-start;
+    padding-top: 32px;
+  }
+
+  @media (min-width: 640px) {
+    padding: 48px 24px;
+  }
 `;
 
 const Progress = styled.div`
@@ -52,23 +61,36 @@ const Card = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.xl}px;
-  padding: 48px;
+  padding: 24px 20px;
   max-width: 480px;
   width: 100%;
   text-align: center;
+
+  @media (min-width: 640px) {
+    padding: 48px;
+  }
 `;
 
 const StepIcon = styled.div`
-  font-size: 56px;
-  margin-bottom: 16px;
+  font-size: 40px;
+  margin-bottom: 12px;
+
+  @media (min-width: 640px) {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
 `;
 
 const Title = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 8px;
+
+  @media (min-width: 640px) {
+    font-size: 24px;
+  }
 `;
 
 const Desc = styled.p`
@@ -83,14 +105,28 @@ const FormArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   text-align: left;
+
+  @media (min-width: 640px) {
+    margin-bottom: 32px;
+  }
 `;
 
 const ButtonRow = styled.div`
   display: flex;
   gap: 12px;
   justify-content: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+    width: 100%;
+
+    & > button {
+      width: 100%;
+    }
+  }
 `;
 
 const pulse = keyframes`

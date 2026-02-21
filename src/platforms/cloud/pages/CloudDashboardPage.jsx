@@ -38,10 +38,17 @@ const Header = styled.div`
 
 const Title = styled.h1`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    font-size: 32px;
+  }
 `;
 
 const Subtitle = styled.p`
@@ -153,10 +160,14 @@ const MetricLabel = styled.div`
 
 const MetricValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   margin-top: 2px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    font-size: 20px;
+  }
 `;
 
 const MetricUnit = styled.span`
@@ -183,7 +194,15 @@ const AlertBanner = styled.div`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 12px;
   cursor: pointer;
+  word-break: break-word;
+  min-height: 44px;
   &:hover { opacity: 0.9; }
+
+  @media (max-width: 640px) {
+    padding: 12px 14px;
+    gap: 8px;
+    font-size: 13px;
+  }
 `;
 
 const ErrorBox = styled.div`
