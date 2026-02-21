@@ -8,8 +8,25 @@ import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../shared/NotificationBell";
-import logoImg from "../../assets/logo.png";
 import { APP_NAME } from "../../constants/constants";
+
+// Inline SVG logo component for crisp rendering at all sizes
+const WQTLogo = ({ height = 36 }) => {
+  const scale = height / 48;
+  const width = 320 * scale;
+  return (
+    <svg width={width} height={height} viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#0F4C81"/>
+        <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      </g>
+      <text x="50" y="32" fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="22" fill="#0F4C81">
+        <tspan fontWeight="700">WaterQuality</tspan><tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+      </text>
+    </svg>
+  );
+};
 
 const fadeIn = keyframes`
   from {
@@ -62,22 +79,17 @@ const LogoWrapper = styled.a`
   text-decoration: none;
 `;
 
-const LogoImg = styled.img`
-  height: 36px;
-  width: auto;
-  display: block;
+const LogoSvgWrapper = styled.div`
+  display: flex;
+  align-items: center;
   transition: transform 0.2s ease-out;
 
   &:hover {
     transform: scale(1.02);
   }
 
-  @media (min-width: 768px) {
-    height: 44px;
-  }
-
-  @media (min-width: 1024px) {
-    height: 52px;
+  svg {
+    display: block;
   }
 `;
 
@@ -154,8 +166,10 @@ export function MarketplaceHeader({ onMenuClick }) {
   return (
     <HeaderOuter>
       <HeaderInner>
-        <LogoWrapper href="/">
-          <LogoImg src={logoImg} alt={APP_NAME || "WaterQuality.Trading"} />
+        <LogoWrapper href="/" aria-label={APP_NAME || "WaterQuality.Trading"}>
+          <LogoSvgWrapper>
+            <WQTLogo height={36} />
+          </LogoSvgWrapper>
         </LogoWrapper>
 
         <NavLinks>

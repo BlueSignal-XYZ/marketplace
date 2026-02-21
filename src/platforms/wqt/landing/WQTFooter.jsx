@@ -40,12 +40,24 @@ const TopRow = styled.div`
 const BrandCol = styled.div``;
 
 const BrandName = styled.div`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 18px;
-  font-weight: 700;
-  color: #FFFFFF;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
 `;
+
+// Inline light logo for dark footer background
+const FooterLogo = () => (
+  <svg width="213" height="32" viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#3B82F6"/>
+      <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </g>
+    <text x="50" y="32" fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="22" fill="#F1F5F9">
+      <tspan fontWeight="700">WaterQuality</tspan><tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+    </text>
+  </svg>
+);
 
 const BrandDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
@@ -116,7 +128,7 @@ export function WQTFooter() {
       <Inner>
         <TopRow>
           <BrandCol>
-            <BrandName>WaterQuality.Trading</BrandName>
+            <BrandName><FooterLogo /></BrandName>
             <BrandDesc>
               A deregulated water quality trading system for distributed water
               production. Dual-credit architecture, three-layer verification,
