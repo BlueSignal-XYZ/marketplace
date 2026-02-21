@@ -13,6 +13,8 @@ import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { Button } from '../../../design-system/primitives/Button';
 import { useAppContext } from '../../../context/AppContext';
 import { useDevicesQuery, useAlertsQuery } from '../../../shared/hooks/useApiQueries';
+import { DemoBanner } from '../../../components/DemoBanner';
+import { DemoHint } from '../../../components/DemoHint';
 
 /* ── Styled ─────────────────────────────────────────────── */
 
@@ -289,8 +291,9 @@ export function CloudDashboardPage() {
 
   return (
     <Page>
+      <DemoBanner />
       <Header>
-        <Title>Dashboard</Title>
+        <Title>Dashboard <DemoHint screenName="cloud-dashboard" /></Title>
         <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
       </Header>
 

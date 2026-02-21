@@ -12,7 +12,7 @@ import {
   purchaseCredits,
   submitCredits,
   commissionDevice,
-} from '../../services/v2/client';
+} from '../../services/v2/api';
 
 // ── Query keys ────────────────────────────────────────────
 

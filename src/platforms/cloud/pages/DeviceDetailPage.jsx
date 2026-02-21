@@ -11,7 +11,7 @@ import { Badge } from '../../../design-system/primitives/Badge';
 import { Tabs } from '../../../design-system/primitives/Tabs';
 import { Button } from '../../../design-system/primitives/Button';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
-import { getDevice, getDeviceMetrics, getDeviceAlerts, ApiError } from '../../../services/v2/client';
+import { getDevice, getDeviceMetrics, getDeviceAlerts, ApiError } from '../../../services/v2/api';
 
 /* ── Styled ─────────────────────────────────────────────── */
 

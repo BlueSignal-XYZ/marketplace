@@ -1,0 +1,72 @@
+/**
+ * v2 API — demo-aware routing proxy.
+ *
+ * Re-exports every function from client.ts, but when demo mode is active
+ * (?demo=1 or VITE_DEMO_MODE=true), Cloud-related functions are swapped
+ * for mock implementations from demoInterceptor.js.
+ *
+ * Non-Cloud functions (market, credits, blockchain, programs, etc.)
+ * always route to the real client.
+ *
+ * Usage: import { getDevices, getAlerts, ApiError } from '../../services/v2/api';
+ */
+
+import { isDemoMode } from '../../utils/demoMode';
+import * as realClient from './client';
+import * as demoClient from './demoInterceptor';
+
+const demo = isDemoMode();
+
+// ── Cloud: Device endpoints ──────────────────────────────
+
+export const getDevices = demo ? demoClient.getDevices : realClient.getDevices;
+export const getDevice = demo ? demoClient.getDevice : realClient.getDevice;
+export const getDeviceMetrics = demo
+  ? demoClient.getDeviceMetrics
+  : realClient.getDeviceMetrics;
+export const getDeviceAlerts = demo
+  ? demoClient.getDeviceAlerts
+  : realClient.getDeviceAlerts;
+export const checkDevice = demo ? demoClient.checkDevice : realClient.checkDevice;
+export const testDeviceConnection = demo
+  ? demoClient.testDeviceConnection
+  : realClient.testDeviceConnection;
+export const commissionDevice = demo
+  ? demoClient.commissionDevice
+  : realClient.commissionDevice;
+
+// ── Cloud: Alert endpoints ───────────────────────────────
+
+export const getAlerts = demo ? demoClient.getAlerts : realClient.getAlerts;
+
+// ── Cloud: Site endpoints ────────────────────────────────
+
+export const getSites = demo ? demoClient.getSites : realClient.getSites;
+export const createSite = demo ? demoClient.createSite : realClient.createSite;
+
+// ── Pass-through: everything else routes to real client ──
+
+export {
+  ApiError,
+  AUTH_SESSION_EXPIRED_EVENT,
+  // Market
+  getMarketStats,
+  getMarketTicker,
+  getListing,
+  searchListings,
+  // Data
+  getPublicSensors,
+  getWatersheds,
+  // Credits
+  purchaseCredits,
+  submitCredits,
+  getPortfolio,
+  // Blockchain
+  mintCertificate,
+  getCertificate,
+  linkWallet,
+  // Programs
+  getPrograms,
+  getProgram,
+  calculateCredits,
+} from './client';

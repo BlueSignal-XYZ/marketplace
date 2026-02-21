@@ -17,7 +17,7 @@ import {
   testDeviceConnection,
   getSites,
   ApiError,
-} from '../../../services/v2/client';
+} from '../../../services/v2/api';
 import { useCommissionDeviceMutation } from '../../../shared/hooks/useApiQueries';
 
 /* ── Styled ─────────────────────────────────────────────── */
