@@ -78,6 +78,8 @@ const RetryButton = styled.button`
 `;
 
 import { ComingSoon } from "../../design-system/primitives/ComingSoon";
+import { Modal } from "../../design-system/primitives/Modal";
+import { Button } from "../../design-system/primitives/Button";
 
 /**
  * LivepeerWrapper - Initializes Livepeer client and wraps child components
@@ -164,16 +166,48 @@ export function CloudVerification() {
 }
 
 export function CloudLiveStream() {
+  const [modalOpen, setModalOpen] = React.useState(false);
+
   return (
     <CloudPageLayout
       title="Live Stream"
       subtitle="Stream live video from site locations"
     >
-      <ComingSoon
-        icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>}
-        title="Live Stream"
-        description="Live video feeds from monitoring sites will appear here once cameras are configured."
-      />
+      <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+        <div style={{ marginBottom: 24 }}>
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="1.5">
+            <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/>
+            <rect width="14" height="12" x="2" y="6" rx="2"/>
+          </svg>
+        </div>
+        <h3 style={{ fontSize: 20, fontWeight: 600, color: '#1A1A1A', margin: '0 0 8px' }}>
+          Live Streaming
+        </h3>
+        <p style={{ fontSize: 15, color: '#6B7280', margin: '0 0 24px', maxWidth: 400, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
+          Stream real-time water quality data and video from your monitoring sites directly to the cloud.
+        </p>
+        <Button variant="primary" onClick={() => setModalOpen(true)}>
+          Go Live
+        </Button>
+      </div>
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Live Streaming"
+      >
+        <div style={{ padding: '8px 0', lineHeight: 1.6, color: '#4B5563' }}>
+          <p style={{ margin: '0 0 16px', fontSize: 15 }}>
+            Live streaming is coming soon. Once your BlueSignal WQM-1 device is connected
+            and a camera is configured at your site, you'll be able to stream real-time
+            water quality data and video directly from this page.
+          </p>
+          <p style={{ margin: 0, fontSize: 14, color: '#9CA3AF' }}>
+            In the meantime, you can monitor device telemetry from the Dashboard and
+            review historical data in the device detail pages.
+          </p>
+        </div>
+      </Modal>
     </CloudPageLayout>
   );
 }
