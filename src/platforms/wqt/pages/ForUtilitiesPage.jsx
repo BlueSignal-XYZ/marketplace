@@ -41,6 +41,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
+  color: #FFFFFF;
   margin: 0 0 20px;
 `;
 
