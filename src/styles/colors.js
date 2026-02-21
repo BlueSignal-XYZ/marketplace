@@ -17,25 +17,25 @@ export const logoColors = {
 
 // Credit type badge colors for WaterQuality.Trading marketplace
 export const creditTypeColors = {
-  nitrogen: {
+  qc: {
     bg: "#DBEAFE",      // blue-100
+    text: "#1E40AF",    // blue-800
+    border: "#93C5FD",  // blue-300
+  },
+  kc: {
+    bg: "#D1FAE5",      // green-100
+    text: "#065F46",    // green-800
+    border: "#6EE7B7",  // green-300
+  },
+  nitrogen: {
+    bg: "#EFF6FF",      // blue-50
     text: "#1D4ED8",    // blue-700
     border: "#93C5FD",  // blue-300
   },
   phosphorus: {
-    bg: "#DCFCE7",      // green-100
-    text: "#15803D",    // green-700
-    border: "#86EFAC",  // green-300
-  },
-  thermal: {
-    bg: "#FFEDD5",      // orange-100
-    text: "#C2410C",    // orange-700
-    border: "#FDBA74",  // orange-300
-  },
-  stormwater: {
-    bg: "#F3E8FF",      // purple-100
-    text: "#7E22CE",    // purple-700
-    border: "#D8B4FE",  // purple-300
+    bg: "#F5F3FF",      // violet-50
+    text: "#6D28D9",    // violet-700
+    border: "#C4B5FD",  // violet-300
   },
 };
 
