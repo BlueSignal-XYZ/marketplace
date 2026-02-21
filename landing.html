@@ -87,13 +87,13 @@
     }
     </script>
 
-    <!-- Google Analytics (gtag.js) — Replace G-XXXXXXXXXX with actual ID -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <!-- Google Analytics 4 (gtag.js) — ID injected from VITE_GA4_MEASUREMENT_ID env var -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA4_MEASUREMENT_ID%"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
+      gtag('config', '%VITE_GA4_MEASUREMENT_ID%');
     </script>
   </head>
 

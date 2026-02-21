@@ -19,6 +19,7 @@ import {
   ApiError,
 } from '../../../services/v2/api';
 import { useCommissionDeviceMutation } from '../../../shared/hooks/useApiQueries';
+import { trackEvent } from '../../../utils/analytics';
 
 /* ── Styled ─────────────────────────────────────────────── */
 
@@ -287,6 +288,7 @@ export function CommissioningWizardPage() {
       },
       {
         onSuccess: (result) => {
+          trackEvent('device_commissioned', { deviceId: form.serialNumber, siteId: result.siteId });
           toast({ type: 'success', message: `Device ${form.serialNumber} commissioned successfully!` });
           navigate(`/device/${result.deviceId}`);
         },
