@@ -137,22 +137,22 @@ const SystemScene = () => (
 
     {/* ========== ULTRASONIC TRANSDUCER ========== */}
     <g>
-      <rect x="500" y="290" width="40" height="30" rx="4" fill="#0f1114" stroke="rgba(168,85,247,0.4)" strokeWidth="1" />
-      <text x="520" y="309" textAnchor="middle" fill="rgba(168,85,247,0.6)" className="label-data">XDCR</text>
+      <rect x="488" y="290" width="114" height="30" rx="4" fill="#0f1114" stroke="rgba(168,85,247,0.4)" strokeWidth="1" />
+      <text x="545" y="309" textAnchor="middle" fill="rgba(168,85,247,0.6)" className="label-sm">Ultrasonic Transducer</text>
       {/* Sonar rings */}
-      <circle cx="520" cy="340" r="12" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="0.8">
+      <circle cx="545" cy="340" r="12" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="0.8">
         <animate attributeName="r" values="12;40" dur="2.5s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0.4;0" dur="2.5s" repeatCount="indefinite" />
       </circle>
-      <circle cx="520" cy="340" r="12" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="0.8">
+      <circle cx="545" cy="340" r="12" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="0.8">
         <animate attributeName="r" values="12;40" dur="2.5s" begin="0.8s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0.4;0" dur="2.5s" begin="0.8s" repeatCount="indefinite" />
       </circle>
-      <circle cx="520" cy="340" r="12" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="0.8">
+      <circle cx="545" cy="340" r="12" fill="none" stroke="rgba(168,85,247,0.3)" strokeWidth="0.8">
         <animate attributeName="r" values="12;40" dur="2.5s" begin="1.6s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0.4;0" dur="2.5s" begin="1.6s" repeatCount="indefinite" />
       </circle>
-      <text x="520" y="385" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Anti-Algae</text>
+      <text x="545" y="385" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Anti-Fouling</text>
     </g>
 
     {/* ========== OUTPUT PIPE (Tank -> Pump) ========== */}
@@ -224,11 +224,6 @@ const SystemScene = () => (
       </g>
     </g>
 
-    {/* ========== RELAY CONTROL FEEDBACK ========== */}
-    <g>
-      <path d="M1060 280 L940 280 L920 280" stroke="#34d399" strokeWidth="1" strokeDasharray="4 6" className="data-flow" fill="none" opacity="0.5" />
-      <text x="990" y="272" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Relay Ctrl</text>
-    </g>
 
     {/* ========== ALERT NOTIFICATION (floating) ========== */}
     <g>

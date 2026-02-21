@@ -317,7 +317,7 @@ const MobileHeroViz = () => (
       </MobileStageIcon>
       <MobileStageText>
         <MobileStageName>Cloud Dashboard</MobileStageName>
-        <MobileStageDetail>Alerts &middot; Charts &middot; Relay control</MobileStageDetail>
+        <MobileStageDetail>Alerts &middot; Charts &middot; Automation</MobileStageDetail>
       </MobileStageText>
     </MobileStage>
   </MobileVizWrapper>
