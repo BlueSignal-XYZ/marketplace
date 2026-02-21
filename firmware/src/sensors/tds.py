@@ -1,117 +1,48 @@
-"""
-TDS (Total Dissolved Solids) / Conductivity Sensor Driver
+"""TDS (Total Dissolved Solids) sensor: ADC voltage -> ppm.
 
-Reads TDS from a conductivity probe on ADC channel 0 of the ADS1115.
-Applies temperature compensation using the DS18B20 reading.
-
-The probe outputs a voltage proportional to the dissolved solids concentration.
-A conversion factor translates voltage to ppm (parts per million).
-
-Temperature compensation formula:
-    TDS_compensated = TDS_raw / (1.0 + 0.02 * (temperature - 25.0))
-    where 0.02 is the standard compensation coefficient for most solutions.
+Reads from ADS1115 U1 (0x48), AIN1. AC excitation circuit with
+demodulated output. Temperature compensation uses the standard
+0.02/degC coefficient.
 """
 
 import logging
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger("wqm.tds")
 
-# ADC channel for TDS probe
-TDS_ADC_CHANNEL = 0
-
-# Default conversion: voltage to ppm
-# This depends on the specific TDS probe and circuit gain.
-# Typical analog TDS modules output 0-2.3V for 0-1000ppm.
-DEFAULT_TDS_FACTOR = 500.0   # ppm per volt (adjustable per probe)
-DEFAULT_TDS_OFFSET = 0.0     # ppm offset
-
-# Temperature compensation coefficient
-TEMP_COMPENSATION_COEFF = 0.02
-REFERENCE_TEMPERATURE = 25.0  # Celsius
+TEMP_COEFF = 0.02
+REF_TEMP = 25.0
+DEFAULT_FACTOR = 500.0
+DEFAULT_OFFSET = 0.0
 
 
 class TDSSensor:
-    """
-    TDS/conductivity sensor on ADS1115 channel 0.
+    def __init__(self, adc, config: dict, calibration: dict = None):
+        self.adc = adc
+        self.channel = config.get("adc_channel", 1)
+        self.gain = config.get("gain", 1)
+        self.samples = config.get("averaging_samples", 5)
+        self.temp_compensation = config.get("temperature_compensation", True)
 
-    Usage:
-        tds = TDSSensor(adc_reader)
-        tds.initialize()
-        value = tds.read(temperature=22.5)  # temperature-compensated
-    """
+        cal = calibration or {}
+        self.factor = cal.get("factor", DEFAULT_FACTOR)
+        self.offset = cal.get("offset", DEFAULT_OFFSET)
+        log.info("TDS calibration: factor=%.2f, offset=%.2f", self.factor, self.offset)
 
-    def __init__(self, adc_reader, channel=TDS_ADC_CHANNEL, calibration=None):
-        self.adc = adc_reader
-        self.channel = channel
-        self.factor = DEFAULT_TDS_FACTOR
-        self.offset = DEFAULT_TDS_OFFSET
+    def read_voltage(self) -> float:
+        """Read raw voltage from TDS probe (for calibration)."""
+        return self.adc.read_channel(self.channel, self.gain, self.samples)
 
-        if calibration:
-            self.factor = calibration.get("factor", DEFAULT_TDS_FACTOR)
-            self.offset = calibration.get("offset", DEFAULT_TDS_OFFSET)
-            logger.info("TDS calibration loaded: factor=%.2f, offset=%.2f",
-                        self.factor, self.offset)
-
-    def initialize(self):
-        """Initialize TDS sensor (ADC must already be initialized)."""
-        logger.info("TDS sensor initialized on ADC channel %d", self.channel)
-        return True
-
-    def read_raw(self):
-        """
-        Read raw TDS value without temperature compensation.
-
-        Returns:
-            float: TDS in ppm (uncorrected), or None on error.
-        """
-        voltage = self.adc.read_voltage(self.channel)
-        if voltage is None:
-            logger.error("Failed to read TDS: ADC returned None")
-            return None
-
+    def read(self, temperature_c: float = None) -> float:
+        """Read TDS in ppm with optional temperature compensation."""
+        voltage = self.read_voltage()
         tds_raw = self.factor * voltage + self.offset
         tds_raw = max(0.0, tds_raw)
 
-        logger.debug("TDS raw: voltage=%.4fV -> %.1f ppm", voltage, tds_raw)
-        return round(tds_raw, 1)
-
-    def read(self, temperature=None):
-        """
-        Read temperature-compensated TDS value.
-
-        Args:
-            temperature: Water temperature in Celsius (from DS18B20).
-                         If None, no compensation is applied.
-
-        Returns:
-            float: TDS in ppm (compensated), or None on error.
-        """
-        tds_raw = self.read_raw()
-        if tds_raw is None:
-            return None
-
-        if temperature is not None:
-            compensation = 1.0 + TEMP_COMPENSATION_COEFF * (
-                temperature - REFERENCE_TEMPERATURE
-            )
+        if self.temp_compensation and temperature_c is not None:
+            compensation = 1.0 + TEMP_COEFF * (temperature_c - REF_TEMP)
             if compensation > 0:
-                tds_compensated = tds_raw / compensation
-            else:
-                tds_compensated = tds_raw
-                logger.warning("Invalid temperature compensation, using raw value")
-        else:
-            tds_compensated = tds_raw
+                tds_raw = tds_raw / compensation
 
-        tds_compensated = max(0.0, min(5000.0, tds_compensated))
-
-        logger.debug(
-            "TDS: raw=%.1f ppm, temp=%.1f°C -> compensated=%.1f ppm",
-            tds_raw,
-            temperature if temperature else 0,
-            tds_compensated,
-        )
-        return round(tds_compensated, 1)
-
-    def read_voltage(self):
-        """Read raw voltage from TDS probe (for calibration)."""
-        return self.adc.read_voltage(self.channel)
+        tds_raw = max(0.0, min(5000.0, tds_raw))
+        log.debug("TDS: voltage=%.4fV, ppm=%.1f, temp=%s", voltage, tds_raw, temperature_c)
+        return round(tds_raw, 1)

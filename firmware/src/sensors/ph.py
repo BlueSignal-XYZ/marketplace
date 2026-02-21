@@ -1,132 +1,72 @@
-"""
-pH Sensor Driver
+"""pH sensor: ADC voltage -> pH value with Nernst temperature compensation.
 
-Reads pH from a BNC-connected pH probe via the OPA340 buffer amplifier
-on ADC channel 3 of the ADS1115.
-
-Calibration: Two-point calibration using pH 4.0 and pH 7.0 buffer solutions.
-The probe outputs a voltage proportional to pH, centered around ~2.5V at pH 7
-(with the OPA340 level-shifting circuit). The relationship is linear:
-
-    pH = slope * voltage + offset
-
-where slope and offset are determined during calibration.
+Reads from ADS1115 U1 (0x48), AIN0. The OPA340 buffer shifts the probe
+output to a 0-3.3 V range centered at offset_voltage (~1.65 V = pH 7).
 """
 
 import logging
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger("wqm.ph")
 
-# Default calibration values (typical for a standard pH probe + OPA340 buffer)
-# These should be overridden by calibration data from config.yaml
-DEFAULT_PH7_VOLTAGE = 2.50   # Voltage at pH 7.0
-DEFAULT_PH4_VOLTAGE = 3.04   # Voltage at pH 4.0
-DEFAULT_SLOPE = -5.556        # pH units per volt (negative: higher V = lower pH)
-DEFAULT_OFFSET = 20.89        # pH at 0V (from linear fit)
-
-# ADC channel for pH probe
-PH_ADC_CHANNEL = 3
+DEFAULT_CAL = {
+    "point_low": {"ph": 4.01, "voltage": 1.05},
+    "point_high": {"ph": 6.86, "voltage": 1.50},
+}
 
 
 class PHSensor:
-    """
-    pH sensor connected via BNC to OPA340 buffer on ADS1115 channel 3.
+    def __init__(self, adc, config: dict, calibration: dict = None):
+        self.adc = adc
+        self.channel = config.get("adc_channel", 0)
+        self.gain = config.get("gain", 1)
+        self.samples = config.get("averaging_samples", 5)
 
-    Usage:
-        ph = PHSensor(adc_reader)
-        ph.initialize()
-        value = ph.read()  # returns pH value (0-14)
-    """
+        cal = calibration if calibration and "point_low" in calibration else DEFAULT_CAL
+        v_low = cal["point_low"]["voltage"]
+        v_high = cal["point_high"]["voltage"]
+        ph_low = cal["point_low"]["ph"]
+        ph_high = cal["point_high"]["ph"]
 
-    def __init__(self, adc_reader, channel=PH_ADC_CHANNEL, calibration=None):
-        self.adc = adc_reader
-        self.channel = channel
-        self.slope = DEFAULT_SLOPE
-        self.offset = DEFAULT_OFFSET
+        if abs(v_high - v_low) < 0.001:
+            log.warning("pH calibration voltages too close, using defaults")
+            v_low = DEFAULT_CAL["point_low"]["voltage"]
+            v_high = DEFAULT_CAL["point_high"]["voltage"]
+            ph_low = DEFAULT_CAL["point_low"]["ph"]
+            ph_high = DEFAULT_CAL["point_high"]["ph"]
 
-        if calibration:
-            self._apply_calibration(calibration)
+        self.slope = (ph_high - ph_low) / (v_high - v_low)
+        self.intercept = ph_low - self.slope * v_low
+        log.info("pH calibration: slope=%.4f, intercept=%.4f", self.slope, self.intercept)
 
-    def _apply_calibration(self, cal):
-        """
-        Apply two-point calibration from config.
-
-        Args:
-            cal: dict with keys 'ph4_voltage', 'ph7_voltage' or 'slope', 'offset'
-        """
-        if "slope" in cal and "offset" in cal:
-            self.slope = cal["slope"]
-            self.offset = cal["offset"]
-            logger.info("pH calibration loaded: slope=%.4f, offset=%.4f",
-                        self.slope, self.offset)
-        elif "ph4_voltage" in cal and "ph7_voltage" in cal:
-            v4 = cal["ph4_voltage"]
-            v7 = cal["ph7_voltage"]
-            if abs(v4 - v7) < 0.01:
-                logger.warning("pH calibration voltages too close, using defaults")
-                return
-            self.slope = (4.0 - 7.0) / (v4 - v7)
-            self.offset = 7.0 - self.slope * v7
-            logger.info(
-                "pH two-point calibration: V4=%.3f, V7=%.3f -> slope=%.4f, offset=%.4f",
-                v4, v7, self.slope, self.offset,
-            )
-        else:
-            logger.warning("Invalid pH calibration data, using defaults")
-
-    def initialize(self):
-        """Initialize pH sensor (ADC must already be initialized)."""
-        logger.info("pH sensor initialized on ADC channel %d", self.channel)
-        return True
-
-    def read(self):
-        """
-        Read current pH value.
-
-        Returns:
-            float: pH value (0.0 - 14.0), or None on error.
-        """
-        voltage = self.adc.read_voltage(self.channel)
-        if voltage is None:
-            logger.error("Failed to read pH: ADC returned None")
-            return None
-
-        ph_value = self.slope * voltage + self.offset
-
-        # Clamp to valid pH range
-        ph_value = max(0.0, min(14.0, ph_value))
-
-        logger.debug("pH: voltage=%.4fV -> pH=%.2f", voltage, ph_value)
-        return round(ph_value, 2)
-
-    def read_voltage(self):
+    def read_voltage(self) -> float:
         """Read raw voltage from pH probe (for calibration)."""
-        return self.adc.read_voltage(self.channel)
+        return self.adc.read_channel(self.channel, self.gain, self.samples)
 
-    def calibrate(self, ph4_voltage, ph7_voltage):
-        """
-        Perform two-point calibration.
+    def read(self, temperature_c: float = None) -> float:
+        """Read pH with optional Nernst temperature compensation."""
+        voltage = self.read_voltage()
+        ph = self.slope * voltage + self.intercept
 
-        Args:
-            ph4_voltage: Voltage reading in pH 4.0 buffer
-            ph7_voltage: Voltage reading in pH 7.0 buffer
+        if temperature_c is not None:
+            nernst_25 = 59.16
+            nernst_t = ((temperature_c + 273.15) / 298.15) * nernst_25
+            correction = (nernst_t - nernst_25) / nernst_25
+            ph = ph * (1 + correction * (ph - 7.0) / 7.0)
 
-        Returns:
-            dict: Calibration parameters {slope, offset, ph4_voltage, ph7_voltage}
-        """
-        if abs(ph4_voltage - ph7_voltage) < 0.01:
-            logger.error("Calibration failed: voltages too close")
+        ph = max(0.0, min(14.0, ph))
+        log.debug("pH: voltage=%.4fV, ph=%.2f, temp_comp=%s", voltage, ph, temperature_c)
+        return round(ph, 2)
+
+    def calibrate(self, ph_low_voltage, ph_high_voltage, ph_low=4.01, ph_high=6.86):
+        """Two-point calibration. Returns calibration dict."""
+        if abs(ph_high_voltage - ph_low_voltage) < 0.01:
+            log.error("Calibration failed: voltages too close")
             return None
 
-        self.slope = (4.0 - 7.0) / (ph4_voltage - ph7_voltage)
-        self.offset = 7.0 - self.slope * ph7_voltage
+        self.slope = (ph_high - ph_low) / (ph_high_voltage - ph_low_voltage)
+        self.intercept = ph_low - self.slope * ph_low_voltage
 
-        cal_data = {
-            "slope": self.slope,
-            "offset": self.offset,
-            "ph4_voltage": ph4_voltage,
-            "ph7_voltage": ph7_voltage,
+        return {
+            "point_low": {"ph": ph_low, "voltage": round(ph_low_voltage, 4)},
+            "point_high": {"ph": ph_high, "voltage": round(ph_high_voltage, 4)},
         }
-
-        logger.info("pH calibration complete: %s", cal_data)
-        return cal_data
