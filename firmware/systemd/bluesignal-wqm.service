@@ -1,0 +1,30 @@
+[Unit]
+Description=BlueSignal WQM-1 Water Quality Monitor
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=bluesignal
+Group=bluesignal
+WorkingDirectory=/opt/bluesignal/firmware
+ExecStart=/opt/bluesignal/firmware/venv/bin/python -m src.main
+Restart=always
+RestartSec=10
+WatchdogSec=300
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+
+# Hardware access
+SupplementaryGroups=gpio i2c spi dialout
+
+# Security hardening
+ProtectSystem=strict
+ReadWritePaths=/var/lib/bluesignal /var/log/bluesignal /etc/bluesignal
+ReadOnlyPaths=/sys/bus/w1 /sys/class/thermal
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

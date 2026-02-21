@@ -1,10 +1,6 @@
-"""
-BlueSignal BS-WQM-100 Utilities
+"""WQM-1 utilities: structured logging, health diagnostics."""
 
-Configuration management and sensor calibration routines.
-"""
+from .logger import setup_logging
+from .health import HealthCheck
 
-from .config import load_config, DeviceConfig
-from .calibration import CalibrationManager
-
-__all__ = ["load_config", "DeviceConfig", "CalibrationManager"]
+__all__ = ["setup_logging", "HealthCheck"]

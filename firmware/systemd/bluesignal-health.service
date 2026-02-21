@@ -1,0 +1,12 @@
+[Unit]
+Description=BlueSignal WQM-1 Health Check
+After=bluesignal-wqm.service
+
+[Service]
+Type=oneshot
+User=bluesignal
+Group=bluesignal
+WorkingDirectory=/opt/bluesignal/firmware
+ExecStart=/opt/bluesignal/firmware/venv/bin/python -c "from src.utils.health import HealthCheck; import json, logging; logging.basicConfig(level=logging.INFO); print(json.dumps(HealthCheck.run(), indent=2))"
+StandardOutput=journal
+StandardError=journal

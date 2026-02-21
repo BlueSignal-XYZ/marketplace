@@ -1,11 +1,6 @@
-"""
-BlueSignal BS-WQM-100 Local Storage
+"""WQM-1 local storage: SQLite WAL buffer and store-and-forward sync."""
 
-SQLite buffer for offline resilience. Readings are stored locally
-and drained to the cloud when LoRaWAN connectivity is available.
-"""
-
-from .local_db import LocalDatabase
+from .database import ReadingsDB
 from .sync import SyncManager
 
-__all__ = ["LocalDatabase", "SyncManager"]
+__all__ = ["ReadingsDB", "SyncManager"]

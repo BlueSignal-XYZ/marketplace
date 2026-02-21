@@ -204,6 +204,7 @@ const Footer = () => (
           <FooterLink href="#sensors">Sensor Channels</FooterLink>
           <FooterLink href="#architecture">Architecture</FooterLink>
           <FooterLink href="#specs">Specifications</FooterLink>
+          <FooterLink href="/download">Firmware Downloads</FooterLink>
           <FooterLink href="#order">Order Dev Kit</FooterLink>
         </LinkCol>
 

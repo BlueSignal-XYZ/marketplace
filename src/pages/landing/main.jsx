@@ -7,6 +7,7 @@ import LandingPage from './LandingPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import WarrantyPage from './pages/WarrantyPage';
+import DownloadPage from './pages/DownloadPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Lightweight pathname-based router (no react-router-dom — keeps bundle small)
@@ -15,6 +16,7 @@ const routes = {
   '/privacy': PrivacyPage,
   '/terms': TermsPage,
   '/warranty': WarrantyPage,
+  '/download': DownloadPage,
 };
 
 const path = window.location.pathname.replace(/\/+$/, '') || '/';

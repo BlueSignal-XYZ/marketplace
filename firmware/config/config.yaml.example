@@ -1,0 +1,94 @@
+# BlueSignal WQM-1 Configuration
+# Copy to config.yaml and edit for this device
+
+device:
+  id: ""                          # Set on first boot (MAC-based or serial)
+  name: "WQM-1"
+  firmware_version: "1.0.0"
+  site_id: ""                     # BlueSignal Cloud site ID
+
+sampling:
+  interval_seconds: 60            # How often to read all sensors
+  averaging_samples: 5            # Readings per sample (median filter)
+  warmup_seconds: 2               # Delay after powering sensors before reading
+
+sensors:
+  ph:
+    enabled: true
+    adc_address: 0x48
+    adc_channel: 0                # AIN0
+    gain: 1                       # ADS1115 PGA: +/- 4.096V
+    offset_voltage: 1.65          # Midpoint reference voltage
+  tds:
+    enabled: true
+    adc_address: 0x48
+    adc_channel: 1                # AIN1
+    gain: 1
+    temperature_compensation: true
+  turbidity:
+    enabled: true
+    adc_address: 0x48
+    adc_channel: 2                # AIN2
+    gain: 1
+  orp:
+    enabled: true
+    adc_address: 0x49
+    adc_channel: 0                # AIN0
+    gain: 1
+    offset_voltage: 1.65
+  temperature:
+    enabled: true
+    gpio_pin: 4                   # 1-Wire data pin
+    resolution_bits: 12           # 9, 10, 11, or 12
+  gps:
+    enabled: true
+    uart_port: "/dev/serial0"
+    baud_rate: 9600
+    pps_gpio: 24
+
+lorawan:
+  enabled: true
+  frequency_plan: "US915"         # US915, EU868, AU915
+  sub_band: 2                     # TTN US915 sub-band
+  join_method: "OTAA"
+  dev_eui: ""                     # Set per device
+  app_eui: ""                     # From TTN application
+  app_key: ""                     # From TTN application
+  uplink_interval_seconds: 300    # How often to transmit (separate from sampling)
+  confirmed_uplinks: false
+  data_rate: 3                    # SF7-SF12 mapped to DR0-DR5
+  tx_power: 14                    # dBm
+
+relay:
+  enabled: true
+  gpio_pin: 23
+  default_state: "off"            # "off" or "on"
+  rules:
+    - name: "High pH Alert"
+      sensor: "ph"
+      condition: ">"
+      threshold: 8.5
+      action: "on"
+      duration_seconds: 300       # Auto-off after 5 min
+      cooldown_seconds: 600       # Don't re-trigger for 10 min
+
+led:
+  gpio_pin: 25
+  patterns:
+    boot: "solid"                 # Solid during boot
+    sampling: "blink_slow"        # 1Hz blink during normal operation
+    transmitting: "blink_fast"    # 5Hz blink during LoRa TX
+    error: "sos"                  # SOS pattern on error
+    no_link: "double_blink"       # Two quick blinks, pause
+
+storage:
+  database_path: "/var/lib/bluesignal/readings.db"
+  max_buffered_readings: 10000    # Flush oldest when exceeded
+  sync_batch_size: 50             # Readings per LoRa sync burst
+  retention_days: 30              # Delete readings older than this
+
+logging:
+  level: "INFO"                   # DEBUG, INFO, WARNING, ERROR
+  file: "/var/log/bluesignal/wqm.log"
+  max_size_mb: 10
+  backup_count: 3

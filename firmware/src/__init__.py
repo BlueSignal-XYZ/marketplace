@@ -1,1 +1,1 @@
-"""BlueSignal BS-WQM-100 Firmware"""
+"""BlueSignal WQM-1 Firmware"""
