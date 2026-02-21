@@ -25,11 +25,12 @@ const bounce = keyframes`
 const Section = styled.section`
   position: relative;
   overflow: hidden;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   height: 100dvh;
   min-height: 100vh;
   min-height: 100dvh;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
