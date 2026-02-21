@@ -25,14 +25,13 @@ const Section = styled.section`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 48px 20px 40px;
+  padding-top: clamp(48px, 4vw + 32px, 80px);
+  padding-bottom: clamp(40px, 3.5vw + 26px, 64px);
+  padding-left: clamp(20px, 2vw + 12px, 32px);
+  padding-right: clamp(20px, 2vw + 12px, 32px);
   background: #0B1120;
   color: #FFFFFF;
   box-sizing: border-box;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 80px 32px 64px;
-  }
 
   @media (prefers-reduced-motion: reduce) {
     & * { animation: none !important; }
@@ -90,34 +89,22 @@ const Eyebrow = styled.span`
 
 const Headline = styled.h1`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 32px;
+  font-size: clamp(32px, 3vw + 1.25rem, 48px);
   font-weight: 700;
   line-height: 1.15;
-  margin: 0 0 16px;
-  max-width: 100%;
+  margin: 0 0 clamp(16px, 1.5vw + 10px, 24px);
+  max-width: min(600px, 90%);
   color: #FFFFFF;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    font-size: 48px;
-    margin-bottom: 24px;
-    max-width: 600px;
-  }
 `;
 
 const Subheadline = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 16px;
+  font-size: clamp(16px, 0.5vw + 14px, 18px);
   font-weight: 400;
   line-height: 1.6;
-  max-width: 100%;
-  margin: 0 0 24px;
+  max-width: min(560px, 90%);
+  margin: 0 0 clamp(24px, 1.5vw + 18px, 32px);
   color: rgba(255, 255, 255, 0.7);
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    font-size: 18px;
-    margin-bottom: 32px;
-    max-width: 560px;
-  }
 `;
 
 const CTARow = styled.div`
@@ -125,8 +112,9 @@ const CTARow = styled.div`
   gap: 16px;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+  @media (max-width: 480px) {
     flex-direction: column;
     width: 100%;
   }
@@ -147,6 +135,8 @@ const PrimaryBtn = styled.a`
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
+  white-space: nowrap;
+  min-width: 180px;
 
   &:hover {
     transform: translateY(-1px);
@@ -154,8 +144,9 @@ const PrimaryBtn = styled.a`
   }
   &:active { transform: translateY(0); }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+  @media (max-width: 480px) {
     width: 100%;
+    min-width: unset;
   }
 `;
 
@@ -174,27 +165,29 @@ const SecondaryBtn = styled.a`
   border-radius: 8px;
   text-decoration: none;
   transition: all 200ms;
+  white-space: nowrap;
+  min-width: 180px;
 
   &:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.2);
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+  @media (max-width: 480px) {
     width: 100%;
+    min-width: unset;
   }
 `;
 
 const Pills = styled.div`
-  margin-top: 40px;
+  margin-top: clamp(24px, 2.5vw + 14px, 40px);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
-    margin-top: 24px;
+  @media (max-width: 600px) {
     flex-direction: column;
     gap: 6px;
   }
@@ -213,7 +206,7 @@ const PillSeparator = styled.span`
   color: rgba(255, 255, 255, 0.25);
   user-select: none;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+  @media (max-width: 600px) {
     display: none;
   }
 `;
