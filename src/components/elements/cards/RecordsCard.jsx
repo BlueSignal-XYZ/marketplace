@@ -78,7 +78,7 @@ const CardTitle = styled.span`
     margin: 1rem;
     font-size: 1.1rem;
     font-style: normal;
-    font-family: 'Work Sans';
+    font-family: inherit;
     font-weight: 500;
   `;
 

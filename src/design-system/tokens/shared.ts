@@ -38,8 +38,8 @@ export const animation = {
 } as const;
 
 export const fonts = {
-  sans: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-  mono: "'JetBrains Mono', 'SF Mono', monospace",
+  sans: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif",
+  mono: "'IBM Plex Mono', 'SF Mono', monospace",
 } as const;
 
 export const breakpoints = {
