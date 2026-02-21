@@ -155,3 +155,40 @@ These are used by deployment scripts and CI/CD, not by the Vite build:
 3. All Firebase configuration values come from environment variables exclusively ✅.
 
 4. No Stripe keys, LoRaWAN/TTN credentials, or payment keys were found in the codebase.
+
+---
+
+## 6. Device System & Revenue Grade Environment Variables
+
+Added February 2026 for the BlueSignal Device System and Revenue Grade Credit On-Ramp.
+
+### Backend (Firebase Cloud Functions)
+
+These are set via Cloud Functions configuration or GitHub Secrets:
+
+| Variable | Description | Required |
+|---|---|---|
+| `TTN_APP_ID` | The Things Network application ID (e.g., `bluesignal-wqm`) | Yes (for LoRaWAN) |
+| `TTN_API_KEY` | TTN v3 API key for device registration and downlink scheduling | Yes (for LoRaWAN) |
+| `TTN_WEBHOOK_SECRET` | Shared secret for TTN webhook authentication | Yes (already configured as Cloud Function secret) |
+| `TTN_BASE_URL` | TTN v3 API base URL (default: `https://nam1.cloud.thethings.network`) | No (has default) |
+| `BLUESIGNAL_OUI_PREFIX` | First 4 bytes of DevEUI (default: `0018B200`) | No (has default) |
+| `BLUESIGNAL_APP_EUI` | Fixed AppEUI for all BlueSignal devices (default: `70B3D57ED0000001`) | No (has default) |
+| `FIRMWARE_BUCKET_URL` | Cloud storage URL for firmware binaries (for BLE OTA) | No (v2 feature) |
+
+### Firmware (Pi on-device — NOT environment variables)
+
+The Pi firmware uses JSON config files under `/opt/bluesignal/config/`, not environment variables.
+Build-time variables for `flash_image.sh`:
+
+| Variable | Description | Default |
+|---|---|---|
+| `BLUESIGNAL_FW_VERSION` | Firmware version baked into SD card image | `1.0.0` |
+| `BLUESIGNAL_HW_REVISION` | Hardware revision identifier | `WQM1-v1.0` |
+
+### Pi Config Files (generated at first boot)
+
+- `device.json` — Device identity (device_id, dev_eui, ble_name)
+- `lora.json` — LoRaWAN credentials (app_key, written by BLE commissioning)
+- `calibration.json` — Sensor calibration constants with revenue-grade fields
+- `settings.json` — Sample interval, thresholds, relay rules, revenue-grade settings

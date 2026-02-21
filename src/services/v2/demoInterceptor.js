@@ -353,3 +353,165 @@ export async function createSite(params) {
     updatedAt: new Date().toISOString(),
   };
 }
+
+// ── Revenue Grade (demo stubs) ───────────────────────────────────────────
+
+export async function getRevenueGradeStatus(deviceId) {
+  await new Promise((r) => setTimeout(r, 300));
+  // First demo device has revenue grade enabled, others don't
+  if (deviceId === 'pgw-demo-001') {
+    return {
+      enabled: true,
+      enabledAt: '2026-01-15T00:00:00Z',
+      baselineType: 'regulatory',
+      baselineComplete: true,
+      baselineProgress: null,
+      baselineParams: { tn: 5.0, tp: 1.0 },
+      baselineLockedAt: '2026-01-15T00:00:00Z',
+      wqtProjectId: 'proj-demo-001',
+      wqtLinked: true,
+      calibrationStatus: { ph: 'valid', tds: 'valid', turbidity: 'expiring_soon', orp: 'valid' },
+      uptime30d: 98.2,
+      creditTotals: { nitrogen: 3.8, phosphorus: 1.2 },
+      flowEstimate: { method: 'manual', value: 10, unit: 'm3/day' },
+      huc12Code: '020700100101',
+      watershedName: 'Lower James River',
+      eligibleCredits: ['nitrogen', 'phosphorus'],
+    };
+  }
+  return { enabled: false, calibrationStatus: {}, creditTotals: {}, eligibleCredits: [] };
+}
+
+export async function enableRevenueGrade(deviceId, params) {
+  await new Promise((r) => setTimeout(r, 500));
+  return { enabled: true, enabledAt: new Date().toISOString(), ...params };
+}
+
+export async function disableRevenueGrade(deviceId) {
+  await new Promise((r) => setTimeout(r, 300));
+}
+
+// ── Calibrations (demo stubs) ────────────────────────────────────────────
+
+export async function getCalibrations(deviceId) {
+  await new Promise((r) => setTimeout(r, 300));
+  const now = Date.now();
+  return [
+    {
+      id: 'cal-demo-1', deviceId, probeType: 'ph',
+      calibratedAt: now - 30 * 86400000, calibratedBy: 'demo-user',
+      standardsUsed: ['pH 4.0 buffer', 'pH 7.0 buffer', 'pH 10.0 buffer'],
+      offsetValue: 0.02, slopeValue: 0.998, photoUrls: [],
+      expiresAt: now + 60 * 86400000, status: 'valid',
+    },
+    {
+      id: 'cal-demo-2', deviceId, probeType: 'tds',
+      calibratedAt: now - 30 * 86400000, calibratedBy: 'demo-user',
+      standardsUsed: ['500 ppm'], offsetValue: 0, slopeValue: null, photoUrls: [],
+      expiresAt: now + 60 * 86400000, status: 'valid',
+    },
+  ];
+}
+
+export async function logCalibration(deviceId, calibration) {
+  await new Promise((r) => setTimeout(r, 500));
+  return {
+    id: `cal-demo-${Date.now()}`, deviceId, probeType: calibration.probe_type,
+    calibratedAt: Date.now(), calibratedBy: 'demo-user',
+    standardsUsed: calibration.standards_used || [],
+    offsetValue: calibration.offset_value || 0, slopeValue: calibration.slope_value || null,
+    photoUrls: [], expiresAt: Date.now() + 90 * 86400000, status: 'valid',
+  };
+}
+
+// ── Device Commands (demo stubs) ─────────────────────────────────────────
+
+export async function sendDeviceCommand(deviceId, command) {
+  await new Promise((r) => setTimeout(r, 400));
+  return {
+    commandId: `cmd-demo-${Date.now()}`,
+    status: 'queued',
+    message: 'Command queued — will be delivered on the device\'s next uplink (demo mode).',
+  };
+}
+
+// ── HUC Lookup (demo stub) ───────────────────────────────────────────────
+
+export async function lookupHUC(lat, lng) {
+  await new Promise((r) => setTimeout(r, 300));
+  return {
+    huc12: '020700100101',
+    name: 'Lower James River',
+    state: 'VA',
+    impairments: ['nitrogen', 'phosphorus'],
+    activeTmdl: true,
+    tradingProgram: 'VA Nutrient Credit Exchange',
+    distance: 12.5,
+  };
+}
+
+// ── Account Linking (demo stubs) ─────────────────────────────────────────
+
+export async function getWQTLinkStatus() {
+  await new Promise((r) => setTimeout(r, 200));
+  return { linked: true, linkedAt: '2026-01-10T00:00:00Z', consentedDevices: ['pgw-demo-001'], revokedAt: null };
+}
+
+export async function linkWQTAccount(deviceIds) {
+  await new Promise((r) => setTimeout(r, 500));
+  return { linked: true, linkedAt: new Date().toISOString() };
+}
+
+// ── Credit Projects (demo stubs) ─────────────────────────────────────────
+
+export async function registerCreditProject(params) {
+  await new Promise((r) => setTimeout(r, 800));
+  return {
+    id: `proj-demo-${Date.now()}`,
+    deviceId: params.device_id,
+    siteName: params.site_name || 'Demo Site',
+    huc12Code: params.huc12_code || '020700100101',
+    watershedName: params.watershed_name || 'Lower James River',
+    baselineType: params.baseline_type || 'monitoring',
+    baselineComplete: params.baseline_type !== 'monitoring',
+    eligibleCredits: params.eligible_credits || ['nitrogen', 'phosphorus'],
+    status: params.baseline_type === 'monitoring' ? 'pending_baseline' : 'active',
+    totalCredits: {},
+    createdAt: new Date().toISOString(),
+  };
+}
+
+export async function getCreditProject(projectId) {
+  await new Promise((r) => setTimeout(r, 300));
+  return {
+    id: projectId,
+    deviceId: 'pgw-demo-001',
+    siteName: 'Demo Pond',
+    huc12Code: '020700100101',
+    watershedName: 'Lower James River',
+    baselineType: 'regulatory',
+    baselineComplete: true,
+    eligibleCredits: ['nitrogen', 'phosphorus'],
+    status: 'active',
+    totalCredits: { nitrogen: 3.8, phosphorus: 1.2 },
+    createdAt: '2026-01-15T00:00:00Z',
+  };
+}
+
+export async function getCreditAccruals(projectId) {
+  await new Promise((r) => setTimeout(r, 300));
+  return [
+    {
+      id: 'accrual-demo-1', projectId, periodStart: Date.now() - 30 * 86400000,
+      periodEnd: Date.now(), creditType: 'nitrogen', amount: 1.2, unit: 'lbs',
+      baselineValue: 5.0, measuredValue: 2.1, uptimePct: 98.2, calibrationValid: true,
+      status: 'verified',
+    },
+    {
+      id: 'accrual-demo-2', projectId, periodStart: Date.now() - 30 * 86400000,
+      periodEnd: Date.now(), creditType: 'phosphorus', amount: 0.4, unit: 'lbs',
+      baselineValue: 1.0, measuredValue: 0.6, uptimePct: 98.2, calibrationValid: true,
+      status: 'pending_verification',
+    },
+  ];
+}
