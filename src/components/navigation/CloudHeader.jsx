@@ -4,8 +4,14 @@ import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../shared/NotificationBell";
+import { isDemoMode } from "../../utils/demoMode";
 
 import blueSignalLogo from "../../assets/bluesignal-logo.png";
+
+// Show demo toggle in dev mode or when explicitly enabled
+const SHOW_DEMO_TOGGLE =
+  typeof import.meta !== 'undefined' &&
+  (import.meta.env?.DEV || import.meta.env?.VITE_SHOW_DEMO_TOGGLE === 'true');
 
 const fadeIn = keyframes`
   from {
@@ -127,7 +133,56 @@ const MenuButton = styled.button`
   }
 `;
 
+const DemoToggle = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  border: 1px solid ${({ $active }) => ($active ? '#0066FF' : '#E5E7EB')};
+  background: ${({ $active }) => ($active ? '#0066FF' : '#FAFAFA')};
+  color: ${({ $active }) => ($active ? '#FFFFFF' : '#9CA3AF')};
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  white-space: nowrap;
+  min-height: 28px;
+
+  &:hover {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+`;
+
+const DemoDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${({ $active }) => ($active ? '#FFFFFF' : '#D1D5DB')};
+  transition: background 0.2s;
+`;
+
 export function CloudHeader({ onMenuClick }) {
+  const demoActive = isDemoMode();
+
+  const handleDemoToggle = () => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('demo') === '1') {
+      url.searchParams.delete('demo');
+    } else {
+      url.searchParams.set('demo', '1');
+    }
+    window.location.href = url.toString();
+  };
+
   return (
     <HeaderOuter>
       <HeaderInner>
@@ -137,6 +192,17 @@ export function CloudHeader({ onMenuClick }) {
         </LogoWrapper>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {SHOW_DEMO_TOGGLE && (
+            <DemoToggle
+              $active={demoActive}
+              onClick={handleDemoToggle}
+              aria-label={demoActive ? 'Disable demo mode' : 'Enable demo mode'}
+              title={demoActive ? 'Demo mode ON — click to disable' : 'Click to enable demo mode'}
+            >
+              <DemoDot $active={demoActive} />
+              Demo
+            </DemoToggle>
+          )}
           <NotificationBell />
           <MenuButton onClick={onMenuClick} aria-label="Open cloud menu">
             <FontAwesomeIcon icon={faBars} />
