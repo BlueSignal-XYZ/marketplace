@@ -1,0 +1,13 @@
+# /etc/logrotate.d/bluesignal
+# Rotate BlueSignal firmware logs to prevent SD card fill.
+# Copy to /etc/logrotate.d/bluesignal on the Pi.
+
+/var/log/bluesignal/*.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    maxsize 10M
+    copytruncate
+}
