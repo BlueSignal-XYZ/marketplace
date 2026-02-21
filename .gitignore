@@ -110,8 +110,8 @@ bower_components/
 ################################################################################
 firmware/config/config.yaml
 firmware/venv/
-firmware/__pycache__/
-firmware/src/**/__pycache__/
+__pycache__/
+*.pyc
 firmware/*.img.gz
 firmware/*.img.gz.sha256
 
