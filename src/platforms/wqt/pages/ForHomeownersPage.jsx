@@ -54,16 +54,16 @@ const HeroSub = styled.p`
 `;
 
 const Section = styled.section`
-  padding: 80px 24px;
+  padding: 96px 24px;
   background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
 
   @media (max-width: 640px) {
-    padding: 56px 20px;
+    padding: 64px 20px;
   }
 `;
 
 const SectionInner = styled.div`
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
 `;
 
@@ -78,11 +78,11 @@ const SectionTitle = styled.h2`
 
 const SectionDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 16px;
+  font-size: 17px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.7;
-  margin: 0 0 32px;
-  max-width: 700px;
+  line-height: 1.75;
+  margin: 0 0 36px;
+  max-width: 680px;
 `;
 
 const Grid = styled.div`
@@ -120,9 +120,9 @@ const CardTitle = styled.h3`
 
 const CardDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
 `;
 
@@ -306,8 +306,8 @@ export default function ForHomeownersPage() {
           <Breadcrumb href="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>Earn Credits From Your Water Generator</HeroTitle>
           <HeroSub>
-            Your atmospheric water generator produces water and earns you
-            credits automatically. Two credit types, fully automated verification,
+            Your water has value — now your utility will pay you for it.
+            Two credit types, fully automated verification,
             and rebates credited directly to your monthly water bill.
           </HeroSub>
         </HeroInner>
@@ -317,9 +317,9 @@ export default function ForHomeownersPage() {
         <SectionInner>
           <SectionTitle>How You Earn Credits</SectionTitle>
           <SectionDesc>
-            Your water generator earns two types of credits at the same time. One
-            for every gallon produced, and one for the environmental quality of
-            that water. Both are verified automatically — you don't have to do anything.
+            Every gallon your system produces earns you money back on your water bill.
+            You earn two types of credits simultaneously — one for volume, one for
+            water quality. Both are verified automatically. You don't have to do anything.
           </SectionDesc>
           <CreditPair>
             <CreditCard $accent="#0052CC">
@@ -445,7 +445,7 @@ export default function ForHomeownersPage() {
           Check if your utility participates in the program or
           contact us to learn about availability in your area.
         </CTADesc>
-        <CTAButton href="/contact">Get Started</CTAButton>
+        <CTAButton href="/contact">Calculate Your Rebate</CTAButton>
       </CTASection>
     </Page>
   );
