@@ -393,13 +393,6 @@ export function CloudMenu({ open, onClose, user }) {
               >
                 Live Stream
               </NavItem>
-              <NavItem
-                to="/cloud/tools/upload-media"
-                $active={isActive("/cloud/tools/upload-media")}
-                onClick={onClose}
-              >
-                Media Upload
-              </NavItem>
             </NavList>
 
             {/* Account */}

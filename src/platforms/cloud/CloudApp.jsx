@@ -169,7 +169,7 @@ export function CloudApp({ user, authLoading }) {
               <Route path="/cloud/tools/nutrient-calculator" element={<CloudAuthGate authLoading={authLoading}><CloudNutrientCalculator /></CloudAuthGate>} />
               <Route path="/cloud/tools/verification" element={<CloudAuthGate authLoading={authLoading}><CloudVerification /></CloudAuthGate>} />
               <Route path="/cloud/tools/live" element={<CloudAuthGate authLoading={authLoading}><CloudLiveStream /></CloudAuthGate>} />
-              <Route path="/cloud/tools/upload-media" element={<CloudAuthGate authLoading={authLoading}><CloudUploadMedia /></CloudAuthGate>} />
+              <Route path="/cloud/tools/upload-media" element={<Navigate to="/cloud/tools/verification" replace />} />
 
               {/* Media */}
               <Route path="/media/:playbackID" element={<CloudAuthGate authLoading={authLoading}><CloudMediaPlayer /></CloudAuthGate>} />

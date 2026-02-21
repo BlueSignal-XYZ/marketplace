@@ -97,9 +97,9 @@ const TabContent = styled(TabContainer)`
 
 const TabBar = styled.div`
   display: flex;
+  flex-wrap: wrap;
   border-bottom: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   margin-bottom: 24px;
-  overflow-x: auto;
   gap: 0;
 `;
 
