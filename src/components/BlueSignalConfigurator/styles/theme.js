@@ -52,8 +52,8 @@ export const salesTheme = {
 
   // Typography
   typography: {
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    fontMono: "'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace",
+    fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontMono: "'IBM Plex Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace",
 
     // Font sizes with line heights
     heroH1: { size: '48px', lineHeight: '56px', weight: 600 },

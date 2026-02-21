@@ -1,6 +1,6 @@
 // Typography styles
 const typography = {
-    fontFamily: 'Albert Sans, sans-serif',
+    fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif",
   };
   
   // Color object
