@@ -1,12 +1,40 @@
 /**
  * Demo Mode Utilities
- * Provides functionality to detect and manage demo mode for presentations
+ * Provides functionality to detect and manage demo mode for presentations.
+ *
+ * Demo mode can be enabled via:
+ * 1. localStorage toggle (set from Profile/Settings page)
+ * 2. URL parameter (?demo=1)
+ * 3. Environment variable (VITE_DEMO_MODE=true)
  */
+
+const DEMO_MODE_KEY = 'bluesignal_demo_mode';
 
 export function isDemoMode(): boolean {
   if (typeof window === 'undefined') return false;
+
+  // 1. Check localStorage (user preference from Profile page)
+  const stored = localStorage.getItem(DEMO_MODE_KEY);
+  if (stored === 'true') return true;
+
+  // 2. Check URL parameter
   const params = new URLSearchParams(window.location.search);
-  return params.get('demo') === '1' || import.meta.env.VITE_DEMO_MODE === 'true';
+  if (params.get('demo') === '1') return true;
+
+  // 3. Check env var
+  if (import.meta.env.VITE_DEMO_MODE === 'true') return true;
+
+  return false;
+}
+
+export function setDemoMode(enabled: boolean): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(DEMO_MODE_KEY, String(enabled));
+}
+
+export function clearDemoMode(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(DEMO_MODE_KEY);
 }
 
 export function getDemoHintForScreen(screenName: string): string | null {

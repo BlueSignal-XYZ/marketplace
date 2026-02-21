@@ -95,13 +95,12 @@ export function DemoBanner() {
   return (
     <BannerContainer>
       <BannerText>
-        <DemoIcon>Demo Mode</DemoIcon>
-        <span>You're viewing sample data.</span>
-        <span style={{ opacity: 0.9 }}>Sign in to connect real devices.</span>
+        <DemoIcon>🔬</DemoIcon>
+        <span><strong>Demo Mode</strong> — Showing sample data</span>
       </BannerText>
-      <SignInLink to="/">Sign in</SignInLink>
+      <SignInLink to="/cloud/profile">Disable in Settings</SignInLink>
       <CloseButton onClick={() => setDismissed(true)} aria-label="Dismiss demo banner">
-        x
+        ×
       </CloseButton>
     </BannerContainer>
   );

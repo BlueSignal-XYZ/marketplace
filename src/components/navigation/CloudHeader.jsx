@@ -4,14 +4,12 @@ import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../shared/NotificationBell";
-import { isDemoMode } from "../../utils/demoMode";
+import { isDemoMode, setDemoMode } from "../../utils/demoMode";
 
 import blueSignalLogo from "../../assets/bluesignal-logo.png";
 
-// Show demo toggle in dev mode or when explicitly enabled
-const SHOW_DEMO_TOGGLE =
-  typeof import.meta !== 'undefined' &&
-  (import.meta.env?.DEV || import.meta.env?.VITE_SHOW_DEMO_TOGGLE === 'true');
+// Always show demo toggle — demo mode is now managed via localStorage from Profile page
+const SHOW_DEMO_TOGGLE = true;
 
 const fadeIn = keyframes`
   from {
@@ -174,13 +172,8 @@ export function CloudHeader({ onMenuClick }) {
   const demoActive = isDemoMode();
 
   const handleDemoToggle = () => {
-    const url = new URL(window.location.href);
-    if (url.searchParams.get('demo') === '1') {
-      url.searchParams.delete('demo');
-    } else {
-      url.searchParams.set('demo', '1');
-    }
-    window.location.href = url.toString();
+    setDemoMode(!demoActive);
+    window.location.reload();
   };
 
   return (
