@@ -1328,9 +1328,10 @@ const OrderAPI = {
 
 const createCommission = async (commissionData) => {
   try {
+    // Backend route is /commission/initiate and expects { deviceId, siteId } at top level
     const response = await authPost(
-      `${configs.server_url}/commission/create`,
-      { commissionData }
+      `${configs.server_url}/commission/initiate`,
+      commissionData
     );
     return response?.data;
   } catch (error) {
@@ -1406,11 +1407,14 @@ const completeCommission = async (commissionId, result) => {
 
 const getCommissionByDevice = async (deviceId) => {
   try {
+    // No dedicated /commission/get-by-device endpoint — use /commission/list
+    // with a deviceId filter and return the most recent commission.
     const response = await authPost(
-      `${configs.server_url}/commission/get-by-device`,
-      { deviceId }
+      `${configs.server_url}/commission/list`,
+      { filters: { deviceId } }
     );
-    return response?.data;
+    const commissions = response?.data?.commissions || [];
+    return commissions.length > 0 ? commissions[0] : null;
   } catch (error) {
     console.error("Error fetching commission by device:", error);
     throw error;

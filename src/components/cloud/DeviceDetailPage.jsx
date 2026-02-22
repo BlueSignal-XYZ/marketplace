@@ -479,15 +479,36 @@ export default function DeviceDetailPage() {
     setLoading(true);
     try {
       // v2 API calls — routed through api.js (handles demo/real switching)
-      // Logs: no v2 logs endpoint exists yet — render clean empty state instead of mock data.
-      // Commission: uses CommissionAPI.getByDevice from back_door.js (v1 endpoint).
-      // TODO: /commission/get-by-device endpoint not implemented in backend — returns null on failure
       const [deviceData, alertsData, commissionData] = await Promise.all([
         getDevice(deviceId).catch(() => null),
         getDeviceAlerts(deviceId).catch(() => []),
         CommissionAPI.getByDevice(deviceId).catch(() => null),
       ]);
-      const logsData = []; // No v2 logs endpoint — show empty state until implemented
+
+      // Derive device logs from recent readings (no dedicated logs endpoint)
+      let logsData = [];
+      try {
+        const readingsResult = await ReadingsAPI.get(deviceId, 20);
+        const readings = readingsResult?.readings || [];
+        logsData = readings
+          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+          .map((r) => {
+            const sensorKeys = Object.keys(r.sensors || {}).filter(
+              (k) => r.sensors[k]?.value != null
+            );
+            const summary = sensorKeys.length > 0
+              ? `Sensors: ${sensorKeys.join(", ")}`
+              : "Sensor data received";
+            return {
+              timestamp: r.timestamp ? new Date(r.timestamp).toISOString() : new Date().toISOString(),
+              event: "reading",
+              message: summary,
+            };
+          });
+      } catch {
+        // ReadingsAPI failed — show empty state gracefully
+        logsData = [];
+      }
 
       // v2 returns flat Device object and Alert[] directly
       if (deviceData) setDevice(deviceData);

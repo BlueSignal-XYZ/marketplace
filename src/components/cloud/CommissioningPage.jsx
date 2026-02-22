@@ -494,10 +494,10 @@ const StartNewButton = styled.button`
 
 // NOTE: This component uses v1 commission endpoints via CommissionAPI (back_door.js).
 // Endpoint audit (2026-02-22):
-//   CommissionAPI.create()      → POST /commission/create — MISMATCH: backend route is /commission/initiate
+//   CommissionAPI.create()      → POST /commission/initiate — OK, implemented
 //   CommissionAPI.runTests()    → POST /commission/run-tests — OK, implemented
 //   CommissionAPI.complete()    → POST /commission/complete — OK, implemented
-//   CommissionAPI.getByDevice() → POST /commission/get-by-device — TODO: endpoint not implemented in backend
+//   CommissionAPI.getByDevice() → POST /commission/list (filtered by deviceId) — OK, implemented
 // DeviceAPI.getDevices()        → POST /device/all — v1 endpoint, should migrate to v2 in future pass
 export default function CommissioningPage() {
   const navigate = useNavigate();
@@ -549,7 +549,6 @@ export default function CommissioningPage() {
 
     try {
       // 1. Create a new commission record
-      // TODO: back_door.js calls /commission/create but backend route is /commission/initiate — verify or fix URL
       const commission = await CommissionAPI.create({
         deviceId: device.id,
         deviceName: device.alias || device.name,
@@ -624,7 +623,6 @@ export default function CommissioningPage() {
       let result = null;
 
       // Try CommissionAPI first
-      // TODO: endpoint /commission/get-by-device not implemented in backend — falls back to RTDB read
       try {
         const apiResult = await CommissionAPI.getByDevice(device.id);
         // Normalise: API may return the commission record directly or wrapped
