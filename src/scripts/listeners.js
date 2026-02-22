@@ -1,17 +1,22 @@
 import { collection, query, onSnapshot } from "firebase/firestore";
+import { getFirestoreInstance } from "../apis/firebase";
 
-// Example: Listen to real-time updates for {event: string}
-export const listenToEvent = (eventKey, callback) => {
+export const listenToEvent = async (eventKey, callback) => {
+  const db = await getFirestoreInstance();
+  if (!db) {
+    console.error("[listenToEvent] Firestore not available — skipping listener for:", eventKey);
+    return () => {};
+  }
   const q = query(collection(db, eventKey));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const resultEvents = [];
     querySnapshot.forEach((doc) => {
       resultEvents.push(doc.data());
     });
-    // result events updated
-    // Update your UI with the new events
-    callback?.(resultEvents)
+    callback?.(resultEvents);
+  }, (error) => {
+    console.error(`[listenToEvent] Snapshot error for "${eventKey}":`, error.code, error.message);
   });
 
-  return unsubscribe; // Call unsubscribe() to stop listening when component unmounts
+  return unsubscribe;
 };

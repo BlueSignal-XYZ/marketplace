@@ -296,9 +296,15 @@ export function MarketplaceMenu({ open, onClose, user }) {
 
         <Divider />
 
-        {/* How It Works */}
-        <SectionLabel>How It Works</SectionLabel>
+        {/* Browse */}
         <NavList>
+          <NavItem
+            to="/marketplace"
+            $active={isActive("/marketplace")}
+            onClick={onClose}
+          >
+            Marketplace
+          </NavItem>
           <NavItem
             to="/how-it-works"
             $active={isActive("/how-it-works")}
@@ -306,38 +312,38 @@ export function MarketplaceMenu({ open, onClose, user }) {
           >
             How It Works
           </NavItem>
-          <NavItem
-            to="/generate-credits"
-            $active={isActive("/generate-credits")}
-            onClick={onClose}
-          >
-            For Credit Generators
-          </NavItem>
         </NavList>
 
-        {/* Audiences */}
-        <SectionLabel>For</SectionLabel>
+        {/* Solutions */}
+        <SectionLabel>Solutions</SectionLabel>
         <NavList>
           <NavItem
             to="/for-utilities"
             $active={isActive("/for-utilities")}
             onClick={onClose}
           >
-            Utilities & Municipalities
+            For Utilities
           </NavItem>
           <NavItem
             to="/for-homeowners"
             $active={isActive("/for-homeowners")}
             onClick={onClose}
           >
-            Homeowners
+            For Homeowners
           </NavItem>
           <NavItem
             to="/for-aggregators"
             $active={isActive("/for-aggregators")}
             onClick={onClose}
           >
-            Aggregators & Investors
+            For Aggregators
+          </NavItem>
+          <NavItem
+            to="/generate-credits"
+            $active={isActive("/generate-credits")}
+            onClick={onClose}
+          >
+            For Generators
           </NavItem>
         </NavList>
 

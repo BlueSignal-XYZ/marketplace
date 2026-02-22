@@ -122,16 +122,17 @@ const updateUserProfile = async (req, res) => {
 
   const db = admin.database();
 
-  // Only allow updating specific fields
-  const allowedFields = ["displayName", "phone", "company", "timezone", "units"];
+  const allowedProfileFields = ["displayName", "phone", "company", "bio", "role"];
+  const allowedSettingsFields = ["timezone", "units"];
+  const allowedTopLevel = ["onboardingCompleted", "onboardingCompletedAt"];
   const filteredData = {};
   Object.keys(profileData).forEach((key) => {
-    if (allowedFields.includes(key)) {
-      if (key === "timezone" || key === "units") {
-        filteredData[`settings/${key}`] = profileData[key];
-      } else {
-        filteredData[`profile/${key}`] = profileData[key];
-      }
+    if (allowedSettingsFields.includes(key)) {
+      filteredData[`settings/${key}`] = profileData[key];
+    } else if (allowedTopLevel.includes(key)) {
+      filteredData[`profile/${key}`] = profileData[key];
+    } else if (allowedProfileFields.includes(key)) {
+      filteredData[`profile/${key}`] = profileData[key];
     }
   });
 
