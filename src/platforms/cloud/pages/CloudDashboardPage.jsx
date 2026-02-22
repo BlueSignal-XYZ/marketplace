@@ -254,6 +254,23 @@ function severityIcon(severity) {
   return '🔵';
 }
 
+/* ── Icons ─────────────────────────────────────────────── */
+
+const DeviceEmptyIcon = () => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
+    <circle cx="32" cy="34" r="6" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
+    <path d="M32 28v-4M32 42v4M26 34h-4M38 34h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+  </svg>
+);
+
+const DeviceErrorIcon = () => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.3" />
+    <path d="M32 20v24M32 48v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+  </svg>
+);
+
 /* ── Component ──────────────────────────────────────────── */
 
 export function CloudDashboardPage() {
@@ -277,8 +294,9 @@ export function CloudDashboardPage() {
           <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
         </Header>
         <EmptyState
+          icon={<DeviceErrorIcon />}
           title="Unable to Load Devices"
-          description="We couldn't connect to the device service. This may be a temporary issue."
+          description="We couldn't connect to the device service. Check your connection and try again, or enable Demo Mode in Profile to explore with sample data."
           action={{ label: 'Retry', onClick: () => refetchDevices() }}
         />
       </Page>
@@ -293,8 +311,9 @@ export function CloudDashboardPage() {
           <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
         </Header>
         <EmptyState
+          icon={<DeviceEmptyIcon />}
           title="No Devices Yet"
-          description="No devices registered yet. Add your first device or enable Demo Mode to explore the platform with sample data."
+          description="No devices commissioned yet. Add your first device to get started, or enable Demo Mode in Profile to explore with sample data."
           action={{ label: 'Commission Your First Device', onClick: () => navigate('/commission') }}
         />
       </Page>
