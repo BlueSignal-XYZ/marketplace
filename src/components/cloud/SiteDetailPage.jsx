@@ -316,6 +316,54 @@ const Skeleton = styled.div`
 // Google Maps API key from environment
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
+/** Normalize site from v2 or CloudMockAPI shape for display */
+function normalizeSiteForDisplay(site, deviceCount) {
+  const loc = site.location;
+  const hasLegacyShape = site.customer != null && site.coordinates != null;
+  return {
+    id: site.id,
+    name: site.name || site.id,
+    customer: site.customer ?? (site.description || "—"),
+    location: typeof site.location === "string"
+      ? site.location
+      : (loc?.address || loc?.city || loc?.state ? [loc.address, loc.city, loc.state].filter(Boolean).join(", ") : "—"),
+    coordinates: site.coordinates ?? (loc?.latitude != null && loc?.longitude != null
+      ? { lat: loc.latitude, lng: loc.longitude }
+      : null),
+    status: site.status ?? "online",
+    deviceCount: site.deviceCount ?? deviceCount ?? (site.devices?.length ?? 0),
+    lastUpdate: site.lastUpdate ?? site.updatedAt ?? site.createdAt ?? new Date().toISOString(),
+    boundary: site.boundary,
+  };
+}
+
+/** Normalize device from v2 DeviceSummary or full Device for display */
+function normalizeDeviceForDisplay(device) {
+  const status = device.status === "active" || device.status === "online" ? "online"
+    : device.status === "maintenance" || device.status === "warning" ? "warning"
+    : "offline";
+  return {
+    id: device.id,
+    name: device.name || device.id,
+    deviceType: device.deviceType ?? device.model ?? "Water Quality Monitor",
+    status,
+    batteryLevel: device.batteryLevel ?? device.battery ?? 0,
+    lastContact: device.lastContact ?? device.lastReadingAt ?? device.updatedAt ?? "",
+    coordinates: device.coordinates ?? (device.location?.latitude != null
+      ? { lat: device.location.latitude, lng: device.location.longitude }
+      : null),
+  };
+}
+
+/** Normalize alert for display (firstSeen/lastSeen vs createdAt/updatedAt) */
+function normalizeAlertForDisplay(alert) {
+  return {
+    ...alert,
+    firstSeen: alert.firstSeen ?? alert.createdAt,
+    lastSeen: alert.lastSeen ?? alert.updatedAt,
+  };
+}
+
 // Map styling
 const mapContainerStyle = {
   width: "100%",
@@ -365,6 +413,7 @@ export default function SiteDetailPage() {
   }, [siteId]);
 
   const loadSiteData = async () => {
+    if (!siteId) return;
     setLoading(true);
     setError(null);
     try {
@@ -377,19 +426,24 @@ export default function SiteDetailPage() {
 
       // Find the specific site
       const siteData = (allSites || []).find((s) => s.id === siteId);
-      // TODO: Replace with server-side filtered endpoint (e.g., /v2/sites/:siteId/devices)
-      // when device count exceeds ~100. Current approach fetches all devices then filters.
-      const siteDevices = (allDevices || []).filter((d) => d.siteId === siteId);
+      // v2 API: site has devices[] array of IDs. Demo: devices filtered by d.siteId.
+      const siteDeviceIds = siteData?.devices?.length
+        ? siteData.devices
+        : (allDevices || []).filter((d) => d.siteId === siteId).map((d) => d.id);
+      const siteDevices = (allDevices || []).filter((d) =>
+        siteDeviceIds.includes(d.id)
+      );
       // Filter alerts for this site's devices
-      const siteDeviceIds = siteDevices.map((d) => d.id);
       const siteAlerts = (allAlerts || []).filter((a) =>
         siteDeviceIds.includes(a.deviceId)
       );
 
       if (siteData) {
-        setSite(siteData);
-        setDevices(siteDevices);
-        setAlerts(siteAlerts);
+        // Normalize site shape: v2 has location{}, devices[]; CloudMockAPI has customer, coordinates, deviceCount
+        const normalized = normalizeSiteForDisplay(siteData, siteDevices.length);
+        setSite(normalized);
+        setDevices(siteDevices.map(normalizeDeviceForDisplay));
+        setAlerts(siteAlerts.map(normalizeAlertForDisplay));
       } else {
         setError("Site not found.");
       }

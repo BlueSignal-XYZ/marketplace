@@ -140,10 +140,10 @@ export default function SiteCard({ site }) {
 
       <MetaInfo>
         <MetaRow>
-          <strong>Customer:</strong> {site.customer}
+          <strong>Customer:</strong> {site.customer ?? "—"}
         </MetaRow>
         <MetaRow>
-          <strong>Location:</strong> {site.location}
+          <strong>Location:</strong> {typeof site.location === "string" ? site.location : (site.location?.address || site.location?.city || "—")}
         </MetaRow>
         {site.coordinates && (
           <MetaRow>

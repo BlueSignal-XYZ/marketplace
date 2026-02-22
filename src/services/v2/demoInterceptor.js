@@ -107,8 +107,10 @@ function toDeviceSummary(device) {
     name: device.name,
     status: mapDeviceStatus(device.status),
     onlineStatus: mapOnlineStatus(device.status),
+    siteId: device.siteId || null,
     battery: device.batteryLevel ?? 0,
     lastReadingAt: device.lastContact,
+    deviceType: device.deviceType,
     location: {
       latitude: device.coordinates?.lat ?? 0,
       longitude: device.coordinates?.lng ?? 0,
@@ -169,26 +171,33 @@ function toAlert(alert) {
   };
 }
 
-/** CloudMockAPI site → v2 Site */
+/** CloudMockAPI site → v2 Site (with legacy shape for SiteCard/SiteDetailPage compatibility) */
 function toSite(site, allDevices) {
   const siteDeviceIds = allDevices
     .filter((d) => d.siteId === site.id)
     .map((d) => d.id);
 
+  const loc = {
+    latitude: site.coordinates?.lat ?? 0,
+    longitude: site.coordinates?.lng ?? 0,
+    address: site.location || '',
+    city: '',
+    state: '',
+    country: 'US',
+  };
+
   return {
     id: site.id,
     name: site.name,
     ownerId: 'demo-user',
-    location: {
-      latitude: site.coordinates?.lat ?? 0,
-      longitude: site.coordinates?.lng ?? 0,
-      address: site.location || '',
-      city: '',
-      state: '',
-      country: 'US',
-    },
+    customer: site.customer,
+    coordinates: site.coordinates,
+    status: site.status,
+    deviceCount: site.deviceCount ?? siteDeviceIds.length,
+    lastUpdate: site.lastUpdate,
     devices: siteDeviceIds,
-    description: `${site.customer} — ${site.deviceCount} devices`,
+    description: `${site.customer} — ${site.deviceCount ?? siteDeviceIds.length} devices`,
+    location: loc,
     createdAt: site.lastUpdate,
     updatedAt: site.lastUpdate,
   };
@@ -514,4 +523,145 @@ export async function getCreditAccruals(projectId) {
       status: 'pending_verification',
     },
   ];
+}
+
+// ── WQT Marketplace (demo listings) ─────────────────────────
+
+const DEMO_LISTINGS = [
+  {
+    id: 'demo-listing-1',
+    creditId: 'CR-N-2025-001',
+    nutrientType: 'nitrogen',
+    quantity: 450,
+    pricePerCredit: 12.50,
+    region: 'Chesapeake Bay, VA',
+    verificationLevel: 'sensor-verified',
+    sellerName: 'BlueSignal Demo Farm',
+    vintage: '2025',
+    status: 'active',
+    createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+  },
+  {
+    id: 'demo-listing-2',
+    creditId: 'CR-P-2025-002',
+    nutrientType: 'phosphorus',
+    quantity: 180,
+    pricePerCredit: 18.75,
+    region: 'James River Watershed',
+    verificationLevel: 'third-party',
+    sellerName: 'Virginia Agri Co.',
+    vintage: '2025',
+    status: 'active',
+    createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
+  },
+  {
+    id: 'demo-listing-3',
+    creditId: 'CR-N-2024-003',
+    nutrientType: 'nitrogen',
+    quantity: 320,
+    pricePerCredit: 10.00,
+    region: 'Maryland Eastern Shore',
+    verificationLevel: 'self-reported',
+    sellerName: 'Eastern Shore Credits LLC',
+    vintage: '2024',
+    status: 'active',
+    createdAt: new Date(Date.now() - 21 * 86400000).toISOString(),
+  },
+  {
+    id: 'demo-listing-4',
+    creditId: 'CR-NP-2025-004',
+    nutrientType: 'combined',
+    quantity: 200,
+    pricePerCredit: 22.00,
+    region: 'Potomac River Basin',
+    verificationLevel: 'sensor-verified',
+    sellerName: 'Potomac Water Quality Co.',
+    vintage: '2025',
+    status: 'active',
+    createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+  },
+  {
+    id: 'demo-listing-5',
+    creditId: 'CR-P-2024-005',
+    nutrientType: 'phosphorus',
+    quantity: 95,
+    pricePerCredit: 15.50,
+    region: 'Shenandoah Valley',
+    verificationLevel: 'third-party',
+    sellerName: 'Shenandoah Farm Credits',
+    vintage: '2024',
+    status: 'active',
+    createdAt: new Date(Date.now() - 30 * 86400000).toISOString(),
+  },
+];
+
+/**
+ * Demo marketplace search — returns sample listings with filtering.
+ * @returns {Promise<{ data: ListingSummary[], pagination: {...} }>}
+ */
+export async function searchListings(params = {}) {
+  await new Promise((r) => setTimeout(r, 200));
+
+  const page = params.page ?? 1;
+  const limit = params.limit ?? 20;
+  const query = (params.query || '').toLowerCase();
+  const nutrientType = params.nutrientType;
+  const verificationLevel = params.verificationLevel;
+
+  let filtered = [...DEMO_LISTINGS];
+
+  if (query) {
+    filtered = filtered.filter(
+      (l) =>
+        (l.creditId || '').toLowerCase().includes(query) ||
+        (l.region || '').toLowerCase().includes(query) ||
+        (l.sellerName || '').toLowerCase().includes(query)
+    );
+  }
+  if (nutrientType) {
+    filtered = filtered.filter((l) => l.nutrientType === nutrientType);
+  }
+  if (verificationLevel) {
+    filtered = filtered.filter((l) => l.verificationLevel === verificationLevel);
+  }
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  const start = (page - 1) * limit;
+  const data = filtered.slice(start, start + limit);
+
+  return {
+    data,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    },
+  };
+}
+
+/**
+ * Demo getListing — returns a single listing by ID.
+ */
+export async function getListing(id) {
+  await new Promise((r) => setTimeout(r, 150));
+  const listing = DEMO_LISTINGS.find((l) => l.id === id);
+  if (!listing) {
+    throw Object.assign(new Error(`Listing "${id}" not found`), {
+      name: 'ApiError',
+      status: 404,
+      code: 'NOT_FOUND',
+    });
+  }
+  return {
+    ...listing,
+    sellerId: 'demo-seller',
+    totalPrice: listing.quantity * listing.pricePerCredit,
+    watershed: listing.region,
+    description: `Demo listing for ${listing.nutrientType} credits. ${listing.verificationLevel} verification.`,
+    updatedAt: listing.createdAt,
+  };
 }

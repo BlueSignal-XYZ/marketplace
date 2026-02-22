@@ -98,16 +98,19 @@ export const getCreditAccruals = demo
   ? demoClient.getCreditAccruals
   : realClient.getCreditAccruals;
 
+// ── WQT Marketplace: demo listings when demo mode ──────────
+
+export const searchListings = demo ? demoClient.searchListings : realClient.searchListings;
+export const getListing = demo ? demoClient.getListing : realClient.getListing;
+
 // ── Pass-through: everything else routes to real client ──
 
 export {
   ApiError,
   AUTH_SESSION_EXPIRED_EVENT,
-  // Market
+  // Market (searchListings, getListing routed above when demo)
   getMarketStats,
   getMarketTicker,
-  getListing,
-  searchListings,
   // Data
   getPublicSensors,
   getWatersheds,

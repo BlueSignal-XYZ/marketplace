@@ -27,6 +27,7 @@ async function listDevices(req, res) {
       name: val.name || id,
       status: val.status || "inactive",
       onlineStatus: val.onlineStatus || (val.status === "active" ? "online" : "offline"),
+      siteId: val.siteId || val.installation?.siteId || null,
       battery: val.battery ?? 0,
       lastReadingAt: val.lastReadingAt || val.lastReading || "",
       location: {
