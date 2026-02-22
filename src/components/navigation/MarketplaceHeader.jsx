@@ -12,6 +12,7 @@ import { faBars, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../shared/NotificationBell";
 import { APP_NAME } from "../../constants/constants";
 import { useAppContext } from "../../context/AppContext";
+import { isDemoMode, setDemoMode } from "../../utils/demoMode";
 
 // Inline SVG logo component for crisp rendering at all sizes
 const WQTLogo = ({ height = 36 }) => {
@@ -322,13 +323,56 @@ const MenuButton = styled.button`
   }
 `;
 
+const DemoToggle = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  border: 1px solid ${({ $active }) => ($active ? '#0052CC' : '#E5E7EB')};
+  background: ${({ $active }) => ($active ? '#0052CC' : '#FAFAFA')};
+  color: ${({ $active }) => ($active ? '#FFFFFF' : '#9CA3AF')};
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  white-space: nowrap;
+  min-height: 28px;
+
+  &:hover {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+`;
+
+const DemoDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${({ $active }) => ($active ? '#FFFFFF' : '#D1D5DB')};
+  transition: background 0.2s;
+`;
+
 export function MarketplaceHeader({ onMenuClick }) {
   const { STATES } = useAppContext();
   const isSignedIn = !!STATES?.user?.uid;
   const ctaHref = isSignedIn ? "/marketplace" : "/login";
+  const demoActive = isDemoMode();
 
   const handleClick = () => {
     if (onMenuClick) onMenuClick();
+  };
+
+  const handleDemoToggle = () => {
+    setDemoMode(!demoActive);
+    window.location.reload();
   };
 
   return (
@@ -348,6 +392,15 @@ export function MarketplaceHeader({ onMenuClick }) {
         </NavLinks>
 
         <RightGroup>
+          <DemoToggle
+            $active={demoActive}
+            onClick={handleDemoToggle}
+            aria-label={demoActive ? 'Disable demo mode' : 'Enable demo mode'}
+            title={demoActive ? 'Demo mode ON — click to disable' : 'Click to enable demo mode'}
+          >
+            <DemoDot $active={demoActive} />
+            Demo
+          </DemoToggle>
           <SignUpButton href={ctaHref}>Get Started</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
