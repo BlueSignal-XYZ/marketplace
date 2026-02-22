@@ -16,6 +16,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
@@ -169,7 +170,13 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
           setLoading(false);
           return;
         }
-        await createUserWithEmailAndPassword(auth, email, password);
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        // Send email verification (best-effort — don't block signup)
+        try {
+          await sendEmailVerification(result.user);
+        } catch (_) {
+          // Silently continue — user can request verification later
+        }
         onClose?.();
       } else if (mode === 'reset') {
         await sendPasswordResetEmail(auth, email);

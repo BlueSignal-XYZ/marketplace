@@ -11,6 +11,7 @@ import {
   signInWithPopup,
   signOut,
   sendPasswordResetEmail,
+  sendEmailVerification,
   updateProfile as firebaseUpdateProfile,
 } from "firebase/auth";
 import { ref, onValue, update } from "firebase/database";
@@ -90,6 +91,13 @@ export function AuthProvider({ children }) {
       // Update display name if provided
       if (displayName) {
         await firebaseUpdateProfile(result.user, { displayName });
+      }
+
+      // Send email verification (best-effort — don't block signup)
+      try {
+        await sendEmailVerification(result.user);
+      } catch (_) {
+        // Silently continue — user can request verification later
       }
 
       return result.user;
