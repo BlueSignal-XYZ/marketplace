@@ -11,13 +11,15 @@ const SENSOR_RANGES = {
   nitrogen: { min: 0, max: 100, unit: "mg/L" },
   phosphorus: { min: 0, max: 50, unit: "mg/L" },
   dissolved_oxygen: { min: 0, max: 20, unit: "mg/L" },
-  temperature: { min: -10, max: 50, unit: "C" },
+  temperature: { min: -10, max: 50, unit: "°C" },
   ph: { min: 0, max: 14, unit: "" },
-  turbidity: { min: 0, max: 1000, unit: "NTU" },
+  turbidity: { min: 0, max: 4000, unit: "NTU" },
   tds: { min: 0, max: 5000, unit: "ppm" },
+  orp: { min: -2000, max: 2000, unit: "mV" },
   conductivity: { min: 0, max: 5000, unit: "µS/cm" },
   salinity: { min: 0, max: 50, unit: "ppt" },
   chlorophyll: { min: 0, max: 500, unit: "µg/L" },
+  battery_voltage: { min: 0, max: 30, unit: "V" },
 };
 
 /**
@@ -224,8 +226,8 @@ const checkAlertThresholds = async (db, deviceId, device, sensors) => {
         const alertId = db.ref("alerts").push().key;
         await db.ref(`alerts/${alertId}`).set({
           deviceId,
-          siteId: device.installation?.siteId || null,
-          ownerId: device.ownership?.ownerId || null,
+          siteId: device.installation?.siteId || device.siteId || null,
+          ownerId: device.ownership?.ownerId || device.ownerId || null,
           type: "threshold",
           severity,
           status: "active",
@@ -872,8 +874,8 @@ const parseTTNPayload = (body) => {
     }
   }
 
-  // Extract GPS if present (Cayenne LPP GPS type)
-  const gps = decoded.gps_5 || decoded.gps_1 || null;
+  // Extract GPS if present (Cayenne LPP GPS type — channel 6 in firmware)
+  const gps = decoded.gps_6 || decoded.gps_5 || decoded.gps_1 || null;
 
   // Extract RF metadata
   const rxMeta = uplinkMessage.rx_metadata?.[0] || {};
@@ -1030,6 +1032,18 @@ const ttnWebhook = async (req, res) => {
     if (sensors.relay_state !== undefined) {
       deviceUpdate.relayState = !!(sensors.relay_state?.value ?? sensors.relay_state);
     }
+
+    // Update latestMetrics for dashboard display
+    const latestMetrics = {};
+    for (const [key, sData] of Object.entries(processedSensors)) {
+      if (sData.value !== null && sData.value !== undefined) {
+        latestMetrics[key] = sData.value;
+      }
+    }
+    if (Object.keys(latestMetrics).length > 0) {
+      deviceUpdate.latestMetrics = latestMetrics;
+    }
+
     await db.ref(`devices/${deviceId}`).update(deviceUpdate);
 
     // Detect first-ever reading

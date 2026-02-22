@@ -533,6 +533,16 @@ async function claimDevice(req, res) {
       siteId: null,
       createdAt: now,
       updatedAt: now,
+      configuration: {
+        alertThresholds: {
+          ph: { enabled: true, low: 6.0, high: 9.0 },
+          tds: { enabled: true, high: 800 },
+          turbidity: { enabled: true, high: 100 },
+          orp: { enabled: true, low: 150 },
+          temperature: { enabled: true, high: 35.0 },
+        },
+        sampleInterval: 900,
+      },
       lorawan: {
         devEUI: dev_eui.toUpperCase(),
         appKey: appKey,
