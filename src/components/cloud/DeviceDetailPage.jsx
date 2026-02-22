@@ -15,9 +15,26 @@ import {
   Filler,
 } from "chart.js";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import { getDevice, getDeviceAlerts } from "../../services/v2/api";
-import { ReadingsAPI } from "../../scripts/back_door";
+import { ReadingsAPI, CommissionAPI } from "../../scripts/back_door";
+
+/** Format a timestamp into a human-readable relative string. */
+const getRelativeTime = (timestamp) => {
+  if (!timestamp) return "—";
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  if (Number.isNaN(then)) return "—";
+  const diff = now - then;
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+
+  if (diff < minute) return "just now";
+  if (diff < hour) return `${Math.floor(diff / minute)} min ago`;
+  if (diff < day) return `${Math.floor(diff / hour)} hr ago`;
+  return `${Math.floor(diff / day)} days ago`;
+};
 
 // Register Chart.js components
 ChartJS.register(
@@ -462,18 +479,33 @@ export default function DeviceDetailPage() {
     setLoading(true);
     try {
       // v2 API calls — routed through api.js (handles demo/real switching)
-      const [deviceData, alertsData, logsData, commissionData] = await Promise.all([
+      // Logs: no v2 logs endpoint exists yet — render clean empty state instead of mock data.
+      // Commission: uses CommissionAPI.getByDevice from back_door.js (v1 endpoint).
+      // TODO: /commission/get-by-device endpoint not implemented in backend — returns null on failure
+      const [deviceData, alertsData, commissionData] = await Promise.all([
         getDevice(deviceId).catch(() => null),
         getDeviceAlerts(deviceId).catch(() => []),
-        CloudMockAPI.devices.getLogs(deviceId), // logs still mock until v2 endpoint exists
-        CloudMockAPI.commissioning.getLastCommission(deviceId), // commission still mock
+        CommissionAPI.getByDevice(deviceId).catch(() => null),
       ]);
+      const logsData = []; // No v2 logs endpoint — show empty state until implemented
 
       // v2 returns flat Device object and Alert[] directly
       if (deviceData) setDevice(deviceData);
       setAlerts(alertsData || []);
       setLogs(logsData);
-      setCommissionResult(commissionData);
+
+      // Normalise commission data — API may return { result: { tests } } or { tests } directly
+      const normalised = commissionData?.result || commissionData || null;
+      if (normalised && !normalised.tests && normalised.testResults) {
+        normalised.tests = Object.entries(normalised.testResults).map(([id, r]) => ({
+          id,
+          name: id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+          status: r.status || (r.passed ? "passed" : "failed"),
+          duration: r.duration || 0,
+          details: r.details || r.error || null,
+        }));
+      }
+      setCommissionResult(normalised);
     } catch (error) {
       console.error("Error loading device data:", error);
     } finally {
@@ -1090,7 +1122,7 @@ export default function DeviceDetailPage() {
           {activeTab === "logs" && (
             <>
               {logs.length === 0 ? (
-                <EmptyState>No logs available for this device.</EmptyState>
+                <EmptyState>No logs recorded yet. Logs will appear as device events are received.</EmptyState>
               ) : (
                 <LogsTable>
                   <thead>
