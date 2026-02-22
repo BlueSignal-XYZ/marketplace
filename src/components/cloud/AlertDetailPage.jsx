@@ -241,10 +241,13 @@ export default function AlertDetailPage() {
     }
   };
 
-  const handleReopen = () => {
-    // TODO: Implement actual API call to reopen alert
-    setAlert({ ...alert, status: "open" });
-    // alert reopened
+  const handleReopen = async () => {
+    try {
+      await AlertsAPI.reopen(alertId);
+      setAlert({ ...alert, status: "open" });
+    } catch (error) {
+      console.error("Error reopening alert:", error);
+    }
   };
 
   const getSeverityLabel = (severity) => {

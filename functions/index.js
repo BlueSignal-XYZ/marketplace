@@ -202,6 +202,7 @@ app.post("/readings/stats", readings.getDeviceStats);
 app.post("/alerts/active", readings.getActiveAlerts);
 app.post("/alerts/acknowledge", readings.acknowledgeAlert);
 app.post("/alerts/resolve", readings.resolveAlert);
+app.post("/alerts/reopen", readings.reopenAlert);
 app.post("/device/thresholds/update", readings.updateAlertThresholds);
 
 // =============================================================================

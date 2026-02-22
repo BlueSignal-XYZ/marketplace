@@ -1774,10 +1774,22 @@ const updateAlertThresholds = async (deviceId, thresholds) => {
   }
 };
 
+const reopenAlert = async (alertId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/alerts/reopen`, {
+      alertId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to reopen alert");
+  }
+};
+
 const AlertsAPI = {
   getActive: getActiveAlerts,
   acknowledge: acknowledgeAlert,
   resolve: resolveAlert,
+  reopen: reopenAlert,
   updateThresholds: updateAlertThresholds,
 };
 
