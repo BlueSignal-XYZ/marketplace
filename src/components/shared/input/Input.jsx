@@ -13,7 +13,7 @@ export const Input = styled.input`
   color: ${({ theme }) => theme.colors?.ui800 || "#1F2937"};
   margin: 0px;
   width: 100%;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   border: 1.5px solid
     ${({ theme, error }) =>
@@ -116,7 +116,7 @@ export const Select = styled.select`
   border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
   color: ${({ theme }) => theme.colors?.ui800 || "#1F2937"};
   width: 100%;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   border: 1.5px solid ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
   transition: all 0.2s ease-out;

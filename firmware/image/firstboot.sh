@@ -31,19 +31,30 @@ if [ ! -f /etc/bluesignal/calibration.yaml ]; then
   cp config/calibration.yaml /etc/bluesignal/calibration.yaml
 fi
 
+# Install log rotation and journald config
+cp config/logrotate-bluesignal /etc/logrotate.d/bluesignal
+mkdir -p /etc/systemd/journald.conf.d
+cp config/journald-bluesignal.conf /etc/systemd/journald.conf.d/bluesignal.conf
+systemctl restart systemd-journald
+
 # Install systemd services
 cp systemd/bluesignal-wqm.service /etc/systemd/system/
+cp systemd/bluesignal-led.service /etc/systemd/system/
+cp systemd/bluesignal-ble.service /etc/systemd/system/
 cp systemd/bluesignal-health.service /etc/systemd/system/
 cp systemd/bluesignal-health.timer /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable bluesignal-wqm.service
+systemctl enable bluesignal-led.service
+systemctl enable bluesignal-ble.service
 systemctl enable bluesignal-health.timer
 
 # Set hostname
 DEVICE_ID=$(cat /sys/class/net/wlan0/address 2>/dev/null | tr -d ':' || hostname)
 hostnamectl set-hostname "wqm-${DEVICE_ID:0:8}" 2>/dev/null || true
 
-# Start the service
+# Start the services
+systemctl start bluesignal-led.service
 systemctl start bluesignal-wqm.service
 systemctl start bluesignal-health.timer
 

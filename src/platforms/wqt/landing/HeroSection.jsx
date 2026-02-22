@@ -88,6 +88,8 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 800px;
+  width: 100%;
   z-index: 1;
 `;
 

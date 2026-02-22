@@ -13,7 +13,7 @@ const admin = require("firebase-admin");
 
 async function listDevices(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) {
       return res.status(400).json({ success: false, error: "Missing userId" });
     }
@@ -353,7 +353,7 @@ async function commissionDevice(req, res) {
 
 async function listAlerts(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) {
       return res.status(400).json({ success: false, error: "Missing userId" });
     }
@@ -426,7 +426,17 @@ async function claimDevice(req, res) {
       return res.status(400).json({ success: false, error: "Missing device_id or dev_eui" });
     }
 
-    const uid = req.body.userId || req.user?.uid;
+    // Validate device_id format (alphanumeric + hyphens, 6-40 chars)
+    if (!/^[A-Za-z0-9_-]{6,40}$/.test(device_id)) {
+      return res.status(400).json({ success: false, error: "Invalid device_id format" });
+    }
+
+    // Validate dev_eui format (16 hex characters)
+    if (!/^[0-9A-Fa-f]{16}$/.test(dev_eui)) {
+      return res.status(400).json({ success: false, error: "Invalid dev_eui format" });
+    }
+
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) {
       return res.status(401).json({ success: false, error: "Authentication required" });
     }
@@ -523,6 +533,16 @@ async function claimDevice(req, res) {
       siteId: null,
       createdAt: now,
       updatedAt: now,
+      configuration: {
+        alertThresholds: {
+          ph: { enabled: true, low: 6.0, high: 9.0 },
+          tds: { enabled: true, high: 800 },
+          turbidity: { enabled: true, high: 100 },
+          orp: { enabled: true, low: 150 },
+          temperature: { enabled: true, high: 35.0 },
+        },
+        sampleInterval: 900,
+      },
       lorawan: {
         devEUI: dev_eui.toUpperCase(),
         appKey: appKey,
@@ -559,7 +579,7 @@ async function claimDevice(req, res) {
 async function unclaimDevice(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -607,7 +627,7 @@ async function unclaimDevice(req, res) {
 async function factoryResetDevice(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -674,7 +694,7 @@ async function transferDevice(req, res) {
   try {
     const { id } = req.params;
     const { new_owner_email } = req.body;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
     if (!new_owner_email) return res.status(400).json({ success: false, error: "Missing new_owner_email" });
 
@@ -720,7 +740,7 @@ async function sendDeviceCommand(req, res) {
   try {
     const { id } = req.params;
     const { type, state, duration_seconds, settings } = req.body;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -825,7 +845,7 @@ async function sendDeviceCommand(req, res) {
 async function exportReadings(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -877,7 +897,7 @@ async function exportReadings(req, res) {
 
 async function installerFleet(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) return res.status(400).json({ success: false, error: "Missing userId" });
 
     const db = admin.database();
@@ -907,7 +927,7 @@ async function installerFleet(req, res) {
 
 async function installerCommissions(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) return res.status(400).json({ success: false, error: "Missing userId" });
 
     const db = admin.database();

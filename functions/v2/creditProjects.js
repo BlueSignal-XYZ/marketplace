@@ -34,7 +34,7 @@ const CONVERSION_FACTORS = {
 
 async function registerProject(req, res) {
   try {
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const {
@@ -108,7 +108,7 @@ async function registerProject(req, res) {
 async function getProject(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
 
     const db = admin.database();
     const snap = await db.ref(`credit_projects/${id}`).once("value");
@@ -154,7 +154,7 @@ async function getAccruals(req, res) {
 async function calculateCredits(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -303,7 +303,7 @@ async function submitVerification(req, res) {
   try {
     const { id } = req.params;
     const { accrual_ids } = req.body;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();

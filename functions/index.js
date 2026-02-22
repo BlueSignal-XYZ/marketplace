@@ -86,6 +86,23 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Firebase Auth middleware — populates req.user from Bearer token when present.
+// Does NOT reject unauthenticated requests (individual endpoints decide).
+app.use(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return next();
+  }
+  const token = authHeader.split("Bearer ")[1];
+  try {
+    const decoded = await admin.auth().verifyIdToken(token);
+    req.user = decoded;
+  } catch (err) {
+    // Token invalid/expired — continue without req.user
+  }
+  next();
+});
+
 // =============================================================================
 // HUBSPOT HTTP ENDPOINTS
 // =============================================================================

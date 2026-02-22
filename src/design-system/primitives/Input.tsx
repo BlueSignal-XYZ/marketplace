@@ -23,8 +23,8 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 // ── Sizes ─────────────────────────────────────────────────
 
 const sizeMap = {
-  sm: css`height: 32px; font-size: 13px; padding: 0 10px;`,
-  md: css`height: 40px; font-size: 14px; padding: 0 12px;`,
+  sm: css`height: 36px; font-size: 16px; padding: 0 10px;`,
+  md: css`height: 44px; font-size: 16px; padding: 0 12px;`,
   lg: css`height: 48px; font-size: 16px; padding: 0 16px;`,
 };
 

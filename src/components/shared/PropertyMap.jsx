@@ -5,9 +5,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // Set Mapbox access token
-mapboxgl.accessToken =
-  import.meta.env.VITE_MAPBOX_TOKEN ||
-  "pk.eyJ1IjoiYmx1ZXNpZ25hbCIsImEiOiJjbG0wMTIzNDUwMTIzM2RtZnJ5dXJ5dXJ5In0.dGVzdA";
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
 const MapWrapper = styled.div`
   width: 100%;

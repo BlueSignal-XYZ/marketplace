@@ -14,7 +14,7 @@ const admin = require("firebase-admin");
 async function enableRevenueGrade(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -73,7 +73,7 @@ async function enableRevenueGrade(req, res) {
 async function disableRevenueGrade(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -109,7 +109,7 @@ async function disableRevenueGrade(req, res) {
 async function getRevenueGradeStatus(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
@@ -214,7 +214,7 @@ async function getRevenueGradeStatus(req, res) {
 async function updateRevenueGrade(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();

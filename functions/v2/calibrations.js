@@ -18,7 +18,7 @@ async function logCalibration(req, res) {
       offset_value, slope_value, photo_urls,
     } = req.body;
 
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     if (!probe_type || !["ph", "tds", "turbidity", "orp"].includes(probe_type)) {
@@ -76,7 +76,7 @@ async function logCalibration(req, res) {
 async function getCalibrations(req, res) {
   try {
     const { id } = req.params;
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();

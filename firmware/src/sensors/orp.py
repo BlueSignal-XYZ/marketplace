@@ -9,7 +9,7 @@ import logging
 
 log = logging.getLogger("wqm.orp")
 
-MV_PER_VOLT = 1000.0
+MV_PER_VOLT = 1212.12  # 2000mV range / 1.65V half-range
 
 
 class ORPSensor:

@@ -62,6 +62,11 @@ def load_json_safe(filepath, default=None):
             log.error("Config corrupted: %s (%s) — using defaults", filepath, e)
             return default
         raise
+    except PermissionError as e:
+        if default is not None:
+            log.error("Config permission denied: %s (%s) — using defaults", filepath, e)
+            return default
+        raise
 
 
 def merge_config(base, updates):
