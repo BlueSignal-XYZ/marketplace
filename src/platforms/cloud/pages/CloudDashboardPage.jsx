@@ -22,6 +22,7 @@ const Page = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px;
+  overflow-x: hidden;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 28px 24px;
@@ -198,7 +199,7 @@ const AlertBanner = styled.div`
   min-height: 44px;
   &:hover { opacity: 0.9; }
 
-  @media (max-width: 640px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 12px 14px;
     gap: 8px;
     font-size: 13px;

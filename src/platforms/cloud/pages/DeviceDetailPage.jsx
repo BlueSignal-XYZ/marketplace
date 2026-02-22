@@ -20,12 +20,13 @@ const Page = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   padding: 16px;
+  overflow-x: hidden;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 24px;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 32px 24px;
   }
 `;
@@ -63,7 +64,7 @@ const Title = styled.h1`
   gap: 8px;
   flex-wrap: wrap;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     font-size: 28px;
     gap: 12px;
   }
@@ -81,7 +82,7 @@ const StatsGrid = styled.div`
   gap: 8px;
   margin-bottom: 24px;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 16px;
     margin-bottom: 32px;
@@ -95,7 +96,7 @@ const ChartContainer = styled.div`
   padding: 16px;
   margin-bottom: 24px;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 32px;
     margin-bottom: 32px;
   }
@@ -116,7 +117,7 @@ const ChartValue = styled.div`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 4px;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     font-size: 36px;
   }
 `;
@@ -200,7 +201,7 @@ const InfoSection = styled.div`
   padding: 16px;
   margin-bottom: 24px;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 24px;
     margin-bottom: 32px;
   }
@@ -210,7 +211,7 @@ const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) { grid-template-columns: 1fr; }
 `;
 
 const InfoRow = styled.div`
@@ -270,7 +271,7 @@ const OfflineBanner = styled.div`
   gap: 10px;
   word-break: break-word;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 16px 20px;
     margin-bottom: 24px;
     font-size: 14px;
