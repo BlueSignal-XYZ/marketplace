@@ -32,12 +32,12 @@ const Page = styled.div`
   padding: 24px 16px;
   background: ${({ theme }) => theme.colors.background};
 
-  @media (max-width: 640px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     justify-content: flex-start;
     padding-top: 32px;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 48px 24px;
   }
 `;
@@ -62,12 +62,12 @@ const Card = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.xl}px;
-  padding: 24px 20px;
+  padding: 24px;
   max-width: 480px;
   width: 100%;
   text-align: center;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 48px;
   }
 `;
@@ -76,7 +76,7 @@ const StepIcon = styled.div`
   font-size: 40px;
   margin-bottom: 12px;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     font-size: 56px;
     margin-bottom: 16px;
   }
@@ -89,7 +89,7 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 8px;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     font-size: 24px;
   }
 `;
@@ -109,7 +109,7 @@ const FormArea = styled.div`
   margin-bottom: 24px;
   text-align: left;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     margin-bottom: 32px;
   }
 `;
@@ -120,7 +120,7 @@ const ButtonRow = styled.div`
   justify-content: center;
   flex-wrap: wrap;
 
-  @media (max-width: 400px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     flex-direction: column;
     width: 100%;
 
