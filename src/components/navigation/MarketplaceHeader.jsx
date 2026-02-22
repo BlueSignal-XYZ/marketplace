@@ -198,10 +198,11 @@ export function MarketplaceHeader({ onMenuClick }) {
         </LogoWrapper>
 
         <NavLinks>
-          <NavLink href="/#credit-definitions">How It Works</NavLink>
+          <NavLink href="/how-it-works">How It Works</NavLink>
           <NavLink href="/for-utilities">For Utilities</NavLink>
           <NavLink href="/for-homeowners">For Homeowners</NavLink>
           <NavLink href="/for-aggregators">For Aggregators</NavLink>
+          <NavLink href="/generate-credits">For Generators</NavLink>
           <NavLink href="/registry">Credit Registry</NavLink>
         </NavLinks>
 

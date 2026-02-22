@@ -189,7 +189,7 @@ const ReviewRow = styled.div`
   font-size: 14px;
 `;
 
-const STEPS = ['Scan', 'Connect', 'Calibrate', 'Location', 'Confirm'];
+const STEPS = ['Scan', 'Connect', 'Calibrate', 'Location', 'Credits', 'Confirm'];
 
 /* ── Component ──────────────────────────────────────────── */
 
@@ -436,13 +436,51 @@ export function CommissioningWizardPage() {
             </FormArea>
             <ButtonRow>
               <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
-              <Button onClick={() => { setStepError(null); setStep(4); }}>Review</Button>
+              <Button onClick={() => { setStepError(null); setStep(4); }}>Continue</Button>
             </ButtonRow>
           </>
         )}
 
-        {/* ── Step 4: Confirm ────────────────────────────── */}
+        {/* ── Step 4: Revenue Grade Prompt ────────────────── */}
         {step === 4 && (
+          <>
+            <StepIcon>💰</StepIcon>
+            <Title>Generate Water Quality Credits?</Title>
+            <Desc>
+              Your device can do more than monitor. If your site improves water quality
+              beyond regulatory baselines, you can generate tradeable credits on
+              WaterQuality.Trading.
+            </Desc>
+            <div style={{ textAlign: 'left', marginBottom: 24, fontSize: 14, color: '#666', lineHeight: 1.7 }}>
+              This requires:
+              <ul style={{ marginTop: 8, paddingLeft: 20 }}>
+                <li>Calibrated probes with documented standards</li>
+                <li>A 30-90 day baseline measurement period</li>
+                <li>Continuous data reporting ({'>'} 95% uptime)</li>
+                <li>Site mapped to a watershed</li>
+              </ul>
+            </div>
+            <ButtonRow>
+              <Button variant="outline" onClick={() => { setStepError(null); setStep(5); }}>
+                Skip — Just Monitor
+              </Button>
+              <Button onClick={() => {
+                // Store intent to enable revenue grade after commission
+                update('enableRevenueGrade', true);
+                setStepError(null);
+                setStep(5);
+              }}>
+                Enable Revenue Grade
+              </Button>
+            </ButtonRow>
+            <div style={{ fontSize: 12, color: '#999', marginTop: 16, textAlign: 'center' }}>
+              You can enable this later from your device settings.
+            </div>
+          </>
+        )}
+
+        {/* ── Step 5: Confirm ────────────────────────────── */}
+        {step === 5 && (
           <>
             <StepIcon>✅</StepIcon>
             <Title>Ready to Go</Title>
@@ -464,7 +502,7 @@ export function CommissioningWizardPage() {
               ))}
             </div>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(3)} disabled={processing}>Back</Button>
+              <Button variant="outline" onClick={() => setStep(4)} disabled={processing}>Back</Button>
               <Button onClick={handleCommission} disabled={processing}>
                 {processing ? 'Activating…' : 'Activate Device'}
               </Button>

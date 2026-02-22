@@ -1,0 +1,19 @@
+[Unit]
+Description=BlueSignal LED Status Service
+After=local-fs.target
+
+[Service]
+Type=simple
+User=bluesignal
+Group=gpio
+WorkingDirectory=/opt/bluesignal/firmware
+ExecStart=/opt/bluesignal/firmware/venv/bin/python -m src.led_service
+Restart=always
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/opt/bluesignal/firmware
+
+[Install]
+WantedBy=multi-user.target

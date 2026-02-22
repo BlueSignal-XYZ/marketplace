@@ -1,0 +1,35 @@
+# === BlueSignal WQM-1 Hardware Interface Configuration ===
+# Append these lines to /boot/firmware/config.txt on the Pi SD card.
+# Without these, I2C (ADS1115), SPI (SX1262), 1-Wire (DS18B20),
+# and UART (GPS) are all non-functional on default Raspberry Pi OS.
+
+# Enable I2C bus (required for ADS1115 x2 at 0x48, 0x49)
+dtparam=i2c_arm=on
+dtparam=i2c_arm_baudrate=100000
+
+# Enable SPI bus (required for SX1262 LoRa transceiver on SPI0)
+dtparam=spi=on
+
+# Enable 1-Wire on GPIO 4 (required for DS18B20 temperature probe)
+dtoverlay=w1-gpio,gpiopin=4
+
+# Enable hardware UART for GPS module.
+# disable-bt gives the PL011 (full UART) to GPIO 14/15 for the GPS.
+# The mini-UART's baud rate drifts with core clock — unacceptable for
+# GPS at 9600 baud. LoRaWAN handles connectivity, so Bluetooth serial
+# is not needed. If BLE commissioning runs on-device later, switch to
+# dtoverlay=miniuart-bt and accept BLE performance hit.
+enable_uart=1
+dtoverlay=disable-bt
+
+# Enable PPS input from GPS on GPIO 24 (for time sync via chrony)
+dtoverlay=pps-gpio,gpiopin=24
+
+# Enable hardware watchdog (BCM2835 WDT, see watchdog.py)
+dtparam=watchdog=on
+
+# Disable HDMI to save ~25mA (headless deployment)
+hdmi_blanking=2
+
+# GPU memory minimum (no display needed)
+gpu_mem=16

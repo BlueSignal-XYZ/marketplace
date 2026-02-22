@@ -137,3 +137,137 @@ export interface CloudDashboardData {
   creditsGenerated: number;
   devices: DeviceSummary[];
 }
+
+// ── Revenue Grade ─────────────────────────────────────────
+
+export interface RevenueGradeStatus {
+  enabled: boolean;
+  enabledAt: string | null;
+  baselineType: 'monitoring' | 'regulatory' | 'historical' | null;
+  baselineComplete: boolean;
+  baselineProgress: {
+    daysCurrent: number;
+    daysTotal: number;
+    percentComplete: number;
+  } | null;
+  baselineParams: Record<string, number> | null;
+  baselineLockedAt: string | null;
+  wqtProjectId: string | null;
+  wqtLinked: boolean;
+  calibrationStatus: Record<string, CalibrationProbeStatus>;
+  uptime30d: number | null;
+  creditTotals: Record<string, number>;
+  flowEstimate: {
+    method: string;
+    value: number;
+    unit: string;
+  } | null;
+  huc12Code: string | null;
+  watershedName: string | null;
+  eligibleCredits: string[];
+}
+
+export type CalibrationProbeStatus = 'valid' | 'expiring_soon' | 'expired' | 'not_calibrated';
+
+export interface CalibrationRecord {
+  id: string;
+  deviceId: string;
+  probeType: 'ph' | 'tds' | 'turbidity' | 'orp';
+  calibratedAt: number;
+  calibratedBy: string;
+  standardsUsed: string[];
+  offsetValue: number;
+  slopeValue: number | null;
+  photoUrls: string[];
+  expiresAt: number;
+  status: CalibrationProbeStatus;
+  createdAt: string;
+}
+
+// ── Credit Projects ───────────────────────────────────────
+
+export interface CreditProject {
+  id: string;
+  wqtUserId: string;
+  bluesignalUserId: string;
+  deviceId: string;
+  siteName: string;
+  latitude: number | null;
+  longitude: number | null;
+  huc12Code: string | null;
+  watershedName: string | null;
+  baselineType: 'monitoring' | 'regulatory' | 'historical';
+  baselineParams: Record<string, number> | null;
+  baselineStart: string;
+  baselineEnd: string | null;
+  baselineComplete: boolean;
+  baselineLockedAt: string | null;
+  eligibleCredits: string[];
+  improvementMethod: string | null;
+  flowEstimate: {
+    method: string;
+    value: number;
+    unit: string;
+    updatedAt?: string;
+  } | null;
+  description: string;
+  status: 'pending_baseline' | 'active' | 'paused' | 'retired';
+  totalCredits: Record<string, number>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreditAccrual {
+  id: string;
+  projectId: string;
+  periodStart: number;
+  periodEnd: number;
+  creditType: 'nitrogen' | 'phosphorus' | 'kc' | 'qc';
+  amount: number;
+  unit: string;
+  baselineValue: number;
+  measuredValue: number;
+  flowVolume: number;
+  dataPoints: number;
+  uptimePct: number;
+  calibrationValid: boolean;
+  status: 'pending_verification' | 'pending_review' | 'verified' | 'rejected';
+  verificationNotes: string | null;
+  createdAt: string;
+}
+
+// ── Device Commands ───────────────────────────────────────
+
+export interface DeviceCommand {
+  type: 'relay' | 'config';
+  state?: number;
+  duration_seconds?: number;
+  settings?: Record<string, unknown>;
+}
+
+export interface DeviceCommandResult {
+  commandId: string;
+  status: string;
+  message: string;
+}
+
+// ── Account Linking ───────────────────────────────────────
+
+export interface WQTLinkStatus {
+  linked: boolean;
+  linkedAt?: string;
+  consentedDevices: string[];
+  revokedAt?: string | null;
+}
+
+// ── HUC/Watershed ─────────────────────────────────────────
+
+export interface HUCLookupResult {
+  huc12: string | null;
+  name: string;
+  state: string | null;
+  impairments: string[];
+  activeTmdl: boolean;
+  tradingProgram: string | null;
+  distance: number;
+}

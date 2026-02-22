@@ -1,9 +1,10 @@
 /**
  * ForUtilitiesPage — dedicated page for utilities and municipalities.
- * Covers treatment cost reduction, pricing control, settlement, and demand response.
+ * Content: Nutrient credit offset strategy for NPDES compliance.
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Page = styled.div`
@@ -25,7 +26,7 @@ const HeroInner = styled.div`
   margin: 0 auto;
 `;
 
-const Breadcrumb = styled.a`
+const Breadcrumb = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13px;
   color: rgba(255, 255, 255, 0.4);
@@ -104,13 +105,6 @@ const Card = styled.div`
   border-radius: ${({ theme }) => theme.radius.lg}px;
 `;
 
-const CardAlt = styled.div`
-  padding: 28px;
-  background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg}px;
-`;
-
 const CardTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 17px;
@@ -127,55 +121,19 @@ const CardDesc = styled.p`
   margin: 0;
 `;
 
-const FlowList = styled.ol`
-  list-style: none;
-  counter-reset: flow;
-  padding: 0;
+const BulletList = styled.ul`
+  padding-left: 20px;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 `;
 
-const FlowItem = styled.li`
-  counter-increment: flow;
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: 16px;
-  align-items: start;
-
-  &::before {
-    content: counter(flow, decimal-leading-zero);
-    font-family: ${({ theme }) => theme.fonts.mono};
-    font-size: 14px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.primary};
-    background: rgba(0, 82, 204, 0.08);
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-
-const FlowContent = styled.div``;
-
-const FlowTitle = styled.h4`
+const BulletItem = styled.li`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 16px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 4px;
-`;
-
-const FlowDesc = styled.p`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 15px;
   color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.6;
-  margin: 0;
 `;
 
 const CTASection = styled.section`
@@ -202,7 +160,14 @@ const CTADesc = styled.p`
   max-width: 520px;
 `;
 
-const CTAButton = styled.a`
+const CTAButtons = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
+const CTAButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -223,156 +188,132 @@ const CTAButton = styled.a`
   }
 `;
 
+const CTAButtonOutline = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  min-height: 52px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 200ms;
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+`;
+
 export default function ForUtilitiesPage() {
   return (
     <Page>
       <Hero>
         <HeroInner>
-          <Breadcrumb href="/">&larr; Back to Overview</Breadcrumb>
-          <HeroTitle>Reduce Treatment Costs Through Distributed Water Production</HeroTitle>
+          <Breadcrumb to="/">&larr; Back to Overview</Breadcrumb>
+          <HeroTitle>Offset Nutrient Limits Without Capital Projects</HeroTitle>
           <HeroSub>
-            Every gallon produced at the home is a gallon you don't have to treat and deliver.
-            You control the pricing, set the rates, and integrate through existing billing infrastructure.
+            Purchase verified water quality credits to meet discharge permit requirements
+            at a fraction of the cost of plant upgrades.
           </HeroSub>
         </HeroInner>
       </Hero>
 
       <Section>
         <SectionInner>
-          <SectionTitle>How the System Reduces Treatment Costs</SectionTitle>
+          <SectionTitle>The Problem</SectionTitle>
           <SectionDesc>
-            Every gallon produced by an atmospheric water generator at a home or
-            business is a gallon that doesn't need to be treated and distributed
-            by your utility. Quality credits also reflect nutrient removal value that
-            ties directly to your per-kilogram N/P treatment costs.
+            NPDES permits (National Pollutant Discharge Elimination System) are getting
+            tighter. EPA nutrient criteria are dropping. Your treatment plant meets today's
+            limits, but the next permit cycle will require further nitrogen and phosphorus
+            reductions. A plant upgrade costs $10–50M and takes 3–5 years to design and
+            build. You need compliance flexibility now.
           </SectionDesc>
-          <Grid>
-            <Card>
-              <CardTitle>Quantity Value</CardTitle>
-              <CardDesc>
-                Each gallon produced offsets demand on your treatment and distribution
-                infrastructure. The buyback rate you set reflects this value to your
-                system planning.
-              </CardDesc>
-            </Card>
-            <Card>
-              <CardTitle>Quality Value</CardTitle>
-              <CardDesc>
-                Nitrogen and phosphorus offset or removed by distributed water systems
-                directly reduces your downstream nutrient load. Credits are measured in
-                the same units your operations teams use: cost per kilogram of N/P removal.
-              </CardDesc>
-            </Card>
-            <Card>
-              <CardTitle>Infrastructure Deferral</CardTitle>
-              <CardDesc>
-                Distributed water production reduces peak demand and defers capital
-                expenditure on treatment facility expansion. This value compounds as
-                adoption scales in your service area.
-              </CardDesc>
-            </Card>
-            <Card>
-              <CardTitle>Regulatory Alignment</CardTitle>
-              <CardDesc>
-                Water quality trading programs operate within the framework of the
-                Clean Water Act and NPDES permit structures. The system is designed
-                to align with existing state-level regulatory programs.
-              </CardDesc>
-            </Card>
-          </Grid>
         </SectionInner>
       </Section>
 
       <Section $alt>
         <SectionInner>
-          <SectionTitle>You Control the Pricing</SectionTitle>
+          <SectionTitle>The Alternative</SectionTitle>
           <SectionDesc>
-            Pricing is controlled entirely by your utility. BlueSignal provides
-            recommendations based on regional N/P treatment costs, but all
-            final rate decisions are yours.
+            Water quality credit trading lets you purchase verified nutrient reductions
+            generated by upstream projects — agricultural BMPs (best management practices),
+            stormwater retrofits, restored wetlands — and apply them against your permit
+            obligations. This is legal under Clean Water Act trading frameworks and already
+            operational in states like Virginia, Pennsylvania, and Connecticut.
           </SectionDesc>
-          <Grid>
-            <CardAlt>
-              <CardTitle>Quantity Buyback Rate</CardTitle>
-              <CardDesc>
-                Set at quarter-rate (0.25:1), half-rate (0.5:1), or full parity (1:1)
-                relative to your retail water price. The rate reflects your assessment
-                of distributed generation value.
-              </CardDesc>
-            </CardAlt>
-            <CardAlt>
-              <CardTitle>Quality Multiplier</CardTitle>
-              <CardDesc>
-                Set based on your environmental impact assessment for your service area.
-                A higher multiplier rewards cleaner production, reflecting your actual
-                downstream treatment cost savings.
-              </CardDesc>
-            </CardAlt>
-          </Grid>
         </SectionInner>
       </Section>
 
       <Section>
         <SectionInner>
-          <SectionTitle>Settlement Flow</SectionTitle>
+          <SectionTitle>What WaterQuality.Trading Provides</SectionTitle>
           <SectionDesc>
-            The rebate mechanism integrates with your existing billing infrastructure.
-            No platform migration, no system overhaul, no IT project required.
+            The platform connects you directly to verified credit generators with
+            transparent pricing and defensible documentation.
           </SectionDesc>
-          <FlowList>
-            <FlowItem>
-              <FlowContent>
-                <FlowTitle>Homeowner Systems Produce Water</FlowTitle>
-                <FlowDesc>
-                  Atmospheric water generators produce water at the home. BlueSignal
-                  devices verify quantity and quality. Credits are calculated from
-                  verified data automatically.
-                </FlowDesc>
-              </FlowContent>
-            </FlowItem>
-            <FlowItem>
-              <FlowContent>
-                <FlowTitle>Municipal Demand Drops</FlowTitle>
-                <FlowDesc>
-                  Every gallon produced at home is a gallon not drawn from your system.
-                  Your utility saves on treatment, pumping, and distribution costs.
-                </FlowDesc>
-              </FlowContent>
-            </FlowItem>
-            <FlowItem>
-              <FlowContent>
-                <FlowTitle>Rebate Credited to Homeowner</FlowTitle>
-                <FlowDesc>
-                  You issue a rebate as a credit on the homeowner's regular water bill.
-                  The rebate costs less than delivering the water would have. A small
-                  platform fee covers monitoring, verification, and program management.
-                </FlowDesc>
-              </FlowContent>
-            </FlowItem>
-          </FlowList>
+          <Grid>
+            <Card>
+              <CardTitle>Access to Verified Credits</CardTitle>
+              <CardDesc>
+                Every credit on the platform is backed by continuous sensor data, not
+                modeled estimates. You can inspect the originating project, the monitoring
+                data, and the verification report before purchasing.
+              </CardDesc>
+            </Card>
+            <Card>
+              <CardTitle>Defensible Documentation</CardTitle>
+              <CardDesc>
+                Each credit purchase generates a certificate of retirement with the credit
+                ID, quantity, type, originating project, watershed, verification period,
+                and the underlying dataset reference.
+              </CardDesc>
+            </Card>
+            <Card>
+              <CardTitle>Cost Certainty</CardTitle>
+              <CardDesc>
+                Credit prices are transparent. You can see current listings and historical
+                transaction prices to forecast your offset costs. Compare that against the
+                NPV of a capital project and make a data-driven decision.
+              </CardDesc>
+            </Card>
+            <Card>
+              <CardTitle>Speed</CardTitle>
+              <CardDesc>
+                Credit purchases settle immediately on the platform. No 18-month
+                procurement cycle. No construction risk. Buy the credits you need for this
+                permit cycle while you plan long-term infrastructure investments.
+              </CardDesc>
+            </Card>
+          </Grid>
         </SectionInner>
       </Section>
 
       <Section $alt>
         <SectionInner>
-          <SectionTitle>Future: Water Demand Response</SectionTitle>
-          <SectionDesc>
-            A future phase enables demand response for water. During peak demand
-            periods, homeowners with atmospheric water generators can be dispatched
-            via API to increase local production, reducing their draw on city supply.
-            The utility avoids costly peak infrastructure upgrades while homeowners
-            earn a demand response incentive on top of their standard rebate.
-          </SectionDesc>
+          <SectionTitle>Who This Works For</SectionTitle>
+          <BulletList>
+            <BulletItem>Municipal wastewater utilities approaching nutrient cap limits</BulletItem>
+            <BulletItem>Combined sewer overflow (CSO) communities needing interim offsets</BulletItem>
+            <BulletItem>MS4 permit holders with numeric stormwater quality targets</BulletItem>
+            <BulletItem>Industrial dischargers with NPDES nutrient limits</BulletItem>
+          </BulletList>
         </SectionInner>
       </Section>
 
       <CTASection>
-        <CTATitle>Ready to Evaluate the System?</CTATitle>
+        <CTATitle>Ready to explore credit options?</CTATitle>
         <CTADesc>
-          Discuss rate structures, integration requirements,
-          and pilot program design for your service area.
+          Browse verified credits in your watershed or contact us to discuss your compliance strategy.
         </CTADesc>
-        <CTAButton href="/contact">Schedule a Pilot Discussion</CTAButton>
+        <CTAButtons>
+          <CTAButton to="/registry">View Available Credits</CTAButton>
+          <CTAButtonOutline to="/contact">Contact Us</CTAButtonOutline>
+        </CTAButtons>
       </CTASection>
     </Page>
   );

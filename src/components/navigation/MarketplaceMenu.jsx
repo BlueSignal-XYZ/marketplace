@@ -300,18 +300,18 @@ export function MarketplaceMenu({ open, onClose, user }) {
         <SectionLabel>How It Works</SectionLabel>
         <NavList>
           <NavItem
-            to="/#credit-definitions"
-            $active={false}
+            to="/how-it-works"
+            $active={isActive("/how-it-works")}
             onClick={onClose}
           >
             How It Works
           </NavItem>
           <NavItem
-            to="/"
-            $active={false}
+            to="/generate-credits"
+            $active={isActive("/generate-credits")}
             onClick={onClose}
           >
-            Learn More
+            For Credit Generators
           </NavItem>
         </NavList>
 
