@@ -15,16 +15,19 @@ vi.mock('firebase/auth', () => ({
   signOut: vi.fn(),
 }))
 
-// Mock the UserAPI
+// Mock the UserProfileAPI (replaces legacy UserAPI.account.getUserFromUID)
 vi.mock('../scripts/back_door', () => ({
-  UserAPI: {
-    account: {
-      getUserFromUID: vi.fn(),
-    },
+  UserProfileAPI: {
+    get: vi.fn(),
   },
 }))
 
-import { UserAPI } from '../scripts/back_door'
+// Mock clearDeviceCache
+vi.mock('../hooks/useUserDevices', () => ({
+  clearDeviceCache: vi.fn(),
+}))
+
+import { UserProfileAPI } from '../scripts/back_door'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 
 // Test component to access context
@@ -33,6 +36,11 @@ const TestComponent = () => {
   return (
     <div>
       <div data-testid="user-uid">{STATES.user?.uid || 'no-user'}</div>
+      <div data-testid="user-role">{STATES.user?.role || 'no-role'}</div>
+      <div data-testid="user-email">{STATES.user?.email || 'no-email'}</div>
+      <div data-testid="user-company">{STATES.user?.company || 'no-company'}</div>
+      <div data-testid="user-onboarding">{STATES.user?.onboardingComplete ? 'complete' : 'incomplete'}</div>
+      <div data-testid="user-email-verified">{STATES.user?.emailVerified ? 'verified' : 'unverified'}</div>
       <div data-testid="is-loading">{STATES.isLoading ? 'loading' : 'loaded'}</div>
       <div data-testid="is-mobile">{STATES.isMobile ? 'mobile' : 'desktop'}</div>
       <div data-testid="sidebar-open">{STATES.sidebarOpen ? 'open' : 'closed'}</div>
@@ -117,18 +125,29 @@ describe('AppContext', () => {
   })
 
   describe('User Authentication', () => {
-    it('should load user from sessionStorage on mount', async () => {
-      const mockUser = { uid: 'test-uid-123', email: 'test@example.com' }
+    it('should hydrate user profile from UserProfileAPI.get on auth', async () => {
+      const mockProfile = {
+        uid: 'test-uid-123',
+        email: 'test@example.com',
+        displayName: 'Test User',
+        role: 'buyer',
+        company: 'Acme Corp',
+        phone: '+1555123',
+        onboardingComplete: true,
+      }
 
       // Mock Firebase to return a logged-in user
       onAuthStateChanged.mockImplementation((auth, callback) => {
-        setTimeout(() => callback({ uid: 'test-uid-123', email: 'test@example.com' }), 0)
+        setTimeout(() => callback({
+          uid: 'test-uid-123',
+          email: 'test@example.com',
+          displayName: 'Test User',
+          emailVerified: true,
+        }), 0)
         return vi.fn()
       })
 
-      UserAPI.account.getUserFromUID.mockResolvedValue({
-        userdata: mockUser,
-      })
+      UserProfileAPI.get.mockResolvedValue(mockProfile)
 
       render(
         <AppProvider>
@@ -140,10 +159,48 @@ describe('AppContext', () => {
         expect(screen.getByTestId('user-uid')).toHaveTextContent('test-uid-123')
       }, { timeout: 2000 })
 
-      expect(UserAPI.account.getUserFromUID).toHaveBeenCalledWith('test-uid-123')
+      expect(UserProfileAPI.get).toHaveBeenCalledWith('test-uid-123')
+      expect(screen.getByTestId('user-role')).toHaveTextContent('buyer')
+      expect(screen.getByTestId('user-company')).toHaveTextContent('Acme Corp')
+      expect(screen.getByTestId('user-onboarding')).toHaveTextContent('complete')
+      expect(screen.getByTestId('user-email-verified')).toHaveTextContent('verified')
     })
 
-    it('should not load user when sessionStorage is empty', async () => {
+    it('should populate user role from profile API after Firebase auth', async () => {
+      const mockProfile = {
+        uid: 'seller-uid',
+        email: 'seller@example.com',
+        displayName: 'Seller User',
+        role: 'seller',
+        onboardingComplete: true,
+      }
+
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        setTimeout(() => callback({
+          uid: 'seller-uid',
+          email: 'seller@example.com',
+          displayName: 'Seller User',
+          emailVerified: false,
+        }), 0)
+        return vi.fn()
+      })
+
+      UserProfileAPI.get.mockResolvedValue(mockProfile)
+
+      render(
+        <AppProvider>
+          <TestComponent />
+        </AppProvider>
+      )
+
+      await waitFor(() => {
+        expect(screen.getByTestId('user-role')).toHaveTextContent('seller')
+      }, { timeout: 2000 })
+
+      expect(screen.getByTestId('user-email-verified')).toHaveTextContent('unverified')
+    })
+
+    it('should not load user when no Firebase auth user', async () => {
       render(
         <AppProvider>
           <TestComponent />
@@ -154,17 +211,23 @@ describe('AppContext', () => {
         expect(screen.getByTestId('is-loading')).toHaveTextContent('loaded')
       })
 
-      expect(UserAPI.account.getUserFromUID).not.toHaveBeenCalled()
+      expect(UserProfileAPI.get).not.toHaveBeenCalled()
       expect(screen.getByTestId('user-uid')).toHaveTextContent('no-user')
     })
 
-    it('should handle getUserFromUID errors gracefully', async () => {
-      const mockUser = { uid: 'test-uid-123' }
-      sessionStorage.setItem('user', JSON.stringify(mockUser))
+    it('should fallback to Firebase data when profile API returns no uid', async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        setTimeout(() => callback({
+          uid: 'new-user-uid',
+          email: 'new@example.com',
+          displayName: 'New User',
+          emailVerified: false,
+        }), 0)
+        return vi.fn()
+      })
 
-      UserAPI.account.getUserFromUID.mockRejectedValue(
-        new Error('Network error')
-      )
+      // Profile API returns empty/null (user not yet in backend)
+      UserProfileAPI.get.mockResolvedValue(null)
 
       render(
         <AppProvider>
@@ -173,11 +236,41 @@ describe('AppContext', () => {
       )
 
       await waitFor(() => {
-        expect(screen.getByTestId('is-loading')).toHaveTextContent('loaded')
+        expect(screen.getByTestId('user-uid')).toHaveTextContent('new-user-uid')
+      }, { timeout: 2000 })
+
+      // Should use Firebase fallback — no role assigned
+      expect(screen.getByTestId('user-role')).toHaveTextContent('no-role')
+      expect(screen.getByTestId('user-email')).toHaveTextContent('new@example.com')
+    })
+
+    it('should fallback to Firebase data when profile API errors', async () => {
+      onAuthStateChanged.mockImplementation((auth, callback) => {
+        setTimeout(() => callback({
+          uid: 'error-uid',
+          email: 'error@example.com',
+          displayName: 'Error User',
+          emailVerified: true,
+        }), 0)
+        return vi.fn()
       })
 
-      // User should not be set on error
-      expect(screen.getByTestId('user-uid')).toHaveTextContent('no-user')
+      UserProfileAPI.get.mockRejectedValue(new Error('Network error'))
+
+      render(
+        <AppProvider>
+          <TestComponent />
+        </AppProvider>
+      )
+
+      await waitFor(() => {
+        expect(screen.getByTestId('user-uid')).toHaveTextContent('error-uid')
+      }, { timeout: 2000 })
+
+      // Should use Firebase fallback — no role assigned
+      expect(screen.getByTestId('user-role')).toHaveTextContent('no-role')
+      expect(screen.getByTestId('user-email')).toHaveTextContent('error@example.com')
+      expect(screen.getByTestId('user-email-verified')).toHaveTextContent('verified')
     })
   })
 
@@ -208,17 +301,15 @@ describe('AppContext', () => {
 
   describe('Logout Functionality', () => {
     it('should clear user and sessionStorage on logout confirmation', async () => {
-      const mockUser = { uid: 'test-uid-123', email: 'test@example.com' }
+      const mockProfile = { uid: 'test-uid-123', email: 'test@example.com', role: 'buyer' }
 
       // Mock Firebase to return a logged-in user
       onAuthStateChanged.mockImplementation((auth, callback) => {
-        setTimeout(() => callback({ uid: 'test-uid-123', email: 'test@example.com' }), 0)
+        setTimeout(() => callback({ uid: 'test-uid-123', email: 'test@example.com', emailVerified: true }), 0)
         return vi.fn()
       })
 
-      UserAPI.account.getUserFromUID.mockResolvedValue({
-        userdata: mockUser,
-      })
+      UserProfileAPI.get.mockResolvedValue(mockProfile)
 
       // Mock window.location.href
       delete window.location
@@ -330,11 +421,9 @@ describe('AppContext', () => {
   })
 
   describe('updateUser Action', () => {
-    it('should update user state with new user data', async () => {
-      const mockUser = { uid: 'new-user-123', email: 'new@example.com' }
-      UserAPI.account.getUserFromUID.mockResolvedValue({
-        userdata: mockUser,
-      })
+    it('should update user state by re-fetching profile from backend', async () => {
+      const mockProfile = { uid: 'new-user-123', email: 'new@example.com', role: 'installer' }
+      UserProfileAPI.get.mockResolvedValue(mockProfile)
 
       const TestWithUpdate = () => {
         const { STATES, ACTIONS } = useAppContext()
@@ -344,6 +433,7 @@ describe('AppContext', () => {
               Update User
             </button>
             <div data-testid="user-uid">{STATES.user?.uid || 'no-user'}</div>
+            <div data-testid="user-role">{STATES.user?.role || 'no-role'}</div>
           </div>
         )
       }
@@ -368,11 +458,12 @@ describe('AppContext', () => {
         expect(screen.getByTestId('user-uid')).toHaveTextContent('new-user-123')
       }, { timeout: 2000 })
 
+      expect(screen.getByTestId('user-role')).toHaveTextContent('installer')
       expect(sessionStorage.getItem('user')).toContain('new-user-123')
     })
 
     it('should update user with provided userdata object', async () => {
-      const mockUser = { uid: 'direct-user-456', email: 'direct@example.com' }
+      const mockUser = { uid: 'direct-user-456', email: 'direct@example.com', role: 'seller' }
 
       const TestWithUpdate = () => {
         const { STATES, ACTIONS } = useAppContext()
@@ -382,6 +473,7 @@ describe('AppContext', () => {
               Update User Direct
             </button>
             <div data-testid="user-uid">{STATES.user?.uid || 'no-user'}</div>
+            <div data-testid="user-role">{STATES.user?.role || 'no-role'}</div>
           </div>
         )
       }
@@ -406,8 +498,10 @@ describe('AppContext', () => {
         expect(screen.getByTestId('user-uid')).toHaveTextContent('direct-user-456')
       }, { timeout: 2000 })
 
+      expect(screen.getByTestId('user-role')).toHaveTextContent('seller')
+
       // Should not call API when userdata is provided
-      expect(UserAPI.account.getUserFromUID).not.toHaveBeenCalled()
+      expect(UserProfileAPI.get).not.toHaveBeenCalled()
     })
   })
 
