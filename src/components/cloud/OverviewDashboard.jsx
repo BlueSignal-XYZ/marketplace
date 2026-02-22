@@ -9,7 +9,7 @@ import { DemoHint } from "../DemoHint";
 import SEOHead from "../seo/SEOHead";
 import VirtualDeviceSimulator from "./VirtualDeviceSimulator";
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== "false";
+const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === "true";
 
 const Grid = styled.div`
   display: grid;

@@ -7,7 +7,7 @@ import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import { SiteAPI, DeviceAPI, AlertsAPI } from "../../scripts/back_door";
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== "false";
+const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === "true";
 
 const ContentWrapper = styled.div`
   display: grid;

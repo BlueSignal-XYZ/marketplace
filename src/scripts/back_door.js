@@ -1522,8 +1522,8 @@ const MetricsAPI = {
 // through to the global flag (mock ON by default, OFF only when "false").
 // Uses the same !== "false" opt-out pattern as Cloud components for consistency.
 const USE_MARKETPLACE_MOCKS = import.meta.env.VITE_USE_MARKETPLACE_MOCKS
-  ? import.meta.env.VITE_USE_MARKETPLACE_MOCKS !== "false"
-  : import.meta.env.VITE_USE_MOCK_DATA !== "false";
+  ? import.meta.env.VITE_USE_MARKETPLACE_MOCKS === "true"
+  : import.meta.env.VITE_USE_MOCK_DATA === "true";
 
 const handleMarketplacePost = async (endpoint, body) => {
   if (USE_MARKETPLACE_MOCKS) {
