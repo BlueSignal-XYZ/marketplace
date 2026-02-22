@@ -1353,6 +1353,9 @@ const getCommission = async (commissionId) => {
   }
 };
 
+// WARNING: This calls /commission/update but backend route is /commission/update-step.
+// The backend expects { commissionId, step, stepData } not { commissionId, updateData }.
+// Used by commissionService.js — will 404 until URL and payload are aligned.
 const updateCommission = async (commissionId, updateData) => {
   try {
     const response = await authPost(
@@ -1362,19 +1365,6 @@ const updateCommission = async (commissionId, updateData) => {
     return response?.data;
   } catch (error) {
     console.error("Error updating commission:", error);
-    throw error;
-  }
-};
-
-const submitCommissionChecklist = async (commissionId, checklistData) => {
-  try {
-    const response = await authPost(
-      `${configs.server_url}/commission/submit-checklist`,
-      { commissionId, checklistData }
-    );
-    return response?.data;
-  } catch (error) {
-    console.error("Error submitting commission checklist:", error);
     throw error;
   }
 };
@@ -1423,11 +1413,14 @@ const getCommissionByDevice = async (deviceId) => {
 
 const getCommissionsByInstaller = async (installerId) => {
   try {
+    // No dedicated /commission/get-by-installer endpoint — use /commission/list.
+    // The backend's listCommissions already filters by installerId for installer-role users,
+    // so passing it as a filter provides the same result.
     const response = await authPost(
-      `${configs.server_url}/commission/get-by-installer`,
-      { installerId }
+      `${configs.server_url}/commission/list`,
+      { filters: { installerId } }
     );
-    return response?.data;
+    return response?.data?.commissions || [];
   } catch (error) {
     console.error("Error fetching commissions by installer:", error);
     throw error;
@@ -1447,32 +1440,6 @@ const listCommissions = async (filters = {}) => {
   }
 };
 
-const uploadCommissionPhoto = async (commissionId, photoData) => {
-  try {
-    const response = await authPost(
-      `${configs.server_url}/commission/upload-photo`,
-      { commissionId, photoData }
-    );
-    return response?.data;
-  } catch (error) {
-    console.error("Error uploading commission photo:", error);
-    throw error;
-  }
-};
-
-const submitCommissionSignature = async (commissionId, signatureData) => {
-  try {
-    const response = await authPost(
-      `${configs.server_url}/commission/submit-signature`,
-      { commissionId, signatureData }
-    );
-    return response?.data;
-  } catch (error) {
-    console.error("Error submitting commission signature:", error);
-    throw error;
-  }
-};
-
 const cancelCommission = async (commissionId, reason) => {
   try {
     const response = await authPost(
@@ -1486,18 +1453,32 @@ const cancelCommission = async (commissionId, reason) => {
   }
 };
 
+/**
+ * CommissionAPI — verified working endpoints:
+ *   - create: POST /commission/initiate
+ *   - get: POST /commission/get
+ *   - runTests: POST /commission/run-tests
+ *   - complete: POST /commission/complete
+ *   - getByDevice: POST /commission/list (filtered by deviceId)
+ *   - getByInstaller: POST /commission/list (filtered by installerId)
+ *   - list: POST /commission/list
+ *   - cancel: POST /commission/cancel
+ *
+ * WARNING — route mismatch (used but will 404):
+ *   - update: calls /commission/update, backend has /commission/update-step
+ *
+ * Removed (no backend route, no call sites):
+ *   - submitChecklist, uploadPhoto, submitSignature
+ */
 const CommissionAPI = {
   create: createCommission,
   get: getCommission,
   update: updateCommission,
-  submitChecklist: submitCommissionChecklist,
   runTests: runCommissionTests,
   complete: completeCommission,
   getByDevice: getCommissionByDevice,
   getByInstaller: getCommissionsByInstaller,
   list: listCommissions,
-  uploadPhoto: uploadCommissionPhoto,
-  submitSignature: submitCommissionSignature,
   cancel: cancelCommission,
 };
 
