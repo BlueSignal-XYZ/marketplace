@@ -20,7 +20,8 @@
     "firebase-functions": "^5.1.0",
     "qrcode": "^1.5.3",
     "@googlemaps/google-maps-services-js": "^3.4.0",
-    "@sendgrid/mail": "^8.1.0"
+    "@sendgrid/mail": "^8.1.0",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0"

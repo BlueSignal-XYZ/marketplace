@@ -416,6 +416,7 @@ async function listAlerts(req, res) {
 // ── Device Claim (with TTN registration + AppKey generation) ──────────
 
 const crypto = require("crypto");
+const fetch = require("node-fetch");
 
 async function claimDevice(req, res) {
   try {
@@ -478,7 +479,6 @@ async function claimDevice(req, res) {
           },
         };
 
-        const fetch = (await import("node-fetch")).default;
         const ttnRes = await fetch(
           `${ttnBaseUrl}/api/v3/applications/${ttnAppId}/devices`,
           {
@@ -780,7 +780,6 @@ async function sendDeviceCommand(req, res) {
         }
 
         if (downlinkPayload) {
-          const fetch = (await import("node-fetch")).default;
           await fetch(
             `${ttnBaseUrl}/api/v3/as/applications/${ttnAppId}/devices/${devEui.toLowerCase()}/down/push`,
             {
