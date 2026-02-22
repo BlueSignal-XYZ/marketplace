@@ -50,6 +50,7 @@ const scheduledDeviceHealth = require("./scheduled/deviceHealth");
 const scheduledCalibrationExpiry = require("./scheduled/calibrationExpiry");
 const scheduledBaselineCompletion = require("./scheduled/baselineCompletion");
 const scheduledCreditAccrual = require("./scheduled/creditAccrual");
+const scheduledDataRetention = require("./scheduled/dataRetention");
 
 // Create Express app for HTTP endpoints
 const app = express();
@@ -904,6 +905,13 @@ exports.checkBaselineCompletion = scheduledBaselineCompletion.checkBaselineCompl
  * Auto-calculates credits for all active revenue-grade devices.
  */
 exports.calculateDailyCredits = scheduledCreditAccrual.calculateDailyCredits;
+
+/**
+ * Scheduled: Data Retention Audit — runs weekly on Sunday at 03:00 UTC.
+ * Counts archivable readings (>12 months old). Logs audit event.
+ * TODO: Add Cloud Storage archival + RTDB deletion before 50+ devices.
+ */
+exports.auditDataRetention = scheduledDataRetention.auditDataRetention;
 
 // =============================================================================
 // TTN v3 LORAWAN WEBHOOK
