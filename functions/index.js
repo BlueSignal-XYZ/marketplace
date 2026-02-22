@@ -150,6 +150,14 @@ app.post("/user/role/update", auth.updateUserRole);
 app.post("/user/onboarding/complete", auth.completeOnboarding);
 
 // =============================================================================
+// ADMIN BOOTSTRAP
+// =============================================================================
+// One-time endpoint to seed the first admin user.
+// Protected by ADMIN_SEED_SECRET env var / functions config.
+// Refuses if any admin already exists.
+app.post("/admin/seed", auth.seedAdmin);
+
+// =============================================================================
 // QR CODE & DEVICE REGISTRATION ENDPOINTS
 // =============================================================================
 
