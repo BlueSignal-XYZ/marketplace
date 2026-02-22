@@ -1,7 +1,4 @@
 import Sidebar_MenuItem from "./sidebar/Sidebar_MenuItem";
-import OverviewCard from "./cards/OverviewCard";
-import DataCard from "./cards/DataCard";
-import RecordsCard from "./cards/RecordsCard";
 
 import Loading from "./Loading";
 import Error from "./Error";
@@ -15,9 +12,6 @@ import GoogleStoreLocator from "./GoogleStoreLocator";
 
 export {
     Sidebar_MenuItem,
-    OverviewCard,
-    DataCard,
-    RecordsCard,
     Loading,
     Error,
     Certificate,
