@@ -250,27 +250,27 @@ const updateCommissionStep = async (req, res) => {
         });
         break;
 
-      case "photo_upload":
+      case "photo_upload": {
         if (!stepData?.photos || !Array.isArray(stepData.photos)) {
           return res.status(400).json({ error: "Missing photos array in stepData" });
         }
         const existingPhotos = commission.photos || [];
         updates["photos"] = [...existingPhotos, ...stepData.photos];
         break;
+      }
 
-      case "connectivity_test":
+      case "connectivity_test": {
         if (!stepData?.tests || !Array.isArray(stepData.tests)) {
           return res.status(400).json({ error: "Missing tests array in stepData" });
         }
         updates["tests"] = stepData.tests;
 
-        // Check if all tests passed
         const allTestsPassed = stepData.tests.every((t) => t.result === "passed");
         if (!allTestsPassed) {
-          // Update status but don't fail yet - user can retry
           updates[`workflow/steps/${stepIndex}/status`] = "failed";
         }
         break;
+      }
 
       case "sensor_calibration":
         if (stepData?.offsets) {
@@ -603,33 +603,32 @@ const runCommissionTests = async (req, res) => {
       let result = { testName, testedAt: Date.now() };
 
       switch (testName) {
-        case "power":
-          // Check battery level
+        case "power": {
           const batteryLevel = device.health?.batteryLevel;
           result.value = batteryLevel;
           result.expectedRange = { min: 10, max: 100 };
           result.result = batteryLevel >= 10 ? "passed" : "failed";
           break;
+        }
 
-        case "connectivity":
-          // Check signal strength
+        case "connectivity": {
           const signalStrength = device.health?.signalStrength;
           result.value = signalStrength;
           result.expectedRange = { min: -100, max: -30 };
           result.result = signalStrength && signalStrength >= -100 ? "passed" : "warning";
           break;
+        }
 
-        case "sensors":
-          // Check last sensor reading
+        case "sensors": {
           const lastSeen = device.health?.lastSeen;
           const ageMinutes = lastSeen ? (Date.now() - lastSeen) / 60000 : Infinity;
           result.value = ageMinutes;
           result.expectedRange = { min: 0, max: 30 };
           result.result = ageMinutes <= 30 ? "passed" : "warning";
           break;
+        }
 
-        case "cloud_ingestion":
-          // Check if data is reaching the cloud
+        case "cloud_ingestion": {
           const readingsSnapshot = await db.ref(`readings/${deviceId}`)
             .limitToLast(1)
             .once("value");
@@ -637,6 +636,7 @@ const runCommissionTests = async (req, res) => {
           result.value = hasRecentReadings ? "Data received" : "No data";
           result.result = hasRecentReadings ? "passed" : "warning";
           break;
+        }
 
         default:
           result.result = "skipped";
