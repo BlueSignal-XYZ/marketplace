@@ -46,7 +46,7 @@ const fadeIn = keyframes`
 const HeaderOuter = styled.header`
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 50;
   width: 100%;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
@@ -176,7 +176,7 @@ const DropdownPanel = styled.div`
   padding: 6px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   animation: ${dropdownFadeIn} 150ms ease-out;
-  z-index: 20;
+  z-index: 100;
 `;
 
 const DropdownItem = styled.a`

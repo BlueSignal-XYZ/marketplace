@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapProject, getProjectsByType, getCreditTypeColor } from '../../data/mockMapData';
+import { MapProject, getProjectsByType, getCreditTypeColor, mockMapProjects } from '../../data/mockMapData';
 import { fetchMapProjects } from '../../services/wqtDataService';
+import { isDemoMode } from '../../utils/demoMode';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
@@ -462,10 +463,12 @@ export function MapPage() {
   const loadProjects = React.useCallback(async () => {
     setError(null);
     try {
-      const realProjects = await fetchMapProjects();
-      const projects = Array.isArray(realProjects) ? (realProjects as MapProject[]) : [];
-      setAllProjects(projects);
-      setFilteredProjects(projects);
+      const projects = isDemoMode()
+        ? mockMapProjects
+        : (await fetchMapProjects()) || [];
+      const list = Array.isArray(projects) ? (projects as MapProject[]) : [];
+      setAllProjects(list);
+      setFilteredProjects(list);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load map projects.');
       setAllProjects([]);

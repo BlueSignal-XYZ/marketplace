@@ -60,20 +60,21 @@ export const media = {
 } as const;
 
 /** Z-index scale — use globally for consistent layering.
- * base: page content
- * banner: demo/notification banners (passive)
- * dropdown: nav dropdowns, menus
- * notification: toast, notification bar
+ * content: page content
+ * banner: demo banner (passive)
+ * nav: navigation bar
+ * dropdown: nav dropdown menus
+ * notification: notification banner, toast
  * modal: modals, overlays
  */
 export const zIndex = {
-  base: 0,
+  content: 1,
   banner: 10,
-  dropdown: 20,
-  notification: 30,
-  overlay: 300,
-  modal: 400,
-  toast: 500,
+  nav: 50,
+  dropdown: 100,
+  notification: 150,
+  modal: 200,
+  toast: 250,
 } as const;
 
 // ── Type exports ──────────────────────────────────────────

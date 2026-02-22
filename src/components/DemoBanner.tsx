@@ -1,9 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { isDemoMode } from '../utils/demoMode';
 
 const DEMO_BANNER_DISMISSED_KEY = 'demoBannerDismissed';
+
+/** Permanent dismissal — never show again after user clicks X. */
+function isBannerDismissed(): boolean {
+  if (typeof localStorage === 'undefined') return false;
+  return localStorage.getItem(DEMO_BANNER_DISMISSED_KEY) === 'true';
+}
+
+function setBannerDismissed(): void {
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(DEMO_BANNER_DISMISSED_KEY, 'true');
+  }
+}
 
 const BannerContainer = styled.div`
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
@@ -19,7 +31,7 @@ const BannerContainer = styled.div`
   font-weight: 500;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 10;
+  z-index: 10; /* below nav (50) and dropdowns (100) */
 
   @media (max-width: 768px) {
     min-height: 48px;
@@ -90,20 +102,10 @@ const CloseButton = styled.button`
 `;
 
 export function DemoBanner() {
-  const [dismissed, setDismissed] = useState(() =>
-    typeof sessionStorage !== 'undefined' && sessionStorage.getItem(DEMO_BANNER_DISMISSED_KEY) === 'true'
-  );
-
-  useEffect(() => {
-    if (dismissed && typeof sessionStorage !== 'undefined') {
-      sessionStorage.setItem(DEMO_BANNER_DISMISSED_KEY, 'true');
-    }
-  }, [dismissed]);
+  const [dismissed, setDismissed] = useState(() => isBannerDismissed());
 
   const handleDismiss = () => {
-    if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.setItem(DEMO_BANNER_DISMISSED_KEY, 'true');
-    }
+    setBannerDismissed();
     setDismissed(true);
   };
 

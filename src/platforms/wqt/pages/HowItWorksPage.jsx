@@ -100,6 +100,17 @@ const Grid = styled.div`
   }
 `;
 
+const Card = styled.div`
+  padding: 28px;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.lg}px;
+`;
+
+const CardAlt = styled(Card)`
+  background: ${({ theme }) => theme.colors.background};
+`;
+
 /** 2-over-1 layout: two cards on first row, third spans full width below (or 2/3 centered) */
 const DifferentGrid = styled.div`
   display: grid;
@@ -122,17 +133,6 @@ const DifferentCard = styled(CardAlt)`
       justify-self: center;
     }
   }
-`;
-
-const Card = styled.div`
-  padding: 28px;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.lg}px;
-`;
-
-const CardAlt = styled(Card)`
-  background: ${({ theme }) => theme.colors.background};
 `;
 
 const CardTitle = styled.h3`
