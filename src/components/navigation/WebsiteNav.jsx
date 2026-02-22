@@ -445,7 +445,7 @@ export function WebsiteNav() {
             <NavLink href="/registry">Credit Registry</NavLink>
           </NavLinks>
 
-          <CTALink href="/login">Get Started</CTALink>
+          <CTALink href="/marketplace">Get Started</CTALink>
 
           <MobileMenuBtn
             onClick={() => setMobileOpen((p) => !p)}
@@ -488,7 +488,7 @@ export function WebsiteNav() {
           Credit Registry
         </MobileNavLink>
 
-        <MobileCTA href="/login" onClick={() => setMobileOpen(false)}>
+        <MobileCTA href="/marketplace" onClick={() => setMobileOpen(false)}>
           Get Started
         </MobileCTA>
       </MobileMenu>

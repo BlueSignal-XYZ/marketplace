@@ -343,7 +343,7 @@ export function MarketplaceHeader({ onMenuClick }) {
         </NavLinks>
 
         <RightGroup>
-          <SignUpButton href="/login">Get Started</SignUpButton>
+          <SignUpButton href="/marketplace">Get Started</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
             <FontAwesomeIcon icon={faBars} />
