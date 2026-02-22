@@ -5,8 +5,20 @@ import { getIcon } from "../../lib/icons";
 import { AnimatePresence } from "framer-motion";
 import { StreamItem, VideoItem } from "./data-card";
 import { CardContainer } from "../../lib/styled";
-import { fetchDeviceData } from "../../dash.utils";
+import { DeviceAPI } from "../../../scripts/back_door";
 import { logDev } from "../../../scripts/helpers";
+
+/** @deprecated Legacy dashboard component — not used in any active route. */
+const fetchDeviceData = async (deviceID, setDeviceData) => {
+  try {
+    const { device } = (await DeviceAPI.getDeviceDetails(deviceID)) || {};
+    if (device) {
+      setDeviceData(device);
+    }
+  } catch (error) {
+    console.error("fetchDeviceData error:", error);
+  }
+};
 
 const DataCard = ({ deviceID }) => {
   if (!(deviceID > 0)) {

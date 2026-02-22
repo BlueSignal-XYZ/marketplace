@@ -1497,25 +1497,6 @@ const CommissionAPI = {
   cancel: cancelCommission,
 };
 
-/*************************METRICS_API (STUB)************************************* */
-
-const allMetrics = ["credit_balance", "credit_price", "equity", "tx_pending"];
-
-const getMetric = async (metric, uid) => {
-  // original behavior was just returning "10"
-  return "10";
-  // If you want to wire this later:
-  // return String(
-  //   (await axios.post(`${configs.server_url}/metrics`, { metric, uid }))
-  //     ?.data || 10
-  // );
-};
-
-const MetricsAPI = {
-  allMetrics,
-  getMetric,
-};
-
 /*************************MARKETPLACE_ENDPOINTS************************************* */
 
 // Mock mode flag — unified with VITE_USE_MOCK_DATA so cloud dashboard pages
@@ -2350,7 +2331,6 @@ export {
   NFT_API,
   StripeAPI,
   DeviceAPI,
-  MetricsAPI,
   MarketplaceAPI,
   // Commercial pipeline APIs
   CustomerAPI,

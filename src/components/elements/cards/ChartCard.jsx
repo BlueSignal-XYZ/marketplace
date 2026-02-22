@@ -19,8 +19,23 @@ import {
 } from "chart.js";
 import { CardContainer } from "../../lib/styled";
 import "font-awesome/css/font-awesome.min.css";
-import { fetchDeviceData, getRandomColor } from "../../dash.utils";
+import { DeviceAPI } from "../../../scripts/back_door";
 import { capitalizeFirstLetter, logDev } from "../../../scripts/helpers";
+
+/** @deprecated Legacy dashboard component — not used in any active route. */
+const fetchDeviceData = async (deviceID, setDeviceData) => {
+  try {
+    const { device } = (await DeviceAPI.getDeviceDetails(deviceID)) || {};
+    if (device) {
+      setDeviceData(device);
+    }
+  } catch (error) {
+    console.error("fetchDeviceData error:", error);
+  }
+};
+
+/** @deprecated Legacy dashboard utility — returns a fixed color. */
+const getRandomColor = () => "#196061";
 import { logoColors } from "../../../styles/colors";
 import { Badge } from "../../shared/Badge/Badge";
 
