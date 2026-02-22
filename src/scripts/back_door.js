@@ -1328,9 +1328,10 @@ const OrderAPI = {
 
 const createCommission = async (commissionData) => {
   try {
+    // Backend route is /commission/initiate and expects { deviceId, siteId } at top level
     const response = await authPost(
-      `${configs.server_url}/commission/create`,
-      { commissionData }
+      `${configs.server_url}/commission/initiate`,
+      commissionData
     );
     return response?.data;
   } catch (error) {
@@ -1352,6 +1353,8 @@ const getCommission = async (commissionId) => {
   }
 };
 
+// Generic commission field update — merges updateData into the commission record.
+// For step-based workflow updates, use /commission/update-step instead.
 const updateCommission = async (commissionId, updateData) => {
   try {
     const response = await authPost(
@@ -1361,19 +1364,6 @@ const updateCommission = async (commissionId, updateData) => {
     return response?.data;
   } catch (error) {
     console.error("Error updating commission:", error);
-    throw error;
-  }
-};
-
-const submitCommissionChecklist = async (commissionId, checklistData) => {
-  try {
-    const response = await authPost(
-      `${configs.server_url}/commission/submit-checklist`,
-      { commissionId, checklistData }
-    );
-    return response?.data;
-  } catch (error) {
-    console.error("Error submitting commission checklist:", error);
     throw error;
   }
 };
@@ -1406,11 +1396,14 @@ const completeCommission = async (commissionId, result) => {
 
 const getCommissionByDevice = async (deviceId) => {
   try {
+    // No dedicated /commission/get-by-device endpoint — use /commission/list
+    // with a deviceId filter and return the most recent commission.
     const response = await authPost(
-      `${configs.server_url}/commission/get-by-device`,
-      { deviceId }
+      `${configs.server_url}/commission/list`,
+      { filters: { deviceId } }
     );
-    return response?.data;
+    const commissions = response?.data?.commissions || [];
+    return commissions.length > 0 ? commissions[0] : null;
   } catch (error) {
     console.error("Error fetching commission by device:", error);
     throw error;
@@ -1419,11 +1412,14 @@ const getCommissionByDevice = async (deviceId) => {
 
 const getCommissionsByInstaller = async (installerId) => {
   try {
+    // No dedicated /commission/get-by-installer endpoint — use /commission/list.
+    // The backend's listCommissions already filters by installerId for installer-role users,
+    // so passing it as a filter provides the same result.
     const response = await authPost(
-      `${configs.server_url}/commission/get-by-installer`,
-      { installerId }
+      `${configs.server_url}/commission/list`,
+      { filters: { installerId } }
     );
-    return response?.data;
+    return response?.data?.commissions || [];
   } catch (error) {
     console.error("Error fetching commissions by installer:", error);
     throw error;
@@ -1443,32 +1439,6 @@ const listCommissions = async (filters = {}) => {
   }
 };
 
-const uploadCommissionPhoto = async (commissionId, photoData) => {
-  try {
-    const response = await authPost(
-      `${configs.server_url}/commission/upload-photo`,
-      { commissionId, photoData }
-    );
-    return response?.data;
-  } catch (error) {
-    console.error("Error uploading commission photo:", error);
-    throw error;
-  }
-};
-
-const submitCommissionSignature = async (commissionId, signatureData) => {
-  try {
-    const response = await authPost(
-      `${configs.server_url}/commission/submit-signature`,
-      { commissionId, signatureData }
-    );
-    return response?.data;
-  } catch (error) {
-    console.error("Error submitting commission signature:", error);
-    throw error;
-  }
-};
-
 const cancelCommission = async (commissionId, reason) => {
   try {
     const response = await authPost(
@@ -1482,38 +1452,34 @@ const cancelCommission = async (commissionId, reason) => {
   }
 };
 
+/**
+ * CommissionAPI — all endpoints verified working:
+ *   - create: POST /commission/initiate (initiates new commission)
+ *   - update: POST /commission/update (generic field merge on commission record)
+ *   - get: POST /commission/get (get commission by ID)
+ *   - runTests: POST /commission/run-tests (execute hardware tests)
+ *   - complete: POST /commission/complete (finalize commission)
+ *   - getByDevice: POST /commission/list (filtered by deviceId, returns most recent)
+ *   - getByInstaller: POST /commission/list (filtered by installerId)
+ *   - list: POST /commission/list (all commissions for authenticated user)
+ *   - cancel: POST /commission/cancel (cancel in-progress commission)
+ *
+ * Note: /commission/update-step also exists for step-based workflow updates
+ * (used by FullCommissioningWizard via useCommission hook).
+ *
+ * Removed in Round 4 (no backend route, no call sites):
+ *   - submitChecklist, uploadPhoto, submitSignature
+ */
 const CommissionAPI = {
   create: createCommission,
   get: getCommission,
   update: updateCommission,
-  submitChecklist: submitCommissionChecklist,
   runTests: runCommissionTests,
   complete: completeCommission,
   getByDevice: getCommissionByDevice,
   getByInstaller: getCommissionsByInstaller,
   list: listCommissions,
-  uploadPhoto: uploadCommissionPhoto,
-  submitSignature: submitCommissionSignature,
   cancel: cancelCommission,
-};
-
-/*************************METRICS_API (STUB)************************************* */
-
-const allMetrics = ["credit_balance", "credit_price", "equity", "tx_pending"];
-
-const getMetric = async (metric, uid) => {
-  // original behavior was just returning "10"
-  return "10";
-  // If you want to wire this later:
-  // return String(
-  //   (await axios.post(`${configs.server_url}/metrics`, { metric, uid }))
-  //     ?.data || 10
-  // );
-};
-
-const MetricsAPI = {
-  allMetrics,
-  getMetric,
 };
 
 /*************************MARKETPLACE_ENDPOINTS************************************* */
@@ -2350,7 +2316,6 @@ export {
   NFT_API,
   StripeAPI,
   DeviceAPI,
-  MetricsAPI,
   MarketplaceAPI,
   // Commercial pipeline APIs
   CustomerAPI,

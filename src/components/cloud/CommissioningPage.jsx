@@ -492,6 +492,13 @@ const StartNewButton = styled.button`
 /*                              MAIN COMPONENT                                */
 /* -------------------------------------------------------------------------- */
 
+// NOTE: This component uses v1 commission endpoints via CommissionAPI (back_door.js).
+// Endpoint audit (2026-02-22):
+//   CommissionAPI.create()      → POST /commission/initiate — OK, implemented
+//   CommissionAPI.runTests()    → POST /commission/run-tests — OK, implemented
+//   CommissionAPI.complete()    → POST /commission/complete — OK, implemented
+//   CommissionAPI.getByDevice() → POST /commission/list (filtered by deviceId) — OK, implemented
+// DeviceAPI.getDevices()        → POST /device/all — v1 endpoint, should migrate to v2 in future pass
 export default function CommissioningPage() {
   const navigate = useNavigate();
   const [devices, setDevices] = useState([]);

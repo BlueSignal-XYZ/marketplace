@@ -13,6 +13,7 @@ import { WebsiteNav } from '../../../components/navigation/WebsiteNav';
 import Footer from '../../../components/shared/Footer/Footer';
 import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
 import { SettingsMenu } from '../../../components';
+import { DemoBanner } from '../../../components/DemoBanner';
 
 // Marketing/content pages that should use the dark WebsiteNav instead of the app header
 const MARKETING_ROUTES = [
@@ -82,6 +83,9 @@ export function WQTShell({ user, isAuthLanding, children }) {
           user={user}
         />
       )}
+
+      {/* Demo mode banner (same as Cloud) */}
+      {!isAuthLanding && <DemoBanner />}
 
       {/* Legacy globals (kept for backward compat until components migrated) */}
       <SettingsMenu />

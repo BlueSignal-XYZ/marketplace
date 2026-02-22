@@ -36,15 +36,14 @@ const Section = styled.section`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-left: clamp(20px, 5vw, 48px);
-  padding-right: clamp(20px, 5vw, 48px);
+  padding: 0 clamp(20px, 5vw, 48px);
   background: #0B1120;
   color: #FFFFFF;
   box-sizing: border-box;
 
-  @media (max-height: 700px) {
+  @media (max-height: 500px) {
     justify-content: flex-start;
-    padding-top: clamp(48px, 8vh, 80px);
+    padding-top: clamp(32px, 6vh, 60px);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -90,6 +89,7 @@ const Content = styled.div`
   align-items: center;
   max-width: 800px;
   width: 100%;
+  margin: auto;
   z-index: 1;
 `;
 

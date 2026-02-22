@@ -314,39 +314,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
           </NavItem>
         </NavList>
 
-        {/* Solutions */}
-        <SectionLabel>Solutions</SectionLabel>
-        <NavList>
-          <NavItem
-            to="/for-utilities"
-            $active={isActive("/for-utilities")}
-            onClick={onClose}
-          >
-            For Utilities
-          </NavItem>
-          <NavItem
-            to="/for-homeowners"
-            $active={isActive("/for-homeowners")}
-            onClick={onClose}
-          >
-            For Homeowners
-          </NavItem>
-          <NavItem
-            to="/for-aggregators"
-            $active={isActive("/for-aggregators")}
-            onClick={onClose}
-          >
-            For Aggregators
-          </NavItem>
-          <NavItem
-            to="/generate-credits"
-            $active={isActive("/generate-credits")}
-            onClick={onClose}
-          >
-            For Generators
-          </NavItem>
-        </NavList>
-
         {/* Platform */}
         <SectionLabel>Platform</SectionLabel>
         <NavList>
@@ -416,13 +383,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
             BlueSignal Hardware
             <ExternalIcon>↗</ExternalIcon>
           </ExternalLink>
-          <NavItem
-            to="/contact"
-            $active={isActive("/contact")}
-            onClick={onClose}
-          >
-            Contact
-          </NavItem>
         </NavList>
 
         <SmallText>

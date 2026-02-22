@@ -377,7 +377,8 @@ export default function SiteDetailPage() {
 
       // Find the specific site
       const siteData = (allSites || []).find((s) => s.id === siteId);
-      // Filter devices belonging to this site
+      // TODO: Replace with server-side filtered endpoint (e.g., /v2/sites/:siteId/devices)
+      // when device count exceeds ~100. Current approach fetches all devices then filters.
       const siteDevices = (allDevices || []).filter((d) => d.siteId === siteId);
       // Filter alerts for this site's devices
       const siteDeviceIds = siteDevices.map((d) => d.id);

@@ -662,9 +662,61 @@ const runCommissionTests = async (req, res) => {
   }
 };
 
+/**
+ * Generic commission update — merges fields into an existing commission record.
+ * Used by commissionService.js for updating status, checklists, test results,
+ * photos, signatures, etc. Complements the step-based updateCommissionStep
+ * which handles workflow-specific logic.
+ */
+const updateCommission = async (req, res) => {
+  const { commissionId, updateData } = req.body;
+
+  if (!commissionId || !updateData) {
+    return res.status(400).json({ error: "Missing commissionId or updateData" });
+  }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const token = authHeader.split("Bearer ")[1];
+  const db = admin.database();
+
+  try {
+    // Verify commission exists
+    const commissionSnapshot = await db.ref(`commissions/${commissionId}`).once("value");
+    if (!commissionSnapshot.exists()) {
+      return res.status(404).json({ error: "Commission not found" });
+    }
+
+    const commission = commissionSnapshot.val();
+
+    // Verify authorization (owner, installer, or admin)
+    await verifyCommissionAuth(token, db, commission);
+
+    // Sanitize: prevent overwriting critical fields via generic update
+    const blocked = ["deviceId", "installerId", "ownerId"];
+    const sanitized = { ...updateData };
+    blocked.forEach((key) => delete sanitized[key]);
+
+    // Always update the timestamp
+    sanitized.updatedAt = sanitized.updatedAt || new Date().toISOString();
+
+    // Merge fields into the commission record
+    await db.ref(`commissions/${commissionId}`).update(sanitized);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Failed to update commission:", error);
+    res.status(500).json({ error: error.message || "Failed to update commission" });
+  }
+};
+
 module.exports = {
   initiateCommission,
   updateCommissionStep,
+  updateCommission,
   completeCommission,
   getCommission,
   listCommissions,

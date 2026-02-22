@@ -3,9 +3,27 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
 import { getDevices, getAlerts, getSites } from "../../services/v2/api";
+import { CommissionAPI } from "../../scripts/back_door";
 import { useAppContext } from "../../context/AppContext";
+
+/** Format a timestamp into a human-readable relative string. */
+const getRelativeTime = (timestamp) => {
+  if (!timestamp) return "—";
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  if (Number.isNaN(then)) return "—";
+  const diff = now - then;
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+
+  if (diff < minute) return "just now";
+  if (diff < hour) return `${Math.floor(diff / minute)} min ago`;
+  if (diff < day) return `${Math.floor(diff / hour)} hr ago`;
+  return `${Math.floor(diff / day)} days ago`;
+};
 import { DemoHint } from "../DemoHint";
 import SEOHead from "../seo/SEOHead";
 import VirtualDeviceSimulator from "./VirtualDeviceSimulator";
@@ -690,14 +708,15 @@ export default function OverviewDashboard() {
     try {
       // v2 API calls — routed through api.js which auto-switches
       // between real backend and demo interceptor based on isDemoMode().
-      const [devices, alerts, sitesData, commissioningData, tasksData] =
+      const [devices, alerts, sitesData, commissioningData] =
         await Promise.all([
           getDevices(user.uid).catch(() => []),
           getAlerts(user.uid).catch(() => []),
           getSites(user.uid).catch(() => []),
-          CloudMockAPI.overview.getRecentCommissioning(), // still mock until commissioning API is wired
-          CloudMockAPI.overview.getTodayTasks(),          // still mock until tasks API is wired
+          CommissionAPI.list().then((r) => (r?.commissions || []).slice(0, 5)).catch(() => []),
         ]);
+      // No dedicated tasks API — show empty state until implemented
+      const tasksData = [];
 
       // v2 returns flat arrays directly (DeviceSummary[], Alert[], Site[])
       const onlineDevices = (devices || []).filter(

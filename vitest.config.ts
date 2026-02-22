@@ -30,7 +30,7 @@ export default defineConfig({
       },
     },
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
-    exclude: ['node_modules', 'dist', 'dist-wqt', 'dist-cloud', '.idea', '.git', '.cache'],
+    exclude: ['node_modules', 'dist', 'dist-wqt', 'dist-cloud', '.idea', '.git', '.cache', 'src/tests/integration/**'],
   },
   resolve: {
     alias: {

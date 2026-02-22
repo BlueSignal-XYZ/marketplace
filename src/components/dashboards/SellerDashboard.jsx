@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { Bar } from 'react-chartjs-2';
 import { fetchSellerListings, fetchUserOrders, fetchUserDevices } from '../../services/wqtDataService';
+import { isDemoMode } from '../../utils/demoMode';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -740,10 +741,12 @@ const SellerDashboard = () => {
           <p>Manage your listings, track sales, and maximize revenue from water quality improvements.</p>
         </Header>
 
-        <DemoBanner>
-          <span className="icon">ℹ️</span>
-          <span><strong>Sample Data:</strong> This dashboard shows example listings and sales for demonstration purposes. Your actual data will appear here once you create listings.</span>
-        </DemoBanner>
+        {isDemoMode() && (
+          <DemoBanner data-testid="sample-data-banner">
+            <span className="icon">ℹ️</span>
+            <span><strong>Sample Data:</strong> This dashboard shows example listings and sales for demonstration purposes. Your actual data will appear here once you create listings.</span>
+          </DemoBanner>
+        )}
 
         {isNewSeller && (
           <GettingStartedCard>
