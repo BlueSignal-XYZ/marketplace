@@ -10,16 +10,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../context/AppContext";
-import CloudMockAPI from "../services/cloudMockAPI";
-import { DeviceAPI } from "../scripts/back_door";
-import { isDemoMode } from "../utils/demoMode";
+import { getDevices } from "../services/v2/api";
 
 // Cache key for localStorage
 const CACHE_KEY = "bluesignal_has_devices";
 const CACHE_COUNT_KEY = "bluesignal_device_count";
-
-// Use mock API only when demo mode is active
-const USE_MOCK_API = isDemoMode();
 
 /**
  * Clear the device cache (call on logout)
@@ -67,14 +62,10 @@ export function useUserDevices() {
     try {
       let deviceList = [];
 
-      if (USE_MOCK_API) {
-        // Use mock API for development
-        deviceList = await CloudMockAPI.devices.getAll();
-      } else {
-        // Use real backend API
-        const response = await DeviceAPI.getDevices();
-        deviceList = response?.devices || response || [];
-      }
+      // v2 getDevices auto-switches between demo interceptor (mock data)
+      // and real backend based on isDemoMode(). No manual branching needed.
+      const response = await getDevices(user.uid);
+      deviceList = Array.isArray(response) ? response : response?.devices || [];
 
       // Ensure deviceList is an array
       if (!Array.isArray(deviceList)) {
