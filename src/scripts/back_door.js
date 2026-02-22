@@ -1353,9 +1353,8 @@ const getCommission = async (commissionId) => {
   }
 };
 
-// WARNING: This calls /commission/update but backend route is /commission/update-step.
-// The backend expects { commissionId, step, stepData } not { commissionId, updateData }.
-// Used by commissionService.js — will 404 until URL and payload are aligned.
+// Generic commission field update — merges updateData into the commission record.
+// For step-based workflow updates, use /commission/update-step instead.
 const updateCommission = async (commissionId, updateData) => {
   try {
     const response = await authPost(
@@ -1454,20 +1453,21 @@ const cancelCommission = async (commissionId, reason) => {
 };
 
 /**
- * CommissionAPI — verified working endpoints:
- *   - create: POST /commission/initiate
- *   - get: POST /commission/get
- *   - runTests: POST /commission/run-tests
- *   - complete: POST /commission/complete
- *   - getByDevice: POST /commission/list (filtered by deviceId)
+ * CommissionAPI — all endpoints verified working:
+ *   - create: POST /commission/initiate (initiates new commission)
+ *   - update: POST /commission/update (generic field merge on commission record)
+ *   - get: POST /commission/get (get commission by ID)
+ *   - runTests: POST /commission/run-tests (execute hardware tests)
+ *   - complete: POST /commission/complete (finalize commission)
+ *   - getByDevice: POST /commission/list (filtered by deviceId, returns most recent)
  *   - getByInstaller: POST /commission/list (filtered by installerId)
- *   - list: POST /commission/list
- *   - cancel: POST /commission/cancel
+ *   - list: POST /commission/list (all commissions for authenticated user)
+ *   - cancel: POST /commission/cancel (cancel in-progress commission)
  *
- * WARNING — route mismatch (used but will 404):
- *   - update: calls /commission/update, backend has /commission/update-step
+ * Note: /commission/update-step also exists for step-based workflow updates
+ * (used by FullCommissioningWizard via useCommission hook).
  *
- * Removed (no backend route, no call sites):
+ * Removed in Round 4 (no backend route, no call sites):
  *   - submitChecklist, uploadPhoto, submitSignature
  */
 const CommissionAPI = {

@@ -171,6 +171,7 @@ app.post("/device/register", qrcode.registerDevice);
 // =============================================================================
 
 app.post("/commission/initiate", commissioning.initiateCommission);
+app.post("/commission/update", commissioning.updateCommission);
 app.post("/commission/update-step", commissioning.updateCommissionStep);
 app.post("/commission/complete", commissioning.completeCommission);
 app.post("/commission/get", commissioning.getCommission);
