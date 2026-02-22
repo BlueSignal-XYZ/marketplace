@@ -14,7 +14,7 @@ import { QRScanner, LocationCapture } from "../installer";
 import CloudPageLayout from "./CloudPageLayout";
 import { ButtonPrimary, ButtonSecondary, ButtonDanger } from "../shared/button/Button";
 import { Input } from "../shared/input/Input";
-import { GeocodingAPI } from "../../scripts/back_door";
+import { getSites } from "../../services/v2/api";
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -447,8 +447,8 @@ export default function FullCommissioningWizard() {
   const loadSites = async () => {
     setLoadingSites(true);
     try {
-      const response = await GeocodingAPI.listSites({ ownerId: user?.uid });
-      setSites(response.sites || []);
+      const data = await getSites(user?.uid);
+      setSites(data || []);
     } catch (err) {
       console.error("Error loading sites:", err);
     } finally {

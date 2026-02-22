@@ -6,7 +6,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../context/AppContext";
-import { CreditsMarketplaceAPI, GeocodingAPI } from "../../../scripts/back_door";
+import { CreditsMarketplaceAPI } from "../../../scripts/back_door";
+import { getSites } from "../../../services/v2/api";
 import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
 import { Input } from "../../shared/input/Input";
 
@@ -326,8 +327,8 @@ export default function CreateListingPage() {
 
   const loadSites = async () => {
     try {
-      const response = await GeocodingAPI.listSites({ ownerId: user?.uid });
-      setSites(response.sites || []);
+      const data = await getSites(user?.uid);
+      setSites(data || []);
     } catch (err) {
       console.error("Error loading sites:", err);
     }
