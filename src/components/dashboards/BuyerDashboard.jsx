@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { fetchUserCredits, fetchUserOrders, fetchUserDevices } from '../../services/wqtDataService';
+import { isDemoMode } from '../../utils/demoMode';
 
 const Page = styled.main`
   width: 100%;
@@ -695,10 +696,12 @@ const BuyerDashboard = () => {
           <p>Browse available credits, track purchases, and manage compliance requirements.</p>
         </Header>
 
-        <DemoBanner>
-          <span className="icon">ℹ️</span>
-          <span><strong>Sample Data:</strong> This dashboard shows example credits and purchases for demonstration purposes. Your actual data will appear here once you make purchases.</span>
-        </DemoBanner>
+        {isDemoMode() && (
+          <DemoBanner data-testid="sample-data-banner">
+            <span className="icon">ℹ️</span>
+            <span><strong>Sample Data:</strong> This dashboard shows example credits and purchases for demonstration purposes. Your actual data will appear here once you make purchases.</span>
+          </DemoBanner>
+        )}
 
         {isNewUser && (
           <GettingStartedCard>
