@@ -286,10 +286,13 @@ Each build sets `BUILD_TARGET`, runs Vite with `--max-old-space-size=8192`, copi
 
 | Script | Description |
 |--------|-------------|
-| `npm test` | Run Vitest in watch mode |
+| `npm test` | Run unit tests in watch mode |
+| `npm run test:unit` | Run unit tests once |
 | `npm run test:ui` | Run Vitest with UI |
 | `npm run test:coverage` | Run tests with v8 coverage report |
 | `npm run test:ci` | Run tests once (CI mode, verbose) |
+| `npm run test:integration` | Run integration tests against Firebase Emulator |
+| `npm run emulators:start` | Start Firebase Emulator Suite (Auth, RTDB, Functions) |
 
 ### Data
 
@@ -486,7 +489,7 @@ Base URL: `https://us-central1-waterquality-trading.cloudfunctions.net/app`
 |-------|-----------|
 | **User Profiles** | `POST /user/profile/get`, `/update`, `/role/update`, `/onboarding/complete` |
 | **QR Codes** | `POST /device/qr/generate`, `/generate-batch`, `/validate`, `/device/register` |
-| **Commissioning** | `POST /commission/initiate`, `/update-step`, `/complete`, `/get`, `/list`, `/cancel`, `/run-tests` |
+| **Commissioning** | `POST /commission/initiate`, `/update`, `/update-step`, `/complete`, `/get`, `/list`, `/cancel`, `/run-tests` |
 | **Sites** | `POST /site/create`, `/get`, `/update`, `/list`, `/delete`, `/add-device`, `/remove-device`, `/update-boundary` |
 | **Geocoding** | `POST /geocode/address`, `/reverse` |
 | **Readings & Alerts** | `POST /readings/get`, `/stats`, `/alerts/active`, `/acknowledge`, `/resolve`, `/device/thresholds/update` |
@@ -643,56 +646,134 @@ Pull requests get preview deployments via `.github/workflows/firebase-hosting-pu
 
 ## Testing
 
-Tests use **Vitest** with **React Testing Library** and **jsdom**. Configuration in `vitest.config.ts`.
+### Unit Tests
+
+**109 tests** across 10 test files using **Vitest** + **React Testing Library** + **jsdom**. Configuration in `vitest.config.ts`.
 
 ```bash
 npm test              # Watch mode
-npm run test:ci       # Single run (CI)
+npm run test:unit     # Single run
+npm run test:ci       # Single run (CI, verbose)
 npm run test:coverage # Coverage report (v8)
 ```
 
-Coverage thresholds: 30% lines, functions, branches, statements.
-
-Existing test files:
-- `src/App.test.jsx`
-- `src/apis/firebase.test.js`
-- `src/context/AppContext.test.jsx`
-- `src/components/payment/Payment.test.jsx`
+| Test File | Tests | What It Covers |
+|-----------|-------|----------------|
+| `src/utils/roleRouting.test.js` | 21 | Role-based dashboard routing for all roles × both platforms |
+| `src/context/AppContext.test.jsx` | 17 | Global state management, user hydration, actions |
+| `src/components/payment/Payment.test.jsx` | 16 | Stripe payment flow |
+| `src/services/v2/responseShapes.test.js` | 16 | v2 API response shape validation |
+| `src/App.test.jsx` | 13 | App bootstrap, mode detection |
+| `src/apis/firebase.test.js` | 8 | Firebase initialization, config validation |
+| `src/components/cloud/DevicesListPage.test.js` | 8 | Device merge/dedup logic (two-source Map merge) |
+| `src/services/v2/api.test.js` | 6 | v2 API layer demo/real switching |
+| `src/components/dashboards/DemoBanner.test.js` | 4 | Sample data banner gated behind isDemoMode() |
 
 Test mocks in `src/test/mocks/` for axios and Firebase.
 
+### Integration Tests
+
+**10 integration tests** designed to run against the **Firebase Emulator Suite**. These test real Cloud Functions endpoints end-to-end. Configuration in `vitest.integration.config.ts`.
+
+```bash
+# Start emulators (in one terminal)
+npm run emulators:start
+
+# Run integration tests (in another terminal)
+npx vitest run --config vitest.integration.config.ts
+
+# Or run emulators + tests in one command
+npm run test:integration
+```
+
+| Test File | Tests | What It Covers |
+|-----------|-------|----------------|
+| `src/tests/integration/user-flows.test.ts` | 7 | Signup → onboarding → profile, auth guards, email verification, cross-user protection |
+| `src/tests/integration/device-flows.test.ts` | 3 | Device registration + readings, commission lifecycle, alert lifecycle |
+
+**Emulator ports** (configured in `firebase.json`):
+- Auth: `localhost:9099`
+- RTDB: `localhost:9000`
+- Functions: `localhost:5001`
+- Emulator UI: `localhost:4000`
+
+Integration tests are excluded from `npm test` and `npm run test:ci` — they require emulators and are opt-in only.
+
+### Deploy Smoke Tests
+
+Manual verification checklist at `docs/DEPLOY_SMOKE_TEST.md`. Items with automated coverage are marked ✅; items requiring manual verification are marked 🔲.
+
+### Demo Mode
+
+Both Cloud and WQT support a **demo mode** for presentations and testing with sample data. Demo mode can be enabled via:
+
+1. **URL parameter**: `?demo=1` on any page
+2. **Profile toggle**: Demo pill in the header (Cloud + WQT)
+3. **localStorage**: Set `bluesignal_demo_mode` to `"true"`
+4. **Environment variable**: `VITE_DEMO_MODE=true`
+
+When demo mode is active:
+- The v2 API layer (`src/services/v2/api.js`) routes Cloud-related calls to `demoInterceptor.js` which returns realistic mock data from `cloudMockAPI.js`
+- A purple **"Demo Mode — Showing sample data"** banner appears at the top of app pages
+- Dashboard sample data banners only render in demo mode (never shown to real users)
+
+When demo mode is OFF:
+- All API calls go to real backend endpoints
+- `CloudMockAPI` is never imported by any production component
+- No mock data is returned anywhere in the app
+
 ---
 
-## Known Gaps / TODOs
+## Production Readiness
 
-### Limited Test Coverage
+### What's Verified Working (Beta-Ready)
 
-Only 4 test files exist. Coverage thresholds are set at 30% — most components, services, and hooks have no tests.
+**User Flows:**
+- Firebase Auth signup with email/password
+- Email verification lifecycle
+- Onboarding wizard → profile write to RTDB → role-based routing
+- Profile hydration from `/user/profile/get`
+- Session expiration → re-auth modal
+- Cross-user update prevention (403)
+- Role-based dashboard routing (buyer, seller, installer, admin)
 
-### Mock Data Dependencies
+**Device Flows:**
+- Device registration to RTDB via DeviceService
+- v2 API device list/detail with demo mode switching
+- Sensor readings via ReadingsAPI (time series charts, device logs)
+- Commission lifecycle: `/commission/initiate` → `/commission/update` → `/commission/run-tests` → `/commission/complete`
+- Alert lifecycle: acknowledge → resolve → reopen with state persistence
+- Two-source device merge (v2 API + RTDB) with dedup
 
-Cloud console pages default to mock data (`VITE_USE_MOCK_DATA` defaults to `true`). `src/services/cloudMockAPI.js` has a top-level TODO to replace all mock APIs with real backend calls. The demo interceptor (`src/services/v2/demoInterceptor.js`) stubs revenue grade, calibrations, device commands, HUC lookup, account linking, and credit projects.
+**API Layer:**
+- All `CommissionAPI` methods verified against backend routes
+- `CloudMockAPI` fully isolated to demo mode utilities (zero production imports)
+- v2 typed client with auth token management and session expiration events
 
-### Incomplete API Wiring
+### Known Gaps / TODOs
 
-- `InstallerDashboard.jsx` — has TODO comments to replace mock API calls with real ones, and navigate-to-job/add-device stubs.
-- `AlertsPage.jsx` and `AlertDetailPage.jsx` — TODO comments to replace mock API calls for alert acknowledge/resolve/reopen.
-- `MetricsAPI.getMetric()` — returns hardcoded `"10"` (stub).
+#### Client-Side Device Filtering
 
-### Coming Soon Features
+`SiteDetailPage` fetches all devices then filters by `siteId` client-side. Acceptable for <100 devices. Tagged with `TODO: Replace with server-side filtered endpoint`.
+
+#### InstallerDashboard Mock Data
+
+`InstallerDashboard.jsx` still has TODO comments to replace mock API calls with real ones for job listing and navigate-to-job functionality.
+
+#### Coming Soon Features
 
 - **Live Streaming** — `CloudToolsWrapper.jsx` marks live streaming as "coming soon".
 - **Media Upload** — Upload photos/documentation marked as "coming soon"; route redirects to verification.
 
-### Cloud Functions Deployment Gap
+#### Cloud Functions Deployment Gap
 
 HubSpot-dependent triggers (`onCustomerCreated`, `onCustomerUpdated`, `onOrderCreated`, `onOrderUpdated`, `onCommissionCompleted`, `onDeviceActivated`) and the `hubspotWebhook`/`ttnWebhook` functions require `roles/secretmanager.admin` IAM permission and must be deployed manually, not through CI.
 
-### Marketplace Mock Mode
+#### Marketplace Mock Mode
 
-The `MarketplaceAPI` in `back_door.js` uses a mock mode flag. When enabled (default), all marketplace API calls return empty stubs instead of calling the backend.
+The `MarketplaceAPI` in `back_door.js` uses a mock mode flag. When enabled (default), marketplace API calls return empty stubs. This is separate from the demo mode system and should be unified in a future pass.
 
-### Legacy Code
+#### Legacy Code
 
 The `BlueSignalConfigurator` component tree (`src/components/BlueSignalConfigurator/`) is a legacy sales/configurator page kept for backward compatibility when accessed via `?app=landing`. The production landing page uses the isolated `src/pages/landing/` entry point.
 
