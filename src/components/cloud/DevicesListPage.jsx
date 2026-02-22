@@ -3,12 +3,29 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
+import { getDevices } from "../../services/v2/api";
 import DeviceService from "../../services/deviceService";
 import AddDeviceModal from "./AddDeviceModal";
 import { useAppContext } from "../../context/AppContext";
 import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
-import { isDemoMode } from "../../utils/demoMode";
+
+/** Format a timestamp into a human-readable relative string. */
+const getRelativeTime = (timestamp) => {
+  if (!timestamp) return "—";
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  if (Number.isNaN(then)) return "—";
+  const diff = now - then;
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+
+  if (diff < minute) return "just now";
+  if (diff < hour) return `${Math.floor(diff / minute)} min ago`;
+  if (diff < day) return `${Math.floor(diff / hour)} hr ago`;
+  return `${Math.floor(diff / day)} days ago`;
+};
 
 const ActionButtonsWrapper = styled.div`
   display: flex;
@@ -425,20 +442,25 @@ export default function DevicesListPage() {
   const loadDevices = async () => {
     setLoading(true);
     try {
+      // Merge two device sources via Map (last-write-wins by device ID):
+      //   1. v2 API (getDevices) — returns shaped DeviceSummary[] from the backend
+      //      or demo interceptor data when isDemoMode() is active.
+      //   2. DeviceService (Firebase RTDB) — returns raw devices registered through
+      //      the app's onboarding/add-device flow. These may not yet be in the v2
+      //      backend if they were just created locally.
+      // The Map dedup ensures no duplicates when the same device appears in both.
       const deviceMap = new Map();
 
-      // Only load mock devices in demo mode
-      if (isDemoMode()) {
-        const mockDevices = await CloudMockAPI.devices.getAll();
-        mockDevices.forEach((d) => {
-          deviceMap.set(d.id, {
-            ...d,
-            lifecycle: d.lifecycle || "active",
-          });
+      // Source 1: v2 API (handles demo/real switching automatically)
+      const v2Devices = await getDevices(user?.uid).catch(() => []);
+      (v2Devices || []).forEach((d) => {
+        deviceMap.set(d.id, {
+          ...d,
+          lifecycle: d.lifecycle || "active",
         });
-      }
+      });
 
-      // Always try Firebase (real devices)
+      // Source 2: Firebase RTDB (locally registered devices)
       const firebaseDevices = await DeviceService.getAllDevices().catch(() => []);
       firebaseDevices.forEach((d) => {
         deviceMap.set(d.id, {
