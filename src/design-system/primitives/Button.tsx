@@ -24,21 +24,24 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const sizeStyles = {
   sm: css`
-    padding: 6px 12px;
+    padding: 8px 12px;
     font-size: 13px;
     line-height: 20px;
+    min-height: 36px;
     border-radius: ${({ theme }) => theme.radius.sm}px;
   `,
   md: css`
-    padding: 8px 16px;
+    padding: 10px 16px;
     font-size: 14px;
     line-height: 20px;
+    min-height: 44px;
     border-radius: ${({ theme }) => theme.radius.sm}px;
   `,
   lg: css`
     padding: 12px 24px;
     font-size: 16px;
     line-height: 24px;
+    min-height: 48px;
     border-radius: ${({ theme }) => theme.radius.md}px;
   `,
 };
