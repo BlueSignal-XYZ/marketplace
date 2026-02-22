@@ -57,6 +57,7 @@ const ForCreditGeneratorsPage = React.lazy(() => import('./pages/ForCreditGenera
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const TermsPage = React.lazy(() => import('./pages/TermsPage'));
 const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const WQTProfilePage = React.lazy(() => import('./pages/WQTProfilePage'));
 
 // ── Loading fallback ──────────────────────────────────────
 
@@ -159,7 +160,7 @@ export function WQTApp({ user, authLoading }) {
               <Route path="/marketplace/create-listing" element={<WQTAuthGate user={user} authLoading={authLoading}><CreateListingPage /></WQTAuthGate>} />
               <Route path="/dashboard/financial" element={<WQTAuthGate user={user} authLoading={authLoading}><FinancialDashboard /></WQTAuthGate>} />
               <Route path="/marketplace/transactions" element={<WQTAuthGate user={user} authLoading={authLoading}><TransactionPage /></WQTAuthGate>} />
-
+              <Route path="/profile" element={<WQTProfilePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

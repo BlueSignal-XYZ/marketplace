@@ -25,7 +25,7 @@ const fadeIn = keyframes`
 const HeaderOuter = styled.header`
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 20;
   width: 100%;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);

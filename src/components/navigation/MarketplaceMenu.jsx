@@ -358,6 +358,13 @@ export function MarketplaceMenu({ open, onClose, user }) {
               >
                 My Credits
               </NavItem>
+              <NavItem
+                to="/profile"
+                $active={isActive("/profile")}
+                onClick={onClose}
+              >
+                Profile & Settings
+              </NavItem>
             </NavList>
           </>
         )}
