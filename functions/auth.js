@@ -149,6 +149,12 @@ const updateUserProfile = async (req, res) => {
 
 /**
  * Get user profile
+ *
+ * Returns a FLAT user object so frontend consumers can access fields
+ * directly (e.g. data.role, data.company) without navigating nested
+ * paths.  The RTDB stores data under users/{uid}/profile/* and
+ * users/{uid}/settings/*, but this endpoint merges them into one
+ * top-level object for convenience.
  */
 const getUserProfile = async (req, res) => {
   const { uid } = req.body;
@@ -166,10 +172,26 @@ const getUserProfile = async (req, res) => {
     }
 
     const userData = snapshot.val();
-    // Don't expose sensitive wallet data
-    delete userData.wallets?.stripe?.customerId;
 
-    res.json(userData);
+    // Flatten: spread profile fields to top level so the frontend can
+    // read data.role, data.displayName, etc. directly.
+    const response = {
+      uid,
+      ...(userData.profile || {}),
+      settings: userData.settings || {},
+      // Expose non-sensitive wallet data only
+      wallets: userData.wallets
+        ? {
+            polygon: userData.wallets.polygon || {},
+            stripe: {
+              defaultPaymentMethod:
+                userData.wallets.stripe?.defaultPaymentMethod || "",
+            },
+          }
+        : {},
+    };
+
+    res.json(response);
   } catch (error) {
     console.error("Failed to get profile:", error);
     res.status(500).json({ error: "Failed to get profile" });
