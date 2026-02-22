@@ -751,32 +751,52 @@ exports.hubspotWebhook = functions
   });
 
 // =============================================================================
-// LEGACY STUB ENDPOINTS (return empty data for removed v1 endpoints)
-// These prevent "Network Error" on frontend components not yet migrated to v2.
+// DEPRECATED LEGACY STUB ENDPOINTS
+// These return empty data for removed v1 endpoints. They still respond so
+// any un-migrated frontend code doesn't crash, but they now log a
+// deprecation warning so we can track and remove remaining callers.
+//
+// Migration targets:
+//   /db/user/get/from/uid   → /user/profile/get  (auth.getUserProfile)
+//   /db/user/get/from/username → (remove caller or add v2 endpoint)
+//   /db/user/get/media      → (Livepeer API or v2 media endpoint)
+//   /db/user/get/assets     → (v2 credits/portfolio endpoint)
 // =============================================================================
 
+const deprecationWarning = (endpoint) => {
+  console.warn(`[DEPRECATED] Legacy endpoint called: ${endpoint}. Migrate to v2 API.`);
+};
+
 app.post("/db/user/get/from/uid", (req, res) => {
+  deprecationWarning("/db/user/get/from/uid → use /user/profile/get");
   res.json({ success: true, user: null });
 });
 app.post("/db/user/get/from/username", (req, res) => {
+  deprecationWarning("/db/user/get/from/username");
   res.json({ success: true, user: null });
 });
 app.post("/db/user/get/uid/from/username", (req, res) => {
+  deprecationWarning("/db/user/get/uid/from/username");
   res.json({ success: true, uid: null });
 });
 app.post("/db/user/get/media", (req, res) => {
+  deprecationWarning("/db/user/get/media");
   res.json({ success: true, user_media: [] });
 });
 app.post("/db/user/get/streams", (req, res) => {
+  deprecationWarning("/db/user/get/streams");
   res.json({ success: true, user_streams: [] });
 });
 app.post("/db/user/get/assets", (req, res) => {
+  deprecationWarning("/db/user/get/assets");
   res.json({ success: true, user_assets: [] });
 });
 app.post("/db/user/get/asset/disputes", (req, res) => {
+  deprecationWarning("/db/user/get/asset/disputes");
   res.json({ success: true, user_disputes: [] });
 });
 app.post("/db/user/get/asset/approvals", (req, res) => {
+  deprecationWarning("/db/user/get/asset/approvals");
   res.json({ success: true, user_approvals: [] });
 });
 
