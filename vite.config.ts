@@ -25,6 +25,9 @@ const VITE_ENV_VARS = [
   'VITE_ALCHEMY_API_KEY',
   'VITE_GOOGLE_MAPS_API_KEY',
   'VITE_LIVEPEER_API_KEY',
+  // The Things Network (TTN)
+  'VITE_TTN_API_KEY',
+  'VITE_TTN_APP_ID',
   // Build metadata
   'VITE_BUILD_VERSION',
   'VITE_DEBUG',
