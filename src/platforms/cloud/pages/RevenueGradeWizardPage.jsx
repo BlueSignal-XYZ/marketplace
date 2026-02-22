@@ -41,8 +41,9 @@ const Page = styled.div`
   align-items: center;
   padding: 24px 16px;
   background: ${({ theme }) => theme.colors.background};
-  @media (max-width: 640px) { padding-top: 32px; }
-  @media (min-width: 640px) { padding: 48px 24px; }
+  overflow-x: hidden;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) { padding-top: 32px; }
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) { padding: 48px 24px; }
 `;
 
 const Progress = styled.div`
@@ -68,7 +69,7 @@ const Card = styled.div`
   padding: 24px 20px;
   max-width: 560px;
   width: 100%;
-  @media (min-width: 640px) { padding: 40px; }
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) { padding: 40px; }
 `;
 
 const StepLabel = styled.div`
@@ -86,7 +87,7 @@ const Title = styled.h2`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 8px;
-  @media (min-width: 640px) { font-size: 26px; }
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) { font-size: 26px; }
 `;
 
 const Desc = styled.p`
@@ -180,7 +181,7 @@ const ButtonRow = styled.div`
   gap: 12px;
   justify-content: flex-end;
   flex-wrap: wrap;
-  @media (max-width: 400px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     flex-direction: column;
     & > button { width: 100%; }
   }
