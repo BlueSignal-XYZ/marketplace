@@ -121,6 +121,17 @@ class GPSSensor:
             if msg.datestamp:
                 self._data["date"] = str(msg.datestamp)
 
+            # Extract UTC time for time_sync module
+            if msg.datestamp and msg.timestamp:
+                try:
+                    from datetime import datetime, date, time as dt_time
+                    d = msg.datestamp if isinstance(msg.datestamp, date) else date.fromisoformat(str(msg.datestamp))
+                    t = msg.timestamp if isinstance(msg.timestamp, dt_time) else dt_time.fromisoformat(str(msg.timestamp))
+                    utc_dt = datetime.combine(d, t)
+                    self._data["utc_time"] = utc_dt.strftime("%Y-%m-%d %H:%M:%S")
+                except Exception:
+                    pass
+
     def close(self):
         self._running = False
         if self._thread and self._thread.is_alive():

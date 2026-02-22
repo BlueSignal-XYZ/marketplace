@@ -45,8 +45,12 @@ class ADS1115:
             self._bus = smbus2.SMBus(self._bus_num)
         return self._bus
 
-    def read_channel(self, channel: int, gain: int = 1, samples: int = 1) -> float:
-        """Read single-ended voltage from AINx. Returns median of N samples."""
+    def read_channel(self, channel: int, gain: int = 1, samples: int = 1,
+                     retries: int = 3) -> float:
+        """Read single-ended voltage from AINx. Returns median of N samples.
+
+        Retries on I2C error up to `retries` times, then marks channel as failed.
+        """
         if channel not in MUX_MAP:
             raise ValueError(f"Invalid channel {channel}. Must be 0-3.")
         if gain not in PGA_MAP:
@@ -55,30 +59,47 @@ class ADS1115:
         bus = self._get_bus()
         readings = []
         for _ in range(samples):
-            config = (OS_SINGLE | MUX_MAP[channel] | PGA_MAP[gain] |
-                      MODE_SINGLE | DR_128SPS | COMP_DISABLE)
+            voltage = self._read_single(bus, channel, gain, retries)
+            if voltage is not None:
+                readings.append(voltage)
 
-            config_bytes = [(config >> 8) & 0xFF, config & 0xFF]
-            bus.write_i2c_block_data(self.address, REG_CONFIG, config_bytes)
-
-            time.sleep(0.012)
-
-            for _ in range(10):
-                status = bus.read_i2c_block_data(self.address, REG_CONFIG, 2)
-                if status[0] & 0x80:
-                    break
-                time.sleep(0.002)
-
-            data = bus.read_i2c_block_data(self.address, REG_CONVERSION, 2)
-            raw = struct.unpack(">h", bytes(data))[0]
-            voltage = raw * (PGA_VOLTAGE[gain] / 32768.0)
-            readings.append(voltage)
+        if not readings:
+            log.error("ADS1115 0x%02X ch%d: all samples failed", self.address, channel)
+            return float('nan')
 
         readings.sort()
         mid = len(readings) // 2
         if len(readings) % 2:
             return readings[mid]
         return (readings[mid - 1] + readings[mid]) / 2
+
+    def _read_single(self, bus, channel: int, gain: int, retries: int) -> float | None:
+        """Read a single ADC sample with retry logic."""
+        for attempt in range(retries):
+            try:
+                config = (OS_SINGLE | MUX_MAP[channel] | PGA_MAP[gain] |
+                          MODE_SINGLE | DR_128SPS | COMP_DISABLE)
+
+                config_bytes = [(config >> 8) & 0xFF, config & 0xFF]
+                bus.write_i2c_block_data(self.address, REG_CONFIG, config_bytes)
+
+                time.sleep(0.012)
+
+                for _ in range(10):
+                    status = bus.read_i2c_block_data(self.address, REG_CONFIG, 2)
+                    if status[0] & 0x80:
+                        break
+                    time.sleep(0.002)
+
+                data = bus.read_i2c_block_data(self.address, REG_CONVERSION, 2)
+                raw = struct.unpack(">h", bytes(data))[0]
+                voltage = raw * (PGA_VOLTAGE[gain] / 32768.0)
+                return voltage
+            except OSError as e:
+                log.warning("ADS1115 0x%02X ch%d I2C error (attempt %d/%d): %s",
+                            self.address, channel, attempt + 1, retries, e)
+                time.sleep(0.05 * (attempt + 1))
+        return None
 
     def scan(self) -> bool:
         """Check if device responds on I2C."""
