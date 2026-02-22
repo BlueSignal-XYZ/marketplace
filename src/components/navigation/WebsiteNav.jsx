@@ -1,16 +1,23 @@
 /**
  * WebsiteNav — clean, minimal navigation for WQT marketing/content pages.
  * Dark/transparent background that blends with the dark hero sections.
- * Used on: /contact, /for-utilities, /for-homeowners, /for-aggregators, /terms, /privacy
+ *
+ * Nav items: Marketplace · How It Works · Solutions ▾ · Credit Registry · [Get Started]
+ * Solutions dropdown contains: For Utilities, For Homeowners, For Aggregators, For Generators
  */
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const dropdownFadeIn = keyframes`
+  from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 `;
 
@@ -83,6 +90,77 @@ const NavLink = styled.a`
   }
 `;
 
+// ── Desktop dropdown ────────────────────────────────────
+
+const DropdownWrapper = styled.div`
+  position: relative;
+`;
+
+const DropdownTrigger = styled.button`
+  padding: 8px 14px;
+  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.06);
+  }
+`;
+
+const ChevronIcon = styled(FontAwesomeIcon)`
+  font-size: 10px;
+  transition: transform 200ms;
+  transform: ${({ $open }) => ($open ? "rotate(180deg)" : "rotate(0)")};
+`;
+
+const DropdownPanel = styled.div`
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background: rgba(15, 23, 42, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  animation: ${dropdownFadeIn} 150ms ease-out;
+`;
+
+const DropdownItem = styled.a`
+  display: block;
+  padding: 10px 14px;
+  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 150ms;
+  white-space: nowrap;
+
+  &:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+  }
+`;
+
+// ── CTA ─────────────────────────────────────────────────
+
 const CTALink = styled.a`
   display: none;
   align-items: center;
@@ -107,6 +185,8 @@ const CTALink = styled.a`
     display: inline-flex;
   }
 `;
+
+// ── Mobile ──────────────────────────────────────────────
 
 const MobileMenuBtn = styled.button`
   height: 44px;
@@ -164,6 +244,52 @@ const MobileNavLink = styled.a`
   }
 `;
 
+const MobileSectionToggle = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms;
+
+  &:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.06);
+  }
+`;
+
+const MobileSubLinks = styled.div`
+  display: ${({ $open }) => ($open ? "flex" : "none")};
+  flex-direction: column;
+  padding-left: 16px;
+  gap: 2px;
+`;
+
+const MobileSubLink = styled.a`
+  display: block;
+  padding: 10px 16px;
+  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 150ms;
+
+  &:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.06);
+  }
+`;
+
 const MobileCTA = styled.a`
   display: block;
   padding: 14px 16px;
@@ -184,7 +310,8 @@ const MobileCTA = styled.a`
   }
 `;
 
-// Light logo for dark nav background
+// ── Logo ────────────────────────────────────────────────
+
 const WQTLogoLight = () => (
   <svg
     width="200"
@@ -230,17 +357,78 @@ const WQTLogoLight = () => (
   </svg>
 );
 
-const NAV_LINKS = [
-  { label: "How It Works", href: "/how-it-works" },
+// ── Data ────────────────────────────────────────────────
+
+const SOLUTIONS_ITEMS = [
   { label: "For Utilities", href: "/for-utilities" },
   { label: "For Homeowners", href: "/for-homeowners" },
   { label: "For Aggregators", href: "/for-aggregators" },
-  { label: "Registry", href: "/registry" },
-  { label: "Contact", href: "/contact" },
+  { label: "For Generators", href: "/generate-credits" },
 ];
+
+// ── Desktop Dropdown Component ──────────────────────────
+
+function SolutionsDropdown() {
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
+  const closeTimer = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimer.current = setTimeout(() => setOpen(false), 150);
+  };
+
+  return (
+    <DropdownWrapper
+      ref={wrapperRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <DropdownTrigger
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => setOpen((p) => !p)}
+      >
+        Solutions
+        <ChevronIcon icon={faChevronDown} $open={open} />
+      </DropdownTrigger>
+      {open && (
+        <DropdownPanel>
+          {SOLUTIONS_ITEMS.map((item) => (
+            <DropdownItem
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+            >
+              {item.label}
+            </DropdownItem>
+          ))}
+        </DropdownPanel>
+      )}
+    </DropdownWrapper>
+  );
+}
+
+// ── Component ───────────────────────────────────────────
 
 export function WebsiteNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
 
   return (
     <>
@@ -251,11 +439,10 @@ export function WebsiteNav() {
           </LogoLink>
 
           <NavLinks>
-            {NAV_LINKS.map((link) => (
-              <NavLink key={link.href} href={link.href}>
-                {link.label}
-              </NavLink>
-            ))}
+            <NavLink href="/marketplace">Marketplace</NavLink>
+            <NavLink href="/how-it-works">How It Works</NavLink>
+            <SolutionsDropdown />
+            <NavLink href="/registry">Credit Registry</NavLink>
           </NavLinks>
 
           <CTALink href="/login">Get Started</CTALink>
@@ -270,15 +457,37 @@ export function WebsiteNav() {
       </NavOuter>
 
       <MobileMenu $open={mobileOpen}>
-        {NAV_LINKS.map((link) => (
-          <MobileNavLink
-            key={link.href}
-            href={link.href}
-            onClick={() => setMobileOpen(false)}
-          >
-            {link.label}
-          </MobileNavLink>
-        ))}
+        <MobileNavLink href="/marketplace" onClick={() => setMobileOpen(false)}>
+          Marketplace
+        </MobileNavLink>
+        <MobileNavLink href="/how-it-works" onClick={() => setMobileOpen(false)}>
+          How It Works
+        </MobileNavLink>
+
+        <MobileSectionToggle
+          type="button"
+          onClick={() => setSolutionsOpen((p) => !p)}
+          aria-expanded={solutionsOpen}
+        >
+          Solutions
+          <ChevronIcon icon={faChevronDown} $open={solutionsOpen} />
+        </MobileSectionToggle>
+        <MobileSubLinks $open={solutionsOpen}>
+          {SOLUTIONS_ITEMS.map((item) => (
+            <MobileSubLink
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+            >
+              {item.label}
+            </MobileSubLink>
+          ))}
+        </MobileSubLinks>
+
+        <MobileNavLink href="/registry" onClick={() => setMobileOpen(false)}>
+          Credit Registry
+        </MobileNavLink>
+
         <MobileCTA href="/login" onClick={() => setMobileOpen(false)}>
           Get Started
         </MobileCTA>
