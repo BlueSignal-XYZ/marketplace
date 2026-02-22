@@ -149,6 +149,12 @@ const updateUserProfile = async (req, res) => {
 
 /**
  * Get user profile
+ *
+ * Returns a FLAT user object so frontend consumers can access fields
+ * directly (e.g. data.role, data.company) without navigating nested
+ * paths.  The RTDB stores data under users/{uid}/profile/* and
+ * users/{uid}/settings/*, but this endpoint merges them into one
+ * top-level object for convenience.
  */
 const getUserProfile = async (req, res) => {
   const { uid } = req.body;
@@ -166,10 +172,26 @@ const getUserProfile = async (req, res) => {
     }
 
     const userData = snapshot.val();
-    // Don't expose sensitive wallet data
-    delete userData.wallets?.stripe?.customerId;
 
-    res.json(userData);
+    // Flatten: spread profile fields to top level so the frontend can
+    // read data.role, data.displayName, etc. directly.
+    const response = {
+      uid,
+      ...(userData.profile || {}),
+      settings: userData.settings || {},
+      // Expose non-sensitive wallet data only
+      wallets: userData.wallets
+        ? {
+            polygon: userData.wallets.polygon || {},
+            stripe: {
+              defaultPaymentMethod:
+                userData.wallets.stripe?.defaultPaymentMethod || "",
+            },
+          }
+        : {},
+    };
+
+    res.json(response);
   } catch (error) {
     console.error("Failed to get profile:", error);
     res.status(500).json({ error: "Failed to get profile" });
@@ -280,6 +302,81 @@ const completeOnboarding = async (req, res) => {
   }
 };
 
+/**
+ * Seed the first admin user.
+ *
+ * This is a ONE-TIME bootstrap endpoint protected by a deploy-time
+ * secret (ADMIN_SEED_SECRET environment variable or Firebase Functions
+ * config admin.seed_secret).  It refuses to run if any admin already
+ * exists in the system, preventing misuse after initial setup.
+ *
+ * Usage:
+ *   curl -X POST "$SERVER_URL/admin/seed" \
+ *     -H "Content-Type: application/json" \
+ *     -d '{"uid":"<firebase-uid>","seedSecret":"<secret>"}'
+ */
+const seedAdmin = async (req, res) => {
+  const { uid, seedSecret } = req.body;
+
+  // 1. Verify seed secret
+  const expectedSecret =
+    process.env.ADMIN_SEED_SECRET ||
+    (functions.config().admin && functions.config().admin.seed_secret);
+
+  if (!expectedSecret || seedSecret !== expectedSecret) {
+    return res.status(403).json({ error: "Invalid seed secret" });
+  }
+
+  if (!uid) {
+    return res.status(400).json({ error: "Missing uid" });
+  }
+
+  const db = admin.database();
+
+  try {
+    // 2. Ensure no admin already exists
+    const usersSnapshot = await db.ref("users").once("value");
+    const users = usersSnapshot.val() || {};
+    const existingAdmin = Object.entries(users).find(
+      ([, u]) => u.profile?.role === "admin"
+    );
+    if (existingAdmin) {
+      return res
+        .status(409)
+        .json({ error: "An admin user already exists. Seed aborted." });
+    }
+
+    // 3. Verify the target uid exists in Firebase Auth
+    try {
+      await admin.auth().getUser(uid);
+    } catch (authErr) {
+      return res
+        .status(404)
+        .json({ error: `No Firebase Auth user found for uid: ${uid}` });
+    }
+
+    // 4. Promote user to admin in RTDB + custom claims
+    await db.ref(`users/${uid}/profile`).update({
+      role: "admin",
+      updatedAt: Date.now(),
+    });
+    await admin.auth().setCustomUserClaims(uid, { role: "admin" });
+
+    // 5. Log activity
+    await db.ref(`users/${uid}/activity`).push({
+      type: "admin_seed",
+      timestamp: Date.now(),
+      metadata: { source: "seed_endpoint" },
+    });
+
+    console.log(`Admin seeded successfully for uid: ${uid}`);
+    res.json({ success: true, message: `User ${uid} promoted to admin` });
+  } catch (error) {
+    console.error("Failed to seed admin:", error);
+    res.status(500).json({ error: "Failed to seed admin" });
+  }
+};
+
 module.exports = {
   onUserCreate,
   onUserDelete,
@@ -287,4 +384,5 @@ module.exports = {
   getUserProfile,
   updateUserRole,
   completeOnboarding,
+  seedAdmin,
 };

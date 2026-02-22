@@ -4,12 +4,11 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
-import { DeviceAPI, AlertsAPI, SiteAPI } from "../../scripts/back_door";
+import { getDevices, getAlerts, getSites } from "../../services/v2/api";
+import { useAppContext } from "../../context/AppContext";
 import { DemoHint } from "../DemoHint";
 import SEOHead from "../seo/SEOHead";
 import VirtualDeviceSimulator from "./VirtualDeviceSimulator";
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA !== "false";
 
 const Grid = styled.div`
   display: grid;
@@ -633,6 +632,8 @@ const Skeleton = styled.div`
 `;
 
 export default function OverviewDashboard() {
+  const { STATES } = useAppContext();
+  const { user } = STATES;
   const [stats, setStats] = useState(null);
   const [sites, setSites] = useState([]);
   const [recentCommissioning, setRecentCommissioning] = useState([]);
@@ -644,8 +645,8 @@ export default function OverviewDashboard() {
   });
 
   useEffect(() => {
-    loadDashboardData();
-  }, []);
+    if (user?.uid) loadDashboardData();
+  }, [user?.uid]);
 
   const dismissWelcome = () => {
     localStorage.setItem("cloud_welcome_dismissed", "true");
@@ -687,65 +688,37 @@ export default function OverviewDashboard() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      if (USE_MOCK) {
-        // Mock data path (demo/development)
-        const [statsData, sitesData, commissioningData, tasksData] =
-          await Promise.all([
-            CloudMockAPI.overview.getStats(),
-            CloudMockAPI.sites.getAll(),
-            CloudMockAPI.overview.getRecentCommissioning(),
-            CloudMockAPI.overview.getTodayTasks(),
-          ]);
+      // v2 API calls — routed through api.js which auto-switches
+      // between real backend and demo interceptor based on isDemoMode().
+      const [devices, alerts, sitesData, commissioningData, tasksData] =
+        await Promise.all([
+          getDevices(user.uid).catch(() => []),
+          getAlerts(user.uid).catch(() => []),
+          getSites(user.uid).catch(() => []),
+          CloudMockAPI.overview.getRecentCommissioning(), // still mock until commissioning API is wired
+          CloudMockAPI.overview.getTodayTasks(),          // still mock until tasks API is wired
+        ]);
 
-        setStats(statsData);
-        setSites(sitesData);
-        setRecentCommissioning(commissioningData);
-        setTodayTasks(tasksData);
-      } else {
-        // Real API path
-        const [devicesResult, alertsResult, sitesResult, commissioningData, tasksData] =
-          await Promise.all([
-            DeviceAPI.getDevices().catch(() => null),
-            AlertsAPI.getActive().catch(() => null),
-            SiteAPI.list().catch(() => null),
-            CloudMockAPI.overview.getRecentCommissioning(), // still mock until commissioning API is wired
-            CloudMockAPI.overview.getTodayTasks(),          // still mock until tasks API is wired
-          ]);
+      // v2 returns flat arrays directly (DeviceSummary[], Alert[], Site[])
+      const onlineDevices = (devices || []).filter(
+        (d) => d.onlineStatus === "online"
+      );
 
-        // Compute stats from real device/alert data
-        const devices = devicesResult?.devices || [];
-        const alerts = alertsResult?.alerts || [];
-        const sitesData = sitesResult?.sites || [];
+      setStats({
+        totalDevices: (devices || []).length,
+        onlineDevices: onlineDevices.length,
+        offlineDevices: (devices || []).length - onlineDevices.length,
+        openAlerts: (alerts || []).length,
+        totalSites: (sitesData || []).length,
+      });
 
-        const onlineDevices = devices.filter(
-          (d) => d.health?.lastSeen && Date.now() - d.health.lastSeen < 30 * 60 * 1000
-        );
-
-        setStats({
-          totalDevices: devices.length,
-          onlineDevices: onlineDevices.length,
-          offlineDevices: devices.length - onlineDevices.length,
-          openAlerts: alerts.length,
-          totalSites: sitesData.length,
-        });
-
-        setSites(sitesData);
-        setRecentCommissioning(commissioningData);
-        setTodayTasks(tasksData);
-      }
+      setSites(sitesData || []);
+      setRecentCommissioning(commissioningData);
+      setTodayTasks(tasksData);
     } catch (error) {
       console.error("Error loading overview dashboard:", error);
-      // Fall back to mock data on error
-      try {
-        const [statsData, sitesData] = await Promise.all([
-          CloudMockAPI.overview.getStats(),
-          CloudMockAPI.sites.getAll(),
-        ]);
-        setStats(statsData);
-        setSites(sitesData);
-      } catch (fallbackError) {
-        console.error("Mock fallback also failed:", fallbackError);
-      }
+      // Set empty stats so the page still renders
+      setStats({ totalDevices: 0, onlineDevices: 0, offlineDevices: 0, openAlerts: 0, totalSites: 0 });
     } finally {
       setLoading(false);
     }

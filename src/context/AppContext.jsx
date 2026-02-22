@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, isFirebaseConfigured } from "../apis/firebase";
-import { UserAPI } from "../scripts/back_door";
+import { UserProfileAPI } from "../scripts/back_door";
 import { clearDeviceCache } from "../hooks/useUserDevices";
 
 const AppContext = createContext();
@@ -48,20 +48,27 @@ export const AppProvider = ({ children }) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // User signed in - fetch full user data from backend
+        // User signed in — fetch full profile from the real /user/profile/get endpoint.
+        // The backend returns a flat object: { uid, email, displayName, role, company, phone, onboardingComplete, ... }
         try {
-          const userdata = (await UserAPI.account.getUserFromUID(firebaseUser.uid))?.userdata;
+          const profileData = await UserProfileAPI.get(firebaseUser.uid);
 
-          if (userdata?.uid) {
+          if (profileData?.uid) {
+            // Merge emailVerified from Firebase Auth (not stored in RTDB)
+            const userdata = {
+              ...profileData,
+              emailVerified: firebaseUser.emailVerified,
+            };
             sessionStorage.setItem("user", JSON.stringify(userdata));
             setUser(userdata);
           } else {
-            // Firebase user exists but not in backend - use Firebase data
-            // SECURITY: Do not assign default role client-side - role comes from server
+            // Firebase user exists but not in backend — use Firebase data
+            // SECURITY: Do not assign default role client-side — role comes from server
             const fallbackUser = {
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               displayName: firebaseUser.displayName,
+              emailVerified: firebaseUser.emailVerified,
             };
             sessionStorage.setItem("user", JSON.stringify(fallbackUser));
             setUser(fallbackUser);
@@ -73,6 +80,7 @@ export const AppProvider = ({ children }) => {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             displayName: firebaseUser.displayName,
+            emailVerified: firebaseUser.emailVerified,
           };
           sessionStorage.setItem("user", JSON.stringify(fallbackUser));
           setUser(fallbackUser);
@@ -94,11 +102,13 @@ export const AppProvider = ({ children }) => {
   // Manual user update (for registration or profile edits)
   const updateUser = async (uid, _userdata = {}) => {
     try {
-      var userdata;
+      let userdata;
       if (_userdata?.uid) {
+        // Caller provided a full user object — use it directly
         userdata = _userdata;
       } else {
-        userdata = (await UserAPI.account.getUserFromUID(uid))?.userdata;
+        // Re-fetch the profile from the backend
+        userdata = await UserProfileAPI.get(uid);
       }
       if (userdata?.uid) {
         sessionStorage.setItem("user", JSON.stringify(userdata));

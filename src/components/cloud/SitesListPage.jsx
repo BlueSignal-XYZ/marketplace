@@ -4,11 +4,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import SiteCard from "./SiteCard";
-import CloudMockAPI from "../../services/cloudMockAPI";
-import { GeocodingAPI } from "../../scripts/back_door";
+import { getSites } from "../../services/v2/api";
 import { useAppContext } from "../../context/AppContext";
 import { EmptyState } from "../../design-system/primitives/EmptyState";
-import { isDemoMode } from "../../utils/demoMode";
 
 const CreateSiteButton = styled.button`
   padding: 10px 20px;
@@ -165,19 +163,9 @@ export default function SitesListPage() {
   const loadSites = async () => {
     setLoading(true);
     try {
-      // Try real API first, fall back to mock
-      let data = [];
-      try {
-        const response = await GeocodingAPI.listSites({ ownerId: user?.uid });
-        data = response.sites || [];
-      } catch (apiErr) {
-        if (isDemoMode()) {
-          data = await CloudMockAPI.sites.getAll();
-        } else {
-          data = [];
-        }
-      }
-      setSites(data);
+      // v2 API — routed through api.js (handles demo/real switching)
+      const data = await getSites(user?.uid).catch(() => []);
+      setSites(data || []);
     } catch (error) {
       console.error("Error loading sites:", error);
     } finally {

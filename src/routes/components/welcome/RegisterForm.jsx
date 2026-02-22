@@ -17,6 +17,7 @@ import { formVariant, loadingVariant } from "./motion_variants";
 /** #BACKEND */
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithPopup,
 } from "firebase/auth";
 
@@ -245,6 +246,13 @@ const RegisterForm = ({
           password
         );
         const userData = userCredential.user;
+
+        // Send email verification (best-effort — don't block signup)
+        try {
+          await sendEmailVerification(userData);
+        } catch (_) {
+          // Silently continue — user can request verification later
+        }
 
         newUser = {
           uid: userData.uid,

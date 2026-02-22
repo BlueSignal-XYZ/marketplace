@@ -428,9 +428,7 @@ export default function AlertsPage() {
   const handleAcknowledge = async (alertId) => {
     setUpdatingAlerts((prev) => new Set(prev).add(alertId));
     try {
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
+      await AlertsAPI.acknowledge(alertId);
       setAlerts((prev) =>
         prev.map((a) =>
           a.id === alertId ? { ...a, status: "acknowledged" } : a
@@ -450,9 +448,7 @@ export default function AlertsPage() {
   const handleResolve = async (alertId) => {
     setUpdatingAlerts((prev) => new Set(prev).add(alertId));
     try {
-      // TODO: Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
+      await AlertsAPI.resolve(alertId);
       setAlerts((prev) =>
         prev.map((a) => (a.id === alertId ? { ...a, status: "resolved" } : a))
       );

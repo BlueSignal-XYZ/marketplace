@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
+import { getDevices, getAlerts } from '../../services/v2/api';
 
 const Page = styled.main`
   width: 100%;
@@ -283,64 +284,39 @@ const InstallerDashboard = () => {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      // TODO: Replace with real API calls
-      // const userDevices = await DeviceAPI.getInstallerDevices(user.uid);
-      // const userJobs = await JobsAPI.getPending(user.uid);
-
-      // Mock data
-      setDevices([
-        {
-          id: 'd1',
-          name: 'Lakefront Buoy #3',
-          type: 'Water Quality Buoy',
-          location: 'Deep Creek Lake',
-          status: 'online',
-          lastPing: '2 min ago',
-          readings: 'Temp: 18.4°C · pH 7.2 · DO 8.1 mg/L',
-        },
-        {
-          id: 'd2',
-          name: 'East Field Probe',
-          type: 'Soil NPK Probe',
-          location: 'Johnson Farm — Field 2',
-          status: 'warning',
-          lastPing: '45 min ago',
-          readings: 'Moisture: 42% · N: 18 ppm · P: 7 ppm',
-        },
-        {
-          id: 'd3',
-          name: 'Algae Emitter — Dock B',
-          type: 'Ultrasonic Algae Control',
-          location: 'Harbor Marina',
-          status: 'offline',
-          lastPing: '3 hours ago',
-          readings: 'No data',
-        },
+      // Fetch real device + alert data via v2 API
+      const [userDevices, userAlerts] = await Promise.all([
+        getDevices(user?.uid).catch(() => []),
+        getAlerts(user?.uid).catch(() => []),
       ]);
 
-      setJobs([
-        {
-          id: 'j1',
-          site: 'Johnson Farm',
-          task: 'Install soil probe array (6 units)',
-          priority: 'high',
-          deadline: '2025-11-30',
-        },
-        {
-          id: 'j2',
-          site: 'Deep Creek Lake',
-          task: 'Replace buoy sensor module',
-          priority: 'medium',
-          deadline: '2025-12-05',
-        },
-        {
-          id: 'j3',
-          site: 'Harbor Marina',
-          task: 'Commission algae emitter + gateway',
-          priority: 'high',
-          deadline: '2025-12-01',
-        },
-      ]);
+      // Map v2 DeviceSummary[] to the shape the component renders
+      const mappedDevices = (userDevices || []).map((d) => ({
+        id: d.id,
+        name: d.name || d.id,
+        type: d.model || 'Water Quality Monitor',
+        location: d.location?.address || d.location?.city || 'Unknown',
+        status: d.onlineStatus === 'online' ? 'online' : d.onlineStatus === 'offline' ? 'offline' : 'warning',
+        lastPing: d.lastReadingAt
+          ? new Date(d.lastReadingAt).toLocaleString()
+          : 'No data',
+        readings: d.latestReadings
+          ? d.latestReadings.map((r) => `${r.type}: ${r.value}${r.unit}`).join(' · ')
+          : 'No readings',
+      }));
+      setDevices(mappedDevices);
+
+      // Derive pending jobs from alerts that need action
+      const pendingJobs = (userAlerts || [])
+        .filter((a) => a.status === 'active')
+        .map((a) => ({
+          id: a.id,
+          site: a.deviceName || a.deviceId,
+          task: a.message || 'Alert needs attention',
+          priority: a.severity === 'critical' ? 'high' : a.severity === 'warning' ? 'medium' : 'low',
+          deadline: a.createdAt || '',
+        }));
+      setJobs(pendingJobs);
     } catch (error) {
       console.error('Error loading installer dashboard:', error);
     } finally {
@@ -349,8 +325,7 @@ const InstallerDashboard = () => {
   };
 
   const handleAddDevice = () => {
-    // TODO: Navigate to add device flow
-    alert('Add Device feature coming soon');
+    navigate('/dashboard/devices/add');
   };
 
   const handleViewDevice = (deviceId) => {
@@ -358,8 +333,7 @@ const InstallerDashboard = () => {
   };
 
   const handleViewJob = (jobId) => {
-    // TODO: Navigate to job detail
-    alert(`View job ${jobId}`);
+    navigate(`/dashboard/alerts`);
   };
 
   if (loading) {

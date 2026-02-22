@@ -9,7 +9,8 @@
 
 import { db } from '../apis/firebase';
 import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
-import { CreditsMarketplaceAPI, DeviceAPI, GeocodingAPI } from '../scripts/back_door';
+import { CreditsMarketplaceAPI, DeviceAPI } from '../scripts/back_door';
+import { getSites } from './v2/api';
 
 // ============================================================
 // CREDITS (for Registry and Recent Removals pages)
@@ -184,11 +185,11 @@ const transformListingToCard = (listing, id) => ({
  */
 export const fetchMapProjects = async () => {
   try {
-    // Try backend API
+    // Try v2 API (routes through demo interceptor when demo mode is active)
     try {
-      const response = await GeocodingAPI.listSites({});
-      if (response?.sites && response.sites.length > 0) {
-        return response.sites.map(transformSiteToMapProject);
+      const sites = await getSites('');
+      if (sites && sites.length > 0) {
+        return sites.map(transformSiteToMapProject);
       }
     } catch (e) {
       // Fall through to RTDB

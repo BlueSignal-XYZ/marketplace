@@ -1106,6 +1106,54 @@ const ttnWebhook = async (req, res) => {
   }
 };
 
+/**
+ * Reopen a resolved or acknowledged alert
+ */
+const reopenAlert = async (req, res) => {
+  const { alertId } = req.body;
+
+  if (!alertId) {
+    return res.status(400).json({ error: "Missing alertId" });
+  }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const token = authHeader.split("Bearer ")[1];
+  const db = admin.database();
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const uid = decodedToken.uid;
+
+    const alertSnapshot = await db.ref(`alerts/${alertId}`).once("value");
+    if (!alertSnapshot.exists()) {
+      return res.status(404).json({ error: "Alert not found" });
+    }
+
+    const alert = alertSnapshot.val();
+    const userSnapshot = await db.ref(`users/${uid}/profile/role`).once("value");
+    const role = userSnapshot.val();
+
+    if (alert.ownerId !== uid && role !== "admin") {
+      return res.status(403).json({ error: "Not authorized" });
+    }
+
+    await db.ref(`alerts/${alertId}`).update({
+      status: "active",
+      "timestamps/reopened": Date.now(),
+      "timestamps/reopenedBy": uid,
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Failed to reopen alert:", error);
+    res.status(500).json({ error: "Failed to reopen alert" });
+  }
+};
+
 module.exports = {
   ingestReading,
   getDeviceReadings,
@@ -1114,6 +1162,7 @@ module.exports = {
   getActiveAlerts,
   acknowledgeAlert,
   resolveAlert,
+  reopenAlert,
   updateAlertThresholds,
   ttnWebhook,
   SENSOR_RANGES,

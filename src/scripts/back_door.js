@@ -169,7 +169,7 @@ const UserAPI = {
 
 const getMedia = async (assetID) => {
   try {
-    const response = await axios.post(`${configs.server_url}/db/media/get`, {
+    const response = await authPost(`${configs.server_url}/db/media/get`, {
       assetID,
     });
     return response?.data;
@@ -181,7 +181,7 @@ const getMedia = async (assetID) => {
 
 const getMediaStream = async (streamID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/media/get/stream`,
       { streamID }
     );
@@ -194,7 +194,7 @@ const getMediaStream = async (streamID) => {
 
 const createMedia = async (newAssetPayload, userUID) => {
   try {
-    const response = await axios.post(`${configs.server_url}/db/media/create`, {
+    const response = await authPost(`${configs.server_url}/db/media/create`, {
       newAssetPayload,
       userUID,
     });
@@ -207,7 +207,7 @@ const createMedia = async (newAssetPayload, userUID) => {
 
 const createMediaStream = async (userUID, streamData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/media/create/stream`,
       { userUID, streamData }
     );
@@ -228,7 +228,7 @@ const MediaAPI = {
 /*************************ASSET_ENDPOINTS************************************* */
 const addAssetMetadata = async (assetID, metadata) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/asset/create/metadata`,
       { assetID, metadata }
     );
@@ -241,7 +241,7 @@ const addAssetMetadata = async (assetID, metadata) => {
 
 const submitAsset = async (userUID, assetID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/asset/create/submit`,
       { userUID, assetID }
     );
@@ -254,7 +254,7 @@ const submitAsset = async (userUID, assetID) => {
 
 const disputeAsset = async (userUID, assetID, reason) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/asset/create/dispute`,
       { userUID, assetID, reason }
     );
@@ -267,7 +267,7 @@ const disputeAsset = async (userUID, assetID, reason) => {
 
 const closeAssetDispute = async (userUID, disputeID, solution, status) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/asset/create/dispute/close`,
       { userUID, disputeID, solution, status }
     );
@@ -280,7 +280,7 @@ const closeAssetDispute = async (userUID, disputeID, solution, status) => {
 
 const approveAsset = async (userUID, assetID, params) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/db/asset/create/approve`,
       { userUID, assetID, params }
     );
@@ -313,7 +313,7 @@ const getLivepeerKey = async () => {
 
 const createAsset = async (newAssetPaylaod, userUID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/livepeer/asset/create`,
       { newAssetPaylaod, userUID }
     );
@@ -326,7 +326,7 @@ const createAsset = async (newAssetPaylaod, userUID) => {
 
 const getLivepeerOriginDetails = async () => {
   try {
-    const response = await axios.post(`${configs.server_url}/livepeer/origin`);
+    const response = await authPost(`${configs.server_url}/livepeer/origin`);
     return response?.data;
   } catch (error) {
     console.error("Error fetching Livepeer origin details:", error);
@@ -336,7 +336,7 @@ const getLivepeerOriginDetails = async () => {
 
 const getLivepeerAsset = async (assetID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/livepeer/asset/get`,
       { assetID }
     );
@@ -349,7 +349,7 @@ const getLivepeerAsset = async (assetID) => {
 
 const updateLivepeerAsset = async (assetID, updateData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/livepeer/asset/update`,
       { assetID, updateData }
     );
@@ -362,7 +362,7 @@ const updateLivepeerAsset = async (assetID, updateData) => {
 
 const deleteLivepeerAsset = async (assetID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/livepeer/asset/delete`,
       { assetID }
     );
@@ -375,7 +375,7 @@ const deleteLivepeerAsset = async (assetID) => {
 
 const getLivepeerAssetPlaybackInfo = async (playbackID) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/livepeer/asset/info/playback`,
       { playbackID }
     );
@@ -718,7 +718,7 @@ const getRecoveryDuration = async () => {
 };
 
 const getNPCCreditEvents = async () =>
-  (await axios.post(`${configs.server_url}/npc_credits/events`))?.data;
+  (await authPost(`${configs.server_url}/npc_credits/events`))?.data;
 
 const NPCCreditsAPI = {
   issueCredits,
@@ -845,7 +845,7 @@ const getDeviceDetails = async (deviceID) => {
 
 const emulateDevice = async (deviceID, interval) => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/emulate`, {
+    const response = await authPost(`${configs.server_url}/device/emulate`, {
       deviceID,
       interval,
     });
@@ -858,7 +858,7 @@ const emulateDevice = async (deviceID, interval) => {
 
 const getDeviceData = async (deviceID) => {
   try {
-    const response = await axios.post(`${configs.server_url}/device/data`, {
+    const response = await authPost(`${configs.server_url}/device/data`, {
       deviceID,
     });
     return response?.data;
@@ -871,7 +871,7 @@ const getDeviceData = async (deviceID) => {
 // Device lifecycle updates
 const updateDeviceLifecycle = async (deviceId, lifecycle, metadata) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/update-lifecycle`,
       { deviceId, lifecycle, metadata }
     );
@@ -884,7 +884,7 @@ const updateDeviceLifecycle = async (deviceId, lifecycle, metadata) => {
 
 const assignDeviceToOrder = async (deviceId, orderId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/assign-to-order`,
       { deviceId, orderId }
     );
@@ -897,7 +897,7 @@ const assignDeviceToOrder = async (deviceId, orderId) => {
 
 const assignDeviceInstaller = async (deviceId, installerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/assign-installer`,
       { deviceId, installerId }
     );
@@ -910,7 +910,7 @@ const assignDeviceInstaller = async (deviceId, installerId) => {
 
 const getDevicesByOrder = async (orderId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/get-by-order`,
       { orderId }
     );
@@ -923,7 +923,7 @@ const getDevicesByOrder = async (orderId) => {
 
 const getDeviceInventory = async (filters = {}) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/inventory`,
       { filters }
     );
@@ -936,7 +936,7 @@ const getDeviceInventory = async (filters = {}) => {
 
 const getDevicesBySite = async (siteId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/get-by-site`,
       { siteId }
     );
@@ -949,7 +949,7 @@ const getDevicesBySite = async (siteId) => {
 
 const getDevicesByInstaller = async (installerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/device/get-by-installer`,
       { installerId }
     );
@@ -1064,10 +1064,11 @@ const CustomerAPI = {
 };
 
 /*************************SITE_ENDPOINTS************************************* */
+// SECURITY: Site operations require authentication
 
 const createSite = async (siteData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/create`,
       { siteData }
     );
@@ -1080,7 +1081,7 @@ const createSite = async (siteData) => {
 
 const getSite = async (siteId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/get`,
       { siteId }
     );
@@ -1093,7 +1094,7 @@ const getSite = async (siteId) => {
 
 const updateSite = async (siteId, updateData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/update`,
       { siteId, updateData }
     );
@@ -1106,7 +1107,7 @@ const updateSite = async (siteId, updateData) => {
 
 const listSitesByCustomer = async (customerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/list-by-customer`,
       { customerId }
     );
@@ -1119,7 +1120,7 @@ const listSitesByCustomer = async (customerId) => {
 
 const listSites = async (filters = {}) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/list`,
       { filters }
     );
@@ -1132,7 +1133,7 @@ const listSites = async (filters = {}) => {
 
 const deleteSite = async (siteId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/delete`,
       { siteId }
     );
@@ -1145,7 +1146,7 @@ const deleteSite = async (siteId) => {
 
 const addDeviceToSite = async (siteId, deviceId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/add-device`,
       { siteId, deviceId }
     );
@@ -1158,7 +1159,7 @@ const addDeviceToSite = async (siteId, deviceId) => {
 
 const removeDeviceFromSite = async (siteId, deviceId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/site/remove-device`,
       { siteId, deviceId }
     );
@@ -1233,7 +1234,7 @@ const listOrders = async (filters = {}) => {
 
 const allocateDevicesToOrder = async (orderId, deviceIds) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/allocate-devices`,
       { orderId, deviceIds }
     );
@@ -1246,7 +1247,7 @@ const allocateDevicesToOrder = async (orderId, deviceIds) => {
 
 const updateOrderStatus = async (orderId, status) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/update-status`,
       { orderId, status }
     );
@@ -1259,7 +1260,7 @@ const updateOrderStatus = async (orderId, status) => {
 
 const convertQuoteToOrder = async (orderId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/convert-quote`,
       { orderId }
     );
@@ -1272,7 +1273,7 @@ const convertQuoteToOrder = async (orderId) => {
 
 const getOrdersByCustomer = async (customerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/list-by-customer`,
       { customerId }
     );
@@ -1285,7 +1286,7 @@ const getOrdersByCustomer = async (customerId) => {
 
 const getOrdersBySite = async (siteId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/list-by-site`,
       { siteId }
     );
@@ -1298,7 +1299,7 @@ const getOrdersBySite = async (siteId) => {
 
 const cancelOrder = async (orderId, reason) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/order/cancel`,
       { orderId, reason }
     );
@@ -1323,10 +1324,11 @@ const OrderAPI = {
 };
 
 /*************************COMMISSION_ENDPOINTS************************************* */
+// SECURITY: Commission operations require authentication
 
 const createCommission = async (commissionData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/create`,
       { commissionData }
     );
@@ -1339,7 +1341,7 @@ const createCommission = async (commissionData) => {
 
 const getCommission = async (commissionId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/get`,
       { commissionId }
     );
@@ -1352,7 +1354,7 @@ const getCommission = async (commissionId) => {
 
 const updateCommission = async (commissionId, updateData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/update`,
       { commissionId, updateData }
     );
@@ -1365,7 +1367,7 @@ const updateCommission = async (commissionId, updateData) => {
 
 const submitCommissionChecklist = async (commissionId, checklistData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/submit-checklist`,
       { commissionId, checklistData }
     );
@@ -1378,7 +1380,7 @@ const submitCommissionChecklist = async (commissionId, checklistData) => {
 
 const runCommissionTests = async (commissionId, deviceId, tests) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/run-tests`,
       { commissionId, deviceId, tests }
     );
@@ -1391,7 +1393,7 @@ const runCommissionTests = async (commissionId, deviceId, tests) => {
 
 const completeCommission = async (commissionId, result) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/complete`,
       { commissionId, result }
     );
@@ -1404,7 +1406,7 @@ const completeCommission = async (commissionId, result) => {
 
 const getCommissionByDevice = async (deviceId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/get-by-device`,
       { deviceId }
     );
@@ -1417,7 +1419,7 @@ const getCommissionByDevice = async (deviceId) => {
 
 const getCommissionsByInstaller = async (installerId) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/get-by-installer`,
       { installerId }
     );
@@ -1430,7 +1432,7 @@ const getCommissionsByInstaller = async (installerId) => {
 
 const listCommissions = async (filters = {}) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/list`,
       { filters }
     );
@@ -1443,7 +1445,7 @@ const listCommissions = async (filters = {}) => {
 
 const uploadCommissionPhoto = async (commissionId, photoData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/upload-photo`,
       { commissionId, photoData }
     );
@@ -1456,7 +1458,7 @@ const uploadCommissionPhoto = async (commissionId, photoData) => {
 
 const submitCommissionSignature = async (commissionId, signatureData) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/submit-signature`,
       { commissionId, signatureData }
     );
@@ -1469,7 +1471,7 @@ const submitCommissionSignature = async (commissionId, signatureData) => {
 
 const cancelCommission = async (commissionId, reason) => {
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/commission/cancel`,
       { commissionId, reason }
     );
@@ -1522,8 +1524,8 @@ const MetricsAPI = {
 // through to the global flag (mock ON by default, OFF only when "false").
 // Uses the same !== "false" opt-out pattern as Cloud components for consistency.
 const USE_MARKETPLACE_MOCKS = import.meta.env.VITE_USE_MARKETPLACE_MOCKS
-  ? import.meta.env.VITE_USE_MARKETPLACE_MOCKS !== "false"
-  : import.meta.env.VITE_USE_MOCK_DATA !== "false";
+  ? import.meta.env.VITE_USE_MARKETPLACE_MOCKS === "true"
+  : import.meta.env.VITE_USE_MOCK_DATA === "true";
 
 const handleMarketplacePost = async (endpoint, body) => {
   if (USE_MARKETPLACE_MOCKS) {
@@ -1538,7 +1540,7 @@ const handleMarketplacePost = async (endpoint, body) => {
   }
 
   try {
-    const response = await axios.post(
+    const response = await authPost(
       `${configs.server_url}/marketplace/${endpoint}`,
       body
     );
@@ -1772,10 +1774,22 @@ const updateAlertThresholds = async (deviceId, thresholds) => {
   }
 };
 
+const reopenAlert = async (alertId) => {
+  try {
+    const response = await authPost(`${configs.server_url}/alerts/reopen`, {
+      alertId,
+    });
+    return response?.data;
+  } catch (error) {
+    throw new Error("Failed to reopen alert");
+  }
+};
+
 const AlertsAPI = {
   getActive: getActiveAlerts,
   acknowledge: acknowledgeAlert,
   resolve: resolveAlert,
+  reopen: reopenAlert,
   updateThresholds: updateAlertThresholds,
 };
 
