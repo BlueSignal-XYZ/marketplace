@@ -4,10 +4,9 @@ import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { GoogleMap, useJsApiLoader, Marker, Polygon } from "@react-google-maps/api";
 import CloudPageLayout from "./CloudPageLayout";
-import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
-import { SiteAPI, DeviceAPI, AlertsAPI } from "../../scripts/back_door";
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === "true";
+import { getRelativeTime } from "../../services/cloudMockAPI";
+import { getDevices, getAlerts, getSites } from "../../services/v2/api";
+import { useAppContext } from "../../context/AppContext";
 
 const ContentWrapper = styled.div`
   display: grid;
@@ -340,6 +339,8 @@ const mapOptions = {
 
 export default function SiteDetailPage() {
   const { siteId } = useParams();
+  const { STATES } = useAppContext();
+  const { user } = STATES;
   const [site, setSite] = useState(null);
   const [devices, setDevices] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -367,84 +368,33 @@ export default function SiteDetailPage() {
     setLoading(true);
     setError(null);
     try {
-      if (USE_MOCK) {
-        // Use mock data directly
-        const [siteData, devicesData, alertsData] = await Promise.all([
-          CloudMockAPI.sites.getById(siteId),
-          CloudMockAPI.devices.getBySite(siteId),
-          CloudMockAPI.alerts.getAll(),
-        ]);
+      // v2 API calls — routed through api.js (handles demo/real switching)
+      const [allSites, allDevices, allAlerts] = await Promise.all([
+        getSites(user?.uid).catch(() => []),
+        getDevices(user?.uid).catch(() => []),
+        getAlerts(user?.uid).catch(() => []),
+      ]);
+
+      // Find the specific site
+      const siteData = (allSites || []).find((s) => s.id === siteId);
+      // Filter devices belonging to this site
+      const siteDevices = (allDevices || []).filter((d) => d.siteId === siteId);
+      // Filter alerts for this site's devices
+      const siteDeviceIds = siteDevices.map((d) => d.id);
+      const siteAlerts = (allAlerts || []).filter((a) =>
+        siteDeviceIds.includes(a.deviceId)
+      );
+
+      if (siteData) {
         setSite(siteData);
-        setDevices(devicesData || []);
-        const siteDeviceIds = (devicesData || []).map((d) => d.id);
-        const siteAlerts = (alertsData || []).filter((a) =>
-          siteDeviceIds.includes(a.deviceId)
-        );
+        setDevices(siteDevices);
         setAlerts(siteAlerts);
       } else {
-        // Try real APIs first
-        const [siteData, devicesData, alertsData] = await Promise.all([
-          SiteAPI.get(siteId).catch(() => null),
-          DeviceAPI.getBySite(siteId).catch(() => null),
-          AlertsAPI.getActive().catch(() => null),
-        ]);
-
-        // Extract site — real API returns { site: {...} } or the object directly
-        const resolvedSite = siteData?.site || siteData;
-        // Extract devices — real API returns { devices: [...] } or array directly
-        const resolvedDevices = Array.isArray(devicesData)
-          ? devicesData
-          : devicesData?.devices || [];
-        // Extract alerts — real API returns { alerts: [...] } or array directly
-        const resolvedAlerts = Array.isArray(alertsData)
-          ? alertsData
-          : alertsData?.alerts || [];
-
-        if (resolvedSite && resolvedSite.id) {
-          setSite(resolvedSite);
-          setDevices(resolvedDevices);
-          // Filter alerts for this site's devices
-          const siteDeviceIds = resolvedDevices.map((d) => d.id);
-          const siteAlerts = resolvedAlerts.filter((a) =>
-            siteDeviceIds.includes(a.deviceId)
-          );
-          setAlerts(siteAlerts);
-        } else {
-          // Real API returned no valid site — fall back to mock
-          // Real API returned no site, falling back to mock data
-          const [mockSite, mockDevices, mockAlerts] = await Promise.all([
-            CloudMockAPI.sites.getById(siteId),
-            CloudMockAPI.devices.getBySite(siteId),
-            CloudMockAPI.alerts.getAll(),
-          ]);
-          setSite(mockSite);
-          setDevices(mockDevices || []);
-          const siteDeviceIds = (mockDevices || []).map((d) => d.id);
-          const siteAlerts = (mockAlerts || []).filter((a) =>
-            siteDeviceIds.includes(a.deviceId)
-          );
-          setAlerts(siteAlerts);
-        }
+        setError("Site not found.");
       }
     } catch (err) {
       console.error("Error loading site data:", err);
-      // Last-resort fallback to mock
-      try {
-        const [mockSite, mockDevices, mockAlerts] = await Promise.all([
-          CloudMockAPI.sites.getById(siteId),
-          CloudMockAPI.devices.getBySite(siteId),
-          CloudMockAPI.alerts.getAll(),
-        ]);
-        setSite(mockSite);
-        setDevices(mockDevices || []);
-        const siteDeviceIds = (mockDevices || []).map((d) => d.id);
-        const siteAlerts = (mockAlerts || []).filter((a) =>
-          siteDeviceIds.includes(a.deviceId)
-        );
-        setAlerts(siteAlerts);
-      } catch (_) {
-        setError("Failed to load site data. Please try again.");
-      }
+      setError("Failed to load site data. Please try again.");
     } finally {
       setLoading(false);
     }
