@@ -10,6 +10,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { useAppContext } from "../../context/AppContext";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-4px); }
@@ -429,6 +430,9 @@ function SolutionsDropdown() {
 export function WebsiteNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const { STATES } = useAppContext();
+  const isSignedIn = !!STATES?.user?.uid;
+  const ctaHref = isSignedIn ? "/marketplace" : "/login";
 
   return (
     <>
@@ -445,7 +449,7 @@ export function WebsiteNav() {
             <NavLink href="/registry">Credit Registry</NavLink>
           </NavLinks>
 
-          <CTALink href="/marketplace">Get Started</CTALink>
+          <CTALink href={ctaHref}>Get Started</CTALink>
 
           <MobileMenuBtn
             onClick={() => setMobileOpen((p) => !p)}
@@ -488,7 +492,7 @@ export function WebsiteNav() {
           Credit Registry
         </MobileNavLink>
 
-        <MobileCTA href="/marketplace" onClick={() => setMobileOpen(false)}>
+        <MobileCTA href={ctaHref} onClick={() => setMobileOpen(false)}>
           Get Started
         </MobileCTA>
       </MobileMenu>

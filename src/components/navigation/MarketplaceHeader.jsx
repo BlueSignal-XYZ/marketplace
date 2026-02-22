@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../shared/NotificationBell";
 import { APP_NAME } from "../../constants/constants";
+import { useAppContext } from "../../context/AppContext";
 
 // Inline SVG logo component for crisp rendering at all sizes
 const WQTLogo = ({ height = 36 }) => {
@@ -322,6 +323,10 @@ const MenuButton = styled.button`
 `;
 
 export function MarketplaceHeader({ onMenuClick }) {
+  const { STATES } = useAppContext();
+  const isSignedIn = !!STATES?.user?.uid;
+  const ctaHref = isSignedIn ? "/marketplace" : "/login";
+
   const handleClick = () => {
     if (onMenuClick) onMenuClick();
   };
@@ -343,7 +348,7 @@ export function MarketplaceHeader({ onMenuClick }) {
         </NavLinks>
 
         <RightGroup>
-          <SignUpButton href="/marketplace">Get Started</SignUpButton>
+          <SignUpButton href={ctaHref}>Get Started</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
             <FontAwesomeIcon icon={faBars} />
