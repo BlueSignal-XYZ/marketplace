@@ -16,9 +16,8 @@ import {
 } from "chart.js";
 import CloudPageLayout from "./CloudPageLayout";
 import CloudMockAPI, { getRelativeTime } from "../../services/cloudMockAPI";
-import { DeviceAPI, ReadingsAPI, AlertsAPI } from "../../scripts/back_door";
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === "true";
+import { getDevice, getDeviceAlerts } from "../../services/v2/api";
+import { ReadingsAPI } from "../../scripts/back_door";
 
 // Register Chart.js components
 ChartJS.register(
@@ -462,41 +461,21 @@ export default function DeviceDetailPage() {
   const loadDeviceData = async () => {
     setLoading(true);
     try {
-      if (USE_MOCK) {
-        const [deviceData, alertsData, logsData, commissionData] = await Promise.all([
-          CloudMockAPI.devices.getById(deviceId),
-          CloudMockAPI.alerts.getByDevice(deviceId),
-          CloudMockAPI.devices.getLogs(deviceId),
-          CloudMockAPI.commissioning.getLastCommission(deviceId),
-        ]);
-        setDevice(deviceData);
-        setAlerts(alertsData);
-        setLogs(logsData);
-        setCommissionResult(commissionData);
-      } else {
-        const [deviceData, alertsData, logsData, commissionData] = await Promise.all([
-          DeviceAPI.getDeviceDetails(deviceId).catch(() => null),
-          AlertsAPI.getActive({ deviceId }).catch(() => null),
-          CloudMockAPI.devices.getLogs(deviceId), // logs still mock
-          CloudMockAPI.commissioning.getLastCommission(deviceId), // commission still mock
-        ]);
+      // v2 API calls — routed through api.js (handles demo/real switching)
+      const [deviceData, alertsData, logsData, commissionData] = await Promise.all([
+        getDevice(deviceId).catch(() => null),
+        getDeviceAlerts(deviceId).catch(() => []),
+        CloudMockAPI.devices.getLogs(deviceId), // logs still mock until v2 endpoint exists
+        CloudMockAPI.commissioning.getLastCommission(deviceId), // commission still mock
+      ]);
 
-        if (deviceData?.device) {
-          setDevice(deviceData.device);
-        }
-        if (alertsData?.alerts) {
-          setAlerts(alertsData.alerts);
-        }
-        setLogs(logsData);
-        setCommissionResult(commissionData);
-      }
+      // v2 returns flat Device object and Alert[] directly
+      if (deviceData) setDevice(deviceData);
+      setAlerts(alertsData || []);
+      setLogs(logsData);
+      setCommissionResult(commissionData);
     } catch (error) {
       console.error("Error loading device data:", error);
-      // Fallback to mock
-      try {
-        const deviceData = await CloudMockAPI.devices.getById(deviceId);
-        setDevice(deviceData);
-      } catch (_) { /* ignore */ }
     } finally {
       setLoading(false);
     }
@@ -505,47 +484,36 @@ export default function DeviceDetailPage() {
   const loadTimeSeriesData = async () => {
     setLoadingChart(true);
     try {
-      if (USE_MOCK) {
-        const data = await CloudMockAPI.devices.getTimeSeriesData(deviceId, timeRange);
-        setTimeSeriesData(data);
+      // Use ReadingsAPI (v1 /readings/get — registered and working)
+      const now = Date.now();
+      const rangeMs = {
+        "24h": 24 * 60 * 60 * 1000,
+        "7d": 7 * 24 * 60 * 60 * 1000,
+        "30d": 30 * 24 * 60 * 60 * 1000,
+      };
+      const startTime = now - (rangeMs[timeRange] || rangeMs["24h"]);
+
+      const result = await ReadingsAPI.get(deviceId, 500, startTime, now).catch(() => null);
+
+      if (result?.readings && result.readings.length > 0) {
+        // Transform readings into time series format for charts
+        const transformed = result.readings
+          .sort((a, b) => a.timestamp - b.timestamp)
+          .map((r) => ({
+            timestamp: r.timestamp,
+            time: new Date(r.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            temp_c: r.sensors?.temperature?.value ?? null,
+            ph: r.sensors?.ph?.value ?? null,
+            ntu: r.sensors?.turbidity?.value ?? null,
+            tds_ppm: r.sensors?.tds?.value ?? r.sensors?.conductivity?.value ?? null,
+          }));
+        setTimeSeriesData(transformed);
       } else {
-        // Calculate time range bounds
-        const now = Date.now();
-        const rangeMs = {
-          "24h": 24 * 60 * 60 * 1000,
-          "7d": 7 * 24 * 60 * 60 * 1000,
-          "30d": 30 * 24 * 60 * 60 * 1000,
-        };
-        const startTime = now - (rangeMs[timeRange] || rangeMs["24h"]);
-
-        const result = await ReadingsAPI.get(deviceId, 500, startTime, now).catch(() => null);
-
-        if (result?.readings && result.readings.length > 0) {
-          // Transform readings into time series format matching mock structure
-          const transformed = result.readings
-            .sort((a, b) => a.timestamp - b.timestamp)
-            .map((r) => ({
-              timestamp: r.timestamp,
-              time: new Date(r.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-              temp_c: r.sensors?.temperature?.value ?? null,
-              ph: r.sensors?.ph?.value ?? null,
-              ntu: r.sensors?.turbidity?.value ?? null,
-              tds_ppm: r.sensors?.tds?.value ?? r.sensors?.conductivity?.value ?? null,
-            }));
-          setTimeSeriesData(transformed);
-        } else {
-          // No real data yet, fall back to mock
-          const data = await CloudMockAPI.devices.getTimeSeriesData(deviceId, timeRange);
-          setTimeSeriesData(data);
-        }
+        setTimeSeriesData([]);
       }
     } catch (error) {
       console.error("Error loading time series data:", error);
-      // Fallback to mock
-      try {
-        const data = await CloudMockAPI.devices.getTimeSeriesData(deviceId, timeRange);
-        setTimeSeriesData(data);
-      } catch (_) { /* ignore */ }
+      setTimeSeriesData([]);
     } finally {
       setLoadingChart(false);
     }
