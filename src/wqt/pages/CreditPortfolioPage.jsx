@@ -13,7 +13,6 @@ import {
   PageSubtitle,
   SectionHeading,
   Card,
-  StatCard,
   FiltersRow,
   FilterChip,
   StatusBadge,
@@ -26,6 +25,7 @@ import {
   EmptyStateText,
   ErrorBanner,
 } from '../../styles/uiPrimitives';
+import { DataCard } from '../../design-system/primitives/DataCard';
 
 /* ---- page-specific styled components ---- */
 
@@ -36,8 +36,8 @@ const Header = styled.div`
 const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: ${({ theme }) => theme.spacing.lg};
-  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
+  gap: 16px;
+  margin-bottom: 32px;
 
   @media (min-width: 480px) {
     grid-template-columns: repeat(2, 1fr);
@@ -45,35 +45,8 @@ const StatsGrid = styled.div`
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(4, 1fr);
-    gap: ${({ theme }) => theme.spacing.xl};
+    gap: 20px;
   }
-`;
-
-const StatLabel = styled.div`
-  font-size: 12px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.textMuted};
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
-`;
-
-const StatValue = styled.div`
-  font-size: 24px;
-  font-weight: 700;
-  color: ${({ theme, $color }) => $color || theme.colors.text};
-  line-height: 1.2;
-
-  @media (min-width: 768px) {
-    font-size: 28px;
-  }
-`;
-
-const StatSubtext = styled.div`
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.ui400};
-  margin-top: 6px;
-  line-height: 1.4;
 `;
 
 const FiltersWrapper = styled.div`
@@ -298,26 +271,27 @@ export function CreditPortfolioPage() {
         ) : (
           <>
             <StatsGrid>
-              <StatCard>
-                <StatLabel>Total Credits</StatLabel>
-                <StatValue>{stats.total}</StatValue>
-                <StatSubtext>{stats.totalQuantity.toFixed(2)} total units</StatSubtext>
-              </StatCard>
-              <StatCard>
-                <StatLabel>Available</StatLabel>
-                <StatValue $color="#10b981">{stats.available}</StatValue>
-                <StatSubtext>Ready to list or use</StatSubtext>
-              </StatCard>
-              <StatCard>
-                <StatLabel>Listed</StatLabel>
-                <StatValue $color="#3b82f6">{stats.listed}</StatValue>
-                <StatSubtext>On marketplace</StatSubtext>
-              </StatCard>
-              <StatCard>
-                <StatLabel>Enrollments</StatLabel>
-                <StatValue $color="#1D7072">{enrollments.length}</StatValue>
-                <StatSubtext>Active programs</StatSubtext>
-              </StatCard>
+              <DataCard
+                label="Total Credits"
+                value={stats.total}
+                unit={`${stats.totalQuantity.toFixed(2)} units`}
+                compact
+              />
+              <DataCard
+                label="Available"
+                value={stats.available}
+                compact
+              />
+              <DataCard
+                label="Listed"
+                value={stats.listed}
+                compact
+              />
+              <DataCard
+                label="Enrollments"
+                value={enrollments.length}
+                compact
+              />
             </StatsGrid>
 
             {/* Active Enrollments */}

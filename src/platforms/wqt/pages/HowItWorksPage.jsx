@@ -8,6 +8,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { GlossaryTooltip } from '../components/GlossaryTooltip';
 
 const Page = styled.div`
   min-height: 100vh;
@@ -96,6 +97,30 @@ const Grid = styled.div`
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+  }
+`;
+
+/** 2-over-1 layout: two cards on first row, third spans full width below (or 2/3 centered) */
+const DifferentGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 32px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+`;
+
+const DifferentCard = styled(CardAlt)`
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    &:nth-child(3) {
+      grid-column: 1 / -1;
+      max-width: 66%;
+      margin-left: auto;
+      margin-right: auto;
+      justify-self: center;
+    }
   }
 `;
 
@@ -371,9 +396,9 @@ export default function HowItWorksPage() {
           <SectionTitle>How Trading Works</SectionTitle>
           <Prose>
             <p>
-              Credits listed on the registry can be purchased by entities that need to
-              offset their own water quality impacts — utilities facing nutrient limits,
-              developers with stormwater obligations, or municipalities under consent
+              <GlossaryTooltip term="Nutrient trading" definition="A market mechanism where polluters can buy credits from projects that reduce pollution, instead of upgrading their own facilities. Lowers compliance costs while meeting water quality goals." source="EPA Water Quality Trading" /> works like this: credits listed on the <GlossaryTooltip term="credit registry" definition="A public ledger of verified water quality credits. Each credit has a unique ID, origin, verification status, and ownership history. Regulators and buyers use it to verify compliance." source="EPA, state DEQ programs" /> can be purchased by entities that need to
+              offset their own water quality impacts — utilities facing <GlossaryTooltip term="nutrient limits" definition="Regulatory caps on nitrogen and phosphorus discharge. Facilities must stay under these limits or purchase credits to offset excess loading." source="EPA TMDL, NPDES permits" />,
+              <GlossaryTooltip term="developers" definition="Land and real estate developers who must manage stormwater from new construction. Not software developers." source="MS4 permits, post-construction requirements" /> with <GlossaryTooltip term="stormwater obligations" definition="Requirements to manage runoff from developed sites. Often tied to MS4 permits and post-construction stormwater management plans." source="EPA MS4, state DEQ" />, or municipalities under consent
               decrees.
             </p>
             <p>
@@ -406,32 +431,32 @@ export default function HowItWorksPage() {
             </p>
           </Prose>
 
-          <Grid>
-            <CardAlt>
+          <DifferentGrid>
+            <DifferentCard>
               <CardTitle>Sensor-Verified, Not Self-Reported</CardTitle>
               <CardDesc>
                 Credits are backed by continuous monitoring data from calibrated instruments,
                 not annual reports or engineering estimates. The data exists, it's
                 timestamped, and it's auditable.
               </CardDesc>
-            </CardAlt>
-            <CardAlt>
+            </DifferentCard>
+            <DifferentCard>
               <CardTitle>Open Registry</CardTitle>
               <CardDesc>
                 Any qualified project can register. Any verified buyer can purchase. The
                 registry is transparent — every credit's origin, verification status, and
                 ownership history is visible.
               </CardDesc>
-            </CardAlt>
-            <CardAlt>
+            </DifferentCard>
+            <DifferentCard>
               <CardTitle>Technology-Native Infrastructure</CardTitle>
               <CardDesc>
                 The platform handles measurement, verification, issuance, listing, and
                 settlement in one system. No separate spreadsheets, no mailed forms, no
                 phone calls to a state office.
               </CardDesc>
-            </CardAlt>
-          </Grid>
+            </DifferentCard>
+          </DifferentGrid>
         </SectionInner>
       </Section>
 
