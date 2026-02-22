@@ -13,7 +13,6 @@ import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { Button } from '../../../design-system/primitives/Button';
 import { useAppContext } from '../../../context/AppContext';
 import { useDevicesQuery, useAlertsQuery } from '../../../shared/hooks/useApiQueries';
-import { DemoBanner } from '../../../components/DemoBanner';
 import { DemoHint } from '../../../components/DemoHint';
 
 /* ── Styled ─────────────────────────────────────────────── */
@@ -266,8 +265,10 @@ const DeviceEmptyIcon = () => (
 
 const DeviceErrorIcon = () => (
   <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.3" />
-    <path d="M32 20v24M32 48v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+    <rect x="14" y="22" width="36" height="24" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
+    <circle cx="32" cy="34" r="5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
+    <path d="M32 26v-3M32 44v2M24 34h-3M42 34h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+    <path d="M32 16l-4 6h8l-4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
   </svg>
 );
 
@@ -295,8 +296,8 @@ export function CloudDashboardPage() {
         </Header>
         <EmptyState
           icon={<DeviceErrorIcon />}
-          title="Unable to Load Devices"
-          description="We couldn't connect to the device service. Check your connection and try again, or enable Demo Mode in Profile to explore with sample data."
+          title="Unable to Connect"
+          description="Unable to connect to the device service. Check your connection and try again. Or enable Demo Mode in Profile to explore."
           action={{ label: 'Retry', onClick: () => refetchDevices() }}
         />
       </Page>
@@ -313,7 +314,7 @@ export function CloudDashboardPage() {
         <EmptyState
           icon={<DeviceEmptyIcon />}
           title="No Devices Yet"
-          description="No devices commissioned yet. Add your first device to get started, or enable Demo Mode in Profile to explore with sample data."
+          description="No devices commissioned yet. Commission your first device to get started."
           action={{ label: 'Commission Your First Device', onClick: () => navigate('/commission') }}
         />
       </Page>
@@ -330,7 +331,6 @@ export function CloudDashboardPage() {
 
   return (
     <Page>
-      <DemoBanner />
       <Header>
         <Title>Dashboard <DemoHint screenName="cloud-dashboard" /></Title>
         <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>

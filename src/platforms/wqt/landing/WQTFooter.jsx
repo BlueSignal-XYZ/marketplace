@@ -6,6 +6,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const FooterWrapper = styled.div`
+  width: 100%;
+  background: #0B1120;
+`;
+
 const FooterSection = styled.footer`
   padding: 72px 24px 32px;
   background: #0B1120;
@@ -124,6 +129,7 @@ const SmallLink = styled.a`
 
 export function WQTFooter() {
   return (
+    <FooterWrapper>
     <FooterSection>
       <Inner>
         <TopRow>
@@ -174,5 +180,6 @@ export function WQTFooter() {
         </Bottom>
       </Inner>
     </FooterSection>
+    </FooterWrapper>
   );
 }

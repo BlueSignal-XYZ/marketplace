@@ -25,7 +25,7 @@ const dropdownFadeIn = keyframes`
 const NavOuter = styled.header`
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 50;
   width: 100%;
   background: rgba(11, 17, 32, 0.92);
   backdrop-filter: blur(16px);
@@ -140,7 +140,7 @@ const DropdownPanel = styled.div`
   padding: 6px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
   animation: ${dropdownFadeIn} 150ms ease-out;
-  z-index: 20;
+  z-index: 100;
 `;
 
 const DropdownItem = styled.a`

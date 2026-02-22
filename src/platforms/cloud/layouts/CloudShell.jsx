@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 import { CloudHeader } from '../../../components/navigation/CloudHeader';
 import { CloudMenu } from '../../../components/navigation/CloudMenu';
+import { DemoBanner } from '../../../components/DemoBanner';
 import Footer from '../../../components/shared/Footer/Footer';
 import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
 import { SettingsMenu } from '../../../components';
@@ -63,6 +64,9 @@ export function CloudShell({ user, isAuthLanding, children }) {
         onClose={() => setMenuOpen(false)}
         user={user}
       />
+
+      {/* Demo mode banner — full width beneath header, same styling as WQT */}
+      {!isAuthLanding && <DemoBanner />}
 
       {/* Legacy globals (kept for backward compat until components migrated) */}
       <SettingsMenu />

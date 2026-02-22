@@ -426,8 +426,10 @@ const DeviceEmptyIcon = () => (
 
 const DeviceErrorIcon = () => (
   <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.3" />
-    <path d="M32 20v24M32 48v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+    <rect x="14" y="22" width="36" height="24" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
+    <circle cx="32" cy="34" r="5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
+    <path d="M32 26v-3M32 44v2M24 34h-3M42 34h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+    <path d="M32 16l-4 6h8l-4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
   </svg>
 );
 
@@ -719,8 +721,8 @@ export default function DevicesListPage() {
       {loadError && filteredDevices.length === 0 ? (
         <DSEmptyState
           icon={<DeviceErrorIcon />}
-          title="Unable to Load Devices"
-          description={loadError}
+          title="Unable to Connect"
+          description="Unable to connect to the device service. Check your connection and try again."
           action={{ label: "Retry", onClick: loadDevices }}
         />
       ) : (
@@ -732,7 +734,7 @@ export default function DevicesListPage() {
             description={
               searchQuery || statusFilter !== "all" || typeFilter !== "all"
                 ? "Try adjusting your filters or search query."
-                : "No devices commissioned yet. Add your first device to get started, or enable Demo Mode in Profile to explore with sample data."
+                : "No devices commissioned yet. Commission your first device to get started."
             }
             action={!searchQuery && statusFilter === "all" ? { label: "Commission Device", onClick: () => navigate("/cloud/commissioning/new") } : undefined}
           />
