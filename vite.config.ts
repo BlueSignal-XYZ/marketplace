@@ -24,6 +24,7 @@ const VITE_ENV_VARS = [
   // Third-party API keys
   'VITE_ALCHEMY_API_KEY',
   'VITE_GOOGLE_MAPS_API_KEY',
+  'VITE_MAPBOX_TOKEN',
   'VITE_LIVEPEER_API_KEY',
   // The Things Network (TTN)
   'VITE_TTN_API_KEY',
