@@ -1946,7 +1946,9 @@ const updateUserProfile = async (uid, profileData) => {
     });
     return response?.data;
   } catch (error) {
-    throw new Error("Failed to update profile");
+    const serverMsg = error?.response?.data?.error || error?.response?.data?.message;
+    console.error("[UserProfileAPI.update] Failed:", serverMsg || error.message, { uid, status: error?.response?.status });
+    throw error;
   }
 };
 

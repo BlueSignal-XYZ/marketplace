@@ -309,8 +309,7 @@ export default function OnboardingWizard() {
     setError(null);
 
     try {
-      // Save profile to backend
-      await UserProfileAPI.update(user.uid, {
+      const profilePayload = {
         displayName: formData.displayName,
         company: formData.company,
         phone: formData.phone,
@@ -318,20 +317,18 @@ export default function OnboardingWizard() {
         role: formData.role,
         onboardingCompleted: true,
         onboardingCompletedAt: new Date().toISOString(),
-      });
+      };
 
-      // Update role
-      await UserProfileAPI.updateRole(user.uid, formData.role);
+      await UserProfileAPI.update(user.uid, profilePayload);
 
-      // Update local user state
-      ACTIONS.updateUser({
+      // Update local user state (uid, userData)
+      await ACTIONS.updateUser(user.uid, {
         ...user,
         displayName: formData.displayName,
         role: formData.role,
         onboardingCompleted: true,
       });
 
-      // Redirect to appropriate dashboard
       const dashboardRoutes = {
         buyer: "/dashboard/buyer",
         seller: "/dashboard/seller",
@@ -340,8 +337,9 @@ export default function OnboardingWizard() {
 
       navigate(dashboardRoutes[formData.role] || "/dashboard/main");
     } catch (err) {
-      console.error("Error completing onboarding:", err);
-      setError(err.message || "Failed to complete setup. Please try again.");
+      console.error("Onboarding failed:", err?.response?.data || err.message || err);
+      const serverMsg = err?.response?.data?.error;
+      setError(serverMsg || err.message || "Failed to update profile. Please try again.");
     } finally {
       setLoading(false);
     }

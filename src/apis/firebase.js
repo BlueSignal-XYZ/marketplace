@@ -54,6 +54,10 @@ const mode = getAppMode();
 let _firestore = null;
 export async function getFirestoreInstance() {
   if (_firestore) return _firestore;
+  if (!app) {
+    console.error('[Firebase] Cannot initialise Firestore — Firebase app is not configured. Check VITE_FIREBASE_* env vars.');
+    return null;
+  }
   const { getFirestore } = await import('firebase/firestore');
   _firestore = getFirestore(app);
   return _firestore;
