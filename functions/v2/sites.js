@@ -8,7 +8,7 @@ const admin = require("firebase-admin");
 
 async function listSites(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) {
       return res.status(400).json({ success: false, error: "Missing userId" });
     }

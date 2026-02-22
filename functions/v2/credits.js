@@ -202,7 +202,7 @@ async function rejectCredits(req, res) {
 
 async function getPortfolio(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) {
       return res.status(400).json({ success: false, error: "Missing userId" });
     }

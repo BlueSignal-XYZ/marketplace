@@ -14,7 +14,7 @@ const admin = require("firebase-admin");
 
 async function linkWQT(req, res) {
   try {
-    const uid = req.body.userId || req.user?.uid;
+    const uid = req.user?.uid || req.body.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const { device_ids } = req.body;
@@ -37,7 +37,7 @@ async function linkWQT(req, res) {
 
 async function unlinkWQT(req, res) {
   try {
-    const uid = req.body.userId || req.user?.uid || req.query.userId;
+    const uid = req.user?.uid || req.body.userId || req.query.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const now = new Date().toISOString();
@@ -57,7 +57,7 @@ async function unlinkWQT(req, res) {
 
 async function getLinkStatus(req, res) {
   try {
-    const uid = req.query.userId || req.user?.uid;
+    const uid = req.user?.uid || req.query.userId;
     if (!uid) return res.status(401).json({ success: false, error: "Auth required" });
 
     const db = admin.database();
