@@ -426,6 +426,16 @@ async function claimDevice(req, res) {
       return res.status(400).json({ success: false, error: "Missing device_id or dev_eui" });
     }
 
+    // Validate device_id format (alphanumeric + hyphens, 6-40 chars)
+    if (!/^[A-Za-z0-9_-]{6,40}$/.test(device_id)) {
+      return res.status(400).json({ success: false, error: "Invalid device_id format" });
+    }
+
+    // Validate dev_eui format (16 hex characters)
+    if (!/^[0-9A-Fa-f]{16}$/.test(dev_eui)) {
+      return res.status(400).json({ success: false, error: "Invalid dev_eui format" });
+    }
+
     const uid = req.body.userId || req.user?.uid;
     if (!uid) {
       return res.status(401).json({ success: false, error: "Authentication required" });

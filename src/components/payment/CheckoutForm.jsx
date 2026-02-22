@@ -187,30 +187,16 @@ const CheckoutForm = ({ item }) => {
   const { payAmount } = item || {};
 
   useEffect(() => {
-    console.log("stripe_config", stripe_config);
-  }, [stripe_config]);
-
-  // Load Stripe
-  useEffect(() => {
     fetch(`${serverUrl}/stripe/config`, {
       method: "POST",
     }).then(async (r) => {
       const { publishableKey } = await r.json();
-      console.log("publishableKey", publishableKey);
       setStripePromise(loadStripe(publishableKey));
     });
   }, [serverUrl]);
 
   // Create Payment Intent
   useEffect(() => {
-    //#REQ# SERVER, STRIPE, AND PAY AMOUNT (ABOVE $0.50 [50 CENTS]) SHOULD BE DEFINED.
-    console.log(
-      "isIntentful",
-      serverUrl && stripePromise && payAmount >= 50,
-      serverUrl,
-      stripePromise,
-      payAmount
-    );
     if (serverUrl && stripePromise && payAmount >= 50) {
       fetch(`${serverUrl}/stripe/create/payment_intent`, {
         method: "POST",
