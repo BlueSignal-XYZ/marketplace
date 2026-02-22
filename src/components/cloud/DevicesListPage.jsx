@@ -416,6 +416,21 @@ const Skeleton = styled.div`
   }
 `;
 
+const DeviceEmptyIcon = () => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
+    <circle cx="32" cy="34" r="6" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
+    <path d="M32 28v-4M32 42v4M26 34h-4M38 34h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+  </svg>
+);
+
+const DeviceErrorIcon = () => (
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.3" />
+    <path d="M32 20v24M32 48v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+  </svg>
+);
+
 export default function DevicesListPage() {
   const navigate = useNavigate();
   const { STATES } = useAppContext();
@@ -425,6 +440,7 @@ export default function DevicesListPage() {
   const [devices, setDevices] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -441,6 +457,7 @@ export default function DevicesListPage() {
 
   const loadDevices = async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       // Merge two device sources via Map (last-write-wins by device ID):
       //   1. v2 API (getDevices) — returns shaped DeviceSummary[] from the backend
@@ -452,7 +469,12 @@ export default function DevicesListPage() {
       const deviceMap = new Map();
 
       // Source 1: v2 API (handles demo/real switching automatically)
-      const v2Devices = await getDevices(user?.uid).catch(() => []);
+      let v2Devices = [];
+      try {
+        v2Devices = await getDevices(user?.uid) || [];
+      } catch (e) {
+        setLoadError(e?.message || "Failed to load devices. Check your connection and try again.");
+      }
       (v2Devices || []).forEach((d) => {
         deviceMap.set(d.id, {
           ...d,
@@ -478,6 +500,7 @@ export default function DevicesListPage() {
       setDevices(Array.from(deviceMap.values()));
     } catch (error) {
       console.error("Error loading devices:", error);
+      setLoadError(error?.message || "Failed to load devices.");
     } finally {
       setLoading(false);
     }
@@ -693,15 +716,23 @@ export default function DevicesListPage() {
         </Filters>
       )}
 
+      {loadError && filteredDevices.length === 0 ? (
+        <DSEmptyState
+          icon={<DeviceErrorIcon />}
+          title="Unable to Load Devices"
+          description={loadError}
+          action={{ label: "Retry", onClick: loadDevices }}
+        />
+      ) : (
       <TableContainer>
         {filteredDevices.length === 0 ? (
           <DSEmptyState
-            icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/></svg>}
+            icon={<DeviceEmptyIcon />}
             title={searchQuery || statusFilter !== "all" || typeFilter !== "all" ? "No devices found" : "No Devices Yet"}
             description={
               searchQuery || statusFilter !== "all" || typeFilter !== "all"
                 ? "Try adjusting your filters or search query."
-                : "No devices registered yet. Add your first device or enable Demo Mode in Profile to explore with sample data."
+                : "No devices commissioned yet. Add your first device to get started, or enable Demo Mode in Profile to explore with sample data."
             }
             action={!searchQuery && statusFilter === "all" ? { label: "Commission Device", onClick: () => navigate("/cloud/commissioning/new") } : undefined}
           />
@@ -789,6 +820,7 @@ export default function DevicesListPage() {
           </Table>
         )}
       </TableContainer>
+      )}
 
       <AddDeviceModal
         isOpen={showAddModal}

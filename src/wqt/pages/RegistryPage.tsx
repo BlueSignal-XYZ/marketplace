@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
-import { RegistryCredit } from '../../data/mockRegistryData';
+import { RegistryCredit, mockRegistryCredits } from '../../data/mockRegistryData';
 import { fetchRegistryCredits } from '../../services/wqtDataService';
+import { isDemoMode } from '../../utils/demoMode';
 import { SearchBar } from '../../design-system/primitives/SearchBar';
 import { FilterChips } from '../../design-system/primitives/FilterChips';
 import { Table } from '../../design-system/primitives/Table';
@@ -237,8 +238,12 @@ export function RegistryPage() {
     setLoading(true);
     setError(null);
     try {
-      const realCredits = await fetchRegistryCredits();
-      setAllCredits((Array.isArray(realCredits) ? realCredits : []) as RegistryCredit[]);
+      if (isDemoMode()) {
+        setAllCredits(mockRegistryCredits);
+      } else {
+        const realCredits = await fetchRegistryCredits();
+        setAllCredits((Array.isArray(realCredits) ? realCredits : []) as RegistryCredit[]);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load registry credits.');
       setAllCredits([]);

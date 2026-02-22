@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { isDemoMode } from '../utils/demoMode';
+
+const DEMO_BANNER_DISMISSED_KEY = 'demoBannerDismissed';
 
 const BannerContainer = styled.div`
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
@@ -17,7 +19,7 @@ const BannerContainer = styled.div`
   font-weight: 500;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 100;
+  z-index: 10;
 
   @media (max-width: 768px) {
     min-height: 48px;
@@ -88,7 +90,22 @@ const CloseButton = styled.button`
 `;
 
 export function DemoBanner() {
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() =>
+    typeof sessionStorage !== 'undefined' && sessionStorage.getItem(DEMO_BANNER_DISMISSED_KEY) === 'true'
+  );
+
+  useEffect(() => {
+    if (dismissed && typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem(DEMO_BANNER_DISMISSED_KEY, 'true');
+    }
+  }, [dismissed]);
+
+  const handleDismiss = () => {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem(DEMO_BANNER_DISMISSED_KEY, 'true');
+    }
+    setDismissed(true);
+  };
 
   if (!isDemoMode() || dismissed) return null;
 
@@ -98,10 +115,20 @@ export function DemoBanner() {
         <DemoIcon>🔬</DemoIcon>
         <span><strong>Demo Mode</strong> — Showing sample data</span>
       </BannerText>
-      <SettingsLink to="/cloud/profile">Disable in Settings</SettingsLink>
-      <CloseButton onClick={() => setDismissed(true)} aria-label="Dismiss demo banner">
+      <SettingsLink to={getSettingsPath()}>Disable in Settings</SettingsLink>
+      <CloseButton onClick={handleDismiss} aria-label="Dismiss demo banner">
         ×
       </CloseButton>
     </BannerContainer>
   );
+}
+
+/** Returns the correct profile/settings path based on hostname (WQT vs Cloud). */
+function getSettingsPath(): string {
+  if (typeof window === 'undefined') return '/cloud/profile';
+  const host = window.location.hostname || '';
+  if (host.includes('cloud.bluesignal') || host.includes('cloud-bluesignal')) {
+    return '/cloud/profile';
+  }
+  return '/profile';
 }

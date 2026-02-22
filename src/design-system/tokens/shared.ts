@@ -59,11 +59,18 @@ export const media = {
   '2xl': `@media (min-width: ${breakpoints['2xl']}px)`,
 } as const;
 
-/** Z-index scale */
+/** Z-index scale — use globally for consistent layering.
+ * base: page content
+ * banner: demo/notification banners (passive)
+ * dropdown: nav dropdowns, menus
+ * notification: toast, notification bar
+ * modal: modals, overlays
+ */
 export const zIndex = {
   base: 0,
-  dropdown: 100,
-  sticky: 200,
+  banner: 10,
+  dropdown: 20,
+  notification: 30,
   overlay: 300,
   modal: 400,
   toast: 500,
