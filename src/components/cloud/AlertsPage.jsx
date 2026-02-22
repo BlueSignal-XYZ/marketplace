@@ -168,6 +168,10 @@ const TableContainer = styled.div`
   border-radius: 12px;
   overflow: hidden;
 
+  @media (max-width: 1023px) {
+    overflow: visible;
+  }
+
   @media (max-width: 768px) {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -179,8 +183,8 @@ const Table = styled.table`
   border-collapse: collapse;
   font-size: 14px;
 
-  @media (max-width: 768px) {
-    min-width: 900px;
+  @media (max-width: 1023px) {
+    display: none;
   }
 
   thead {
@@ -190,29 +194,33 @@ const Table = styled.table`
 
   th {
     text-align: left;
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-weight: 600;
     color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-    font-size: 13px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 
-    @media (max-width: 768px) {
-      padding: 12px;
-      font-size: 12px;
-    }
+    &:nth-child(1) { width: 90px; min-width: 90px; }   /* Severity */
+    &:nth-child(2) { width: 140px; min-width: 140px; }  /* Site/Device */
+    &:nth-child(3) { min-width: 0; }                    /* Message - flex */
+    &:nth-child(4) { width: 100px; min-width: 100px; } /* First Seen */
+    &:nth-child(5) { width: 100px; min-width: 100px; } /* Last Seen */
+    &:nth-child(6) { width: 100px; min-width: 100px; } /* Status */
+    &:nth-child(7) { width: 120px; min-width: 120px; }  /* Actions */
   }
 
   td {
-    padding: 14px 16px;
+    padding: 12px 16px;
     border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
     color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    vertical-align: middle;
 
-    @media (max-width: 768px) {
-      padding: 12px;
-      font-size: 13px;
-    }
+    &:nth-child(1) { width: 90px; }
+    &:nth-child(2) { width: 140px; }
+    &:nth-child(6) { width: 100px; }
+    &:nth-child(7) { width: 120px; }
   }
 
   tbody tr {
@@ -227,6 +235,54 @@ const Table = styled.table`
       border-bottom: none;
     }
   }
+`;
+
+const AlertCards = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+const AlertCard = styled.div`
+  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const AlertCardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+const AlertCardMessage = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  line-height: 1.6;
+`;
+
+const AlertCardMeta = styled.div`
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+`;
+
+const AlertCardActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
 `;
 
 const SeverityPill = styled.span`
@@ -562,97 +618,128 @@ export default function AlertsPage() {
             }
           />
         ) : (
-          <Table>
-            <thead>
-              <tr>
-                <th>Severity</th>
-                <th>Site / Device</th>
-                <th>Message</th>
-                <th>First Seen</th>
-                <th>Last Seen</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            <Table>
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Site / Device</th>
+                  <th>Message</th>
+                  <th>First Seen</th>
+                  <th>Last Seen</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredAlerts.map((alert) => (
+                  <tr key={alert.id}>
+                    <td>
+                      <SeverityPill $severity={alert.severity}>
+                        {getSeverityLabel(alert.severity)}
+                      </SeverityPill>
+                    </td>
+                    <td>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                        <span>{alert.siteName}</span>
+                        <DeviceLink to={`/cloud/devices/${alert.deviceId}`} onClick={(e) => e.stopPropagation()}>
+                          {alert.deviceName}
+                        </DeviceLink>
+                      </div>
+                    </td>
+                    <td>
+                      <AlertLink to={`/cloud/alerts/${alert.id}`} onClick={(e) => e.stopPropagation()}>
+                        {alert.message}
+                      </AlertLink>
+                    </td>
+                    <td>
+                      <div>{getRelativeTime(alert.firstSeen)}</div>
+                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={new Date(alert.firstSeen).toLocaleString()}>
+                        {new Date(alert.firstSeen).toLocaleString()}
+                      </div>
+                    </td>
+                    <td>
+                      <div>{getRelativeTime(alert.lastSeen)}</div>
+                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={new Date(alert.lastSeen).toLocaleString()}>
+                        {new Date(alert.lastSeen).toLocaleString()}
+                      </div>
+                    </td>
+                    <td>
+                      <StatusPill $status={alert.status}>
+                        {getStatusLabel(alert.status)}
+                      </StatusPill>
+                    </td>
+                    <td>
+                      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                        {alert.status === "open" && (
+                          <>
+                            <ActionButton onClick={(e) => { e.stopPropagation(); handleAcknowledge(alert.id); }} disabled={updatingAlerts.has(alert.id)}>
+                              {updatingAlerts.has(alert.id) ? "..." : "Ack"}
+                            </ActionButton>
+                            <ActionButton onClick={(e) => { e.stopPropagation(); handleResolve(alert.id); }} disabled={updatingAlerts.has(alert.id)}>
+                              {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                            </ActionButton>
+                          </>
+                        )}
+                        {alert.status === "acknowledged" && (
+                          <ActionButton onClick={(e) => { e.stopPropagation(); handleResolve(alert.id); }} disabled={updatingAlerts.has(alert.id)}>
+                            {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                          </ActionButton>
+                        )}
+                        <ActionButton as={Link} to={`/cloud/alerts/${alert.id}`}>
+                          View
+                        </ActionButton>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+
+            <AlertCards>
               {filteredAlerts.map((alert) => (
-                <tr key={alert.id}>
-                  <td>
+                <AlertCard key={alert.id}>
+                  <AlertCardHeader>
                     <SeverityPill $severity={alert.severity}>
                       {getSeverityLabel(alert.severity)}
                     </SeverityPill>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                      <span>{alert.siteName}</span>
-                      <DeviceLink to={`/cloud/devices/${alert.deviceId}`}>
-                        {alert.deviceName}
-                      </DeviceLink>
-                    </div>
-                  </td>
-                  <td>
-                    <AlertLink to={`/cloud/alerts/${alert.id}`}>
-                      {alert.message}
-                    </AlertLink>
-                  </td>
-                  <td>
-                    <div>{getRelativeTime(alert.firstSeen)}</div>
-                    <div
-                      style={{ fontSize: "11px", color: "#9ca3af" }}
-                      title={new Date(alert.firstSeen).toLocaleString()}
-                    >
-                      {new Date(alert.firstSeen).toLocaleString()}
-                    </div>
-                  </td>
-                  <td>
-                    <div>{getRelativeTime(alert.lastSeen)}</div>
-                    <div
-                      style={{ fontSize: "11px", color: "#9ca3af" }}
-                      title={new Date(alert.lastSeen).toLocaleString()}
-                    >
-                      {new Date(alert.lastSeen).toLocaleString()}
-                    </div>
-                  </td>
-                  <td>
                     <StatusPill $status={alert.status}>
                       {getStatusLabel(alert.status)}
                     </StatusPill>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-                      {alert.status === "open" && (
-                        <>
-                          <ActionButton
-                            onClick={() => handleAcknowledge(alert.id)}
-                            disabled={updatingAlerts.has(alert.id)}
-                          >
-                            {updatingAlerts.has(alert.id) ? "..." : "Ack"}
-                          </ActionButton>
-                          <ActionButton
-                            onClick={() => handleResolve(alert.id)}
-                            disabled={updatingAlerts.has(alert.id)}
-                          >
-                            {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
-                          </ActionButton>
-                        </>
-                      )}
-                      {alert.status === "acknowledged" && (
-                        <ActionButton
-                          onClick={() => handleResolve(alert.id)}
-                          disabled={updatingAlerts.has(alert.id)}
-                        >
+                  </AlertCardHeader>
+                  <AlertCardMeta>
+                    {alert.siteName} · <DeviceLink to={`/cloud/devices/${alert.deviceId}`}>{alert.deviceName}</DeviceLink>
+                  </AlertCardMeta>
+                  <AlertCardMessage>
+                    <AlertLink to={`/cloud/alerts/${alert.id}`}>{alert.message}</AlertLink>
+                  </AlertCardMessage>
+                  <AlertCardMeta>
+                    {getRelativeTime(alert.firstSeen)} — {getRelativeTime(alert.lastSeen)}
+                  </AlertCardMeta>
+                  <AlertCardActions>
+                    {alert.status === "open" && (
+                      <>
+                        <ActionButton onClick={() => handleAcknowledge(alert.id)} disabled={updatingAlerts.has(alert.id)}>
+                          {updatingAlerts.has(alert.id) ? "..." : "Ack"}
+                        </ActionButton>
+                        <ActionButton onClick={() => handleResolve(alert.id)} disabled={updatingAlerts.has(alert.id)}>
                           {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
                         </ActionButton>
-                      )}
-                      <ActionButton as={Link} to={`/cloud/alerts/${alert.id}`}>
-                        View
+                      </>
+                    )}
+                    {alert.status === "acknowledged" && (
+                      <ActionButton onClick={() => handleResolve(alert.id)} disabled={updatingAlerts.has(alert.id)}>
+                        {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
                       </ActionButton>
-                    </div>
-                  </td>
-                </tr>
+                    )}
+                    <ActionButton as={Link} to={`/cloud/alerts/${alert.id}`}>
+                      View
+                    </ActionButton>
+                  </AlertCardActions>
+                </AlertCard>
               ))}
-            </tbody>
-          </Table>
+            </AlertCards>
+          </>
         )}
       </TableContainer>
     </CloudPageLayout>

@@ -40,6 +40,7 @@ const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 `;
 
 const FooterWrapper = styled.div`

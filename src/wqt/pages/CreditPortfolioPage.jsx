@@ -35,12 +35,17 @@ const Header = styled.div`
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing.lg};
   margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 
-  @media (max-width: 768px) {
+  @media (min-width: 480px) {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: ${({ theme }) => theme.spacing.xl};
   }
 `;
 
@@ -50,19 +55,38 @@ const StatLabel = styled.div`
   color: ${({ theme }) => theme.colors.textMuted};
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: 8px;
 `;
 
 const StatValue = styled.div`
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: ${({ theme, $color }) => $color || theme.colors.text};
+  line-height: 1.2;
+
+  @media (min-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const StatSubtext = styled.div`
   font-size: 13px;
   color: ${({ theme }) => theme.colors.ui400};
-  margin-top: 4px;
+  margin-top: 6px;
+  line-height: 1.4;
+`;
+
+const FiltersWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
+`;
+
+const FiltersRowLocal = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 `;
 
 const CreditGrid = styled.div`
@@ -77,6 +101,10 @@ const CreditGrid = styled.div`
   @media (min-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
   }
+`;
+
+const EmptyStateWrapper = styled.div`
+  margin-top: 40px;
 `;
 
 const creditBorderColor = (type, theme) => {
@@ -316,56 +344,62 @@ export function CreditPortfolioPage() {
             )}
 
             {/* Credit Filters */}
-            <FiltersRow>
-              <FilterChip $active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
-                All Status
-              </FilterChip>
-              <FilterChip $active={statusFilter === 'verified'} onClick={() => setStatusFilter('verified')}>
-                Verified
-              </FilterChip>
-              <FilterChip $active={statusFilter === 'pending'} onClick={() => setStatusFilter('pending')}>
-                Pending
-              </FilterChip>
-              <FilterChip $active={statusFilter === 'listed'} onClick={() => setStatusFilter('listed')}>
-                Listed
-              </FilterChip>
-              <FilterChip $active={statusFilter === 'retired'} onClick={() => setStatusFilter('retired')}>
-                Retired
-              </FilterChip>
-            </FiltersRow>
-
-            <FiltersRow>
-              <FilterChip $active={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>
-                All Types
-              </FilterChip>
-              <FilterChip $active={typeFilter === 'nitrogen'} onClick={() => setTypeFilter('nitrogen')}>
-                Nitrogen
-              </FilterChip>
-              <FilterChip $active={typeFilter === 'phosphorus'} onClick={() => setTypeFilter('phosphorus')}>
-                Phosphorus
-              </FilterChip>
-              <FilterChip $active={typeFilter === 'stormwater'} onClick={() => setTypeFilter('stormwater')}>
-                Stormwater
-              </FilterChip>
-              <FilterChip $active={typeFilter === 'thermal'} onClick={() => setTypeFilter('thermal')}>
-                Thermal
-              </FilterChip>
-            </FiltersRow>
+            <FiltersWrapper>
+              <FiltersRowLocal>
+                <FilterChip $active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
+                  All Status
+                </FilterChip>
+                <FilterChip $active={statusFilter === 'verified'} onClick={() => setStatusFilter('verified')}>
+                  Verified
+                </FilterChip>
+                <FilterChip $active={statusFilter === 'pending'} onClick={() => setStatusFilter('pending')}>
+                  Pending
+                </FilterChip>
+                <FilterChip $active={statusFilter === 'listed'} onClick={() => setStatusFilter('listed')}>
+                  Listed
+                </FilterChip>
+                <FilterChip $active={statusFilter === 'retired'} onClick={() => setStatusFilter('retired')}>
+                  Retired
+                </FilterChip>
+              </FiltersRowLocal>
+              <FiltersRowLocal>
+                <FilterChip $active={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>
+                  All Types
+                </FilterChip>
+                <FilterChip $active={typeFilter === 'nitrogen'} onClick={() => setTypeFilter('nitrogen')}>
+                  Nitrogen
+                </FilterChip>
+                <FilterChip $active={typeFilter === 'phosphorus'} onClick={() => setTypeFilter('phosphorus')}>
+                  Phosphorus
+                </FilterChip>
+                <FilterChip $active={typeFilter === 'stormwater'} onClick={() => setTypeFilter('stormwater')}>
+                  Stormwater
+                </FilterChip>
+                <FilterChip $active={typeFilter === 'thermal'} onClick={() => setTypeFilter('thermal')}>
+                  Thermal
+                </FilterChip>
+              </FiltersRowLocal>
+            </FiltersWrapper>
 
             {filteredCredits.length === 0 ? (
-              <EmptyStateContainer>
-                <EmptyStateTitle>No Credits Yet</EmptyStateTitle>
-                <EmptyStateText>
-                  {credits.length === 0
-                    ? 'Enroll your devices in a trading program to start generating credits.'
-                    : 'No credits match your current filters.'}
-                </EmptyStateText>
-                {credits.length === 0 && (
-                  <PrimaryButton onClick={() => navigate('/programs')}>
-                    Browse Trading Programs
-                  </PrimaryButton>
-                )}
-              </EmptyStateContainer>
+              <EmptyStateWrapper>
+                <EmptyStateContainer>
+                  <EmptyStateTitle>No Credits Yet</EmptyStateTitle>
+                  <EmptyStateText>
+                    {credits.length === 0
+                      ? 'Enroll your devices in a trading program to start generating credits.'
+                      : 'No credits match your current filters.'}
+                  </EmptyStateText>
+                  {credits.length === 0 && (
+                    <PrimaryButton
+                      onClick={() => navigate('/programs')}
+                      style={{ padding: '14px 28px', fontSize: '16px', fontWeight: 600 }}
+                    >
+                      Browse Trading Programs
+                    </PrimaryButton>
+                  )}
+                </EmptyStateContainer>
+              </EmptyStateWrapper>
             ) : (
               <CreditGrid>
                 {filteredCredits.map(credit => (

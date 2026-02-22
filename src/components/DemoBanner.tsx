@@ -6,70 +6,72 @@ import { isDemoMode } from '../utils/demoMode';
 const BannerContainer = styled.div`
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 10px 16px;
+  min-height: 40px;
+  max-height: 48px;
+  padding: 8px 48px 8px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 100;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    min-height: 48px;
+    max-height: 64px;
+    padding: 10px 44px 10px 12px;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
-    padding: 12px 16px;
-    text-align: center;
   }
 `;
 
 const BannerText = styled.span`
   display: flex;
   align-items: center;
-  gap: 8px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 4px;
-  }
+  gap: 6px;
 `;
 
 const DemoIcon = styled.span`
-  font-size: 16px;
+  font-size: 14px;
+  flex-shrink: 0;
 `;
 
-const SignInLink = styled(Link)`
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  padding: 6px 16px;
+const SettingsLink = styled(Link)`
+  color: rgba(255, 255, 255, 0.95);
+  padding: 4px 12px;
   border-radius: 6px;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 500;
+  font-size: 12px;
   transition: all 0.15s ease-out;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.15);
   }
 `;
 
 const CloseButton = styled.button`
   position: absolute;
-  right: 16px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 20px;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px;
   line-height: 1;
   transition: all 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     color: #ffffff;
@@ -81,9 +83,7 @@ const CloseButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    position: static;
-    transform: none;
-    margin-top: 4px;
+    right: 8px;
   }
 `;
 
@@ -98,7 +98,7 @@ export function DemoBanner() {
         <DemoIcon>🔬</DemoIcon>
         <span><strong>Demo Mode</strong> — Showing sample data</span>
       </BannerText>
-      <SignInLink to="/cloud/profile">Disable in Settings</SignInLink>
+      <SettingsLink to="/cloud/profile">Disable in Settings</SettingsLink>
       <CloseButton onClick={() => setDismissed(true)} aria-label="Dismiss demo banner">
         ×
       </CloseButton>

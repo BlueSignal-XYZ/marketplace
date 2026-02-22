@@ -623,10 +623,12 @@ const MOCK_PGP_TEST_RESULTS = {
 // Simulate network delay
 const delay = (ms = 300) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Format relative time
+// Format relative time (handles invalid/undefined timestamps)
 export const getRelativeTime = (timestamp) => {
+  if (timestamp == null || timestamp === "") return "—";
   const now = Date.now();
   const then = new Date(timestamp).getTime();
+  if (Number.isNaN(then)) return "—";
   const diff = now - then;
 
   const minute = 60 * 1000;

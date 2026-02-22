@@ -152,6 +152,8 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('[ErrorBoundary] Uncaught render error:', error, errorInfo);
+    console.error('[ErrorBoundary] Stack trace:', error?.stack);
+    console.error('[ErrorBoundary] Component stack:', errorInfo?.componentStack);
   }
 
   resetError = () => {
