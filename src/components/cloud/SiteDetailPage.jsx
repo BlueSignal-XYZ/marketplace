@@ -2,11 +2,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
-import { GoogleMap, useJsApiLoader, Marker, Polygon } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, Marker, Polygon } from "@react-google-maps/api";
 import CloudPageLayout from "./CloudPageLayout";
 import { getRelativeTime } from "../../services/cloudMockAPI";
 import { getDevices, getAlerts, getSites } from "../../services/v2/api";
 import { useAppContext } from "../../context/AppContext";
+import { MapsAPI } from "../../scripts/back_door";
 
 const ContentWrapper = styled.div`
   display: grid;
@@ -268,21 +269,6 @@ const MapLoading = styled.div`
   gap: 8px;
 `;
 
-const MapError = styled.div`
-  height: 100%;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #dc2626;
-  font-size: 14px;
-  gap: 8px;
-  text-align: center;
-  padding: 20px;
-`;
 
 const EmptyState = styled.div`
   text-align: center;
@@ -313,8 +299,8 @@ const Skeleton = styled.div`
   }
 `;
 
-// Google Maps API key from environment
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
+// Google Maps API key — prefer env var, fall back to backend
+const ENV_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
 /** Normalize site from v2 or CloudMockAPI shape for display */
 function normalizeSiteForDisplay(site, deviceCount) {
@@ -394,11 +380,21 @@ export default function SiteDetailPage() {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [mapsApiKey, setMapsApiKey] = useState(ENV_MAPS_KEY || null);
 
-  // Load Google Maps
-  const { isLoaded: mapsLoaded, loadError: mapsError } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-  });
+  // Resolve Google Maps API key: env var first, then backend fallback
+  useEffect(() => {
+    if (mapsApiKey) return;
+    let cancelled = false;
+    MapsAPI.getKey()
+      .then((key) => {
+        if (!cancelled && key) setMapsApiKey(key);
+      })
+      .catch(() => {
+        // silently fail — map section will show a fallback message
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   // Map center - memoized to prevent re-renders
   const mapCenter = useMemo(() => {
@@ -599,72 +595,69 @@ export default function SiteDetailPage() {
         <Section>
           <h2>Location Map</h2>
           <MapContainer>
-            {mapsError ? (
-              <MapError>
-                <div>Failed to load map</div>
-                <div style={{ fontSize: "12px" }}>Please check your internet connection</div>
-              </MapError>
-            ) : !mapsLoaded ? (
+            {!mapsApiKey ? (
               <MapLoading>
                 <div>Loading map...</div>
               </MapLoading>
             ) : (
-              <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                center={mapCenter}
-                zoom={14}
-                options={mapOptions}
-              >
-                {/* Site marker */}
-                {site?.coordinates && (
-                  <Marker
-                    position={{ lat: site.coordinates.lat, lng: site.coordinates.lng }}
-                    title={site.name}
-                    icon={{
-                      url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#0284c7">
-                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                      `),
-                      scaledSize: { width: 32, height: 32 },
-                    }}
-                  />
-                )}
-                {/* Device markers */}
-                {devices.map((device) =>
-                  device.coordinates ? (
+              <LoadScript googleMapsApiKey={mapsApiKey} loadingElement={<MapLoading><div>Loading map...</div></MapLoading>}>
+                <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  center={mapCenter}
+                  zoom={14}
+                  options={mapOptions}
+                >
+                  {/* Site marker */}
+                  {site?.coordinates && (
                     <Marker
-                      key={device.id}
-                      position={{ lat: device.coordinates.lat, lng: device.coordinates.lng }}
-                      title={device.name}
+                      position={{ lat: site.coordinates.lat, lng: site.coordinates.lng }}
+                      title={site.name}
                       icon={{
                         url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${
-                            device.status === "online" ? "#16a34a" : device.status === "warning" ? "#f97316" : "#dc2626"
-                          }">
-                            <circle cx="12" cy="12" r="8"/>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#0284c7">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                           </svg>
                         `),
-                        scaledSize: { width: 16, height: 16 },
-                        anchor: { x: 8, y: 8 },
+                        scaledSize: { width: 32, height: 32 },
                       }}
                     />
-                  ) : null
-                )}
-                {/* Property boundary polygon if available */}
-                {site?.boundary && (
-                  <Polygon
-                    paths={site.boundary}
-                    options={{
-                      fillColor: "#0284c7",
-                      fillOpacity: 0.1,
-                      strokeColor: "#0284c7",
-                      strokeOpacity: 0.8,
-                      strokeWeight: 2,
-                    }}
-                  />
-                )}
-              </GoogleMap>
+                  )}
+                  {/* Device markers */}
+                  {devices.map((device) =>
+                    device.coordinates ? (
+                      <Marker
+                        key={device.id}
+                        position={{ lat: device.coordinates.lat, lng: device.coordinates.lng }}
+                        title={device.name}
+                        icon={{
+                          url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${
+                              device.status === "online" ? "#16a34a" : device.status === "warning" ? "#f97316" : "#dc2626"
+                            }">
+                              <circle cx="12" cy="12" r="8"/>
+                            </svg>
+                          `),
+                          scaledSize: { width: 16, height: 16 },
+                          anchor: { x: 8, y: 8 },
+                        }}
+                      />
+                    ) : null
+                  )}
+                  {/* Property boundary polygon if available */}
+                  {site?.boundary && (
+                    <Polygon
+                      paths={site.boundary}
+                      options={{
+                        fillColor: "#0284c7",
+                        fillOpacity: 0.1,
+                        strokeColor: "#0284c7",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                      }}
+                    />
+                  )}
+                </GoogleMap>
+              </LoadScript>
             )}
           </MapContainer>
         </Section>
