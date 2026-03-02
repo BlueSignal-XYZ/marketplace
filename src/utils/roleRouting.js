@@ -29,7 +29,7 @@ const getUserRole = (user) => {
 /**
  * Default dashboard routing for each platform mode.
  *
- * @param {Object} user - Firebase user with role/claims
+ * @param {Object|null} user - Firebase user with role/claims (null if unauthenticated)
  * @param {string} mode - 'cloud' | 'marketplace'
  * @returns {string} - route path
  */
