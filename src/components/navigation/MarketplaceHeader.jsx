@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -112,11 +113,12 @@ const NavLink = styled.a`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors?.textSecondary || '#64748B'};
+  color: ${({ $active, theme }) => $active ? (theme.colors?.primary || '#0052CC') : (theme.colors?.textSecondary || '#64748B')};
   text-decoration: none;
   border-radius: 8px;
   transition: all 150ms;
   white-space: nowrap;
+  ${({ $active, theme }) => $active ? `border-bottom: 2px solid ${theme.colors?.primary || '#0052CC'};` : ''}
 
   &:hover {
     color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
@@ -201,7 +203,7 @@ const SOLUTIONS_ITEMS = [
   { label: "For Utilities", href: "/for-utilities" },
   { label: "For Homeowners", href: "/for-homeowners" },
   { label: "For Aggregators", href: "/for-aggregators" },
-  { label: "For Generators", href: "/generate-credits" },
+  { label: "For Credit Generators", href: "/generate-credits" },
 ];
 
 function SolutionsDropdownLight() {
@@ -321,6 +323,10 @@ const MenuButton = styled.button`
   &:active {
     transform: scale(0.95);
   }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
 `;
 
 const DemoToggle = styled.button`
@@ -362,9 +368,11 @@ const DemoDot = styled.span`
 
 export function MarketplaceHeader({ onMenuClick }) {
   const { STATES } = useAppContext();
+  const location = useLocation();
   const isSignedIn = !!STATES?.user?.uid;
   const ctaHref = isSignedIn ? "/marketplace" : "/login";
   const demoActive = isDemoMode();
+  const pathname = location.pathname;
 
   const handleClick = () => {
     if (onMenuClick) onMenuClick();
@@ -384,11 +392,13 @@ export function MarketplaceHeader({ onMenuClick }) {
           </LogoSvgWrapper>
         </LogoWrapper>
 
-        <NavLinks>
-          <NavLink href="/marketplace">Marketplace</NavLink>
-          <NavLink href="/how-it-works">How It Works</NavLink>
+        <NavLinks aria-label="Main navigation">
+          <NavLink href="/marketplace" $active={pathname === '/marketplace'}>Marketplace</NavLink>
+          <NavLink href="/how-it-works" $active={pathname === '/how-it-works'}>How It Works</NavLink>
           <SolutionsDropdownLight />
-          <NavLink href="/registry">Credit Registry</NavLink>
+          <NavLink href="/registry" $active={pathname === '/registry'}>Credit Registry</NavLink>
+          <NavLink href="/map" $active={pathname === '/map'}>Project Map</NavLink>
+          <NavLink href="/programs" $active={pathname === '/programs' || pathname.startsWith('/programs/')}>Programs</NavLink>
         </NavLinks>
 
         <RightGroup>
@@ -401,7 +411,7 @@ export function MarketplaceHeader({ onMenuClick }) {
             <DemoDot $active={demoActive} />
             Demo
           </DemoToggle>
-          <SignUpButton href={ctaHref}>Get Started</SignUpButton>
+          <SignUpButton href={ctaHref}>Sign In</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
             <FontAwesomeIcon icon={faBars} />

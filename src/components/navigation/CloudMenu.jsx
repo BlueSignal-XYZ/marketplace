@@ -285,7 +285,7 @@ export function CloudMenu({ open, onClose, user }) {
   return (
     <>
       <Backdrop $open={open} onClick={handleBackdropClick} />
-      <Panel $open={open}>
+      <Panel $open={open} aria-label="Sidebar menu">
         <PanelHeader>
           <PanelTitle>BlueSignal Cloud</PanelTitle>
           <CloseButton
@@ -301,7 +301,7 @@ export function CloudMenu({ open, onClose, user }) {
 
         {/* Primary Navigation - Always visible */}
         <SectionLabel>Dashboard</SectionLabel>
-        <NavList>
+        <NavList aria-label="Dashboard navigation">
           <NavItem
             to="/dashboard/main"
             $active={isActive("/dashboard/main")}
@@ -324,7 +324,7 @@ export function CloudMenu({ open, onClose, user }) {
           <>
             {/* Sites & Devices - Core functionality */}
             <SectionLabel>Manage</SectionLabel>
-            <NavList>
+            <NavList aria-label="Manage navigation">
               <NavItem
                 to="/cloud/sites"
                 $active={isActive("/cloud/sites")}
@@ -350,13 +350,20 @@ export function CloudMenu({ open, onClose, user }) {
 
             {/* Quick Actions - Streamlined */}
             <SectionLabel>Quick Actions</SectionLabel>
-            <NavList>
+            <NavList aria-label="Quick actions">
               <NavItem
                 to="/cloud/sites/new"
                 $active={isActive("/cloud/sites/new")}
                 onClick={onClose}
               >
                 + Add Site
+              </NavItem>
+              <NavItem
+                to="/commission"
+                $active={isActive("/commission")}
+                onClick={onClose}
+              >
+                + Add Device
               </NavItem>
               {menuConfig.showCommissioning && (
                 <NavItem
@@ -371,7 +378,7 @@ export function CloudMenu({ open, onClose, user }) {
 
             {/* Tools - Consolidated */}
             <SectionLabel>Tools</SectionLabel>
-            <NavList>
+            <NavList aria-label="Tools navigation">
               <NavItem
                 to="/cloud/tools/nutrient-calculator"
                 $active={isActive("/cloud/tools/nutrient-calculator")}
@@ -397,7 +404,7 @@ export function CloudMenu({ open, onClose, user }) {
 
             {/* Account */}
             <SectionLabel>Account</SectionLabel>
-            <NavList>
+            <NavList aria-label="Account navigation">
               <NavItem
                 to="/cloud/profile"
                 $active={isActive("/cloud/profile")}
@@ -409,9 +416,21 @@ export function CloudMenu({ open, onClose, user }) {
           </>
         )}
 
+        {/* Support */}
+        <SectionLabel>Support</SectionLabel>
+        <NavList aria-label="Support links">
+          <NavItem
+            to="/contact"
+            $active={isActive("/contact")}
+            onClick={onClose}
+          >
+            Help & Support
+          </NavItem>
+        </NavList>
+
         {/* Cross-platform links */}
         <SectionLabel>BlueSignal Ecosystem</SectionLabel>
-        <NavList>
+        <NavList aria-label="BlueSignal ecosystem links">
           <ExternalLink
             href="https://waterquality.trading"
             target="_blank"

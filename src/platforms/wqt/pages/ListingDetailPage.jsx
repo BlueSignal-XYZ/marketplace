@@ -12,7 +12,7 @@ import { Button } from '../../../design-system/primitives/Button';
 import { Tabs } from '../../../design-system/primitives/Tabs';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
-import { getListing, ApiError } from '../../../services/v2/client';
+import { getListing, ApiError } from '../../../services/v2/api';
 
 const Page = styled.div`
   max-width: 1000px;

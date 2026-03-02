@@ -3,8 +3,8 @@
  * Wired to /v2/market/search with loading, error, empty states.
  */
 
-import React, { useState, useCallback, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { SearchBar } from '../../../design-system/primitives/SearchBar';
 import { Table } from '../../../design-system/primitives/Table';
@@ -58,6 +58,11 @@ const FilterRow = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+
+  & > * {
+    flex: 1;
+    min-width: 0;
+  }
 `;
 
 const ViewToggle = styled.div`
@@ -141,8 +146,9 @@ function VerificationBadge({ level }) {
 }
 
 function NutrientBadge({ type }) {
+  const label = type === 'nitrogen' ? 'Nitrogen' : type === 'phosphorus' ? 'Phosphorus' : 'Nitrogen and Phosphorus';
   return (
-    <Badge variant={type === 'nitrogen' ? 'info' : 'positive'} size="sm">
+    <Badge variant={type === 'nitrogen' ? 'info' : 'positive'} size="sm" aria-label={label}>
       {type === 'nitrogen' ? 'N' : type === 'phosphorus' ? 'P' : 'N+P'}
     </Badge>
   );
@@ -156,7 +162,10 @@ const COLUMNS = [
     header: 'Credit ID',
     width: '120px',
     mono: true,
-    render: (row) => (row.creditId || row.id || '').slice(0, 10) + '…',
+    render: (row) => {
+      const fullId = row.creditId || row.id || '';
+      return <span title={fullId}>{fullId.slice(0, 10)}…</span>;
+    },
   },
   {
     key: 'nutrientType',
@@ -255,8 +264,12 @@ function TableSkeleton() {
 
 export function MarketplacePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  useEffect(() => { document.title = 'Marketplace — WaterQuality.Trading'; }, []);
+
+  const [searchInput, setSearchInput] = useState(searchParams.get('q') || '');
   const [search, setSearch] = useState(searchParams.get('q') || '');
   const [filters, setFilters] = useState({
     nutrientType: searchParams.get('nutrientType') || '',
@@ -264,6 +277,27 @@ export function MarketplacePage() {
   });
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
   const debounceRef = useRef(null);
+  const initialKeyRef = useRef(location.key);
+
+  // Sync state from URL params on back/forward navigation
+  useEffect(() => {
+    if (location.key === initialKeyRef.current) return;
+    const q = searchParams.get('q') || '';
+    setSearchInput(q);
+    setSearch(q);
+    setFilters({
+      nutrientType: searchParams.get('nutrientType') || '',
+      verificationLevel: searchParams.get('verificationLevel') || '',
+    });
+    setPage(Number(searchParams.get('page')) || 1);
+  }, [location.key, searchParams]);
+
+  // Clean up debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   const queryParams = {
     page,
@@ -294,6 +328,7 @@ export function MarketplacePage() {
   }, [page, search, filters, updateUrl]);
 
   const handleSearchChange = useCallback((value) => {
+    setSearchInput(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setSearch(value);
@@ -323,11 +358,12 @@ export function MarketplacePage() {
       <FilterRow>
         <SearchBar
           placeholder="Search by credit ID, region, or seller…"
-          defaultValue={search}
+          value={searchInput}
           onChange={handleSearchChange}
           filters={FILTER_CONFIGS}
           activeFilters={filters}
           onFilterChange={handleFilterChange}
+          aria-label="Search marketplace listings"
         />
       </FilterRow>
 
@@ -339,7 +375,7 @@ export function MarketplacePage() {
       )}
 
       <ViewToggle>
-        <ResultCount>
+        <ResultCount aria-live="polite">
           {loading ? 'Loading…' : `${total} listing${total !== 1 ? 's' : ''}`}
         </ResultCount>
       </ViewToggle>
@@ -352,7 +388,7 @@ export function MarketplacePage() {
             icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>}
             title="No listings found"
             description="Try adjusting your filters or search terms."
-            action={{ label: 'Clear Filters', onClick: () => { setSearch(''); setFilters({}); setPage(1); } }}
+            action={{ label: 'Clear Filters', onClick: () => { setSearchInput(''); setSearch(''); setFilters({}); setPage(1); } }}
           />
         ) : (
           <EmptyState

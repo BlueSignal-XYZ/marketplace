@@ -3,6 +3,24 @@ import styled from "styled-components";
 import { logoImage } from "../../Welcome";
 import { isCloudMode, getAppMode } from "../../../utils/modeDetection";
 
+// Inline SVG logo for WQT — crisp at any size (avoids pixelated raster logo)
+const WQTLogoInline = ({ height = 36 }) => {
+  const scale = height / 48;
+  const width = 320 * scale;
+  return (
+    <svg width={width} height={height} viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#0F4C81"/>
+        <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      </g>
+      <text x="50" y="32" fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="22" fill="#0F4C81">
+        <tspan fontWeight="700">WaterQuality</tspan><tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+      </text>
+    </svg>
+  );
+};
+
 const Title = styled.h1`
   font-size: 1.5rem;
   color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
@@ -124,7 +142,11 @@ const WelcomeHome = ({ user, setCardState, enterDash }) => {
       animate="visible"
     >
       <div className="logo-wrap">
-        <img src={logoImage} alt={isCloud ? "BlueSignal" : "WaterQuality.Trading"} />
+        {isCloud ? (
+          <img src={logoImage} alt="BlueSignal" />
+        ) : (
+          <WQTLogoInline height={36} />
+        )}
         <span className="mode-badge">
           {isCloud ? "Cloud" : "Marketplace"}
         </span>

@@ -11,6 +11,7 @@ import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useAppContext } from "../../context/AppContext";
+import { isDemoMode, setDemoMode } from "../../utils/demoMode";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-4px); }
@@ -312,6 +313,73 @@ const MobileCTA = styled.a`
   }
 `;
 
+// ── Demo toggle + app menu button (dark variant) ────────
+
+const DemoToggleDark = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  border: 1px solid ${({ $active }) => ($active ? '#0EA5E9' : 'rgba(255, 255, 255, 0.15)')};
+  background: ${({ $active }) => ($active ? '#0EA5E9' : 'rgba(255, 255, 255, 0.06)')};
+  color: ${({ $active }) => ($active ? '#FFFFFF' : 'rgba(255, 255, 255, 0.5)')};
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  white-space: nowrap;
+  min-height: 28px;
+
+  &:hover {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+`;
+
+const DemoDot = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${({ $active }) => ($active ? '#FFFFFF' : 'rgba(255, 255, 255, 0.3)')};
+  transition: background 0.2s;
+`;
+
+const AppMenuBtn = styled.button`
+  height: 44px;
+  width: 44px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
+  transition: all 0.2s;
+
+  &:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+const RightGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 // ── Logo ────────────────────────────────────────────────
 
 const WQTLogoLight = () => (
@@ -365,7 +433,7 @@ const SOLUTIONS_ITEMS = [
   { label: "For Utilities", href: "/for-utilities" },
   { label: "For Homeowners", href: "/for-homeowners" },
   { label: "For Aggregators", href: "/for-aggregators" },
-  { label: "For Generators", href: "/generate-credits" },
+  { label: "For Credit Generators", href: "/generate-credits" },
 ];
 
 // ── Desktop Dropdown Component ──────────────────────────
@@ -428,12 +496,18 @@ function SolutionsDropdown() {
 
 // ── Component ───────────────────────────────────────────
 
-export function WebsiteNav() {
+export function WebsiteNav({ onMenuClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const { STATES } = useAppContext();
   const isSignedIn = !!STATES?.user?.uid;
   const ctaHref = isSignedIn ? "/marketplace" : "/login";
+  const demoActive = isDemoMode();
+
+  const handleDemoToggle = () => {
+    setDemoMode(!demoActive);
+    window.location.reload();
+  };
 
   return (
     <>
@@ -450,14 +524,33 @@ export function WebsiteNav() {
             <NavLink href="/registry">Credit Registry</NavLink>
           </NavLinks>
 
-          <CTALink href={ctaHref}>Get Started</CTALink>
-
-          <MobileMenuBtn
-            onClick={() => setMobileOpen((p) => !p)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          >
-            <FontAwesomeIcon icon={mobileOpen ? faTimes : faBars} />
-          </MobileMenuBtn>
+          <RightGroup>
+            <DemoToggleDark
+              $active={demoActive}
+              onClick={handleDemoToggle}
+              aria-label={demoActive ? 'Disable demo mode' : 'Enable demo mode'}
+              title={demoActive ? 'Demo mode ON — click to disable' : 'Click to enable demo mode'}
+            >
+              <DemoDot $active={demoActive} />
+              Demo
+            </DemoToggleDark>
+            <CTALink href={ctaHref}>Sign In</CTALink>
+            <AppMenuBtn
+              onClick={() => {
+                setMobileOpen(false);
+                if (onMenuClick) onMenuClick();
+              }}
+              aria-label="Open app menu"
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </AppMenuBtn>
+            <MobileMenuBtn
+              onClick={() => setMobileOpen((p) => !p)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            >
+              <FontAwesomeIcon icon={mobileOpen ? faTimes : faBars} />
+            </MobileMenuBtn>
+          </RightGroup>
         </NavInner>
       </NavOuter>
 

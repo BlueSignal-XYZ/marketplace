@@ -325,19 +325,20 @@ const LoginForm = () => {
               required
             />
 
-            <ActionsRow>
-              <ButtonPrimary type="submit" disabled={submitting}>
-                {submitting ? "Signing in..." : "Sign in"}
-              </ButtonPrimary>
+            <ButtonPrimary type="submit" disabled={submitting} style={{ width: '100%' }}>
+              {submitting ? "Signing in..." : "Sign in"}
+            </ButtonPrimary>
 
-              <ButtonSecondary
+            <div style={{ textAlign: 'center', marginTop: 4 }}>
+              <ButtonLink
                 type="button"
                 onClick={handleResetPassword}
                 disabled={submitting}
+                style={{ fontSize: 13 }}
               >
-                Reset password
-              </ButtonSecondary>
-            </ActionsRow>
+                Forgot password?
+              </ButtonLink>
+            </div>
           </Form>
 
           <FooterRow>

@@ -61,9 +61,9 @@ export const cloudTheme = {
 
     // Badges
     badgeSuccessBg: 'rgba(16, 185, 129, 0.1)',
-    badgeSuccessText: cloudColors.success,
+    badgeSuccessText: '#047857',
     badgeWarningBg: 'rgba(245, 158, 11, 0.1)',
-    badgeWarningText: cloudColors.warning,
+    badgeWarningText: '#B45309',
     badgeErrorBg: 'rgba(239, 68, 68, 0.1)',
     badgeErrorText: cloudColors.error,
     badgeNeutralBg: cloudColors.background,

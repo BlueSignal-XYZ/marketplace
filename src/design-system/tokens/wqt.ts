@@ -16,7 +16,7 @@ export const wqtColors = {
   backgroundDark: '#1B1F2A',     // For optional dark data panels
   text: '#1A1A1A',
   textSecondary: '#6B7280',
-  textMuted: '#9CA3AF',
+  textMuted: '#6B7280',
   textOnPrimary: '#FFFFFF',
   border: '#E2E4E9',
   borderLight: '#F0F1F3',
