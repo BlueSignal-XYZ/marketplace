@@ -49,7 +49,8 @@ const HintPopup = styled.div<{ visible: boolean }>`
   font-size: 13px;
   line-height: 1.5;
   color: #1a202c;
-  max-width: 300px;
+  max-width: 360px;
+  white-space: normal;
   z-index: 10001;
   opacity: ${props => props.visible ? 1 : 0};
   pointer-events: ${props => props.visible ? 'auto' : 'none'};
@@ -82,10 +83,13 @@ export function DemoHint({ screenName, customHint }: DemoHintProps) {
   return (
     <HintContainer>
       <HintButton
+        type="button"
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
         onClick={() => setVisible(!visible)}
         aria-label="Demo hint"
+        aria-haspopup="true"
+        aria-expanded={visible}
       >
         ?
       </HintButton>

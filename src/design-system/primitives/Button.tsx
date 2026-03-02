@@ -141,6 +141,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       $fullWidth={fullWidth}
       $loading={loading}
       disabled={disabled || loading}
+      type="button"
       {...rest}
     >
       {loading ? <Spinner /> : icon}

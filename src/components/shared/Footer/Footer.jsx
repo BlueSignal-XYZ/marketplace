@@ -9,11 +9,29 @@ const StyledFooter = styled.footer`
   margin: 0 auto;
   text-align: center;
 
+  .footer-top {
+    display: none;
+  }
+
   @media (min-width: 648px) {
-    display: flex;
-    justify-content: space-between;
     text-align: left;
-    gap: 80px; /* large horizontal gap between left + right */
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || '#F0F1F3'};
+    }
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
   }
 
   .rights-reserved {
@@ -29,14 +47,40 @@ const StyledFooter = styled.footer`
     gap: 16px;
   }
 
-  .footer-spacer {
-    flex: 1;
-  }
-
   a {
     color: ${({ theme }) => theme.colors.primary500};
     font-size: 12px;
     font-weight: 500;
+  }
+
+  .footer-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
+    margin: 0 0 12px;
+  }
+
+  .footer-col-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-col-links a {
+    font-size: 13px;
+    font-weight: 400;
+    color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
+    text-decoration: none;
+    transition: color 150ms;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+    }
   }
 `;
 
@@ -59,28 +103,56 @@ function Footer() {
 
   return (
     <StyledFooter>
-      <span className="rights-reserved">
-        {copyrightText}
-      </span>
-
-      {/* spacer pushes Terms/Privacy to the right on desktop */}
-      <div className="footer-spacer" />
-
-      <div className="button-wrap">
-        <a
-          rel="noreferrer"
-          target="_blank"
-          href={termsUrl}
-        >
-          Terms & Conditions
-        </a>
-        <a
-          rel="noreferrer"
-          target="_blank"
-          href={privacyUrl}
-        >
-          Privacy Policy
-        </a>
+      {!isBlueSignalMode && (
+        <div className="footer-top">
+          <div>
+            <p className="footer-col-title">Marketplace</p>
+            <ul className="footer-col-links">
+              <li><a href="/marketplace">Browse Credits</a></li>
+              <li><a href="/registry">Credit Registry</a></li>
+              <li><a href="/map">Project Map</a></li>
+              <li><a href="/recent-removals">Recent Removals</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="footer-col-title">Solutions</p>
+            <ul className="footer-col-links">
+              <li><a href="/how-it-works">How It Works</a></li>
+              <li><a href="/for-utilities">For Utilities</a></li>
+              <li><a href="/for-homeowners">For Homeowners</a></li>
+              <li><a href="/generate-credits">For Credit Generators</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="footer-col-title">Resources</p>
+            <ul className="footer-col-links">
+              <li><a href="/programs">Trading Programs</a></li>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/data">Environmental Data</a></li>
+            </ul>
+          </div>
+        </div>
+      )}
+      <div className="footer-bottom">
+        <span className="rights-reserved">
+          {copyrightText}
+        </span>
+        <div className="button-wrap">
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href={termsUrl}
+          >
+            Terms & Conditions
+          </a>
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href={privacyUrl}
+          >
+            Privacy Policy
+          </a>
+        </div>
       </div>
     </StyledFooter>
   );

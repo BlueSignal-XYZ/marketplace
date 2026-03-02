@@ -5,7 +5,7 @@
  * URL: /how-it-works
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { GlossaryTooltip } from '../components/GlossaryTooltip';
@@ -111,7 +111,7 @@ const CardAlt = styled(Card)`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-/** 2-over-1 layout: two cards on first row, third spans full width below (or 2/3 centered) */
+/** 3-column grid for "What Makes This Different" section */
 const DifferentGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -121,19 +121,12 @@ const DifferentGrid = styled.div`
     grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
-`;
-
-const DifferentCard = styled(CardAlt)`
-  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    &:nth-child(3) {
-      grid-column: 1 / -1;
-      max-width: 66%;
-      margin-left: auto;
-      margin-right: auto;
-      justify-self: center;
-    }
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
+
+const DifferentCard = styled(CardAlt)``;
 
 const CardTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
@@ -260,6 +253,8 @@ const CTAButtonOutline = styled(Link)`
 `;
 
 export default function HowItWorksPage() {
+  useEffect(() => { document.title = 'How It Works — WaterQuality.Trading'; }, []);
+
   return (
     <Page>
       <Hero>

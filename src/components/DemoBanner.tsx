@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { isDemoMode } from '../utils/demoMode';
+import { useAppContext } from '../context/AppContext';
 
 const DEMO_BANNER_DISMISSED_KEY = 'demoBannerDismissed';
 
@@ -103,6 +104,8 @@ const CloseButton = styled.button`
 
 export function DemoBanner() {
   const [dismissed, setDismissed] = useState(() => isBannerDismissed());
+  const { STATES } = useAppContext();
+  const isLoggedIn = !!STATES?.user?.uid;
 
   const handleDismiss = () => {
     setBannerDismissed();
@@ -111,13 +114,16 @@ export function DemoBanner() {
 
   if (!isDemoMode() || dismissed) return null;
 
+  const linkPath = isLoggedIn ? getSettingsPath() : '/login';
+  const linkLabel = isLoggedIn ? 'Disable in Profile' : 'Sign in to disable';
+
   return (
     <BannerContainer>
       <BannerText>
         <DemoIcon>🔬</DemoIcon>
         <span><strong>Demo Mode</strong> — Showing sample data</span>
       </BannerText>
-      <SettingsLink to={getSettingsPath()}>Disable in Settings</SettingsLink>
+      <SettingsLink to={linkPath}>{linkLabel}</SettingsLink>
       <CloseButton onClick={handleDismiss} aria-label="Dismiss demo banner">
         ×
       </CloseButton>

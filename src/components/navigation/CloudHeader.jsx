@@ -55,11 +55,12 @@ const HeaderInner = styled.div`
   }
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled.a`
   height: 100%;
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
 `;
 
 const LogoImg = styled.img`
@@ -179,7 +180,7 @@ export function CloudHeader({ onMenuClick }) {
   return (
     <HeaderOuter>
       <HeaderInner>
-        <LogoWrapper>
+        <LogoWrapper href="/dashboard/main" aria-label="BlueSignal Cloud — Go to dashboard">
           <LogoImg src={blueSignalLogo} alt="BlueSignal Cloud Monitoring" />
           <ModeBadge>Cloud</ModeBadge>
         </LogoWrapper>

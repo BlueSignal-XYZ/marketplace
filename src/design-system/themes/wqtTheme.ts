@@ -63,11 +63,11 @@ export const wqtTheme = {
     badgeVerifiedBg: 'rgba(139, 92, 246, 0.1)',
     badgeVerifiedText: wqtColors.verified,
     badgePositiveBg: 'rgba(16, 185, 129, 0.1)',
-    badgePositiveText: wqtColors.positive,
+    badgePositiveText: '#047857',
     badgeNegativeBg: 'rgba(239, 68, 68, 0.1)',
     badgeNegativeText: wqtColors.negative,
     badgeWarningBg: 'rgba(245, 158, 11, 0.1)',
-    badgeWarningText: wqtColors.warning,
+    badgeWarningText: '#B45309',
     badgeNeutralBg: wqtColors.background,
     badgeNeutralText: wqtColors.textSecondary,
 

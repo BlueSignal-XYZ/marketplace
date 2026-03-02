@@ -451,6 +451,8 @@ export function MapPage() {
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
 
+  useEffect(() => { document.title = 'Project Map — WaterQuality.Trading'; }, []);
+
   const [loading, setLoading] = useState(true);
   const [mapError, setMapError] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'qc' | 'kc' | 'nitrogen' | 'phosphorus'>('all');
@@ -741,7 +743,13 @@ export function MapPage() {
           </FilterChipsContainer>
 
           <ViewToggle>
-            <ViewButton active={viewMode === 'map'} onClick={() => setViewMode('map')}>
+            <ViewButton
+              active={viewMode === 'map'}
+              onClick={() => HAS_VALID_TOKEN && setViewMode('map')}
+              disabled={!HAS_VALID_TOKEN}
+              title={!HAS_VALID_TOKEN ? 'Map view is temporarily unavailable' : undefined}
+              style={!HAS_VALID_TOKEN ? { opacity: 0.4, cursor: 'not-allowed' } : undefined}
+            >
               Map View
             </ViewButton>
             <ViewButton active={viewMode === 'list'} onClick={() => setViewMode('list')}>

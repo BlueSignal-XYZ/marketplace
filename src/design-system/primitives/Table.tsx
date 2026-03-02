@@ -108,6 +108,7 @@ const Tr = styled.tr<{ $clickable: boolean }>`
   &:nth-child(even) { background: ${({ theme }) => theme.components.tableHeaderBg}08; }
   &:hover { background: ${({ theme }) => theme.components.tableRowHover}; }
   &:not(:last-child) > td { border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder}; }
+  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.primary}; outline-offset: -2px; }
 `;
 
 const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean }>`
@@ -178,10 +179,12 @@ export function Table<T>({
             {columns.map((col) => (
               <Th
                 key={col.key}
+                scope="col"
                 $align={col.align || 'left'}
                 $sortable={!!col.sortable}
                 style={col.width ? { width: col.width } : undefined}
                 onClick={() => handleSort(col)}
+                aria-sort={col.sortable ? (sortKey === col.key && sortDir ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') : undefined}
               >
                 {col.header}
                 {col.sortable && (
@@ -200,7 +203,13 @@ export function Table<T>({
             </tr>
           ) : (
             sortedData.map((row, i) => (
-              <Tr key={rowKey(row)} $clickable={!!onRowClick} onClick={() => onRowClick?.(row)}>
+              <Tr
+                key={rowKey(row)}
+                $clickable={!!onRowClick}
+                onClick={() => onRowClick?.(row)}
+                tabIndex={onRowClick ? 0 : undefined}
+                onKeyDown={onRowClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(row); } } : undefined}
+              >
                 {columns.map((col) => (
                   <Td
                     key={col.key}

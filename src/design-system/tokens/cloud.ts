@@ -15,7 +15,7 @@ export const cloudColors = {
   background: '#FAFAFA',
   text: '#1A1A1A',
   textSecondary: '#6B7280',
-  textMuted: '#9CA3AF',
+  textMuted: '#6B7280',
   textOnPrimary: '#FFFFFF',
   border: '#E5E7EB',
   borderLight: '#F3F4F6',

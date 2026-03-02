@@ -3,7 +3,7 @@
  * Submits to the same Google Sheets endpoint used by BlueSignal.xyz landing.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
@@ -370,6 +370,8 @@ const PoweredBy = styled.p`
 // ── Component ────────────────────────────────────────────────
 
 export default function ContactPage() {
+  useEffect(() => { document.title = 'Contact Us — WaterQuality.Trading'; }, []);
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -661,7 +663,6 @@ export default function ContactPage() {
             Or email us directly at{' '}
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           </InfoText>
-          <PoweredBy>Powered by BlueSignal LTD</PoweredBy>
         </InfoSection>
       </FormSection>
     </Page>

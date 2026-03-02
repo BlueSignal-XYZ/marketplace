@@ -81,7 +81,7 @@ const SectionHeader = styled.div`
   margin-bottom: 16px;
 `;
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 18px;
   font-weight: 600;
@@ -93,6 +93,7 @@ const DeviceGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
+  align-items: stretch;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     grid-template-columns: repeat(2, 1fr);
@@ -114,6 +115,10 @@ const DeviceCard = styled.div`
     border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0 4px 16px rgba(0, 102, 255, 0.06);
     transform: translateY(-1px);
+  }
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
   }
 `;
 
@@ -336,23 +341,32 @@ export function CloudDashboardPage() {
         <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
       </Header>
 
-      {activeAlerts.slice(0, 5).map((alert) => (
+      {activeAlerts
+        .sort((a, b) => {
+          const order = { critical: 0, warning: 1, info: 2 };
+          return (order[a.severity] ?? 3) - (order[b.severity] ?? 3);
+        })
+        .slice(0, 5)
+        .map((alert) => (
         <AlertBanner
           key={alert.id}
           $severity={alert.severity}
           onClick={() => navigate(`/device/${alert.deviceId}`)}
+          role="alert"
+          aria-live={alert.severity === 'critical' ? 'assertive' : 'polite'}
         >
           <span>{severityIcon(alert.severity)}</span>
           <span>{alert.deviceName ? `${alert.deviceName} — ` : ''}{alert.message}</span>
+          <span style={{ marginLeft: 'auto', fontSize: 12, opacity: 0.6 }}>View →</span>
         </AlertBanner>
       ))}
 
       <StatusRow>
         <DataCard label="Total Devices" value={`${devices.length}`} icon={<span style={{ fontSize: 16 }}>📊</span>} compact />
         <DataCard label="Online" value={`${online}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#10B981', fontSize: 16 }}>●</span>} compact />
-        <DataCard label="Warning" value={`${warning}`} icon={<span style={{ color: '#F59E0B', fontSize: 16 }}>●</span>} compact />
-        <DataCard label="Offline" value={`${offline}`} icon={<span style={{ color: '#EF4444', fontSize: 16 }}>●</span>} compact />
-        <DataCard label="Avg Battery" value={`${avgBattery}`} unit="%" icon={<span style={{ fontSize: 16 }}>🔋</span>} compact />
+        <DataCard label="Warning" value={`${warning}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#F59E0B', fontSize: 16 }}>●</span>} compact />
+        <DataCard label="Offline" value={`${offline}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#EF4444', fontSize: 16 }}>●</span>} compact />
+        <DataCard label="Avg Battery" value={`${avgBattery}`} unit={`% (${devices.filter(d => d.battery > 0).length} devices)`} icon={<span style={{ fontSize: 16 }}>🔋</span>} compact />
       </StatusRow>
 
       <Section>
@@ -367,6 +381,10 @@ export function CloudDashboardPage() {
             <DeviceCard
               key={device.id}
               onClick={() => navigate(`/device/${device.id}`)}
+              tabIndex={0}
+              role="link"
+              aria-label={`View device ${device.name}`}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/device/${device.id}`); } }}
             >
               <DeviceHeader>
                 <div>
@@ -381,22 +399,19 @@ export function CloudDashboardPage() {
                   {device.onlineStatus}
                 </Badge>
               </DeviceHeader>
-              {device.onlineStatus !== 'offline' ? (
-                <MetricRow>
-                  <Metric>
-                    <MetricLabel>Battery</MetricLabel>
-                    <MetricValue>{device.battery}<MetricUnit>%</MetricUnit></MetricValue>
-                  </Metric>
-                  <Metric>
-                    <MetricLabel>Credits</MetricLabel>
-                    <MetricValue>{device.creditsGenerated}<MetricUnit> kg</MetricUnit></MetricValue>
-                  </Metric>
-                </MetricRow>
-              ) : (
-                <div style={{ padding: '32px 0', textAlign: 'center', fontSize: 13, fontFamily: 'inherit' }}>
-                  <span style={{ color: '#9CA3AF' }}>
-                    Device offline{device.lastReadingAt ? ` · Last seen ${new Date(device.lastReadingAt).toLocaleDateString()}` : ''}
-                  </span>
+              <MetricRow>
+                <Metric>
+                  <MetricLabel>Battery</MetricLabel>
+                  <MetricValue>{device.onlineStatus !== 'offline' ? device.battery : '—'}<MetricUnit>{device.onlineStatus !== 'offline' ? '%' : ''}</MetricUnit></MetricValue>
+                </Metric>
+                <Metric>
+                  <MetricLabel title="Nutrient credits (kg)">Credits</MetricLabel>
+                  <MetricValue>{device.onlineStatus !== 'offline' ? device.creditsGenerated : '—'}<MetricUnit>{device.onlineStatus !== 'offline' ? ' kg' : ''}</MetricUnit></MetricValue>
+                </Metric>
+              </MetricRow>
+              {device.onlineStatus === 'offline' && device.lastReadingAt && (
+                <div style={{ marginTop: 8, fontSize: 12, color: '#6B7280', textAlign: 'center' }}>
+                  Last seen {new Date(device.lastReadingAt).toLocaleString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' })}
                 </div>
               )}
             </DeviceCard>
