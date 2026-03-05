@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 const SITE_CONFIG = {
   'waterquality.trading': {
     siteName: 'WaterQuality.Trading',
-    defaultImage: 'https://waterquality.trading/social/wqt-preview.png',
+    defaultImage: 'https://waterquality.trading/og-image-wqt.png',
     twitterHandle: '@WQTrading',
     baseUrl: 'https://waterquality.trading',
   },
