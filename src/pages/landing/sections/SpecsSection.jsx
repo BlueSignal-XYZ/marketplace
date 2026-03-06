@@ -48,6 +48,13 @@ const CTAButton = styled.a`
   }
 `;
 
+const PricingNote = styled.p`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.w50};
+  margin-top: 16px;
+`;
+
 const Tables = styled.div`
   display: flex;
   flex-direction: column;
@@ -166,11 +173,12 @@ const SpecsSection = () => (
               No marketing abstractions — just the&nbsp;datasheet.
             </SectionDesc>
             <CTAButton href="#order" onClick={() => trackCTA('order_devkit_specs', 'Specs CTA')}>
-              Order Dev Kit — $499
+              Order Dev Kit — $999
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </CTAButton>
+            <PricingNote>+ Cloud Monitoring $9.99/mo per&nbsp;device</PricingNote>
           </RevealOnScroll>
         </Left>
 
