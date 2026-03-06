@@ -120,7 +120,7 @@ const CTASection = () => (
               Try the Dashboard
             </SecondaryBtn>
           </DashboardLink>
-          <Note style={{ marginTop: 24 }}>Dev kits ship Q2 2026 &middot; hello@bluesignal.xyz &middot; Free shipping in the&nbsp;US</Note>
+          <Note style={{ marginTop: 24 }}>WQM-1 Dev Kit $999 &middot; Cloud Monitoring $9.99/mo per device &middot; Free shipping in the&nbsp;US</Note>
         </Wrapper>
       </RevealOnScroll>
     </Container>
