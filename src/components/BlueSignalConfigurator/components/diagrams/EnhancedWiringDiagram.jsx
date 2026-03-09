@@ -468,7 +468,7 @@ const EnhancedWiringDiagram = ({ product }) => {
                 strokeWidth="2"
               />
               <text x="55" y="22" textAnchor="middle" fill="#1e40af" fontSize="11" fontWeight="600">
-                {product.id === "smart-buoy-xl" ? "Pi CM4" : "Pi Zero 2W"}
+                Pi Zero 2W
               </text>
               <text x="55" y="40" textAnchor="middle" fill="#374151" fontSize="9">
                 Controller

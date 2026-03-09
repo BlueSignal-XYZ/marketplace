@@ -55,10 +55,7 @@ export const CONNECTORS = {
 };
 
 export const FUSES = {
-  batteryMain: { rating: "60A ANL", location: "Positive terminal", products: ["s-sol", "smart-buoy", "smart-buoy-xl"] },
-  inverterInput: { rating: "30A ANL", location: "Inverter positive lead", products: ["s-sol", "smart-buoy", "smart-buoy-xl"] },
-  acInput: { rating: "5A 250V", location: "After terminal block", products: ["s-ac"] },
-  dcBranch: { rating: "10A ATC", location: "Each major branch", products: "all" },
+  dcInput: { rating: "3A inline", location: "DC input positive lead", products: ["wqm-1"] },
 };
 
 export default { WIRE_COLORS, CONNECTORS, FUSES };

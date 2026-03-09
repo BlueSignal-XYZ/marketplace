@@ -198,24 +198,24 @@ const BenchmarkView = () => {
 
         {/* BlueSignal */}
         <BenchmarkCard highlight>
-          <BenchmarkName>BlueSignal Platform</BenchmarkName>
-          <BenchmarkPrice highlight>$599 - $19,999</BenchmarkPrice>
+          <BenchmarkName>BlueSignal WQM-1</BenchmarkName>
+          <BenchmarkPrice highlight>$999</BenchmarkPrice>
           <BenchmarkSection type="pro">
             <h5>Capabilities</h5>
             <ul>
-              <li>Integrated algae control + monitoring</li>
-              <li>LTE connectivity included</li>
-              <li>Cloud dashboard & alerts</li>
-              <li>Solar-powered options</li>
-              <li>Floating & shore deployments</li>
+              <li>6-channel water quality monitoring</li>
+              <li>LoRaWAN connectivity (15 km range)</li>
+              <li>Cloud dashboard & alerts ($9.99/mo)</li>
+              <li>Relay output for automation</li>
+              <li>Offline SQLite storage with auto-sync</li>
               <li>Open platform (Pi-based)</li>
             </ul>
           </BenchmarkSection>
           <BenchmarkSection type="pro">
             <h5>Unique Value</h5>
             <ul>
-              <li>ONLY affordable option with both</li>
-              <li>monitoring AND control</li>
+              <li>6 parameters at consumer price point</li>
+              <li>LoRaWAN long-range connectivity</li>
             </ul>
           </BenchmarkSection>
         </BenchmarkCard>
@@ -224,13 +224,13 @@ const BenchmarkView = () => {
       <SavingsCallout>
         <h4>Cost Advantage</h4>
         <p>
-          BlueSignal delivers <strong>algae control + water quality monitoring</strong> starting at{" "}
-          <strong>$599</strong> — compared to <strong>$36,000+</strong> for equivalent enterprise
-          solutions (ultrasonic system + multi-parameter sonde).
+          BlueSignal WQM-1 delivers <strong>6-channel water quality monitoring</strong> starting at{" "}
+          <strong>$999</strong> — compared to <strong>$6,000+</strong> for equivalent professional
+          sondes (YSI, Hach, In-Situ).
         </p>
         <p style={{ marginTop: 12 }}>
-          <strong>That's up to 98% cost savings</strong> with integrated LTE connectivity and cloud
-          dashboard included.
+          <strong>That's up to 83% cost savings</strong> with LoRaWAN connectivity and cloud
+          dashboard included ($9.99/mo).
         </p>
       </SavingsCallout>
 

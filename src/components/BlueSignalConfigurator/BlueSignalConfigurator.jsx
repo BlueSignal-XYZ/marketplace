@@ -89,7 +89,7 @@ const TABS = [
 
 export default function BlueSignalConfigurator() {
   const [view, setView] = useState("products");
-  const [selectedProduct, setSelectedProduct] = useState("s-ac");
+  const [selectedProduct, setSelectedProduct] = useState("wqm-1");
   const [activeTab, setActiveTab] = useState("overview");
 
   // Filter and comparison state
@@ -485,17 +485,17 @@ export default function BlueSignalConfigurator() {
     sku: selectedProduct.toUpperCase(),
     price: product.price,
     currency: 'USD',
-    availability: 'InStock',
+    availability: 'PreOrder',
     url: `https://bluesignal.xyz?product=${selectedProduct}`,
   }) : null;
 
   return (
     <ConfiguratorWrapper ref={containerRef}>
       <SEOHead
-        title="Water Quality Sensors & Smart Buoys | BlueSignal"
-        description="Professional-grade water quality monitoring hardware. Smart buoys, NPK sensors, LoRaWAN gateways, and enclosures. Configure your monitoring system and get a quote."
+        title="WQM-1 Water Quality Monitor | BlueSignal"
+        description="WQM-1: 6-channel water quality monitoring HAT for Raspberry Pi. pH, TDS, Turbidity, ORP, Temperature, GPS. LoRaWAN connectivity. $999 dev kit."
         canonical="/configurator"
-        keywords="water quality sensors, smart buoys, lake monitoring, pond monitoring, NPK sensors, water monitoring hardware"
+        keywords="WQM-1, water quality monitor, Raspberry Pi HAT, pH sensor, TDS, turbidity, ORP, LoRaWAN, water monitoring hardware"
         jsonLd={[BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, ...(productSchema ? [productSchema] : [])]}
       />
 

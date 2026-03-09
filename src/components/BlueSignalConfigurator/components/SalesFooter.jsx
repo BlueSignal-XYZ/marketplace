@@ -500,7 +500,7 @@ export default function SalesFooter({ onNavigate }) {
             <FooterLinks>
               <FooterLinkItem>
                 <FooterLink href="#products" onClick={(e) => handleNavClick(e, 'products')}>
-                  Shore Monitor AC
+                  WQM-1 Dev Kit
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -508,15 +508,7 @@ export default function SalesFooter({ onNavigate }) {
               </FooterLinkItem>
               <FooterLinkItem>
                 <FooterLink href="#products" onClick={(e) => handleNavClick(e, 'products')}>
-                  Shore Monitor Solar
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </FooterLink>
-              </FooterLinkItem>
-              <FooterLinkItem>
-                <FooterLink href="#products" onClick={(e) => handleNavClick(e, 'products')}>
-                  Smart Buoy Series
+                  Cloud Monitoring
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
