@@ -1049,7 +1049,7 @@ const faqItems = [
   },
   {
     question: "How long does installation take?",
-    answer: "Most installations are completed in 60 minutes or less for shore-based units. Smart Buoy deployments typically take 2-3 hours including anchoring and calibration. We offer professional installation services in the Austin metro area and can provide remote guidance for DIY installations elsewhere."
+    answer: "Most WQM-1 installations are completed in 30 minutes or less — it's a plug-and-play HAT for Raspberry Pi. We offer professional installation services in the Austin metro area and can provide remote guidance for DIY installations elsewhere."
   },
   {
     question: "What is your return policy?",
@@ -1075,12 +1075,8 @@ const faqItems = [
 
 const productOptions = [
   { value: "", label: "Select a product (optional)" },
-  { value: "smart-buoy", label: "Smart Buoy - $2,499" },
-  { value: "smart-buoy-xl", label: "Smart Buoy XL - $19,999" },
-  { value: "shore-monitor-ac", label: "Shore Monitor AC - $599" },
-  { value: "shore-monitor-solar", label: "Shore Monitor Solar - $1,499" },
-  { value: "shore-monitor-lite", label: "Shore Monitor Lite - $849" },
-  { value: "pressure-wash", label: "Pressure Washing Services" },
+  { value: "wqm-1", label: "WQM-1 Dev Kit - $999" },
+  { value: "cloud-monitoring", label: "Cloud Monitoring - $9.99/mo" },
   { value: "other", label: "Other / General Inquiry" },
 ];
 
@@ -1541,7 +1537,7 @@ export default function SalesPage() {
     sku: selectedProduct.toUpperCase(),
     price: product.price,
     currency: 'USD',
-    availability: 'InStock',
+    availability: 'PreOrder',
     url: `https://bluesignal.xyz?product=${selectedProduct}`,
   }) : null;
 
@@ -1549,10 +1545,10 @@ export default function SalesPage() {
     <>
       <GlobalStyles />
       <SEOHead
-        title="Water Quality Sensors & Smart Buoys | BlueSignal"
-        description="Professional-grade water quality monitoring hardware. Smart buoys, sensors, and complete monitoring systems. Configure your system and get a quote."
+        title="WQM-1 Water Quality Monitor | BlueSignal"
+        description="WQM-1: 6-channel water quality monitoring HAT for Raspberry Pi. pH, TDS, Turbidity, ORP, Temperature, GPS. LoRaWAN connectivity. $999 dev kit."
         canonical="/"
-        keywords="water quality sensors, smart buoys, lake monitoring, pond monitoring, water monitoring hardware"
+        keywords="WQM-1, water quality monitor, Raspberry Pi HAT, pH sensor, TDS, turbidity, ORP, LoRaWAN, water monitoring hardware"
         jsonLd={[BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, ...(productSchema ? [productSchema] : [])]}
       />
 

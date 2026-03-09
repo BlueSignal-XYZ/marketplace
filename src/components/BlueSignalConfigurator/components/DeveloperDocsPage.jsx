@@ -410,7 +410,7 @@ const ResourceDescription = styled.p`
 
 export default function DeveloperDocsPage() {
   const navigate = useNavigate();
-  const [selectedProduct, setSelectedProduct] = useState("s-ac");
+  const [selectedProduct, setSelectedProduct] = useState("wqm-1");
   const product = PRODUCTS[selectedProduct];
 
   const handleNavigate = (sectionId) => {

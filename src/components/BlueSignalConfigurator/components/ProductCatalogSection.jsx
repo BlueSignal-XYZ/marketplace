@@ -940,11 +940,7 @@ export default function ProductCatalogSection({
                       File naming convention: product-{product.id}.png
                       Files location: /public/images/products/
                       Example files to add:
-                        - product-s-ac.png        (Shore Monitor AC)
-                        - product-s-sol.png       (Shore Monitor Solar)
-                        - product-s-mon.png       (Shore Monitor Lite)
-                        - product-smart-buoy.png  (Smart Buoy)
-                        - product-smart-buoy-xl.png (Smart Buoy XL)
+                        - product-wqm-1.png       (WQM-1)
 
                       Recommended image specs: 400x300px PNG with transparent background
                     */}

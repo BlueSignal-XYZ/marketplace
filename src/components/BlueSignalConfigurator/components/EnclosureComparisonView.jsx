@@ -173,8 +173,8 @@ const StatValue = styled.span`
 const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
   const [selectedProducts, setSelectedProducts] = useState(
     products.length >= 2
-      ? [products[0].id, products[1].id]
-      : [products[0]?.id || "s-ac", "s-sol"]
+      ? [products[0].id, products[1]?.id || products[0].id]
+      : [products[0]?.id || "wqm-1", "wqm-1"]
   );
 
   const handleProductChange = (index, productId) => {

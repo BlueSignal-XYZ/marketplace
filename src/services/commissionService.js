@@ -49,11 +49,7 @@ const getTestsForDeviceType = (deviceType) => {
   const baseTests = ['power_os', 'ads1115', 'ph_ntu', 'relay_ch1', 'lte_wifi', 'cloud_ingest', 'gps'];
 
   const deviceSpecificTests = {
-    'shore-ac': [...baseTests, 'ultrasonic'],
-    'shore-solar': [...baseTests, 'ultrasonic', 'solar_mppt', 'battery_voltage'],
-    'shore-monitor': [...baseTests, 'solar_mppt', 'battery_voltage'],
-    'smart-buoy': [...baseTests, 'ultrasonic', 'solar_mppt', 'battery_voltage', 'ds18b20'],
-    'smart-buoy-xl': [...baseTests, 'ultrasonic', 'solar_mppt', 'battery_voltage', 'ds18b20'],
+    'wqm-1': [...baseTests],
   };
 
   const applicableTestIds = deviceSpecificTests[deviceType] || baseTests;
@@ -61,10 +57,7 @@ const getTestsForDeviceType = (deviceType) => {
 };
 
 // Determine checklist type from device type
-const getChecklistType = (deviceType) => {
-  if (deviceType?.includes('buoy')) {
-    return 'buoy';
-  }
+const getChecklistType = () => {
   return 'shore';
 };
 

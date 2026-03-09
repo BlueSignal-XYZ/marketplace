@@ -2,98 +2,49 @@
 // Pre-configured packages for common deployment scenarios
 
 export const BUNDLES = {
-  "starter-pond": {
-    id: "starter-pond",
-    name: "Starter Pond Package",
-    description: "Entry-level monitoring + treatment for small ponds (< 1 acre)",
+  "single-monitor": {
+    id: "single-monitor",
+    name: "Single Monitor",
+    description: "Single WQM-1 for one monitoring site",
     products: [
-      { productId: "s-ac", quantity: 1 },
+      { productId: "wqm-1", quantity: 1 },
     ],
     discount: 0,
     features: [
-      "Single AC-powered unit",
-      "100W ultrasonic treatment",
-      "3 water quality sensors",
-      "Ideal for backyard ponds",
+      "1× WQM-1 6-channel monitor",
+      "6 water quality parameters",
+      "LoRaWAN connectivity (15 km)",
+      "Cloud dashboard ($9.99/mo)",
     ],
   },
-  "pond-pro": {
-    id: "pond-pro",
-    name: "Pond Pro Package",
-    description: "Off-grid monitoring + treatment for medium ponds (1-5 acres)",
+  "multi-site": {
+    id: "multi-site",
+    name: "Multi-Site Package",
+    description: "3 WQM-1 units for distributed monitoring across a property",
     products: [
-      { productId: "s-sol", quantity: 1 },
-      { productId: "s-mon", quantity: 1 },
-    ],
-    discount: 5,
-    features: [
-      "1 solar-powered treatment unit",
-      "1 monitoring-only station",
-      "Dual-point water quality coverage",
-      "Complete off-grid operation",
-    ],
-  },
-  "lake-monitor": {
-    id: "lake-monitor",
-    name: "Lake Monitoring Package",
-    description: "Comprehensive monitoring for lakes and reservoirs",
-    products: [
-      { productId: "smart-buoy", quantity: 2 },
-      { productId: "s-mon", quantity: 1 },
-    ],
-    discount: 8,
-    features: [
-      "2 floating buoy platforms",
-      "1 shore station",
-      "5 sensors per buoy (10 total floating)",
-      "Multi-point coverage",
-    ],
-  },
-  "treatment-fleet": {
-    id: "treatment-fleet",
-    name: "Treatment Fleet",
-    description: "Multi-zone algae control for large water bodies (10+ acres)",
-    products: [
-      { productId: "s-sol", quantity: 3 },
+      { productId: "wqm-1", quantity: 3 },
     ],
     discount: 10,
     features: [
-      "3 solar-powered treatment units",
-      "300W total ultrasonic power",
-      "Full perimeter coverage",
-      "Coordinated treatment zones",
+      "3× WQM-1 6-channel monitors",
+      "Multi-point water quality coverage",
+      "Shared LoRaWAN gateway",
+      "Unified cloud dashboard",
     ],
   },
-  "research-station": {
-    id: "research-station",
-    name: "Research Station",
-    description: "Lab-grade monitoring for research and compliance",
+  "fleet": {
+    id: "fleet",
+    name: "Fleet Deployment",
+    description: "5 WQM-1 units for comprehensive site coverage",
     products: [
-      { productId: "smart-buoy-xl", quantity: 1 },
-      { productId: "s-mon", quantity: 2 },
+      { productId: "wqm-1", quantity: 5 },
     ],
-    discount: 5,
+    discount: 15,
     features: [
-      "8+ Atlas Scientific sensors",
-      "Chlorophyll-a fluorometer",
-      "Phycocyanin detector",
-      "Shore reference stations",
-    ],
-  },
-  "municipal-basic": {
-    id: "municipal-basic",
-    name: "Municipal Basic",
-    description: "Essential package for municipal water treatment",
-    products: [
-      { productId: "s-ac", quantity: 3 },
-      { productId: "s-mon", quantity: 1 },
-    ],
-    discount: 12,
-    features: [
-      "3 AC-powered treatment units",
-      "1 solar monitoring station",
-      "Suitable for treatment ponds",
-      "Grid-powered reliability",
+      "5× WQM-1 6-channel monitors",
+      "Full-site coverage",
+      "Volume discount",
+      "Priority support",
     ],
   },
 };

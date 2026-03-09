@@ -212,7 +212,7 @@ const faqItems = [
   },
   {
     question: "How long does installation take?",
-    answer: "Most installations are completed in 60 minutes or less for shore-based units. Smart Buoy deployments typically take 2-3 hours including anchoring and calibration. We offer professional installation services in the Austin metro area and can provide remote guidance for DIY installations elsewhere."
+    answer: "Most WQM-1 installations are completed in 30 minutes or less — it's a plug-and-play HAT for Raspberry Pi. We offer professional installation services in the Austin metro area and can provide remote guidance for DIY installations elsewhere."
   },
   {
     question: "What is your return policy?",

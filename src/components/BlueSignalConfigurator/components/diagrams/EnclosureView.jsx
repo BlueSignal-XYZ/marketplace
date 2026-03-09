@@ -47,214 +47,44 @@ const EnclosureLayout = ({ product }) => {
 
     // Product-specific power zone components
     const powerConfigs = {
-      's-ac': {
-        acPsu: {
-          id: 'acPsu',
-          name: 'AC-DC Power Supply',
-          description: 'Grid power input. Dual output for system power and ultrasonic drive.',
-          specs: '120VAC → 24V 4A + 5V 1A, 120W max',
+      'wqm-1': {
+        dcRegulator: {
+          id: 'dcRegulator',
+          name: 'DC Voltage Regulator',
+          description: 'Onboard 9-24V to 5V regulator for Pi and sensor power.',
+          specs: '9-24V DC in → 5V 2A out',
           color: '#eab308',
-          zone: 'lower',
-          position: { top: '15%', left: '8%', width: '100px', height: '55px' }
-        },
-        ultrasonicDriver: {
-          id: 'ultrasonicDriver',
-          name: 'Ultrasonic Driver Board',
-          description: '100W driver for 28kHz transducer. Generates high-frequency signal for algae disruption.',
-          specs: '110VAC input, 100W, 28kHz output',
-          color: '#f97316',
-          zone: 'lower',
-          position: { top: '15%', left: '55%', width: '90px', height: '50px' }
-        },
-        relay: {
-          id: 'relay',
-          name: '24V Relay Module',
-          description: 'Controls ultrasonic emitter power. GPIO-triggered via optocoupler isolation.',
-          specs: '24VDC coil, 10A contacts, optocoupler isolated',
-          color: '#ef4444',
-          zone: 'lower',
-          position: { top: '60%', left: '8%', width: '55px', height: '32px' }
-        },
-        boostConverter: {
-          id: 'boostConverter',
-          name: 'DC-AC Boost Converter',
-          description: 'Steps 24VDC up to 110VAC for ultrasonic driver when running off-grid.',
-          specs: '24V in → 110V out, 100W',
-          color: '#a855f7',
-          zone: 'lower',
-          position: { top: '60%', left: '35%', width: '65px', height: '32px' }
-        },
-        solarMppt: {
-          id: 'solarMppt',
-          name: 'Solar MPPT Module',
-          description: 'Solar charge controller with 18650 battery holder. Powers Pi and sensors off-grid.',
-          specs: '6-24V solar in, 5V 2A out, MPPT',
-          color: '#14b8a6',
-          zone: 'lower',
-          position: { top: '60%', left: '68%', width: '60px', height: '32px' }
-        }
-      },
-      's-sol': {
-        solarMppt: {
-          id: 'solarMppt',
-          name: 'Solar MPPT Controller',
-          description: 'Maximum power point tracking for optimal solar harvest. Charges battery bank.',
-          specs: '6-24V solar in, 5V 3A out, MPPT tracking',
-          color: '#14b8a6',
-          zone: 'lower',
-          position: { top: '15%', left: '8%', width: '100px', height: '55px' }
-        },
-        batteryPack: {
-          id: 'batteryPack',
-          name: '18650 Battery Pack',
-          description: '4S2P lithium battery pack for overnight operation and cloudy day backup.',
-          specs: '14.8V nominal, 5200mAh, protected cells',
-          color: '#22c55e',
-          zone: 'lower',
-          position: { top: '15%', left: '55%', width: '90px', height: '50px' }
-        },
-        dcConverter: {
-          id: 'dcConverter',
-          name: 'DC-DC Buck Converter',
-          description: 'Steps battery voltage down to 5V for Pi and sensors.',
-          specs: '8-28V in → 5V 3A out, 93% efficient',
-          color: '#eab308',
-          zone: 'lower',
-          position: { top: '60%', left: '8%', width: '65px', height: '32px' }
-        },
-        bms: {
-          id: 'bms',
-          name: 'Battery Management System',
-          description: 'Balances cells, protects against over-charge/discharge, monitors temperature.',
-          specs: '4S BMS, 20A continuous, temp sensor',
-          color: '#ef4444',
-          zone: 'lower',
-          position: { top: '60%', left: '45%', width: '75px', height: '32px' }
-        }
-      },
-      's-mon': {
-        dcPsu: {
-          id: 'dcPsu',
-          name: 'PoE Splitter',
-          description: 'Power over Ethernet for single-cable deployment. Provides power and data.',
-          specs: '802.3af/at PoE, 5V 2.4A out',
-          color: '#3b82f6',
           zone: 'lower',
           position: { top: '15%', left: '8%', width: '90px', height: '50px' }
         },
-        ethernetSwitch: {
-          id: 'ethernetSwitch',
-          name: 'Ethernet Switch',
-          description: 'Managed switch for sensor network expansion.',
-          specs: '5-port Gigabit, VLAN capable',
-          color: '#6366f1',
+        relay: {
+          id: 'relay',
+          name: '10A Relay Module',
+          description: 'Switched output for automation (pumps, valves, alerts).',
+          specs: '10A @ 250VAC/30VDC, GPIO-triggered',
+          color: '#ef4444',
           zone: 'lower',
-          position: { top: '15%', left: '55%', width: '85px', height: '50px' }
+          position: { top: '15%', left: '55%', width: '80px', height: '50px' }
         },
-        dcConverter: {
-          id: 'dcConverter',
-          name: 'DC-DC Buck Converter',
-          description: 'Voltage regulation for sensor power rails.',
-          specs: '12V in → 5V/3.3V out, dual rail',
-          color: '#eab308',
+        loraModule: {
+          id: 'loraModule',
+          name: 'SX1262 LoRa Module',
+          description: 'LoRaWAN 1.0.3 Class A transceiver for long-range data upload.',
+          specs: '915 MHz, 15 km LOS, AES-128',
+          color: '#14b8a6',
           zone: 'lower',
           position: { top: '60%', left: '25%', width: '100px', height: '32px' }
         }
       },
-      'smart-buoy': {
-        solarMppt: {
-          id: 'solarMppt',
-          name: 'Marine Solar MPPT',
-          description: 'Waterproof solar controller optimized for marine environment.',
-          specs: '12V 10W solar in, 5V 2A out, conformal coated',
-          color: '#14b8a6',
-          zone: 'lower',
-          position: { top: '15%', left: '8%', width: '95px', height: '50px' }
-        },
-        batteryPack: {
-          id: 'batteryPack',
-          name: 'LiFePO4 Battery',
-          description: 'Marine-grade lithium iron phosphate for safety and longevity.',
-          specs: '12.8V 6Ah, 2000+ cycles, IP67',
-          color: '#22c55e',
-          zone: 'lower',
-          position: { top: '15%', left: '55%', width: '85px', height: '50px' }
-        },
-        chargeController: {
-          id: 'chargeController',
-          name: 'Smart Charge Controller',
-          description: 'Manages battery charging with temperature compensation.',
-          specs: '12V 5A, temp sensor, low-voltage disconnect',
-          color: '#eab308',
-          zone: 'lower',
-          position: { top: '60%', left: '8%', width: '70px', height: '32px' }
-        },
-        dcConverter: {
-          id: 'dcConverter',
-          name: '5V Regulator',
-          description: 'Efficient switching regulator for Pi and sensors.',
-          specs: '12V in → 5V 3A out, 95% efficient',
-          color: '#a855f7',
-          zone: 'lower',
-          position: { top: '60%', left: '50%', width: '70px', height: '32px' }
-        }
-      },
-      'smart-buoy-xl': {
-        solarMppt: {
-          id: 'solarMppt',
-          name: 'High-Power Solar MPPT',
-          description: 'Dual-input solar controller for 50W panel array.',
-          specs: '24V 50W solar in, dual input, MPPT',
-          color: '#14b8a6',
-          zone: 'lower',
-          position: { top: '10%', left: '5%', width: '85px', height: '45px' }
-        },
-        batteryPack: {
-          id: 'batteryPack',
-          name: 'LiFePO4 Battery Bank',
-          description: 'High-capacity marine battery for extended autonomy.',
-          specs: '12.8V 20Ah, 4S prismatic cells',
-          color: '#22c55e',
-          zone: 'lower',
-          position: { top: '10%', left: '48%', width: '95px', height: '45px' }
-        },
-        bms: {
-          id: 'bms',
-          name: 'Marine BMS',
-          description: 'Active cell balancing with CAN bus monitoring.',
-          specs: '4S 30A, active balance, CAN reporting',
-          color: '#ef4444',
-          zone: 'lower',
-          position: { top: '55%', left: '5%', width: '60px', height: '35px' }
-        },
-        dcConverter: {
-          id: 'dcConverter',
-          name: 'Multi-Rail DC-DC',
-          description: 'Multiple regulated outputs for sensors and peripherals.',
-          specs: '12V → 5V/3.3V/12V rails, 5A total',
-          color: '#eab308',
-          zone: 'lower',
-          position: { top: '55%', left: '35%', width: '55px', height: '35px' }
-        },
-        ultrasonicDriver: {
-          id: 'ultrasonicDriver',
-          name: 'Ultrasonic Driver',
-          description: 'Algae control transducer driver for buoy-mounted emitter.',
-          specs: '12V input, 50W, 40kHz',
-          color: '#f97316',
-          zone: 'lower',
-          position: { top: '55%', left: '62%', width: '75px', height: '35px' }
-        }
-      }
     };
 
     return {
       ...baseComponents,
-      ...(powerConfigs[productId] || powerConfigs['s-ac'])
+      ...(powerConfigs[productId] || powerConfigs['wqm-1'])
     };
   };
 
-  const components = getComponentsForProduct(product?.id || 's-ac');
+  const components = getComponentsForProduct(product?.id || 'wqm-1');
   const hoveredData = hoveredComponent ? components[hoveredComponent] : null;
 
   const neonColor = '#00ff88';
@@ -263,34 +93,13 @@ const EnclosureLayout = ({ product }) => {
   // Get cable glands based on product
   const getCableGlands = (productId) => {
     const glandConfigs = {
-      's-ac': [
-        { label: 'AC IN', color: '#eab308' },
-        { label: 'SENSORS', color: '#06b6d4' },
-        { label: 'XDCR OUT', color: '#f97316' }
-      ],
-      's-sol': [
-        { label: 'SOLAR', color: '#14b8a6' },
+      'wqm-1': [
+        { label: 'DC IN', color: '#eab308' },
         { label: 'SENSORS', color: '#06b6d4' },
         { label: 'ANT', color: '#3b82f6' }
       ],
-      's-mon': [
-        { label: 'PoE IN', color: '#3b82f6' },
-        { label: 'SENSORS', color: '#06b6d4' },
-        { label: 'ETH OUT', color: '#6366f1' }
-      ],
-      'smart-buoy': [
-        { label: 'SOLAR', color: '#14b8a6' },
-        { label: 'SENSORS', color: '#06b6d4' },
-        { label: 'ANT', color: '#3b82f6' }
-      ],
-      'smart-buoy-xl': [
-        { label: 'SOLAR', color: '#14b8a6' },
-        { label: 'SENSORS', color: '#06b6d4' },
-        { label: 'XDCR', color: '#f97316' },
-        { label: 'ANT', color: '#3b82f6' }
-      ]
     };
-    return glandConfigs[productId] || glandConfigs['s-ac'];
+    return glandConfigs[productId] || glandConfigs['wqm-1'];
   };
 
   const cableGlands = getCableGlands(product?.id);

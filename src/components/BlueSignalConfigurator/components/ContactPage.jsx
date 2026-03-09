@@ -375,12 +375,8 @@ const ServicePrice = styled.span`
 
 const productOptions = [
   { value: "", label: "Select a product (optional)" },
-  { value: "smart-buoy", label: "Smart Buoy - $2,499" },
-  { value: "smart-buoy-xl", label: "Smart Buoy XL - $19,999" },
-  { value: "shore-monitor-ac", label: "Shore Monitor AC - $599" },
-  { value: "shore-monitor-solar", label: "Shore Monitor Solar - $1,499" },
-  { value: "shore-monitor-lite", label: "Shore Monitor Lite - $849" },
-  { value: "pressure-wash", label: "Pressure Washing Services" },
+  { value: "wqm-1", label: "WQM-1 Dev Kit - $999" },
+  { value: "cloud-monitoring", label: "Cloud Monitoring - $9.99/mo" },
   { value: "other", label: "Other / General Inquiry" },
 ];
 

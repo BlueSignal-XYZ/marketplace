@@ -423,7 +423,7 @@ const CompareButton = styled.button`
 
 const EnclosurePage = () => {
   const navigate = useNavigate();
-  const [selectedProduct, setSelectedProduct] = useState("s-ac");
+  const [selectedProduct, setSelectedProduct] = useState("wqm-1");
   const [showComparison, setShowComparison] = useState(false);
   const product = PRODUCTS[selectedProduct];
 
