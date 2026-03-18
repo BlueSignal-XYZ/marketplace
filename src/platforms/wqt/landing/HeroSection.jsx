@@ -215,9 +215,10 @@ const Pills = styled.div`
   gap: 8px;
   flex-wrap: wrap;
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    gap: 8px;
   }
 
   @media (max-height: 700px) {
@@ -238,7 +239,7 @@ const PillSeparator = styled.span`
   color: rgba(255, 255, 255, 0.25);
   user-select: none;
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     display: none;
   }
 `;
