@@ -113,6 +113,16 @@ const FlowItem = styled.li`
     align-items: center;
     justify-content: center;
   }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    &::before {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+  }
 `;
 
 const FlowContent = styled.div``;
