@@ -30,6 +30,13 @@ const Section = styled.section`
   height: 100dvh;
   min-height: 100vh;
   min-height: 100dvh;
+
+  @media (max-width: 480px) {
+    height: auto;
+    min-height: auto;
+    padding-top: 80px;
+    padding-bottom: 48px;
+  }
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
@@ -268,6 +275,54 @@ const ChevronSvg = () => (
   </svg>
 );
 
+const SocialProof = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: clamp(28px, 2.5vw + 14px, 44px);
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (max-height: 700px) {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+`;
+
+const ProofItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+`;
+
+const ProofHighlight = styled.span`
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+`;
+
+const ProofDot = styled.span`
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+`;
+
 const MobileBr = styled.br`
   display: none;
   @media (max-width: 480px) { display: block; }
@@ -300,8 +355,8 @@ export function HeroSection() {
           Produce clean water.<MobileBr /> Earn utility rebates.<MobileBr /> Every gallon metered, every credit verified, every rebate on your bill.
         </Subheadline>
         <CTARow>
-          <PrimaryBtn href="/#credit-definitions">See How Credits Work</PrimaryBtn>
-          <SecondaryBtn href="/registry">View Credit Registry</SecondaryBtn>
+          <PrimaryBtn href="/login">Get Started</PrimaryBtn>
+          <SecondaryBtn href="/#audiences">See If You Qualify</SecondaryBtn>
         </CTARow>
         {/* TODO: animated hero flow — separate PR */}
         <Pills>
@@ -312,6 +367,13 @@ export function HeroSection() {
             </React.Fragment>
           ))}
         </Pills>
+        <SocialProof>
+          <ProofItem>Featured in <ProofHighlight>Global Water Intelligence</ProofHighlight></ProofItem>
+          <ProofDot />
+          <ProofItem><ProofHighlight>3-Layer</ProofHighlight> Independent Verification</ProofItem>
+          <ProofDot />
+          <ProofItem><ProofHighlight>Utility-Controlled</ProofHighlight> Pricing</ProofItem>
+        </SocialProof>
       </Content>
       <ScrollIndicator>
         <ChevronSvg />
