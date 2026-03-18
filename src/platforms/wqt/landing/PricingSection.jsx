@@ -195,26 +195,21 @@ export function PricingSection() {
           <Card>
             <CardTitle>Quality Multiplier</CardTitle>
             <CardDesc>
-              The utility sets the quality multiplier based on their environmental
-              goals for their service area. A higher multiplier rewards homeowners
-              producing cleaner water, reflecting real treatment cost savings.
+              Cleaner water earns more. Your utility sets the multiplier based on
+              local treatment costs — higher quality output means a bigger rebate.
             </CardDesc>
             <RateTable>
               <RateRow>
-                <RateLabel>Multiplier Authority</RateLabel>
-                <RateValue>Utility / Municipality</RateValue>
+                <RateLabel>Standard Quality</RateLabel>
+                <RateBadge $bg="rgba(245, 158, 11, 0.1)" $color="#D97706">1.0x</RateBadge>
               </RateRow>
               <RateRow>
-                <RateLabel>Basis</RateLabel>
-                <RateValue>Regional N/P treatment costs</RateValue>
+                <RateLabel>High Quality</RateLabel>
+                <RateBadge $bg="rgba(0, 82, 204, 0.1)" $color="#0052CC">1.5x</RateBadge>
               </RateRow>
               <RateRow>
-                <RateLabel>Recommendations</RateLabel>
-                <RateValue>BlueSignal</RateValue>
-              </RateRow>
-              <RateRow>
-                <RateLabel>Final Decision</RateLabel>
-                <RateValue>Utility</RateValue>
+                <RateLabel>Premium Quality</RateLabel>
+                <RateBadge $bg="rgba(16, 185, 129, 0.1)" $color="#10B981">2.0x</RateBadge>
               </RateRow>
             </RateTable>
           </Card>
