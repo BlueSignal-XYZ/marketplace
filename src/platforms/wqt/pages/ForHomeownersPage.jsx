@@ -113,6 +113,16 @@ const FlowItem = styled.li`
     align-items: center;
     justify-content: center;
   }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    &::before {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+  }
 `;
 
 const FlowContent = styled.div``;
@@ -155,6 +165,10 @@ const CalloutDesc = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.7;
   margin: 0;
+
+  & + & {
+    margin-top: 12px;
+  }
 `;
 
 const BulletList = styled.ul`
@@ -310,7 +324,10 @@ export default function ForHomeownersPage() {
             <CalloutDesc>
               A homeowner with a 5-acre property in a Chesapeake Bay watershed installs a
               bioretention system and a BlueSignal monitor. The system reduces phosphorus
-              runoff by 12 lbs/year compared to the pre-project baseline. After a 6-month
+              runoff by 12 lbs/year compared to the pre-project baseline.
+            </CalloutDesc>
+            <CalloutDesc>
+              After a 6-month
               verification period, the platform issues 12 phosphorus credits. At current
               regional prices, those credits have market value — potentially enough to offset
               the cost of the monitoring equipment within 2–3 years.

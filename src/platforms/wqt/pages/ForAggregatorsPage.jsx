@@ -113,6 +113,16 @@ const FlowItem = styled.li`
     align-items: center;
     justify-content: center;
   }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    &::before {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+  }
 `;
 
 const FlowContent = styled.div``;
@@ -236,6 +246,8 @@ export default function ForAggregatorsPage() {
             stormwater retrofits across a municipality, BMP (best management practice)
             installations for a land conservancy. Each site generates measurable water
             quality improvements, but individually they're too small to attract buyers.
+          </SectionDesc>
+          <SectionDesc>
             Aggregated, they're a portfolio.
           </SectionDesc>
         </SectionInner>

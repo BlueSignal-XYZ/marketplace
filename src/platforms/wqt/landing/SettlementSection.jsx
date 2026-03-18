@@ -68,6 +68,11 @@ const FlowStep = styled.div`
 
   &:last-child { border-bottom: none; }
 
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     grid-template-columns: 80px 1fr;
     gap: 32px;

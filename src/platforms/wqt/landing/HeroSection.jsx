@@ -126,6 +126,10 @@ const Subheadline = styled.p`
   margin: 0 0 clamp(24px, 1.5vw + 18px, 32px);
   color: rgba(255, 255, 255, 0.7);
 
+  @media (max-width: 480px) {
+    line-height: 1.8;
+  }
+
   @media (max-height: 700px) {
     margin-bottom: 16px;
   }
@@ -211,9 +215,10 @@ const Pills = styled.div`
   gap: 8px;
   flex-wrap: wrap;
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    gap: 8px;
   }
 
   @media (max-height: 700px) {
@@ -234,7 +239,7 @@ const PillSeparator = styled.span`
   color: rgba(255, 255, 255, 0.25);
   user-select: none;
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     display: none;
   }
 `;
@@ -263,6 +268,11 @@ const ChevronSvg = () => (
   </svg>
 );
 
+const MobileBr = styled.br`
+  display: none;
+  @media (max-width: 480px) { display: block; }
+`;
+
 const PILLS = [
   'Every credit sensor-verified',
   'Pricing set by your utility',
@@ -287,12 +297,13 @@ export function HeroSection() {
         <Eyebrow>Sensor-Verified Water Credits</Eyebrow>
         <Headline>Your Water Has Value. Now You Can Prove It.</Headline>
         <Subheadline>
-          Produce clean water. Earn utility rebates. Every gallon metered, every credit verified, every rebate on your bill.
+          Produce clean water.<MobileBr /> Earn utility rebates.<MobileBr /> Every gallon metered, every credit verified, every rebate on your bill.
         </Subheadline>
         <CTARow>
           <PrimaryBtn href="/#credit-definitions">See How Credits Work</PrimaryBtn>
           <SecondaryBtn href="/registry">View Credit Registry</SecondaryBtn>
         </CTARow>
+        {/* TODO: animated hero flow — separate PR */}
         <Pills>
           {PILLS.map((text, i) => (
             <React.Fragment key={i}>
