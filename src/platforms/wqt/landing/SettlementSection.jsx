@@ -219,21 +219,21 @@ const FLOW_STEPS = [
     bg: 'rgba(0, 82, 204, 0.1)',
     color: '#0052CC',
     title: 'Credit Generation',
-    desc: 'Your atmospheric water generator produces clean water and stores it on-site. Every gallon produced is metered by an inline flow sensor. BlueSignal\u2019s monitoring platform continuously verifies water quality. When production meets program thresholds, verified credits are automatically generated and registered on the platform.',
+    desc: 'Your system produces clean water. Every gallon is metered and verified. Credits are generated automatically when production meets thresholds.',
   },
   {
     num: '02',
     bg: 'rgba(16, 185, 129, 0.1)',
     color: '#10B981',
     title: 'Utility Rebate',
-    desc: 'Because you\u2019re producing your own water, you draw less from the municipal supply. Your utility recognizes this reduced demand and issues a rebate \u2014 it appears as a credit on your monthly water bill. The rebate rate is set by your utility based on their avoided cost of treatment and delivery.',
+    desc: 'You produce your own water, so you draw less from the city. Your utility issues a rebate on your monthly bill based on their avoided cost.',
   },
   {
     num: '03',
     bg: 'rgba(139, 92, 246, 0.1)',
     color: '#8B5CF6',
     title: 'Platform Services',
-    desc: 'The platform charges a small service fee for continuous monitoring, verification, and program management. This fee is transparent and deducted automatically \u2014 you always see your net rebate amount before opting in.',
+    desc: 'A small, transparent service fee covers monitoring, verification, and program management. You always see your net rebate before opting in.',
   },
 ];
 
