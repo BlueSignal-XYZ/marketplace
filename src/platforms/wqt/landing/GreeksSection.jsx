@@ -3,7 +3,7 @@
  * Targets aggregators and investors specifically.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Section = styled.section`
@@ -88,6 +88,7 @@ const GreekCard = styled.div`
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
     gap: 16px;
+    cursor: pointer;
   }
 `;
 
@@ -124,6 +125,27 @@ const GreekName = styled.span`
   letter-spacing: 0.04em;
 `;
 
+const GreekHeaderRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (min-width: 641px) {
+    justify-content: flex-start;
+  }
+`;
+
+const GreekToggle = styled.span`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  line-height: 1;
+
+  @media (min-width: 641px) {
+    display: none;
+  }
+`;
+
 const GreekContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -137,6 +159,16 @@ const GreekTitle = styled.h3`
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
   letter-spacing: -0.01em;
+`;
+
+const GreekDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @media (max-width: 640px) {
+    display: ${({ $expanded }) => $expanded ? 'flex' : 'none'};
+  }
 `;
 
 const GreekDesc = styled.p`
@@ -161,7 +193,8 @@ const GREEKS = [
     name: 'Delta',
     color: '#0052CC',
     title: 'Price Sensitivity',
-    desc: 'How much credit value changes when the underlying water price or treatment cost shifts. A utility in dry West Texas will show a higher delta than one in water-rich East Texas.',
+    desc: 'How much credit value changes when the underlying water price or treatment cost shifts.',
+    detail: 'A utility in dry West Texas will show a higher delta than one in water-rich East Texas.',
     example: 'Helps aggregators understand how regional water economics affect portfolio value.',
   },
   {
@@ -169,7 +202,8 @@ const GREEKS = [
     name: 'Gamma',
     color: '#8B5CF6',
     title: 'Acceleration of Price Sensitivity',
-    desc: 'How fast delta itself is changing. When a drought hits and prices spike, gamma shows how quickly credit values are accelerating. High gamma means risk is growing faster than expected.',
+    desc: 'How fast delta itself is changing.',
+    detail: 'When a drought hits and prices spike, gamma shows how quickly credit values are accelerating. High gamma means risk is growing faster than expected.',
     example: 'Important for aggregators deciding whether positions can be hedged effectively.',
   },
   {
@@ -177,7 +211,8 @@ const GREEKS = [
     name: 'Theta',
     color: '#D97706',
     title: 'Time Decay',
-    desc: 'Water quality credits lose value over time. A credit from today is worth more than one from six months ago because conditions change — filters age, seasonal contamination shifts, and system performance drifts.',
+    desc: 'Water quality credits lose value over time.',
+    detail: 'A credit from today is worth more than one from six months ago because conditions change — filters age, seasonal contamination shifts, and system performance drifts.',
     example: 'Keeps the market fresh and prevents credit hoarding. Credits have expiration windows tied to how recently they were verified.',
   },
   {
@@ -185,7 +220,8 @@ const GREEKS = [
     name: 'Vega',
     color: '#10B981',
     title: 'Volatility Sensitivity',
-    desc: 'How credit value responds to changes in market uncertainty. During regulatory shifts, contamination events, or infrastructure failures, vega spikes.',
+    desc: 'How credit value responds to changes in market uncertainty.',
+    detail: 'During regulatory shifts, contamination events, or infrastructure failures, vega spikes.',
     example: 'Helps aggregators understand their exposure to uncertainty, separate from price direction.',
   },
   {
@@ -193,12 +229,16 @@ const GREEKS = [
     name: 'Rho',
     color: '#06B6D4',
     title: 'Cost of Carry',
-    desc: 'How sensitive credit value is to the cost of money over time. For aggregators financing credit portfolios, rho captures the difference between annual vs. monthly rebate structures and the cost of holding credits before settlement.',
+    desc: 'How sensitive credit value is to the cost of money over time.',
+    detail: 'For aggregators financing credit portfolios, rho captures the difference between annual vs. monthly rebate structures and the cost of holding credits before settlement.',
     example: 'Becomes especially relevant as the market grows and financial products are built on credit pools.',
   },
 ];
 
 export function GreeksSection() {
+  const [expanded, setExpanded] = useState({});
+  const toggle = (name) => setExpanded(prev => ({ ...prev, [name]: !prev[name] }));
+
   return (
     <Section id="risk-framework">
       <Inner>
@@ -213,15 +253,21 @@ export function GreeksSection() {
 
         <GreeksGrid>
           {GREEKS.map((greek) => (
-            <GreekCard key={greek.name}>
+            <GreekCard key={greek.name} onClick={() => toggle(greek.name)}>
               <GreekSymbolWrap>
                 <GreekSymbol $color={greek.color}>{greek.symbol}</GreekSymbol>
                 <GreekName>{greek.name}</GreekName>
               </GreekSymbolWrap>
               <GreekContent>
-                <GreekTitle>{greek.title}</GreekTitle>
+                <GreekHeaderRow>
+                  <GreekTitle>{greek.title}</GreekTitle>
+                  <GreekToggle>{expanded[greek.name] ? '\u2212' : '+'}</GreekToggle>
+                </GreekHeaderRow>
                 <GreekDesc>{greek.desc}</GreekDesc>
-                <GreekExample>{greek.example}</GreekExample>
+                <GreekDetail $expanded={expanded[greek.name]}>
+                  <GreekDesc>{greek.detail}</GreekDesc>
+                  <GreekExample>{greek.example}</GreekExample>
+                </GreekDetail>
               </GreekContent>
             </GreekCard>
           ))}
