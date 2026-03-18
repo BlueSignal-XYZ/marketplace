@@ -215,9 +215,8 @@ export function CreditDefinitionsSection() {
             <CreditTitle>Quantity Credit</CreditTitle>
             <CreditUnit>1 QC = 1 gallon produced</CreditUnit>
             <CreditDesc>
-              One quantity credit equals one gallon of water produced by an
-              atmospheric water generator. QCs are the baseline unit of production
-              and the foundation of the credit system.
+              One quantity credit equals one gallon of water produced by your
+              atmospheric water generator. The baseline unit of the credit system.
             </CreditDesc>
             <VerificationNote>
               <VerificationLabel>Verification: </VerificationLabel>
@@ -236,8 +235,8 @@ export function CreditDefinitionsSection() {
             <CreditUnit>1 KC = 1 kg N/P offset or removed</CreditUnit>
             <CreditDesc>
               One quality credit equals one kilogram of nitrogen or phosphorus
-              offset or removed from the water supply. KCs represent the environmental
-              value of the water produced and relate directly to utility treatment costs.
+              offset or removed. KCs represent the environmental value and relate
+              directly to utility treatment cost savings.
             </CreditDesc>
             <VerificationNote>
               <VerificationLabel>Verification: </VerificationLabel>
