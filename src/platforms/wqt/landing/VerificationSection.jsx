@@ -1,6 +1,6 @@
 /**
  * VerificationSection — three-layer verification architecture.
- * Replaces old "How It Works" flow.
+ * Vertical flow diagram layout.
  */
 
 import React from 'react';
@@ -52,103 +52,94 @@ const SectionSub = styled.p`
   line-height: 1.6;
 `;
 
-const LayersContainer = styled.div`
+const FlowContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
 `;
 
-const Layer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+const FlowNode = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  padding: 24px;
   background: ${({ theme }) => theme.colors.background};
-  padding: 32px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.lg}px;
 
-  &:first-child {
-    border-radius: ${({ theme }) => theme.radius.lg}px ${({ theme }) => theme.radius.lg}px 0 0;
-  }
-  &:last-child {
-    border-radius: 0 0 ${({ theme }) => theme.radius.lg}px ${({ theme }) => theme.radius.lg}px;
-  }
-  &:not(:last-child) {
-    border-bottom: none;
-  }
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    grid-template-columns: 200px 1fr;
-    gap: 32px;
-    padding: 40px;
+  @media (max-width: 480px) {
+    gap: 14px;
+    padding: 20px;
   }
 `;
 
-const LayerMeta = styled.div`
+const FlowIcon = styled.div`
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: ${({ $bg }) => $bg};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+`;
+
+const FlowBody = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    margin-bottom: 0;
-    border-right: 1px solid ${({ theme }) => theme.colors.borderLight};
-    padding-right: 32px;
-  }
+  gap: 6px;
+  min-width: 0;
 `;
 
-const LayerNumber = styled.span`
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 12px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.primary};
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-`;
-
-const LayerTitle = styled.h3`
+const FlowLayerTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
   letter-spacing: -0.01em;
 `;
 
+const FlowDesc = styled.p`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.6;
+  margin: 0;
+`;
+
 const LayerType = styled.span`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: ${({ $color }) => $color};
   background: ${({ $bg }) => $bg};
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 3px 8px;
+  border-radius: 5px;
   display: inline-block;
   width: fit-content;
 `;
 
-const LayerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const LayerDesc = styled.p`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 15px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.7;
-  margin: 0;
-`;
-
-const LayerDetail = styled.div`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.text};
-  line-height: 1.6;
-  padding: 14px 16px;
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: 8px;
-  border-left: 3px solid ${({ $accent }) => $accent || '#0052CC'};
+const Connector = styled.div`
+  width: 2px;
+  height: 32px;
+  background: ${({ theme }) => theme.colors.borderLight};
+  margin: 0 auto;
+  position: relative;
+  &::after {
+    content: '\u25BC';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: ${({ theme }) => theme.colors.textSecondary};
+  }
 `;
 
 const TrustStatement = styled.div`
@@ -178,34 +169,31 @@ const TrustHighlight = styled.span`
 
 const LAYERS = [
   {
-    number: 'Layer 01',
     title: 'Inline Flow Metering',
+    icon: '\u2B21',
     type: 'Quantity',
     typeColor: '#0052CC',
     typeBg: 'rgba(0, 82, 204, 0.1)',
-    accent: '#0052CC',
-    desc: 'Inline flow sensor records every gallon produced, cross-referenced against the property water meter. Two independent measurements per gallon.',
-    detail: 'Discrepancies trigger automatic flags. No single data source can validate production alone.',
+    iconBg: 'rgba(0, 82, 204, 0.08)',
+    desc: 'Inline flow sensor records every gallon produced, cross-referenced against the property water meter.',
   },
   {
-    number: 'Layer 02',
     title: 'BlueSignal Continuous Monitoring',
+    icon: '\u25C9',
     type: 'Quality',
     typeColor: '#10B981',
     typeBg: 'rgba(16, 185, 129, 0.1)',
-    accent: '#10B981',
-    desc: 'BlueSignal WQM-1 reads water quality 24/7 and transmits to the cloud. Controls anti-fouling to maintain system performance.',
-    detail: 'Every unit monitored, every signal recorded, every anomaly flagged in real time.',
+    iconBg: 'rgba(16, 185, 129, 0.08)',
+    desc: 'WQM-1 reads water quality 24/7 and transmits to the cloud. Every anomaly flagged in real time.',
   },
   {
-    number: 'Layer 03',
     title: 'Independent Third-Party Sampling',
+    icon: '\u2697',
     type: 'Validation',
     typeColor: '#8B5CF6',
     typeBg: 'rgba(139, 92, 246, 0.1)',
-    accent: '#8B5CF6',
-    desc: '25% of active sites physically sampled annually by an independent contractor with no ties to the hardware manufacturer or homeowner.',
-    detail: 'Lab results check continuous monitoring data. Discrepancies trigger investigation and credit adjustment.',
+    iconBg: 'rgba(139, 92, 246, 0.08)',
+    desc: '25% of active sites physically sampled annually by an independent contractor.',
   },
 ];
 
@@ -221,23 +209,23 @@ export function VerificationSection() {
           trust foundation of the entire market.
         </SectionSub>
 
-        <LayersContainer>
-          {LAYERS.map((layer) => (
-            <Layer key={layer.number}>
-              <LayerMeta>
-                <LayerNumber>{layer.number}</LayerNumber>
-                <LayerTitle>{layer.title}</LayerTitle>
-                <LayerType $color={layer.typeColor} $bg={layer.typeBg}>
-                  {layer.type}
-                </LayerType>
-              </LayerMeta>
-              <LayerContent>
-                <LayerDesc>{layer.desc}</LayerDesc>
-                <LayerDetail $accent={layer.accent}>{layer.detail}</LayerDetail>
-              </LayerContent>
-            </Layer>
+        <FlowContainer>
+          {LAYERS.map((layer, i) => (
+            <React.Fragment key={layer.title}>
+              {i > 0 && <Connector />}
+              <FlowNode>
+                <FlowIcon $bg={layer.iconBg}>{layer.icon}</FlowIcon>
+                <FlowBody>
+                  <FlowLayerTitle>{layer.title}</FlowLayerTitle>
+                  <LayerType $color={layer.typeColor} $bg={layer.typeBg}>
+                    {layer.type}
+                  </LayerType>
+                  <FlowDesc>{layer.desc}</FlowDesc>
+                </FlowBody>
+              </FlowNode>
+            </React.Fragment>
           ))}
-        </LayersContainer>
+        </FlowContainer>
 
         <TrustStatement>
           <TrustText>
