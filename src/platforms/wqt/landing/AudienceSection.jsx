@@ -200,12 +200,10 @@ export function AudienceSection() {
   return (
     <Section id="audiences">
       <Inner>
-        <SectionLabel>Built for Every Participant</SectionLabel>
-        <SectionTitle>Three Audiences, One System</SectionTitle>
+        <SectionLabel>Who Is This For?</SectionLabel>
+        <SectionTitle>Find Your Role in the Market</SectionTitle>
         <SectionSub>
-          The platform serves utilities managing water infrastructure, homeowners
-          producing distributed water, and aggregators building market depth.
-          Each participant has a distinct role and a clear value proposition.
+          Three participants, three clear value propositions. Choose your path.
         </SectionSub>
 
         <CardsGrid>
