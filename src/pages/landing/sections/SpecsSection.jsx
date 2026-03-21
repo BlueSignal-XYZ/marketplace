@@ -166,19 +166,19 @@ const SpecsSection = () => (
         <Left>
           <RevealOnScroll>
             <SectionLabel>Specifications</SectionLabel>
-            <SectionTitle>Enterprise-grade hardware.</SectionTitle>
+            <SectionTitle>Every detail, documented.</SectionTitle>
             <SectionDesc>
-              The WQM-1 is purpose-built for continuous outdoor deployment.
-              Six sensor channels, long-range LoRa radio, and relay control — all
-              in a single board that integrates with any AWG or water&nbsp;system.
+              The WQM-1 is designed for developers and integrators who need
+              full visibility into hardware capabilities before committing.
+              No marketing abstractions — just the&nbsp;datasheet.
             </SectionDesc>
-            <CTAButton href="#order" onClick={() => trackCTA('get_started_specs', 'Specs CTA')}>
-              Get Started
+            <CTAButton href="#order" onClick={() => trackCTA('order_devkit_specs', 'Specs CTA')}>
+              Order Dev Kit — $999
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </CTAButton>
-            <PricingNote>WQM-1 $999 + Cloud $9.99/mo per&nbsp;device</PricingNote>
+            <PricingNote>+ Cloud Monitoring $9.99/mo per&nbsp;device</PricingNote>
           </RevealOnScroll>
         </Left>
 

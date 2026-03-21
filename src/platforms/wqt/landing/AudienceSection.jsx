@@ -67,7 +67,7 @@ const CardsGrid = styled.div`
 `;
 
 const AudienceCard = styled.a`
-  padding: 36px 28px;
+  padding: 32px 24px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
@@ -84,7 +84,7 @@ const AudienceCard = styled.a`
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 44px 36px;
+    padding: 40px 32px;
   }
 `;
 
@@ -182,11 +182,11 @@ const AUDIENCES = [
     bg: 'rgba(16, 185, 129, 0.12)',
     accent: '#10B981',
     title: 'Participants',
-    desc: 'Earn rebates on your water bill by conserving water and improving quality. Whether you\'re a homeowner, facility manager, or commercial property — your contribution is sensor-verified.',
+    desc: 'Install an AWG paired with a BlueSignal sensor and earn rebates on your water bill. Whether you\'re a homeowner, facility manager, or commercial property — every gallon is sensor-verified.',
     features: [
+      'AWG + WQM-1 generates and verifies clean water',
       'Earn both quantity and quality credit rebates',
       'Rebates appear directly on your water bill',
-      'Fully automated — no manual reporting',
       'Real-time monitoring dashboard access',
     ],
     iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',

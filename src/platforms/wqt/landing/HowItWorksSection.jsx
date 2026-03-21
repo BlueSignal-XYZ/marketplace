@@ -88,7 +88,7 @@ const FeatureCard = styled.div`
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 36px 28px;
+    padding: 40px 32px;
   }
 `;
 
@@ -234,7 +234,7 @@ const FEATURES = [
     bg: 'rgba(6, 182, 212, 0.12)',
     color: '#06B6D4',
     title: 'Continuous Monitoring',
-    desc: 'BlueSignal WQM-1 sensors read water quality parameters 24/7. Every data point is timestamped, stored, and available via API.',
+    desc: 'BlueSignal WQM-1 sensors paired with atmospheric water generators read water quality parameters 24/7. Every data point is timestamped, stored, and available via API.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
@@ -272,6 +272,10 @@ const CODE_LINES = [
   { content: <>&nbsp;&nbsp;<Key>name</Key>: <Str>"Metro Water District DR"</Str></> },
   { content: <>&nbsp;&nbsp;<Key>type</Key>: <Str>"demand_response"</Str></> },
   { content: <>&nbsp;&nbsp;<Key>status</Key>: <Val>active</Val></> },
+  { content: <></> },
+  { content: <><Key>source</Key>:</> },
+  { content: <>&nbsp;&nbsp;<Key>device</Key>: <Str>"AWG + BlueSignal WQM-1"</Str></> },
+  { content: <>&nbsp;&nbsp;<Key>output</Key>: <Str>"potable water"</Str> <Comment># sensor-verified</Comment></> },
   { content: <></> },
   { content: <><Key>credits</Key>:</> },
   { content: <>&nbsp;&nbsp;<Key>quantity_rate</Key>: <Val>0.50</Val> <Comment># $/gallon conserved</Comment></> },

@@ -76,14 +76,14 @@ const CardsRow = styled.div`
 const Card = styled.div`
   position: relative;
   overflow: hidden;
-  padding: 36px 28px;
+  padding: 32px 24px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   backdrop-filter: blur(12px);
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 44px 36px;
+    padding: 40px 32px;
   }
 `;
 
@@ -246,7 +246,7 @@ export function ProblemSection() {
 
         <RevealOnScroll delay={0.3}>
           <BridgeText>
-            What if you could address both with <BridgeHighlight>one program</BridgeHighlight>?
+            What if one device and <BridgeHighlight>one program</BridgeHighlight> could address both?
           </BridgeText>
         </RevealOnScroll>
       </Inner>

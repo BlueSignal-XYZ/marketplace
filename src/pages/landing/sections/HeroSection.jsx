@@ -53,7 +53,7 @@ const Headline = styled.h1`
   line-height: 1.06;
   letter-spacing: -0.04em;
   color: ${({ theme }) => theme.colors.white};
-  max-width: 18ch;
+  max-width: 14ch;
   margin: 0 auto 24px;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.25s both;
   text-wrap: balance;
@@ -62,9 +62,9 @@ const Headline = styled.h1`
 const GradientWord = styled.span`
   background: linear-gradient(
     135deg,
-    ${({ theme }) => theme.colors.blue},
-    ${({ theme }) => theme.colors.blueB},
-    ${({ theme }) => theme.colors.green}
+    ${({ theme }) => theme.colors.algae},
+    ${({ theme }) => theme.colors.algaeLight},
+    ${({ theme }) => theme.colors.algaeDark}
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -287,8 +287,8 @@ const MobileHeroViz = () => (
         </svg>
       </MobileStageIcon>
       <MobileStageText>
-        <MobileStageName>Water Generation</MobileStageName>
-        <MobileStageDetail>AWG &middot; Atmospheric Water Generator</MobileStageDetail>
+        <MobileStageName>Water Source</MobileStageName>
+        <MobileStageDetail>Tank, pond, or well</MobileStageDetail>
       </MobileStageText>
     </MobileStage>
 
@@ -302,7 +302,7 @@ const MobileHeroViz = () => (
       </MobileStageIcon>
       <MobileStageText>
         <MobileStageName>BlueSignal WQM-1</MobileStageName>
-        <MobileStageDetail>Monitors &middot; Verifies &middot; Reports</MobileStageDetail>
+        <MobileStageDetail>pH &middot; TDS &middot; Turbidity &middot; ORP &middot; Temp</MobileStageDetail>
       </MobileStageText>
       <PulseDotMobile />
     </MobileStage>
@@ -312,19 +312,19 @@ const MobileHeroViz = () => (
     <MobileStage>
       <MobileStageIcon $bg="rgba(45,140,240,0.1)">
         <svg viewBox="0 0 24 24" fill="none" stroke="#5badff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 2l3 6h6l-5 4 2 7-6-4-6 4 2-7-5-4h6z" />
+          <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
         </svg>
       </MobileStageIcon>
       <MobileStageText>
-        <MobileStageName>Credits &amp; Rebates</MobileStageName>
-        <MobileStageDetail>waterquality.trading &middot; Municipal Rebates</MobileStageDetail>
+        <MobileStageName>Cloud Dashboard</MobileStageName>
+        <MobileStageDetail>Alerts &middot; Charts &middot; Automation</MobileStageDetail>
       </MobileStageText>
     </MobileStage>
   </MobileVizWrapper>
 );
 
 const SpecsBar = styled.div`
-  background: ${({ theme }) => theme.colors.w04};
+  background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.w08};
   border-radius: 16px;
   padding: 20px 32px;
@@ -390,27 +390,26 @@ const HeroSection = () => (
     <Container>
       <Badge>
         <PulseDot />
-        Municipal Rebate Infrastructure&ensp;&middot;&ensp;Verified Credits
+        Raspberry Pi HAT&ensp;&middot;&ensp;Open Platform
       </Badge>
 
       <Headline>
-        Where Clean Water Becomes&nbsp;<GradientWord>Revenue.</GradientWord>
+        Monitor. Detect.<br /><GradientWord>Control.</GradientWord>
       </Headline>
 
       <Subhead>
-        BlueSignal is the sensor infrastructure behind municipal water quality rebate programs.
-        From atmospheric water generation to verified credits on waterquality.trading — we connect
-        your property to the&nbsp;marketplace.
+        Continuous water quality monitoring for tanks, ponds, and treatment systems.
+        Detect contamination and algae before they start — then automate the&nbsp;response.
       </Subhead>
 
       <CTARow>
-        <PrimaryBtn href="#order" onClick={() => trackCTA('schedule_consultation', 'Hero CTA')}>
-          Join a Rebate Program
+        <PrimaryBtn href="#order" onClick={() => trackCTA('order_devkit_hero', 'Hero CTA')}>
+          Order Dev Kit — $999
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </PrimaryBtn>
-        <SecondaryBtn href="#how-it-works" onClick={() => trackCTA('how_it_works', 'Hero')}>How It Works</SecondaryBtn>
+        <SecondaryBtn href="#specs" onClick={() => trackCTA('view_specs', 'Hero Specs')}>Full Specifications</SecondaryBtn>
       </CTARow>
 
       <SceneWrapper>
@@ -422,24 +421,24 @@ const HeroSection = () => (
 
       <SpecsBar>
         <SpecItem>
-          <SpecLabel>Monitor</SpecLabel>
-          <SpecVal>6 Sensors &middot; Real-time</SpecVal>
+          <SpecLabel>Sensors</SpecLabel>
+          <SpecVal>6-Channel &middot; 16-bit</SpecVal>
         </SpecItem>
         <SpecItem>
-          <SpecLabel>Verify</SpecLabel>
-          <SpecVal>Blockchain &middot; Immutable</SpecVal>
+          <SpecLabel>Radio</SpecLabel>
+          <SpecVal>SX1262 &middot; 15&nbsp;km</SpecVal>
         </SpecItem>
         <SpecItem>
-          <SpecLabel>Trade</SpecLabel>
-          <SpecVal>Nutrient Credits &middot; WQT</SpecVal>
+          <SpecLabel>Power</SpecLabel>
+          <SpecVal>9 – 24&nbsp;V&nbsp;DC</SpecVal>
         </SpecItem>
         <SpecItem>
-          <SpecLabel>Rebate</SpecLabel>
-          <SpecVal>Municipal &middot; Automated</SpecVal>
+          <SpecLabel>Storage</SpecLabel>
+          <SpecVal>SQLite WAL</SpecVal>
         </SpecItem>
         <SpecItem>
-          <SpecLabel>Connect</SpecLabel>
-          <SpecVal>LoRa &middot; 15&nbsp;km Range</SpecVal>
+          <SpecLabel>Control</SpecLabel>
+          <SpecVal>Relay &middot; 10&nbsp;A</SpecVal>
         </SpecItem>
       </SpecsBar>
     </Container>
