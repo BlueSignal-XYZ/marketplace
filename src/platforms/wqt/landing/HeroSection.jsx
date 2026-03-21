@@ -129,7 +129,7 @@ const Headline = styled.h1`
   line-height: 1.08;
   letter-spacing: -0.03em;
   margin: 0 0 24px;
-  max-width: 14ch;
+  max-width: 18ch;
   color: #FFFFFF;
   text-wrap: balance;
   animation: ${fadeUp} 0.9s ${SPRING} 0.25s both;
@@ -367,49 +367,105 @@ const PILLS = [
 ];
 
 const MOBILE_STEPS = [
-  { icon: '💧', bg: 'rgba(6, 182, 212, 0.15)', label: 'Sensor Monitors Water' },
-  { icon: '📊', bg: 'rgba(0, 82, 204, 0.15)', label: 'Credits Auto-Generated' },
+  { icon: '💧', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Generates Clean Water' },
+  { icon: '📡', bg: 'rgba(59, 130, 246, 0.15)', label: 'WQM-1 Sensor Verifies Quality' },
+  { icon: '📊', bg: 'rgba(139, 92, 246, 0.15)', label: 'Credits Auto-Generated' },
   { icon: '💵', bg: 'rgba(16, 185, 129, 0.15)', label: 'Rebate on Your Bill' },
 ];
 
 /* ── Desktop flow SVG component ────────────────────────── */
 
 function DemandResponseFlow() {
+  const STEPS = [
+    { x: 0, label: 'AWG', sub: 'Water Generation', color: '#06B6D4', detail: '12 gal/day' },
+    { x: 152, label: 'WQM-1', sub: 'Sensor Verification', color: '#3B82F6', detail: 'pH · TDS · ORP' },
+    { x: 304, label: 'Cloud', sub: 'Data Pipeline', color: '#8B5CF6', detail: 'Encrypted · 24/7' },
+    { x: 456, label: 'Credits', sub: 'Auto-Generated', color: '#A855F7', detail: 'N/P · Quantity' },
+    { x: 608, label: 'Rebate', sub: 'On Your Bill', color: '#10B981', detail: 'Automated' },
+  ];
+
   return (
-    <FlowSvg viewBox="0 0 760 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Step boxes */}
-      {[
-        { x: 0, label: 'Sensor', sub: 'WQM-1', color: '#06B6D4' },
-        { x: 190, label: 'Monitor', sub: '24/7 Data', color: '#3B82F6' },
-        { x: 380, label: 'Verify', sub: 'Credits', color: '#8B5CF6' },
-        { x: 570, label: 'Rebate', sub: 'On Your Bill', color: '#10B981' },
-      ].map((step, i) => (
+    <FlowSvg viewBox="0 0 760 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#06B6D4" stopOpacity="0.4" />
+          <stop offset="25%" stopColor="#3B82F6" stopOpacity="0.4" />
+          <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.4" />
+          <stop offset="75%" stopColor="#A855F7" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#10B981" stopOpacity="0.4" />
+        </linearGradient>
+        <pattern id="heroGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <circle cx="20" cy="20" r="0.5" fill="rgba(255,255,255,0.03)" />
+        </pattern>
+      </defs>
+
+      {/* Subtle dot grid */}
+      <rect width="760" height="200" fill="url(#heroGrid)" />
+
+      {/* Horizontal connector line */}
+      <line x1="76" y1="56" x2="684" y2="56" stroke="url(#flowGrad)" strokeWidth="2" />
+      {/* Animated flow overlay */}
+      <line className="flow-line" x1="76" y1="56" x2="684" y2="56"
+        stroke="rgba(255,255,255,0.15)" strokeWidth="2" />
+
+      {/* Step nodes */}
+      {STEPS.map((step, i) => (
         <g key={i}>
-          <rect x={step.x} y="20" width="160" height="100" rx="12"
-            fill="rgba(255,255,255,0.03)" stroke={step.color} strokeWidth="1" strokeOpacity="0.3" />
-          {/* Icon circle */}
-          <circle cx={step.x + 80} cy="56" r="16" fill={step.color} fillOpacity="0.15" />
-          <text x={step.x + 80} y="62" textAnchor="middle"
-            fontFamily="'Outfit', sans-serif" fontSize="14" fontWeight="600" fill={step.color}>
+          {/* Ambient glow */}
+          <circle cx={step.x + 76} cy="56" r="40" fill={step.color} fillOpacity="0.04" />
+
+          {/* Outer ring */}
+          <circle cx={step.x + 76} cy="56" r="28" fill="rgba(255,255,255,0.02)"
+            stroke={step.color} strokeWidth="1.5" strokeOpacity="0.3" />
+          {/* Inner filled circle */}
+          <circle cx={step.x + 76} cy="56" r="18" fill={step.color} fillOpacity="0.12" />
+          {/* Step number */}
+          <text x={step.x + 76} y="61" textAnchor="middle"
+            fontFamily="'IBM Plex Mono', monospace" fontSize="13" fontWeight="700" fill={step.color}>
             {String(i + 1).padStart(2, '0')}
           </text>
-          {/* Labels */}
-          <text x={step.x + 80} y="92" textAnchor="middle"
+
+          {/* Label */}
+          <text x={step.x + 76} y="104" textAnchor="middle"
             fontFamily="'Outfit', sans-serif" fontSize="14" fontWeight="600" fill="#FFFFFF">
             {step.label}
           </text>
-          <text x={step.x + 80} y="110" textAnchor="middle"
-            fontFamily="'IBM Plex Mono', monospace" fontSize="11" fill="rgba(255,255,255,0.45)">
+          {/* Subtitle */}
+          <text x={step.x + 76} y="120" textAnchor="middle"
+            fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.4)">
             {step.sub}
+          </text>
+
+          {/* Detail tag */}
+          <rect x={step.x + 76 - 36} y="130" width="72" height="20" rx="10"
+            fill={step.color} fillOpacity="0.08" stroke={step.color} strokeWidth="0.5" strokeOpacity="0.2" />
+          <text x={step.x + 76} y="144" textAnchor="middle"
+            fontFamily="'IBM Plex Mono', monospace" fontSize="9" fontWeight="500" fill={step.color} fillOpacity="0.7">
+            {step.detail}
           </text>
         </g>
       ))}
-      {/* Connecting flow lines */}
-      {[160, 350, 540].map((x, i) => (
-        <line key={i} className="flow-line"
-          x1={x + 10} y1="70" x2={x + 20} y2="70"
-          stroke="rgba(255,255,255,0.2)" strokeWidth="2" />
-      ))}
+
+      {/* Data flow arrows between nodes */}
+      {[0, 1, 2, 3].map(i => {
+        const x1 = STEPS[i].x + 76 + 30;
+        const x2 = STEPS[i + 1].x + 76 - 30;
+        const mid = (x1 + x2) / 2;
+        return (
+          <g key={`arrow-${i}`}>
+            <path d={`M${mid - 4} 51 l8 5 -8 5`} fill="none"
+              stroke={STEPS[i + 1].color} strokeWidth="1" strokeOpacity="0.4"
+              strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+        );
+      })}
+
+      {/* Bottom label */}
+      <text x="380" y="185" textAnchor="middle"
+        fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.15)"
+        letterSpacing="0.1em">
+        SENSOR → VERIFY → CREDIT → REBATE
+      </text>
     </FlowSvg>
   );
 }
@@ -431,11 +487,12 @@ export function HeroSection() {
       <Content>
         <Eyebrow>Water Demand Response Platform</Eyebrow>
         <Headline>
-          One Sensor. <GradientSpan>Two Problems</GradientSpan> Solved.
+          Where Conservation Becomes <GradientSpan>Revenue.</GradientSpan>
         </Headline>
         <Subheadline>
-          Help utilities launch sensor-verified rebate programs that reward
-          water conservation and quality improvement — all from one device.
+          WaterQuality.Trading is the demand response platform that connects
+          BlueSignal sensors and atmospheric water generators to a verified credits
+          marketplace — turning water conservation into automated&nbsp;rebates.
         </Subheadline>
         <CTARow>
           <PrimaryBtn href="/for-utilities">For Utilities</PrimaryBtn>

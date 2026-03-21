@@ -136,9 +136,9 @@ export function WQTFooter() {
           <BrandCol>
             <BrandName><FooterLogo /></BrandName>
             <BrandDesc>
-              The water demand response platform. Sensor-verified credits,
-              utility-controlled pricing, and automated rebates for distributed
-              water conservation and quality improvement.
+              The water demand response platform. Connecting atmospheric water
+              generators and BlueSignal sensors to a verified credits marketplace —
+              with utility-controlled pricing and automated rebates.
             </BrandDesc>
           </BrandCol>
 

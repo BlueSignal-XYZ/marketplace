@@ -9,7 +9,7 @@ import RevealOnScroll from './RevealOnScroll';
 
 const Section = styled.section`
   padding: 64px clamp(20px, 5vw, 48px);
-  background: #0F1524;
+  background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 100px clamp(20px, 5vw, 48px);
@@ -56,7 +56,7 @@ const StatsGrid = styled.div`
 `;
 
 const StatCard = styled.div`
-  padding: 28px 20px;
+  padding: 32px 24px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
@@ -69,7 +69,7 @@ const StatCard = styled.div`
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 36px 24px;
+    padding: 40px 32px;
   }
 `;
 

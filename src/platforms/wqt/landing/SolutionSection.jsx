@@ -14,7 +14,7 @@ const flowPulse = keyframes`
 
 const Section = styled.section`
   padding: 64px clamp(20px, 5vw, 48px);
-  background: #0F1524;
+  background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 120px clamp(20px, 5vw, 48px);
@@ -220,13 +220,13 @@ const STEPS = [
     color: '#06B6D4',
     bg: 'rgba(6, 182, 212, 0.12)',
     title: 'Participants Enroll',
-    desc: 'Homeowners and facilities install sensor-verified water systems in the service area.',
+    desc: 'Homeowners and facilities install an atmospheric water generator paired with a BlueSignal WQM-1 sensor.',
   },
   {
     color: '#3B82F6',
     bg: 'rgba(59, 130, 246, 0.12)',
     title: 'BlueSignal Monitors',
-    desc: 'WQM-1 sensors read water quality and quantity 24/7, with every data point timestamped.',
+    desc: 'The WQM-1 reads water quality and quantity from the AWG output 24/7 — every data point timestamped and verified.',
   },
   {
     color: '#8B5CF6',
