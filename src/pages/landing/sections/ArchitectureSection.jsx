@@ -221,6 +221,42 @@ const DiagramWrapper = styled.div`
   margin: 0 auto;
 `;
 
+const DiagramHeader = styled.div`
+  text-align: center;
+  margin-bottom: 24px;
+`;
+
+const DiagramLabel = styled.span`
+  display: inline-block;
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: ${({ theme }) => theme.colors.blueB};
+  margin-bottom: 8px;
+`;
+
+const DiagramTitle = styled.h3`
+  font-family: ${({ theme }) => theme.fonts.display};
+  font-size: 20px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.white};
+  margin-bottom: 8px;
+
+  ${({ theme }) => theme.media.sm} {
+    font-size: 18px;
+  }
+`;
+
+const DiagramDesc = styled.p`
+  font-size: 14px;
+  line-height: 1.65;
+  color: ${({ theme }) => theme.colors.w50};
+  max-width: 480px;
+  margin: 0 auto;
+`;
+
 /* ── Feature cards ──────────────────────────────────────── */
 
 const Cards = styled.div`
@@ -253,6 +289,7 @@ const Cards = styled.div`
 const FeatureCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   padding: 28px 32px;
+  height: 100%;
   transition: background 0.2s;
 
   &:hover {
@@ -334,13 +371,21 @@ const ArchitectureSection = () => (
 
       <Grid>
         <RevealOnScroll>
-          <PipelineTerminal />
-        </RevealOnScroll>
-
-        <RevealOnScroll>
+          <DiagramHeader>
+            <DiagramLabel>Wiring Overview</DiagramLabel>
+            <DiagramTitle>How it all connects.</DiagramTitle>
+            <DiagramDesc>
+              Sensors, radio, relay output, and expansion — see how each
+              subsystem wires into the WQM-1&nbsp;board.
+            </DiagramDesc>
+          </DiagramHeader>
           <DiagramWrapper>
             <WiringDiagram />
           </DiagramWrapper>
+        </RevealOnScroll>
+
+        <RevealOnScroll>
+          <PipelineTerminal />
         </RevealOnScroll>
 
         <Cards>
