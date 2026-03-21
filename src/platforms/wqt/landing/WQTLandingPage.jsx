@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 import { HeroSection } from './HeroSection';
 import { ProblemSection } from './ProblemSection';
 import { SolutionSection } from './SolutionSection';
@@ -13,9 +14,14 @@ import { AudienceSection } from './AudienceSection';
 import { CTASection } from './CTASection';
 import { WQTFooter } from './WQTFooter';
 
+const PageWrapper = styled.div`
+  background: #0B1120;
+  min-height: 100vh;
+`;
+
 export function WQTLandingPage() {
   return (
-    <>
+    <PageWrapper>
       <HeroSection />
       <ProblemSection />
       <SolutionSection />
@@ -24,6 +30,6 @@ export function WQTLandingPage() {
       <AudienceSection />
       <CTASection />
       <WQTFooter />
-    </>
+    </PageWrapper>
   );
 }

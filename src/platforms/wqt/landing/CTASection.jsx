@@ -287,7 +287,7 @@ export function CTASection() {
       <BlueGlow />
       <Inner>
         <RevealOnScroll>
-          <SectionTitle>Start Earning From Your Water</SectionTitle>
+          <SectionTitle>Start Earning From Your Water Generator</SectionTitle>
           <SectionSub>
             Tell us about your home, facility, or utility. We'll show you how to
             get started with an AWG and start earning water credits.
