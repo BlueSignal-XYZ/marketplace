@@ -136,27 +136,26 @@ export function WQTFooter() {
           <BrandCol>
             <BrandName><FooterLogo /></BrandName>
             <BrandDesc>
-              A deregulated water quality trading system for distributed water
-              production. Dual-credit architecture, three-layer verification,
-              and utility-controlled pricing.
+              The water demand response platform. Sensor-verified credits,
+              utility-controlled pricing, and automated rebates for distributed
+              water conservation and quality improvement.
             </BrandDesc>
           </BrandCol>
 
           <div>
-            <ColTitle>How It Works</ColTitle>
-            <ColLink href="/#credit-definitions">Credit Definitions</ColLink>
-            <ColLink href="/#verification">Verification</ColLink>
-            <ColLink href="/#pricing">Pricing Mechanics</ColLink>
-            <ColLink href="/#settlement">Settlement</ColLink>
-            <ColLink href="/#risk-framework">Risk Framework</ColLink>
+            <ColTitle>Platform</ColTitle>
+            <ColLink href="/#problem">The Challenge</ColLink>
+            <ColLink href="/#demand-response">Demand Response</ColLink>
+            <ColLink href="/#how-it-works">How It Works</ColLink>
+            <ColLink href="/#contact">Contact</ColLink>
           </div>
 
           <div>
             <ColTitle>For</ColTitle>
             <ColLink href="/for-utilities">Utilities & Municipalities</ColLink>
-            <ColLink href="/for-homeowners">Homeowners</ColLink>
-            <ColLink href="/for-aggregators">Aggregators & Investors</ColLink>
+            <ColLink href="/for-homeowners">Participants</ColLink>
             <ColLink href="/registry">Credit Registry</ColLink>
+            <ColLink href="/map">Project Map</ColLink>
           </div>
 
           <div>
