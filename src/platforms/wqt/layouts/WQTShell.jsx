@@ -33,7 +33,7 @@ const AppContainer = styled.div`
   min-height: 100vh;
   width: 100vw;
   overflow-x: hidden;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ $dark, theme }) => $dark ? '#0B1120' : theme.colors.background};
 `;
 
 const MainContent = styled.main`
@@ -67,7 +67,7 @@ export function WQTShell({ user, isAuthLanding, children }) {
   }, [location.pathname]);
 
   return (
-    <AppContainer>
+    <AppContainer $dark={isAuthLanding}>
       <a
         href="#main-content"
         style={{
