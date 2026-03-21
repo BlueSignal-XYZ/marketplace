@@ -40,7 +40,7 @@ const Grid = styled.div`
 
 const Card = styled.div`
   background: ${({ theme }) => theme.colors.surface};
-  padding: 40px 28px;
+  padding: 32px;
   text-align: center;
   transition: background 0.2s;
 
@@ -53,7 +53,11 @@ const Card = styled.div`
     align-items: flex-start;
     gap: 16px;
     text-align: left;
-    padding: 20px 24px;
+    padding: 24px;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 20px;
   }
 `;
 
@@ -96,24 +100,24 @@ const CardDesc = styled.p`
 
 const useCases = [
   {
-    emoji: '\ud83d\udc1f',
-    title: 'Aquaculture',
-    desc: 'Monitor dissolved oxygen, pH, and temperature in fish ponds and shrimp\u00a0farms.',
+    emoji: '\ud83c\udfe0',
+    title: 'Homeowner Rebates',
+    desc: 'Opt into your municipality\u2019s water quality program. BlueSignal monitors your AWG or well water and generates the credits that qualify you for\u00a0rebates.',
+  },
+  {
+    emoji: '\ud83c\udfe2',
+    title: 'Commercial Properties',
+    desc: 'Businesses with on-site water systems earn nutrient credits automatically. Verified data flows to waterquality.trading and rebates hit your\u00a0account.',
+  },
+  {
+    emoji: '\ud83c\udfdb\ufe0f',
+    title: 'Municipal Programs',
+    desc: 'Cities deploy BlueSignal as the monitoring backbone for water quality rebate programs. One platform for enrollment, verification, and credit\u00a0settlement.',
   },
   {
     emoji: '\ud83c\udf3f',
-    title: 'Algae Control',
-    desc: 'Detect blooms early with turbidity and ORP trending. Trigger ultrasonic transducers\u00a0automatically.',
-  },
-  {
-    emoji: '\ud83c\udfd7\ufe0f',
-    title: 'Stormwater',
-    desc: 'Track retention basin quality for MS4 compliance. Log GPS-tagged readings for\u00a0reporting.',
-  },
-  {
-    emoji: '\ud83c\udfe0',
-    title: 'Residential',
-    desc: 'Well water and rainwater harvesting. Get alerts when pH drifts or TDS spikes above\u00a0threshold.',
+    title: 'Stormwater & Compliance',
+    desc: 'Track retention basin quality for MS4 compliance. Sensor data becomes verified credits — turning regulatory costs into\u00a0revenue.',
   },
 ];
 
@@ -122,8 +126,8 @@ const UseCasesSection = () => (
     <Container>
       <Header>
         <RevealOnScroll>
-          <SectionLabel>Applications</SectionLabel>
-          <SectionTitle>Built for the&nbsp;field.</SectionTitle>
+          <SectionLabel>Who It&rsquo;s For</SectionLabel>
+          <SectionTitle>From homeowners to&nbsp;municipalities.</SectionTitle>
         </RevealOnScroll>
       </Header>
 

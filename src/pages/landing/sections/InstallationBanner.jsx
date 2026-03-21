@@ -112,9 +112,9 @@ const InstallationBanner = () => (
               <SectionLabel>Professional Installation</SectionLabel>
               <SectionTitle>We install it for&nbsp;you.</SectionTitle>
               <Desc>
-                Full-service installation for commercial and residential sites.
-                Site survey, mounting, probe calibration, LoRa gateway setup, and
-                cloud dashboard configuration — all included in one&nbsp;visit.
+                Full-service installation for homes and businesses joining a rebate program.
+                Site survey, AWG integration, sensor calibration, LoRa gateway setup, and
+                marketplace enrollment — all included in one&nbsp;visit.
               </Desc>
               <StateTags>
                 <StateTag $available>

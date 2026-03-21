@@ -227,10 +227,10 @@ const MobileCTA = styled.a`
 `;
 
 const mobileLinks = [
+  { href: '#how-it-works', label: 'How It Works' },
   { href: '#sensors', label: 'Sensors' },
-  { href: '#architecture', label: 'Architecture' },
   { href: '#specs', label: 'Specs' },
-  { href: '/download', label: 'Downloads' },
+  { href: 'https://waterquality.trading', label: 'Marketplace', external: true },
   { href: 'https://cloud.bluesignal.xyz', label: 'Cloud', external: true },
 ];
 
@@ -281,14 +281,14 @@ const Nav = () => {
           </Brand>
 
           <NavLinks>
+            <NavLink href="#how-it-works">How It Works</NavLink>
             <NavLink href="#sensors">Sensors</NavLink>
-            <NavLink href="#architecture">Architecture</NavLink>
             <NavLink href="#specs">Specs</NavLink>
-            <NavLink href="/download">Downloads</NavLink>
+            <NavLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_marketplace', 'Nav')}>Marketplace</NavLink>
             <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Nav')}>Cloud</NavLink>
           </NavLinks>
 
-          <CTAButton href="#order" onClick={() => trackCTA('order_devkit_hero', 'Nav CTA')}>Order Dev Kit</CTAButton>
+          <CTAButton href="#order" onClick={() => trackCTA('get_started', 'Nav CTA')}>Get Started</CTAButton>
 
           <HamburgerBtn
             onClick={() => setMenuOpen(prev => !prev)}
@@ -328,9 +328,9 @@ const Nav = () => {
           href="#order"
           $index={mobileLinks.length}
           $open={menuOpen}
-          onClick={() => handleLinkClick('order_devkit_hero')}
+          onClick={() => handleLinkClick('get_started')}
         >
-          Order Dev Kit
+          Get Started
         </MobileCTA>
       </MobileMenu>
     </>

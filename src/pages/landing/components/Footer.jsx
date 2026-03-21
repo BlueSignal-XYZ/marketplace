@@ -3,7 +3,7 @@ import { trackCTA } from '../utils/analytics';
 import BlueSignalLogo from './Logo';
 
 const FooterWrapper = styled.footer`
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => theme.colors.bg};
   border-top: 1px solid ${({ theme }) => theme.colors.w08};
 `;
 
@@ -183,7 +183,7 @@ const Footer = () => (
             <BrandTitle>BlueSignal</BrandTitle>
           </LogoRow>
           <BrandDesc>
-            Water quality monitoring hardware for tanks, ponds, and treatment&nbsp;systems.
+            Water quality monitoring infrastructure for municipal rebate&nbsp;programs.
             <BrandTagline>Made with ❤️ in Austin, Texas</BrandTagline>
           </BrandDesc>
           <SocialRow>
@@ -201,15 +201,15 @@ const Footer = () => (
 
         <LinkCol>
           <ColTitle>Product</ColTitle>
+          <FooterLink href="#how-it-works">How It Works</FooterLink>
           <FooterLink href="#sensors">Sensor Channels</FooterLink>
-          <FooterLink href="#architecture">Architecture</FooterLink>
           <FooterLink href="#specs">Specifications</FooterLink>
-          <FooterLink href="/download">Firmware Downloads</FooterLink>
-          <FooterLink href="#order">Order Dev Kit</FooterLink>
+          <FooterLink href="#order">Get Started</FooterLink>
         </LinkCol>
 
         <LinkCol>
           <ColTitle>Platform</ColTitle>
+          <FooterLink href="https://waterquality.trading" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_marketplace', 'Footer')}>Credits Marketplace</FooterLink>
           <FooterLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Footer')}>Cloud Dashboard</FooterLink>
           <FooterLink href="https://github.com/BlueSignal-XYZ" target="_blank" rel="noopener noreferrer">GitHub</FooterLink>
         </LinkCol>
@@ -218,7 +218,7 @@ const Footer = () => (
           <ColTitle>Services</ColTitle>
           <FooterLink href="#installation">Installation — Texas</FooterLink>
           <FooterLink href="#installation">Installation — Florida<SoonBadge>SOON</SoonBadge></FooterLink>
-          <FooterLink href="#order">Volume Pricing</FooterLink>
+          <FooterLink href="#order">Municipal Programs</FooterLink>
           <FooterLink href="mailto:hello@bluesignal.xyz">Contact</FooterLink>
         </LinkCol>
       </FooterGrid>
