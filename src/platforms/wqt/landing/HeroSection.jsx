@@ -271,7 +271,7 @@ const DesktopViz = styled.div`
   max-width: 760px;
   animation: ${fadeUp} 0.9s ${SPRING} 0.75s both;
 
-  @media (max-width: 768px) {
+  @media (max-width: 680px) {
     display: none;
   }
 `;
@@ -299,7 +299,7 @@ const MobileViz = styled.div`
   max-width: 320px;
   animation: ${fadeUp} 0.9s ${SPRING} 0.7s both;
 
-  @media (max-width: 768px) {
+  @media (max-width: 680px) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -362,26 +362,26 @@ const ScrollIndicator = styled.div`
 
 const PILLS = [
   'Sensor-Verified',
-  'Utility-Controlled',
-  'Quality + Quantity',
+  'Rebates on Your Bill',
+  'No Municipal Water Needed',
 ];
 
 const MOBILE_STEPS = [
-  { icon: '💧', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Generates Clean Water' },
-  { icon: '📡', bg: 'rgba(59, 130, 246, 0.15)', label: 'WQM-1 Sensor Verifies Quality' },
-  { icon: '📊', bg: 'rgba(139, 92, 246, 0.15)', label: 'Credits Auto-Generated' },
-  { icon: '💵', bg: 'rgba(16, 185, 129, 0.15)', label: 'Rebate on Your Bill' },
+  { icon: '💧', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Harvests Water From Air' },
+  { icon: '📡', bg: 'rgba(59, 130, 246, 0.15)', label: 'Sensor Verifies Every Drop' },
+  { icon: '📊', bg: 'rgba(139, 92, 246, 0.15)', label: 'Credits Earned Automatically' },
+  { icon: '💵', bg: 'rgba(16, 185, 129, 0.15)', label: 'You Get Paid on Your Bill' },
 ];
 
 /* ── Desktop flow SVG component ────────────────────────── */
 
 function DemandResponseFlow() {
   const STEPS = [
-    { x: 0, label: 'AWG', sub: 'Water Generation', color: '#06B6D4', detail: '12 gal/day' },
-    { x: 152, label: 'WQM-1', sub: 'Sensor Verification', color: '#3B82F6', detail: 'pH · TDS · ORP' },
-    { x: 304, label: 'Cloud', sub: 'Data Pipeline', color: '#8B5CF6', detail: 'Encrypted · 24/7' },
-    { x: 456, label: 'Credits', sub: 'Auto-Generated', color: '#A855F7', detail: 'N/P · Quantity' },
-    { x: 608, label: 'Rebate', sub: 'On Your Bill', color: '#10B981', detail: 'Automated' },
+    { x: 0, label: 'Harvest', sub: 'AWG Makes Water', color: '#06B6D4', detail: '12 gal/day' },
+    { x: 152, label: 'Verify', sub: 'Sensor Confirms', color: '#3B82F6', detail: 'pH · TDS · ORP' },
+    { x: 304, label: 'Report', sub: 'Data to Utility', color: '#8B5CF6', detail: 'Encrypted · 24/7' },
+    { x: 456, label: 'Earn', sub: 'Credits Generated', color: '#A855F7', detail: 'N/P · Quantity' },
+    { x: 608, label: 'Get Paid', sub: 'On Your Bill', color: '#10B981', detail: 'Automated' },
   ];
 
   return (
@@ -464,7 +464,7 @@ function DemandResponseFlow() {
       <text x="380" y="185" textAnchor="middle"
         fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.15)"
         letterSpacing="0.1em">
-        SENSOR → VERIFY → CREDIT → REBATE
+        HARVEST → VERIFY → EARN → GET PAID
       </text>
     </FlowSvg>
   );
@@ -485,18 +485,18 @@ export function HeroSection() {
       />
 
       <Content>
-        <Eyebrow>Water Demand Response Platform</Eyebrow>
+        <Eyebrow>Earn Money From Water</Eyebrow>
         <Headline>
-          Where Conservation Becomes <GradientSpan>Revenue.</GradientSpan>
+          Get Paid to Harvest Water <GradientSpan>From the Air.</GradientSpan>
         </Headline>
         <Subheadline>
-          WaterQuality.Trading is the demand response platform that connects
-          BlueSignal sensors and atmospheric water generators to a verified credits
-          marketplace — turning water conservation into automated&nbsp;rebates.
+          Your atmospheric water generator produces clean water. Our sensor
+          verifies it. Your utility pays you — automatically, on your
+          water&nbsp;bill.
         </Subheadline>
         <CTARow>
-          <PrimaryBtn href="/for-utilities">For Utilities</PrimaryBtn>
-          <SecondaryBtn href="/for-homeowners">For Participants</SecondaryBtn>
+          <PrimaryBtn href="#demand-response">See How It Works</PrimaryBtn>
+          <SecondaryBtn href="/for-utilities">I'm a Utility</SecondaryBtn>
         </CTARow>
         <Pills>
           {PILLS.map((text, i) => (

@@ -12,6 +12,10 @@ const Section = styled.section`
   background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    padding: 80px clamp(20px, 5vw, 48px);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px clamp(20px, 5vw, 48px);
   }
 `;
@@ -164,32 +168,32 @@ const CardLink = styled.span`
 
 const AUDIENCES = [
   {
+    href: '/for-homeowners',
+    bg: 'rgba(16, 185, 129, 0.12)',
+    accent: '#10B981',
+    title: 'Homeowners & Facilities',
+    desc: 'Install an AWG, pair it with a BlueSignal sensor, and start earning rebates on your water bill. Clean water from the air — verified and paid for, automatically.',
+    features: [
+      'Generate clean water from the air',
+      'Sensor verifies every drop',
+      'Rebates appear on your water bill',
+      'Track earnings in real-time',
+    ],
+    iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+  },
+  {
     href: '/for-utilities',
     bg: 'rgba(0, 82, 204, 0.12)',
     accent: '#3B82F6',
     title: 'Utilities & Municipalities',
-    desc: 'Launch a turnkey demand response program that incentivizes distributed water conservation and quality improvement across your service area.',
+    desc: 'Launch a turnkey program that pays residents to generate clean water locally — reducing demand on your infrastructure while improving water quality district-wide.',
     features: [
       'White-label our API and sensor network',
-      'Set your own rebate rates and quality multipliers',
+      'Set your own rebate rates and multipliers',
       'Automated credit generation and settlement',
       'No changes to your existing billing systems',
     ],
     iconPath: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
-  },
-  {
-    href: '/for-homeowners',
-    bg: 'rgba(16, 185, 129, 0.12)',
-    accent: '#10B981',
-    title: 'Participants',
-    desc: 'Install an AWG paired with a BlueSignal sensor and earn rebates on your water bill. Whether you\'re a homeowner, facility manager, or commercial property — every gallon is sensor-verified.',
-    features: [
-      'AWG + WQM-1 generates and verifies clean water',
-      'Earn both quantity and quality credit rebates',
-      'Rebates appear directly on your water bill',
-      'Real-time monitoring dashboard access',
-    ],
-    iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   },
 ];
 
@@ -198,11 +202,11 @@ export function AudienceSection() {
     <Section id="audiences">
       <Inner>
         <RevealOnScroll>
-          <SectionLabel>Get Started</SectionLabel>
-          <SectionTitle>Which Side Are You On?</SectionTitle>
+          <SectionLabel>Your Path</SectionLabel>
+          <SectionTitle>Ready to Start Earning?</SectionTitle>
           <SectionSub>
-            Whether you're a utility looking to launch a program or a participant
-            ready to start earning rebates — there's a path for you.
+            Whether you want to earn rebates at home or launch a program for your
+            service area — here's where to start.
           </SectionSub>
         </RevealOnScroll>
 

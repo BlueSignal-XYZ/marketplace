@@ -19,6 +19,10 @@ const Section = styled.section`
   color: #FFFFFF;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    padding: 80px clamp(20px, 5vw, 48px);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px clamp(20px, 5vw, 48px);
   }
 `;
@@ -81,6 +85,13 @@ const Card = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   backdrop-filter: blur(12px);
+  transition: all 200ms;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+  }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 40px 32px;
@@ -180,11 +191,12 @@ export function ProblemSection() {
     <Section id="problem">
       <Inner>
         <RevealOnScroll>
-          <SectionLabel>The Challenge</SectionLabel>
-          <SectionTitle>Utilities Face Two Growing Crises</SectionTitle>
+          <SectionLabel>The Problem</SectionLabel>
+          <SectionTitle>Municipal Water Is Getting Worse — and More Expensive</SectionTitle>
           <SectionSub>
-            Aging infrastructure, rising demand, and tightening regulations
-            are pushing water systems to their limits — on both sides of the meter.
+            Aging pipes. Rising rates. Contaminants making headlines. Whether you're a
+            homeowner tired of boil notices or a utility struggling with infrastructure —
+            the system is overdue for an upgrade.
           </SectionSub>
         </RevealOnScroll>
 
@@ -197,11 +209,11 @@ export function ProblemSection() {
                   <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" />
                 </svg>
               </CardIcon>
-              <CardTitle>Water Quantity</CardTitle>
+              <CardTitle>For Homeowners</CardTitle>
               <CardDesc>
-                Droughts are intensifying, aquifers are depleting, and population growth
-                is outpacing supply. Utilities are deferring billions in infrastructure
-                investment while demand keeps climbing.
+                Rising water bills, drought restrictions, and aging pipes mean you're
+                paying more for water you can't always trust. What if you could make
+                your own — and get paid for it?
               </CardDesc>
               <StatRow>
                 <Stat>
@@ -224,11 +236,11 @@ export function ProblemSection() {
                   <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </CardIcon>
-              <CardTitle>Water Quality</CardTitle>
+              <CardTitle>For Utilities</CardTitle>
               <CardDesc>
-                NPDES compliance costs are rising. Nutrient loading from stormwater
-                and aging septic systems drives expensive treatment upgrades.
-                Distributed solutions could offset these costs at a fraction of the price.
+                NPDES compliance costs are rising. Nutrient loading drives expensive
+                treatment upgrades. Distributed water generation could offset demand
+                and improve quality at a fraction of the cost.
               </CardDesc>
               <StatRow>
                 <Stat>
@@ -246,7 +258,7 @@ export function ProblemSection() {
 
         <RevealOnScroll delay={0.3}>
           <BridgeText>
-            What if one device and <BridgeHighlight>one program</BridgeHighlight> could address both?
+            What if one device could <BridgeHighlight>solve both sides</BridgeHighlight>?
           </BridgeText>
         </RevealOnScroll>
       </Inner>
