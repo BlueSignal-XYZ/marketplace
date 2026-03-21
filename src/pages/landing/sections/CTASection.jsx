@@ -107,10 +107,10 @@ const CTASection = () => (
       <RevealOnScroll>
         <Wrapper>
           <BlueGlow />
-          <Title>Let&rsquo;s talk water&nbsp;quality.</Title>
+          <Title>Ready to earn water&nbsp;rebates?</Title>
           <Desc>
-            Whether you&rsquo;re ready to order a dev kit, explore a pilot program,
-            or just have questions &mdash; we&rsquo;d love to hear from&nbsp;you.
+            Whether you&rsquo;re a homeowner, a business, or a municipality building a
+            rebate program &mdash; let&rsquo;s get you connected to the&nbsp;marketplace.
           </Desc>
           <FormArea>
             <ContactForm />
@@ -120,7 +120,7 @@ const CTASection = () => (
               Try the Dashboard
             </SecondaryBtn>
           </DashboardLink>
-          <Note style={{ marginTop: 24 }}>WQM-1 Dev Kit $999 &middot; Cloud Monitoring $9.99/mo per device &middot; Free shipping in the&nbsp;US</Note>
+          <Note style={{ marginTop: 24 }}>WQM-1 Sensor $999 &middot; Cloud Monitoring $9.99/mo per device &middot; Free shipping &middot; Municipal volume&nbsp;pricing</Note>
         </Wrapper>
       </RevealOnScroll>
     </Container>

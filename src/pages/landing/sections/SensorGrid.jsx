@@ -63,6 +63,10 @@ const Card = styled.div`
   ${({ theme }) => theme.media.md} {
     padding: 24px;
   }
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 20px;
+  }
 `;
 
 const ChannelBadge = styled.span`
@@ -153,10 +157,11 @@ const SensorGrid = () => (
       <Header>
         <RevealOnScroll>
           <SectionLabel>Sensor Channels</SectionLabel>
-          <SectionTitle>Six parameters. One&nbsp;board.</SectionTitle>
+          <SectionTitle>Six parameters that generate&nbsp;credits.</SectionTitle>
           <SectionDesc>
-            Each channel reads through a 16-bit ADS1115 ADC with programmable gain.
-            Factory-calibrated with NIST-traceable references. Field-recalibrate with standard&nbsp;buffers.
+            Every reading from the WQM-1 is verified on-chain and contributes to your
+            nutrient credit balance. Factory-calibrated with NIST-traceable references
+            for rebate-program&nbsp;compliance.
           </SectionDesc>
         </RevealOnScroll>
       </Header>

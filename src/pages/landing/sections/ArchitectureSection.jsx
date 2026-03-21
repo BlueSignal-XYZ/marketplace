@@ -177,36 +177,36 @@ const PipelineTerminal = () => (
         <Dot $c="#febc2e" />
         <Dot $c="#28c840" />
       </DotsGroup>
-      <TabLabel>bluesignal-wqm {'\u2014'} pipeline</TabLabel>
+      <TabLabel>bluesignal {'\u2014'} rebate pipeline</TabLabel>
     </TermBar>
 
     <CodeScroll>
       <CodeTable>
-        <L n={1}><Cm># WQM-1 Data Pipeline</Cm></L>
+        <L n={1}><Cm># Water Quality → Credits → Rebates</Cm></L>
         <L n={2} />
-        <L n={3}><Ky>sensors</Ky>:</L>
-        <L n={4}>{'  '}<Ds>-</Ds>{' '}<St>pH</St>{'          '}<Cm># BNC analog → ADS1115</Cm></L>
-        <L n={5}>{'  '}<Ds>-</Ds>{' '}<St>TDS</St>{'         '}<Cm># JST-XH analog → ADS1115</Cm></L>
-        <L n={6}>{'  '}<Ds>-</Ds>{' '}<St>turbidity</St>{'   '}<Cm># JST-XH analog → ADS1115</Cm></L>
-        <L n={7}>{'  '}<Ds>-</Ds>{' '}<St>ORP</St>{'         '}<Cm># JST-XH analog → ADS1115</Cm></L>
-        <L n={8}>{'  '}<Ds>-</Ds>{' '}<St>temperature</St>{' '}<Cm># DS18B20 OneWire</Cm></L>
-        <L n={9}>{'  '}<Ds>-</Ds>{' '}<St>GPS</St>{'         '}<Cm># UART serial</Cm></L>
-        <L n={10} />
-        <L n={11}><Ky>processor</Ky>:</L>
-        <L n={12}>{'  '}<Ky>board</Ky>:{' '}<St>Pi Zero 2W</St></L>
-        <L n={13}>{'  '}<Ky>adc</Ky>:{' '}<St>ADS1115 16-bit</St></L>
-        <L n={14}>{'  '}<Ky>storage</Ky>:{' '}<St>SQLite WAL buffer</St></L>
-        <L n={15} />
-        <L n={16}><Ky>radio</Ky>:</L>
-        <L n={17}>{'  '}<Ky>module</Ky>:{' '}<St>SX1262 LoRa</St></L>
-        <L n={18}>{'  '}<Ky>encoding</Ky>:{' '}<St>Cayenne LPP</St></L>
-        <L n={19}>{'  '}<Ky>encryption</Ky>:{' '}<St>AES-128</St></L>
-        <L n={20}>{'  '}<Ky>range</Ky>:{' '}<St>15 km line-of-sight</St></L>
+        <L n={3}><Ky>source</Ky>:</L>
+        <L n={4}>{'  '}<Ky>type</Ky>:{' '}<St>Atmospheric Water Generator</St></L>
+        <L n={5}>{'  '}<Ky>output</Ky>:{' '}<St>12 gal/day</St>{'       '}<Cm># potable water</Cm></L>
+        <L n={6} />
+        <L n={7}><Ky>monitor</Ky>:</L>
+        <L n={8}>{'  '}<Ky>device</Ky>:{' '}<St>BlueSignal WQM-1</St></L>
+        <L n={9}>{'  '}<Ky>sensors</Ky>:</L>
+        <L n={10}>{'    '}<Ds>-</Ds>{' '}<St>pH</St>{', '}<St>TDS</St>{', '}<St>turbidity</St>{', '}<St>ORP</St>{', '}<St>temp</St>{', '}<St>GPS</St></L>
+        <L n={11}>{'  '}<Ky>uplink</Ky>:{' '}<St>LoRaWAN 15km</St>{'     '}<Cm># encrypted</Cm></L>
+        <L n={12} />
+        <L n={13}><Ky>verify</Ky>:</L>
+        <L n={14}>{'  '}<Ky>chain</Ky>:{' '}<St>Polygon</St></L>
+        <L n={15}>{'  '}<Ky>proof</Ky>:{' '}<St>immutable hash per reading</St></L>
+        <L n={16} />
+        <L n={17}><Ky>pipeline</Ky>:</L>
+        <L n={18}>{'  '}<St>sensor</St>{' '}<Ar>→</Ar>{' '}<St>verify</St>{' '}<Ar>→</Ar>{' '}<St>credit</St>{' '}<Ar>→</Ar>{' '}<St>rebate</St></L>
+        <L n={19}>{'  '}<Ky>dashboard</Ky>:{' '}<St>cloud.bluesignal.xyz</St></L>
+        <L n={20}>{'  '}<Ky>marketplace</Ky>:{' '}<St>waterquality.trading</St></L>
         <L n={21} />
-        <L n={22}><Ky>upstream</Ky>:</L>
-        <L n={23}>{'  '}<St>ingest</St>{' '}<Ar>→</Ar>{' '}<St>store</St>{' '}<Ar>→</Ar>{' '}<St>alert</St>{' '}<Ar>→</Ar>{' '}<St>dashboard</St></L>
-        <L n={24}>{'  '}<Ky>dashboard</Ky>:{'  '}<St>cloud.bluesignal.xyz</St></L>
-        <L n={25}>{'  '}<Ky>registry</Ky>:{'   '}<St>waterquality.trading</St><Cursor /></L>
+        <L n={22}><Ky>rebate</Ky>:</L>
+        <L n={23}>{'  '}<Ky>program</Ky>:{' '}<St>Municipal Water Quality</St></L>
+        <L n={24}>{'  '}<Ky>status</Ky>:{' '}<St>enrolled</St>{'           '}<Cm># auto-verified</Cm></L>
+        <L n={25}>{'  '}<Ky>credits_earned</Ky>:{' '}<St>24 this month</St><Cursor /></L>
       </CodeTable>
     </CodeScroll>
   </Terminal>
@@ -243,7 +243,7 @@ const Cards = styled.div`
 
 const FeatureCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
-  padding: 28px 32px;
+  padding: 32px;
   transition: background 0.2s;
 
   &:hover {
@@ -251,11 +251,11 @@ const FeatureCard = styled.div`
   }
 
   ${({ theme }) => theme.media.md} {
-    padding: 20px;
+    padding: 24px;
   }
 
   ${({ theme }) => theme.media.sm} {
-    padding: 16px;
+    padding: 20px;
   }
 `;
 
@@ -286,39 +286,40 @@ const FeatureDesc = styled.p`
 
 const features = [
   {
-    tag: 'Storage',
-    title: 'Offline-First SQLite Buffer',
-    desc: 'WAL-mode database stores readings locally during connectivity loss. Automatic sync when LoRa link\u00a0restores.',
+    tag: 'Monitor',
+    title: '6-Channel Sensor Array',
+    desc: 'pH, TDS, turbidity, ORP, temperature, and GPS. Continuous readings from your AWG or water\u00a0system.',
   },
   {
-    tag: 'Radio',
-    title: 'LoRaWAN Class A',
-    desc: 'SX1262 transceiver with 15\u00a0km line-of-sight range. Cayenne LPP payload encoding with AES-128\u00a0encryption.',
+    tag: 'Verify',
+    title: 'Blockchain Verification',
+    desc: 'Every reading is hashed and recorded on Polygon. Immutable proof that your water quality meets program\u00a0standards.',
   },
   {
-    tag: 'Control',
-    title: 'Relay Output',
-    desc: '10\u00a0A relay for pumps, valves, and dosing systems. Triggered by threshold rules or cloud\u00a0commands.',
+    tag: 'Trade',
+    title: 'Nutrient Credit Generation',
+    desc: 'Verified data automatically becomes tradeable credits on waterquality.trading. No manual\u00a0reporting.',
   },
   {
-    tag: 'Expansion',
-    title: 'I\u00b2C Expansion Bus',
-    desc: 'Exposed I\u00b2C header for additional sensors \u2014 barometric pressure, dissolved oxygen, or custom\u00a0probes.',
+    tag: 'Rebate',
+    title: 'Automated Municipal Rebates',
+    desc: 'Your municipality\u2019s rebate program processes credits automatically. Rebates flow back to your\u00a0account.',
   },
 ];
 
 /* ── Main section ───────────────────────────────────────── */
 
 const ArchitectureSection = () => (
-  <Section id="architecture">
+  <Section id="how-it-works">
     <Container>
       <SectionHeader>
         <RevealOnScroll>
-          <SectionLabel>Architecture</SectionLabel>
-          <SectionTitle>From probe to&nbsp;dashboard.</SectionTitle>
+          <SectionLabel>How It Works</SectionLabel>
+          <SectionTitle>From sensor to&nbsp;rebate.</SectionTitle>
           <SectionDesc>
-            The WQM-1 captures sensor data, buffers it locally, and transmits over LoRaWAN to
-            BlueSignal Cloud. Threshold alerts and relay control close the&nbsp;loop.
+            The WQM-1 monitors water quality from your AWG or existing water system,
+            verifies data on-chain, and generates nutrient credits on waterquality.trading.
+            Your municipality processes the rebate&nbsp;automatically.
           </SectionDesc>
         </RevealOnScroll>
       </SectionHeader>
