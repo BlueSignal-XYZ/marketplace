@@ -112,13 +112,22 @@ const StepCircle = styled.div`
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: ${({ $bg }) => $bg};
+  background: #0B1120;
   border: 2px solid ${({ $color }) => $color};
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
   position: relative;
+
+  /* Inner colored fill */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: ${({ $bg }) => $bg};
+  }
 `;
 
 const StepNumber = styled.span`
@@ -126,6 +135,8 @@ const StepNumber = styled.span`
   font-size: 16px;
   font-weight: 700;
   color: ${({ $color }) => $color};
+  position: relative;
+  z-index: 1;
 `;
 
 const StepTitle = styled.h3`
