@@ -402,11 +402,24 @@ function DemandResponseFlow() {
       {/* Subtle dot grid */}
       <rect width="760" height="200" fill="url(#heroGrid)" />
 
-      {/* Horizontal connector line */}
-      <line x1="76" y1="56" x2="684" y2="56" stroke="url(#flowGrad)" strokeWidth="2" />
-      {/* Animated flow overlay */}
-      <line className="flow-line" x1="76" y1="56" x2="684" y2="56"
-        stroke="rgba(255,255,255,0.15)" strokeWidth="2" />
+      {/* Connecting lines between circles (not through them) */}
+      {[0, 1, 2, 3].map(i => {
+        const fromCx = STEPS[i].x + 76;
+        const toCx = STEPS[i + 1].x + 76;
+        const lineX1 = fromCx + 30; // right edge of outer ring (r=28 + 2px gap)
+        const lineX2 = toCx - 30;   // left edge of next outer ring
+        const midX = (lineX1 + lineX2) / 2;
+        return (
+          <g key={`conn-${i}`}>
+            <line x1={lineX1} y1="56" x2={lineX2} y2="56"
+              stroke={STEPS[i + 1].color} strokeWidth="1.5" strokeOpacity="0.2" />
+            {/* Arrow head */}
+            <path d={`M${midX + 3} 51 l6 5 -6 5`} fill="none"
+              stroke={STEPS[i + 1].color} strokeWidth="1" strokeOpacity="0.35"
+              strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+        );
+      })}
 
       {/* Step nodes */}
       {STEPS.map((step, i) => (
@@ -415,7 +428,7 @@ function DemandResponseFlow() {
           <circle cx={step.x + 76} cy="56" r="40" fill={step.color} fillOpacity="0.04" />
 
           {/* Outer ring */}
-          <circle cx={step.x + 76} cy="56" r="28" fill="rgba(255,255,255,0.02)"
+          <circle cx={step.x + 76} cy="56" r="28" fill="#0B1120"
             stroke={step.color} strokeWidth="1.5" strokeOpacity="0.3" />
           {/* Inner filled circle */}
           <circle cx={step.x + 76} cy="56" r="18" fill={step.color} fillOpacity="0.12" />
@@ -446,20 +459,6 @@ function DemandResponseFlow() {
         </g>
       ))}
 
-      {/* Data flow arrows between nodes */}
-      {[0, 1, 2, 3].map(i => {
-        const x1 = STEPS[i].x + 76 + 30;
-        const x2 = STEPS[i + 1].x + 76 - 30;
-        const mid = (x1 + x2) / 2;
-        return (
-          <g key={`arrow-${i}`}>
-            <path d={`M${mid - 4} 51 l8 5 -8 5`} fill="none"
-              stroke={STEPS[i + 1].color} strokeWidth="1" strokeOpacity="0.4"
-              strokeLinecap="round" strokeLinejoin="round" />
-          </g>
-        );
-      })}
-
       {/* Bottom label */}
       <text x="380" y="185" textAnchor="middle"
         fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.15)"
@@ -487,7 +486,7 @@ export function HeroSection() {
       <Content>
         <Eyebrow>Earn Money From Water</Eyebrow>
         <Headline>
-          Get Paid to Harvest Water <GradientSpan>From the Air.</GradientSpan>
+          Get Paid to Harvest Clean Water <GradientSpan>From the Air.</GradientSpan>
         </Headline>
         <Subheadline>
           Your atmospheric water generator produces clean water. Our sensor

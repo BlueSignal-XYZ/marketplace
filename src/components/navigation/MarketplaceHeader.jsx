@@ -402,15 +402,6 @@ export function MarketplaceHeader({ onMenuClick }) {
         </NavLinks>
 
         <RightGroup>
-          <DemoToggle
-            $active={demoActive}
-            onClick={handleDemoToggle}
-            aria-label={demoActive ? 'Disable demo mode' : 'Enable demo mode'}
-            title={demoActive ? 'Demo mode ON — click to disable' : 'Click to enable demo mode'}
-          >
-            <DemoDot $active={demoActive} />
-            Demo
-          </DemoToggle>
           <SignUpButton href={ctaHref}>Sign In</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">

@@ -314,18 +314,17 @@ export function MarketplacePage() {
   const error = queryError?.message || null;
 
   // Sync URL search params
-  const updateUrl = useCallback((p, q, f) => {
-    const params = new URLSearchParams();
-    if (p > 1) params.set('page', String(p));
-    if (q) params.set('q', q);
-    if (f.nutrientType) params.set('nutrientType', f.nutrientType);
-    if (f.verificationLevel) params.set('verificationLevel', f.verificationLevel);
-    setSearchParams(params, { replace: true });
-  }, [setSearchParams]);
+  const updateUrlRef = React.useRef();
+  updateUrlRef.current = setSearchParams;
 
   React.useEffect(() => {
-    updateUrl(page, search, filters);
-  }, [page, search, filters, updateUrl]);
+    const params = new URLSearchParams();
+    if (page > 1) params.set('page', String(page));
+    if (search) params.set('q', search);
+    if (filters.nutrientType) params.set('nutrientType', filters.nutrientType);
+    if (filters.verificationLevel) params.set('verificationLevel', filters.verificationLevel);
+    updateUrlRef.current(params, { replace: true });
+  }, [page, search, filters]);
 
   const handleSearchChange = useCallback((value) => {
     setSearchInput(value);
