@@ -16,6 +16,9 @@ const Grid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 2px;
 
+  /* Ensure all grid children stretch equally */
+  > * { min-height: 0; }
+
   /* Unified corner radius on grid children (RevealOnScroll wrappers) */
   > :nth-child(1) { border-radius: 16px 0 0 16px; overflow: hidden; }
   > :nth-child(4) { border-radius: 0 16px 16px 0; overflow: hidden; }
@@ -43,13 +46,17 @@ const Card = styled.div`
   padding: 40px 28px;
   text-align: center;
   transition: background 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
   }
 
   ${({ theme }) => theme.media.md} {
-    display: flex;
+    flex-direction: row;
     align-items: flex-start;
     gap: 16px;
     text-align: left;
