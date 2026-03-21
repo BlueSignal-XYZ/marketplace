@@ -1,6 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
+import WiringDiagram from '../components/WiringDiagram';
 
 /* ── Section layout ─────────────────────────────────────── */
 
@@ -212,6 +213,14 @@ const PipelineTerminal = () => (
   </Terminal>
 );
 
+/* ── Wiring diagram wrapper ────────────────────────────── */
+
+const DiagramWrapper = styled.div`
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+`;
+
 /* ── Feature cards ──────────────────────────────────────── */
 
 const Cards = styled.div`
@@ -326,6 +335,12 @@ const ArchitectureSection = () => (
       <Grid>
         <RevealOnScroll>
           <PipelineTerminal />
+        </RevealOnScroll>
+
+        <RevealOnScroll>
+          <DiagramWrapper>
+            <WiringDiagram />
+          </DiagramWrapper>
         </RevealOnScroll>
 
         <Cards>
