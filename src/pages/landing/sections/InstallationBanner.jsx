@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
 import { trackCTA } from '../utils/analytics';
+import WiringDiagram from '../components/WiringDiagram';
 
 const Banner = styled.div`
   background: ${({ theme }) => theme.colors.surface};
@@ -17,7 +18,7 @@ const Banner = styled.div`
 
 const Inner = styled.div`
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 48px;
   align-items: center;
 
@@ -28,6 +29,15 @@ const Inner = styled.div`
 
   ${({ theme }) => theme.media.md} {
     gap: 24px;
+  }
+`;
+
+const DiagramWrapper = styled.div`
+  width: 100%;
+  max-width: 560px;
+
+  ${({ theme }) => theme.media.lg} {
+    margin: 0 auto;
   }
 `;
 
@@ -97,6 +107,8 @@ const CTAButton = styled.a`
     box-shadow: 0 0 24px rgba(255,255,255,0.15);
   }
 
+  margin-top: 24px;
+
   ${({ theme }) => theme.media.sm} {
     width: 100%;
   }
@@ -126,19 +138,22 @@ const InstallationBanner = () => (
                   Florida — Coming Soon
                 </StateTag>
               </StateTags>
+              <CTAButton
+                href="#order"
+                onClick={(e) => {
+                  e.preventDefault();
+                  trackCTA('request_install_quote', 'Installation Banner');
+                  window.dispatchEvent(new CustomEvent('prefill-inquiry', { detail: 'quote' }));
+                  const section = document.getElementById('order');
+                  if (section) section.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Request Installation Quote
+              </CTAButton>
             </Content>
-            <CTAButton
-              href="#order"
-              onClick={(e) => {
-                e.preventDefault();
-                trackCTA('request_install_quote', 'Installation Banner');
-                window.dispatchEvent(new CustomEvent('prefill-inquiry', { detail: 'quote' }));
-                const section = document.getElementById('order');
-                if (section) section.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Request Installation Quote
-            </CTAButton>
+            <DiagramWrapper>
+              <WiringDiagram />
+            </DiagramWrapper>
           </Inner>
         </Banner>
       </RevealOnScroll>
