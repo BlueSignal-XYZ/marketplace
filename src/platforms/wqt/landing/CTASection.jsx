@@ -22,6 +22,10 @@ const Section = styled.section`
   overflow: hidden;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    padding: 80px clamp(20px, 5vw, 48px);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px clamp(20px, 5vw, 48px);
   }
 `;
@@ -123,7 +127,7 @@ const Select = styled.select`
   cursor: pointer;
   transition: border-color 200ms;
 
-  &:focus { border-color: #3B82F6; }
+  &:focus { border-color: ${({ theme }) => theme.colors.primary}; }
 
   option {
     background: #1a1f2e;
@@ -145,7 +149,7 @@ const TextArea = styled.textarea`
   transition: border-color 200ms;
 
   &::placeholder { color: rgba(255, 255, 255, 0.25); }
-  &:focus { border-color: #3B82F6; }
+  &:focus { border-color: ${({ theme }) => theme.colors.primary}; }
 `;
 
 const SubmitBtn = styled.button`
@@ -283,10 +287,10 @@ export function CTASection() {
       <BlueGlow />
       <Inner>
         <RevealOnScroll>
-          <SectionTitle>Ready to Launch a Water Demand Response Program?</SectionTitle>
+          <SectionTitle>Start Earning From Your Water</SectionTitle>
           <SectionSub>
-            Tell us about your utility or project. We'll show you how to get started
-            with sensor-verified water credits and automated rebates.
+            Tell us about your home, facility, or utility. We'll show you how to
+            get started with an AWG and start earning water credits.
           </SectionSub>
         </RevealOnScroll>
 

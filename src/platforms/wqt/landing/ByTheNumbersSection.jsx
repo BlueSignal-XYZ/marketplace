@@ -12,7 +12,11 @@ const Section = styled.section`
   background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 100px clamp(20px, 5vw, 48px);
+    padding: 80px clamp(20px, 5vw, 48px);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 120px clamp(20px, 5vw, 48px);
   }
 `;
 
@@ -47,11 +51,14 @@ const SectionTitle = styled.h2`
 const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 20px;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
 
@@ -66,6 +73,7 @@ const StatCard = styled.div`
   &:hover {
     background: rgba(255, 255, 255, 0.05);
     transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
@@ -188,7 +196,7 @@ export function ByTheNumbersSection() {
       <Inner>
         <RevealOnScroll>
           <SectionLabel>Platform</SectionLabel>
-          <SectionTitle>Built for Scale</SectionTitle>
+          <SectionTitle>Built for Trust</SectionTitle>
         </RevealOnScroll>
 
         <StatsGrid>

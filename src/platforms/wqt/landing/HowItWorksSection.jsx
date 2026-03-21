@@ -17,6 +17,10 @@ const Section = styled.section`
   background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    padding: 80px clamp(20px, 5vw, 48px);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px clamp(20px, 5vw, 48px);
   }
 `;
@@ -69,8 +73,12 @@ const FeaturesGrid = styled.div`
   margin-bottom: 56px;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 `;
 
@@ -105,7 +113,7 @@ const FeatureIcon = styled.div`
 
 const FeatureTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 18px;
+  font-size: clamp(18px, 2vw, 22px);
   font-weight: 600;
   color: #FFFFFF;
   margin: 0 0 10px;
@@ -113,8 +121,8 @@ const FeatureTitle = styled.h3`
 
 const FeatureDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.7;
   margin: 0;
 `;
@@ -233,8 +241,8 @@ const FEATURES = [
   {
     bg: 'rgba(6, 182, 212, 0.12)',
     color: '#06B6D4',
-    title: 'Continuous Monitoring',
-    desc: 'BlueSignal WQM-1 sensors paired with atmospheric water generators read water quality parameters 24/7. Every data point is timestamped, stored, and available via API.',
+    title: 'Always-On Verification',
+    desc: 'The WQM-1 sensor paired with your AWG reads water quality around the clock. Every reading is timestamped, encrypted, and stored.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
@@ -244,8 +252,8 @@ const FEATURES = [
   {
     bg: 'rgba(0, 82, 204, 0.12)',
     color: '#0052CC',
-    title: 'Dual Credit System',
-    desc: 'Quantity Credits track gallons conserved. Quality Credits measure N/P nutrient offsets. Both are auto-calculated from verified sensor data.',
+    title: 'Two Ways to Earn',
+    desc: 'Quantity Credits for every gallon your AWG produces. Quality Credits when your water exceeds purity thresholds. Both stack.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="14" rx="2" />
@@ -256,8 +264,8 @@ const FEATURES = [
   {
     bg: 'rgba(16, 185, 129, 0.12)',
     color: '#10B981',
-    title: 'Utility-Set Pricing',
-    desc: 'Utilities set their own buyback rates and quality multipliers. No speculation, no tokens — just transparent, configurable economics.',
+    title: 'Your Utility Sets the Rate',
+    desc: 'Rebate rates are set by your water utility — transparent, configurable, and backed by real economics. Not crypto. Not tokens.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
@@ -293,11 +301,11 @@ export function HowItWorksSection() {
     <Section id="how-it-works">
       <Inner>
         <RevealOnScroll>
-          <SectionLabel>How It Works</SectionLabel>
-          <SectionTitle>Sensor-Verified. Utility-Controlled. Fully Automated.</SectionTitle>
+          <SectionLabel>Under the Hood</SectionLabel>
+          <SectionTitle>Real Sensors. Real Credits. Real Money.</SectionTitle>
           <SectionSub>
-            Every credit is backed by real sensor data. Every rate is set by your utility.
-            Every rebate is issued automatically.
+            No guesswork. No tokens. No speculation. Every credit comes from a real sensor
+            reading — and every rebate hits your real water bill.
           </SectionSub>
         </RevealOnScroll>
 

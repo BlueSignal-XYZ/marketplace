@@ -17,6 +17,10 @@ const Section = styled.section`
   background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    padding: 80px clamp(20px, 5vw, 48px);
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px clamp(20px, 5vw, 48px);
   }
 `;
@@ -55,7 +59,7 @@ const SectionSub = styled.p`
   color: rgba(255, 255, 255, 0.5);
   text-align: center;
   max-width: 620px;
-  margin: 0 auto 64px;
+  margin: 0 auto 56px;
   line-height: 1.7;
   text-wrap: pretty;
 `;
@@ -135,10 +139,14 @@ const StepTitle = styled.h3`
 const StepDesc = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.6;
   margin: 0;
-  max-width: 180px;
+  max-width: 140px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    max-width: 180px;
+  }
 `;
 
 /* ── Mobile: vertical pipeline ─────────────────────────── */
@@ -213,32 +221,32 @@ const STEPS = [
   {
     color: '#0052CC',
     bg: 'rgba(0, 82, 204, 0.12)',
-    title: 'Utility Launches',
-    desc: 'Set rebate rates, define service areas, and configure your program through our API.',
+    title: 'Utility Launches Program',
+    desc: 'Your utility sets rebate rates and defines the service area. You don\'t have to do anything here — they handle it.',
   },
   {
     color: '#06B6D4',
     bg: 'rgba(6, 182, 212, 0.12)',
-    title: 'Participants Enroll',
-    desc: 'Homeowners and facilities install an atmospheric water generator paired with a BlueSignal WQM-1 sensor.',
+    title: 'You Install an AWG',
+    desc: 'Set up an atmospheric water generator at your home or facility. Pair it with a BlueSignal WQM-1 sensor.',
   },
   {
     color: '#3B82F6',
     bg: 'rgba(59, 130, 246, 0.12)',
-    title: 'BlueSignal Monitors',
-    desc: 'The WQM-1 reads water quality and quantity from the AWG output 24/7 — every data point timestamped and verified.',
+    title: 'Sensor Verifies Water',
+    desc: 'The WQM-1 monitors your water output 24/7 — pH, TDS, ORP — and reports it to the cloud automatically.',
   },
   {
     color: '#8B5CF6',
     bg: 'rgba(139, 92, 246, 0.12)',
-    title: 'Credits Generated',
-    desc: 'Verified quantity and quality credits are auto-generated when thresholds are met.',
+    title: 'Credits Earned',
+    desc: 'Every gallon of verified clean water earns you quantity and quality credits. No paperwork.',
   },
   {
     color: '#10B981',
     bg: 'rgba(16, 185, 129, 0.12)',
-    title: 'Rebates Issued',
-    desc: 'Participants see rebates on their water bills. Utilities save on treatment and delivery.',
+    title: 'You Get Paid',
+    desc: 'Credits convert to rebates that appear directly on your water bill. That simple.',
   },
 ];
 
@@ -247,11 +255,11 @@ export function SolutionSection() {
     <Section id="demand-response">
       <Inner>
         <RevealOnScroll>
-          <SectionLabel>The Solution</SectionLabel>
-          <SectionTitle>The Demand Response Program</SectionTitle>
+          <SectionLabel>How It Works</SectionLabel>
+          <SectionTitle>From Air to Water to Money</SectionTitle>
           <SectionSub>
-            Utilities white-label BlueSignal's sensor network and market platform
-            to launch rebate programs that reward water conservation and quality improvement.
+            An atmospheric water generator harvests water from the air. A BlueSignal
+            sensor verifies every drop. Your utility pays you for each gallon — automatically.
           </SectionSub>
         </RevealOnScroll>
 

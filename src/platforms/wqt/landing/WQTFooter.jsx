@@ -32,7 +32,7 @@ const TopRow = styled.div`
   gap: 48px;
   margin-bottom: 48px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     grid-template-columns: 1fr 1fr;
     gap: 32px;
   }
@@ -136,9 +136,8 @@ export function WQTFooter() {
           <BrandCol>
             <BrandName><FooterLogo /></BrandName>
             <BrandDesc>
-              The water demand response platform. Connecting atmospheric water
-              generators and BlueSignal sensors to a verified credits marketplace —
-              with utility-controlled pricing and automated rebates.
+              Get paid to harvest clean water from the air. AWG + sensor +
+              utility rebates — all verified, all automated.
             </BrandDesc>
           </BrandCol>
 
