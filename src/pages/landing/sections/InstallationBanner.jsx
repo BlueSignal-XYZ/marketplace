@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
 import { trackCTA } from '../utils/analytics';
-import WiringDiagram from '../components/WiringDiagram';
 
 const Banner = styled.div`
   background: ${({ theme }) => theme.colors.surface};
@@ -13,31 +12,6 @@ const Banner = styled.div`
   ${({ theme }) => theme.media.md} {
     padding: 32px 20px;
     border-radius: 16px;
-  }
-`;
-
-const Inner = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-
-  ${({ theme }) => theme.media.lg} {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  ${({ theme }) => theme.media.md} {
-    gap: 24px;
-  }
-`;
-
-const DiagramWrapper = styled.div`
-  width: 100%;
-  max-width: 560px;
-
-  ${({ theme }) => theme.media.lg} {
-    margin: 0 auto;
   }
 `;
 
@@ -119,7 +93,6 @@ const InstallationBanner = () => (
     <Container>
       <RevealOnScroll>
         <Banner>
-          <Inner>
             <Content>
               <SectionLabel>Professional Installation</SectionLabel>
               <SectionTitle>We install it for&nbsp;you.</SectionTitle>
@@ -151,10 +124,6 @@ const InstallationBanner = () => (
                 Request Installation Quote
               </CTAButton>
             </Content>
-            <DiagramWrapper>
-              <WiringDiagram />
-            </DiagramWrapper>
-          </Inner>
         </Banner>
       </RevealOnScroll>
     </Container>

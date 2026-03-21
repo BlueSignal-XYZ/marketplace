@@ -278,13 +278,19 @@ const WiringDiagram = () => (
       {/* Cable gland (right side of enclosure) */}
       <circle cx="540" cy="250" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
 
-      {/* Pump / Valve icon */}
+      {/* Chemical Doser icon */}
       <rect x="560" y="225" width="50" height="50" rx="6" fill="#0f1114" stroke="rgba(251,191,36,0.3)" strokeWidth="1" />
-      {/* Pump impeller icon */}
-      <circle cx="585" cy="244" r="12" fill="none" stroke="rgba(251,191,36,0.2)" strokeWidth="1" />
-      <line x1="585" y1="232" x2="585" y2="256" stroke="rgba(251,191,36,0.15)" strokeWidth="0.8" />
-      <line x1="573" y1="244" x2="597" y2="244" stroke="rgba(251,191,36,0.15)" strokeWidth="0.8" />
-      <text x="585" y="267" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">Pump</text>
+      {/* Tank body */}
+      <rect x="574" y="232" width="22" height="15" rx="2" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="1" />
+      {/* Liquid fill */}
+      <rect x="575" y="239" width="20" height="7" rx="1" fill="rgba(251,191,36,0.08)" />
+      {/* Outlet nozzle */}
+      <line x1="585" y1="247" x2="585" y2="255" stroke="rgba(251,191,36,0.3)" strokeWidth="1.2" />
+      {/* Drip */}
+      <circle cx="585" cy="259" r="1.5" fill="rgba(251,191,36,0.35)">
+        <animate attributeName="opacity" values="0.4;0.1;0.4" dur="1.5s" repeatCount="indefinite" />
+      </circle>
+      <text x="585" y="270" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">Doser</text>
       <text x="585" y="290" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Relay Out</text>
       <text x="585" y="300" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">10A · 250VAC</text>
     </g>
