@@ -84,8 +84,8 @@ export function WQTShell({ user, isAuthLanding, children }) {
       >
         Skip to content
       </a>
-      {/* Navigation: landing & marketing pages get dark WebsiteNav, app pages get MarketplaceHeader */}
-      {(isAuthLanding || isMarketingRoute) && (
+      {/* Navigation: marketing pages get dark WebsiteNav, app pages get MarketplaceHeader, landing gets nothing */}
+      {!isAuthLanding && isMarketingRoute && (
         <WebsiteNav onMenuClick={() => setMenuOpen((p) => !p)} />
       )}
       {!isAuthLanding && !isMarketingRoute && (

@@ -394,15 +394,13 @@ export function MarketplaceHeader({ onMenuClick }) {
 
         <NavLinks aria-label="Main navigation">
           <NavLink href="/marketplace" $active={pathname === '/marketplace'}>Marketplace</NavLink>
-          <NavLink href="/how-it-works" $active={pathname === '/how-it-works'}>How It Works</NavLink>
-          <SolutionsDropdownLight />
           <NavLink href="/registry" $active={pathname === '/registry'}>Credit Registry</NavLink>
           <NavLink href="/map" $active={pathname === '/map'}>Project Map</NavLink>
           <NavLink href="/programs" $active={pathname === '/programs' || pathname.startsWith('/programs/')}>Programs</NavLink>
         </NavLinks>
 
         <RightGroup>
-          <SignUpButton href={ctaHref}>Sign In</SignUpButton>
+          <SignUpButton href={ctaHref}>{isSignedIn ? 'Dashboard' : 'Sign In'}</SignUpButton>
           <NotificationBell />
           <MenuButton onClick={handleClick} aria-label="Open menu">
             <FontAwesomeIcon icon={faBars} />

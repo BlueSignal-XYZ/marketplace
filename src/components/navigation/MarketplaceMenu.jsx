@@ -305,13 +305,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
           >
             Marketplace
           </NavItem>
-          <NavItem
-            to="/how-it-works"
-            $active={isActive("/how-it-works")}
-            onClick={onClose}
-          >
-            How It Works
-          </NavItem>
         </NavList>
 
         {/* Platform */}
