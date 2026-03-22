@@ -42,21 +42,21 @@ const Section = styled.section`
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 80px clamp(20px, 5vw, 48px) 48px;
+  padding: clamp(48px, 8vh, 80px) clamp(20px, 5vw, 48px) clamp(24px, 4vh, 48px);
   background: #0B1120;
   color: #FFFFFF;
   box-sizing: border-box;
 
   @media (max-height: 500px) {
     justify-content: flex-start;
-    padding-top: clamp(32px, 6vh, 60px);
+    padding-top: clamp(24px, 4vh, 48px);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -103,6 +103,9 @@ const Content = styled.div`
   max-width: 860px;
   width: 100%;
   z-index: 1;
+  flex: 1;
+  justify-content: center;
+  min-height: 0;
 `;
 
 /* ── Typography ────────────────────────────────────────── */
@@ -118,7 +121,7 @@ const Eyebrow = styled.span`
   border: 1px solid rgba(6, 182, 212, 0.15);
   border-radius: 100px;
   padding: 6px 16px;
-  margin-bottom: 24px;
+  margin-bottom: clamp(12px, 2vh, 24px);
   animation: ${fadeUp} 0.9s ${SPRING} 0.1s both;
 `;
 
@@ -128,7 +131,7 @@ const Headline = styled.h1`
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.03em;
-  margin: 0 0 24px;
+  margin: 0 0 clamp(12px, 2vh, 24px);
   max-width: 18ch;
   color: #FFFFFF;
   text-wrap: balance;
@@ -148,7 +151,7 @@ const Subheadline = styled.p`
   font-weight: 400;
   line-height: 1.65;
   max-width: 560px;
-  margin: 0 0 36px;
+  margin: 0 0 clamp(16px, 3vh, 36px);
   color: rgba(255, 255, 255, 0.6);
   text-wrap: pretty;
   animation: ${fadeUp} 0.9s ${SPRING} 0.4s both;
@@ -236,7 +239,7 @@ const SecondaryBtn = styled.a`
 /* ── Pill bar ──────────────────────────────────────────── */
 
 const Pills = styled.div`
-  margin-top: 36px;
+  margin-top: clamp(12px, 2vh, 36px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,9 +269,11 @@ const PillDot = styled.span`
 /* ── Desktop SVG visual ────────────────────────────────── */
 
 const DesktopViz = styled.div`
-  margin-top: 56px;
+  margin-top: clamp(16px, 4vh, 56px);
   width: 100%;
   max-width: 760px;
+  flex-shrink: 1;
+  min-height: 0;
   animation: ${fadeUp} 0.9s ${SPRING} 0.75s both;
 
   @media (max-width: 680px) {
@@ -294,9 +299,12 @@ const FlowSvg = styled.svg`
 
 const MobileViz = styled.div`
   display: none;
-  margin-top: 40px;
+  margin-top: clamp(16px, 3vh, 40px);
   width: 100%;
   max-width: 320px;
+  flex-shrink: 1;
+  min-height: 0;
+  overflow: hidden;
   animation: ${fadeUp} 0.9s ${SPRING} 0.7s both;
 
   @media (max-width: 680px) {
