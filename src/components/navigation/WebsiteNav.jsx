@@ -534,7 +534,7 @@ export function WebsiteNav({ onMenuClick }) {
               <DemoDot $active={demoActive} />
               Demo
             </DemoToggleDark>
-            <CTALink href={ctaHref}>Sign In</CTALink>
+            <CTALink href={ctaHref}>{isSignedIn ? 'Dashboard' : 'Sign In'}</CTALink>
             <AppMenuBtn
               onClick={() => {
                 setMobileOpen(false);
@@ -587,7 +587,7 @@ export function WebsiteNav({ onMenuClick }) {
         </MobileNavLink>
 
         <MobileCTA href={ctaHref} onClick={() => setMobileOpen(false)}>
-          Get Started
+          {isSignedIn ? 'Dashboard' : 'Get Started'}
         </MobileCTA>
       </MobileMenu>
     </>

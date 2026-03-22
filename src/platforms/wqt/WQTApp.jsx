@@ -4,14 +4,13 @@
  */
 
 import React, { Suspense, useState, useEffect } from 'react';
-import { Route, Routes, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { wqtTheme } from '../../design-system/themes/wqtTheme';
 import { ToastProvider } from '../../shared/providers/ToastProvider';
 import { QueryProvider } from '../../shared/providers/QueryProvider';
 import { WQTShell } from './layouts/WQTShell';
-import { getDefaultDashboardRoute } from '../../utils/roleRouting';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 import { AuthGate } from '../../shared/components/AuthGate';
 import { ErrorBoundary } from '../../shared/components/ErrorBoundary';
@@ -71,22 +70,10 @@ const LoadingFallback = () => (
 // ── Landing redirect ──────────────────────────────────────
 
 function MarketplaceLanding({ user, authLoading }) {
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (authLoading) return;
-    if (user?.uid) {
-      const route = getDefaultDashboardRoute(user, 'marketplace');
-      navigate(route, { replace: true });
-    }
-  }, [user, authLoading, navigate]);
-
   if (authLoading) return <LoadingFallback />;
 
-  // Authenticated users get redirected above. Show landing page to visitors.
-  if (!user?.uid) return <WQTLandingPage />;
-
-  return <Welcome />;
+  // Always show landing page — authenticated users can navigate away via nav/CTA
+  return <WQTLandingPage />;
 }
 
 // ── WQT Auth Gate (delegates to shared AuthGate) ──────────
