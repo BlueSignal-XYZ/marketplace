@@ -278,10 +278,15 @@ export function MarketplacePage() {
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
   const debounceRef = useRef(null);
   const initialKeyRef = useRef(location.key);
+  const skipUrlSyncRef = useRef(false);
 
   // Sync state from URL params on back/forward navigation
   useEffect(() => {
     if (location.key === initialKeyRef.current) return;
+    if (skipUrlSyncRef.current) {
+      skipUrlSyncRef.current = false;
+      return;
+    }
     const q = searchParams.get('q') || '';
     setSearchInput(q);
     setSearch(q);
@@ -323,8 +328,15 @@ export function MarketplacePage() {
     if (search) params.set('q', search);
     if (filters.nutrientType) params.set('nutrientType', filters.nutrientType);
     if (filters.verificationLevel) params.set('verificationLevel', filters.verificationLevel);
+
+    // Only update URL if params actually changed to prevent replaceState loops
+    const newSearch = params.toString();
+    const currentSearch = searchParams.toString();
+    if (newSearch === currentSearch) return;
+
+    skipUrlSyncRef.current = true;
     updateUrlRef.current(params, { replace: true });
-  }, [page, search, filters]);
+  }, [page, search, filters, searchParams]);
 
   const handleSearchChange = useCallback((value) => {
     setSearchInput(value);

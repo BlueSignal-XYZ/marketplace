@@ -1267,9 +1267,10 @@ export default function SalesPage() {
     }
 
     const newSearch = params.toString();
-    if (newSearch !== location.search.slice(1)) {
-      navigate(`?${newSearch}`, { replace: true });
-    }
+    const currentSearch = new URLSearchParams(location.search).toString();
+    if (newSearch === currentSearch) return;
+
+    navigate(`?${newSearch}`, { replace: true });
   }, [selectedProduct, activeTab, quoteItems]);
 
   // Intersection Observer for active section tracking
