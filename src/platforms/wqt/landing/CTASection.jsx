@@ -75,6 +75,31 @@ const SectionSub = styled.p`
   text-wrap: pretty;
 `;
 
+const CTAButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 0 32px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: ${({ theme }) => theme.colors.primary};
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 200ms;
+  box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
+  white-space: nowrap;
+  margin-bottom: 40px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
+  }
+  &:active { transform: translateY(0); }
+`;
+
 /* ── Form ──────────────────────────────────────────────── */
 
 const Form = styled.form`
@@ -214,7 +239,7 @@ const INQUIRY_OPTIONS = [
   'General Inquiry',
 ];
 
-export function CTASection() {
+export function CTASection({ audience, content }) {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -287,11 +312,14 @@ export function CTASection() {
       <BlueGlow />
       <Inner>
         <RevealOnScroll>
-          <SectionTitle>Start Earning From Your Water Generator</SectionTitle>
+          <SectionTitle>{content?.headline || 'Start Earning From Your Water Generator'}</SectionTitle>
           <SectionSub>
-            Tell us about your home, facility, or utility. We'll show you how to
+            Tell us about your home, facility, or utility. We&rsquo;ll show you how to
             get started with an AWG and start earning water credits.
           </SectionSub>
+          {content?.href && (
+            <CTAButton href={content.href}>{content.label}</CTAButton>
+          )}
         </RevealOnScroll>
 
         <RevealOnScroll delay={0.15}>

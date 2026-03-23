@@ -1,11 +1,13 @@
 /**
  * WQT Hero — premium dark hero for waterquality.trading.
  * Demand Response Platform positioning.
+ * Supports dual-audience toggle (Homeowner / Utility) with crossfade.
  * Desktop: animated SVG flow diagram. Mobile: simplified vertical pipeline.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { AudienceToggle } from './AudienceToggle';
 
 /* ── Keyframes ─────────────────────────────────────────── */
 
@@ -68,12 +70,17 @@ const GradientMesh = styled.div`
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 82, 204, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 50% 90%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+  background: ${({ $audience }) =>
+    $audience === 'utility'
+      ? `radial-gradient(ellipse 80% 60% at 20% 40%, rgba(59, 130, 246, 0.12) 0%, transparent 70%),
+         radial-gradient(ellipse 60% 80% at 80% 30%, rgba(139, 92, 246, 0.10) 0%, transparent 60%),
+         radial-gradient(ellipse 50% 50% at 50% 90%, rgba(59, 130, 246, 0.06) 0%, transparent 60%)`
+      : `radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0, 82, 204, 0.15) 0%, transparent 70%),
+         radial-gradient(ellipse 60% 80% at 80% 30%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+         radial-gradient(ellipse 50% 50% at 50% 90%, rgba(16, 185, 129, 0.08) 0%, transparent 60%)`};
   animation: ${gradientShift} 20s ease-in-out infinite;
   background-size: 200% 200%;
+  transition: background 400ms ease;
 `;
 
 const GridOverlay = styled.div`
@@ -93,6 +100,7 @@ const GlowOrb = styled.div`
   pointer-events: none;
   animation: ${pulse} ${({ $d }) => $d || '6s'} ease-in-out infinite;
   animation-delay: ${({ $del }) => $del || '0s'};
+  transition: background 400ms ease;
 `;
 
 const Content = styled.div`
@@ -108,7 +116,23 @@ const Content = styled.div`
   min-height: 0;
 `;
 
+/* ── Crossfade wrapper ────────────────────────────────── */
+
+const CrossfadeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: opacity 200ms ease-in-out;
+`;
+
 /* ── Typography ────────────────────────────────────────── */
+
+const ToggleRow = styled.div`
+  margin-bottom: clamp(16px, 2.5vh, 28px);
+  animation: ${fadeUp} 0.9s ${SPRING} 0.05s both;
+`;
 
 const Eyebrow = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
@@ -116,13 +140,16 @@ const Eyebrow = styled.span`
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(6, 182, 212, 0.9);
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.15);
+  color: ${({ $audience }) =>
+    $audience === 'utility' ? 'rgba(59, 130, 246, 0.9)' : 'rgba(6, 182, 212, 0.9)'};
+  background: ${({ $audience }) =>
+    $audience === 'utility' ? 'rgba(59, 130, 246, 0.08)' : 'rgba(6, 182, 212, 0.08)'};
+  border: 1px solid ${({ $audience }) =>
+    $audience === 'utility' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(6, 182, 212, 0.15)'};
   border-radius: 100px;
   padding: 6px 16px;
   margin-bottom: clamp(12px, 2vh, 24px);
-  animation: ${fadeUp} 0.9s ${SPRING} 0.1s both;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
 `;
 
 const Headline = styled.h1`
@@ -135,14 +162,17 @@ const Headline = styled.h1`
   max-width: 18ch;
   color: #FFFFFF;
   text-wrap: balance;
-  animation: ${fadeUp} 0.9s ${SPRING} 0.25s both;
 `;
 
 const GradientSpan = styled.span`
-  background: linear-gradient(135deg, #06B6D4, #3B82F6, #8B5CF6);
+  background: ${({ $audience }) =>
+    $audience === 'utility'
+      ? 'linear-gradient(135deg, #3B82F6, #8B5CF6, #6366F1)'
+      : 'linear-gradient(135deg, #06B6D4, #3B82F6, #8B5CF6)'};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  transition: background 200ms ease;
 `;
 
 const Subheadline = styled.p`
@@ -154,7 +184,6 @@ const Subheadline = styled.p`
   margin: 0 0 clamp(16px, 3vh, 36px);
   color: rgba(255, 255, 255, 0.6);
   text-wrap: pretty;
-  animation: ${fadeUp} 0.9s ${SPRING} 0.4s both;
 
   @media (max-width: 480px) {
     line-height: 1.8;
@@ -169,7 +198,6 @@ const CTARow = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  animation: ${fadeUp} 0.9s ${SPRING} 0.55s both;
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -207,35 +235,6 @@ const PrimaryBtn = styled.a`
   }
 `;
 
-const SecondaryBtn = styled.a`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  padding: 0 28px;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  text-decoration: none;
-  transition: all 200ms;
-  white-space: nowrap;
-  min-width: 180px;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
-    min-width: unset;
-  }
-`;
-
 /* ── Pill bar ──────────────────────────────────────────── */
 
 const Pills = styled.div`
@@ -245,7 +244,6 @@ const Pills = styled.div`
   justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
-  animation: ${fadeUp} 0.9s ${SPRING} 0.65s both;
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -375,10 +373,10 @@ const PILLS = [
 ];
 
 const MOBILE_STEPS = [
-  { icon: '💧', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Harvests Water From Air' },
-  { icon: '📡', bg: 'rgba(59, 130, 246, 0.15)', label: 'Sensor Verifies Every Drop' },
-  { icon: '📊', bg: 'rgba(139, 92, 246, 0.15)', label: 'Credits Earned Automatically' },
-  { icon: '💵', bg: 'rgba(16, 185, 129, 0.15)', label: 'You Get Paid on Your Bill' },
+  { icon: '\u{1F4A7}', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Harvests Water From Air' },
+  { icon: '\u{1F4E1}', bg: 'rgba(59, 130, 246, 0.15)', label: 'Sensor Verifies Every Drop' },
+  { icon: '\u{1F4CA}', bg: 'rgba(139, 92, 246, 0.15)', label: 'Credits Earned Automatically' },
+  { icon: '\u{1F4B5}', bg: 'rgba(16, 185, 129, 0.15)', label: 'You Get Paid on Your Bill' },
 ];
 
 /* ── Desktop flow SVG component ────────────────────────── */
@@ -386,9 +384,9 @@ const MOBILE_STEPS = [
 function DemandResponseFlow() {
   const STEPS = [
     { x: 0, label: 'Harvest', sub: 'AWG Makes Water', color: '#06B6D4', detail: '12 gal/day' },
-    { x: 152, label: 'Verify', sub: 'Sensor Confirms', color: '#3B82F6', detail: 'pH · TDS · ORP' },
-    { x: 304, label: 'Report', sub: 'Data to Utility', color: '#8B5CF6', detail: 'Encrypted · 24/7' },
-    { x: 456, label: 'Earn', sub: 'Credits Generated', color: '#A855F7', detail: 'N/P · Quantity' },
+    { x: 152, label: 'Verify', sub: 'Sensor Confirms', color: '#3B82F6', detail: 'pH \u00B7 TDS \u00B7 ORP' },
+    { x: 304, label: 'Report', sub: 'Data to Utility', color: '#8B5CF6', detail: 'Encrypted \u00B7 24/7' },
+    { x: 456, label: 'Earn', sub: 'Credits Generated', color: '#A855F7', detail: 'N/P \u00B7 Quantity' },
     { x: 608, label: 'Get Paid', sub: 'On Your Bill', color: '#10B981', detail: 'Automated' },
   ];
 
@@ -414,14 +412,13 @@ function DemandResponseFlow() {
       {[0, 1, 2, 3].map(i => {
         const fromCx = STEPS[i].x + 76;
         const toCx = STEPS[i + 1].x + 76;
-        const lineX1 = fromCx + 30; // right edge of outer ring (r=28 + 2px gap)
-        const lineX2 = toCx - 30;   // left edge of next outer ring
+        const lineX1 = fromCx + 30;
+        const lineX2 = toCx - 30;
         const midX = (lineX1 + lineX2) / 2;
         return (
           <g key={`conn-${i}`}>
             <line x1={lineX1} y1="56" x2={lineX2} y2="56"
               stroke={STEPS[i + 1].color} strokeWidth="1.5" strokeOpacity="0.2" />
-            {/* Arrow head */}
             <path d={`M${midX + 3} 51 l6 5 -6 5`} fill="none"
               stroke={STEPS[i + 1].color} strokeWidth="1" strokeOpacity="0.35"
               strokeLinecap="round" strokeLinejoin="round" />
@@ -432,32 +429,22 @@ function DemandResponseFlow() {
       {/* Step nodes */}
       {STEPS.map((step, i) => (
         <g key={i}>
-          {/* Ambient glow */}
           <circle cx={step.x + 76} cy="56" r="40" fill={step.color} fillOpacity="0.04" />
-
-          {/* Outer ring */}
           <circle cx={step.x + 76} cy="56" r="28" fill="#0B1120"
             stroke={step.color} strokeWidth="1.5" strokeOpacity="0.3" />
-          {/* Inner filled circle */}
           <circle cx={step.x + 76} cy="56" r="18" fill={step.color} fillOpacity="0.12" />
-          {/* Step number */}
           <text x={step.x + 76} y="61" textAnchor="middle"
             fontFamily="'IBM Plex Mono', monospace" fontSize="13" fontWeight="700" fill={step.color}>
             {String(i + 1).padStart(2, '0')}
           </text>
-
-          {/* Label */}
           <text x={step.x + 76} y="104" textAnchor="middle"
             fontFamily="'Outfit', sans-serif" fontSize="14" fontWeight="600" fill="#FFFFFF">
             {step.label}
           </text>
-          {/* Subtitle */}
           <text x={step.x + 76} y="120" textAnchor="middle"
             fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.4)">
             {step.sub}
           </text>
-
-          {/* Detail tag */}
           <rect x={step.x + 76 - 36} y="130" width="72" height="20" rx="10"
             fill={step.color} fillOpacity="0.08" stroke={step.color} strokeWidth="0.5" strokeOpacity="0.2" />
           <text x={step.x + 76} y="144" textAnchor="middle"
@@ -467,11 +454,10 @@ function DemandResponseFlow() {
         </g>
       ))}
 
-      {/* Bottom label */}
       <text x="380" y="185" textAnchor="middle"
         fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.15)"
         letterSpacing="0.1em">
-        HARVEST → VERIFY → EARN → GET PAID
+        HARVEST &rarr; VERIFY &rarr; EARN &rarr; GET PAID
       </text>
     </FlowSvg>
   );
@@ -479,36 +465,65 @@ function DemandResponseFlow() {
 
 /* ── Component ─────────────────────────────────────────── */
 
-export function HeroSection() {
+export function HeroSection({ audience = 'homeowner', onToggle, content }) {
+  // Crossfade: fade out → swap → fade in
+  const [visible, setVisible] = useState(true);
+  const [displayContent, setDisplayContent] = useState(content);
+
+  useEffect(() => {
+    if (content === displayContent) return;
+    setVisible(false);
+    const timer = setTimeout(() => {
+      setDisplayContent(content);
+      setVisible(true);
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [content, displayContent]);
+
+  const isUtility = audience === 'utility';
+
   return (
     <Section>
-      <GradientMesh />
+      <GradientMesh $audience={audience} />
       <GridOverlay />
       <GlowOrb $d="8s" $del="0s"
-        style={{ top: '10%', left: '5%', width: 300, height: 300, background: 'rgba(0,82,204,0.08)' }}
+        style={{
+          top: '10%', left: '5%', width: 300, height: 300,
+          background: isUtility ? 'rgba(59,130,246,0.06)' : 'rgba(0,82,204,0.08)',
+        }}
       />
       <GlowOrb $d="10s" $del="2s"
-        style={{ bottom: '10%', right: '5%', width: 250, height: 250, background: 'rgba(6,182,212,0.06)' }}
+        style={{
+          bottom: '10%', right: '5%', width: 250, height: 250,
+          background: isUtility ? 'rgba(139,92,246,0.05)' : 'rgba(6,182,212,0.06)',
+        }}
       />
 
       <Content>
-        <Eyebrow>Earn Money From Water</Eyebrow>
-        <Headline>
-          Get Paid to Harvest Clean Water <GradientSpan>From the Air.</GradientSpan>
-        </Headline>
-        <Subheadline>
-          Your atmospheric water generator produces clean water. Our sensor
-          verifies it. Your utility pays you — automatically, on your
-          water&nbsp;bill.
-        </Subheadline>
-        <CTARow>
-          <PrimaryBtn href="#demand-response">See How It Works</PrimaryBtn>
-          <SecondaryBtn href="/for-utilities">I'm a Utility</SecondaryBtn>
-        </CTARow>
+        {onToggle && (
+          <ToggleRow>
+            <AudienceToggle audience={audience} onToggle={onToggle} />
+          </ToggleRow>
+        )}
+
+        <CrossfadeWrapper $visible={visible}>
+          <Eyebrow $audience={audience}>{displayContent?.eyebrow}</Eyebrow>
+          <Headline>
+            {displayContent?.headline}{' '}
+            <GradientSpan $audience={audience}>{displayContent?.headlineAccent}</GradientSpan>
+          </Headline>
+          <Subheadline>{displayContent?.subhead}</Subheadline>
+          <CTARow>
+            <PrimaryBtn href={displayContent?.cta?.href}>
+              {displayContent?.cta?.label}
+            </PrimaryBtn>
+          </CTARow>
+        </CrossfadeWrapper>
+
         <Pills>
           {PILLS.map((text, i) => (
             <React.Fragment key={i}>
-              {i > 0 && <PillDot>·</PillDot>}
+              {i > 0 && <PillDot>&middot;</PillDot>}
               <Pill>{text}</Pill>
             </React.Fragment>
           ))}
