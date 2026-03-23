@@ -11,8 +11,6 @@ import { MarketplaceHeader } from '../../../components/navigation/MarketplaceHea
 import { MarketplaceMenu } from '../../../components/navigation/MarketplaceMenu';
 import { WebsiteNav } from '../../../components/navigation/WebsiteNav';
 import Footer from '../../../components/shared/Footer/Footer';
-import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
-import { SettingsMenu } from '../../../components';
 import { DemoBanner } from '../../../components/DemoBanner';
 
 // Marketing/content pages that should use the dark WebsiteNav instead of the app header
@@ -55,6 +53,8 @@ export function WQTShell({ user, isAuthLanding, children }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isMarketingRoute = MARKETING_ROUTES.includes(location.pathname);
+  const isAuthPage = location.pathname === '/login';
+  const hideChrome = isAuthLanding || isAuthPage;
 
   // Set page title
   useEffect(() => {
@@ -67,7 +67,7 @@ export function WQTShell({ user, isAuthLanding, children }) {
   }, [location.pathname]);
 
   return (
-    <AppContainer $dark={isAuthLanding}>
+    <AppContainer $dark={hideChrome}>
       <a
         href="#main-content"
         style={{
@@ -84,11 +84,11 @@ export function WQTShell({ user, isAuthLanding, children }) {
       >
         Skip to content
       </a>
-      {/* Navigation: marketing pages get dark WebsiteNav, app pages get MarketplaceHeader, landing gets nothing */}
-      {!isAuthLanding && isMarketingRoute && (
+      {/* Navigation: landing/login get nothing, marketing pages get dark WebsiteNav, app pages get MarketplaceHeader */}
+      {!hideChrome && isMarketingRoute && (
         <WebsiteNav onMenuClick={() => setMenuOpen((p) => !p)} />
       )}
-      {!isAuthLanding && !isMarketingRoute && (
+      {!hideChrome && !isMarketingRoute && (
         <MarketplaceHeader onMenuClick={() => setMenuOpen((p) => !p)} />
       )}
 
@@ -100,23 +100,19 @@ export function WQTShell({ user, isAuthLanding, children }) {
       />
 
       {/* Demo mode banner (same as Cloud) */}
-      {!isAuthLanding && <DemoBanner />}
+      {!hideChrome && <DemoBanner />}
 
-      {/* Legacy globals (kept for backward compat until components migrated) */}
-      <SettingsMenu />
 
       {/* Main content */}
       <MainContent id="main-content">{children}</MainContent>
 
-      {/* Footer — hidden on landing page (landing has its own footer) */}
-      {!isAuthLanding && (
+      {/* Footer — hidden on landing page and login page */}
+      {!hideChrome && (
         <FooterWrapper>
           <Footer />
         </FooterWrapper>
       )}
 
-      {/* Link badge */}
-      {user?.uid && <LinkBadgePortal />}
     </AppContainer>
   );
 }
