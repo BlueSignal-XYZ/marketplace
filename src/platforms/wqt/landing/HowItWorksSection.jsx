@@ -3,7 +3,7 @@
  * Sensor-Verified. Utility-Controlled. Fully Automated.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -235,6 +235,22 @@ const Cursor = styled.span`
   }
 `;
 
+const CrossfadeWrapper = styled.div`
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: opacity 200ms ease-in-out;
+`;
+
+const TrustLine = styled.p`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  margin: 32px 0 0;
+  padding: 0 16px;
+`;
+
 /* ── Data ──────────────────────────────────────────────── */
 
 const FEATURES = [
@@ -296,7 +312,35 @@ const CODE_LINES = [
   { content: <>&nbsp;&nbsp;<Key>auto_generate</Key>: <Val>true</Val><Cursor /></> },
 ];
 
-export function HowItWorksSection() {
+function GenericIcon({ color }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+  );
+}
+
+export function HowItWorksSection({ audience, content, trust }) {
+  // Use audience-specific value props when provided, otherwise default features
+  const features = content || FEATURES;
+  const isAudienceContent = !!content;
+
+  // Crossfade
+  const [visible, setVisible] = useState(true);
+  const [displayFeatures, setDisplayFeatures] = useState(features);
+  const [displayTrust, setDisplayTrust] = useState(trust);
+
+  useEffect(() => {
+    if (features === displayFeatures && trust === displayTrust) return;
+    setVisible(false);
+    const timer = setTimeout(() => {
+      setDisplayFeatures(features);
+      setDisplayTrust(trust);
+      setVisible(true);
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [features, trust, displayFeatures, displayTrust]);
+
   return (
     <Section id="how-it-works">
       <Inner>
@@ -309,17 +353,27 @@ export function HowItWorksSection() {
           </SectionSub>
         </RevealOnScroll>
 
-        <FeaturesGrid>
-          {FEATURES.map((f, i) => (
-            <RevealOnScroll key={i} delay={i * 0.1}>
-              <FeatureCard>
-                <FeatureIcon $bg={f.bg}>{f.icon}</FeatureIcon>
-                <FeatureTitle>{f.title}</FeatureTitle>
-                <FeatureDesc>{f.desc}</FeatureDesc>
-              </FeatureCard>
+        <CrossfadeWrapper $visible={visible}>
+          <FeaturesGrid>
+            {displayFeatures.map((f, i) => (
+              <RevealOnScroll key={i} delay={i * 0.1}>
+                <FeatureCard>
+                  <FeatureIcon $bg={f.bg || `${f.color}1F`}>
+                    {f.icon || <GenericIcon color={f.color} />}
+                  </FeatureIcon>
+                  <FeatureTitle>{f.title}</FeatureTitle>
+                  <FeatureDesc>{f.desc}</FeatureDesc>
+                </FeatureCard>
+              </RevealOnScroll>
+            ))}
+          </FeaturesGrid>
+
+          {displayTrust && (
+            <RevealOnScroll delay={0.15}>
+              <TrustLine>{displayTrust}</TrustLine>
             </RevealOnScroll>
-          ))}
-        </FeaturesGrid>
+          )}
+        </CrossfadeWrapper>
 
         <RevealOnScroll delay={0.2}>
           <Terminal>

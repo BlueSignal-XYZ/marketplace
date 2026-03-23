@@ -1,9 +1,10 @@
 /**
  * SolutionSection — the Demand Response Program flow.
- * 5-step horizontal timeline (vertical on mobile) showing the program lifecycle.
+ * Renders audience-specific 3-step content when `content` prop provided,
+ * otherwise falls back to the default 5-step lifecycle.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -66,13 +67,18 @@ const SectionSub = styled.p`
 
 /* ── Desktop: horizontal timeline ──────────────────────── */
 
+const CrossfadeWrapper = styled.div`
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  transition: opacity 200ms ease-in-out;
+`;
+
 const Timeline = styled.div`
   display: none;
   position: relative;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(${({ $cols }) => $cols || 5}, 1fr);
     gap: 0;
   }
 `;
@@ -261,7 +267,25 @@ const STEPS = [
   },
 ];
 
-export function SolutionSection() {
+export function SolutionSection({ audience, content }) {
+  // Use audience-specific steps when provided, otherwise default 5-step
+  const steps = content?.steps || STEPS;
+  const colCount = steps.length;
+
+  // Crossfade
+  const [visible, setVisible] = useState(true);
+  const [displaySteps, setDisplaySteps] = useState(steps);
+
+  useEffect(() => {
+    if (steps === displaySteps) return;
+    setVisible(false);
+    const timer = setTimeout(() => {
+      setDisplaySteps(steps);
+      setVisible(true);
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [steps, displaySteps]);
+
   return (
     <Section id="demand-response">
       <Inner>
@@ -274,46 +298,48 @@ export function SolutionSection() {
           </SectionSub>
         </RevealOnScroll>
 
-        {/* Desktop timeline */}
-        <RevealOnScroll delay={0.15}>
-          <Timeline>
-            <TimelineConnector />
-            {STEPS.map((step, i) => (
-              <TimelineStep key={i}>
-                <StepCircle $color={step.color} $bg={step.bg}>
-                  <StepNumber $color={step.color}>{String(i + 1).padStart(2, '0')}</StepNumber>
-                </StepCircle>
-                <StepTitle>{step.title}</StepTitle>
-                <StepDesc>{step.desc}</StepDesc>
-              </TimelineStep>
-            ))}
-          </Timeline>
-        </RevealOnScroll>
+        <CrossfadeWrapper $visible={visible}>
+          {/* Desktop timeline */}
+          <RevealOnScroll delay={0.15}>
+            <Timeline $cols={colCount}>
+              <TimelineConnector />
+              {displaySteps.map((step, i) => (
+                <TimelineStep key={i}>
+                  <StepCircle $color={step.color} $bg={`${step.color}1F`}>
+                    <StepNumber $color={step.color}>{String(i + 1).padStart(2, '0')}</StepNumber>
+                  </StepCircle>
+                  <StepTitle>{step.title}</StepTitle>
+                  <StepDesc>{step.desc}</StepDesc>
+                </TimelineStep>
+              ))}
+            </Timeline>
+          </RevealOnScroll>
 
-        {/* Mobile pipeline */}
-        <MobilePipeline>
-          {STEPS.map((step, i) => (
-            <RevealOnScroll key={i} delay={i * 0.08}>
-              {i > 0 && <MobileConnector />}
-              <MobileCard>
-                <MobileCircle $color={step.color} $bg={step.bg}>
-                  <span style={{
-                    fontFamily: "'IBM Plex Mono', monospace",
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: step.color,
-                  }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                </MobileCircle>
-                <MobileContent>
-                  <MobileTitle>{step.title}</MobileTitle>
-                  <MobileDesc>{step.desc}</MobileDesc>
-                </MobileContent>
-              </MobileCard>
-            </RevealOnScroll>
-          ))}
-        </MobilePipeline>
+          {/* Mobile pipeline */}
+          <MobilePipeline>
+            {displaySteps.map((step, i) => (
+              <RevealOnScroll key={i} delay={i * 0.08}>
+                {i > 0 && <MobileConnector />}
+                <MobileCard>
+                  <MobileCircle $color={step.color} $bg={`${step.color}1F`}>
+                    <span style={{
+                      fontFamily: "'IBM Plex Mono', monospace",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: step.color,
+                    }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </MobileCircle>
+                  <MobileContent>
+                    <MobileTitle>{step.title}</MobileTitle>
+                    <MobileDesc>{step.desc}</MobileDesc>
+                  </MobileContent>
+                </MobileCard>
+              </RevealOnScroll>
+            ))}
+          </MobilePipeline>
+        </CrossfadeWrapper>
       </Inner>
     </Section>
   );
