@@ -49,7 +49,6 @@ export const AUDIENCE_CONTENT = {
         color: '#8B5CF6',
       },
     ],
-    trust: 'Verified by BlueSignal WQM-1 · Featured in Global Water Intelligence',
     bottomCta: {
       headline: 'Start Earning From Your Water Generator',
       label: 'Join the Marketplace',
@@ -101,8 +100,6 @@ export const AUDIENCE_CONTENT = {
         color: '#10B981',
       },
     ],
-    trust:
-      'Three-layer verification: inline metering, continuous monitoring, independent third-party sampling',
     bottomCta: {
       headline: 'Launch a Water Credit Program for Your Service Area',
       label: 'Request a Pilot Program Brief',

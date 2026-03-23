@@ -103,36 +103,6 @@ function Footer() {
 
   return (
     <StyledFooter>
-      {!isBlueSignalMode && (
-        <div className="footer-top">
-          <div>
-            <p className="footer-col-title">Marketplace</p>
-            <ul className="footer-col-links">
-              <li><a href="/marketplace">Browse Credits</a></li>
-              <li><a href="/registry">Credit Registry</a></li>
-              <li><a href="/map">Project Map</a></li>
-              <li><a href="/recent-removals">Recent Removals</a></li>
-            </ul>
-          </div>
-          <div>
-            <p className="footer-col-title">Solutions</p>
-            <ul className="footer-col-links">
-              <li><a href="/how-it-works">How It Works</a></li>
-              <li><a href="/for-utilities">For Utilities</a></li>
-              <li><a href="/for-homeowners">For Homeowners</a></li>
-              <li><a href="/generate-credits">For Credit Generators</a></li>
-            </ul>
-          </div>
-          <div>
-            <p className="footer-col-title">Resources</p>
-            <ul className="footer-col-links">
-              <li><a href="/programs">Trading Programs</a></li>
-              <li><a href="/contact">Contact</a></li>
-              <li><a href="/data">Environmental Data</a></li>
-            </ul>
-          </div>
-        </div>
-      )}
       <div className="footer-bottom">
         <span className="rights-reserved">
           {copyrightText}

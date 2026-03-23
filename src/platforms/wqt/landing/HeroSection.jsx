@@ -51,7 +51,7 @@ const Section = styled.section`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: clamp(48px, 8vh, 80px) clamp(20px, 5vw, 48px) clamp(24px, 4vh, 48px);
+  padding: clamp(32px, 5vh, 56px) clamp(20px, 5vw, 48px) clamp(16px, 3vh, 32px);
   background: #0B1120;
   color: #FFFFFF;
   box-sizing: border-box;
@@ -130,7 +130,7 @@ const CrossfadeWrapper = styled.div`
 /* ── Typography ────────────────────────────────────────── */
 
 const ToggleRow = styled.div`
-  margin-bottom: clamp(16px, 2.5vh, 28px);
+  margin-bottom: clamp(10px, 1.5vh, 20px);
   animation: ${fadeUp} 0.9s ${SPRING} 0.05s both;
 `;
 
@@ -148,7 +148,7 @@ const Eyebrow = styled.span`
     $audience === 'utility' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(6, 182, 212, 0.15)'};
   border-radius: 100px;
   padding: 6px 16px;
-  margin-bottom: clamp(12px, 2vh, 24px);
+  margin-bottom: clamp(8px, 1.2vh, 16px);
   transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
 `;
 
@@ -158,7 +158,7 @@ const Headline = styled.h1`
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.03em;
-  margin: 0 0 clamp(12px, 2vh, 24px);
+  margin: 0 0 clamp(8px, 1.5vh, 18px);
   max-width: 18ch;
   color: #FFFFFF;
   text-wrap: balance;
@@ -181,7 +181,7 @@ const Subheadline = styled.p`
   font-weight: 400;
   line-height: 1.65;
   max-width: 560px;
-  margin: 0 0 clamp(16px, 3vh, 36px);
+  margin: 0 0 clamp(12px, 2vh, 24px);
   color: rgba(255, 255, 255, 0.6);
   text-wrap: pretty;
 
@@ -238,7 +238,7 @@ const PrimaryBtn = styled.a`
 /* ── Pill bar ──────────────────────────────────────────── */
 
 const Pills = styled.div`
-  margin-top: clamp(12px, 2vh, 36px);
+  margin-top: clamp(8px, 1.5vh, 20px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -267,7 +267,7 @@ const PillDot = styled.span`
 /* ── Desktop SVG visual ────────────────────────────────── */
 
 const DesktopViz = styled.div`
-  margin-top: clamp(16px, 4vh, 56px);
+  margin-top: clamp(12px, 2.5vh, 32px);
   width: 100%;
   max-width: 760px;
   flex-shrink: 1;

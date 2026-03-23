@@ -229,36 +229,6 @@ const LogoutButton = styled.button`
   }
 `;
 
-const ExternalLink = styled.a`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  min-height: 44px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4B5563"};
-  background: transparent;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.2s ease-out;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
-    color: ${({ theme }) => theme.colors?.primary600 || "#0F393A"};
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-`;
-
-const ExternalIcon = styled.span`
-  font-size: 14px;
-  opacity: 0.6;
-`;
 
 export function MarketplaceMenu({ open, onClose, user }) {
   const location = useLocation();
@@ -296,7 +266,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
 
         <Divider />
 
-        {/* Browse */}
+        {/* Navigation */}
         <NavList>
           <NavItem
             to="/marketplace"
@@ -305,11 +275,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
           >
             Marketplace
           </NavItem>
-        </NavList>
-
-        {/* Platform */}
-        <SectionLabel>Platform</SectionLabel>
-        <NavList>
           <NavItem
             to="/registry"
             $active={isActive("/registry")}
@@ -361,29 +326,6 @@ export function MarketplaceMenu({ open, onClose, user }) {
             </NavList>
           </>
         )}
-
-        {/* BlueSignal Ecosystem */}
-        <SectionLabel>BlueSignal Ecosystem</SectionLabel>
-        <NavList>
-          <ExternalLink
-            href="https://cloud.bluesignal.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onClose}
-          >
-            Cloud Monitoring
-            <ExternalIcon>↗</ExternalIcon>
-          </ExternalLink>
-          <ExternalLink
-            href="https://bluesignal.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onClose}
-          >
-            BlueSignal Hardware
-            <ExternalIcon>↗</ExternalIcon>
-          </ExternalLink>
-        </NavList>
 
         <SmallText>
           {user?.uid ? (
