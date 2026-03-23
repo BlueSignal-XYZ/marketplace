@@ -1,18 +1,20 @@
 /**
  * CloudShell — layout wrapper for the Cloud platform.
- * Header + main content + footer + menus.
+ * Persistent sidebar (desktop) + slide-out drawer (mobile) + slim top bar.
  */
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { CloudHeader } from '../../../components/navigation/CloudHeader';
-import { CloudMenu } from '../../../components/navigation/CloudMenu';
+import { CloudTopBar } from '../components/CloudTopBar';
+import { CloudSidebar } from '../components/CloudSidebar';
 import { DemoBanner } from '../../../components/DemoBanner';
 import Footer from '../../../components/shared/Footer/Footer';
 import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
 import { SettingsMenu } from '../../../components';
+
+const SIDEBAR_WIDTH = 240;
 
 const AppContainer = styled.div`
   display: flex;
@@ -21,6 +23,17 @@ const AppContainer = styled.div`
   width: 100vw;
   overflow-x: hidden;
   background: ${({ theme }) => theme.colors.background};
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) {
+    margin-left: ${({ $hasSidebar }) => ($hasSidebar ? `${SIDEBAR_WIDTH}px` : '0')};
+  }
 `;
 
 const MainContent = styled.main`
@@ -46,10 +59,12 @@ export function CloudShell({ user, isAuthLanding, children }) {
     document.title = 'BlueSignal Cloud Monitoring';
   }, []);
 
-  // Close menu on route change
+  // Close mobile drawer on route change
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
+
+  const showNav = !isAuthLanding;
 
   return (
     <AppContainer>
@@ -69,31 +84,36 @@ export function CloudShell({ user, isAuthLanding, children }) {
       >
         Skip to content
       </a>
-      {/* Header — hidden on auth landing */}
-      {!isAuthLanding && (
-        <CloudHeader onMenuClick={() => setMenuOpen((p) => !p)} />
+
+      {/* Top bar — hidden on auth landing */}
+      {showNav && (
+        <CloudTopBar onMenuToggle={() => setMenuOpen((p) => !p)} />
       )}
 
-      {/* Mobile menu */}
-      <CloudMenu
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        user={user}
-      />
+      {/* Sidebar — persistent on desktop, drawer on mobile */}
+      {showNav && (
+        <CloudSidebar
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+        />
+      )}
 
-      {/* Demo mode banner — full width beneath header, same styling as WQT */}
-      {!isAuthLanding && <DemoBanner />}
+      {/* Content area — offset by sidebar width on desktop */}
+      <ContentWrapper $hasSidebar={showNav}>
+        {/* Demo mode banner — full width beneath header */}
+        {showNav && <DemoBanner />}
 
-      {/* Legacy globals (kept for backward compat until components migrated) */}
-      <SettingsMenu />
+        {/* Legacy globals (kept for backward compat until components migrated) */}
+        <SettingsMenu />
 
-      {/* Main content */}
-      <MainContent id="main-content">{children}</MainContent>
+        {/* Main content */}
+        <MainContent id="main-content">{children}</MainContent>
 
-      {/* Footer */}
-      <FooterWrapper>
-        <Footer />
-      </FooterWrapper>
+        {/* Footer */}
+        <FooterWrapper>
+          <Footer />
+        </FooterWrapper>
+      </ContentWrapper>
 
       {/* Link badge */}
       {user?.uid && <LinkBadgePortal />}

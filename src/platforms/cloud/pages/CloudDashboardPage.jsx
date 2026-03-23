@@ -6,6 +6,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Activity, BellRing, TrendingUp, Plus, ChevronRight } from 'lucide-react';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
@@ -14,6 +15,7 @@ import { Button } from '../../../design-system/primitives/Button';
 import { useAppContext } from '../../../context/AppContext';
 import { useDevicesQuery, useAlertsQuery } from '../../../shared/hooks/useApiQueries';
 import { DemoHint } from '../../../components/DemoHint';
+import { setDemoMode } from '../../../utils/demoMode';
 
 /* ── Styled ─────────────────────────────────────────────── */
 
@@ -34,6 +36,14 @@ const Page = styled.div`
 
 const Header = styled.div`
   margin-bottom: 32px;
+`;
+
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
 `;
 
 const Title = styled.h1`
@@ -225,6 +235,193 @@ const ErrorText = styled.p`
   margin: 0 0 12px;
 `;
 
+/* ── Empty State Styled ───────────────────────────────────── */
+
+const EmptyWrap = styled.div`
+  text-align: center;
+  padding: 48px 0 32px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding: 64px 0 48px;
+  }
+`;
+
+const EmptyTitle = styled.h2`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 24px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0 0 8px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    font-size: 28px;
+  }
+`;
+
+const EmptyDescription = styled.p`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin: 0 0 28px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+`;
+
+const EmptyActions = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+`;
+
+const FeatureCardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 840px;
+  margin: 0 auto;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+const FeatureCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.lg}px;
+  padding: 24px 20px;
+  text-align: left;
+`;
+
+const FeatureIconWrap = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: ${({ theme }) => theme.radius.md}px;
+  background: ${({ theme }) => theme.colors.primaryAlpha || 'rgba(0, 102, 255, 0.08)'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.colors.primary};
+  margin-bottom: 14px;
+`;
+
+const FeatureTitle = styled.div`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 15px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: 6px;
+`;
+
+const FeatureDesc = styled.div`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.5;
+`;
+
+/* ── Quick Actions Styled ─────────────────────────────────── */
+
+const QuickActionsRow = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+const QuickAction = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 13px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.primaryAlpha || 'rgba(0, 102, 255, 0.08)'};
+  border: 1px solid transparent;
+  border-radius: ${({ theme }) => theme.radius.md}px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.primaryAlpha || 'rgba(0, 102, 255, 0.12)'};
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
+/* ── Latest Readings Styled ───────────────────────────────── */
+
+const ReadingsScroll = styled.div`
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.border};
+    border-radius: 2px;
+  }
+`;
+
+const ReadingCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.lg}px;
+  padding: 16px 20px;
+  min-width: 240px;
+  flex-shrink: 0;
+`;
+
+const ReadingDeviceName = styled.div`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: 12px;
+`;
+
+const ReadingMetrics = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+`;
+
+const ReadingMetric = styled.div`
+  padding: 6px 8px;
+  background: ${({ theme }) => theme.colors.background};
+  border-radius: ${({ theme }) => theme.radius.md}px;
+`;
+
+const ReadingMetricLabel = styled.div`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 10px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+`;
+
+const ReadingMetricValue = styled.div`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  margin-top: 1px;
+`;
+
 /* ── Skeletons ──────────────────────────────────────────── */
 
 function DashboardSkeleton() {
@@ -277,6 +474,28 @@ const DeviceErrorIcon = () => (
   </svg>
 );
 
+/* ── Sensor reading helpers ───────────────────────────────── */
+
+const SENSOR_FIELDS = [
+  { key: 'pH', label: 'pH', unit: '' },
+  { key: 'tds', label: 'TDS', unit: ' ppm' },
+  { key: 'turbidity', label: 'Turb', unit: ' NTU' },
+  { key: 'temperature', label: 'Temp', unit: '°' },
+];
+
+function getSensorReadings(device) {
+  // Try latestReading first, then sensors, then top-level fields
+  const src = device.latestReading || device.sensors || device;
+  const readings = [];
+  for (const { key, label, unit } of SENSOR_FIELDS) {
+    const val = src[key];
+    if (val !== undefined && val !== null) {
+      readings.push({ label, value: typeof val === 'number' ? val.toFixed(1) : String(val), unit });
+    }
+  }
+  return readings;
+}
+
 /* ── Component ──────────────────────────────────────────── */
 
 export function CloudDashboardPage() {
@@ -289,6 +508,11 @@ export function CloudDashboardPage() {
 
   const loading = devicesLoading || alertsLoading;
   const error = devicesError?.message || null;
+
+  const handleEnableDemo = () => {
+    setDemoMode(true);
+    window.location.reload();
+  };
 
   if (loading) return <DashboardSkeleton />;
 
@@ -309,6 +533,8 @@ export function CloudDashboardPage() {
     );
   }
 
+  /* ── Empty state: onboarding experience ─────────────────── */
+
   if (devices.length === 0) {
     return (
       <Page>
@@ -316,15 +542,49 @@ export function CloudDashboardPage() {
           <Title>Dashboard</Title>
           <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
         </Header>
-        <EmptyState
-          icon={<DeviceEmptyIcon />}
-          title="No Devices Yet"
-          description="No devices commissioned yet. Commission your first device to get started."
-          action={{ label: 'Commission Your First Device', onClick: () => navigate('/commission') }}
-        />
+        <EmptyWrap>
+          <DeviceEmptyIcon />
+          <EmptyTitle>Welcome to BlueSignal Cloud</EmptyTitle>
+          <EmptyDescription>
+            Register your WQM-1 to start monitoring water quality.
+          </EmptyDescription>
+          <EmptyActions>
+            <Button onClick={() => navigate('/cloud/commissioning')}>
+              Register Device <ChevronRight size={16} />
+            </Button>
+            <Button variant="outline" onClick={handleEnableDemo}>
+              Try Demo Mode <ChevronRight size={16} />
+            </Button>
+          </EmptyActions>
+          <FeatureCardsGrid>
+            <FeatureCard>
+              <FeatureIconWrap><Activity size={20} /></FeatureIconWrap>
+              <FeatureTitle>Real-time Monitoring</FeatureTitle>
+              <FeatureDesc>
+                Monitor pH, TDS, turbidity, ORP &amp; temperature in real time
+              </FeatureDesc>
+            </FeatureCard>
+            <FeatureCard>
+              <FeatureIconWrap><BellRing size={20} /></FeatureIconWrap>
+              <FeatureTitle>Threshold Alerts</FeatureTitle>
+              <FeatureDesc>
+                Set custom thresholds and get instant alerts when readings exceed limits
+              </FeatureDesc>
+            </FeatureCard>
+            <FeatureCard>
+              <FeatureIconWrap><TrendingUp size={20} /></FeatureIconWrap>
+              <FeatureTitle>Credit Generation</FeatureTitle>
+              <FeatureDesc>
+                Your device generates verified QC and KC credits on WaterQuality.Trading
+              </FeatureDesc>
+            </FeatureCard>
+          </FeatureCardsGrid>
+        </EmptyWrap>
       </Page>
     );
   }
+
+  /* ── Active state ───────────────────────────────────────── */
 
   const online = devices.filter((d) => d.onlineStatus === 'online').length;
   const offline = devices.filter((d) => d.onlineStatus === 'offline').length;
@@ -334,11 +594,31 @@ export function CloudDashboardPage() {
     : 0;
   const activeAlerts = alerts.filter((a) => a.status === 'active');
 
+  // Collect devices that have any sensor readings for the Latest Readings section
+  const devicesWithReadings = devices
+    .map((d) => ({ device: d, readings: getSensorReadings(d) }))
+    .filter(({ readings }) => readings.length > 0);
+
   return (
     <Page>
       <Header>
-        <Title>Dashboard <DemoHint screenName="cloud-dashboard" /></Title>
-        <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
+        <HeaderRow>
+          <div>
+            <Title>Dashboard <DemoHint screenName="cloud-dashboard" /></Title>
+            <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
+          </div>
+          <QuickActionsRow>
+            <QuickAction onClick={() => navigate('/cloud/devices/add')}>
+              <Plus size={14} /> Add Device
+            </QuickAction>
+            <QuickAction onClick={() => navigate('/cloud/alerts')}>
+              <BellRing size={14} /> View All Alerts
+            </QuickAction>
+            <QuickAction onClick={() => navigate('/cloud/sites')}>
+              <Activity size={14} /> Manage Sites
+            </QuickAction>
+          </QuickActionsRow>
+        </HeaderRow>
       </Header>
 
       {activeAlerts
@@ -418,6 +698,29 @@ export function CloudDashboardPage() {
           ))}
         </DeviceGrid>
       </Section>
+
+      {devicesWithReadings.length > 0 && (
+        <Section>
+          <SectionHeader>
+            <SectionTitle>Latest Readings</SectionTitle>
+          </SectionHeader>
+          <ReadingsScroll>
+            {devicesWithReadings.map(({ device, readings }) => (
+              <ReadingCard key={device.id}>
+                <ReadingDeviceName>{device.name}</ReadingDeviceName>
+                <ReadingMetrics>
+                  {readings.map((r) => (
+                    <ReadingMetric key={r.label}>
+                      <ReadingMetricLabel>{r.label}</ReadingMetricLabel>
+                      <ReadingMetricValue>{r.value}{r.unit}</ReadingMetricValue>
+                    </ReadingMetric>
+                  ))}
+                </ReadingMetrics>
+              </ReadingCard>
+            ))}
+          </ReadingsScroll>
+        </Section>
+      )}
     </Page>
   );
 }
