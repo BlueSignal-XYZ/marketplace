@@ -1,17 +1,20 @@
 /**
  * WQTShell — layout wrapper for the WQT platform.
- * Header + main content + footer + menus.
+ * Marketing routes use WebsiteNav; app routes use the new sidebar/topbar/bottom-tabs nav.
+ * Landing and login pages get no chrome.
  */
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { MarketplaceHeader } from '../../../components/navigation/MarketplaceHeader';
-import { MarketplaceMenu } from '../../../components/navigation/MarketplaceMenu';
 import { WebsiteNav } from '../../../components/navigation/WebsiteNav';
+import { MarketplaceMenu } from '../../../components/navigation/MarketplaceMenu';
 import Footer from '../../../components/shared/Footer/Footer';
 import { DemoBanner } from '../../../components/DemoBanner';
+import { WQTTopBar } from '../components/WQTTopBar';
+import { WQTSidebar, SIDEBAR_WIDTH } from '../components/WQTSidebar';
+import { WQTBottomTabs, TAB_BAR_HEIGHT } from '../components/WQTBottomTabs';
 
 // Marketing/content pages that should use the dark WebsiteNav instead of the app header
 const MARKETING_ROUTES = [
@@ -34,11 +37,29 @@ const AppContainer = styled.div`
   background: ${({ $dark, theme }) => $dark ? '#0B1120' : theme.colors.background};
 `;
 
+const AppBody = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+`;
+
 const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+
+  ${({ $appRoute }) => $appRoute && `
+    /* Desktop: offset by sidebar width */
+    @media (min-width: 768px) {
+      margin-left: ${SIDEBAR_WIDTH}px;
+    }
+
+    /* Mobile: offset by bottom tabs height + safe area */
+    @media (max-width: 767px) {
+      padding-bottom: ${TAB_BAR_HEIGHT}px;
+    }
+  `}
 `;
 
 const FooterWrapper = styled.div`
@@ -46,6 +67,12 @@ const FooterWrapper = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.border};
   background: ${({ theme }) => theme.colors.surface};
   margin-top: auto;
+
+  ${({ $appRoute }) => $appRoute && `
+    @media (min-width: 768px) {
+      margin-left: ${SIDEBAR_WIDTH}px;
+    }
+  `}
 `;
 
 export function WQTShell({ user, isAuthLanding, children }) {
@@ -55,6 +82,7 @@ export function WQTShell({ user, isAuthLanding, children }) {
   const isMarketingRoute = MARKETING_ROUTES.includes(location.pathname);
   const isAuthPage = location.pathname === '/login';
   const hideChrome = isAuthLanding || isAuthPage;
+  const isAppRoute = !hideChrome && !isMarketingRoute;
 
   // Set page title
   useEffect(() => {
@@ -84,35 +112,40 @@ export function WQTShell({ user, isAuthLanding, children }) {
       >
         Skip to content
       </a>
-      {/* Navigation: landing/login get nothing, marketing pages get dark WebsiteNav, app pages get MarketplaceHeader */}
+
+      {/* Navigation: landing/login get nothing, marketing pages get dark WebsiteNav, app pages get new nav */}
       {!hideChrome && isMarketingRoute && (
         <WebsiteNav onMenuClick={() => setMenuOpen((p) => !p)} />
       )}
-      {!hideChrome && !isMarketingRoute && (
-        <MarketplaceHeader onMenuClick={() => setMenuOpen((p) => !p)} />
-      )}
+      {isAppRoute && <WQTTopBar />}
+      {isAppRoute && <WQTSidebar />}
 
-      {/* Mobile menu (available on all pages for consistent navigation) */}
-      <MarketplaceMenu
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        user={user}
-      />
+      {/* Mobile menu for marketing routes */}
+      {isMarketingRoute && (
+        <MarketplaceMenu
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          user={user}
+        />
+      )}
 
       {/* Demo mode banner (same as Cloud) */}
       {!hideChrome && <DemoBanner />}
 
-
       {/* Main content */}
-      <MainContent id="main-content">{children}</MainContent>
+      <MainContent id="main-content" $appRoute={isAppRoute}>
+        {children}
+      </MainContent>
+
+      {/* Bottom tabs for mobile on app routes */}
+      {isAppRoute && <WQTBottomTabs />}
 
       {/* Footer — hidden on landing page and login page */}
       {!hideChrome && (
-        <FooterWrapper>
+        <FooterWrapper $appRoute={isAppRoute}>
           <Footer />
         </FooterWrapper>
       )}
-
     </AppContainer>
   );
 }
