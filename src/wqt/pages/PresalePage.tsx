@@ -16,7 +16,10 @@ import { DemoHint } from '../../components/DemoHint';
 import SEOHead from '../../components/seo/SEOHead';
 import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
+const _presaleMapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+if (_presaleMapboxToken && _presaleMapboxToken.startsWith('pk.')) {
+  mapboxgl.accessToken = _presaleMapboxToken;
+}
 
 const PageContainer = styled.div`
   min-height: 100vh;
