@@ -9,7 +9,21 @@ import styled from 'styled-components';
 import { Menu, User, ChevronDown, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import blueSignalLogo from '../../../assets/bluesignal-logo.png';
+// Inline SVG logo — the blue curved lines mark from bluesignal.xyz
+const BlueSignalLogoSVG = ({ size = 32 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 28 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-label="BlueSignal"
+  >
+    <path d="M4 8 C8 5, 16 5, 24 8" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path d="M4 14 C8 11, 16 11, 24 14" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path d="M4 20 C8 17, 16 17, 24 20" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+  </svg>
+);
 import NotificationBell from '../../../components/shared/NotificationBell';
 import { useAppContext } from '../../../context/AppContext';
 import { isDemoMode, setDemoMode } from '../../../utils/demoMode';
@@ -81,13 +95,15 @@ const LogoLink = styled.a`
   flex-shrink: 0;
 `;
 
-const LogoImg = styled.img`
-  height: 28px;
-  width: auto;
-  display: block;
+const LogoText = styled.span`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 16px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+  letter-spacing: -0.01em;
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) {
-    height: 34px;
+    font-size: 18px;
   }
 `;
 
@@ -307,7 +323,8 @@ export function CloudTopBar({ onMenuToggle }) {
         </HamburgerButton>
 
         <LogoLink href="/dashboard/main" aria-label="BlueSignal Cloud — Go to dashboard">
-          <LogoImg src={blueSignalLogo} alt="BlueSignal" />
+          <BlueSignalLogoSVG size={30} />
+          <LogoText>BlueSignal</LogoText>
           <CloudBadge>Cloud</CloudBadge>
         </LogoLink>
       </LeftGroup>

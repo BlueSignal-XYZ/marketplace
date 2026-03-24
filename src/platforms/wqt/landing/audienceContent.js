@@ -26,8 +26,8 @@ export const AUDIENCE_CONTENT = {
           color: '#3B82F6',
         },
         {
-          title: 'Earn QC Credits for Every Gallon Verified',
-          desc: 'Quality and Quantity Credits stack. Your utility pays you automatically — rebates appear on your water bill.',
+          title: 'Earn AWG Credits for Every Gallon Verified',
+          desc: 'AWG credits stack automatically. Your utility pays you — rebates appear on your water bill.',
           color: '#10B981',
         },
       ],

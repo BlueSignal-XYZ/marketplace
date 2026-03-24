@@ -298,21 +298,21 @@ function ExplorerPage() {
               value:
                 totalSupply?.toString() +
                 " " +
-                `${NUMBERS.toNumber(totalSupply) > 0 ? "NPCs" : "NPC"}`,
+                `${NUMBERS.toNumber(totalSupply) > 0 ? "AWG Credits" : "AWG Credit"}`,
             },
             {
               label: "Total Sold",
               value:
                 totalSold?.toString() +
                 " " +
-                `${NUMBERS.toNumber(totalSold) > 0 ? "NPCs" : "NPC"}`,
+                `${NUMBERS.toNumber(totalSold) > 0 ? "AWG Credits" : "AWG Credit"}`,
             },
             {
               label: "Total Donated Credits",
               value:
                 totalBurnedSupply?.toString() +
                 " " +
-                `${NUMBERS.toNumber(totalBurnedSupply) > 0 ? "NPCs" : "NPC"}`,
+                `${NUMBERS.toNumber(totalBurnedSupply) > 0 ? "AWG Credits" : "AWG Credit"}`,
             },
             { label: "Credit Types", value: creditTypes?.join(", ") },
             {
@@ -490,7 +490,7 @@ function ExplorerPage() {
           <>
             <FixedTitle>
               <Heading isSmallScreen={isSmallScreen}>
-                - Recent Removals -
+                - Credit Registry -
               </Heading>
               <AccountSearchButton onClick={handleAccountSearchToggle}>
                 Account Search

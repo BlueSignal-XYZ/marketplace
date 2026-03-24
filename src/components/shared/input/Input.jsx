@@ -222,13 +222,14 @@ export const Checkbox = styled.input.attrs({ type: "checkbox" })`
 
 // Toggle/Switch
 export const Toggle = styled.button`
-  width: 48px;
-  height: 26px;
-  border-radius: 13px;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
   border: none;
-  padding: 3px;
+  padding: 0;
   cursor: pointer;
-  transition: all 0.2s ease-out;
+  position: relative;
+  transition: background 0.2s ease;
   background: ${({ $checked, theme }) =>
     $checked
       ? theme.colors?.primary500 || "#1D7072"
@@ -236,14 +237,15 @@ export const Toggle = styled.button`
 
   &::after {
     content: "";
-    display: block;
-    width: 20px;
-    height: 20px;
+    position: absolute;
+    top: 2px;
+    left: ${({ $checked }) => ($checked ? "18px" : "2px")};
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform: translateX(${({ $checked }) => ($checked ? "22px" : "0")});
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    transition: left 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   &:hover:not(:disabled) {

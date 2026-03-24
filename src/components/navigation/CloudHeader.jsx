@@ -6,7 +6,21 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../shared/NotificationBell";
 import { isDemoMode, setDemoMode } from "../../utils/demoMode";
 
-import blueSignalLogo from "../../assets/bluesignal-logo.png";
+// Inline SVG logo — the blue curved lines mark from bluesignal.xyz
+const BlueSignalLogo = ({ size = 32 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 28 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-label="BlueSignal"
+  >
+    <path d="M4 8 C8 5, 16 5, 24 8" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path d="M4 14 C8 11, 16 11, 24 14" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path d="M4 20 C8 17, 16 17, 24 20" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+  </svg>
+);
 
 // Always show demo toggle — demo mode is now managed via localStorage from Profile page
 const SHOW_DEMO_TOGGLE = true;
@@ -63,22 +77,15 @@ const LogoWrapper = styled.a`
   text-decoration: none;
 `;
 
-const LogoImg = styled.img`
-  height: 36px;
-  width: auto;
-  display: block;
-  transition: transform 0.2s ease-out;
-
-  &:hover {
-    transform: scale(1.02);
-  }
+const LogoText = styled.span`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 17px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+  letter-spacing: -0.01em;
 
   @media (min-width: 768px) {
-    height: 44px;
-  }
-
-  @media (min-width: 1024px) {
-    height: 52px;
+    font-size: 19px;
   }
 `;
 
@@ -181,7 +188,8 @@ export function CloudHeader({ onMenuClick }) {
     <HeaderOuter>
       <HeaderInner>
         <LogoWrapper href="/dashboard/main" aria-label="BlueSignal Cloud — Go to dashboard">
-          <LogoImg src={blueSignalLogo} alt="BlueSignal Cloud Monitoring" />
+          <BlueSignalLogo size={36} />
+          <LogoText>BlueSignal</LogoText>
           <ModeBadge>Cloud</ModeBadge>
         </LogoWrapper>
 

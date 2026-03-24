@@ -410,7 +410,7 @@ export function CloudMenu({ open, onClose, user }) {
                 $active={isActive("/cloud/profile")}
                 onClick={onClose}
               >
-                Profile & Settings
+                Profile
               </NavItem>
             </NavList>
           </>

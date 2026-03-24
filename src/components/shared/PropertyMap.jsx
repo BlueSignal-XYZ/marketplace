@@ -4,8 +4,11 @@ import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-// Set Mapbox access token
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
+// Set Mapbox access token (only if valid)
+const _mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+if (_mapboxToken && _mapboxToken.startsWith('pk.')) {
+  mapboxgl.accessToken = _mapboxToken;
+}
 
 const MapWrapper = styled.div`
   width: 100%;
@@ -121,6 +124,11 @@ export function PropertyMap({
     if (!mapContainerRef.current) return;
     if (!lat || !lng) {
       setError("No coordinates available");
+      setLoading(false);
+      return;
+    }
+    if (!mapboxgl.accessToken) {
+      setError("Map service unavailable");
       setLoading(false);
       return;
     }

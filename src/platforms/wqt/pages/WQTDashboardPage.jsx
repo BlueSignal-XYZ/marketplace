@@ -464,7 +464,7 @@ export function WQTDashboardPage() {
               </StartCardIcon>
               <StartCardTitle>Generate Credits</StartCardTitle>
               <StartCardDesc>
-                Link a BlueSignal device to start generating verified QC/KC
+                Link a BlueSignal device to start generating verified AWG credits
               </StartCardDesc>
               <StartCardArrow>
                 Get started <ArrowRight size={14} />
@@ -538,11 +538,11 @@ export function WQTDashboardPage() {
         <PortfolioValue>${totalValue.toLocaleString()}</PortfolioValue>
         <BreakdownGrid>
           <BreakdownItem>
-            <BreakdownLabel>QC Balance</BreakdownLabel>
+            <BreakdownLabel>AWG Balance</BreakdownLabel>
             <BreakdownValue>{qcCredits.toLocaleString()} credits</BreakdownValue>
           </BreakdownItem>
           <BreakdownItem>
-            <BreakdownLabel>KC Balance</BreakdownLabel>
+            <BreakdownLabel>AWG+ Balance</BreakdownLabel>
             <BreakdownValue>{kcCredits.toLocaleString()} credits</BreakdownValue>
           </BreakdownItem>
           {pendingCredits > 0 && (

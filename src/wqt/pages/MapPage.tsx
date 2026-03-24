@@ -729,10 +729,10 @@ export function MapPage() {
               All Projects
             </FilterChip>
             <FilterChip active={filterType === 'qc'} onClick={() => setFilterType('qc')}>
-              QC (Quantity)
+              AWG Credits
             </FilterChip>
             <FilterChip active={filterType === 'kc'} onClick={() => setFilterType('kc')}>
-              KC (Quality)
+              AWG+ Credits
             </FilterChip>
             <FilterChip active={filterType === 'nitrogen'} onClick={() => setFilterType('nitrogen')}>
               Nitrogen

@@ -74,11 +74,26 @@ const P = styled.p`
   margin: 0 0 16px;
 `;
 
+const BackLink = styled.a`
+  display: inline-block;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: color 0.15s;
+
+  &:hover {
+    color: #FFFFFF;
+  }
+`;
+
 export default function TermsPage() {
   return (
     <Page>
       <Hero>
         <HeroInner>
+          <BackLink href="/">&larr; Back to home</BackLink>
           <HeroTitle>Terms of Service</HeroTitle>
           <Updated>Last Updated: February 2026</Updated>
         </HeroInner>

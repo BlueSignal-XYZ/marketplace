@@ -287,22 +287,23 @@ export default function HowItWorksPage() {
 
           <Grid>
             <Card>
-              <CardTitle>Quantity Credits (QC)</CardTitle>
+              <CardTitle>AWG Credits (Water Generation)</CardTitle>
               <CardDesc>
                 Issued when a project reduces the total volume of polluted discharge entering
                 a waterway. Stormwater retention systems, rainwater harvesting, and green
-                infrastructure that diverts runoff from impaired streams generate QCs. One QC
-                represents one verified unit of volume reduction against an established baseline.
+                infrastructure that diverts runoff from impaired streams generate AWG credits.
+                One AWG credit represents one verified unit of volume reduction against an
+                established baseline.
               </CardDesc>
             </Card>
             <Card>
-              <CardTitle>Quality Credits (KC)</CardTitle>
+              <CardTitle>AWG+ Credits (Enhanced Quality)</CardTitle>
               <CardDesc>
                 Issued when a project measurably improves the chemical or biological quality
                 of a discharge or water body. Algae remediation, advanced filtration, and
-                treatment system upgrades that reduce contaminant concentrations generate KCs.
-                One KC represents one verified unit of quality improvement measured against
-                baseline conditions.
+                treatment system upgrades that reduce contaminant concentrations generate AWG+
+                credits. One AWG+ credit represents one verified unit of quality improvement
+                measured against baseline conditions.
               </CardDesc>
             </Card>
             <Card>

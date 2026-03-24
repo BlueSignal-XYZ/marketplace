@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faUser, faVideo, faCog, faBell, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {useAppContext} from '../../../../context/AppContext';
@@ -15,17 +15,14 @@ const ProfileDropMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = STATES || {};
-  const { handleSettingsTab, handleLogOut } = ACTIONS || {};
+  const { handleLogOut } = ACTIONS || {};
 
-  const handleSettings = (action) => {
-    // action type handled
+  const handleAction = (action) => {
     setIsOpen(false);
     if (typeof action === 'string' && action.startsWith('/')) {
       navigate(action);
-    } else if(typeof action === 'function') {
+    } else if (typeof action === 'function') {
       action();
-    } else {
-      handleSettingsTab(action);
     }
   };
 
@@ -37,9 +34,8 @@ const ProfileDropMenu = () => {
   };
 
   const menuItems = [
-
-    { label: 'Settings', icon: faCog, action: 'Profile Settings' },
-    { label: 'Logout', icon: faSignOutAlt, action: () => handleLogOut()}
+    { label: 'Profile', icon: faUser, action: '/profile' },
+    { label: 'Log out', icon: faSignOutAlt, action: () => handleLogOut()}
   ];
 
   return (
@@ -74,7 +70,7 @@ const ProfileDropMenu = () => {
         {isOpen && (
           <ProfileDropMenuItems initial="closed" animate="open" exit="closed" variants={variants}>
             {menuItems.map(({ label, icon, action }) => (
-              <ListItem key={label} onClick={() => handleSettings(action)}>
+              <ListItem key={label} onClick={() => handleAction(action)}>
                 <FontAwesomeIcon icon={icon} />
                 {label}
               </ListItem>
