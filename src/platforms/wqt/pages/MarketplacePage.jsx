@@ -21,7 +21,7 @@ import { useAppContext } from '../../../context/AppContext';
 // ── Page layout ───────────────────────────────────────────
 
 const Page = styled.div`
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px;
   overflow-x: hidden;
@@ -148,18 +148,8 @@ const CreditTab = styled.button`
 
 // ── Layout containers ─────────────────────────────────────
 
-const ContentLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    flex-direction: row;
-  }
-`;
-
 const TableSection = styled.div`
-  flex: 1;
+  width: 100%;
   min-width: 0;
 `;
 
@@ -167,11 +157,6 @@ const TableSection = styled.div`
 
 const OrderPanelWrapper = styled.div`
   width: 100%;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    width: 320px;
-    flex-shrink: 0;
-  }
 `;
 
 const OrderPanelCard = styled.div`
@@ -179,11 +164,7 @@ const OrderPanelCard = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radius.md}px;
   padding: 20px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    position: sticky;
-    top: 24px;
-  }
+  margin-top: 24px;
 `;
 
 const OrderPanelTitle = styled.h3`
@@ -439,10 +420,18 @@ const SkeletonTable = styled.div`
 
 const SkeletonRow = styled.div`
   display: grid;
-  grid-template-columns: 120px 80px 90px 80px 1fr 120px 90px 100px;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: 120px 80px 90px 1fr 120px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    grid-template-columns: 120px 80px 90px 80px 1fr 120px 90px 100px;
+  }
 `;
 
 // ── Verification badge ────────────────────────────────────
@@ -459,10 +448,10 @@ function VerificationBadge({ level }) {
 }
 
 function NutrientBadge({ type }) {
-  const label = type === 'nitrogen' ? 'Nitrogen' : type === 'phosphorus' ? 'Phosphorus' : 'Nitrogen and Phosphorus';
+  const label = type === 'nitrogen' ? 'AWG Credit' : type === 'phosphorus' ? 'AWG+ Credit' : 'AWG Credits';
   return (
     <Badge variant={type === 'nitrogen' ? 'info' : 'positive'} size="sm" aria-label={label}>
-      {type === 'nitrogen' ? 'N' : type === 'phosphorus' ? 'P' : 'N+P'}
+      {type === 'nitrogen' ? 'AWG' : type === 'phosphorus' ? 'AWG+' : 'AWG'}
     </Badge>
   );
 }
@@ -532,10 +521,10 @@ const COLUMNS = [
 const FILTER_CONFIGS = [
   {
     id: 'nutrientType',
-    label: 'Nutrient Type',
+    label: 'Credit Type',
     options: [
-      { value: 'nitrogen', label: 'Nitrogen (N)' },
-      { value: 'phosphorus', label: 'Phosphorus (P)' },
+      { value: 'nitrogen', label: 'AWG' },
+      { value: 'phosphorus', label: 'AWG+' },
       { value: 'combined', label: 'Combined' },
     ],
   },
@@ -556,8 +545,8 @@ const PER_PAGE = 20;
 
 const CREDIT_TYPES = [
   { value: '', label: 'All' },
-  { value: 'nitrogen', label: 'QC' },
-  { value: 'phosphorus', label: 'KC' },
+  { value: 'nitrogen', label: 'AWG' },
+  { value: 'phosphorus', label: 'AWG+' },
 ];
 
 // ── Loading skeleton ──────────────────────────────────────
@@ -565,14 +554,8 @@ const CREDIT_TYPES = [
 function TableSkeleton() {
   return (
     <SkeletonTable>
-      {Array.from({ length: 8 }, (_, i) => (
+      {Array.from({ length: 5 }, (_, i) => (
         <SkeletonRow key={i}>
-          <Skeleton width="100%" height={16} />
-          <Skeleton width="100%" height={16} />
-          <Skeleton width="100%" height={16} />
-          <Skeleton width="100%" height={16} />
-          <Skeleton width="100%" height={16} />
-          <Skeleton width="100%" height={16} />
           <Skeleton width="100%" height={16} />
           <Skeleton width="100%" height={16} />
         </SkeletonRow>
@@ -627,13 +610,13 @@ function OrderPanel() {
               $active={creditType === 'nitrogen'}
               onClick={() => setCreditType('nitrogen')}
             >
-              QC
+              AWG
             </CreditTab>
             <CreditTab
               $active={creditType === 'phosphorus'}
               onClick={() => setCreditType('phosphorus')}
             >
-              KC
+              AWG+
             </CreditTab>
           </CreditTabs>
         </OrderFieldGroup>
@@ -839,7 +822,7 @@ export function MarketplacePage() {
     return (
       <MarketBanner>
         <MarketStat>
-          <StatLabel>QC</StatLabel>
+          <StatLabel>AWG</StatLabel>
           <StatValue>${(marketStats.avgNitrogenPrice ?? 0).toFixed(3)}</StatValue>
           <StatChange $positive={nPositive}>
             {nPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
@@ -850,7 +833,7 @@ export function MarketplacePage() {
         <StatDivider />
 
         <MarketStat>
-          <StatLabel>KC</StatLabel>
+          <StatLabel>AWG+</StatLabel>
           <StatValue>${(marketStats.avgPhosphorusPrice ?? 0).toFixed(2)}</StatValue>
           <StatChange $positive={pPositive}>
             {pPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
@@ -873,7 +856,7 @@ export function MarketplacePage() {
     <Page>
       <Header>
         <Title>Marketplace</Title>
-        <Subtitle>Browse verified nutrient credits. Click any listing for details.</Subtitle>
+        <Subtitle>Browse verified water quality credits. Click any listing for details.</Subtitle>
       </Header>
 
       {renderMarketBanner()}
@@ -914,47 +897,45 @@ export function MarketplacePage() {
         </ResultCount>
       </ViewToggle>
 
-      <ContentLayout>
-        <TableSection>
-          {loading ? (
-            <TableSkeleton />
-          ) : listings.length === 0 && !error ? (
-            search || filters.nutrientType || filters.verificationLevel ? (
-              <EmptyState
-                icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>}
-                title="No listings found"
-                description="Try adjusting your filters or search terms."
-                action={{ label: 'Clear Filters', onClick: () => { setSearchInput(''); setSearch(''); setFilters({ nutrientType: '', verificationLevel: '' }); setPage(1); } }}
+      <TableSection>
+        {loading ? (
+          <TableSkeleton />
+        ) : listings.length === 0 && !error ? (
+          search || filters.nutrientType || filters.verificationLevel ? (
+            <EmptyState
+              icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>}
+              title="No listings found"
+              description="Try adjusting your filters or search terms."
+              action={{ label: 'Clear Filters', onClick: () => { setSearchInput(''); setSearch(''); setFilters({ nutrientType: '', verificationLevel: '' }); setPage(1); } }}
+            />
+          ) : (
+            <EmptyState
+              icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>}
+              title="No listings yet"
+              description="Check back soon — verified water quality credits will appear here as they're listed."
+            />
+          )
+        ) : listings.length > 0 ? (
+          <>
+            <Table
+              columns={COLUMNS}
+              data={listings}
+              rowKey={(row) => row.id}
+              onRowClick={handleRowClick}
+              compact
+            />
+            {totalPages > 1 && (
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
               />
-            ) : (
-              <EmptyState
-                icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>}
-                title="No listings yet"
-                description="Check back soon — verified nutrient credits will appear here as they're listed."
-              />
-            )
-          ) : listings.length > 0 ? (
-            <>
-              <Table
-                columns={COLUMNS}
-                data={listings}
-                rowKey={(row) => row.id}
-                onRowClick={handleRowClick}
-                compact
-              />
-              {totalPages > 1 && (
-                <Pagination
-                  page={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
-              )}
-            </>
-          ) : null}
-        </TableSection>
+            )}
+          </>
+        ) : null}
+      </TableSection>
 
-        <OrderPanel />
-      </ContentLayout>
+      <OrderPanel />
 
       {user?.uid && (
         <YourListingsSection>

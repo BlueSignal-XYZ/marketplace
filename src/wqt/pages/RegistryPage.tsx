@@ -131,8 +131,8 @@ const DetailValue = styled.div`
 
 const FILTER_OPTIONS = [
   { value: 'all', label: 'All Credits' },
-  { value: 'qc', label: 'QC (Quantity)' },
-  { value: 'kc', label: 'KC (Quality)' },
+  { value: 'qc', label: 'AWG Credits' },
+  { value: 'kc', label: 'AWG+ Credits' },
   { value: 'nitrogen', label: 'Nitrogen' },
   { value: 'phosphorus', label: 'Phosphorus' },
 ];
@@ -145,8 +145,8 @@ function creditTypeBadge(type: string) {
     phosphorus: 'positive',
   };
   const labels: Record<string, string> = {
-    qc: 'QC',
-    kc: 'KC',
+    qc: 'AWG',
+    kc: 'AWG+',
     nitrogen: 'Nitrogen',
     phosphorus: 'Phosphorus',
   };
@@ -281,15 +281,15 @@ export function RegistryPage() {
     <Page>
       <SEOHead
         title="Water Quality Credit Registry"
-        description="Public registry of verified nutrient and stormwater credits."
+        description="Public registry of all water quality trading credits."
         canonical="/registry"
-        keywords="credit registry, nutrient credits, verified credits, water quality"
+        keywords="credit registry, AWG credits, verified credits, water quality trading"
         jsonLd={registrySchema}
       />
 
       <Header>
         <Title>Credit Registry</Title>
-        <Subtitle>Public registry of verified nutrient and stormwater credits</Subtitle>
+        <Subtitle>Public registry of all water quality trading credits</Subtitle>
       </Header>
 
       <FilterRow>

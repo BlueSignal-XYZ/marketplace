@@ -186,9 +186,9 @@ export function EnvironmentalMapPage() {
 
       <MapContainer>
         <MapPlaceholder>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>🗺</div>
-          <div style={{ fontSize: 14 }}>Interactive map — integrates with @react-google-maps/api or mapbox-gl</div>
-          <div style={{ fontSize: 12, marginTop: 4 }}>{SENSORS.length} stations plotted</div>
+          <div style={{ fontSize: 14, fontWeight: 500 }}>Map loading...</div>
+          <div style={{ fontSize: 12, marginTop: 4, opacity: 0.7 }}>Connecting to map service. Check that VITE_GOOGLE_MAPS_API_KEY is configured.</div>
+          <div style={{ fontSize: 12, marginTop: 4 }}>{SENSORS.length} stations ready</div>
         </MapPlaceholder>
         {/* Scatter dots as rough position indicators */}
         {SENSORS.map((s, i) => (

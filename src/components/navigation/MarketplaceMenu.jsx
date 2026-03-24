@@ -321,7 +321,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
                 $active={isActive("/profile")}
                 onClick={onClose}
               >
-                Profile & Settings
+                Profile
               </NavItem>
             </NavList>
           </>

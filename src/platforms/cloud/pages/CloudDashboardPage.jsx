@@ -575,7 +575,7 @@ export function CloudDashboardPage() {
               <FeatureIconWrap><TrendingUp size={20} /></FeatureIconWrap>
               <FeatureTitle>Credit Generation</FeatureTitle>
               <FeatureDesc>
-                Your device generates verified QC and KC credits on WaterQuality.Trading
+                Your device generates verified AWG credits on WaterQuality.Trading
               </FeatureDesc>
             </FeatureCard>
           </FeatureCardsGrid>

@@ -378,27 +378,28 @@ const ToggleDesc = styled.div`
 `;
 
 const Toggle = styled.button`
-  width: 44px;
-  height: 24px;
-  border-radius: 999px;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
   border: none;
+  padding: 0;
   background: ${({ $on, theme }) => ($on ? (theme.colors?.primary || '#0052CC') : '#D1D5DB')};
   cursor: pointer;
   position: relative;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
   flex-shrink: 0;
 
   &::after {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: white;
     top: 2px;
-    left: ${({ $on }) => ($on ? '22px' : '2px')};
-    transition: left 0.2s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    left: ${({ $on }) => ($on ? '18px' : '2px')};
+    transition: left 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   }
 `;
 
@@ -667,14 +668,14 @@ export function WQTProfilePage() {
       <>
         <CardGrid>
           <DataCard
-            label="Nitrogen Credits"
+            label="AWG Credits"
             value={qcBalance.toLocaleString()}
             unit="kg"
             icon={<Wallet size={14} />}
             compact
           />
           <DataCard
-            label="Phosphorus Credits"
+            label="AWG+ Credits"
             value={kcBalance.toLocaleString()}
             unit="kg"
             icon={<Wallet size={14} />}
