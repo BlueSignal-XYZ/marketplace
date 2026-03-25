@@ -13,7 +13,7 @@ import { MarketplaceMenu } from '../../../components/navigation/MarketplaceMenu'
 import Footer from '../../../components/shared/Footer/Footer';
 import { DemoBanner } from '../../../components/DemoBanner';
 import { WQTTopBar } from '../components/WQTTopBar';
-import { WQTSidebar, SIDEBAR_WIDTH } from '../components/WQTSidebar';
+import { WQTSidebar, SIDEBAR_WIDTH, SIDEBAR_WIDTH_TABLET } from '../components/WQTSidebar';
 import { WQTBottomTabs, TAB_BAR_HEIGHT } from '../components/WQTBottomTabs';
 
 // Marketing/content pages that should use the dark WebsiteNav instead of the app header
@@ -51,14 +51,19 @@ const MainContent = styled.main`
   overflow-x: hidden;
 
   ${({ $appRoute }) => $appRoute && `
-    /* Desktop: offset by sidebar width */
-    @media (min-width: 768px) {
-      margin-left: ${SIDEBAR_WIDTH}px;
-    }
-
     /* Mobile: offset by bottom tabs height + safe area */
     @media (max-width: 767px) {
       padding-bottom: ${TAB_BAR_HEIGHT}px;
+    }
+
+    /* Tablet: offset by narrow sidebar */
+    @media (min-width: 768px) {
+      margin-left: ${SIDEBAR_WIDTH_TABLET}px;
+    }
+
+    /* Desktop: offset by full sidebar */
+    @media (min-width: 1024px) {
+      margin-left: ${SIDEBAR_WIDTH}px;
     }
   `}
 `;
@@ -109,6 +114,9 @@ const FooterWrapper = styled.div`
 
   ${({ $appRoute }) => $appRoute && `
     @media (min-width: 768px) {
+      margin-left: ${SIDEBAR_WIDTH_TABLET}px;
+    }
+    @media (min-width: 1024px) {
       margin-left: ${SIDEBAR_WIDTH}px;
     }
   `}

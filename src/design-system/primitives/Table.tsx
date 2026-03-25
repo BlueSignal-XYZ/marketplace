@@ -25,6 +25,8 @@ export interface Column<T> {
   align?: 'left' | 'center' | 'right';
   /** Use monospace font (for data values) */
   mono?: boolean;
+  /** Hide column below this breakpoint (px). Column gets display:none via CSS class. */
+  hideBelow?: number;
 }
 
 export interface TableProps<T> {
@@ -77,7 +79,7 @@ const Thead = styled.thead`
   background: ${({ theme }) => theme.components.tableHeaderBg};
 `;
 
-const Th = styled.th<{ $align: string; $sortable: boolean }>`
+const Th = styled.th<{ $align: string; $sortable: boolean; $hideBelow?: number }>`
   padding: 10px 14px;
   font-size: 11px;
   font-weight: 600;
@@ -89,6 +91,12 @@ const Th = styled.th<{ $align: string; $sortable: boolean }>`
   user-select: none;
   white-space: nowrap;
   border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder};
+
+  ${({ $hideBelow }) => $hideBelow && `
+    @media (max-width: ${$hideBelow - 1}px) {
+      display: none;
+    }
+  `}
 
   &:hover {
     ${({ $sortable, theme }) => $sortable && `color: ${theme.colors.text};`}
@@ -111,13 +119,19 @@ const Tr = styled.tr<{ $clickable: boolean }>`
   &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.primary}; outline-offset: -2px; }
 `;
 
-const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean }>`
+const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean; $hideBelow?: number }>`
   padding: ${({ $compact }) => ($compact ? '8px 12px' : '12px 14px')};
   font-size: 13px;
   color: ${({ theme }) => theme.colors.text};
   text-align: ${({ $align }) => $align};
   font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : 'inherit')};
   white-space: nowrap;
+
+  ${({ $hideBelow }) => $hideBelow && `
+    @media (max-width: ${$hideBelow - 1}px) {
+      display: none;
+    }
+  `}
 `;
 
 const Empty = styled.td`
@@ -182,6 +196,7 @@ export function Table<T>({
                 scope="col"
                 $align={col.align || 'left'}
                 $sortable={!!col.sortable}
+                $hideBelow={col.hideBelow}
                 style={col.width ? { width: col.width } : undefined}
                 onClick={() => handleSort(col)}
                 aria-sort={col.sortable ? (sortKey === col.key && sortDir ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') : undefined}
@@ -216,6 +231,7 @@ export function Table<T>({
                     $align={col.align || 'left'}
                     $mono={!!col.mono}
                     $compact={compact}
+                    $hideBelow={col.hideBelow}
                   >
                     {col.render ? col.render(row, i) : (row as any)[col.key]}
                   </Td>
