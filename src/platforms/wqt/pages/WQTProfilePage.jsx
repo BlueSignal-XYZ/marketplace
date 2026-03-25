@@ -265,9 +265,13 @@ const ExternalLinkStyled = styled.a`
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const QuickActions = styled.div`
@@ -378,9 +382,9 @@ const ToggleDesc = styled.div`
 `;
 
 const Toggle = styled.button`
-  width: 36px;
-  height: 20px;
-  border-radius: 10px;
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
   border: none;
   padding: 0;
   background: ${({ $on, theme }) => ($on ? (theme.colors?.primary || '#0052CC') : '#D1D5DB')};
@@ -388,18 +392,20 @@ const Toggle = styled.button`
   position: relative;
   transition: background 0.2s ease;
   flex-shrink: 0;
+  box-sizing: border-box;
+  min-height: 0;
 
   &::after {
     content: '';
     position: absolute;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: white;
     top: 2px;
-    left: ${({ $on }) => ($on ? '18px' : '2px')};
+    left: ${({ $on }) => ($on ? '20px' : '2px')};
     transition: left 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
   }
 `;
 
