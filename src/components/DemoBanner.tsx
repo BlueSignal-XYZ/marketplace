@@ -22,8 +22,7 @@ const BannerContainer = styled.div`
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: white;
   min-height: 40px;
-  max-height: 48px;
-  padding: 8px 48px 8px 16px;
+  padding: 10px 48px 10px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,8 +35,7 @@ const BannerContainer = styled.div`
 
   @media (max-width: 768px) {
     min-height: 48px;
-    max-height: 64px;
-    padding: 10px 44px 10px 12px;
+    padding: 10px 40px 10px 14px;
     flex-wrap: wrap;
     justify-content: center;
     gap: 8px;

@@ -7,7 +7,7 @@ import { getRelativeTime } from "../../services/cloudMockAPI";
 import { AlertsAPI } from "../../scripts/back_door";
 import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
 import { isDemoMode } from "../../utils/demoMode";
-import { DemoBanner as DemoBannerComponent } from "../DemoBanner";
+
 
 // Realistic demo alerts based on WQM-1 sensor specs
 const DEMO_ALERTS = [
@@ -73,26 +73,6 @@ const DEMO_ALERTS = [
   },
 ];
 
-const DemoBanner = styled.div`
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border: 1px solid #f59e0b;
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: #92400e;
-
-  .icon {
-    font-size: 18px;
-  }
-
-  strong {
-    font-weight: 600;
-  }
-`;
 
 const Controls = styled.div`
   display: flex;
@@ -535,7 +515,6 @@ export default function AlertsPage() {
       title="Alerts"
       subtitle="Monitor and manage device alerts"
     >
-      {isDemoMode() && <DemoBannerComponent />}
       <Controls>
         <Filters>
           <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
