@@ -348,32 +348,6 @@ const DemoDot = styled.span`
   transition: background 0.2s;
 `;
 
-const AppMenuBtn = styled.button`
-  height: 44px;
-  width: 44px;
-  border-radius: 10px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 18px;
-  transition: all 0.2s;
-
-  &:hover {
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
 const RightGroup = styled.div`
   display: flex;
   align-items: center;
@@ -535,15 +509,6 @@ export function WebsiteNav({ onMenuClick }) {
               Demo
             </DemoToggleDark>
             <CTALink href={ctaHref}>{isSignedIn ? 'Dashboard' : 'Sign In'}</CTALink>
-            <AppMenuBtn
-              onClick={() => {
-                setMobileOpen(false);
-                if (onMenuClick) onMenuClick();
-              }}
-              aria-label="Open app menu"
-            >
-              <FontAwesomeIcon icon={faBars} />
-            </AppMenuBtn>
             <MobileMenuBtn
               onClick={() => setMobileOpen((p) => !p)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}

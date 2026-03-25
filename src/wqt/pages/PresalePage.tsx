@@ -134,7 +134,7 @@ const ViewToggle = styled.div`
 `;
 
 const ViewButton = styled.button<{ active: boolean }>`
-  padding: 8px 20px;
+  padding: 6px 16px;
   border: none;
   background: ${props => props.active ? '#667eea' : 'transparent'};
   color: ${props => props.active ? 'white' : '#94a3b8'};
