@@ -39,6 +39,7 @@ const TopRow = styled.div`
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
 `;
 

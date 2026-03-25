@@ -17,16 +17,16 @@ const pulse = keyframes`
 
 const Section = styled.section`
   position: relative;
-  padding: 64px clamp(20px, 5vw, 48px);
+  padding: 48px clamp(16px, 5vw, 48px);
   background: #0B1120;
   overflow: hidden;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 80px clamp(20px, 5vw, 48px);
+    padding: 64px clamp(20px, 5vw, 48px);
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 120px clamp(20px, 5vw, 48px);
+    padding: 100px clamp(20px, 5vw, 48px);
   }
 `;
 
@@ -35,9 +35,9 @@ const BlueGlow = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 400px;
-  background: radial-gradient(ellipse, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
+  width: clamp(280px, 80vw, 600px);
+  height: clamp(180px, 60vw, 400px);
+  background: radial-gradient(ellipse, rgba(6, 182, 212, 0.06) 0%, transparent 70%);
   filter: blur(60px);
   pointer-events: none;
   animation: ${pulse} 8s ease-in-out infinite;

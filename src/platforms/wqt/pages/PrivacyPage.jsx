@@ -11,12 +11,12 @@ const Page = styled.div`
 `;
 
 const Hero = styled.section`
-  padding: 80px 24px 48px;
+  padding: 48px 24px 40px;
   background: #0B1120;
   color: #FFFFFF;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 100px 24px 64px;
+    padding: 64px 24px 48px;
   }
 `;
 
@@ -93,7 +93,6 @@ export default function PrivacyPage() {
     <Page>
       <Hero>
         <HeroInner>
-          <BackLink href="/">&larr; Back to home</BackLink>
           <HeroTitle>Privacy Policy</HeroTitle>
           <Updated>Last Updated: March 2026</Updated>
         </HeroInner>

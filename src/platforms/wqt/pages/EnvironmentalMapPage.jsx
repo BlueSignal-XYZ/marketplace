@@ -24,6 +24,10 @@ const Page = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 640px) {
+    padding: 20px 16px;
+  }
 `;
 
 const Header = styled.div`
@@ -54,6 +58,10 @@ const MapContainer = styled.div`
   margin-bottom: 32px;
   overflow: hidden;
   position: relative;
+
+  @media (max-width: 640px) {
+    height: 320px;
+  }
 `;
 
 const MapFallback = styled.div`
@@ -78,8 +86,12 @@ const StatsRow = styled.div`
 
 const SensorsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SensorCard = styled.div`

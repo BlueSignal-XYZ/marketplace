@@ -68,6 +68,12 @@ const MarketBanner = styled.div`
   margin-bottom: 20px;
   overflow-x: auto;
   white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    gap: 16px;
+    padding: 12px 16px;
+  }
 `;
 
 const MarketStat = styled.div`
@@ -126,6 +132,7 @@ const CreditTabs = styled.div`
   display: flex;
   gap: 6px;
   flex-shrink: 0;
+  flex-wrap: wrap;
 `;
 
 const CreditTab = styled.button`
@@ -356,6 +363,10 @@ const FilterRow = styled.div`
   & > *:first-child {
     flex: 1;
     min-width: 0;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    gap: 8px;
   }
 `;
 

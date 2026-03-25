@@ -13,15 +13,15 @@ const blink = keyframes`
 `;
 
 const Section = styled.section`
-  padding: 64px clamp(20px, 5vw, 48px);
+  padding: 48px clamp(16px, 5vw, 48px);
   background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 80px clamp(20px, 5vw, 48px);
+    padding: 64px clamp(20px, 5vw, 48px);
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 120px clamp(20px, 5vw, 48px);
+    padding: 100px clamp(20px, 5vw, 48px);
   }
 `;
 
@@ -83,7 +83,7 @@ const FeaturesGrid = styled.div`
 `;
 
 const FeatureCard = styled.div`
-  padding: 32px 24px;
+  padding: 24px 20px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
@@ -187,11 +187,11 @@ const CodeScroll = styled.div`
 
 const CodeTable = styled.div`
   display: table;
-  min-width: 480px;
+  min-width: min(100%, 480px);
   width: 100%;
   padding: 16px 0;
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: clamp(12px, 1.05vw, 14px);
+  font-size: clamp(11px, 1.05vw, 14px);
   line-height: 1.75;
 `;
 

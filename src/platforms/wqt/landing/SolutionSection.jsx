@@ -14,15 +14,15 @@ const flowPulse = keyframes`
 `;
 
 const Section = styled.section`
-  padding: 64px clamp(20px, 5vw, 48px);
+  padding: 48px clamp(16px, 5vw, 48px);
   background: #0B1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 80px clamp(20px, 5vw, 48px);
+    padding: 64px clamp(20px, 5vw, 48px);
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 120px clamp(20px, 5vw, 48px);
+    padding: 100px clamp(20px, 5vw, 48px);
   }
 `;
 

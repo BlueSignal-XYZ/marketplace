@@ -163,7 +163,8 @@ const MapContainer = styled.div`
   margin-bottom: 24px;
 
   @media (max-width: 768px) {
-    height: 400px;
+    height: 320px;
+    border-radius: 8px;
   }
 `;
 

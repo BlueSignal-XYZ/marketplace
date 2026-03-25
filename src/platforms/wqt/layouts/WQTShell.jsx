@@ -24,15 +24,16 @@ const MARKETING_ROUTES = [
   '/for-aggregators',
   '/how-it-works',
   '/generate-credits',
-  '/terms',
-  '/privacy',
 ];
+
+// Legal pages get a minimal header (logo + back link only)
+const LEGAL_ROUTES = ['/terms', '/privacy'];
 
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   overflow-x: hidden;
   background: ${({ $dark, theme }) => $dark ? '#0B1120' : theme.colors.background};
 `;
@@ -62,6 +63,44 @@ const MainContent = styled.main`
   `}
 `;
 
+const LegalNav = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background: rgba(11, 17, 32, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+`;
+
+const LegalNavInner = styled.div`
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 640px) {
+    padding: 0 16px;
+  }
+`;
+
+const LegalBackLink = styled.a`
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
+`;
+
 const FooterWrapper = styled.div`
   padding: 24px 20px;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
@@ -80,9 +119,10 @@ export function WQTShell({ user, isAuthLanding, children }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isMarketingRoute = MARKETING_ROUTES.includes(location.pathname);
+  const isLegalRoute = LEGAL_ROUTES.includes(location.pathname);
   const isAuthPage = location.pathname === '/login';
   const hideChrome = isAuthLanding || isAuthPage;
-  const isAppRoute = !hideChrome && !isMarketingRoute;
+  const isAppRoute = !hideChrome && !isMarketingRoute && !isLegalRoute;
 
   // Set page title
   useEffect(() => {
@@ -113,7 +153,27 @@ export function WQTShell({ user, isAuthLanding, children }) {
         Skip to content
       </a>
 
-      {/* Navigation: landing/login get nothing, marketing pages get dark WebsiteNav, app pages get new nav */}
+      {/* Navigation: landing/login get nothing, legal pages get minimal nav, marketing pages get dark WebsiteNav, app pages get new nav */}
+      {!hideChrome && isLegalRoute && (
+        <LegalNav>
+          <LegalNavInner>
+            <a href="/" aria-label="WaterQuality.Trading" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+              <svg width="180" height="28" viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                  <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#3B82F6" />
+                  <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                </g>
+                <text x="50" y="32" fontFamily="'Outfit', 'Inter', sans-serif" fontSize="22" fill="#F1F5F9">
+                  <tspan fontWeight="700">WaterQuality</tspan>
+                  <tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+                </text>
+              </svg>
+            </a>
+            <LegalBackLink href="/">&larr; Back to home</LegalBackLink>
+          </LegalNavInner>
+        </LegalNav>
+      )}
       {!hideChrome && isMarketingRoute && (
         <WebsiteNav onMenuClick={() => setMenuOpen((p) => !p)} />
       )}

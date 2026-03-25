@@ -73,6 +73,12 @@ const ControlsRow = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
 `;
 
 const FilterChipsContainer = styled.div`
@@ -136,7 +142,8 @@ const MapContainer = styled.div`
   position: relative;
 
   @media (max-width: 768px) {
-    height: 500px;
+    height: 380px;
+    border-radius: 8px;
   }
 `;
 
