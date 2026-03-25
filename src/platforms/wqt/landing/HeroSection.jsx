@@ -245,9 +245,8 @@ const Pills = styled.div`
   gap: 8px;
   flex-wrap: wrap;
 
-  @media (max-width: 480px) {
-    flex-direction: column;
-    gap: 6px;
+  @media (max-width: 680px) {
+    display: none;
   }
 `;
 
@@ -297,9 +296,9 @@ const FlowSvg = styled.svg`
 
 const MobileViz = styled.div`
   display: none;
-  margin-top: clamp(16px, 3vh, 40px);
+  margin-top: clamp(12px, 2vh, 24px);
   width: 100%;
-  max-width: 320px;
+  max-width: 300px;
   flex-shrink: 1;
   min-height: 0;
   overflow: hidden;
@@ -325,9 +324,9 @@ const MobileStep = styled.div`
 `;
 
 const MobileIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -337,14 +336,14 @@ const MobileIcon = styled.div`
 
 const MobileLabel = styled.span`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
 `;
 
 const MobileConnector = styled.div`
   width: 2px;
-  height: 20px;
+  height: 14px;
   background: linear-gradient(to bottom, rgba(6, 182, 212, 0.4), rgba(6, 182, 212, 0.1));
   margin: 0 auto;
 `;
@@ -373,10 +372,9 @@ const PILLS = [
 ];
 
 const MOBILE_STEPS = [
-  { icon: '\u{1F4A7}', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Harvests Water From Air' },
-  { icon: '\u{1F4E1}', bg: 'rgba(59, 130, 246, 0.15)', label: 'Sensor Verifies Every Drop' },
-  { icon: '\u{1F4CA}', bg: 'rgba(139, 92, 246, 0.15)', label: 'Credits Earned Automatically' },
-  { icon: '\u{1F4B5}', bg: 'rgba(16, 185, 129, 0.15)', label: 'You Get Paid on Your Bill' },
+  { icon: '\u{1F4A7}', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Harvests Water' },
+  { icon: '\u{1F4E1}', bg: 'rgba(59, 130, 246, 0.15)', label: 'Sensor Verifies Quality' },
+  { icon: '\u{1F4B5}', bg: 'rgba(16, 185, 129, 0.15)', label: 'Credits Earned \u2192 You Get Paid' },
 ];
 
 /* ── Desktop flow SVG component ────────────────────────── */

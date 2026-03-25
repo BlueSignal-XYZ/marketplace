@@ -68,7 +68,7 @@ const Wrapper = styled.div`
 
 const StyledTable = styled.table`
   width: 100%;
-  min-width: 600px;
+  min-width: 520px;
   border-collapse: collapse;
   font-family: ${({ theme }) => theme.fonts.sans};
 `;
@@ -112,8 +112,8 @@ const Tr = styled.tr<{ $clickable: boolean }>`
 `;
 
 const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean }>`
-  padding: ${({ $compact }) => ($compact ? '8px 14px' : '12px 14px')};
-  font-size: 14px;
+  padding: ${({ $compact }) => ($compact ? '8px 12px' : '12px 14px')};
+  font-size: 13px;
   color: ${({ theme }) => theme.colors.text};
   text-align: ${({ $align }) => $align};
   font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : 'inherit')};

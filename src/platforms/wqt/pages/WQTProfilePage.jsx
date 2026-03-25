@@ -381,31 +381,53 @@ const ToggleDesc = styled.div`
   margin-top: 2px;
 `;
 
-const Toggle = styled.button`
-  width: 40px;
-  height: 22px;
-  border-radius: 11px;
-  border: none;
-  padding: 0;
-  background: ${({ $on, theme }) => ($on ? (theme.colors?.primary || '#0052CC') : '#D1D5DB')};
-  cursor: pointer;
+const ToggleTrack = styled.label`
   position: relative;
-  transition: background 0.2s ease;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
   flex-shrink: 0;
-  box-sizing: border-box;
-  min-height: 0;
+  cursor: pointer;
+`;
+
+const ToggleInput = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+
+  &:checked + span {
+    background: ${({ theme }) => theme.colors?.positive || '#10B981'};
+  }
+
+  &:checked + span::after {
+    transform: translateX(20px);
+  }
+
+  &:focus-visible + span {
+    outline: 2px solid ${({ theme }) => theme.colors?.primary || '#0052CC'};
+    outline-offset: 2px;
+  }
+`;
+
+const ToggleSlider = styled.span`
+  position: absolute;
+  inset: 0;
+  background: #D1D5DB;
+  border-radius: 12px;
+  transition: background 0.25s ease;
 
   &::after {
     content: '';
     position: absolute;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: white;
+    width: 20px;
+    height: 20px;
+    left: 2px;
     top: 2px;
-    left: ${({ $on }) => ($on ? '20px' : '2px')};
-    transition: left 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -836,13 +858,10 @@ export function WQTProfilePage() {
                 : 'Explore the platform with sample data for presentations and testing.'}
             </ToggleDesc>
           </ToggleInfo>
-          <Toggle
-            type="button"
-            role="switch"
-            aria-checked={demoEnabled}
-            $on={demoEnabled}
-            onClick={handleDemoToggle}
-          />
+          <ToggleTrack>
+            <ToggleInput type="checkbox" checked={demoEnabled} onChange={handleDemoToggle} />
+            <ToggleSlider />
+          </ToggleTrack>
         </ToggleRow>
       </SettingsSection>
 
@@ -857,39 +876,30 @@ export function WQTProfilePage() {
             <ToggleLabel>Email Notifications</ToggleLabel>
             <ToggleDesc>Receive transaction confirmations and account alerts via email</ToggleDesc>
           </ToggleInfo>
-          <Toggle
-            type="button"
-            role="switch"
-            aria-checked={emailNotif}
-            $on={emailNotif}
-            onClick={() => setEmailNotif(!emailNotif)}
-          />
+          <ToggleTrack>
+            <ToggleInput type="checkbox" checked={emailNotif} onChange={() => setEmailNotif(!emailNotif)} />
+            <ToggleSlider />
+          </ToggleTrack>
         </ToggleRow>
         <ToggleRow>
           <ToggleInfo>
             <ToggleLabel>Market Alerts</ToggleLabel>
             <ToggleDesc>Get notified about price changes and new listings</ToggleDesc>
           </ToggleInfo>
-          <Toggle
-            type="button"
-            role="switch"
-            aria-checked={marketNotif}
-            $on={marketNotif}
-            onClick={() => setMarketNotif(!marketNotif)}
-          />
+          <ToggleTrack>
+            <ToggleInput type="checkbox" checked={marketNotif} onChange={() => setMarketNotif(!marketNotif)} />
+            <ToggleSlider />
+          </ToggleTrack>
         </ToggleRow>
         <ToggleRow>
           <ToggleInfo>
             <ToggleLabel>Device Alerts</ToggleLabel>
             <ToggleDesc>Alerts when linked devices go offline or need attention</ToggleDesc>
           </ToggleInfo>
-          <Toggle
-            type="button"
-            role="switch"
-            aria-checked={deviceNotif}
-            $on={deviceNotif}
-            onClick={() => setDeviceNotif(!deviceNotif)}
-          />
+          <ToggleTrack>
+            <ToggleInput type="checkbox" checked={deviceNotif} onChange={() => setDeviceNotif(!deviceNotif)} />
+            <ToggleSlider />
+          </ToggleTrack>
         </ToggleRow>
       </SettingsSection>
 
