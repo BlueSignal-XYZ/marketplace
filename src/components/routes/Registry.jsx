@@ -44,14 +44,15 @@ const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
   width: 100%;
-  height: 100%;
+  max-width: 960px;
+  min-height: 100%;
   animation: ${fadeIn} 0.5s ease-in-out;
   transition: 0.5s ease-in-out;
   overflow-y: auto;
   overflow-x: hidden;
+  box-sizing: border-box;
 `;
 
 const Content = styled(motion.div).attrs(() => ({
@@ -62,14 +63,13 @@ const Content = styled(motion.div).attrs(() => ({
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
-  padding: 1rem;
+  padding: 24px 20px;
   overflow-x: hidden;
-  align-items: flex-start; /* Align content to the top of the container */
-  overflow-y: auto; // Add vertical scroll if content overflows
+  overflow-y: auto;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    width: 80%;
+    padding: 20px 16px;
   }
 `;
 
@@ -80,8 +80,8 @@ const Heading = styled.h1`
 
 const DynamicList = styled.div`
   width: 100%;
-  padding: 0 10px;
-  border-bottom: 1px solid #00000080;
+  padding: 0;
+  margin-top: 32px;
 `;
 
 const Heading2 = styled.h2`
@@ -101,40 +101,29 @@ const Heading2 = styled.h2`
 `;
 
 const StyledTable = styled.table`
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
-  // background-color: ${colors.secondaryAccent};
   border-radius: 8px;
-  margin: auto;
-  margin-top: 100px;
+  margin: 0 auto;
   overflow: hidden;
-  -webkit-box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.75);
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const StyledTh = styled.th`
-  padding: 10px;
-  background: ${colors.accent};
+  padding: 12px 16px;
+  background: #0B1120;
   color: white;
-  text-align: center;
-  border-right: 2px solid #222;
-  &:last-child {
-    border-right: none;
-  }
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 `;
 
 const StyledTd = styled.td`
-  padding: 8px;
-  border-bottom: 1px solid #222;
-  border-right: 2px solid #222;
-  &:last-child {
-    border-right: none;
-  }
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e4e9;
+  font-size: 14px;
 `;
 
 const LoadingAnimation = keyframes`
@@ -203,20 +192,21 @@ const AccountSearchButton = styled.button`
 `;
 
 const FixedTitle = styled.div`
-  position: fixed;
-  top: 7wh;
-  left: 0;
+  position: sticky;
+  top: 0;
   width: 100%;
-  height: 60px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #fff;
-  border-bottom: 2px solid #222;
+  border-bottom: 1px solid #e2e4e9;
   padding: 0 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
-  z-index: 1000;
+  z-index: 10;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 24px;
 `;
 
 /******************** Caching **********************/
@@ -496,7 +486,6 @@ function ExplorerPage() {
                 Account Search
               </AccountSearchButton>
             </FixedTitle>
-            <br />
             <StyledTable>
               <thead>
                 <tr>
@@ -515,10 +504,10 @@ function ExplorerPage() {
             </StyledTable>
             <DynamicList>
               <Heading2>Farmers</Heading2>
-              <Line width={"50%"} />
+              <Line width={"100%"} />
               <ProducersData producersData={producersData} />
               <Heading2>Events</Heading2>
-              <Line width={"50%"} />
+              <Line width={"100%"} />
               {events.map((event, index) => (
                 <EventData key={index} event={event} />
               ))}

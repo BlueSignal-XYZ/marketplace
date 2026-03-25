@@ -28,10 +28,14 @@ const Page = styled.div`
   box-sizing: border-box;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 28px 24px;
+    padding: 28px 20px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding: 32px 32px;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.xl}px) {
     padding: 32px 48px;
   }
 `;
@@ -437,7 +441,7 @@ const SkeletonRow = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    grid-template-columns: 1fr 80px 90px 1fr 100px;
+    grid-template-columns: 1fr 70px 80px 1fr 90px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
