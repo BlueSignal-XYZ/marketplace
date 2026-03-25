@@ -510,6 +510,7 @@ const COLUMNS = [
     key: 'region',
     header: 'Region',
     sortable: true,
+    hideBelow: 1024,
     render: (row) => row.region || '—',
   },
   {
@@ -523,10 +524,12 @@ const COLUMNS = [
     width: '90px',
     mono: true,
     sortable: true,
+    hideBelow: 1024,
   },
   {
     key: 'sellerName',
     header: 'Seller',
+    hideBelow: 1024,
     render: (row) => row.sellerName || '—',
   },
 ];

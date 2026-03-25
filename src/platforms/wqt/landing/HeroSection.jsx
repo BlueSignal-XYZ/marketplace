@@ -130,7 +130,7 @@ const CrossfadeWrapper = styled.div`
 /* ── Typography ────────────────────────────────────────── */
 
 const ToggleRow = styled.div`
-  margin-bottom: clamp(10px, 1.5vh, 20px);
+  margin-bottom: clamp(16px, 2.5vh, 28px);
   animation: ${fadeUp} 0.9s ${SPRING} 0.05s both;
 `;
 
@@ -148,7 +148,7 @@ const Eyebrow = styled.span`
     $audience === 'utility' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(6, 182, 212, 0.15)'};
   border-radius: 100px;
   padding: 6px 16px;
-  margin-bottom: clamp(8px, 1.2vh, 16px);
+  margin-bottom: clamp(14px, 2vh, 24px);
   transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
 `;
 
@@ -158,7 +158,7 @@ const Headline = styled.h1`
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.03em;
-  margin: 0 0 clamp(8px, 1.5vh, 18px);
+  margin: 0 0 clamp(14px, 2.5vh, 24px);
   max-width: 18ch;
   color: #FFFFFF;
   text-wrap: balance;
@@ -181,7 +181,7 @@ const Subheadline = styled.p`
   font-weight: 400;
   line-height: 1.65;
   max-width: 560px;
-  margin: 0 0 clamp(12px, 2vh, 24px);
+  margin: 0 0 clamp(20px, 3vh, 32px);
   color: rgba(255, 255, 255, 0.6);
   text-wrap: pretty;
 
@@ -238,7 +238,7 @@ const PrimaryBtn = styled.a`
 /* ── Pill bar ──────────────────────────────────────────── */
 
 const Pills = styled.div`
-  margin-top: clamp(8px, 1.5vh, 20px);
+  margin-top: clamp(16px, 2.5vh, 28px);
   display: flex;
   align-items: center;
   justify-content: center;

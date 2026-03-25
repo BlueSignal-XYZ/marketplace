@@ -11,6 +11,7 @@ import { Home, TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';
 /* ── Constants ─────────────────────────────────────────── */
 
 const SIDEBAR_WIDTH = 240;
+const SIDEBAR_WIDTH_TABLET = 68;
 
 const NAV_ITEMS = [
   { label: 'Home', icon: Home, to: '/dashboard' },
@@ -35,9 +36,19 @@ const SidebarContainer = styled.nav`
   flex-direction: column;
   padding: 16px 12px;
   overflow-y: auto;
+  transition: width 200ms ease-out, padding 200ms ease-out;
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) {
     display: flex;
+    width: ${SIDEBAR_WIDTH_TABLET}px;
+    padding: 16px 8px;
+    align-items: center;
+  }
+
+  @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
+    width: ${SIDEBAR_WIDTH}px;
+    padding: 16px 12px;
+    align-items: stretch;
   }
 `;
 
@@ -46,6 +57,14 @@ const NavList = styled.div`
   flex-direction: column;
   gap: 2px;
   flex: 1;
+`;
+
+const NavLabel = styled.span`
+  display: none;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
+    display: inline;
+  }
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -64,6 +83,16 @@ const StyledNavLink = styled(NavLink)`
   position: relative;
   border-left: 3px solid transparent;
 
+  /* Tablet: center icon in narrow rail */
+  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({ theme }) => (theme.breakpoints?.lg || 1024) - 1}px) {
+    justify-content: center;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    border-left: none;
+    border-radius: ${({ theme }) => theme.radius?.md || 12}px;
+  }
+
   svg {
     flex-shrink: 0;
     transition: color 200ms ease-out;
@@ -80,6 +109,11 @@ const StyledNavLink = styled(NavLink)`
     border-left-color: ${({ theme }) => theme.colors?.primary || '#0052CC'};
     font-weight: 600;
 
+    /* Tablet: no left border indicator, use background only */
+    @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({ theme }) => (theme.breakpoints?.lg || 1024) - 1}px) {
+      border-left-color: transparent;
+    }
+
     svg {
       color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
     }
@@ -92,6 +126,10 @@ const VersionText = styled.div`
   font-size: 11px;
   color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   opacity: 0.6;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({ theme }) => (theme.breakpoints?.lg || 1024) - 1}px) {
+    display: none;
+  }
 `;
 
 /* ── Component ─────────────────────────────────────────── */
@@ -105,9 +143,10 @@ export function WQTSidebar() {
             key={to}
             to={to}
             end={to === '/marketplace' || to === '/dashboard'}
+            title={label}
           >
             <Icon size={20} />
-            {label}
+            <NavLabel>{label}</NavLabel>
           </StyledNavLink>
         ))}
       </NavList>
@@ -116,4 +155,4 @@ export function WQTSidebar() {
   );
 }
 
-export { SIDEBAR_WIDTH };
+export { SIDEBAR_WIDTH, SIDEBAR_WIDTH_TABLET };
