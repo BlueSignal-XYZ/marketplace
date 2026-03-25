@@ -16,6 +16,7 @@ import { AuthGate } from '../../shared/components/AuthGate';
 import { ErrorBoundary } from '../../shared/components/ErrorBoundary';
 import { AuthModal } from '../../shared/components/AuthModal';
 import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
+import { lazyWithRetry } from '../../shared/utils/lazyWithRetry';
 
 // WQT Landing page (unauthenticated visitors — not lazy, above fold)
 import { WQTLandingPage } from './landing/WQTLandingPage';
@@ -23,40 +24,40 @@ import { WQTLandingPage } from './landing/WQTLandingPage';
 // Eagerly loaded (used in routing logic)
 import { Welcome, NotFound } from '../../routes';
 
-// ── Lazy-loaded pages ─────────────────────────────────────
-const MarketplacePage = React.lazy(() => import('./pages/MarketplacePage'));
-const ListingDetailPage = React.lazy(() => import('./pages/ListingDetailPage'));
-const CertificateDetailPage = React.lazy(() => import('./pages/CertificateDetailPage'));
-const EnvironmentalMapPage = React.lazy(() => import('./pages/EnvironmentalMapPage'));
-const WatershedDashboardPage = React.lazy(() => import('./pages/WatershedDashboardPage'));
-const PurchaseFlowPage = React.lazy(() => import('./pages/PurchaseFlowPage'));
-const PortfolioPage = React.lazy(() => import('./pages/PortfolioPage'));
-const SellerOnboardingPage = React.lazy(() => import('./pages/SellerOnboardingPage'));
-const WQTDashboardPage = React.lazy(() => import('./pages/WQTDashboardPage'));
-const ProgramsPage = React.lazy(() => import('./pages/ProgramsPage'));
-const FinancialDashboard = React.lazy(() => import('../../routes/marketplace/account/FinancialDashboard'));
-const RegistryPage = React.lazy(() => import('../../wqt/pages/RegistryPage'));
-const RecentRemovalsPage = React.lazy(() => import('../../wqt/pages/RecentRemovalsPage'));
-const MapPage = React.lazy(() => import('../../wqt/pages/MapPage'));
-const PresalePage = React.lazy(() => import('../../wqt/pages/PresalePage'));
-const TradingProgramDetailPage = React.lazy(() => import('../../wqt/pages/TradingProgramDetailPage'));
-const CreditPortfolioPage = React.lazy(() => import('../../wqt/pages/CreditPortfolioPage'));
-const CreateListingPage = React.lazy(() => import('../../components/elements/marketplace/CreateListingPage'));
-const TransactionPage = React.lazy(() => import('../../components/elements/marketplace/TransactionPage'));
-const VerificationUI = React.lazy(() => import('../../components/elements/contractUI/VerificationUI'));
-const BuyerDashboard = React.lazy(() => import('../../components/dashboards/BuyerDashboard'));
-const SellerDashboard_Role = React.lazy(() => import('../../components/dashboards/SellerDashboard'));
+// ── Lazy-loaded pages (with chunk-load retry) ─────────────
+const MarketplacePage = lazyWithRetry(() => import('./pages/MarketplacePage'));
+const ListingDetailPage = lazyWithRetry(() => import('./pages/ListingDetailPage'));
+const CertificateDetailPage = lazyWithRetry(() => import('./pages/CertificateDetailPage'));
+const EnvironmentalMapPage = lazyWithRetry(() => import('./pages/EnvironmentalMapPage'));
+const WatershedDashboardPage = lazyWithRetry(() => import('./pages/WatershedDashboardPage'));
+const PurchaseFlowPage = lazyWithRetry(() => import('./pages/PurchaseFlowPage'));
+const PortfolioPage = lazyWithRetry(() => import('./pages/PortfolioPage'));
+const SellerOnboardingPage = lazyWithRetry(() => import('./pages/SellerOnboardingPage'));
+const WQTDashboardPage = lazyWithRetry(() => import('./pages/WQTDashboardPage'));
+const ProgramsPage = lazyWithRetry(() => import('./pages/ProgramsPage'));
+const FinancialDashboard = lazyWithRetry(() => import('../../routes/marketplace/account/FinancialDashboard'));
+const RegistryPage = lazyWithRetry(() => import('../../wqt/pages/RegistryPage'));
+const RecentRemovalsPage = lazyWithRetry(() => import('../../wqt/pages/RecentRemovalsPage'));
+const MapPage = lazyWithRetry(() => import('../../wqt/pages/MapPage'));
+const PresalePage = lazyWithRetry(() => import('../../wqt/pages/PresalePage'));
+const TradingProgramDetailPage = lazyWithRetry(() => import('../../wqt/pages/TradingProgramDetailPage'));
+const CreditPortfolioPage = lazyWithRetry(() => import('../../wqt/pages/CreditPortfolioPage'));
+const CreateListingPage = lazyWithRetry(() => import('../../components/elements/marketplace/CreateListingPage'));
+const TransactionPage = lazyWithRetry(() => import('../../components/elements/marketplace/TransactionPage'));
+const VerificationUI = lazyWithRetry(() => import('../../components/elements/contractUI/VerificationUI'));
+const BuyerDashboard = lazyWithRetry(() => import('../../components/dashboards/BuyerDashboard'));
+const SellerDashboard_Role = lazyWithRetry(() => import('../../components/dashboards/SellerDashboard'));
 
 // Audience-specific pages
-const ForUtilitiesPage = React.lazy(() => import('./pages/ForUtilitiesPage'));
-const ForHomeownersPage = React.lazy(() => import('./pages/ForHomeownersPage'));
-const ForAggregatorsPage = React.lazy(() => import('./pages/ForAggregatorsPage'));
-const HowItWorksPage = React.lazy(() => import('./pages/HowItWorksPage'));
-const ForCreditGeneratorsPage = React.lazy(() => import('./pages/ForCreditGeneratorsPage'));
-const ContactPage = React.lazy(() => import('./pages/ContactPage'));
-const TermsPage = React.lazy(() => import('./pages/TermsPage'));
-const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
-const WQTProfilePage = React.lazy(() => import('./pages/WQTProfilePage'));
+const ForUtilitiesPage = lazyWithRetry(() => import('./pages/ForUtilitiesPage'));
+const ForHomeownersPage = lazyWithRetry(() => import('./pages/ForHomeownersPage'));
+const ForAggregatorsPage = lazyWithRetry(() => import('./pages/ForAggregatorsPage'));
+const HowItWorksPage = lazyWithRetry(() => import('./pages/HowItWorksPage'));
+const ForCreditGeneratorsPage = lazyWithRetry(() => import('./pages/ForCreditGeneratorsPage'));
+const ContactPage = lazyWithRetry(() => import('./pages/ContactPage'));
+const TermsPage = lazyWithRetry(() => import('./pages/TermsPage'));
+const PrivacyPage = lazyWithRetry(() => import('./pages/PrivacyPage'));
+const WQTProfilePage = lazyWithRetry(() => import('./pages/WQTProfilePage'));
 
 // ── Loading fallback ──────────────────────────────────────
 

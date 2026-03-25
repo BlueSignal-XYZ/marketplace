@@ -17,40 +17,41 @@ import { AuthGate } from '../../shared/components/AuthGate';
 import { ErrorBoundary } from '../../shared/components/ErrorBoundary';
 import { AuthModal } from '../../shared/components/AuthModal';
 import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
+import { lazyWithRetry } from '../../shared/utils/lazyWithRetry';
 
 import { Welcome } from '../../routes';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 
-// ── Lazy-loaded pages ─────────────────────────────────────
-const Home = React.lazy(() => import('../../routes/Home'));
-const Livepeer = React.lazy(() => import('../../components/elements/livepeer/Livepeer'));
-const CommissionWorkflow = React.lazy(() => import('../../components/installer/CommissionWorkflow'));
-const DeviceActivation = React.lazy(() => import('../../components/installer/DeviceActivation'));
-const InstallerDashboard = React.lazy(() => import('../../components/dashboards/InstallerDashboard'));
-const CloudNutrientCalculator = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudNutrientCalculator })));
-const CloudVerification = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudVerification })));
-const CloudLiveStream = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudLiveStream })));
-const CloudUploadMedia = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudUploadMedia })));
-const CloudMediaPlayer = React.lazy(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudMediaPlayer })));
-const CloudDashboardPage = React.lazy(() => import('./pages/CloudDashboardPage'));
-const NewDeviceDetailPage = React.lazy(() => import('./pages/DeviceDetailPage'));
-const CommissioningWizardPage = React.lazy(() => import('./pages/CommissioningWizardPage'));
-const RevenueGradeWizardPage = React.lazy(() => import('./pages/RevenueGradeWizardPage'));
+// ── Lazy-loaded pages (with chunk-load retry) ─────────────
+const Home = lazyWithRetry(() => import('../../routes/Home'));
+const Livepeer = lazyWithRetry(() => import('../../components/elements/livepeer/Livepeer'));
+const CommissionWorkflow = lazyWithRetry(() => import('../../components/installer/CommissionWorkflow'));
+const DeviceActivation = lazyWithRetry(() => import('../../components/installer/DeviceActivation'));
+const InstallerDashboard = lazyWithRetry(() => import('../../components/dashboards/InstallerDashboard'));
+const CloudNutrientCalculator = lazyWithRetry(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudNutrientCalculator })));
+const CloudVerification = lazyWithRetry(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudVerification })));
+const CloudLiveStream = lazyWithRetry(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudLiveStream })));
+const CloudUploadMedia = lazyWithRetry(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudUploadMedia })));
+const CloudMediaPlayer = lazyWithRetry(() => import('../../components/cloud/CloudToolsWrapper').then(m => ({ default: m.CloudMediaPlayer })));
+const CloudDashboardPage = lazyWithRetry(() => import('./pages/CloudDashboardPage'));
+const NewDeviceDetailPage = lazyWithRetry(() => import('./pages/DeviceDetailPage'));
+const CommissioningWizardPage = lazyWithRetry(() => import('./pages/CommissioningWizardPage'));
+const RevenueGradeWizardPage = lazyWithRetry(() => import('./pages/RevenueGradeWizardPage'));
 
-// Cloud console components (lazy-loaded for code splitting)
-const DevicesListPage = React.lazy(() => import('../../components/cloud/DevicesListPage'));
-const DeviceDetailPage = React.lazy(() => import('../../components/cloud/DeviceDetailPage'));
-const SitesListPage = React.lazy(() => import('../../components/cloud/SitesListPage'));
-const SiteDetailPage = React.lazy(() => import('../../components/cloud/SiteDetailPage'));
-const CreateSitePage = React.lazy(() => import('../../components/cloud/CreateSitePage'));
-const CommissioningPage = React.lazy(() => import('../../components/cloud/CommissioningPage'));
-const FullCommissioningWizard = React.lazy(() => import('../../components/cloud/FullCommissioningWizard'));
-const AlertsPage = React.lazy(() => import('../../components/cloud/AlertsPage'));
-const AlertDetailPage = React.lazy(() => import('../../components/cloud/AlertDetailPage'));
-const DeviceOnboardingWizard = React.lazy(() => import('../../components/cloud/DeviceOnboardingWizard'));
-const ProfilePage = React.lazy(() => import('../../components/cloud/ProfilePage'));
-const OnboardingWizard = React.lazy(() => import('../../components/cloud/OnboardingWizard'));
-const AddDevicePage = React.lazy(() => import('../../components/cloud/AddDevicePage'));
+// Cloud console components (lazy-loaded with retry for code splitting)
+const DevicesListPage = lazyWithRetry(() => import('../../components/cloud/DevicesListPage'));
+const DeviceDetailPage = lazyWithRetry(() => import('../../components/cloud/DeviceDetailPage'));
+const SitesListPage = lazyWithRetry(() => import('../../components/cloud/SitesListPage'));
+const SiteDetailPage = lazyWithRetry(() => import('../../components/cloud/SiteDetailPage'));
+const CreateSitePage = lazyWithRetry(() => import('../../components/cloud/CreateSitePage'));
+const CommissioningPage = lazyWithRetry(() => import('../../components/cloud/CommissioningPage'));
+const FullCommissioningWizard = lazyWithRetry(() => import('../../components/cloud/FullCommissioningWizard'));
+const AlertsPage = lazyWithRetry(() => import('../../components/cloud/AlertsPage'));
+const AlertDetailPage = lazyWithRetry(() => import('../../components/cloud/AlertDetailPage'));
+const DeviceOnboardingWizard = lazyWithRetry(() => import('../../components/cloud/DeviceOnboardingWizard'));
+const ProfilePage = lazyWithRetry(() => import('../../components/cloud/ProfilePage'));
+const OnboardingWizard = lazyWithRetry(() => import('../../components/cloud/OnboardingWizard'));
+const AddDevicePage = lazyWithRetry(() => import('../../components/cloud/AddDevicePage'));
 
 // ── Loading fallback ──────────────────────────────────────
 
