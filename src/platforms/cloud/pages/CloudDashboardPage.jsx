@@ -637,7 +637,7 @@ export function CloudDashboardPage() {
         >
           <span>{severityIcon(alert.severity)}</span>
           <span>{alert.deviceName ? `${alert.deviceName} — ` : ''}{alert.message}</span>
-          <span style={{ marginLeft: 'auto', fontSize: 12, opacity: 0.6 }}>View →</span>
+          <span style={{ marginLeft: 'auto', fontSize: 12, opacity: 0.6, whiteSpace: 'nowrap', flexShrink: 0 }}>View →</span>
         </AlertBanner>
       ))}
 

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { logoImage } from "../../Welcome";
-import { isCloudMode, getAppMode } from "../../../utils/modeDetection";
+import { getAppMode } from "../../../utils/modeDetection";
+import BlueSignalLogo from "../../../components/shared/BlueSignalLogo";
 
 // Inline SVG logo for WQT — crisp at any size (avoids pixelated raster logo)
 const WQTLogoInline = ({ height = 36 }) => {
@@ -143,7 +143,7 @@ const WelcomeHome = ({ user, setCardState, enterDash }) => {
     >
       <div className="logo-wrap">
         {isCloud ? (
-          <img src={logoImage} alt="BlueSignal" />
+          <BlueSignalLogo size={36} />
         ) : (
           <WQTLogoInline height={36} />
         )}

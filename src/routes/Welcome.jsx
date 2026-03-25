@@ -10,15 +10,9 @@ import { WelcomeHome } from "./components/welcome";
 
 import { useAppContext } from "../context/AppContext";
 import { getDefaultDashboardRoute } from "../utils/roleRouting";
-import { isCloudMode, getAppMode } from "../utils/modeDetection";
+import { getAppMode } from "../utils/modeDetection";
 import SEOHead from "../components/seo/SEOHead";
 import { WQT_ORGANIZATION_SCHEMA, BLUESIGNAL_ORGANIZATION_SCHEMA } from "../components/seo/schemas";
-
-import cloudLogo from "../assets/bluesignal-logo.png";
-import marketplaceLogo from "../assets/logo.png";
-
-// --------------------- logo by hostname (used by WelcomeHome) -------------
-export const logoImage = isCloudMode() ? cloudLogo : marketplaceLogo;
 
 // ------------------------------ layout ------------------------------------
 
