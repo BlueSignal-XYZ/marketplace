@@ -658,11 +658,22 @@ export function WQTProfilePage() {
       );
     }
 
-    if (portfolioError) {
-      return <ErrorText>{portfolioError}</ErrorText>;
-    }
-
     const hasCredits = qcBalance > 0 || kcBalance > 0 || pendingCredits > 0;
+
+    if (portfolioError || (!hasCredits && !portfolio)) {
+      return (
+        <EmptyState
+          icon={<Wallet size={40} />}
+          title="No credits yet"
+          description="Purchase water quality credits on the marketplace to see your balances here."
+          action={{
+            label: 'Browse Marketplace',
+            onClick: () => navigate('/marketplace'),
+          }}
+          compact
+        />
+      );
+    }
 
     return (
       <>
@@ -700,19 +711,6 @@ export function WQTProfilePage() {
           </CardGrid>
         )}
 
-        {!hasCredits && !portfolio && (
-          <EmptyState
-            icon={<Wallet size={40} />}
-            title="No credits yet"
-            description="Browse the marketplace to get started."
-            action={{
-              label: 'Browse Marketplace',
-              onClick: () => navigate('/marketplace'),
-            }}
-            compact
-          />
-        )}
-
         <QuickActions>
           <Button
             variant="primary"
@@ -745,16 +743,16 @@ export function WQTProfilePage() {
       );
     }
 
-    if (portfolioError) {
-      return <ErrorText>{portfolioError}</ErrorText>;
-    }
-
-    if (transactions.length === 0) {
+    if (portfolioError || transactions.length === 0) {
       return (
         <EmptyState
           icon={<ArrowRightLeft size={40} />}
           title="No transactions yet"
-          description="Your purchase, sale, and retirement history will appear here."
+          description="When you buy or sell credits on the marketplace, your transaction history will appear here."
+          action={{
+            label: 'Browse Marketplace',
+            onClick: () => navigate('/marketplace'),
+          }}
         />
       );
     }

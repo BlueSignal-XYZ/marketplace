@@ -6,7 +6,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import { Search, User, ChevronDown, LogOut, Settings } from 'lucide-react';
+import { Search, User, ChevronDown, LogOut } from 'lucide-react';
 import { useAppContext } from '../../../context/AppContext';
 import NotificationBell from '../../../components/shared/NotificationBell';
 
@@ -306,10 +306,6 @@ export function WQTTopBar() {
               <DropdownItem onClick={() => handleNavigate('/profile')}>
                 <User size={16} />
                 Profile
-              </DropdownItem>
-              <DropdownItem onClick={() => handleNavigate('/settings')}>
-                <Settings size={16} />
-                Settings
               </DropdownItem>
               <DropdownDivider />
               <DropdownItem onClick={handleLogout}>

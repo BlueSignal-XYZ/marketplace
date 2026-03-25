@@ -415,22 +415,22 @@ const ErrorText = styled.span`
 const SkeletonTable = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 `;
 
 const SkeletonRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  padding: 12px 0;
+  padding: 14px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    grid-template-columns: 120px 80px 90px 1fr 120px;
+    grid-template-columns: 1fr 80px 90px 1fr 100px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    grid-template-columns: 120px 80px 90px 80px 1fr 120px 90px 100px;
+    grid-template-columns: 1fr 80px 90px 80px 1fr 100px 90px 100px;
   }
 `;
 
@@ -556,6 +556,12 @@ function TableSkeleton() {
     <SkeletonTable>
       {Array.from({ length: 5 }, (_, i) => (
         <SkeletonRow key={i}>
+          <Skeleton width="100%" height={16} />
+          <Skeleton width="100%" height={16} />
+          <Skeleton width="100%" height={16} />
+          <Skeleton width="100%" height={16} />
+          <Skeleton width="100%" height={16} />
+          <Skeleton width="100%" height={16} />
           <Skeleton width="100%" height={16} />
           <Skeleton width="100%" height={16} />
         </SkeletonRow>

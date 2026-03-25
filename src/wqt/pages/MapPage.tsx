@@ -82,8 +82,7 @@ const FilterChipsContainer = styled.div`
 `;
 
 const FilterChip = styled.button<{ active: boolean }>`
-  padding: 8px 16px;
-  min-height: 36px;
+  padding: 6px 14px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   border: 1px solid ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : (props.theme.colors?.border || '#E2E4E9')};
   background: ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : (props.theme.colors?.surface || 'white')};
@@ -108,8 +107,7 @@ const ViewToggle = styled.div`
 `;
 
 const ViewButton = styled.button<{ active: boolean }>`
-  padding: 8px 20px;
-  min-height: 36px;
+  padding: 6px 16px;
   border: none;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   background: ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : 'transparent'};
