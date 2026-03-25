@@ -381,6 +381,7 @@ export default function SiteDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mapsApiKey, setMapsApiKey] = useState(ENV_MAPS_KEY || null);
+  const [mapKeyFailed, setMapKeyFailed] = useState(false);
 
   // Resolve Google Maps API key: env var first, then backend fallback
   useEffect(() => {
@@ -389,9 +390,10 @@ export default function SiteDetailPage() {
     MapsAPI.getKey()
       .then((key) => {
         if (!cancelled && key) setMapsApiKey(key);
+        else if (!cancelled) setMapKeyFailed(true);
       })
       .catch(() => {
-        // silently fail — map section will show a fallback message
+        if (!cancelled) setMapKeyFailed(true);
       });
     return () => { cancelled = true; };
   }, []);
@@ -597,7 +599,19 @@ export default function SiteDetailPage() {
           <MapContainer>
             {!mapsApiKey ? (
               <MapLoading>
-                <div>Loading map...</div>
+                {mapKeyFailed ? (
+                  <>
+                    <div style={{ fontSize: 24, marginBottom: 4 }}>🗺️</div>
+                    <div>Map unavailable</div>
+                    <div style={{ fontSize: 12, color: '#9ca3af' }}>
+                      {site?.coordinates
+                        ? `${site.coordinates.lat.toFixed(4)}, ${site.coordinates.lng.toFixed(4)}`
+                        : 'No location data'}
+                    </div>
+                  </>
+                ) : (
+                  <div>Loading map...</div>
+                )}
               </MapLoading>
             ) : (
               <LoadScript googleMapsApiKey={mapsApiKey} loadingElement={<MapLoading><div>Loading map...</div></MapLoading>}>

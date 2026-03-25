@@ -29,9 +29,14 @@ const VITE_ENV_VARS = [
   // The Things Network (TTN)
   'VITE_TTN_API_KEY',
   'VITE_TTN_APP_ID',
+  // Analytics
+  'VITE_GA4_MEASUREMENT_ID',
   // Build metadata
   'VITE_BUILD_VERSION',
   'VITE_DEBUG',
+  // Feature flags
+  'VITE_SHOW_DEMO_TOGGLE',
+  'VITE_USE_MOCK_API',
 ];
 
 // Handle common typos/variations in env var names
