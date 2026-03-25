@@ -7,22 +7,20 @@ import { isSalesMode, isCloudMode } from "../../../utils/modeDetection";
 const StyledFooter = styled.footer`
   max-width: 1000px;
   margin: 0 auto;
-  text-align: center;
 
   .footer-top {
-    display: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || '#F0F1F3'};
   }
 
   @media (min-width: 648px) {
-    text-align: left;
-
     .footer-top {
-      display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 32px;
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || '#F0F1F3'};
     }
   }
 
@@ -31,12 +29,12 @@ const StyledFooter = styled.footer`
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
   }
 
   .rights-reserved {
-    color: ${({ theme }) => theme.colors.ui600};
-    font-size: 12px;
+    color: ${({ theme }) => theme.colors?.ui600 || theme.colors?.textSecondary || '#6B7280'};
+    font-size: 13px;
     font-weight: 500;
   }
 
@@ -48,9 +46,14 @@ const StyledFooter = styled.footer`
   }
 
   a {
-    color: ${({ theme }) => theme.colors.primary500};
-    font-size: 12px;
+    color: ${({ theme }) => theme.colors?.primary || theme.colors?.primary500 || '#0052CC'};
+    font-size: 13px;
     font-weight: 500;
+    text-decoration: none;
+    transition: color 150ms;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   .footer-col-title {
@@ -72,14 +75,23 @@ const StyledFooter = styled.footer`
   }
 
   .footer-col-links a {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
     text-decoration: none;
     transition: color 150ms;
+    padding: 4px 0;
 
     &:hover {
       color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
     }
   }
 `;
@@ -103,6 +115,34 @@ function Footer() {
 
   return (
     <StyledFooter>
+      {!isBlueSignalMode && (
+        <div className="footer-top">
+          <div>
+            <h4 className="footer-col-title">Marketplace</h4>
+            <ul className="footer-col-links">
+              <li><a href="/marketplace">Browse Credits</a></li>
+              <li><a href="/registry">Registry</a></li>
+              <li><a href="/map">Map</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="footer-col-title">Resources</h4>
+            <ul className="footer-col-links">
+              <li><a href="/how-it-works">How It Works</a></li>
+              <li><a href="/generate-credits">Generate Credits</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="footer-col-title">For</h4>
+            <ul className="footer-col-links">
+              <li><a href="/for-utilities">Utilities</a></li>
+              <li><a href="/for-homeowners">Homeowners</a></li>
+              <li><a href="/for-aggregators">Aggregators</a></li>
+            </ul>
+          </div>
+        </div>
+      )}
       <div className="footer-bottom">
         <span className="rights-reserved">
           {copyrightText}

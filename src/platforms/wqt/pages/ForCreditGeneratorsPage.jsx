@@ -180,6 +180,11 @@ const CodeBlock = styled.pre`
   overflow-x: auto;
   line-height: 1.6;
   margin: 24px 0;
+
+  @media (max-width: 640px) {
+    font-size: 12px;
+    padding: 16px;
+  }
 `;
 
 const FAQItem = styled.div`
