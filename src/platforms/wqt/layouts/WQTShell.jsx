@@ -53,7 +53,7 @@ const MainContent = styled.main`
   ${({ $appRoute }) => $appRoute && `
     /* Mobile: offset by bottom tabs height + safe area */
     @media (max-width: 767px) {
-      padding-bottom: ${TAB_BAR_HEIGHT}px;
+      padding-bottom: calc(${TAB_BAR_HEIGHT}px + env(safe-area-inset-bottom, 0px));
     }
 
     /* Tablet: offset by narrow sidebar */

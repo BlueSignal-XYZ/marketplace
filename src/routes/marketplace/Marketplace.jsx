@@ -19,20 +19,20 @@ const PageWrapper = styled.div`
 const MarketplaceShell = styled.main`
   flex: 1;
   width: 100%;
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 20px 16px 48px;
+  padding: 20px clamp(16px, 4vw, 32px) 48px;
   padding-bottom: calc(48px + ${safeAreaInsets.bottom});
   box-sizing: border-box;
 
   ${media.lg} {
-    padding: 32px 20px 64px;
+    padding: 32px clamp(20px, 4vw, 32px) 64px;
   }
 `;
 
 const HeaderBlock = styled.header`
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: clamp(24px, 5vw, 48px);
 
   h1 {
     margin: 0 0 12px;
@@ -47,24 +47,19 @@ const HeaderBlock = styled.header`
     font-size: 15px;
     line-height: 1.6;
     color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
-    max-width: 600px;
+    max-width: clamp(280px, 80vw, 600px);
     margin: 0 auto;
-  }
-
-  ${media.lg} {
-    margin-bottom: 48px;
   }
 `;
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: clamp(12px, 2vw, 20px);
   margin-bottom: 24px;
 
-  ${media.lg} {
+  ${media.md} {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
     margin-bottom: 32px;
   }
 
@@ -77,7 +72,7 @@ const Card = styled.div`
   background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   border-radius: 12px;
-  padding: 16px;
+  padding: clamp(16px, 3vw, 24px);
   cursor: pointer;
   transition: all 0.15s ease-out;
   display: flex;
@@ -85,9 +80,9 @@ const Card = styled.div`
   gap: 8px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  min-width: 0;
 
   ${media.lg} {
-    padding: 24px;
     border-radius: 16px;
   }
 
@@ -199,49 +194,58 @@ const QuickActionsRow = styled.div`
   gap: 12px;
   margin-bottom: 32px;
 
-  @media (max-width: 600px) {
+  ${media.mobileOnly} {
     flex-direction: column;
+    align-items: stretch;
   }
 `;
 
 const PrimaryButton = styled(Link)`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
   color: #ffffff;
   border: none;
   border-radius: 8px;
   padding: 12px 24px;
+  min-height: 44px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.15s ease-out;
 
-  &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  ${media.mouse} {
+    &:hover {
+      background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
   }
 `;
 
 const SecondaryActionButton = styled(Link)`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: #ffffff;
   color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
   border: 1px solid ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
   border-radius: 8px;
   padding: 12px 24px;
+  min-height: 44px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.15s ease-out;
 
-  &:hover {
-    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2fe"};
-    transform: translateY(-1px);
+  ${media.mouse} {
+    &:hover {
+      background: ${({ theme }) => theme.colors?.primary50 || "#e0f2fe"};
+      transform: translateY(-1px);
+    }
   }
 `;
 

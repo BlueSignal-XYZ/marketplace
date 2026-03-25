@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const Page = styled.main`
   width: 100%;
-  min-height: calc(100vh - 72px);
-  padding: 24px 16px 48px;
+  min-height: calc(100vh - 56px);
+  padding: 24px 16px calc(48px + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;
   background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
 
@@ -14,7 +14,7 @@ const Page = styled.main`
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
-    padding: 32px 48px 64px;
+    padding: 32px clamp(24px, 4vw, 48px) 64px;
   }
 `;
 
@@ -118,7 +118,7 @@ const ActionBar = styled.div`
 
     > * {
       flex: 1;
-      min-width: 140px;
+      min-width: 0;
     }
   }
 `;

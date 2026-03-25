@@ -9,6 +9,8 @@ import { useAppContext } from "../../../context/AppContext";
 import { CreditsMarketplaceAPI } from "../../../scripts/back_door";
 import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
 import { Input } from "../../shared/input/Input";
+import { creditTypeColors } from "../../../styles/colors";
+import { connectAndSign, hasWalletProvider, getConnectedAddress } from "../../../shared/utils/wallet";
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -308,6 +310,18 @@ const PaymentMethodDesc = styled.div`
   margin-top: 4px;
 `;
 
+const CreditTypeBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: ${({ $creditType }) => creditTypeColors[$creditType]?.bg || "#f3f4f6"};
+  color: ${({ $creditType }) => creditTypeColors[$creditType]?.text || "#374151"};
+  border: 1px solid ${({ $creditType }) => creditTypeColors[$creditType]?.border || "#d1d5db"};
+`;
+
 /* -------------------------------------------------------------------------- */
 /*                              MAIN COMPONENT                                */
 /* -------------------------------------------------------------------------- */
@@ -324,6 +338,18 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
   const [quantity, setQuantity] = useState(listing?.minimumPurchase || 1);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [orderResult, setOrderResult] = useState(null);
+  const [walletAddress, setWalletAddress] = useState(null);
+  const [walletConnecting, setWalletConnecting] = useState(false);
+
+  // Check for existing wallet connection on mount
+  useEffect(() => {
+    getConnectedAddress().then((addr) => {
+      if (addr) setWalletAddress(addr);
+    });
+  }, []);
+
+  const truncateAddress = (addr) =>
+    addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
 
   const pricePerUnit = listing?.pricePerUnit || 0;
   const subtotal = quantity * pricePerUnit;
@@ -335,7 +361,26 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
     setQuantity(num);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (step === 2 && paymentMethod === "crypto") {
+      if (!hasWalletProvider()) {
+        setError("MetaMask is not installed. Please install MetaMask to pay with cryptocurrency.");
+        return;
+      }
+      if (!walletAddress) {
+        setWalletConnecting(true);
+        setError(null);
+        try {
+          const { address } = await connectAndSign();
+          setWalletAddress(address);
+        } catch (err) {
+          setError(err.message || "Failed to connect wallet. Please try again.");
+          setWalletConnecting(false);
+          return;
+        }
+        setWalletConnecting(false);
+      }
+    }
     if (step < 3) {
       setStep((prev) => prev + 1);
     }
@@ -357,6 +402,7 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
         buyerId: user?.uid,
         quantity,
         paymentMethod,
+        ...(paymentMethod === "crypto" && walletAddress ? { walletAddress } : {}),
       });
 
       setOrderResult(result);
@@ -412,9 +458,11 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
               <ListingInfo>
                 <ListingTitle>{listing?.title || "Credit Listing"}</ListingTitle>
                 <ListingMeta>
-                  <span>
-                    {listing?.creditType?.replace("_", " ").toUpperCase() || "Credits"}
-                  </span>
+                  <CreditTypeBadge $creditType={listing?.creditType}>
+                    {listing?.creditType
+                      ? listing.creditType.charAt(0).toUpperCase() + listing.creditType.slice(1)
+                      : "Credits"}
+                  </CreditTypeBadge>
                   <span>
                     ${pricePerUnit.toFixed(2)}/{listing?.unit || "kg"}
                   </span>
@@ -510,7 +558,9 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
                     Cryptocurrency
                   </PaymentMethodTitle>
                   <PaymentMethodDesc>
-                    Pay with USDC or other supported tokens
+                    {walletAddress
+                      ? `Wallet connected: ${truncateAddress(walletAddress)}`
+                      : "Connect wallet to pay with USDC or other supported tokens"}
                   </PaymentMethodDesc>
                 </PaymentMethodCard>
               </FormGroup>
@@ -542,8 +592,13 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
               <div style={{ marginBottom: 16 }}>
                 <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
                   <span>Credits</span>
-                  <span>
-                    {quantity} {listing?.unit} {listing?.creditType}
+                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    {quantity} {listing?.unit}
+                    <CreditTypeBadge $creditType={listing?.creditType}>
+                      {listing?.creditType
+                        ? listing.creditType.charAt(0).toUpperCase() + listing.creditType.slice(1)
+                        : "Credits"}
+                    </CreditTypeBadge>
                   </span>
                 </PriceRow>
                 <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
@@ -556,6 +611,14 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
                     {paymentMethod === "ach" ? "Bank Transfer" : paymentMethod}
                   </span>
                 </PriceRow>
+                {paymentMethod === "crypto" && walletAddress && (
+                  <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
+                    <span>Wallet</span>
+                    <span style={{ fontFamily: "monospace", fontSize: 13 }}>
+                      {truncateAddress(walletAddress)}
+                    </span>
+                  </PriceRow>
+                )}
               </div>
 
               <PriceSummary>
@@ -620,7 +683,13 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
           {step === 2 && (
             <>
               <ButtonSecondary onClick={handleBack}>Back</ButtonSecondary>
-              <ButtonPrimary onClick={handleNext}>Review Order</ButtonPrimary>
+              <ButtonPrimary onClick={handleNext} disabled={walletConnecting}>
+                {walletConnecting
+                  ? "Connecting Wallet..."
+                  : paymentMethod === "crypto" && !walletAddress
+                  ? "Connect Wallet & Review"
+                  : "Review Order"}
+              </ButtonPrimary>
             </>
           )}
 
