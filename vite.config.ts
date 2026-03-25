@@ -95,6 +95,10 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: input,
         output: {
+          // Explicit filename patterns to ensure consistent chunk naming
+          entryFileNames: 'assets/[name]-[hash].js',
+          chunkFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash][extname]',
           // Landing page uses a minimal Firebase set (Firestore only for lead capture)
           manualChunks: buildTarget === 'landing'
             ? { vendor: ['react', 'react-dom'] }
