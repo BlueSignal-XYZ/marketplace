@@ -132,7 +132,6 @@ const DetailValue = styled.div`
 const FILTER_OPTIONS = [
   { value: 'all', label: 'All Credits' },
   { value: 'qc', label: 'AWG Credits' },
-  { value: 'kc', label: 'AWG+ Credits' },
   { value: 'nitrogen', label: 'Nitrogen' },
   { value: 'phosphorus', label: 'Phosphorus' },
 ];
@@ -146,7 +145,6 @@ function creditTypeBadge(type: string) {
   };
   const labels: Record<string, string> = {
     qc: 'AWG',
-    kc: 'AWG+',
     nitrogen: 'Nitrogen',
     phosphorus: 'Phosphorus',
   };

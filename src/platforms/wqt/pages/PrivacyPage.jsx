@@ -110,7 +110,7 @@ export default function PrivacyPage() {
           <P><strong>Cookies and Local Storage:</strong> Firebase session cookies for authentication, session storage for user state persistence, and analytics cookies if enabled for Platform improvement. We do not use third-party advertising cookies or tracking pixels.</P>
 
           <H2>3. How We Use Your Information</H2>
-          <P>We use your information to: operate and maintain the Platform and your account; process credit transactions, calculate rebates, and facilitate settlements; verify water production and quality data through our three-layer verification system; generate, validate, and issue nutrient credits (AWG and AWG+ credits); communicate about your account, transactions, and Platform updates; improve Platform functionality, reliability, and user experience; comply with legal and regulatory obligations; detect, prevent, and investigate fraud, unauthorized access, or other prohibited activities.</P>
+          <P>We use your information to: operate and maintain the Platform and your account; process credit transactions, calculate rebates, and facilitate settlements; verify water production and quality data through our three-layer verification system; generate, validate, and issue nutrient credits (AWG credits); communicate about your account, transactions, and Platform updates; improve Platform functionality, reliability, and user experience; comply with legal and regulatory obligations; detect, prevent, and investigate fraud, unauthorized access, or other prohibited activities.</P>
 
           <H2>4. How We Share Your Information</H2>
           <P>We do not sell your personal information. We may share data with the following categories of recipients:</P>

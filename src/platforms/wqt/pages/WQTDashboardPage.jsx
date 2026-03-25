@@ -541,10 +541,6 @@ export function WQTDashboardPage() {
             <BreakdownLabel>AWG Balance</BreakdownLabel>
             <BreakdownValue>{qcCredits.toLocaleString()} credits</BreakdownValue>
           </BreakdownItem>
-          <BreakdownItem>
-            <BreakdownLabel>AWG+ Balance</BreakdownLabel>
-            <BreakdownValue>{kcCredits.toLocaleString()} credits</BreakdownValue>
-          </BreakdownItem>
           {pendingCredits > 0 && (
             <BreakdownItem>
               <BreakdownLabel>Pending</BreakdownLabel>

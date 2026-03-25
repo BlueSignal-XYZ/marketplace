@@ -297,16 +297,6 @@ export default function HowItWorksPage() {
               </CardDesc>
             </Card>
             <Card>
-              <CardTitle>AWG+ Credits (Enhanced Quality)</CardTitle>
-              <CardDesc>
-                Issued when a project measurably improves the chemical or biological quality
-                of a discharge or water body. Algae remediation, advanced filtration, and
-                treatment system upgrades that reduce contaminant concentrations generate AWG+
-                credits. One AWG+ credit represents one verified unit of quality improvement
-                measured against baseline conditions.
-              </CardDesc>
-            </Card>
-            <Card>
               <CardTitle>Nitrogen Credits</CardTitle>
               <CardDesc>
                 Issued specifically for reductions in total nitrogen (TN) loading. Agricultural

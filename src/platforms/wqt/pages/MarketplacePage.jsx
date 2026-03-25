@@ -463,10 +463,10 @@ function VerificationBadge({ level }) {
 }
 
 function NutrientBadge({ type }) {
-  const label = type === 'nitrogen' ? 'AWG Credit' : type === 'phosphorus' ? 'AWG+ Credit' : 'AWG Credits';
+  const label = 'AWG Credit';
   return (
-    <Badge variant={type === 'nitrogen' ? 'info' : 'positive'} size="sm" aria-label={label}>
-      {type === 'nitrogen' ? 'AWG' : type === 'phosphorus' ? 'AWG+' : 'AWG'}
+    <Badge variant="info" size="sm" aria-label={label}>
+      AWG
     </Badge>
   );
 }
@@ -542,7 +542,6 @@ const FILTER_CONFIGS = [
     label: 'Credit Type',
     options: [
       { value: 'nitrogen', label: 'AWG' },
-      { value: 'phosphorus', label: 'AWG+' },
       { value: 'combined', label: 'Combined' },
     ],
   },
@@ -564,7 +563,6 @@ const PER_PAGE = 20;
 const CREDIT_TYPES = [
   { value: '', label: 'All' },
   { value: 'nitrogen', label: 'AWG' },
-  { value: 'phosphorus', label: 'AWG+' },
 ];
 
 // ── Loading skeleton ──────────────────────────────────────
@@ -635,12 +633,6 @@ function OrderPanel() {
               onClick={() => setCreditType('nitrogen')}
             >
               AWG
-            </CreditTab>
-            <CreditTab
-              $active={creditType === 'phosphorus'}
-              onClick={() => setCreditType('phosphorus')}
-            >
-              AWG+
             </CreditTab>
           </CreditTabs>
         </OrderFieldGroup>
@@ -839,9 +831,7 @@ export function MarketplacePage() {
     }
 
     const nChange = marketStats.nitrogenPriceChange24h ?? 0;
-    const pChange = marketStats.phosphorusPriceChange24h ?? 0;
     const nPositive = nChange >= 0;
-    const pPositive = pChange >= 0;
 
     return (
       <MarketBanner>
@@ -851,17 +841,6 @@ export function MarketplacePage() {
           <StatChange $positive={nPositive}>
             {nPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
             {Math.abs(nChange).toFixed(1)}%
-          </StatChange>
-        </MarketStat>
-
-        <StatDivider />
-
-        <MarketStat>
-          <StatLabel>AWG+</StatLabel>
-          <StatValue>${(marketStats.avgPhosphorusPrice ?? 0).toFixed(2)}</StatValue>
-          <StatChange $positive={pPositive}>
-            {pPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-            {Math.abs(pChange).toFixed(1)}%
           </StatChange>
         </MarketStat>
 
