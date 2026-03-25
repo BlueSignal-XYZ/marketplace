@@ -1,81 +1,51 @@
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import { motion } from "framer-motion";
 import {
   EventData,
   ProducersData,
   AccountSearch,
   Line,
 } from "../elements/index";
-import { colors } from "../../data/styles";
 import { NUMBERS } from "../../scripts/helpers";
 import { NPCCreditsAPI } from "../../scripts/back_door";
 import useFetchNPCCreditEvents from "../../hooks/useFetchNPCCreditEvents";
+import { media, safeAreaInsets } from "../../styles/breakpoints";
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
+/* -------------------------------------------------------------------------- */
+/*                              STYLED COMPONENTS                             */
+/* -------------------------------------------------------------------------- */
 
-const breakpoints = [576, 768, 992, 1200];
-
-// Custom hook to target the breakpoints for responsiveness
-const useMediaQuery = (width) => {
-  const [targetReached, setTargetReached] = useState(false);
-
-  useEffect(() => {
-    const updateTarget = () => {
-      if (window.innerWidth < width) {
-        setTargetReached(true);
-      } else {
-        setTargetReached(false);
-      }
-    };
-    updateTarget();
-    window.addEventListener("resize", updateTarget);
-    return () => window.removeEventListener("resize", updateTarget);
-  }, [width]);
-
-  return targetReached;
-};
-
-const Container = styled(motion.div)`
+const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   width: 100%;
-  max-width: 960px;
+  max-width: 1280px;
   min-height: 100%;
-  animation: ${fadeIn} 0.5s ease-in-out;
-  transition: 0.5s ease-in-out;
-  overflow-y: auto;
-  overflow-x: hidden;
   box-sizing: border-box;
 `;
 
-const Content = styled(motion.div).attrs(() => ({
-  initial: "hidden",
-  variants: fadeIn,
-}))`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 24px 20px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  padding: 20px 16px;
+  padding-bottom: calc(48px + ${safeAreaInsets.bottom});
   box-sizing: border-box;
 
-  @media (max-width: 768px) {
-    padding: 20px 16px;
+  ${media.lg} {
+    padding: 32px clamp(20px, 4vw, 32px) 64px;
   }
 `;
 
 const Heading = styled.h1`
-  font-size: ${(props) => (props.isSmallScreen ? "16px" : "24px")};
-  font-weight: bold;
+  font-size: clamp(16px, 4vw, 24px);
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  margin: 0;
+  letter-spacing: -0.01em;
 `;
 
 const DynamicList = styled.div`
@@ -86,108 +56,139 @@ const DynamicList = styled.div`
 
 const Heading2 = styled.h2`
   width: 100%;
-  font-size: 1.5em;
-  font-weight: bold;
+  font-size: clamp(1em, 3vw, 1.5em);
+  font-weight: 700;
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
   margin-bottom: 20px;
-  @media (max-width: ${breakpoints[1]}px) {
-    font-size: 1.2em;
-  }
-  @media (max-width: ${breakpoints[0]}px) {
-    font-size: 1em;
-  }
+  color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+`;
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  box-shadow: ${({ theme }) => theme.shadows?.sm || "0 1px 3px rgba(0,0,0,0.1)"};
 `;
 
 const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  border-radius: 8px;
-  margin: 0 auto;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  min-width: 320px;
 `;
 
 const StyledTh = styled.th`
   padding: 12px 16px;
-  background: #0B1120;
-  color: white;
+  background: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  color: #ffffff;
   text-align: left;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+
+  ${media.mobileOnly} {
+    padding: 10px 12px;
+  }
 `;
 
 const StyledTd = styled.td`
   padding: 12px 16px;
-  border-bottom: 1px solid #e2e4e9;
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   font-size: 14px;
+  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+
+  ${media.mobileOnly} {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
 `;
 
-const LoadingAnimation = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 `;
 
 const LoadingSpinner = styled.div`
   display: inline-block;
-  margin: auto;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #568ca9;
+  margin: 64px auto;
+  border: 3px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-left-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: ${LoadingAnimation} 0.8s infinite linear;
+  width: 24px;
+  height: 24px;
+  animation: ${spin} 0.8s infinite linear;
 `;
 
 const MessageContainer = styled.div`
   position: fixed;
   bottom: 30px;
-  right: 10px;
+  right: 16px;
   z-index: 999;
   display: flex;
   align-items: center;
-  background-color: ${({ type }) => (type === "error" ? "#ff9a9a" : "#d8f5e9")};
-  color: ${({ type }) => (type === "error" ? "#ff0000" : "#00b800")};
-  padding: 10px 20px;
-  border-radius: 4px;
-  box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.25);
+  gap: 12px;
+  background: ${({ type, theme }) =>
+    type === "error"
+      ? theme.colors?.red50 || "#fef2f2"
+      : theme.colors?.success50 || "#ecfdf5"};
+  color: ${({ type, theme }) =>
+    type === "error"
+      ? theme.colors?.red700 || "#b91c1c"
+      : theme.colors?.success700 || "#047857"};
+  border: 1px solid ${({ type, theme }) =>
+    type === "error"
+      ? theme.colors?.red200 || "#fecaca"
+      : theme.colors?.success200 || "#a7f3d0"};
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: ${({ theme }) => theme.shadows?.lg || "0 10px 15px -3px rgba(0,0,0,0.1)"};
+  font-size: 14px;
+  max-width: calc(100vw - 32px);
 `;
 
 const CloseButton = styled.button`
-  margin-left: 10px;
-  background-color: transparent;
+  background: transparent;
   border: none;
-  color: ${({ type }) => (type === "error" ? "#ff0000" : "#00b800")};
+  color: inherit;
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s ease-out;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
 `;
 
 const AccountSearchButton = styled.button`
-  border-radius: 10px;
-  backdrop-filter: blur(20px);
-  padding: 10px;
-  border: 1px solid #333;
-  background: #222;
-  color: white;
-  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 8px;
+  padding: 8px 16px;
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: #ffffff;
+  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.15s ease-out;
+  min-height: 44px;
 
   &:hover {
-    scale: 1.1;
+    background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
   }
 
-  @media (max-width: 600px) {
-    font-size: 10px;
-    padding: 5px;
+  &:active {
+    transform: scale(0.97);
+  }
+
+  ${media.mobileOnly} {
+    font-size: 13px;
+    padding: 6px 12px;
   }
 `;
 
@@ -199,18 +200,27 @@ const FixedTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  border-bottom: 1px solid #e2e4e9;
-  padding: 0 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  padding: 0 16px;
+  box-shadow: ${({ theme }) => theme.shadows?.xs || "0 1px 2px rgba(0,0,0,0.05)"};
   box-sizing: border-box;
   z-index: 10;
-  border-radius: 8px 8px 0 0;
+  border-radius: 12px 12px 0 0;
   margin-bottom: 24px;
+
+  ${media.lg} {
+    padding: 0 20px;
+  }
 `;
 
-/******************** Caching **********************/
-// Helper function to check if cache is stale
+/* -------------------------------------------------------------------------- */
+/*                                  CACHING                                   */
+/* -------------------------------------------------------------------------- */
+
 const isCacheStale = (key, expiryTime) => {
   const cachedItem = localStorage.getItem(key);
   if (!cachedItem) return true;
@@ -219,11 +229,13 @@ const isCacheStale = (key, expiryTime) => {
   return Date.now() - timestamp > expiryTime;
 };
 
-const cacheExpiryTime = 600000; // Cache expiration time set to 10 minutes
+const cacheExpiryTime = 600000; // 10 minutes
+
+/* -------------------------------------------------------------------------- */
+/*                              MAIN COMPONENT                                */
+/* -------------------------------------------------------------------------- */
 
 function ExplorerPage() {
-  const isSmallScreen = useMediaQuery(768);
-
   const [data, setData] = useState([]);
   const [producers, setProducers] = useState(null);
   const [producersData, setProducersData] = useState(null);
@@ -473,35 +485,35 @@ function ExplorerPage() {
 
   return (
     <Container>
-      <Content animate="visible">
+      <Content>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <>
             <FixedTitle>
-              <Heading isSmallScreen={isSmallScreen}>
-                - Credit Registry -
-              </Heading>
+              <Heading>Credit Registry</Heading>
               <AccountSearchButton onClick={handleAccountSearchToggle}>
                 Account Search
               </AccountSearchButton>
             </FixedTitle>
-            <StyledTable>
-              <thead>
-                <tr>
-                  <StyledTh>Data</StyledTh>
-                  <StyledTh>Value</StyledTh>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <StyledTd>{item.label}</StyledTd>
-                    <StyledTd>{item.value}</StyledTd>
+            <TableWrapper>
+              <StyledTable>
+                <thead>
+                  <tr>
+                    <StyledTh>Data</StyledTh>
+                    <StyledTh>Value</StyledTh>
                   </tr>
-                ))}
-              </tbody>
-            </StyledTable>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index}>
+                      <StyledTd>{item.label}</StyledTd>
+                      <StyledTd>{item.value}</StyledTd>
+                    </tr>
+                  ))}
+                </tbody>
+              </StyledTable>
+            </TableWrapper>
             <DynamicList>
               <Heading2>Farmers</Heading2>
               <Line width={"100%"} />

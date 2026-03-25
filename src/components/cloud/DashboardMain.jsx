@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Page = styled.main`
   width: 100%;
-  min-height: calc(100vh - 72px); /* subtract header */
+  min-height: calc(100vh - 56px);
   padding: 32px 20px 48px;
   box-sizing: border-box;
 
@@ -14,7 +14,7 @@ const Page = styled.main`
   background: ${({ theme }) => theme.colors?.bg || "#fafafa"};
 
   @media (max-width: 600px) {
-    padding: 20px 16px 40px;
+    padding: 20px 16px calc(40px + env(safe-area-inset-bottom, 0px));
   }
 `;
 
