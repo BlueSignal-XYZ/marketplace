@@ -60,6 +60,10 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Section = styled.section`
@@ -98,6 +102,7 @@ const SkeletonGrid = styled.div`
   gap: 16px;
   margin-bottom: 32px;
   @media (max-width: 640px) { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 380px) { grid-template-columns: 1fr; }
 `;
 
 function PortfolioSkeleton() {

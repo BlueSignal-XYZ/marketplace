@@ -714,13 +714,6 @@ export function WQTProfilePage() {
             compact
           />
           <DataCard
-            label="AWG+ Credits"
-            value={kcBalance.toLocaleString()}
-            unit="kg"
-            icon={<Wallet size={14} />}
-            compact
-          />
-          <DataCard
             label="Pending Verification"
             value={pendingCredits.toLocaleString()}
             unit="kg"

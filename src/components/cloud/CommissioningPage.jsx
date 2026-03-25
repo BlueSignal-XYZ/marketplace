@@ -173,9 +173,9 @@ const SignalBar = styled.div`
 const ActionButton = styled.button`
   padding: 8px 16px;
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
-  background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
-  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  background: ${({ theme }) => theme.colors?.primaryLight || "#E8F0FE"};
+  color: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
@@ -183,7 +183,7 @@ const ActionButton = styled.button`
   min-height: 48px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary100 || "#bae6fd"};
+    background: ${({ theme }) => theme.colors?.hover || "rgba(0, 102, 255, 0.08)"};
   }
 
   &:disabled {
@@ -315,13 +315,13 @@ const ModalButton = styled.button`
   border: none;
   min-height: 48px;
 
-  ${({ $variant }) =>
+  ${({ $variant, theme }) =>
     $variant === "primary"
       ? `
-    background: #06b6d4;
+    background: ${theme?.colors?.primary || "#0066FF"};
     color: #ffffff;
     &:hover {
-      background: #0891b2;
+      background: ${theme?.colors?.primaryDark || "#004DCC"};
     }
   `
       : `
@@ -464,7 +464,7 @@ const StartNewButton = styled.button`
   padding: 12px 24px;
   border-radius: 8px;
   border: none;
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  background: ${({ theme }) => theme.colors?.primary || "#0066FF"};
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
@@ -473,9 +473,9 @@ const StartNewButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    background: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
   }
 
   &:active {

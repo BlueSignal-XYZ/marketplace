@@ -126,6 +126,10 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 const Section = styled.section`

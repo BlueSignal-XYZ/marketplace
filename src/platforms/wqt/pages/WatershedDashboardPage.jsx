@@ -12,6 +12,10 @@ const Page = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: 32px 24px;
+
+  @media (max-width: 640px) {
+    padding: 20px 16px;
+  }
 `;
 
 const Title = styled.h1`
@@ -34,6 +38,10 @@ const StatsRow = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const WatershedCard = styled.div`
@@ -44,6 +52,10 @@ const WatershedCard = styled.div`
   cursor: pointer;
   transition: all 0.15s;
   &:hover { border-color: ${({ theme }) => theme.colors.primary}; }
+
+  @media (max-width: 640px) {
+    padding: 20px;
+  }
 `;
 
 const WatershedName = styled.h3`
@@ -66,6 +78,10 @@ const WGrid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const DetailSection = styled.div`

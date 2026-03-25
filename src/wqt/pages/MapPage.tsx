@@ -736,9 +736,6 @@ export function MapPage() {
             <FilterChip active={filterType === 'qc'} onClick={() => setFilterType('qc')}>
               AWG Credits
             </FilterChip>
-            <FilterChip active={filterType === 'kc'} onClick={() => setFilterType('kc')}>
-              AWG+ Credits
-            </FilterChip>
             <FilterChip active={filterType === 'nitrogen'} onClick={() => setFilterType('nitrogen')}>
               Nitrogen
             </FilterChip>

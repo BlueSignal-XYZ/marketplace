@@ -35,7 +35,7 @@ const AppContainer = styled.div`
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
-  background: ${({ $dark, theme }) => $dark ? '#0B1120' : theme.colors.background};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const AppBody = styled.div`
