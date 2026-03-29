@@ -959,7 +959,7 @@ export default function CommissioningPage() {
               </h2>
               <p>Device ID: {viewingResult.device.id}</p>
               <p style={{ fontSize: "13px", marginTop: "8px" }}>
-                Commissioned: {new Date(viewingResult.result.completedAt).toLocaleString()}
+                Commissioned: {viewingResult.result?.completedAt ? new Date(viewingResult.result.completedAt).toLocaleString() : "Unknown"}
               </p>
             </ModalHeader>
 

@@ -393,9 +393,9 @@ const TransactionPage = () => {
     if (search) {
       const searchLower = search.toLowerCase();
       return (
-        tx.title.toLowerCase().includes(searchLower) ||
-        tx.description.toLowerCase().includes(searchLower) ||
-        tx.counterparty.toLowerCase().includes(searchLower)
+        (tx.title || "").toLowerCase().includes(searchLower) ||
+        (tx.description || "").toLowerCase().includes(searchLower) ||
+        (tx.counterparty || "").toLowerCase().includes(searchLower)
       );
     }
 

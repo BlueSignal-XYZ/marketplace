@@ -437,7 +437,7 @@ export default function CreateSitePage() {
               <LocationPreview>
                 <LocationLabel>Captured Coordinates</LocationLabel>
                 <LocationValue>
-                  {formData.location.latitude.toFixed(6)}, {formData.location.longitude.toFixed(6)}
+                  {formData.location?.latitude?.toFixed(6) ?? "—"}, {formData.location?.longitude?.toFixed(6) ?? "—"}
                 </LocationValue>
                 {formData.location.address && (
                   <>
