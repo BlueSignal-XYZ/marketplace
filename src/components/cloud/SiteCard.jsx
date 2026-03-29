@@ -147,8 +147,8 @@ export default function SiteCard({ site }) {
         </MetaRow>
         {site.coordinates && (
           <MetaRow>
-            <strong>Coordinates:</strong> {site.coordinates.lat.toFixed(4)},{" "}
-            {site.coordinates.lng.toFixed(4)}
+            <strong>Coordinates:</strong> {site.coordinates?.lat?.toFixed(4) ?? "—"},{" "}
+            {site.coordinates?.lng?.toFixed(4) ?? "—"}
           </MetaRow>
         )}
       </MetaInfo>

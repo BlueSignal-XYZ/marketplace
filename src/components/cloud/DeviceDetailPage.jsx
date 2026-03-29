@@ -731,8 +731,8 @@ export default function DeviceDetailPage() {
                 <strong>Type:</strong> {device.deviceType}
               </div>
               <div className="meta-item">
-                <strong>Coordinates:</strong> {device.coordinates.lat},{" "}
-                {device.coordinates.lng}
+                <strong>Coordinates:</strong> {device.coordinates?.lat ?? "—"},{" "}
+                {device.coordinates?.lng ?? "—"}
               </div>
             </MetaRow>
           </HeaderInfo>
@@ -1105,7 +1105,7 @@ export default function DeviceDetailPage() {
                 <InfoCard>
                   <div className="label">Coordinates</div>
                   <div className="value">
-                    {device.coordinates.lat}, {device.coordinates.lng}
+                    {device.coordinates?.lat ?? "—"}, {device.coordinates?.lng ?? "—"}
                   </div>
                 </InfoCard>
               </InfoGrid>
