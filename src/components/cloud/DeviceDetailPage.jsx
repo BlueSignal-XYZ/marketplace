@@ -1,5 +1,5 @@
 // /src/components/cloud/DeviceDetailPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { Line } from "react-chartjs-2";
@@ -448,8 +448,37 @@ const formatSensorLabel = (fieldName) => {
     conductivity: "Conductivity (µS/cm)",
     gps_lat: "GPS Latitude",
     gps_lng: "GPS Longitude",
+    temperature: "Temperature (°C)",
+    pH: "pH Level",
+    turbidity: "Turbidity (NTU)",
+    TDS: "TDS (ppm)",
+    ORP: "ORP (mV)",
   };
   return labels[fieldName] || fieldName;
+};
+
+// Normalize latestReadings: v2 API returns an array of {type, value, unit, timestamp},
+// but the old mock API returns a flat object {temp_c: 18.4, ph: 7.2, ...}.
+// This converts the array format to a flat object so existing rendering logic works.
+const normalizeReadings = (readings) => {
+  if (!readings) return null;
+  if (!Array.isArray(readings)) return readings;
+
+  const typeToField = {
+    temperature: "temp_c",
+    pH: "ph",
+    turbidity: "ntu",
+    TDS: "tds_ppm",
+    ORP: "orp_mv",
+    conductivity: "conductivity",
+  };
+
+  const flat = {};
+  for (const r of readings) {
+    const key = typeToField[r.type] || r.type;
+    flat[key] = r.value;
+  }
+  return flat;
 };
 
 export default function DeviceDetailPage() {
@@ -464,6 +493,12 @@ export default function DeviceDetailPage() {
   const [loadingChart, setLoadingChart] = useState(false);
   const [commissionResult, setCommissionResult] = useState(null);
   const [showAllTests, setShowAllTests] = useState(false);
+
+  // Normalize latestReadings to flat object format regardless of API version
+  const readings = useMemo(
+    () => normalizeReadings(device?.latestReadings),
+    [device?.latestReadings]
+  );
 
   useEffect(() => {
     loadDeviceData();
@@ -832,13 +867,13 @@ export default function DeviceDetailPage() {
                 </InfoCard>
               </InfoGrid>
 
-              {device.latestReadings && (
+              {readings && (
                 <>
                   <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
                     Latest Sensor Readings (from PGP)
                   </h3>
                   <InfoGrid>
-                    {Object.entries(device.latestReadings)
+                    {Object.entries(readings)
                       .filter(([key, value]) => value !== null) // Filter out null values (sensor not applicable)
                       .map(([key, value]) => (
                         <InfoCard key={key}>
@@ -951,9 +986,9 @@ export default function DeviceDetailPage() {
                 <Skeleton $height="300px" />
               ) : (
                 <>
-                  {device.latestReadings && (
+                  {readings && (
                     <>
-                      {device.latestReadings.temp_c !== null && (
+                      {readings.temp_c !== null && (
                         <ChartContainer>
                           <h4>Temperature (°C)</h4>
                           <div className="chart-wrapper">
@@ -969,7 +1004,7 @@ export default function DeviceDetailPage() {
                         </ChartContainer>
                       )}
 
-                      {device.latestReadings.ph !== null && (
+                      {readings.ph !== null && (
                         <ChartContainer>
                           <h4>pH Level</h4>
                           <div className="chart-wrapper">
@@ -981,7 +1016,7 @@ export default function DeviceDetailPage() {
                         </ChartContainer>
                       )}
 
-                      {device.latestReadings.ntu !== null && (
+                      {readings.ntu !== null && (
                         <ChartContainer>
                           <h4>Turbidity (NTU)</h4>
                           <div className="chart-wrapper">
@@ -997,7 +1032,7 @@ export default function DeviceDetailPage() {
                         </ChartContainer>
                       )}
 
-                      {device.latestReadings.tds_ppm !== null && (
+                      {readings.tds_ppm !== null && (
                         <ChartContainer>
                           <h4>Total Dissolved Solids (ppm)</h4>
                           <div className="chart-wrapper">
@@ -1013,7 +1048,7 @@ export default function DeviceDetailPage() {
                         </ChartContainer>
                       )}
 
-                      {device.latestReadings.conductivity != null && (
+                      {readings.conductivity != null && (
                         <ChartContainer>
                           <h4>Conductivity (µS/cm)</h4>
                           <div className="chart-wrapper">
@@ -1030,7 +1065,7 @@ export default function DeviceDetailPage() {
                       )}
 
                       {/* GPS Coordinates Display */}
-                      {(device.latestReadings.gps_lat != null || device.installation?.location) && (
+                      {(readings.gps_lat != null || device.installation?.location) && (
                         <div style={{
                           background: '#f8fafc',
                           borderRadius: '10px',
@@ -1043,11 +1078,11 @@ export default function DeviceDetailPage() {
                           <div style={{ display: 'flex', gap: '24px', fontSize: '15px', color: '#1e293b' }}>
                             <span>
                               <strong>Lat:</strong>{' '}
-                              {device.latestReadings.gps_lat ?? device.installation?.location?.lat ?? 'N/A'}
+                              {readings.gps_lat ?? device.installation?.location?.lat ?? 'N/A'}
                             </span>
                             <span>
                               <strong>Lng:</strong>{' '}
-                              {device.latestReadings.gps_lng ?? device.installation?.location?.lng ?? 'N/A'}
+                              {readings.gps_lng ?? device.installation?.location?.lng ?? 'N/A'}
                             </span>
                           </div>
                         </div>
@@ -1058,9 +1093,9 @@ export default function DeviceDetailPage() {
                   <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
                     Current Readings
                   </h3>
-                  {device.latestReadings && (
+                  {readings && (
                     <InfoGrid>
-                      {Object.entries(device.latestReadings)
+                      {Object.entries(readings)
                         .filter(([key, value]) => value !== null)
                         .map(([key, value]) => (
                           <InfoCard key={key}>
