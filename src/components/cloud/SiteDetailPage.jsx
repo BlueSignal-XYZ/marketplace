@@ -547,8 +547,8 @@ export default function SiteDetailPage() {
               <div className="value">{site.location}</div>
               {site.coordinates && (
                 <div className="subvalue">
-                  {site.coordinates.lat.toFixed(4)},{" "}
-                  {site.coordinates.lng.toFixed(4)}
+                  {site.coordinates?.lat?.toFixed(4) ?? "—"},{" "}
+                  {site.coordinates?.lng?.toFixed(4) ?? "—"}
                 </div>
               )}
             </InfoCard>
