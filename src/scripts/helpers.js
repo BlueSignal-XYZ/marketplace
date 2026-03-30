@@ -73,8 +73,9 @@ export const OBJECTS = {
 
 export const STRING = {
   toTitleCase: (str) => {
+    if (!str) return "";
     // Insert a space before all caps and trim the resulting string
-    return str
+    return String(str)
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, (str) => str.toUpperCase()) // Capitalize the first letter
       .trim();
@@ -97,6 +98,7 @@ export const TIME = {
 
 export const NUMBERS = {
   toNumber: (value) => {
+    if (value == null) return 0;
     try {
       return value.toNumber();
     } catch (e) {
@@ -104,7 +106,7 @@ export const NUMBERS = {
       return value;
     } else {
       // Handle other potential types (like string)
-      return parseInt(value, 10);
+      return parseInt(value, 10) || 0;
     }}
   },
   isValidAmount: (amount) => {
@@ -157,7 +159,8 @@ export const timestampToLocale = (timestamp) => {
 };
 
 export const handleViewCertificate = (id) => {
-    const URL = `${window.location.origin}/certificate?id=${id.toNumber()}`;
+    const numId = id?.toNumber?.() ?? id ?? 0;
+    const URL = `${window.location.origin}/certificate?id=${numId}`;
     window.open(URL, "_blank");
   };
 

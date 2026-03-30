@@ -207,8 +207,8 @@ export class VirginiaCreditCalculator {
    */
   calculateNutrientReduction(monitoringData, nutrientType, baselineLoad) {
     const readings = nutrientType === 'nitrogen'
-      ? monitoringData.nitrogenReadings
-      : monitoringData.phosphorusReadings;
+      ? (monitoringData.nitrogenReadings || [])
+      : (monitoringData.phosphorusReadings || []);
 
     if (readings.length === 0) {
       // No sensor data - use practice-based calculation

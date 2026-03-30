@@ -172,7 +172,7 @@ function GoogleStoreLocator({ storesData }) {
     } else {
       const filtered =
         stores.filter((store) =>
-          store.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
+          (store.name || "").toLowerCase().includes(searchTerm.toLowerCase().trim())
         );
       setFilteredStores(filtered);
     }

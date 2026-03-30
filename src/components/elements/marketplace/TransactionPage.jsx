@@ -469,10 +469,10 @@ const TransactionPage = () => {
                     <TransactionHeader>
                       <TransactionTitle>{tx.title}</TransactionTitle>
                       <TypeBadge type={tx.type}>
-                        {tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}
+                        {tx.type ? tx.type.charAt(0).toUpperCase() + tx.type.slice(1) : "—"}
                       </TypeBadge>
                       <StatusBadge status={tx.status}>
-                        {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
+                        {tx.status ? tx.status.charAt(0).toUpperCase() + tx.status.slice(1) : "—"}
                       </StatusBadge>
                     </TransactionHeader>
                     <TransactionDetails>

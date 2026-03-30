@@ -415,17 +415,20 @@ export const getInventorySummary = async () => {
     const bySku = {};
 
     for (const device of devices) {
+      const lifecycle = device.lifecycle || 'unknown';
+      const sku = device.sku || 'unknown';
+
       // Count by lifecycle
-      byLifecycle[device.lifecycle] = (byLifecycle[device.lifecycle] || 0) + 1;
+      byLifecycle[lifecycle] = (byLifecycle[lifecycle] || 0) + 1;
 
       // Count by SKU
-      if (!bySku[device.sku]) {
-        bySku[device.sku] = { total: 0, inventory: 0, allocated: 0, active: 0 };
+      if (!bySku[sku]) {
+        bySku[sku] = { total: 0, inventory: 0, allocated: 0, active: 0 };
       }
-      bySku[device.sku].total++;
-      if (device.lifecycle === 'inventory') bySku[device.sku].inventory++;
-      if (device.lifecycle === 'allocated') bySku[device.sku].allocated++;
-      if (device.lifecycle === 'active') bySku[device.sku].active++;
+      bySku[sku].total++;
+      if (lifecycle === 'inventory') bySku[sku].inventory++;
+      if (lifecycle === 'allocated') bySku[sku].allocated++;
+      if (lifecycle === 'active') bySku[sku].active++;
     }
 
     return {

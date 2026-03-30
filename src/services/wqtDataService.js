@@ -62,9 +62,9 @@ export const searchCredits = (credits, query) => {
   if (!query) return credits;
   const q = query.toLowerCase();
   return credits.filter(c =>
-    c.id.toLowerCase().includes(q) ||
-    c.projectName.toLowerCase().includes(q) ||
-    c.location.toLowerCase().includes(q)
+    (c.id || "").toLowerCase().includes(q) ||
+    (c.projectName || "").toLowerCase().includes(q) ||
+    (c.location || "").toLowerCase().includes(q)
   );
 };
 
