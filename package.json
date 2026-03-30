@@ -1,8 +1,29 @@
 {
   "name": "bluesignal-marketplace",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "React SPA with tri-mode architecture: marketplace, cloud dashboard, and hardware landing page",
+  "license": "BSL-1.1",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bluesignal-xyz/marketplace.git"
+  },
+  "homepage": "https://waterquality.trading",
+  "bugs": {
+    "url": "https://github.com/bluesignal-xyz/marketplace/issues"
+  },
+  "author": "BlueSignal <hello@bluesignal.xyz> (https://bluesignal.xyz)",
+  "keywords": [
+    "water-quality",
+    "marketplace",
+    "iot",
+    "react",
+    "firebase",
+    "blockchain",
+    "polygon",
+    "sensors",
+    "environmental"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "bash scripts/setup-env.sh && npm run build:wqt && npm run build:cloud && npm run build:landing",
