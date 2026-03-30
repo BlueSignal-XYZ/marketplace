@@ -392,10 +392,10 @@ export const completeCommission = async (commissionId) => {
     const now = new Date().toISOString();
 
     // Calculate overall result
-    const failedTests = commission.testResults.filter(t => t.status === 'failed');
+    const failedTests = (commission.testResults || []).filter(t => t.status === 'failed');
     const allTestsPassed = failedTests.length === 0;
-    const allPreDeploymentComplete = commission.preDeploymentChecks.every(c => c.completed);
-    const allCommissioningComplete = commission.commissioningChecks.every(c => c.completed);
+    const allPreDeploymentComplete = (commission.preDeploymentChecks || []).every(c => c.completed);
+    const allCommissioningComplete = (commission.commissioningChecks || []).every(c => c.completed);
 
     const passed = allTestsPassed && allPreDeploymentComplete && allCommissioningComplete;
     const status = passed ? 'passed' : 'failed';

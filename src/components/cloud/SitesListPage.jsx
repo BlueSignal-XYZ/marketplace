@@ -181,9 +181,9 @@ export default function SitesListPage() {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (s) =>
-          s.name.toLowerCase().includes(query) ||
-          s.customer.toLowerCase().includes(query) ||
-          s.location.toLowerCase().includes(query)
+          (s.name || "").toLowerCase().includes(query) ||
+          (s.customer || "").toLowerCase().includes(query) ||
+          ((typeof s.location === "string" ? s.location : s.location?.address) || "").toLowerCase().includes(query)
       );
     }
 

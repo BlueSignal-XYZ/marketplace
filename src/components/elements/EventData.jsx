@@ -207,10 +207,8 @@ function formatArgs(args) {
 }
 
 function formatValue(value) {
-  // if (value instanceof BigNumber) {
-  //   return value.toString();
-  // }
-  return value.toString().toUpperCase();
+  if (value == null) return "—";
+  return String(value).toUpperCase();
 }
 
 export default EventData;

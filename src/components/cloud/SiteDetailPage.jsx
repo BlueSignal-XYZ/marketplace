@@ -604,7 +604,7 @@ export default function SiteDetailPage() {
                     <div style={{ fontSize: 24, marginBottom: 4 }}>🗺️</div>
                     <div>Map unavailable</div>
                     <div style={{ fontSize: 12, color: '#9ca3af' }}>
-                      {site?.coordinates
+                      {site?.coordinates?.lat != null
                         ? `${site.coordinates.lat.toFixed(4)}, ${site.coordinates.lng.toFixed(4)}`
                         : 'No location data'}
                     </div>

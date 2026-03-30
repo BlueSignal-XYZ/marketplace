@@ -151,8 +151,8 @@ function GoogleStoreLocator({ storesData }) {
   const stores = storesData.Database.map((store) => ({
     name: store.CompanyName,
     location: {
-      lat: store.geometry?.coordinates[1],
-      lng: store.geometry?.coordinates[0],
+      lat: store.geometry?.coordinates?.[1],
+      lng: store.geometry?.coordinates?.[0],
     },
     website: store.Website,
     email: store.Email,
@@ -172,7 +172,7 @@ function GoogleStoreLocator({ storesData }) {
     } else {
       const filtered =
         stores.filter((store) =>
-          store.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
+          (store.name || "").toLowerCase().includes(searchTerm.toLowerCase().trim())
         );
       setFilteredStores(filtered);
     }

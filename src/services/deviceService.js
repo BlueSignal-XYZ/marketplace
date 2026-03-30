@@ -85,7 +85,7 @@ export const getNextSerialNumber = async () => {
 
     // Find the highest serial number
     Object.values(devices).forEach((device) => {
-      const serialNum = parseSerialNumber(device.serialNumber || device.id);
+      const serialNum = parseSerialNumber(device?.serialNumber || device?.id || "");
       if (serialNum > highestNum) {
         highestNum = serialNum;
       }
@@ -114,7 +114,7 @@ export const getNextSerialNumbers = async (count, prefix = SERIAL_PREFIX) => {
     if (snapshot.exists()) {
       const devices = snapshot.val();
       Object.values(devices).forEach((device) => {
-        const serialNum = parseSerialNumber(device.serialNumber || device.id);
+        const serialNum = parseSerialNumber(device?.serialNumber || device?.id || "");
         if (serialNum > highestNum) {
           highestNum = serialNum;
         }

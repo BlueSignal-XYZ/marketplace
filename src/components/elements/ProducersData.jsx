@@ -187,7 +187,7 @@ const ProducersData = ({ producersData }) => {
                   return (
                     <VerifierRow key={index}>
                       <CreditType>{supply.creditType}</CreditType>
-                      <Verifier>{verifierData.verifier.toUpperCase()}</Verifier>
+                      <Verifier>{verifierData.verifier?.toUpperCase() ?? "—"}</Verifier>
                       <AvailableNPC>{supply.issuedSupply}</AvailableNPC>
                       <SoldNPC>
                         {supply.availableSupply}

@@ -401,10 +401,10 @@ const Marketplace = () => {
 
                   <PriceRow>
                     <Price>
-                      ${listing.pricePerUnit.toLocaleString()}/{listing.unit}
+                      ${(listing.pricePerUnit ?? 0).toLocaleString()}/{listing.unit || "unit"}
                     </Price>
                     <Quantity>
-                      {listing.quantityAvailable.toLocaleString()} {listing.unit} available
+                      {(listing.quantityAvailable ?? 0).toLocaleString()} {listing.unit || "unit"} available
                     </Quantity>
                   </PriceRow>
                 </Card>

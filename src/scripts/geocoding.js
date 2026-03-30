@@ -14,7 +14,7 @@ export default async function getCoordinates(address, apiKey) {
     return fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        if (data.status === "OK") {
+        if (data.status === "OK" && data.results?.length > 0) {
           // Extract latitude and longitude
           const coordinates = {
             lat: data.results[0].geometry.location.lat,
