@@ -21,7 +21,7 @@ const MarketplaceShell = styled.main`
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 20px clamp(16px, 4vw, 32px) 48px;
+  padding: 20px clamp(20px, 4vw, 32px) 48px;
   padding-bottom: calc(48px + ${safeAreaInsets.bottom});
   box-sizing: border-box;
 

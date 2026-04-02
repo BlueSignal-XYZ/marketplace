@@ -31,7 +31,7 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 20px 16px;
+  padding: 20px clamp(20px, 4vw, 32px);
   padding-bottom: calc(48px + ${safeAreaInsets.bottom});
   box-sizing: border-box;
 
