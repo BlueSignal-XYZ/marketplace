@@ -15,7 +15,7 @@ const HeroWrapper = styled.section`
   }
 
   ${({ theme }) => theme.media.sm} {
-    padding-top: 100px;
+    padding-top: 90px;
   }
 `;
 
@@ -35,6 +35,10 @@ const Badge = styled.div`
 
   ${({ theme }) => theme.media.md} {
     margin-bottom: 24px;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 20px;
   }
 `;
 
@@ -57,6 +61,10 @@ const Headline = styled.h1`
   margin: 0 auto 24px;
   animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.25s both;
   text-wrap: balance;
+
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 16px;
+  }
 `;
 
 const GradientWord = styled.span`
@@ -83,6 +91,10 @@ const Subhead = styled.p`
 
   ${({ theme }) => theme.media.md} {
     margin-bottom: 32px;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 24px;
   }
 `;
 
@@ -188,6 +200,11 @@ const MobileVizWrapper = styled.div`
     max-width: 280px;
     margin: 0 auto 48px;
     animation: fadeUp 0.9s ${({ theme }) => theme.ease} 0.6s both;
+  }
+
+  ${({ theme }) => theme.media.sm} {
+    max-width: 260px;
+    margin-bottom: 32px;
   }
 `;
 
