@@ -818,7 +818,7 @@ export default function DeviceOnboardingWizard() {
                   onChange={(e) => handleInputChange("notes", e.target.value)}
                   maxLength={500}
                 />
-                <div className="hint">{formData.notes.length}/500 characters</div>
+                <div className="hint">{(formData.notes || "").length}/500 characters</div>
               </FormGroup>
             </>
           )}

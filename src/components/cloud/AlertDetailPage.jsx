@@ -376,7 +376,7 @@ export default function AlertDetailPage() {
             <div className="label">First Seen</div>
             <div className="value">{getRelativeTime(alert.firstSeen)}</div>
             <div className="subvalue">
-              {new Date(alert.firstSeen).toLocaleString()}
+              {alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : "—"}
             </div>
           </InfoCard>
 
@@ -384,7 +384,7 @@ export default function AlertDetailPage() {
             <div className="label">Last Seen</div>
             <div className="value">{getRelativeTime(alert.lastSeen)}</div>
             <div className="subvalue">
-              {new Date(alert.lastSeen).toLocaleString()}
+              {alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : "—"}
             </div>
           </InfoCard>
 

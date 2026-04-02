@@ -785,7 +785,7 @@ export default function FullCommissioningWizard() {
                 <SuccessMessage>
                   Location captured!
                   <div style={{ marginTop: 8, fontSize: 14 }}>
-                    {location.address || `${location.latitude}, ${location.longitude}`}
+                    {location.address || (location.latitude != null && location.longitude != null ? `${location.latitude}, ${location.longitude}` : "Location captured")}
                   </div>
                 </SuccessMessage>
               ) : (
@@ -950,7 +950,7 @@ export default function FullCommissioningWizard() {
                 <SummaryCard>
                   <SummaryLabel>Location</SummaryLabel>
                   <SummaryValue>
-                    {location?.address || (location ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}` : "N/A")}
+                    {location?.address || (location?.latitude != null && location?.longitude != null ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}` : "N/A")}
                   </SummaryValue>
                 </SummaryCard>
 

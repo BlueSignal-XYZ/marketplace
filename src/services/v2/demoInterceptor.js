@@ -211,7 +211,7 @@ function toSite(site, allDevices) {
  */
 export async function getDevices(userId) {
   const devices = await CloudMockAPI.devices.getAll();
-  return devices.map(toDeviceSummary);
+  return (devices || []).map(toDeviceSummary);
 }
 
 /**
@@ -258,7 +258,7 @@ export async function getDeviceMetrics(deviceId, metric, range) {
  */
 export async function getDeviceAlerts(deviceId) {
   const alerts = await CloudMockAPI.alerts.getByDevice(deviceId);
-  return alerts.map(toAlert);
+  return (alerts || []).map(toAlert);
 }
 
 /**
@@ -267,7 +267,7 @@ export async function getDeviceAlerts(deviceId) {
  */
 export async function getAlerts(userId) {
   const alerts = await CloudMockAPI.alerts.getAll();
-  return alerts.map(toAlert);
+  return (alerts || []).map(toAlert);
 }
 
 /**
@@ -279,7 +279,7 @@ export async function getSites(userId) {
     CloudMockAPI.sites.getAll(),
     CloudMockAPI.devices.getAll(),
   ]);
-  return sites.map((s) => toSite(s, devices));
+  return (sites || []).map((s) => toSite(s, devices || []));
 }
 
 /**

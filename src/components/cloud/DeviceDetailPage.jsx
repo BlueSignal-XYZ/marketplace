@@ -594,6 +594,7 @@ export default function DeviceDetailPage() {
             ph: r.sensors?.ph?.value ?? null,
             ntu: r.sensors?.turbidity?.value ?? null,
             tds_ppm: r.sensors?.tds?.value ?? r.sensors?.conductivity?.value ?? null,
+            conductivity: r.sensors?.conductivity?.value ?? null,
           }));
         setTimeSeriesData(transformed);
       } else {
@@ -608,7 +609,9 @@ export default function DeviceDetailPage() {
   };
 
   const createChartData = (dataKey, label, color) => {
-    if (!timeSeriesData) return null;
+    if (!timeSeriesData || timeSeriesData.length === 0) {
+      return { labels: [], datasets: [] };
+    }
 
     return {
       labels: timeSeriesData.map((point) => {
@@ -820,31 +823,35 @@ export default function DeviceDetailPage() {
                     {getRelativeTime(device.lastContact)}
                   </div>
                   <div className="subvalue">
-                    {new Date(device.lastContact).toLocaleString()}
+                    {device.lastContact ? new Date(device.lastContact).toLocaleString() : "—"}
                   </div>
                 </InfoCard>
 
                 <InfoCard>
                   <div className="label">Signal Strength</div>
-                  <div className="value">{device.signalStrength}%</div>
+                  <div className="value">{device.signalStrength != null ? `${device.signalStrength}%` : "—"}</div>
                   <div className="subvalue">
-                    {device.signalStrength > 80
-                      ? "Excellent"
-                      : device.signalStrength > 50
-                      ? "Good"
-                      : "Poor"}
+                    {device.signalStrength != null
+                      ? device.signalStrength > 80
+                        ? "Excellent"
+                        : device.signalStrength > 50
+                        ? "Good"
+                        : "Poor"
+                      : "No data"}
                   </div>
                 </InfoCard>
 
                 <InfoCard>
                   <div className="label">Battery</div>
-                  <div className="value">{device.batteryLevel}%</div>
+                  <div className="value">{device.batteryLevel != null ? `${device.batteryLevel}%` : "—"}</div>
                   <div className="subvalue">
-                    {device.batteryLevel > 50
-                      ? "Good"
-                      : device.batteryLevel > 20
-                      ? "Low"
-                      : "Critical"}
+                    {device.batteryLevel != null
+                      ? device.batteryLevel > 50
+                        ? "Good"
+                        : device.batteryLevel > 20
+                        ? "Low"
+                        : "Critical"
+                      : "No data"}
                   </div>
                 </InfoCard>
 
@@ -986,7 +993,7 @@ export default function DeviceDetailPage() {
                 <Skeleton $height="300px" />
               ) : (
                 <>
-                  {readings && (
+                  {readings && timeSeriesData && (
                     <>
                       {readings.temp_c !== null && (
                         <ChartContainer>

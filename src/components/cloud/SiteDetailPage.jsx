@@ -587,7 +587,7 @@ export default function SiteDetailPage() {
               <div className="label">Last Update</div>
               <div className="value">{getRelativeTime(site.lastUpdate)}</div>
               <div className="subvalue">
-                {new Date(site.lastUpdate).toLocaleString()}
+                {site.lastUpdate ? new Date(site.lastUpdate).toLocaleString() : "—"}
               </div>
             </InfoCard>
           </InfoGrid>
@@ -638,7 +638,7 @@ export default function SiteDetailPage() {
                   )}
                   {/* Device markers */}
                   {devices.map((device) =>
-                    device.coordinates ? (
+                    device.coordinates?.lat != null && device.coordinates?.lng != null ? (
                       <Marker
                         key={device.id}
                         position={{ lat: device.coordinates.lat, lng: device.coordinates.lng }}
