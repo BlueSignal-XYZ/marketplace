@@ -633,14 +633,14 @@ export default function AlertsPage() {
                     </td>
                     <td>
                       <div>{getRelativeTime(alert.firstSeen)}</div>
-                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={new Date(alert.firstSeen).toLocaleString()}>
-                        {new Date(alert.firstSeen).toLocaleString()}
+                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : "—"}>
+                        {alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : "—"}
                       </div>
                     </td>
                     <td>
                       <div>{getRelativeTime(alert.lastSeen)}</div>
-                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={new Date(alert.lastSeen).toLocaleString()}>
-                        {new Date(alert.lastSeen).toLocaleString()}
+                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : "—"}>
+                        {alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : "—"}
                       </div>
                     </td>
                     <td>
