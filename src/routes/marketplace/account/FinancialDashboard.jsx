@@ -670,12 +670,12 @@ const FinancialDashboard = () => {
                 <Doughnut data={creditTypeData} options={creditTypeOptions} />
               </DonutContainer>
               <LegendContainer>
-                {creditTypeData.labels.map((label, i) => {
-                  const total = creditTypeData.datasets[0].data.reduce((a, b) => a + b, 0);
+                {creditTypeData.labels?.map((label, i) => {
+                  const total = creditTypeData.datasets?.[0]?.data?.reduce((a, b) => a + b, 0) || 0;
                   const pct = total > 0 ? Math.round((creditTypeData.datasets[0].data[i] / total) * 100) : 0;
                   return (
                     <LegendItem key={label}>
-                      <LegendDot color={creditTypeData.datasets[0].backgroundColor[i]} />
+                      <LegendDot color={creditTypeData.datasets?.[0]?.backgroundColor?.[i]} />
                       {label} ({pct}%)
                     </LegendItem>
                   );

@@ -594,6 +594,7 @@ export default function DeviceDetailPage() {
             ph: r.sensors?.ph?.value ?? null,
             ntu: r.sensors?.turbidity?.value ?? null,
             tds_ppm: r.sensors?.tds?.value ?? r.sensors?.conductivity?.value ?? null,
+            conductivity: r.sensors?.conductivity?.value ?? null,
           }));
         setTimeSeriesData(transformed);
       } else {
@@ -608,7 +609,9 @@ export default function DeviceDetailPage() {
   };
 
   const createChartData = (dataKey, label, color) => {
-    if (!timeSeriesData) return null;
+    if (!timeSeriesData || timeSeriesData.length === 0) {
+      return { labels: [], datasets: [] };
+    }
 
     return {
       labels: timeSeriesData.map((point) => {
@@ -986,7 +989,7 @@ export default function DeviceDetailPage() {
                 <Skeleton $height="300px" />
               ) : (
                 <>
-                  {readings && (
+                  {readings && timeSeriesData && (
                     <>
                       {readings.temp_c !== null && (
                         <ChartContainer>
