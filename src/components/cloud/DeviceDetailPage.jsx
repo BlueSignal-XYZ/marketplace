@@ -3,6 +3,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { Line } from "react-chartjs-2";
+
+/** Wrapper that guarantees Chart.js never receives null/invalid data. */
+const SafeLine = ({ data, options }) => {
+  if (!data || !data.labels || !data.datasets) return null;
+  return <Line data={data} options={options} />;
+};
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -999,7 +1005,7 @@ export default function DeviceDetailPage() {
                         <ChartContainer>
                           <h4>Temperature (°C)</h4>
                           <div className="chart-wrapper">
-                            <Line
+                            <SafeLine
                               data={createChartData(
                                 "temp_c",
                                 "Temperature",
@@ -1015,7 +1021,7 @@ export default function DeviceDetailPage() {
                         <ChartContainer>
                           <h4>pH Level</h4>
                           <div className="chart-wrapper">
-                            <Line
+                            <SafeLine
                               data={createChartData("ph", "pH", "#8b5cf6")}
                               options={chartOptions}
                             />
@@ -1027,7 +1033,7 @@ export default function DeviceDetailPage() {
                         <ChartContainer>
                           <h4>Turbidity (NTU)</h4>
                           <div className="chart-wrapper">
-                            <Line
+                            <SafeLine
                               data={createChartData(
                                 "ntu",
                                 "Turbidity",
@@ -1043,7 +1049,7 @@ export default function DeviceDetailPage() {
                         <ChartContainer>
                           <h4>Total Dissolved Solids (ppm)</h4>
                           <div className="chart-wrapper">
-                            <Line
+                            <SafeLine
                               data={createChartData(
                                 "tds_ppm",
                                 "TDS",
@@ -1059,7 +1065,7 @@ export default function DeviceDetailPage() {
                         <ChartContainer>
                           <h4>Conductivity (µS/cm)</h4>
                           <div className="chart-wrapper">
-                            <Line
+                            <SafeLine
                               data={createChartData(
                                 "conductivity",
                                 "Conductivity",
