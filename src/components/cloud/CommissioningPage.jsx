@@ -7,6 +7,7 @@ import { DeviceAPI, CommissionAPI } from "../../scripts/back_door";
 import { db } from "../../apis/firebase";
 import { ref, get } from "firebase/database";
 import FilterPills from "../shared/FilterPills/FilterPills";
+import { useToastContext } from "../../shared/providers/ToastProvider";
 
 /* -------------------------------------------------------------------------- */
 /*                               HELPERS                                      */
@@ -501,6 +502,7 @@ const StartNewButton = styled.button`
 // DeviceAPI.getDevices()        → POST /device/all — v1 endpoint, should migrate to v2 in future pass
 export default function CommissioningPage() {
   const navigate = useNavigate();
+  const { toast } = useToastContext();
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commissioningDevice, setCommissioningDevice] = useState(null);
@@ -656,7 +658,7 @@ export default function CommissioningPage() {
         }
         setViewingResult({ device, result });
       } else {
-        alert(`No commissioning history found for ${device.alias || device.name}`);
+        toast({ type: 'info', message: `No commissioning history found for ${device.alias || device.name}` });
       }
     } catch (error) {
       console.error("Error loading commission result:", error);

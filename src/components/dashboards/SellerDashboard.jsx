@@ -692,13 +692,23 @@ const SellerDashboard = () => {
   const totalInquiries = listings.reduce((sum, l) => sum + (l.inquiries || 0), 0);
   const isNewSeller = listings.length === 0;
 
-  // Chart data
+  // Chart data — derive from actual sales
+  const salesByWeek = {};
+  sales.forEach((s) => {
+    if (!s.date) return;
+    const d = new Date(s.date);
+    const weekLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    salesByWeek[weekLabel] = (salesByWeek[weekLabel] || 0) + (s.price || 0);
+  });
+  const chartLabels = Object.keys(salesByWeek);
+  const chartValues = chartLabels.map((k) => salesByWeek[k]);
+
   const chartData = {
-    labels: ['Nov 8', 'Nov 15', 'Nov 22', 'Nov 28'],
+    labels: chartLabels.length > 0 ? chartLabels : ['—'],
     datasets: [
       {
         label: 'Revenue ($)',
-        data: [13500, 15000, 10400, 22500],
+        data: chartLabels.length > 0 ? chartValues : [0],
         backgroundColor: 'rgba(29, 112, 114, 0.8)',
         borderRadius: 6,
       },
@@ -798,7 +808,7 @@ const SellerDashboard = () => {
             <CardIcon color="#dbeafe">$</CardIcon>
             <CardLabel>Total Revenue</CardLabel>
             <CardValue>${(totalRevenue / 1000).toFixed(1)}k</CardValue>
-            <CardSubtext positive>+23% this month</CardSubtext>
+            <CardSubtext positive={totalRevenue > 0}>{totalRevenue > 0 ? 'From sales' : 'No sales yet'}</CardSubtext>
           </StatusCard>
 
           <StatusCard>

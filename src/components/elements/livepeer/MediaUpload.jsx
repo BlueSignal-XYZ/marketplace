@@ -205,7 +205,7 @@ const DEFAULT_THUMBNAIL = [
 ];
 
 const MediaUpload = () => {
-  const { STATES } = useAppContext();
+  const { STATES, ACTIONS } = useAppContext();
   const [file, setFile] = useState(null);
   const [uploadName, setUploadName] = useState("");
   const [uploadDescription, setUploadDescription] = useState("");
@@ -238,7 +238,7 @@ const MediaUpload = () => {
     );
 
     if (validFiles.length === 0) {
-      alert("No valid files. Only MP4 videos and PDF files are allowed.");
+      ACTIONS.logNotification("error", "No valid files. Only MP4 videos and PDF files are allowed.");
       return;
     }
 
@@ -266,7 +266,7 @@ const MediaUpload = () => {
 
   const handleUpload = async () => {
     if (!activeFile) {
-      alert("No file selected for upload.");
+      ACTIONS.logNotification("error", "No file selected for upload.");
       return;
     }
 
@@ -293,9 +293,7 @@ const MediaUpload = () => {
       logDev("Media Upload", { result, tusEndpoint });
 
       if (!isSupported) {
-        alert(
-          "This browser does not support uploads. Please use a modern browser instead."
-        );
+        ACTIONS.logNotification("error", "This browser does not support uploads. Please use a modern browser instead.");
       }
 
       if (tusEndpoint) {
@@ -341,7 +339,7 @@ const MediaUpload = () => {
       }
     } catch (error) {
       console.error("Error uploading the asset:", error);
-      alert("Error uploading the asset. Please try again.");
+      ACTIONS.logNotification("error", "Error uploading the asset. Please try again.");
     } finally {
       setIsLoading(false);
     }
