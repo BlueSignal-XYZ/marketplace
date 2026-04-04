@@ -470,10 +470,24 @@ export function WQTProfilePage() {
   // Demo mode
   const [demoEnabled, setDemoEnabled] = useState(isDemoMode());
 
-  // Notification prefs (placeholder)
-  const [emailNotif, setEmailNotif] = useState(true);
-  const [marketNotif, setMarketNotif] = useState(true);
-  const [deviceNotif, setDeviceNotif] = useState(false);
+  // Notification prefs (persisted to localStorage)
+  const [emailNotif, setEmailNotif] = useState(() => {
+    try { const v = localStorage.getItem('wqt_pref_emailNotif'); return v !== null ? JSON.parse(v) : true; } catch { return true; }
+  });
+  const [marketNotif, setMarketNotif] = useState(() => {
+    try { const v = localStorage.getItem('wqt_pref_marketNotif'); return v !== null ? JSON.parse(v) : true; } catch { return true; }
+  });
+  const [deviceNotif, setDeviceNotif] = useState(() => {
+    try { const v = localStorage.getItem('wqt_pref_deviceNotif'); return v !== null ? JSON.parse(v) : false; } catch { return false; }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('wqt_pref_emailNotif', JSON.stringify(emailNotif));
+      localStorage.setItem('wqt_pref_marketNotif', JSON.stringify(marketNotif));
+      localStorage.setItem('wqt_pref_deviceNotif', JSON.stringify(deviceNotif));
+    } catch { /* localStorage unavailable */ }
+  }, [emailNotif, marketNotif, deviceNotif]);
 
   // Fetch portfolio
   useEffect(() => {

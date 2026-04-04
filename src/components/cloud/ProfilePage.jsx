@@ -422,15 +422,15 @@ export default function ProfilePage() {
 
       // Update local user state if name changed
       if (profile.displayName !== user?.displayName) {
-        ACTIONS.updateUser({
+        ACTIONS.updateUser(user.uid, {
           ...user,
           displayName: profile.displayName,
           role: profile.role,
         });
       }
     } catch (err) {
-      console.error("Error saving profile:", err);
-      setError(err.message || "Failed to save profile. Please try again.");
+      const serverMsg = err?.response?.data?.error || err?.response?.data?.message;
+      setError(serverMsg || err.message || "Failed to save profile. Please try again.");
     } finally {
       setSaving(false);
     }
