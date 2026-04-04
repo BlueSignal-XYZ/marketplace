@@ -20,6 +20,7 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100vw;
   overflow-x: hidden;
   background: ${({ theme }) => theme.colors.background};
