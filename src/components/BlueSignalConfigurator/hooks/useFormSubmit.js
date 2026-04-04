@@ -15,7 +15,6 @@ const useFormSubmit = (collectionName) => {
 
   const submitForm = async (data) => {
     if (!isFirebaseConfigured) {
-      console.warn('Firebase not configured - form submission disabled');
       setFormState({
         status: 'error',
         error: 'Form submission is currently unavailable. Please try again later.',

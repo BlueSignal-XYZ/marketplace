@@ -286,13 +286,11 @@ const ContactForm = () => {
     // Simple POST (no preflight). Opaque response is fine — we only need the
     // request delivered. Resolves once the network round-trip completes.
     try {
-      console.log('[ContactForm] Strategy 1: fetch no-cors →', GOOGLE_SHEETS_URL);
       await fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
         body,
       });
-      console.log('[ContactForm] fetch resolved — data sent');
       setStatus('success');
       resetForm();
       return;
@@ -303,12 +301,10 @@ const ContactForm = () => {
     // ── Strategy 2: navigator.sendBeacon (fire-and-forget) ────────────────
     if (navigator.sendBeacon) {
       try {
-        console.log('[ContactForm] Strategy 2: sendBeacon');
         const blob = new Blob([body.toString()], {
           type: 'application/x-www-form-urlencoded',
         });
         const queued = navigator.sendBeacon(GOOGLE_SHEETS_URL, blob);
-        console.log('[ContactForm] sendBeacon queued:', queued);
         if (queued) {
           setStatus('success');
           resetForm();
@@ -321,7 +317,6 @@ const ContactForm = () => {
 
     // ── Strategy 3: hidden iframe form POST (last resort) ─────────────────
     try {
-      console.log('[ContactForm] Strategy 3: iframe form POST');
       const frameName = 'gs-submit-' + Date.now();
       const iframe = document.createElement('iframe');
       iframe.name = frameName;
@@ -420,8 +415,10 @@ const ContactForm = () => {
               onChange={handleChange}
               $hasError={!!errors.name}
               autoComplete="name"
+              aria-describedby={errors.name ? 'cf-name-error' : undefined}
+              aria-invalid={!!errors.name}
             />
-            {errors.name && <FieldError>{errors.name}</FieldError>}
+            {errors.name && <FieldError id="cf-name-error" role="alert">{errors.name}</FieldError>}
           </FieldGroup>
 
           <FieldGroup>
@@ -435,8 +432,10 @@ const ContactForm = () => {
               onChange={handleChange}
               $hasError={!!errors.email}
               autoComplete="email"
+              aria-describedby={errors.email ? 'cf-email-error' : undefined}
+              aria-invalid={!!errors.email}
             />
-            {errors.email && <FieldError>{errors.email}</FieldError>}
+            {errors.email && <FieldError id="cf-email-error" role="alert">{errors.email}</FieldError>}
           </FieldGroup>
         </Row>
 
@@ -480,8 +479,10 @@ const ContactForm = () => {
             value={form.message}
             onChange={handleChange}
             $hasError={!!errors.message}
+            aria-describedby={errors.message ? 'cf-message-error' : undefined}
+            aria-invalid={!!errors.message}
           />
-          {errors.message && <FieldError>{errors.message}</FieldError>}
+          {errors.message && <FieldError id="cf-message-error" role="alert">{errors.message}</FieldError>}
         </FieldGroup>
 
         {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}

@@ -119,17 +119,11 @@ const CertificatePage = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log("Data", data);
             const { certificate } = data;
             if (certificate) {
               const certId = Number(certificate?.id);
               if (certId > 0) {
-                const formattedCertificate = formatCertificate(certificate);
-                console.log(
-                  formattedCertificate,
-                  certificate,
-                  certificate?.buyer
-                );
+                formatCertificate(certificate);
                 setCertificate(certificate);
               } else {
                 setError("Certificate Not Found");
@@ -167,18 +161,20 @@ const CertificatePage = () => {
       </CertificateContainer>
 
       <ShareLinksContainer>
-        <ShareLink href={createFacebookShareLink(certUrl)} target="_blank">
+        <ShareLink href={createFacebookShareLink(certUrl)} target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={faFacebookF} />
         </ShareLink>
         <ShareLink
           href={createTwitterShareLink(certUrl, shareText)}
           target="_blank"
+          rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faTwitter} />
         </ShareLink>
         <ShareLink
           href={createLinkedInShareLink(certUrl, shareText, "")}
           target="_blank"
+          rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faLinkedinIn} />
         </ShareLink>
