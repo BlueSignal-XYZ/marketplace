@@ -16,6 +16,7 @@ import { useUserDevices } from '../../hooks/useUserDevices';
 import { AuthGate } from '../../shared/components/AuthGate';
 import { ErrorBoundary } from '../../shared/components/ErrorBoundary';
 import { AuthModal } from '../../shared/components/AuthModal';
+import Confirmation from '../../components/popups/ConfirmationPopup';
 import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
 import { lazyWithRetry } from '../../shared/utils/lazyWithRetry';
 
@@ -196,6 +197,7 @@ export function CloudApp({ user, authLoading }) {
           platform="cloud"
           message="Your session has expired. Please sign in again."
         />
+        <Confirmation />
       </ToastProvider>
       </ErrorBoundary>
     </ThemeProvider>
