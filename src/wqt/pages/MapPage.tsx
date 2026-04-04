@@ -455,6 +455,7 @@ export function MapPage() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
+  const filteredProjectsRef = useRef<MapProject[]>([]);
 
   useEffect(() => { document.title = 'Project Map — WaterQuality.Trading'; }, []);
 
@@ -488,11 +489,11 @@ export function MapPage() {
   }, [loadProjects]);
 
   useEffect(() => {
-    if (filterType === 'all') {
-      setFilteredProjects(allProjects);
-    } else {
-      setFilteredProjects(allProjects.filter(p => p.creditTypes?.includes(filterType)));
-    }
+    const next = filterType === 'all'
+      ? allProjects
+      : allProjects.filter(p => p.creditTypes?.includes(filterType));
+    setFilteredProjects(next);
+    filteredProjectsRef.current = next;
   }, [filterType, allProjects]);
 
   // Retry map initialization
@@ -560,6 +561,7 @@ export function MapPage() {
 
     function addBoundaryLayers() {
       if (!map.current) return;
+      const projects = filteredProjectsRef.current;
 
       // Remove ALL existing boundary layers and sources (check up to 20 possible indices)
       for (let idx = 0; idx < 20; idx++) {
@@ -579,7 +581,7 @@ export function MapPage() {
       }
 
       // Add boundary layers for each project
-      filteredProjects.forEach((project, idx) => {
+      projects.forEach((project, idx) => {
         if (!project.boundary) return;
 
         const color = project.creditTypes.length > 0
@@ -625,7 +627,7 @@ export function MapPage() {
     markers.current.forEach(marker => marker.remove());
     markers.current = [];
 
-    filteredProjects.forEach(project => {
+    filteredProjectsRef.current.forEach(project => {
       const markerColor = project.creditTypes.length > 0
         ? getCreditTypeColor(project.creditTypes[0])
         : '#6b7280';
@@ -697,9 +699,9 @@ export function MapPage() {
       markers.current.push(marker);
     });
 
-    if (filteredProjects.length > 0 && map.current) {
+    if (filteredProjectsRef.current.length > 0 && map.current) {
       const bounds = new mapboxgl.LngLatBounds();
-      filteredProjects.forEach(project => {
+      filteredProjectsRef.current.forEach(project => {
         bounds.extend([project.lng, project.lat]);
       });
       map.current.fitBounds(bounds, { padding: 60, maxZoom: 10 });

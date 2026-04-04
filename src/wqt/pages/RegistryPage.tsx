@@ -18,14 +18,14 @@ import { createBreadcrumbSchema } from '../../components/seo/schemas';
 const Page = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 32px 24px 16px;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 28px 24px;
+    padding: 28px 40px 28px 24px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 32px 48px;
+    padding: 32px 64px 32px 48px;
   }
 `;
 

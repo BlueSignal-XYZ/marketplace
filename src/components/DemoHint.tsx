@@ -16,6 +16,10 @@ const HintButton = styled.button`
   border-radius: 50%;
   width: 24px;
   height: 24px;
+  min-width: 24px;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
