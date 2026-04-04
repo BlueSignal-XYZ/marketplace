@@ -42,7 +42,6 @@ convertAddressesToCoordinates()
     return fs.writeFile(filePath, jsonStr, 'utf-8');
   })
   .then(() => {
-    console.log('New JSON file has been created successfully.');
   })
   .catch((error) => {
     console.error(`Failed to create new JSON file: ${error}`);

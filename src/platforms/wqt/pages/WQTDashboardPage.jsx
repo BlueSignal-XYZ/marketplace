@@ -359,6 +359,7 @@ const TX_COLS = [
 /* ── Component ──────────────────────────────────────────── */
 
 export function WQTDashboardPage() {
+  useEffect(() => { document.title = 'Dashboard — WaterQuality.Trading'; }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const user = STATES?.user;

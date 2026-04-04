@@ -1495,9 +1495,6 @@ const USE_MARKETPLACE_MOCKS = import.meta.env.VITE_USE_MARKETPLACE_MOCKS
 
 const handleMarketplacePost = async (endpoint, body) => {
   if (USE_MARKETPLACE_MOCKS) {
-    console.warn(
-      `[MarketplaceAPI] Mock mode enabled, skipping ${endpoint} request`
-    );
     // Basic shape so UI doesn't explode; you can extend this later
     if (endpoint === "events/listings") {
       return { nfts: [] };

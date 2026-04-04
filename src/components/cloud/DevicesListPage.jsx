@@ -434,6 +434,7 @@ const DeviceErrorIcon = () => (
 );
 
 export default function DevicesListPage() {
+  useEffect(() => { document.title = 'Devices — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const { user } = STATES;

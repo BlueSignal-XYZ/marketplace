@@ -44,6 +44,8 @@ export function WQTLandingPage() {
 
   const content = AUDIENCE_CONTENT[audience];
 
+  useEffect(() => { document.title = 'WaterQuality.Trading — Nutrient Credit Marketplace'; }, []);
+
   // Set html/body background to dark so iOS overscroll areas match
   useEffect(() => {
     const prevHtml = document.documentElement.style.backgroundColor;

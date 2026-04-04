@@ -98,7 +98,6 @@ function OrderConfirmation({ proceedToPayment, checkoutItems }) {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Data", data);
           const { price } = data;
           setItem({
             name: price.nickname,

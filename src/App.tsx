@@ -4,7 +4,6 @@ import React from "react"
 export default function App() {
   const [hash, setHash] = React.useState(window.location.hash)
   React.useEffect(() => {
-    console.log("[App] mounted, hash =", window.location.hash)
     const onHash = () => setHash(window.location.hash)
     window.addEventListener("hashchange", onHash)
     return () => window.removeEventListener("hashchange", onHash)

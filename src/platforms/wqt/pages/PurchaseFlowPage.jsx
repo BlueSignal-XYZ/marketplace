@@ -260,6 +260,7 @@ function LoadingSkeleton() {
 }
 
 export function PurchaseFlowPage() {
+  useEffect(() => { document.title = 'Purchase — WaterQuality.Trading'; }, []);
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToastContext();

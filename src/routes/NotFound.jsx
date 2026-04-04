@@ -12,6 +12,7 @@ const Container = styled(motion.div)`
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   text-align: center;
   padding: 20px;
   box-sizing: border-box;

@@ -14,6 +14,7 @@ const IMAGE_SHA256 = 'Published alongside release assets';
 
 const Wrapper = styled.div`
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 `;

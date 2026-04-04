@@ -45,7 +45,6 @@ export const Stream = () => {
   const { user } = STATES || {};
   useEffect(() => {
     if (stream?.playbackId) {
-      console.log(stream);
       _saveStream();
     }
   }, [stream]);

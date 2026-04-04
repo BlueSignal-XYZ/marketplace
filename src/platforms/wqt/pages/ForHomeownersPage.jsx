@@ -3,7 +3,7 @@
  * Content: Property-level credit generation from water quality improvements.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -253,6 +253,7 @@ const CTAButtonOutline = styled.a`
 `;
 
 export default function ForHomeownersPage() {
+  useEffect(() => { document.title = 'For Homeowners — WaterQuality.Trading'; }, []);
   return (
     <Page>
       <Hero>

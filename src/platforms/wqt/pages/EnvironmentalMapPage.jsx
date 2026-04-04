@@ -177,6 +177,7 @@ const STATUS_COLORS = {
 };
 
 export function EnvironmentalMapPage() {
+  useEffect(() => { document.title = 'Environmental Data — WaterQuality.Trading'; }, []);
   const [search, setSearch] = useState('');
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);

@@ -135,7 +135,6 @@ const AccountSettingsTab = () => {
 
   const handleDeactivate = () => {
     // Logic to deactivate account
-    console.log("Deactivating account...");
   };
 
   const handleDelete = () => {
@@ -145,7 +144,6 @@ const AccountSettingsTab = () => {
       )
     ) {
       // Logic to delete user account
-      console.log("Deleting account...");
     }
   };
 

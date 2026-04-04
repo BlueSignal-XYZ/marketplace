@@ -741,8 +741,6 @@ export const CloudMockAPI = {
         throw new Error(`Device ${deviceId} not found`);
       }
 
-      console.log(`📋 Commissioning started: ${deviceId}`);
-
       const startedAt = new Date().toISOString();
       const tests = [
         { id: "power_os", name: "Power & OS", status: "pending", duration: 0, details: null },
@@ -783,14 +781,10 @@ export const CloudMockAPI = {
         } else if (device.commissionStatus === "failed" && test.id === "npk") {
           test.status = "failed";
           test.details = "Timeout on register read";
-          console.log(`❌ Test failed: ${test.id} – ${test.details}`);
         } else {
           test.status = shouldPass ? "passed" : "failed";
-          if (test.status === "passed") {
-            console.log(`✅ Test passed: ${test.id} (${(test.duration / 1000).toFixed(1)}s)`);
-          } else {
+          if (test.status === "failed") {
             test.details = "Test failed";
-            console.log(`❌ Test failed: ${test.id} – ${test.details}`);
           }
         }
 
@@ -814,8 +808,6 @@ export const CloudMockAPI = {
       // Update device commission status
       device.commissionStatus = overallStatus === "passed" ? "commissioned" : "failed";
       device.lastCommissioned = completedAt;
-
-      console.log(`🏁 Commissioning ${overallStatus}: ${deviceId}`);
 
       return result;
     },

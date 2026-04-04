@@ -309,6 +309,7 @@ function DetailSkeleton() {
 /* ── Component ──────────────────────────────────────────── */
 
 export function DeviceDetailPage() {
+  useEffect(() => { document.title = 'Device Detail — BlueSignal Cloud'; }, []);
   const { deviceId } = useParams();
   const navigate = useNavigate();
 

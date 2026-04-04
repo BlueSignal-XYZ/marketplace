@@ -338,6 +338,7 @@ const PageButton = styled.button`
 `;
 
 const TransactionPage = () => {
+  useEffect(() => { document.title = 'Transactions — WaterQuality.Trading'; }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();

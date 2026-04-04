@@ -292,6 +292,7 @@ const VERIFICATION_STANDARDS = [
 /* -------------------------------------------------------------------------- */
 
 export default function CreateListingPage() {
+  useEffect(() => { document.title = 'Create Listing — WaterQuality.Trading'; }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};

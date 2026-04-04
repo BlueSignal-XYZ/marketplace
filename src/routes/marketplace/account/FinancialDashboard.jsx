@@ -379,6 +379,7 @@ const ErrorText = styled.span`
 `;
 
 const FinancialDashboard = () => {
+  useEffect(() => { document.title = 'Financial Dashboard — WaterQuality.Trading'; }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();

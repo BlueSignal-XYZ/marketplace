@@ -269,6 +269,7 @@ const ToolCard = styled.div`
 `;
 
 const InstallerDashboard = () => {
+  useEffect(() => { document.title = 'Installer Dashboard — BlueSignal Cloud'; }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();

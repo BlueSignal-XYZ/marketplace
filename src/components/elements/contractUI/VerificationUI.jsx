@@ -343,6 +343,8 @@ function VerificationUI() {
     ]);
 
     const setters = [setUploads, setSubmissions, setDisputes, setApprovals];
+    const labels = ["uploads", "submissions", "disputes", "approvals"];
+    const errors = [];
 
     results.forEach((result, i) => {
       if (result.status === "fulfilled") {
@@ -350,10 +352,11 @@ function VerificationUI() {
         setters[i](data);
       } else {
         setters[i]([]);
+        errors.push({ label: labels[i], message: result.reason?.message || "Failed to load" });
       }
     });
 
-    setLoadErrors([]);
+    setLoadErrors(errors);
     setDataLoading(false);
   }, [user?.uid, toast]);
 

@@ -17,6 +17,7 @@ import { Pagination } from '../../../design-system/primitives/Pagination';
 import { useMarketplaceQuery } from '../../../shared/hooks/useApiQueries';
 import { getMarketStats } from '../../../services/v2/client';
 import { useAppContext } from '../../../context/AppContext';
+import { useToastContext } from '../../../shared/providers/ToastProvider';
 
 // ── Page layout ───────────────────────────────────────────
 
@@ -589,6 +590,7 @@ function TableSkeleton() {
 // ── Order Panel Component ─────────────────────────────────
 
 function OrderPanel() {
+  const { toast } = useToastContext();
   const [side, setSide] = useState('buy');
   const [creditType, setCreditType] = useState('nitrogen');
   const [quantity, setQuantity] = useState('');
@@ -600,7 +602,7 @@ function OrderPanel() {
   const total = qty * prc;
 
   const handlePlaceOrder = () => {
-    window.alert('Order placement coming soon');
+    toast({ type: 'info', message: 'Order placement coming soon.' });
   };
 
   return (

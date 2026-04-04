@@ -453,6 +453,7 @@ const ErrorText = styled.p`
 // ── Component ────────────────────────────────────────────
 
 export function WQTProfilePage() {
+  useEffect(() => { document.title = 'Profile — WaterQuality.Trading'; }, []);
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES;
   const navigate = useNavigate();

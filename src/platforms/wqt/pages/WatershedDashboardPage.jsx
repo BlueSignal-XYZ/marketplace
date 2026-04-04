@@ -2,7 +2,7 @@
  * WQT Watershed Dashboard — aggregated water quality data per watershed.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
@@ -156,6 +156,7 @@ const WATERSHEDS = [
 ];
 
 export function WatershedDashboardPage() {
+  useEffect(() => { document.title = 'Watershed Dashboard — WaterQuality.Trading'; }, []);
   const [selected, setSelected] = useState(null);
   const ws = selected ? WATERSHEDS.find((w) => w.id === selected) : null;
 

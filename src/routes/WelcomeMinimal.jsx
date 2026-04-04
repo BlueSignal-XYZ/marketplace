@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -33,6 +33,7 @@ const Wrapper = styled.div`
 `;
 
 const WelcomeMinimal = () => {
+  useEffect(() => { document.title = 'Sign In — WaterQuality.Trading'; }, []);
   return (
     <Wrapper>
       <div className="box">

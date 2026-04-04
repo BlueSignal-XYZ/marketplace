@@ -142,6 +142,7 @@ const Skeleton = styled.div`
 `;
 
 export default function SitesListPage() {
+  useEffect(() => { document.title = 'Sites — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const { user } = STATES || {};

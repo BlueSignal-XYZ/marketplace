@@ -252,7 +252,6 @@ export class VirginiaCreditCalculator {
 
     const efficiency = practiceEfficiencies[this.project.practiceType];
     if (!efficiency) {
-      console.warn(`Unknown practice type: ${this.project.practiceType}`);
       return 0;
     }
 

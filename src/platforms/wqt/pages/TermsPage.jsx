@@ -3,7 +3,7 @@
  * Public route, no auth required.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 const Page = styled.div`
@@ -89,6 +89,7 @@ const BackLink = styled.a`
 `;
 
 export default function TermsPage() {
+  useEffect(() => { document.title = 'Terms of Service — WaterQuality.Trading'; }, []);
   return (
     <Page>
       <Hero>

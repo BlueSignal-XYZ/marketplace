@@ -5,7 +5,7 @@
  * Explains the complete on-ramp from monitoring device to tradeable credits.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -267,6 +267,7 @@ const CTAButtonOutline = styled.a`
 `;
 
 export default function ForCreditGeneratorsPage() {
+  useEffect(() => { document.title = 'Generate Credits — WaterQuality.Trading'; }, []);
   return (
     <Page>
       <Hero>

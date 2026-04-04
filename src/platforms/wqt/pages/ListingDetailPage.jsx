@@ -233,6 +233,7 @@ function verificationVariant(level) {
 // ── Component ─────────────────────────────────────────────
 
 export function ListingDetailPage() {
+  useEffect(() => { document.title = 'Listing — WaterQuality.Trading'; }, []);
   const { id } = useParams();
   const navigate = useNavigate();
   const [listing, setListing] = useState(null);
