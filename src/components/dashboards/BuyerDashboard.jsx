@@ -590,6 +590,7 @@ const StatusBadge = styled.span`
 `;
 
 const BuyerDashboard = () => {
+  useEffect(() => { document.title = 'Buyer Dashboard — WaterQuality.Trading'; }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();

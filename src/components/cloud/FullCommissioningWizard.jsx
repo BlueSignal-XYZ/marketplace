@@ -405,6 +405,7 @@ const REQUIRED_PHOTOS = ["Installation", "Sensors", "Site Overview"];
 /* -------------------------------------------------------------------------- */
 
 export default function FullCommissioningWizard() {
+  useEffect(() => { document.title = 'Commissioning — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};

@@ -3,7 +3,7 @@
  * Shows registered programs, calculator, and program-specific rules.
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Badge } from '../../../design-system/primitives/Badge';
@@ -206,6 +206,7 @@ const PROGRAMS = [
 ];
 
 export function ProgramsPage() {
+  useEffect(() => { document.title = 'Trading Programs — WaterQuality.Trading'; }, []);
   const [selectedProgram, setSelectedProgram] = useState(PROGRAMS[0]);
   const [tab, setTab] = useState('overview');
   const [calcForm, setCalcForm] = useState({ nutrientType: 'nitrogen', removalKg: 100, verificationLevel: 'sensor-verified', vintage: '2025' });

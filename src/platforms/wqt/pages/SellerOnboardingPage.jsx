@@ -3,7 +3,7 @@
  * Steps: Welcome → Organization → Verification → Devices → Review
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
@@ -128,6 +128,7 @@ const ReviewValue = styled.span`
 const STEPS = ['Welcome', 'Organization', 'Verification', 'Devices', 'Review'];
 
 export function SellerOnboardingPage() {
+  useEffect(() => { document.title = 'Seller Onboarding — WaterQuality.Trading'; }, []);
   const { toast } = useToastContext();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({

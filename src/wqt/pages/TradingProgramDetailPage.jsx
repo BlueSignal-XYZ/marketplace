@@ -176,6 +176,7 @@ const EmptyText = styled.div`
 /* ---- component ---- */
 
 export function TradingProgramDetailPage() {
+  useEffect(() => { document.title = 'Program Details — WaterQuality.Trading'; }, []);
   const { programId } = useParams();
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();

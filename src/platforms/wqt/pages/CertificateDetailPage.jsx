@@ -174,6 +174,7 @@ function CertSkeleton() {
 }
 
 export function CertificateDetailPage() {
+  useEffect(() => { document.title = 'Certificate — WaterQuality.Trading'; }, []);
   const { id } = useParams();
   const { toast } = useToastContext();
   const certRef = useRef(null);

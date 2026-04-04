@@ -120,6 +120,7 @@ const MetaItem = styled.div`
 /* ---- component ---- */
 
 export function TradingProgramsPage() {
+  useEffect(() => { document.title = 'Trading Programs — WaterQuality.Trading'; }, []);
   const navigate = useNavigate();
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -225,6 +225,7 @@ function TableSkeleton() {
 }
 
 export function RegistryPage() {
+  useEffect(() => { document.title = 'Credit Registry — WaterQuality.Trading'; }, []);
   const [loading, setLoading] = useState(true);
   const [allCredits, setAllCredits] = useState<RegistryCredit[]>([]);
   const [filterType, setFilterType] = useState('all');

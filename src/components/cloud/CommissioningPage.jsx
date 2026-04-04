@@ -501,6 +501,7 @@ const StartNewButton = styled.button`
 //   CommissionAPI.getByDevice() → POST /commission/list (filtered by deviceId) — OK, implemented
 // DeviceAPI.getDevices()        → POST /device/all — v1 endpoint, should migrate to v2 in future pass
 export default function CommissioningPage() {
+  useEffect(() => { document.title = 'Commissioning — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { toast } = useToastContext();
   const [devices, setDevices] = useState([]);

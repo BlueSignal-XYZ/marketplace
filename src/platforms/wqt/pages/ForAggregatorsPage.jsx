@@ -3,7 +3,7 @@
  * Content: Bundle projects, generate credits, access institutional buyers.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -225,6 +225,7 @@ const CTAButtonOutline = styled(Link)`
 `;
 
 export default function ForAggregatorsPage() {
+  useEffect(() => { document.title = 'For Aggregators — WaterQuality.Trading'; }, []);
   return (
     <Page>
       <Hero>

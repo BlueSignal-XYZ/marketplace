@@ -422,6 +422,7 @@ const EmptyText = styled.p`
 type ViewMode = 'map' | 'cards';
 
 export function PresalePage() {
+  useEffect(() => { document.title = 'Pre-Sale — WaterQuality.Trading'; }, []);
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);

@@ -307,6 +307,7 @@ const DemoWarning = styled.div`
 /* -------------------------------------------------------------------------- */
 
 export default function ProfilePage() {
+  useEffect(() => { document.title = 'Profile — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};

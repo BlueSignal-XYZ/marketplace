@@ -1,5 +1,5 @@
 // /src/components/cloud/OnboardingWizard.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
@@ -256,6 +256,7 @@ const ROLES = [
 /* -------------------------------------------------------------------------- */
 
 export default function OnboardingWizard() {
+  useEffect(() => { document.title = 'Onboarding — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};

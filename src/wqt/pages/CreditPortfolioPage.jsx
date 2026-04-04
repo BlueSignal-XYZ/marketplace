@@ -183,6 +183,7 @@ const EnrollmentLabel = styled.div`
 /* ---- component ---- */
 
 export function CreditPortfolioPage() {
+  useEffect(() => { document.title = 'Credits — WaterQuality.Trading'; }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();

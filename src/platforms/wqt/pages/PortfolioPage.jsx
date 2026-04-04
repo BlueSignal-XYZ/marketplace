@@ -3,7 +3,7 @@
  * Wired to /v2/credits/portfolio.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tabs } from '../../../design-system/primitives/Tabs';
@@ -136,6 +136,7 @@ const TX_COLUMNS = [
 ];
 
 export function PortfolioPage() {
+  useEffect(() => { document.title = 'Portfolio — WaterQuality.Trading'; }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const user = STATES?.user;

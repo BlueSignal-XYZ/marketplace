@@ -188,6 +188,7 @@ function TableSkeleton() {
 }
 
 export function RecentRemovalsPage() {
+  useEffect(() => { document.title = 'Recent Removals — WaterQuality.Trading'; }, []);
   const [loading, setLoading] = useState(true);
   const [allRetiredCredits, setAllRetiredCredits] = useState<RegistryCredit[]>([]);
   const [filterType, setFilterType] = useState('all');

@@ -601,6 +601,7 @@ const Step = styled.div`
 `;
 
 const SellerDashboard = () => {
+  useEffect(() => { document.title = 'Seller Dashboard — WaterQuality.Trading'; }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();

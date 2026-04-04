@@ -3,7 +3,7 @@
  * Content: Nutrient credit offset strategy for NPDES compliance.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -210,6 +210,7 @@ const CTAButtonOutline = styled(Link)`
 `;
 
 export default function ForUtilitiesPage() {
+  useEffect(() => { document.title = 'For Utilities — WaterQuality.Trading'; }, []);
   return (
     <Page>
       <Hero>

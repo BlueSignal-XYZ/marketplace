@@ -379,6 +379,7 @@ const Skeleton = styled.div`
 `;
 
 export default function AlertsPage() {
+  useEffect(() => { document.title = 'Alerts — BlueSignal Cloud'; }, []);
   const [alerts, setAlerts] = useState([]);
   const [filteredAlerts, setFilteredAlerts] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -3,7 +3,7 @@
  * Fetches real device fleet + alerts from /v2/ APIs.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Activity, BellRing, TrendingUp, Plus, ChevronRight } from 'lucide-react';
@@ -503,6 +503,7 @@ function getSensorReadings(device) {
 /* ── Component ──────────────────────────────────────────── */
 
 export function CloudDashboardPage() {
+  useEffect(() => { document.title = 'Dashboard — BlueSignal Cloud'; }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const user = STATES?.user;
