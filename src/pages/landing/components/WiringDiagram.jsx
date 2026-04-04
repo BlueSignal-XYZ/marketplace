@@ -45,7 +45,7 @@ const DiagramSvg = styled.svg`
 `;
 
 const WiringDiagram = () => (
-  <DiagramSvg viewBox="0 0 620 580" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <DiagramSvg viewBox="0 0 660 600" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="wd-boardGrad" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor="#151719" />
@@ -57,262 +57,326 @@ const WiringDiagram = () => (
       </linearGradient>
     </defs>
 
-    {/* ========== LORA ANTENNA (top) ========== */}
-    <g>
-      {/* Antenna mast */}
-      <line x1="470" y1="28" x2="470" y2="72" stroke="rgba(255,255,255,0.3)" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Antenna tip */}
-      <circle cx="470" cy="24" r="3.5" fill="none" stroke="rgba(45,140,240,0.5)" strokeWidth="1.2" />
-      <circle cx="470" cy="24" r="1.5" fill="#2d8cf0" opacity="0.7" />
-      {/* Signal arcs */}
-      <path d="M458 18 Q470 8 482 18" fill="none" stroke="rgba(45,140,240,0.35)" strokeWidth="0.8">
-        <animate attributeName="opacity" values="0.35;0.1;0.35" dur="2s" repeatCount="indefinite" />
-      </path>
-      <path d="M452 12 Q470 -2 488 12" fill="none" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8">
-        <animate attributeName="opacity" values="0.25;0.05;0.25" dur="2s" begin="0.3s" repeatCount="indefinite" />
-      </path>
-      <path d="M446 6 Q470 -12 494 6" fill="none" stroke="rgba(45,140,240,0.15)" strokeWidth="0.8">
-        <animate attributeName="opacity" values="0.15;0.02;0.15" dur="2s" begin="0.6s" repeatCount="indefinite" />
-      </path>
-      {/* Label */}
-      <text x="470" y="10" textAnchor="middle" fill="rgba(255,255,255,0.25)" className="label-sm">915 MHz LoRa</text>
-      {/* SMA connector base */}
-      <rect x="464" y="72" width="12" height="8" rx="2" fill="#0f1114" stroke="rgba(251,191,36,0.4)" strokeWidth="0.8" />
-      <text x="470" y="92" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">SMA</text>
-    </g>
-
     {/* ========== IP65 ENCLOSURE ========== */}
     <g>
       {/* Main enclosure body */}
-      <rect x="80" y="100" width="460" height="270" rx="14" fill="#0f1114" stroke="rgba(255,255,255,0.12)" strokeWidth="1.8" />
+      <rect x="30" y="20" width="600" height="340" rx="14" fill="#0f1114" stroke="rgba(255,255,255,0.12)" strokeWidth="1.8" />
       {/* Enclosure lid line */}
-      <line x1="94" y1="114" x2="526" y2="114" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
+      <line x1="44" y1="34" x2="616" y2="34" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
       {/* Corner mounting lugs */}
-      <circle cx="96" cy="116" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx="524" cy="116" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx="96" cy="354" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx="524" cy="354" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx="46" cy="36" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx="614" cy="36" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx="46" cy="344" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx="614" cy="344" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
       {/* Enclosure label */}
-      <text x="310" y="382" textAnchor="middle" fill="rgba(255,255,255,0.12)" className="label">IP65 Rated Enclosure</text>
+      <text x="330" y="372" textAnchor="middle" fill="rgba(255,255,255,0.12)" className="label">IP65 Rated Enclosure</text>
 
-      {/* ========== CABLE GLANDS (bottom of enclosure) ========== */}
-      {/* pH / BNC gland */}
-      <circle cx="150" cy="370" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      {/* Sensor array gland */}
-      <circle cx="230" cy="370" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      {/* I2C gland */}
-      <circle cx="350" cy="370" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      {/* Power gland */}
-      <circle cx="430" cy="370" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      {/* Antenna gland (top) */}
-      <circle cx="470" cy="100" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      {/* ========== Cable glands ========== */}
+      {/* Bottom glands: sensor, I2C */}
+      <circle cx="200" cy="360" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      <circle cx="330" cy="360" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      {/* Left gland: power */}
+      <circle cx="30" cy="120" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      {/* Right glands: LoRa, GPS, PH */}
+      <circle cx="630" cy="180" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      <circle cx="630" cy="140" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      <circle cx="630" cy="280" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      {/* Top gland: relay output */}
+      <circle cx="380" cy="20" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
 
-      {/* ========== PCB BOARD (inside enclosure) ========== */}
+      {/* ========== PCB BOARD (landscape, inside enclosure) ========== */}
       <g>
-        <rect x="120" y="130" width="380" height="210" rx="8" fill="url(#wd-boardGrad)" stroke="#34d399" strokeWidth="1" strokeOpacity="0.5" />
+        <rect x="60" y="42" width="540" height="300" rx="6" fill="url(#wd-boardGrad)" stroke="#34d399" strokeWidth="1" strokeOpacity="0.5" />
         {/* PCB mounting holes */}
-        <circle cx="134" cy="144" r="4" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
-        <circle cx="486" cy="144" r="4" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
-        <circle cx="134" cy="326" r="4" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
-        <circle cx="486" cy="326" r="4" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
+        <circle cx="74" cy="56" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+        <circle cx="586" cy="56" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+        <circle cx="74" cy="328" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
+        <circle cx="586" cy="328" r="5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.8" />
         {/* Board label */}
-        <text x="310" y="152" textAnchor="middle" fill="rgba(52,211,153,0.4)" className="label">WQM-1 Rev 2.1</text>
+        <text x="300" y="60" textAnchor="middle" fill="rgba(52,211,153,0.4)" className="label">WQM-1 Rev 2.1</text>
 
-        {/* ---- BCM2710A1 (main processor) ---- */}
-        <rect x="150" y="165" width="90" height="55" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" />
-        <text x="195" y="188" textAnchor="middle" fill="rgba(255,255,255,0.4)" className="label-data">BCM2710A1</text>
-        <text x="195" y="200" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Quad A53</text>
-        {/* Power LED */}
-        <circle cx="160" cy="178" r="2.5" fill="#34d399" className="pulse-dot" />
-        {/* Data LED */}
-        <circle cx="160" cy="186" r="2.5" fill="#2d8cf0" className="pulse-dot" style={{ animationDelay: '0.7s' }} />
+        {/* ---- VIN / GND — top-left power input ---- */}
+        <g>
+          <rect x="80" y="66" width="50" height="24" rx="3" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.3)" strokeWidth="0.8" />
+          <text x="92" y="79" fill="rgba(248,113,113,0.6)" className="label-data">VIN</text>
+          <text x="118" y="79" fill="rgba(255,255,255,0.25)" className="label-data">GND</text>
+          {/* Screw terminal dots */}
+          <circle cx="95" cy="82" r="2" fill="none" stroke="rgba(248,113,113,0.3)" strokeWidth="0.6" />
+          <circle cx="115" cy="82" r="2" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
+          {/* Power trace down */}
+          <path d="M105 90 L105 130" stroke="rgba(248,113,113,0.15)" strokeWidth="0.6" strokeDasharray="2 4" />
+        </g>
 
-        {/* ---- SX1262 (LoRa transceiver) ---- */}
-        <rect x="370" y="165" width="80" height="45" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8" />
-        <text x="410" y="185" textAnchor="middle" fill="rgba(45,140,240,0.5)" className="label-data">SX1262</text>
-        <text x="410" y="197" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">LoRa Radio</text>
-        {/* Trace from SX1262 to SMA connector */}
-        <path d="M430 165 L430 145 L470 145 L470 130" stroke="rgba(45,140,240,0.3)" strokeWidth="1" strokeDasharray="3 3" className="data-flow" />
+        {/* ---- Power regulation section (upper-left) ---- */}
+        <g>
+          {/* Buck converter IC */}
+          <rect x="80" y="105" width="60" height="35" rx="3" fill="rgba(255,255,255,0.02)" stroke="rgba(248,113,113,0.2)" strokeWidth="0.6" />
+          <text x="110" y="122" textAnchor="middle" fill="rgba(248,113,113,0.35)" className="label-sm">Power Reg</text>
+          <text x="110" y="132" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">5V / 3.3V</text>
+          {/* Capacitor symbols */}
+          <rect x="148" y="110" width="8" height="14" rx="1" fill="none" stroke="rgba(248,113,113,0.15)" strokeWidth="0.5" />
+          <rect x="160" y="110" width="8" height="14" rx="1" fill="none" stroke="rgba(248,113,113,0.15)" strokeWidth="0.5" />
+          {/* Power LED */}
+          <circle cx="88" y="175" r="2.5" fill="#f87171" className="pulse-dot" />
+          <text x="96" y="178" fill="rgba(255,255,255,0.2)" className="label-sm">PWR</text>
+        </g>
 
-        {/* ---- ADS1115 (ADC) ---- */}
-        <rect x="150" y="235" width="80" height="45" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(52,211,153,0.25)" strokeWidth="0.8" />
-        <text x="190" y="255" textAnchor="middle" fill="rgba(52,211,153,0.5)" className="label-data">ADS1115</text>
-        <text x="190" y="267" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">16-bit · 4ch</text>
+        {/* ---- Status LEDs (left side, vertical) ---- */}
+        <g>
+          <circle cx="88" cy="190" r="2" fill="#34d399" className="pulse-dot" />
+          <text x="96" y="193" fill="rgba(255,255,255,0.15)" className="label-sm">STA1</text>
+          <circle cx="88" cy="202" r="2" fill="#34d399" className="pulse-dot" style={{ animationDelay: '0.3s' }} />
+          <text x="96" y="205" fill="rgba(255,255,255,0.15)" className="label-sm">STA2</text>
+          <circle cx="88" cy="214" r="2" fill="#2d8cf0" className="pulse-dot" style={{ animationDelay: '0.6s' }} />
+          <text x="96" y="217" fill="rgba(255,255,255,0.15)" className="label-sm">STA3</text>
+          <circle cx="88" cy="226" r="2" fill="#2d8cf0" className="pulse-dot" style={{ animationDelay: '0.9s' }} />
+          <text x="96" y="229" fill="rgba(255,255,255,0.15)" className="label-sm">STA4</text>
+        </g>
 
-        {/* ---- 4× Relay Block ---- */}
-        <rect x="280" y="235" width="100" height="45" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(251,191,36,0.25)" strokeWidth="0.8" />
-        <text x="330" y="255" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">4× Relay</text>
-        <text x="330" y="267" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">10A · 250VAC</text>
-        {/* Relay terminal indicators */}
-        <rect x="284" y="282" width="18" height="6" rx="1" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.2)" strokeWidth="0.5" />
-        <rect x="306" y="282" width="18" height="6" rx="1" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.2)" strokeWidth="0.5" />
-        <rect x="328" y="282" width="18" height="6" rx="1" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.2)" strokeWidth="0.5" />
-        <rect x="350" y="282" width="18" height="6" rx="1" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.2)" strokeWidth="0.5" />
-        <text x="284" y="296" fill="rgba(255,255,255,0.12)" style={{ fontSize: '5px', fontFamily: 'IBM Plex Mono, monospace' }}>NC COM NO</text>
+        {/* ---- GPIO header (lower-left, pin grid) ---- */}
+        <g>
+          <rect x="80" y="244" width="80" height="54" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+          <text x="120" y="258" textAnchor="middle" fill="rgba(255,255,255,0.25)" className="label-sm">GPIO Header</text>
+          {/* Pin grid (4×4) */}
+          {[0,1,2,3].map(r => [0,1,2,3,4,5].map(c => (
+            <circle key={`gpio-${r}-${c}`} cx={90 + c * 11} cy={266 + r * 8} r="1.2" fill="rgba(255,255,255,0.15)" />
+          )))}
+          <text x="88" y="303" fill="rgba(255,255,255,0.1)" style={{ fontSize: '4.5px', fontFamily: 'IBM Plex Mono, monospace' }}>3V3 +5V IO6 IO7 IO8 IO22</text>
+        </g>
 
-        {/* ---- BNC Connector (pH) ---- */}
-        <circle cx="135" cy="270" r="10" fill="#0f1114" stroke="rgba(52,211,153,0.4)" strokeWidth="1" />
-        <circle cx="135" cy="270" r="4" fill="none" stroke="rgba(52,211,153,0.25)" strokeWidth="0.8" />
-        <circle cx="135" cy="270" r="1.5" fill="#34d399" opacity="0.5" />
-        <text x="135" y="290" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">BNC</text>
-        {/* Trace from BNC to ADC */}
-        <line x1="145" y1="270" x2="150" y2="258" stroke="rgba(52,211,153,0.2)" strokeWidth="0.8" />
+        {/* ---- 4× Relay Terminals (top edge, center-to-right) ---- */}
+        <g>
+          {[0,1,2,3].map(i => (
+            <g key={`relay-term-${i}`}>
+              <rect x={200 + i * 90} y="50" width="80" height="26" rx="3" fill="rgba(251,191,36,0.05)" stroke="rgba(251,191,36,0.3)" strokeWidth="0.8" />
+              {/* 3 screw terminal circles per relay */}
+              <circle cx={215 + i * 90} cy="63" r="3" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="0.6" />
+              <circle cx={233 + i * 90} cy="63" r="3" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="0.6" />
+              <circle cx={251 + i * 90} cy="63" r="3" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="0.6" />
+              <text x={215 + i * 90} y="57" fill="rgba(255,255,255,0.1)" style={{ fontSize: '4px', fontFamily: 'IBM Plex Mono, monospace' }}>NC</text>
+              <text x={230 + i * 90} y="57" fill="rgba(255,255,255,0.1)" style={{ fontSize: '4px', fontFamily: 'IBM Plex Mono, monospace' }}>COM</text>
+              <text x={248 + i * 90} y="57" fill="rgba(255,255,255,0.1)" style={{ fontSize: '4px', fontFamily: 'IBM Plex Mono, monospace' }}>NO</text>
+            </g>
+          ))}
+          <text x="380" y="48" textAnchor="middle" fill="rgba(251,191,36,0.3)" className="label-sm">Relay Terminals — 10A · 250VAC</text>
+        </g>
 
-        {/* ---- Sensor header (PH connector) ---- */}
-        <rect x="200" y="310" width="50" height="12" rx="2" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.25)" strokeWidth="0.6" />
-        <text x="225" y="335" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Sensor Header</text>
-        {/* Pin dots */}
-        <circle cx="210" cy="316" r="1.5" fill="#34d399" opacity="0.4" />
-        <circle cx="218" cy="316" r="1.5" fill="#2d8cf0" opacity="0.4" />
-        <circle cx="226" cy="316" r="1.5" fill="#fbbf24" opacity="0.4" />
-        <circle cx="234" cy="316" r="1.5" fill="rgba(255,255,255,0.3)" />
-        <circle cx="242" cy="316" r="1.5" fill="rgba(255,255,255,0.3)" />
+        {/* ---- 4× Relay Driver ICs (center, below terminals) ---- */}
+        <g>
+          {[0,1,2,3].map(i => (
+            <g key={`relay-ic-${i}`}>
+              <rect x={210 + i * 80} y="100" width="55" height="35" rx="3" fill="rgba(255,255,255,0.03)" stroke="rgba(251,191,36,0.2)" strokeWidth="0.6" />
+              <text x={237 + i * 80} y="118" textAnchor="middle" fill="rgba(251,191,36,0.45)" className="label-data">{`CH${i + 1}`}</text>
+              <text x={237 + i * 80} y="129" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">Relay</text>
+              {/* Trace from IC to terminal */}
+              <line x1={237 + i * 80} y1="100" x2={237 + i * 90} y2="76" stroke="rgba(251,191,36,0.12)" strokeWidth="0.5" strokeDasharray="2 3" />
+            </g>
+          ))}
+        </g>
 
-        {/* ---- I2C Header ---- */}
-        <rect x="320" y="310" width="40" height="12" rx="2" fill="rgba(45,140,240,0.08)" stroke="rgba(45,140,240,0.25)" strokeWidth="0.6" />
-        <text x="340" y="335" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">I²C</text>
-        {/* Pin labels */}
-        <text x="325" y="308" fill="rgba(255,255,255,0.1)" style={{ fontSize: '4.5px', fontFamily: 'IBM Plex Mono, monospace' }}>SDA SCL GND V+</text>
+        {/* ---- Main Processor (center-right, QFN) ---- */}
+        <g>
+          <rect x="370" y="160" width="100" height="70" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.8" />
+          {/* QFN pads around perimeter */}
+          {[0,1,2,3,4,5,6].map(i => (
+            <rect key={`qfn-b-${i}`} x={378 + i * 12} y="228" width="6" height="3" rx="0.5" fill="rgba(255,255,255,0.06)" />
+          ))}
+          {[0,1,2,3,4,5,6].map(i => (
+            <rect key={`qfn-t-${i}`} x={378 + i * 12} y="159" width="6" height="3" rx="0.5" fill="rgba(255,255,255,0.06)" />
+          ))}
+          {[0,1,2,3].map(i => (
+            <rect key={`qfn-l-${i}`} x={368} y={170 + i * 14} width="3" height="6" rx="0.5" fill="rgba(255,255,255,0.06)" />
+          ))}
+          {[0,1,2,3].map(i => (
+            <rect key={`qfn-r-${i}`} x={469} y={170 + i * 14} width="3" height="6" rx="0.5" fill="rgba(255,255,255,0.06)" />
+          ))}
+          <text x="420" y="192" textAnchor="middle" fill="rgba(255,255,255,0.4)" className="label-data">BCM2710A1</text>
+          <text x="420" y="204" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Quad A53</text>
+          {/* Power + Data LEDs on processor */}
+          <circle cx="380" cy="172" r="2" fill="#34d399" className="pulse-dot" />
+          <circle cx="380" cy="180" r="2" fill="#2d8cf0" className="pulse-dot" style={{ animationDelay: '0.7s' }} />
+        </g>
 
-        {/* ---- Power Input ---- */}
-        <rect x="410" y="310" width="40" height="12" rx="2" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.25)" strokeWidth="0.6" />
-        <text x="430" y="335" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">PWR</text>
-        {/* JST pin dots */}
-        <circle cx="423" cy="316" r="1.5" fill="#f87171" opacity="0.5" />
-        <circle cx="437" cy="316" r="1.5" fill="rgba(255,255,255,0.2)" />
+        {/* ---- ADS1115 ADC (center-left) ---- */}
+        <g>
+          <rect x="185" y="170" width="80" height="45" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(52,211,153,0.25)" strokeWidth="0.8" />
+          <text x="225" y="192" textAnchor="middle" fill="rgba(52,211,153,0.5)" className="label-data">ADS1115</text>
+          <text x="225" y="204" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">16-bit · 4ch</text>
+          {/* Trace ADC → Processor */}
+          <path d="M265 195 L290 195 L290 190 L370 190" stroke="rgba(255,255,255,0.06)" strokeWidth="0.6" strokeDasharray="2 4" />
+        </g>
 
-        {/* ---- Internal traces (simplified) ---- */}
-        {/* ADC to sensor header */}
-        <line x1="190" y1="280" x2="225" y2="310" stroke="rgba(52,211,153,0.12)" strokeWidth="0.6" />
-        {/* Processor to radio */}
-        <line x1="240" y1="190" x2="370" y2="185" stroke="rgba(255,255,255,0.06)" strokeWidth="0.6" strokeDasharray="2 4" />
-        {/* Processor to ADC */}
-        <line x1="195" y1="220" x2="190" y2="235" stroke="rgba(255,255,255,0.06)" strokeWidth="0.6" strokeDasharray="2 4" />
-        {/* Processor to relays */}
-        <line x1="240" y1="200" x2="280" y2="248" stroke="rgba(255,255,255,0.06)" strokeWidth="0.6" strokeDasharray="2 4" />
+        {/* ---- GPS Module (right side, above LoRa) ---- */}
+        <g>
+          <rect x="510" y="100" width="65" height="35" rx="3" fill="rgba(255,255,255,0.03)" stroke="rgba(45,140,240,0.2)" strokeWidth="0.6" />
+          <text x="542" y="118" textAnchor="middle" fill="rgba(45,140,240,0.4)" className="label-data">GPS</text>
+          <text x="542" y="128" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">u.FL</text>
+          {/* Trace GPS → edge connector */}
+          <path d="M575 117 L600 117 L600 140" stroke="rgba(45,140,240,0.2)" strokeWidth="0.6" strokeDasharray="2 3" />
+          {/* Trace GPS → processor */}
+          <path d="M510 120 L475 120 L475 170" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" strokeDasharray="2 4" />
+        </g>
+
+        {/* ---- SX1262 LoRa (right side, below GPS) ---- */}
+        <g>
+          <rect x="510" y="155" width="65" height="40" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8" />
+          <text x="542" y="174" textAnchor="middle" fill="rgba(45,140,240,0.5)" className="label-data">SX1262</text>
+          <text x="542" y="186" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">LoRa Radio</text>
+          {/* Trace SX1262 → edge SMA connector */}
+          <path d="M575 175 L600 175 L600 180" stroke="rgba(45,140,240,0.3)" strokeWidth="1" strokeDasharray="3 3" className="data-flow" />
+          {/* Trace SX1262 → processor (SPI bus) */}
+          <path d="M510 175 L475 175 L475 180" stroke="rgba(255,255,255,0.06)" strokeWidth="0.6" strokeDasharray="2 4" />
+        </g>
+
+        {/* ---- PH BNC Connector (right edge, lower) ---- */}
+        <g>
+          <circle cx="585" cy="275" r="12" fill="#0f1114" stroke="rgba(52,211,153,0.4)" strokeWidth="1" />
+          <circle cx="585" cy="275" r="5" fill="none" stroke="rgba(52,211,153,0.25)" strokeWidth="0.8" />
+          <circle cx="585" cy="275" r="2" fill="#34d399" opacity="0.5" />
+          <text x="585" y="295" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">PH</text>
+          <text x="585" y="304" textAnchor="middle" fill="rgba(52,211,153,0.3)" className="label-sm">BNC</text>
+          {/* Trace BNC → ADC */}
+          <path d="M573 275 L520 275 L520 210 L265 210" stroke="rgba(52,211,153,0.12)" strokeWidth="0.6" strokeDasharray="2 4" />
+        </g>
+
+        {/* ---- Sensor / I²C header (bottom edge) ---- */}
+        <g>
+          <rect x="170" y="316" width="220" height="14" rx="2" fill="rgba(52,211,153,0.06)" stroke="rgba(52,211,153,0.2)" strokeWidth="0.5" />
+          {/* Pin dots */}
+          {[0,1,2,3,4,5,6,7,8,9,10,11].map(i => (
+            <circle key={`hdr-${i}`} cx={182 + i * 17} cy="323" r="1.5" fill={i < 4 ? '#34d399' : i < 6 ? '#2d8cf0' : 'rgba(255,255,255,0.2)'} opacity={i < 6 ? 0.5 : 0.3} />
+          ))}
+          <text x="182" y="340" fill="rgba(255,255,255,0.1)" style={{ fontSize: '4px', fontFamily: 'IBM Plex Mono, monospace' }}>SDA SCL GND V+ GN DATA VN SNDY TUS 1M OUT IN</text>
+          {/* Trace header → ADC */}
+          <path d="M225 316 L225 215" stroke="rgba(52,211,153,0.1)" strokeWidth="0.5" strokeDasharray="2 3" />
+        </g>
+
+        {/* ---- Processor → Relay driver traces ---- */}
+        <path d="M420 230 L420 245 L350 245 L350 135" stroke="rgba(251,191,36,0.08)" strokeWidth="0.5" strokeDasharray="2 4" />
+
+        {/* ---- BlueSignal XYZ branding (right side, vertical) ---- */}
+        <text x="596" y="230" fill="rgba(255,255,255,0.08)" style={{ fontSize: '11px', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, letterSpacing: '0.15em' }} transform="rotate(-90 596 230)">BlueSignal XYZ</text>
+        {/* Antenna trace curves (decorative, matching real board) */}
+        <path d="M575 60 Q590 80 575 100" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="2" />
+        <path d="M580 62 Q595 82 580 102" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
+        <path d="M585 64 Q600 84 585 104" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="2" />
       </g>
     </g>
 
     {/* ========== EXTERNAL WIRING ========== */}
 
-    {/* ---- pH Probe (from BNC through cable gland) ---- */}
+    {/* ---- LoRa Antenna (right side) ---- */}
     <g>
-      {/* Cable through gland */}
-      <path d="M150 340 L150 370 L150 420" stroke="rgba(52,211,153,0.35)" strokeWidth="2" strokeDasharray="4 4" className="sensor-glow" fill="none" />
-      {/* BNC probe icon */}
-      <rect x="136" y="420" width="28" height="60" rx="4" fill="#0f1114" stroke="rgba(52,211,153,0.3)" strokeWidth="1" />
-      <line x1="150" y1="480" x2="150" y2="505" stroke="rgba(52,211,153,0.4)" strokeWidth="1.5" />
-      <circle cx="150" cy="508" r="3" fill="#34d399" opacity="0.5" className="sensor-glow" />
-      <text x="150" y="440" textAnchor="middle" fill="rgba(52,211,153,0.6)" className="label-data">pH</text>
-      <text x="150" y="452" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">0–14</text>
-      <text x="150" y="525" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">pH Probe</text>
+      {/* SMA connector on enclosure edge */}
+      <rect x="632" y="172" width="14" height="16" rx="2" fill="#0f1114" stroke="rgba(45,140,240,0.4)" strokeWidth="0.8" />
+      {/* Antenna mast */}
+      <line x1="652" y1="180" x2="652" y2="130" stroke="rgba(255,255,255,0.3)" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="652" cy="126" r="3.5" fill="none" stroke="rgba(45,140,240,0.5)" strokeWidth="1.2" />
+      <circle cx="652" cy="126" r="1.5" fill="#2d8cf0" opacity="0.7" />
+      {/* Signal arcs */}
+      <path d="M644 120 Q652 112 660 120" fill="none" stroke="rgba(45,140,240,0.35)" strokeWidth="0.8">
+        <animate attributeName="opacity" values="0.35;0.1;0.35" dur="2s" repeatCount="indefinite" />
+      </path>
+      <path d="M640 114 Q652 104 664 114" fill="none" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8">
+        <animate attributeName="opacity" values="0.25;0.05;0.25" dur="2s" begin="0.3s" repeatCount="indefinite" />
+      </path>
+      <text x="652" y="108" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">915 MHz</text>
+      <text x="652" y="196" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">SMA</text>
     </g>
 
-    {/* ---- Sensor Array (from sensor header through cable gland) ---- */}
+    {/* ---- Power Supply (left side, from VIN) ---- */}
     <g>
-      {/* Main cable */}
-      <path d="M230 340 L230 370 L230 410" stroke="rgba(45,140,240,0.3)" strokeWidth="2" strokeDasharray="4 4" className="sensor-glow" fill="none" />
-      {/* Fan out to probes */}
-      <path d="M230 410 L200 430" stroke="rgba(45,140,240,0.25)" strokeWidth="1.2" strokeDasharray="3 3" fill="none" />
-      <path d="M230 410 L230 430" stroke="rgba(45,140,240,0.25)" strokeWidth="1.2" strokeDasharray="3 3" fill="none" />
-      <path d="M230 410 L260 430" stroke="rgba(251,191,36,0.25)" strokeWidth="1.2" strokeDasharray="3 3" fill="none" />
-
-      {/* TDS probe */}
-      <rect x="187" y="430" width="26" height="45" rx="3" fill="#0f1114" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8" />
-      <text x="200" y="448" textAnchor="middle" fill="rgba(45,140,240,0.5)" className="label-data">TDS</text>
-      <line x1="200" y1="475" x2="200" y2="500" stroke="rgba(45,140,240,0.3)" strokeWidth="1.2" />
-      <circle cx="200" cy="503" r="2.5" fill="#2d8cf0" opacity="0.5" className="sensor-glow" />
-
-      {/* ORP probe */}
-      <rect x="217" y="430" width="26" height="45" rx="3" fill="#0f1114" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8" />
-      <text x="230" y="448" textAnchor="middle" fill="rgba(45,140,240,0.5)" className="label-data">ORP</text>
-      <line x1="230" y1="475" x2="230" y2="500" stroke="rgba(45,140,240,0.3)" strokeWidth="1.2" />
-      <circle cx="230" cy="503" r="2.5" fill="#2d8cf0" opacity="0.5" className="sensor-glow" style={{ animationDelay: '0.4s' }} />
-
-      {/* Turbidity probe */}
-      <rect x="247" y="430" width="26" height="45" rx="3" fill="#0f1114" stroke="rgba(251,191,36,0.25)" strokeWidth="0.8" />
-      <text x="260" y="448" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">Turb</text>
-      <line x1="260" y1="475" x2="260" y2="500" stroke="rgba(251,191,36,0.3)" strokeWidth="1.2" />
-      <circle cx="260" cy="503" r="2.5" fill="#fbbf24" opacity="0.5" className="sensor-glow" style={{ animationDelay: '0.8s' }} />
-
-      <text x="230" y="525" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Sensor Array</text>
-    </g>
-
-    {/* ---- I2C Expansion (from I2C header through cable gland) ---- */}
-    <g>
-      {/* Cable */}
-      <path d="M350 340 L350 370 L350 430" stroke="rgba(45,140,240,0.25)" strokeWidth="1.5" strokeDasharray="4 6" fill="none" />
-      {/* Expansion module box */}
-      <rect x="325" y="430" width="50" height="35" rx="4" fill="#0f1114" stroke="rgba(45,140,240,0.2)" strokeWidth="0.8" />
-      <text x="350" y="448" textAnchor="middle" fill="rgba(45,140,240,0.4)" className="label-data">I²C</text>
-      <text x="350" y="460" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">3.3V</text>
-      {/* 4 wire indicators */}
-      <line x1="335" y1="430" x2="335" y2="425" stroke="rgba(45,140,240,0.2)" strokeWidth="0.6" />
-      <line x1="342" y1="430" x2="342" y2="425" stroke="rgba(45,140,240,0.2)" strokeWidth="0.6" />
-      <line x1="349" y1="430" x2="349" y2="425" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
-      <line x1="356" y1="430" x2="356" y2="425" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
-      <text x="350" y="480" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Expansion</text>
-    </g>
-
-    {/* ---- Power Input (from PWR header through cable gland) ---- */}
-    <g>
-      {/* Cable */}
-      <path d="M430 340 L430 370 L430 420" stroke="rgba(248,113,113,0.35)" strokeWidth="2" strokeDasharray="4 4" fill="none" />
-      <path d="M432 340 L432 370 L432 420" stroke="rgba(255,255,255,0.1)" strokeWidth="1" strokeDasharray="4 4" fill="none" />
+      <path d="M60 78 L30 78 L30 120 L24 120 L24 420" stroke="rgba(248,113,113,0.35)" strokeWidth="2" strokeDasharray="4 4" fill="none" />
+      <path d="M26 78 L26 420" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="4 4" fill="none" />
       {/* DC Power supply icon */}
-      <rect x="408" y="420" width="46" height="50" rx="5" fill="#0f1114" stroke="rgba(248,113,113,0.3)" strokeWidth="1" />
-      {/* + / - symbols */}
-      <line x1="420" y1="438" x2="428" y2="438" stroke="#f87171" strokeWidth="1.2" />
-      <line x1="424" y1="434" x2="424" y2="442" stroke="#f87171" strokeWidth="1.2" />
-      <line x1="436" y1="438" x2="444" y2="438" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" />
-      {/* Voltage label */}
-      <text x="431" y="458" textAnchor="middle" fill="rgba(248,113,113,0.5)" className="label-data">9–24V</text>
-      <text x="431" y="485" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">DC Power</text>
-      <text x="431" y="495" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">JST-XH</text>
+      <rect x="0" y="420" width="48" height="50" rx="5" fill="#0f1114" stroke="rgba(248,113,113,0.3)" strokeWidth="1" />
+      <line x1="12" y1="438" x2="20" y2="438" stroke="#f87171" strokeWidth="1.2" />
+      <line x1="16" y1="434" x2="16" y2="442" stroke="#f87171" strokeWidth="1.2" />
+      <line x1="32" y1="438" x2="40" y2="438" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" />
+      <text x="24" y="458" textAnchor="middle" fill="rgba(248,113,113,0.5)" className="label-data">9–24V</text>
+      <text x="24" y="485" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">DC Power</text>
     </g>
 
-    {/* ---- Relay Output (right side) ---- */}
+    {/* ---- pH Probe (from right-side BNC) ---- */}
     <g>
-      {/* Wires from relay block out through right side of enclosure */}
-      <path d="M380 258 L540 258 L540 250 L560 250" stroke="rgba(251,191,36,0.3)" strokeWidth="1.5" strokeDasharray="5 5" className="data-flow" fill="none" />
-      {/* Cable gland (right side of enclosure) */}
-      <circle cx="540" cy="250" r="7" fill="#0f1114" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+      <path d="M597 275 L630 275 L630 280 L630 420" stroke="rgba(52,211,153,0.35)" strokeWidth="2" strokeDasharray="4 4" className="sensor-glow" fill="none" />
+      <rect x="616" y="420" width="28" height="60" rx="4" fill="#0f1114" stroke="rgba(52,211,153,0.3)" strokeWidth="1" />
+      <line x1="630" y1="480" x2="630" y2="505" stroke="rgba(52,211,153,0.4)" strokeWidth="1.5" />
+      <circle cx="630" cy="508" r="3" fill="#34d399" opacity="0.5" className="sensor-glow" />
+      <text x="630" y="440" textAnchor="middle" fill="rgba(52,211,153,0.6)" className="label-data">pH</text>
+      <text x="630" y="452" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">0–14</text>
+      <text x="630" y="525" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">pH Probe</text>
+    </g>
 
-      {/* Chemical Doser icon */}
-      <rect x="560" y="225" width="50" height="50" rx="6" fill="#0f1114" stroke="rgba(251,191,36,0.3)" strokeWidth="1" />
-      {/* Tank body */}
-      <rect x="574" y="232" width="22" height="15" rx="2" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="1" />
-      {/* Liquid fill */}
-      <rect x="575" y="239" width="20" height="7" rx="1" fill="rgba(251,191,36,0.08)" />
-      {/* Outlet nozzle */}
-      <line x1="585" y1="247" x2="585" y2="255" stroke="rgba(251,191,36,0.3)" strokeWidth="1.2" />
-      {/* Drip */}
-      <circle cx="585" cy="259" r="1.5" fill="rgba(251,191,36,0.35)">
+    {/* ---- Sensor Array (from bottom header) ---- */}
+    <g>
+      <path d="M200 330 L200 360 L200 410" stroke="rgba(45,140,240,0.3)" strokeWidth="2" strokeDasharray="4 4" className="sensor-glow" fill="none" />
+      <path d="M200 410 L170 430" stroke="rgba(45,140,240,0.25)" strokeWidth="1.2" strokeDasharray="3 3" fill="none" />
+      <path d="M200 410 L200 430" stroke="rgba(45,140,240,0.25)" strokeWidth="1.2" strokeDasharray="3 3" fill="none" />
+      <path d="M200 410 L230 430" stroke="rgba(251,191,36,0.25)" strokeWidth="1.2" strokeDasharray="3 3" fill="none" />
+
+      <rect x="157" y="430" width="26" height="45" rx="3" fill="#0f1114" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8" />
+      <text x="170" y="448" textAnchor="middle" fill="rgba(45,140,240,0.5)" className="label-data">TDS</text>
+      <line x1="170" y1="475" x2="170" y2="500" stroke="rgba(45,140,240,0.3)" strokeWidth="1.2" />
+      <circle cx="170" cy="503" r="2.5" fill="#2d8cf0" opacity="0.5" className="sensor-glow" />
+
+      <rect x="187" y="430" width="26" height="45" rx="3" fill="#0f1114" stroke="rgba(45,140,240,0.25)" strokeWidth="0.8" />
+      <text x="200" y="448" textAnchor="middle" fill="rgba(45,140,240,0.5)" className="label-data">ORP</text>
+      <line x1="200" y1="475" x2="200" y2="500" stroke="rgba(45,140,240,0.3)" strokeWidth="1.2" />
+      <circle cx="200" cy="503" r="2.5" fill="#2d8cf0" opacity="0.5" className="sensor-glow" style={{ animationDelay: '0.4s' }} />
+
+      <rect x="217" y="430" width="26" height="45" rx="3" fill="#0f1114" stroke="rgba(251,191,36,0.25)" strokeWidth="0.8" />
+      <text x="230" y="448" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">Turb</text>
+      <line x1="230" y1="475" x2="230" y2="500" stroke="rgba(251,191,36,0.3)" strokeWidth="1.2" />
+      <circle cx="230" cy="503" r="2.5" fill="#fbbf24" opacity="0.5" className="sensor-glow" style={{ animationDelay: '0.8s' }} />
+
+      <text x="200" y="525" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Sensor Array</text>
+    </g>
+
+    {/* ---- I2C Expansion (from bottom header) ---- */}
+    <g>
+      <path d="M330 330 L330 360 L330 430" stroke="rgba(45,140,240,0.25)" strokeWidth="1.5" strokeDasharray="4 6" fill="none" />
+      <rect x="305" y="430" width="50" height="35" rx="4" fill="#0f1114" stroke="rgba(45,140,240,0.2)" strokeWidth="0.8" />
+      <text x="330" y="448" textAnchor="middle" fill="rgba(45,140,240,0.4)" className="label-data">I²C</text>
+      <text x="330" y="460" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">3.3V</text>
+      <line x1="315" y1="430" x2="315" y2="425" stroke="rgba(45,140,240,0.2)" strokeWidth="0.6" />
+      <line x1="322" y1="430" x2="322" y2="425" stroke="rgba(45,140,240,0.2)" strokeWidth="0.6" />
+      <line x1="329" y1="430" x2="329" y2="425" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
+      <line x1="336" y1="430" x2="336" y2="425" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
+      <text x="330" y="480" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Expansion</text>
+    </g>
+
+    {/* ---- Relay Output / Chemical Doser (from top relay terminals) ---- */}
+    <g>
+      <path d="M380 20 L380 0 L380 -10" stroke="rgba(251,191,36,0.3)" strokeWidth="1.5" fill="none" />
+      <path d="M380 50 L380 20" stroke="rgba(251,191,36,0.15)" strokeWidth="1" strokeDasharray="2 3" fill="none" />
+      {/* Wire down to doser */}
+      <path d="M560 50 L560 10 L480 10 L480 420" stroke="rgba(251,191,36,0.3)" strokeWidth="1.5" strokeDasharray="5 5" className="data-flow" fill="none" />
+      <rect x="456" y="420" width="50" height="50" rx="6" fill="#0f1114" stroke="rgba(251,191,36,0.3)" strokeWidth="1" />
+      <rect x="470" y="427" width="22" height="15" rx="2" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="1" />
+      <rect x="471" y="434" width="20" height="7" rx="1" fill="rgba(251,191,36,0.08)" />
+      <line x1="481" y1="442" x2="481" y2="450" stroke="rgba(251,191,36,0.3)" strokeWidth="1.2" />
+      <circle cx="481" cy="454" r="1.5" fill="rgba(251,191,36,0.35)">
         <animate attributeName="opacity" values="0.4;0.1;0.4" dur="1.5s" repeatCount="indefinite" />
       </circle>
-      <text x="585" y="270" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">Doser</text>
-      <text x="585" y="290" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Relay Out</text>
-      <text x="585" y="300" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">10A · 250VAC</text>
-    </g>
-
-    {/* ---- Coax from antenna gland to SX1262 ---- */}
-    <g>
-      <path d="M470 107 L470 130 L430 145" stroke="rgba(251,191,36,0.25)" strokeWidth="1" strokeDasharray="3 3" className="data-flow" fill="none" />
+      <text x="481" y="465" textAnchor="middle" fill="rgba(251,191,36,0.5)" className="label-data">Doser</text>
+      <text x="481" y="485" textAnchor="middle" fill="rgba(255,255,255,0.2)" className="label-sm">Relay Out</text>
+      <text x="481" y="495" textAnchor="middle" fill="rgba(255,255,255,0.15)" className="label-sm">10A · 250VAC</text>
     </g>
 
     {/* ========== COLOR LEGEND ========== */}
     <g>
-      <circle cx="120" cy="555" r="4" fill="#34d399" opacity="0.6" />
-      <text x="130" y="558" fill="rgba(255,255,255,0.35)" className="label-sm">Sensor</text>
+      <circle cx="140" cy="575" r="4" fill="#34d399" opacity="0.6" />
+      <text x="150" y="578" fill="rgba(255,255,255,0.35)" className="label-sm">Sensor</text>
 
-      <circle cx="185" cy="555" r="4" fill="#2d8cf0" opacity="0.6" />
-      <text x="195" y="558" fill="rgba(255,255,255,0.35)" className="label-sm">Data</text>
+      <circle cx="210" cy="575" r="4" fill="#2d8cf0" opacity="0.6" />
+      <text x="220" y="578" fill="rgba(255,255,255,0.35)" className="label-sm">Data</text>
 
-      <circle cx="240" cy="555" r="4" fill="#f87171" opacity="0.6" />
-      <text x="250" y="558" fill="rgba(255,255,255,0.35)" className="label-sm">Power</text>
+      <circle cx="270" cy="575" r="4" fill="#f87171" opacity="0.6" />
+      <text x="280" y="578" fill="rgba(255,255,255,0.35)" className="label-sm">Power</text>
 
-      <circle cx="300" cy="555" r="4" fill="#fbbf24" opacity="0.6" />
-      <text x="310" y="558" fill="rgba(255,255,255,0.35)" className="label-sm">Control</text>
+      <circle cx="330" cy="575" r="4" fill="#fbbf24" opacity="0.6" />
+      <text x="340" y="578" fill="rgba(255,255,255,0.35)" className="label-sm">Control</text>
     </g>
   </DiagramSvg>
 );

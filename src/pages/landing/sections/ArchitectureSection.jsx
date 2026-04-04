@@ -217,7 +217,7 @@ const PipelineTerminal = () => (
 
 const DiagramWrapper = styled.div`
   width: 100%;
-  max-width: 620px;
+  max-width: 660px;
   margin: 0 auto;
 `;
 

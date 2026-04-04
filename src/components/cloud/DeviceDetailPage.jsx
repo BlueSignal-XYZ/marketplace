@@ -144,15 +144,23 @@ const Tabs = styled.div`
   display: flex;
   border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Tab = styled.button`
   border: none;
   background: none;
   padding: 16px 24px;
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
+  min-height: 44px;
   color: ${({ $active, theme }) =>
     $active
       ? theme.colors?.primary700 || "#0369a1"
