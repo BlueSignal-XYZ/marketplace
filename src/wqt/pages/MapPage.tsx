@@ -10,7 +10,7 @@ import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
 // Set Mapbox token - requires valid VITE_MAPBOX_TOKEN environment variable
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-const HAS_VALID_TOKEN = MAPBOX_TOKEN && MAPBOX_TOKEN.length > 50 && MAPBOX_TOKEN.startsWith('pk.');
+const HAS_VALID_TOKEN = typeof MAPBOX_TOKEN === 'string' && MAPBOX_TOKEN.length > 3 && MAPBOX_TOKEN.startsWith('pk.');
 
 if (HAS_VALID_TOKEN) {
   mapboxgl.accessToken = MAPBOX_TOKEN;

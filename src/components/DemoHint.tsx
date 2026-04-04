@@ -6,7 +6,7 @@ const HintContainer = styled.div`
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin-left: 8px;
+  margin-left: 0;
 `;
 
 const HintButton = styled.button`
@@ -20,6 +20,8 @@ const HintButton = styled.button`
   flex-shrink: 0;
   padding: 0;
   line-height: 1;
+  aspect-ratio: 1;
+  box-sizing: border-box;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
