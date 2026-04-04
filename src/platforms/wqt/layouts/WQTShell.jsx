@@ -60,11 +60,13 @@ const MainContent = styled.main`
     /* Tablet: offset by narrow sidebar */
     @media (min-width: 768px) {
       margin-left: ${SIDEBAR_WIDTH_TABLET}px;
+      padding-right: 16px;
     }
 
     /* Desktop: offset by full sidebar */
     @media (min-width: 1024px) {
       margin-left: ${SIDEBAR_WIDTH}px;
+      padding-right: 24px;
     }
   `}
 `;

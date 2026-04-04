@@ -348,10 +348,10 @@ const WiringDiagram = () => (
 
     {/* ---- Relay Output / Chemical Doser (from top relay terminals) ---- */}
     <g>
-      <path d="M380 20 L380 0 L380 -10" stroke="rgba(251,191,36,0.3)" strokeWidth="1.5" fill="none" />
-      <path d="M380 50 L380 20" stroke="rgba(251,191,36,0.15)" strokeWidth="1" strokeDasharray="2 3" fill="none" />
-      {/* Wire down to doser */}
-      <path d="M560 50 L560 10 L480 10 L480 420" stroke="rgba(251,191,36,0.3)" strokeWidth="1.5" strokeDasharray="5 5" className="data-flow" fill="none" />
+      {/* Trace from relay IC area down through board to bottom edge */}
+      <path d="M480 135 L480 350" stroke="rgba(251,191,36,0.12)" strokeWidth="0.6" strokeDasharray="2 4" fill="none" />
+      {/* External wire from enclosure bottom to doser */}
+      <path d="M480 360 L480 420" stroke="rgba(251,191,36,0.3)" strokeWidth="1.5" strokeDasharray="5 5" className="data-flow" fill="none" />
       <rect x="456" y="420" width="50" height="50" rx="6" fill="#0f1114" stroke="rgba(251,191,36,0.3)" strokeWidth="1" />
       <rect x="470" y="427" width="22" height="15" rx="2" fill="none" stroke="rgba(251,191,36,0.25)" strokeWidth="1" />
       <rect x="471" y="434" width="20" height="7" rx="1" fill="rgba(251,191,36,0.08)" />
