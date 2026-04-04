@@ -32,7 +32,6 @@ function Livepeer() {
       const client = createReactClient({
         provider: studioProvider(key)
       })
-      console.log('client', {client});
       setLivepeerClient(client);
     }
   }, [key])

@@ -183,7 +183,6 @@ const ListingPage = () => {
       try {
         const allEvents = (await marketEvents.getAllEvents())?.events;
         if (!allEvents) return;
-        console.log({ allEvents });
         const listingEvents = allEvents.filter(
           (event) => event.listingId?.toString() === id
         );

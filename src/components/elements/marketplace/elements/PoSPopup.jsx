@@ -134,7 +134,6 @@ const PoSPopup = ({ closePopup, actionType, listingId, buyNFT, placeBid, listing
         ? await buyNFT(listingId, String(value))
         : await placeBid(listingId, String(value));
 
-        console.log({txReceipt})
       setReceipt(txReceipt);
     } catch (error) {
       console.error('Transaction error:', error);

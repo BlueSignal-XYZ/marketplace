@@ -210,10 +210,8 @@ const EventsPopup = ({ onClose }) => {
     if (filterType in marketEvents.filtered) {
       _events = (await marketEvents.filtered[filterType](rangeFilter, toBlock))
         ?.events;
-      console.log("filtered", { filterType, _events });
     } else {
       _events = (await marketEvents.getAllEvents(rangeFilter, toBlock))?.events;
-      console.log("all events", { _events });
     }
 
     if (Array.isArray(_events)) {

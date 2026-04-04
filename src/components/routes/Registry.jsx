@@ -249,7 +249,6 @@ function ExplorerPage() {
   useEffect(() => {
     const handleEvent = (event) => {
       setUpdateCache(event);
-      console.log(event.log);
     };
 
     NPCCreditsAPI.on("*", (e) => {
@@ -281,15 +280,6 @@ function ExplorerPage() {
           const creditTypes = await NPCCreditsAPI.getCreditTypes(
             1
           ); /** FIX ** */
-
-          console.log("DATA STATES*****************************", {
-            totalSupply: NUMBERS.toNumber(totalSupply),
-            totalSold: NUMBERS.toNumber(totalSold),
-            totalBurnedSupply: NUMBERS.toNumber(totalBurnedSupply),
-            totalCertificates: NUMBERS.toNumber(totalCertificates),
-            _producers,
-            creditTypes,
-          });
 
           //Append credit types to live cache for internal use by app
           setLiveCache({ ...liveCache, creditTypes });
@@ -360,7 +350,6 @@ function ExplorerPage() {
 
       if (!isCacheStale(cacheKey, cacheExpiryTime) || !updateCache) {
         const cachedData = JSON.parse(localStorage.getItem(cacheKey));
-        console.log("cacheDataProducer", { cachedData }, Boolean(cachedData));
         if (cachedData) {
           setProducersData(cachedData.data);
           return;
@@ -370,11 +359,9 @@ function ExplorerPage() {
       if (updateCache || !producersData) {
         try {
           var { creditTypes } = liveCache;
-          console.log("creditTypes", creditTypes);
           //Re-request if not available
           if (!creditTypes) {
             creditTypes = await NPCCreditsAPI.getCreditTypes(1);
-            console.log("Re-request of creditTypes");
           }
           const _producersData = await Promise.all(
             producers.map(async (producer) => {

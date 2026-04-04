@@ -300,8 +300,6 @@ const MediaUpload = () => {
         const endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(
           tusEndpoint
         )}`;
-        console.log("proxy-endpoint", endpoint);
-
         //https://github.com/tus/tus-js-client/blob/main/docs/api.md
         const upload = new Upload(activeFile, {
           endpoint: tusEndpoint,
@@ -320,7 +318,6 @@ const MediaUpload = () => {
             setuploadPercentage(Math.round((bytesUploaded / bytesTotal) * 100));
           },
           onSuccess() {
-            console.log("Upload finished:", upload.url, asset);
             setTimeout(() => {
               handleUploadSuccess(asset);
             }, 5000);
@@ -368,7 +365,6 @@ const MediaUpload = () => {
           return await parseVttFile(vttUrl);
         } else {
           // If no thumbnail source is found
-          console.warn("No thumbnail source found in playback info");
           return DEFAULT_THUMBNAIL;
         }
       }

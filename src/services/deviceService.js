@@ -147,7 +147,6 @@ export const createDevice = async (deviceData) => {
   try {
     const deviceRef = ref(db, `devices/${deviceData.id}`);
     await set(deviceRef, deviceData);
-    console.log(`Device created: ${deviceData.id}`);
     return deviceData;
   } catch (error) {
     console.error("Error creating device:", error);
@@ -219,8 +218,6 @@ export const createDeviceBatch = async (sku, quantity, createdBy, options = {}) 
 
     const rootRef = ref(db);
     await update(rootRef, updates);
-
-    console.log(`Batch created: ${quantity} devices (${serialNumbers[0]} to ${serialNumbers[quantity - 1]})`);
 
     return {
       success: true,
@@ -324,7 +321,6 @@ export const updateDevice = async (deviceId, updateData) => {
     };
 
     await set(deviceRef, updatedDevice);
-    console.log(`Device updated: ${deviceId}`);
 
     return updatedDevice;
   } catch (error) {
@@ -342,7 +338,6 @@ export const deleteDevice = async (deviceId) => {
   try {
     const deviceRef = ref(db, `devices/${deviceId}`);
     await set(deviceRef, null);
-    console.log(`Device deleted: ${deviceId}`);
     return true;
   } catch (error) {
     console.error("Error deleting device:", error);

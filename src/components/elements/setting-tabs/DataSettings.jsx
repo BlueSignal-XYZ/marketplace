@@ -39,18 +39,15 @@ const DataSettingsTab = () => {
   
   const handleBackup = () => {
     // Logic to trigger data backup
-    console.log("Backing up user data...");
   };
 
   const handleExport = () => {
     // Logic to export user data
-    console.log("Exporting user data...");
   };
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete your data? This action is irreversible.")) {
       // Logic to delete user data
-      console.log("Deleting user data...");
     }
   };
 

@@ -63,22 +63,12 @@ const Form = ({ item }) => {
         price: payAmount,
       });
   
-      console.log("Data", data);
-  
       const { certID } = data.response;
       if (certID > 0) {
         certReturn = certID;
       }
-  
-      console.log({ certReturn });
-  
+
     } catch (error) {
-      if (error?.shortMessage) {
-        console.log("ERROR", error);
-        // handle Message
-      } else {
-        console.log({ message: `Failed to fetch item details: ${error.message}` });
-      }
       throw error; // Re-throw the error after handling it
     }
   
@@ -109,7 +99,6 @@ const Form = ({ item }) => {
         // Successful Payment
         setMessage("Payment Successful");
         const newCert = await onSuccess();
-        console.log({newCert});
         if (newCert > 0) {
           naviagte(`/certificate/${newCert}`);
         } else {
