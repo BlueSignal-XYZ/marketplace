@@ -1,7 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
-import WiringDiagram from '../components/WiringDiagram';
 
 /* ── Section layout ─────────────────────────────────────── */
 
@@ -213,50 +212,6 @@ const PipelineTerminal = () => (
   </Terminal>
 );
 
-/* ── Wiring diagram wrapper ────────────────────────────── */
-
-const DiagramWrapper = styled.div`
-  width: 100%;
-  max-width: 660px;
-  margin: 0 auto;
-`;
-
-const DiagramHeader = styled.div`
-  text-align: center;
-  margin-bottom: 24px;
-`;
-
-const DiagramLabel = styled.span`
-  display: inline-block;
-  font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: ${({ theme }) => theme.colors.blueB};
-  margin-bottom: 8px;
-`;
-
-const DiagramTitle = styled.h3`
-  font-family: ${({ theme }) => theme.fonts.display};
-  font-size: 20px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.white};
-  margin-bottom: 8px;
-
-  ${({ theme }) => theme.media.sm} {
-    font-size: 18px;
-  }
-`;
-
-const DiagramDesc = styled.p`
-  font-size: 14px;
-  line-height: 1.65;
-  color: ${({ theme }) => theme.colors.w50};
-  max-width: 480px;
-  margin: 0 auto;
-`;
-
 /* ── Feature cards ──────────────────────────────────────── */
 
 const Cards = styled.div`
@@ -370,12 +325,6 @@ const ArchitectureSection = () => (
       </SectionHeader>
 
       <Grid>
-        <RevealOnScroll>
-          <DiagramWrapper>
-            <WiringDiagram />
-          </DiagramWrapper>
-        </RevealOnScroll>
-
         <RevealOnScroll>
           <PipelineTerminal />
         </RevealOnScroll>
