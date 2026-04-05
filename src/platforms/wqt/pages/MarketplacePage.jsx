@@ -24,20 +24,20 @@ import { useToastContext } from '../../../shared/providers/ToastProvider';
 const Page = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 32px 24px 16px;
+  padding: 24px 16px;
   overflow-x: hidden;
   box-sizing: border-box;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 28px 36px 28px 20px;
+    padding: 28px 24px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 32px 48px 32px 32px;
+    padding: 32px 32px;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.xl}px) {
-    padding: 32px 64px 32px 48px;
+    padding: 32px 48px;
   }
 `;
 
