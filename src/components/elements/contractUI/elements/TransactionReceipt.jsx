@@ -59,13 +59,50 @@ const Value = styled.span`
   font-weight: 300;
 `;
 
-const TransactionReceipt = ({ receipt, onClose }) => {
-  const [_openLogs, _setOpenLogs] = useState({});
+const Logs = styled.div`
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+`;
 
-  const _toggleLogDetail = index => {
-    _setOpenLogs(prevState => ({
+const LogItem = styled.div`
+  margin-bottom: 1rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const LogDetails = styled.div`
+  background-color: #f8f9fa;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  display: none;
+  &.open {
+    display: block;
+  }
+`;
+
+const ExpandButton = styled.button`
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background: #0056b3;
+  }
+`;
+
+const TransactionReceipt = ({ receipt, onClose }) => {
+  const [openLogs, setOpenLogs] = useState({});
+
+  const toggleLogDetail = (index) => {
+    setOpenLogs((prevState) => ({
       ...prevState,
-      [index]: !prevState[index]
+      [index]: !prevState[index],
     }));
   };
 
@@ -75,12 +112,14 @@ const TransactionReceipt = ({ receipt, onClose }) => {
     <ReceiptModal>
       <CloseButton onClick={onClose}>×</CloseButton>
       <Title>Transaction Receipt</Title>
-      {Object.entries(receipt).filter(([key]) => key !== 'logs').map(([key, value], index) => (
-        <KeyValue key={index}>
-          <Key>{key}:</Key>
-          <Value>{value?.toString()}</Value>
-        </KeyValue>
-      ))}
+      {Object.entries(receipt)
+        .filter(([key]) => key !== 'logs')
+        .map(([key, value], index) => (
+          <KeyValue key={index}>
+            <Key>{key}:</Key>
+            <Value>{value?.toString()}</Value>
+          </KeyValue>
+        ))}
     </ReceiptModal>
   );
 };

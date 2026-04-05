@@ -3,18 +3,18 @@
  * Full 7-Step Commissioning Wizard
  * Uses the real backend API via useCommission hook
  */
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
-import { useCommission } from "../../hooks/useCommission";
-import { useToastContext } from "../../shared/providers/ToastProvider";
-import { testDeviceConnection, ApiError } from "../../services/v2/client";
-import { QRScanner, LocationCapture } from "../installer";
-import CloudPageLayout from "./CloudPageLayout";
-import { ButtonPrimary, ButtonSecondary, ButtonDanger } from "../shared/button/Button";
-import { Input } from "../shared/input/Input";
-import { getSites } from "../../services/v2/api";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
+import { useCommission } from '../../hooks/useCommission';
+import { useToastContext } from '../../shared/providers/ToastProvider';
+import { testDeviceConnection, ApiError } from '../../services/v2/client';
+import { QRScanner, LocationCapture } from '../installer';
+import CloudPageLayout from './CloudPageLayout';
+import { ButtonPrimary, ButtonSecondary, ButtonDanger } from '../shared/button/Button';
+import { Input } from '../shared/input/Input';
+import { getSites } from '../../services/v2/api';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -45,22 +45,22 @@ const ProgressStep = styled.div`
   font-size: 11px;
   font-weight: 600;
   border-radius: 8px;
-  cursor: ${({ $clickable }) => ($clickable ? "pointer" : "default")};
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   transition: all 0.2s ease-out;
 
   background: ${({ $active, $completed, theme }) =>
     $active
-      ? theme.colors?.primary500 || "#0284c7"
+      ? theme.colors?.primary500 || '#0284c7'
       : $completed
-      ? theme.colors?.primary100 || "#e0f2ff"
-      : theme.colors?.ui100 || "#f4f4f5"};
+        ? theme.colors?.primary100 || '#e0f2ff'
+        : theme.colors?.ui100 || '#f4f4f5'};
 
   color: ${({ $active, $completed, theme }) =>
     $active
-      ? "#ffffff"
+      ? '#ffffff'
       : $completed
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui500 || "#71717a"};
+        ? theme.colors?.primary700 || '#0369a1'
+        : theme.colors?.ui500 || '#71717a'};
 
   ${({ $clickable }) =>
     $clickable &&
@@ -85,7 +85,7 @@ const StepLabel = styled.div`
 
 const Card = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
@@ -95,13 +95,13 @@ const StepTitle = styled.h2`
   margin: 0 0 8px;
   font-size: 24px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#18181b'};
 `;
 
 const StepDescription = styled.p`
   margin: 0 0 24px;
   font-size: 15px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   line-height: 1.6;
 `;
 
@@ -118,55 +118,55 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const Select = styled.select`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   height: 44px;
   padding: 0px 12px;
   border-radius: 12px;
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
   width: 100%;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || "#EFFBFB"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
   }
 `;
 
 const SiteCard = styled.div`
   border: 2px solid
     ${({ $selected, theme }) =>
-      $selected ? theme.colors?.primary500 || "#0284c7" : theme.colors?.ui200 || "#e5e7eb"};
+      $selected ? theme.colors?.primary500 || '#0284c7' : theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 12px;
   cursor: pointer;
   transition: all 0.15s ease-out;
   background: ${({ $selected, theme }) =>
-    $selected ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $selected ? theme.colors?.primary50 || '#e0f2ff' : '#ffffff'};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#22d3ee'};
   }
 `;
 
 const SiteName = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#18181b'};
   margin-bottom: 4px;
 `;
 
 const SiteAddress = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
 `;
 
 const PhotoGrid = styled.div`
@@ -178,7 +178,7 @@ const PhotoGrid = styled.div`
 const PhotoCard = styled.div`
   position: relative;
   aspect-ratio: 1;
-  background: ${({ theme }) => theme.colors?.ui100 || "#f4f4f5"};
+  background: ${({ theme }) => theme.colors?.ui100 || '#f4f4f5'};
   border-radius: 8px;
   overflow: hidden;
 
@@ -223,8 +223,8 @@ const RemovePhotoButton = styled.button`
 
 const AddPhotoButton = styled.label`
   aspect-ratio: 1;
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
-  border: 2px dashed ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
+  border: 2px dashed ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -234,8 +234,8 @@ const AddPhotoButton = styled.label`
   transition: all 0.2s;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#0284c7"};
-    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#0284c7'};
+    background: ${({ theme }) => theme.colors?.primary50 || '#e0f2ff'};
   }
 
   input {
@@ -255,19 +255,20 @@ const TestItem = styled.div`
   padding: 16px;
   border-radius: 8px;
   background: ${({ $status }) => {
-    if ($status === "passed") return "#d1fae5";
-    if ($status === "failed") return "#fee2e2";
-    if ($status === "running") return "#dbeafe";
-    if ($status === "skipped") return "#fef3c7";
-    return "#f9fafb";
+    if ($status === 'passed') return '#d1fae5';
+    if ($status === 'failed') return '#fee2e2';
+    if ($status === 'running') return '#dbeafe';
+    if ($status === 'skipped') return '#fef3c7';
+    return '#f9fafb';
   }};
-  border: 1px solid ${({ $status }) => {
-    if ($status === "passed") return "#86efac";
-    if ($status === "failed") return "#fca5a5";
-    if ($status === "running") return "#93c5fd";
-    if ($status === "skipped") return "#fde68a";
-    return "#e5e7eb";
-  }};
+  border: 1px solid
+    ${({ $status }) => {
+      if ($status === 'passed') return '#86efac';
+      if ($status === 'failed') return '#fca5a5';
+      if ($status === 'running') return '#93c5fd';
+      if ($status === 'skipped') return '#fde68a';
+      return '#e5e7eb';
+    }};
 `;
 
 const TestIcon = styled.div`
@@ -289,12 +290,12 @@ const TestInfo = styled.div`
 const TestName = styled.div`
   font-size: 15px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#18181b'};
 `;
 
 const TestDetails = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   margin-top: 2px;
 `;
 
@@ -309,7 +310,7 @@ const SummaryGrid = styled.div`
 `;
 
 const SummaryCard = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   border-radius: 8px;
   padding: 16px;
 `;
@@ -318,14 +319,14 @@ const SummaryLabel = styled.div`
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
-  color: ${({ theme }) => theme.colors?.ui500 || "#71717a"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#71717a'};
   margin-bottom: 8px;
 `;
 
 const SummaryValue = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#18181b'};
 `;
 
 const Footer = styled.div`
@@ -340,9 +341,9 @@ const Footer = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.red50 || "#fef2f2"};
-  border: 1px solid ${({ theme }) => theme.colors?.red200 || "#fecaca"};
-  color: ${({ theme }) => theme.colors?.red700 || "#b91c1c"};
+  background: ${({ theme }) => theme.colors?.red50 || '#fef2f2'};
+  border: 1px solid ${({ theme }) => theme.colors?.red200 || '#fecaca'};
+  color: ${({ theme }) => theme.colors?.red700 || '#b91c1c'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -376,11 +377,15 @@ const Skeleton = styled.div`
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
-  height: ${({ $height }) => $height || "200px"};
+  height: ${({ $height }) => $height || '200px'};
 
   @keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 `;
 
@@ -389,23 +394,25 @@ const Skeleton = styled.div`
 /* -------------------------------------------------------------------------- */
 
 const STEPS = [
-  { id: "device_scan", label: "Scan", icon: "1" },
-  { id: "site_selection", label: "Site", icon: "2" },
-  { id: "location_capture", label: "Location", icon: "3" },
-  { id: "photo_upload", label: "Photos", icon: "4" },
-  { id: "connectivity_test", label: "Tests", icon: "5" },
-  { id: "sensor_calibration", label: "Calibrate", icon: "6" },
-  { id: "review_confirm", label: "Review", icon: "7" },
+  { id: 'device_scan', label: 'Scan', icon: '1' },
+  { id: 'site_selection', label: 'Site', icon: '2' },
+  { id: 'location_capture', label: 'Location', icon: '3' },
+  { id: 'photo_upload', label: 'Photos', icon: '4' },
+  { id: 'connectivity_test', label: 'Tests', icon: '5' },
+  { id: 'sensor_calibration', label: 'Calibrate', icon: '6' },
+  { id: 'review_confirm', label: 'Review', icon: '7' },
 ];
 
-const REQUIRED_PHOTOS = ["Installation", "Sensors", "Site Overview"];
+const REQUIRED_PHOTOS = ['Installation', 'Sensors', 'Site Overview'];
 
 /* -------------------------------------------------------------------------- */
 /*                              MAIN COMPONENT                                */
 /* -------------------------------------------------------------------------- */
 
 export default function FullCommissioningWizard() {
-  useEffect(() => { document.title = 'Commissioning — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Commissioning — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
@@ -430,7 +437,7 @@ export default function FullCommissioningWizard() {
   const [deviceData, setDeviceData] = useState(null);
   const [selectedSite, setSelectedSite] = useState(null);
   const [newSiteMode, setNewSiteMode] = useState(false);
-  const [newSiteName, setNewSiteName] = useState("");
+  const [newSiteName, setNewSiteName] = useState('');
   const [location, setLocation] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [testResults, setTestResults] = useState([]);
@@ -451,7 +458,7 @@ export default function FullCommissioningWizard() {
       const data = await getSites(user?.uid);
       setSites(data || []);
     } catch (err) {
-      console.error("Error loading sites:", err);
+      console.error('Error loading sites:', err);
     } finally {
       setLoadingSites(false);
     }
@@ -468,7 +475,7 @@ export default function FullCommissioningWizard() {
       // Auto-advance to next step
       setCurrentStepIndex(1);
     } catch (err) {
-      setError(err.message || "Failed to start commissioning");
+      setError(err.message || 'Failed to start commissioning');
     }
   };
 
@@ -479,9 +486,9 @@ export default function FullCommissioningWizard() {
 
     if (commission?.commissionId) {
       try {
-        await updateStep("site_selection", { siteId: site.id });
+        await updateStep('site_selection', { siteId: site.id });
       } catch (err) {
-        console.error("Error updating step:", err);
+        console.error('Error updating step:', err);
       }
     }
   };
@@ -493,13 +500,13 @@ export default function FullCommissioningWizard() {
 
     if (commission?.commissionId) {
       try {
-        await updateStep("location_capture", {
+        await updateStep('location_capture', {
           latitude: loc.latitude,
           longitude: loc.longitude,
           address: loc.address,
         });
       } catch (err) {
-        console.error("Error updating step:", err);
+        console.error('Error updating step:', err);
       }
     }
   };
@@ -519,7 +526,7 @@ export default function FullCommissioningWizard() {
               id: `photo-${ts}-${idx}`,
               url: event.target.result,
               caption: file.name,
-              type: "installation",
+              type: 'installation',
             });
           };
           reader.readAsDataURL(file);
@@ -537,7 +544,7 @@ export default function FullCommissioningWizard() {
   // Run connectivity tests via v2 API
   const handleRunTests = async () => {
     if (!deviceData?.serialNumber) {
-      setError("No device selected. Scan a device first.");
+      setError('No device selected. Scan a device first.');
       return;
     }
     setRunningTests(true);
@@ -548,29 +555,49 @@ export default function FullCommissioningWizard() {
 
       if (result.simulated) {
         setTestResults([
-          { id: "power", name: "Power System", status: "skipped", details: "Simulation mode — no device connected" },
-          { id: "network", name: "Network Connectivity", status: "skipped", details: "Simulation mode — no device connected" },
-          { id: "sensors", name: "Sensor Response", status: "skipped", details: "Simulation mode — no device connected" },
-          { id: "data", name: "Data Transmission", status: "skipped", details: "Simulation mode — no device connected" },
+          {
+            id: 'power',
+            name: 'Power System',
+            status: 'skipped',
+            details: 'Simulation mode — no device connected',
+          },
+          {
+            id: 'network',
+            name: 'Network Connectivity',
+            status: 'skipped',
+            details: 'Simulation mode — no device connected',
+          },
+          {
+            id: 'sensors',
+            name: 'Sensor Response',
+            status: 'skipped',
+            details: 'Simulation mode — no device connected',
+          },
+          {
+            id: 'data',
+            name: 'Data Transmission',
+            status: 'skipped',
+            details: 'Simulation mode — no device connected',
+          },
         ]);
         setIsSimulatedTests(true);
       } else {
-        const status = result.connected ? "passed" : "failed";
-        const details = result.connected ? `Connected (${result.signal || "OK"})` : (result.message || "Connection failed");
-        setTestResults([
-          { id: "connection", name: "Connection", status, details },
-        ]);
+        const status = result.connected ? 'passed' : 'failed';
+        const details = result.connected
+          ? `Connected (${result.signal || 'OK'})`
+          : result.message || 'Connection failed';
+        setTestResults([{ id: 'connection', name: 'Connection', status, details }]);
         setIsSimulatedTests(false);
 
         if (commission?.commissionId) {
-          await updateStep("connectivity_test", {
-            tests: [{ id: "connection", name: "Connection", status, details }],
+          await updateStep('connectivity_test', {
+            tests: [{ id: 'connection', name: 'Connection', status, details }],
             passed: result.connected,
           });
         }
       }
     } catch (err) {
-      const msg = err instanceof ApiError ? err.message : "Connection test failed.";
+      const msg = err instanceof ApiError ? err.message : 'Connection test failed.';
       setError(msg);
       setTestResults([]);
     } finally {
@@ -618,13 +645,22 @@ export default function FullCommissioningWizard() {
   // Check if step is complete
   const isStepComplete = (index) => {
     switch (index) {
-      case 0: return !!deviceData;
-      case 1: return !!selectedSite || !!newSiteName;
-      case 2: return !!location;
-      case 3: return photos.length >= 1;
-      case 4: return testResults.some((t) => t.status === "passed" || t.status === "failed" || t.status === "skipped");
-      case 5: return Object.keys(calibrationData).length > 0;
-      default: return false;
+      case 0:
+        return !!deviceData;
+      case 1:
+        return !!selectedSite || !!newSiteName;
+      case 2:
+        return !!location;
+      case 3:
+        return photos.length >= 1;
+      case 4:
+        return testResults.some(
+          (t) => t.status === 'passed' || t.status === 'failed' || t.status === 'skipped'
+        );
+      case 5:
+        return Object.keys(calibrationData).length > 0;
+      default:
+        return false;
     }
   };
 
@@ -633,39 +669,48 @@ export default function FullCommissioningWizard() {
     setError(null);
 
     if (isSimulatedTests) {
-      toast({ type: "error", message: "Cannot complete: connectivity tests were run in simulation mode. Connect a real device to commission." });
+      toast({
+        type: 'error',
+        message:
+          'Cannot complete: connectivity tests were run in simulation mode. Connect a real device to commission.',
+      });
       return;
     }
 
     try {
       await complete();
-      toast({ type: "success", message: "Device commissioned successfully!" });
-      navigate("/cloud/commissioning");
+      toast({ type: 'success', message: 'Device commissioned successfully!' });
+      navigate('/cloud/commissioning');
     } catch (err) {
-      setError(err.message || "Failed to complete commissioning");
+      setError(err.message || 'Failed to complete commissioning');
     }
   };
 
   // Handle cancel
   const handleCancel = async () => {
-    if (window.confirm("Are you sure you want to cancel this commissioning?")) {
+    if (window.confirm('Are you sure you want to cancel this commissioning?')) {
       try {
-        await cancel("User cancelled");
-        navigate("/cloud/commissioning");
+        await cancel('User cancelled');
+        navigate('/cloud/commissioning');
       } catch (err) {
-        console.error("Error cancelling:", err);
-        navigate("/cloud/commissioning");
+        console.error('Error cancelling:', err);
+        navigate('/cloud/commissioning');
       }
     }
   };
 
   const getTestIcon = (status) => {
     switch (status) {
-      case "passed": return "✓";
-      case "failed": return "✗";
-      case "running": return "...";
-      case "skipped": return "—";
-      default: return "-";
+      case 'passed':
+        return '✓';
+      case 'failed':
+        return '✗';
+      case 'running':
+        return '...';
+      case 'skipped':
+        return '—';
+      default:
+        return '-';
     }
   };
 
@@ -691,14 +736,12 @@ export default function FullCommissioningWizard() {
           ))}
         </ProgressBar>
 
-        {(error || commissionError) && (
-          <ErrorMessage>{error || commissionError}</ErrorMessage>
-        )}
+        {(error || commissionError) && <ErrorMessage>{error || commissionError}</ErrorMessage>}
 
         {/* Step Content */}
         <Card>
           {/* Step 1: Device Scan */}
-          {currentStep.id === "device_scan" && (
+          {currentStep.id === 'device_scan' && (
             <>
               <StepTitle>Scan Device</StepTitle>
               <StepDescription>
@@ -708,21 +751,16 @@ export default function FullCommissioningWizard() {
               {deviceData ? (
                 <SuccessMessage>
                   Device scanned successfully!
-                  <div style={{ fontWeight: 700, marginTop: 8 }}>
-                    {deviceData.serialNumber}
-                  </div>
+                  <div style={{ fontWeight: 700, marginTop: 8 }}>{deviceData.serialNumber}</div>
                 </SuccessMessage>
               ) : (
-                <QRScanner
-                  onDeviceValidated={handleDeviceScan}
-                  onError={(err) => setError(err)}
-                />
+                <QRScanner onDeviceValidated={handleDeviceScan} onError={(err) => setError(err)} />
               )}
             </>
           )}
 
           {/* Step 2: Site Selection */}
-          {currentStep.id === "site_selection" && (
+          {currentStep.id === 'site_selection' && (
             <>
               <StepTitle>Select Site</StepTitle>
               <StepDescription>
@@ -730,7 +768,7 @@ export default function FullCommissioningWizard() {
               </StepDescription>
 
               <FormGroup>
-                <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                   <input
                     type="checkbox"
                     checked={newSiteMode}
@@ -754,7 +792,7 @@ export default function FullCommissioningWizard() {
               ) : loadingSites ? (
                 <Skeleton $height="150px" />
               ) : sites.length === 0 ? (
-                <div style={{ textAlign: "center", padding: 32, color: "#6b7280" }}>
+                <div style={{ textAlign: 'center', padding: 32, color: '#6b7280' }}>
                   No sites found. Create a new site to continue.
                 </div>
               ) : (
@@ -766,7 +804,7 @@ export default function FullCommissioningWizard() {
                       onClick={() => handleSiteSelect(site)}
                     >
                       <SiteName>{site.name}</SiteName>
-                      <SiteAddress>{site.address || "No address"}</SiteAddress>
+                      <SiteAddress>{site.address || 'No address'}</SiteAddress>
                     </SiteCard>
                   ))}
                 </>
@@ -775,7 +813,7 @@ export default function FullCommissioningWizard() {
           )}
 
           {/* Step 3: Location Capture */}
-          {currentStep.id === "location_capture" && (
+          {currentStep.id === 'location_capture' && (
             <>
               <StepTitle>Capture Location</StepTitle>
               <StepDescription>
@@ -786,7 +824,10 @@ export default function FullCommissioningWizard() {
                 <SuccessMessage>
                   Location captured!
                   <div style={{ marginTop: 8, fontSize: 14 }}>
-                    {location.address || (location.latitude != null && location.longitude != null ? `${location.latitude}, ${location.longitude}` : "Location captured")}
+                    {location.address ||
+                      (location.latitude != null && location.longitude != null
+                        ? `${location.latitude}, ${location.longitude}`
+                        : 'Location captured')}
                   </div>
                 </SuccessMessage>
               ) : (
@@ -796,12 +837,12 @@ export default function FullCommissioningWizard() {
           )}
 
           {/* Step 4: Photo Upload */}
-          {currentStep.id === "photo_upload" && (
+          {currentStep.id === 'photo_upload' && (
             <>
               <StepTitle>Upload Photos</StepTitle>
               <StepDescription>
-                Take photos of the installation for documentation.
-                Required: {REQUIRED_PHOTOS.join(", ")}
+                Take photos of the installation for documentation. Required:{' '}
+                {REQUIRED_PHOTOS.join(', ')}
               </StepDescription>
 
               <PhotoGrid>
@@ -816,37 +857,31 @@ export default function FullCommissioningWizard() {
                 ))}
 
                 <AddPhotoButton>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handlePhotoUpload}
-                  />
-                  <div style={{ fontSize: 32, color: "#9ca3af" }}>+</div>
-                  <div style={{ fontSize: 12, color: "#6b7280" }}>Add Photo</div>
+                  <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} />
+                  <div style={{ fontSize: 32, color: '#9ca3af' }}>+</div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>Add Photo</div>
                 </AddPhotoButton>
               </PhotoGrid>
             </>
           )}
 
           {/* Step 5: Connectivity Tests */}
-          {currentStep.id === "connectivity_test" && (
+          {currentStep.id === 'connectivity_test' && (
             <>
               <StepTitle>Connectivity Tests</StepTitle>
-              <StepDescription>
-                Run automated tests to verify device connectivity.
-              </StepDescription>
+              <StepDescription>Run automated tests to verify device connectivity.</StepDescription>
 
               {isSimulatedTests && (
                 <SimBanner>
-                  Simulation Mode — no device connected. Results are not saved. Connect a real device to complete commissioning.
+                  Simulation Mode — no device connected. Results are not saved. Connect a real
+                  device to complete commissioning.
                 </SimBanner>
               )}
 
               {testResults.length === 0 ? (
-                <div style={{ textAlign: "center", padding: 32 }}>
+                <div style={{ textAlign: 'center', padding: 32 }}>
                   <ButtonPrimary onClick={handleRunTests} disabled={runningTests}>
-                    {runningTests ? "Running Tests..." : "Run Tests"}
+                    {runningTests ? 'Running Tests...' : 'Run Tests'}
                   </ButtonPrimary>
                 </div>
               ) : (
@@ -858,15 +893,15 @@ export default function FullCommissioningWizard() {
                         <TestInfo>
                           <TestName>{test.name}</TestName>
                           <TestDetails>
-                            {test.details || (test.status === "pending" ? "Waiting..." : "")}
+                            {test.details || (test.status === 'pending' ? 'Waiting...' : '')}
                           </TestDetails>
                         </TestInfo>
                       </TestItem>
                     ))}
                   </TestGrid>
 
-                  {testResults.some((t) => t.status === "failed") && (
-                    <div style={{ marginTop: 16, textAlign: "center" }}>
+                  {testResults.some((t) => t.status === 'failed') && (
+                    <div style={{ marginTop: 16, textAlign: 'center' }}>
                       <ButtonSecondary onClick={handleRunTests} disabled={runningTests}>
                         Retry Tests
                       </ButtonSecondary>
@@ -878,12 +913,10 @@ export default function FullCommissioningWizard() {
           )}
 
           {/* Step 6: Sensor Calibration */}
-          {currentStep.id === "sensor_calibration" && (
+          {currentStep.id === 'sensor_calibration' && (
             <>
               <StepTitle>Sensor Calibration</StepTitle>
-              <StepDescription>
-                Calibrate sensors with reference values.
-              </StepDescription>
+              <StepDescription>Calibrate sensors with reference values.</StepDescription>
 
               <FormGroup>
                 <Label htmlFor="ph">pH Reference Value</Label>
@@ -891,8 +924,8 @@ export default function FullCommissioningWizard() {
                   id="ph"
                   type="number"
                   step="0.1"
-                  value={calibrationData.ph || ""}
-                  onChange={(e) => handleCalibrationChange("ph", e.target.value)}
+                  value={calibrationData.ph || ''}
+                  onChange={(e) => handleCalibrationChange('ph', e.target.value)}
                   placeholder="7.0"
                 />
               </FormGroup>
@@ -903,8 +936,8 @@ export default function FullCommissioningWizard() {
                   id="temperature"
                   type="number"
                   step="0.1"
-                  value={calibrationData.temperature || ""}
-                  onChange={(e) => handleCalibrationChange("temperature", e.target.value)}
+                  value={calibrationData.temperature || ''}
+                  onChange={(e) => handleCalibrationChange('temperature', e.target.value)}
                   placeholder="25.0"
                 />
               </FormGroup>
@@ -915,8 +948,8 @@ export default function FullCommissioningWizard() {
                   id="dissolvedOxygen"
                   type="number"
                   step="0.1"
-                  value={calibrationData.dissolvedOxygen || ""}
-                  onChange={(e) => handleCalibrationChange("dissolvedOxygen", e.target.value)}
+                  value={calibrationData.dissolvedOxygen || ''}
+                  onChange={(e) => handleCalibrationChange('dissolvedOxygen', e.target.value)}
                   placeholder="8.0"
                 />
               </FormGroup>
@@ -924,34 +957,36 @@ export default function FullCommissioningWizard() {
           )}
 
           {/* Step 7: Review & Confirm */}
-          {currentStep.id === "review_confirm" && (
+          {currentStep.id === 'review_confirm' && (
             <>
               <StepTitle>Review & Confirm</StepTitle>
-              <StepDescription>
-                Review the commissioning details before completing.
-              </StepDescription>
+              <StepDescription>Review the commissioning details before completing.</StepDescription>
 
               {isSimulatedTests && (
                 <SimBanner>
-                  Simulation Mode — connectivity tests were not run on a real device. Complete is disabled. Connect a real device and re-run tests to commission.
+                  Simulation Mode — connectivity tests were not run on a real device. Complete is
+                  disabled. Connect a real device and re-run tests to commission.
                 </SimBanner>
               )}
 
               <SummaryGrid>
                 <SummaryCard>
                   <SummaryLabel>Device</SummaryLabel>
-                  <SummaryValue>{deviceData?.serialNumber || "N/A"}</SummaryValue>
+                  <SummaryValue>{deviceData?.serialNumber || 'N/A'}</SummaryValue>
                 </SummaryCard>
 
                 <SummaryCard>
                   <SummaryLabel>Site</SummaryLabel>
-                  <SummaryValue>{selectedSite?.name || newSiteName || "N/A"}</SummaryValue>
+                  <SummaryValue>{selectedSite?.name || newSiteName || 'N/A'}</SummaryValue>
                 </SummaryCard>
 
                 <SummaryCard>
                   <SummaryLabel>Location</SummaryLabel>
                   <SummaryValue>
-                    {location?.address || (location?.latitude != null && location?.longitude != null ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}` : "N/A")}
+                    {location?.address ||
+                      (location?.latitude != null && location?.longitude != null
+                        ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`
+                        : 'N/A')}
                   </SummaryValue>
                 </SummaryCard>
 
@@ -964,15 +999,15 @@ export default function FullCommissioningWizard() {
                   <SummaryLabel>Tests</SummaryLabel>
                   <SummaryValue>
                     {isSimulatedTests
-                      ? "Simulation mode (not saved)"
-                      : `${testResults.filter((t) => t.status === "passed").length}/${testResults.length} passed`}
+                      ? 'Simulation mode (not saved)'
+                      : `${testResults.filter((t) => t.status === 'passed').length}/${testResults.length} passed`}
                   </SummaryValue>
                 </SummaryCard>
 
                 <SummaryCard>
                   <SummaryLabel>Calibration</SummaryLabel>
                   <SummaryValue>
-                    {Object.keys(calibrationData).length > 0 ? "Complete" : "Skipped"}
+                    {Object.keys(calibrationData).length > 0 ? 'Complete' : 'Skipped'}
                   </SummaryValue>
                 </SummaryCard>
               </SummaryGrid>
@@ -983,31 +1018,23 @@ export default function FullCommissioningWizard() {
         {/* Footer Navigation */}
         <Footer>
           <div>
-            {currentStepIndex > 0 && (
-              <ButtonSecondary onClick={goBack}>
-                Back
-              </ButtonSecondary>
-            )}
+            {currentStepIndex > 0 && <ButtonSecondary onClick={goBack}>Back</ButtonSecondary>}
           </div>
 
-          <div style={{ display: "flex", gap: 12 }}>
-            <ButtonDanger onClick={handleCancel}>
-              Cancel
-            </ButtonDanger>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <ButtonDanger onClick={handleCancel}>Cancel</ButtonDanger>
 
             {currentStepIndex < STEPS.length - 1 ? (
-              <ButtonPrimary
-                onClick={goNext}
-                disabled={!isStepComplete(currentStepIndex)}
-              >
+              <ButtonPrimary onClick={goNext} disabled={!isStepComplete(currentStepIndex)}>
                 Continue
               </ButtonPrimary>
             ) : (
-              <ButtonPrimary
-                onClick={handleComplete}
-                disabled={loading || isSimulatedTests}
-              >
-                {loading ? "Completing..." : isSimulatedTests ? "Complete (blocked — simulation mode)" : "Complete Commission"}
+              <ButtonPrimary onClick={handleComplete} disabled={loading || isSimulatedTests}>
+                {loading
+                  ? 'Completing...'
+                  : isSimulatedTests
+                    ? 'Complete (blocked — simulation mode)'
+                    : 'Complete Commission'}
               </ButtonPrimary>
             )}
           </div>

@@ -1,23 +1,23 @@
 /**
  * Payment Processing Component
- * 
+ *
  * Purpose: Handles the payment processing process.
  */
 import { useState, useEffect, useRef } from 'react';
 import CheckoutForm from './CheckoutForm';
 import CustomerInfoForm from './CustomerInfoForm';
-import { FaTimes } from 'react-icons/fa'; 
+import { FaTimes } from 'react-icons/fa';
 import OrderConfirmation from './OrderConfirmation';
 import './Payment.css';
-import {FormWrapper} from './styled';
+import { FormWrapper } from './styled';
 
 /**
- * 
+ *
  * @param {function} setIsPaying set wheather paying or not
- * @param {Array} checkoutItems 
- * @returns 
+ * @param {Array} checkoutItems
+ * @returns
  */
-function Payment({setIsPaying, checkoutItems}) {
+function Payment({ setIsPaying, checkoutItems }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [checkoutItem, setCheckoutItem] = useState(null);
 
@@ -25,10 +25,10 @@ function Payment({setIsPaying, checkoutItems}) {
   const formRef = useRef(null);
 
   useEffect(() => {
-    if(checkoutItem){
-      setCurrentStep(3)
+    if (checkoutItem) {
+      setCurrentStep(3);
     }
-  }, [checkoutItem])
+  }, [checkoutItem]);
 
   //Exit Payment
   const exitSteps = () => {
@@ -45,24 +45,24 @@ function Payment({setIsPaying, checkoutItems}) {
     }
   };
 
-    /**
-     * 
-     * @param {Object} item 
-     * @param {number || null} payAmount 
-     * @returns 
-     */
-  const proceedToPayment = (item, payAmount) => setCheckoutItem({item, payAmount});
+  /**
+   *
+   * @param {Object} item
+   * @param {number || null} payAmount
+   * @returns
+   */
+  const proceedToPayment = (item, payAmount) => setCheckoutItem({ item, payAmount });
 
   return (
     <FormWrapper>
-      <div className='form-container' ref={formRef}>
+      <div className="form-container" ref={formRef}>
         {currentStep === 1 && <CustomerInfoForm onNextClick={goToNextStep} />}
-        {currentStep === 2 && <OrderConfirmation proceedToPayment={proceedToPayment} checkoutItems={checkoutItems} />}
-        {currentStep === 3 && checkoutItem && (
-            <CheckoutForm item={checkoutItem}/>
+        {currentStep === 2 && (
+          <OrderConfirmation proceedToPayment={proceedToPayment} checkoutItems={checkoutItems} />
         )}
+        {currentStep === 3 && checkoutItem && <CheckoutForm item={checkoutItem} />}
       </div>
-      <div className='navigation'>
+      <div className="navigation">
         <FaTimes onClick={exitSteps} />
       </div>
     </FormWrapper>

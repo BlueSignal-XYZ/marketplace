@@ -1,9 +1,9 @@
 // Save Quote Modal - Collects customer and site info to persist quote
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { CustomerAPI, SiteAPI } from "../../scripts/back_door";
-import orderService from "../../services/orderService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { CustomerAPI, SiteAPI } from '../../scripts/back_door';
+import orderService from '../../services/orderService';
+import { useAppContext } from '../../context/AppContext';
 
 const Overlay = styled.div`
   position: fixed;
@@ -99,7 +99,9 @@ const Input = styled.input`
   border: 1px solid #d1d5db;
   border-radius: 6px;
   background: #ffffff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 
   &:focus {
     outline: none;
@@ -166,10 +168,10 @@ const Tab = styled.button`
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 500;
-  border: 1px solid ${(props) => (props.active ? "#3b82f6" : "#d1d5db")};
+  border: 1px solid ${(props) => (props.active ? '#3b82f6' : '#d1d5db')};
   border-radius: 6px;
-  background: ${(props) => (props.active ? "#eff6ff" : "#ffffff")};
-  color: ${(props) => (props.active ? "#3b82f6" : "#6b7280")};
+  background: ${(props) => (props.active ? '#eff6ff' : '#ffffff')};
+  color: ${(props) => (props.active ? '#3b82f6' : '#6b7280')};
   cursor: pointer;
   transition: all 0.2s;
 
@@ -181,9 +183,9 @@ const Tab = styled.button`
 
 const CustomerCard = styled.div`
   padding: 12px;
-  border: 1px solid ${(props) => (props.selected ? "#3b82f6" : "#e5e7eb")};
+  border: 1px solid ${(props) => (props.selected ? '#3b82f6' : '#e5e7eb')};
   border-radius: 8px;
-  background: ${(props) => (props.selected ? "#eff6ff" : "#ffffff")};
+  background: ${(props) => (props.selected ? '#eff6ff' : '#ffffff')};
   cursor: pointer;
   margin-bottom: 8px;
   transition: all 0.2s;
@@ -226,7 +228,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -303,27 +305,21 @@ const SuccessMessage = styled.div`
 `;
 
 const CUSTOMER_TYPES = [
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-  { value: "municipal", label: "Municipal" },
-  { value: "agricultural", label: "Agricultural" },
-  { value: "educational", label: "Educational" },
-  { value: "research", label: "Research" },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'municipal', label: 'Municipal' },
+  { value: 'agricultural', label: 'Agricultural' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'research', label: 'Research' },
 ];
 
-const SaveQuoteModal = ({
-  isOpen,
-  onClose,
-  quoteItems,
-  products,
-  onQuoteSaved,
-}) => {
+const SaveQuoteModal = ({ isOpen, onClose, quoteItems, products, onQuoteSaved }) => {
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
 
   const [step, setStep] = useState(1); // 1: customer, 2: site, 3: review
-  const [customerTab, setCustomerTab] = useState("new"); // "new" or "existing"
-  const [siteTab, setSiteTab] = useState("new");
+  const [customerTab, setCustomerTab] = useState('new'); // "new" or "existing"
+  const [siteTab, setSiteTab] = useState('new');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -338,24 +334,24 @@ const SaveQuoteModal = ({
 
   // New customer form
   const [customerForm, setCustomerForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    type: "residential",
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    type: 'residential',
   });
 
   // New site form
   const [siteForm, setSiteForm] = useState({
-    name: "",
-    address: "",
-    type: "residential",
-    waterBodyName: "",
-    notes: "",
+    name: '',
+    address: '',
+    type: 'residential',
+    waterBodyName: '',
+    notes: '',
   });
 
   // Quote notes
-  const [quoteNotes, setQuoteNotes] = useState("");
+  const [quoteNotes, setQuoteNotes] = useState('');
 
   // Calculate totals
   const subtotal = quoteItems.reduce(
@@ -371,7 +367,7 @@ const SaveQuoteModal = ({
         const customers = await CustomerAPI.list({ limit: 50 });
         setExistingCustomers(customers || []);
       } catch (err) {
-        console.warn("Failed to load customers:", err);
+        console.warn('Failed to load customers:', err);
       }
     };
     if (isOpen) {
@@ -387,7 +383,7 @@ const SaveQuoteModal = ({
           const sites = await SiteAPI.listByCustomer(selectedCustomerId);
           setExistingSites(sites || []);
         } catch (err) {
-          console.warn("Failed to load sites:", err);
+          console.warn('Failed to load sites:', err);
         }
       }
     };
@@ -398,25 +394,25 @@ const SaveQuoteModal = ({
   useEffect(() => {
     if (!isOpen) {
       setStep(1);
-      setCustomerTab("new");
-      setSiteTab("new");
+      setCustomerTab('new');
+      setSiteTab('new');
       setSelectedCustomerId(null);
       setSelectedSiteId(null);
       setCustomerForm({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        type: "residential",
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        type: 'residential',
       });
       setSiteForm({
-        name: "",
-        address: "",
-        type: "residential",
-        waterBodyName: "",
-        notes: "",
+        name: '',
+        address: '',
+        type: 'residential',
+        waterBodyName: '',
+        notes: '',
       });
-      setQuoteNotes("");
+      setQuoteNotes('');
       setError(null);
       setSuccess(false);
     }
@@ -431,14 +427,14 @@ const SaveQuoteModal = ({
   };
 
   const validateCustomer = () => {
-    if (customerTab === "existing") {
+    if (customerTab === 'existing') {
       return !!selectedCustomerId;
     }
     return customerForm.name && customerForm.email;
   };
 
   const validateSite = () => {
-    if (siteTab === "existing") {
+    if (siteTab === 'existing') {
       return !!selectedSiteId;
     }
     return siteForm.name && siteForm.address;
@@ -448,13 +444,13 @@ const SaveQuoteModal = ({
     setError(null);
     if (step === 1) {
       if (!validateCustomer()) {
-        setError("Please complete customer information");
+        setError('Please complete customer information');
         return;
       }
       setStep(2);
     } else if (step === 2) {
       if (!validateSite()) {
-        setError("Please complete site information");
+        setError('Please complete site information');
         return;
       }
       setStep(3);
@@ -475,7 +471,7 @@ const SaveQuoteModal = ({
       let siteId = selectedSiteId;
 
       // Create new customer if needed
-      if (customerTab === "new") {
+      if (customerTab === 'new') {
         const customerResult = await CustomerAPI.create({
           ...customerForm,
           createdAt: new Date().toISOString(),
@@ -485,7 +481,7 @@ const SaveQuoteModal = ({
       }
 
       // Create new site if needed
-      if (siteTab === "new" && customerId) {
+      if (siteTab === 'new' && customerId) {
         const siteResult = await SiteAPI.create({
           ...siteForm,
           customerId,
@@ -510,7 +506,7 @@ const SaveQuoteModal = ({
           lineItems,
           notes: quoteNotes,
         },
-        user?.uid || "anonymous"
+        user?.uid || 'anonymous'
       );
 
       setSuccess(true);
@@ -522,7 +518,7 @@ const SaveQuoteModal = ({
 
       // Show success notification
       if (ACTIONS?.logNotification) {
-        ACTIONS.logNotification("success", "Quote saved successfully!");
+        ACTIONS.logNotification('success', 'Quote saved successfully!');
       }
 
       // Close after delay
@@ -530,8 +526,8 @@ const SaveQuoteModal = ({
         onClose();
       }, 2000);
     } catch (err) {
-      console.error("Failed to save quote:", err);
-      setError(err.message || "Failed to save quote. Please try again.");
+      console.error('Failed to save quote:', err);
+      setError(err.message || 'Failed to save quote. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -544,18 +540,16 @@ const SaveQuoteModal = ({
       <Modal onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <ModalTitle>
-            {step === 1 && "Save Quote - Customer Information"}
-            {step === 2 && "Save Quote - Site Information"}
-            {step === 3 && "Save Quote - Review & Confirm"}
+            {step === 1 && 'Save Quote - Customer Information'}
+            {step === 2 && 'Save Quote - Site Information'}
+            {step === 3 && 'Save Quote - Review & Confirm'}
           </ModalTitle>
           <CloseButton onClick={onClose}>&times;</CloseButton>
         </ModalHeader>
 
         <ModalBody>
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          {success && (
-            <SuccessMessage>Quote saved successfully!</SuccessMessage>
-          )}
+          {success && <SuccessMessage>Quote saved successfully!</SuccessMessage>}
 
           {/* Quote Summary */}
           <QuoteSummary>
@@ -574,21 +568,15 @@ const SaveQuoteModal = ({
             <Section>
               <SectionTitle>Customer</SectionTitle>
               <TabsContainer>
-                <Tab
-                  active={customerTab === "new"}
-                  onClick={() => setCustomerTab("new")}
-                >
+                <Tab active={customerTab === 'new'} onClick={() => setCustomerTab('new')}>
                   New Customer
                 </Tab>
-                <Tab
-                  active={customerTab === "existing"}
-                  onClick={() => setCustomerTab("existing")}
-                >
+                <Tab active={customerTab === 'existing'} onClick={() => setCustomerTab('existing')}>
                   Existing Customer
                 </Tab>
               </TabsContainer>
 
-              {customerTab === "new" ? (
+              {customerTab === 'new' ? (
                 <>
                   <FormGroup>
                     <Label>Name *</Label>
@@ -596,9 +584,7 @@ const SaveQuoteModal = ({
                       type="text"
                       placeholder="Full name or company name"
                       value={customerForm.name}
-                      onChange={(e) =>
-                        handleCustomerFormChange("name", e.target.value)
-                      }
+                      onChange={(e) => handleCustomerFormChange('name', e.target.value)}
                     />
                   </FormGroup>
                   <Row>
@@ -608,9 +594,7 @@ const SaveQuoteModal = ({
                         type="email"
                         placeholder="email@example.com"
                         value={customerForm.email}
-                        onChange={(e) =>
-                          handleCustomerFormChange("email", e.target.value)
-                        }
+                        onChange={(e) => handleCustomerFormChange('email', e.target.value)}
                       />
                     </FormGroup>
                     <FormGroup>
@@ -619,9 +603,7 @@ const SaveQuoteModal = ({
                         type="tel"
                         placeholder="(555) 555-5555"
                         value={customerForm.phone}
-                        onChange={(e) =>
-                          handleCustomerFormChange("phone", e.target.value)
-                        }
+                        onChange={(e) => handleCustomerFormChange('phone', e.target.value)}
                       />
                     </FormGroup>
                   </Row>
@@ -632,18 +614,14 @@ const SaveQuoteModal = ({
                         type="text"
                         placeholder="Company name (optional)"
                         value={customerForm.company}
-                        onChange={(e) =>
-                          handleCustomerFormChange("company", e.target.value)
-                        }
+                        onChange={(e) => handleCustomerFormChange('company', e.target.value)}
                       />
                     </FormGroup>
                     <FormGroup>
                       <Label>Type</Label>
                       <Select
                         value={customerForm.type}
-                        onChange={(e) =>
-                          handleCustomerFormChange("type", e.target.value)
-                        }
+                        onChange={(e) => handleCustomerFormChange('type', e.target.value)}
                       >
                         {CUSTOMER_TYPES.map((t) => (
                           <option key={t.value} value={t.value}>
@@ -655,12 +633,12 @@ const SaveQuoteModal = ({
                   </Row>
                 </>
               ) : (
-                <div style={{ maxHeight: 200, overflowY: "auto" }}>
+                <div style={{ maxHeight: 200, overflowY: 'auto' }}>
                   {existingCustomers.length === 0 ? (
                     <div
                       style={{
-                        textAlign: "center",
-                        color: "#6b7280",
+                        textAlign: 'center',
+                        color: '#6b7280',
                         padding: 20,
                       }}
                     >
@@ -688,22 +666,19 @@ const SaveQuoteModal = ({
             <Section>
               <SectionTitle>Installation Site</SectionTitle>
               <TabsContainer>
-                <Tab
-                  active={siteTab === "new"}
-                  onClick={() => setSiteTab("new")}
-                >
+                <Tab active={siteTab === 'new'} onClick={() => setSiteTab('new')}>
                   New Site
                 </Tab>
                 <Tab
-                  active={siteTab === "existing"}
-                  onClick={() => setSiteTab("existing")}
+                  active={siteTab === 'existing'}
+                  onClick={() => setSiteTab('existing')}
                   disabled={existingSites.length === 0}
                 >
                   Existing Site ({existingSites.length})
                 </Tab>
               </TabsContainer>
 
-              {siteTab === "new" ? (
+              {siteTab === 'new' ? (
                 <>
                   <FormGroup>
                     <Label>Site Name *</Label>
@@ -711,9 +686,7 @@ const SaveQuoteModal = ({
                       type="text"
                       placeholder="e.g., Main Pond, North Lake"
                       value={siteForm.name}
-                      onChange={(e) =>
-                        handleSiteFormChange("name", e.target.value)
-                      }
+                      onChange={(e) => handleSiteFormChange('name', e.target.value)}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -722,9 +695,7 @@ const SaveQuoteModal = ({
                       type="text"
                       placeholder="Full address"
                       value={siteForm.address}
-                      onChange={(e) =>
-                        handleSiteFormChange("address", e.target.value)
-                      }
+                      onChange={(e) => handleSiteFormChange('address', e.target.value)}
                     />
                   </FormGroup>
                   <Row>
@@ -732,9 +703,7 @@ const SaveQuoteModal = ({
                       <Label>Site Type</Label>
                       <Select
                         value={siteForm.type}
-                        onChange={(e) =>
-                          handleSiteFormChange("type", e.target.value)
-                        }
+                        onChange={(e) => handleSiteFormChange('type', e.target.value)}
                       >
                         {CUSTOMER_TYPES.map((t) => (
                           <option key={t.value} value={t.value}>
@@ -749,9 +718,7 @@ const SaveQuoteModal = ({
                         type="text"
                         placeholder="Lake/Pond name"
                         value={siteForm.waterBodyName}
-                        onChange={(e) =>
-                          handleSiteFormChange("waterBodyName", e.target.value)
-                        }
+                        onChange={(e) => handleSiteFormChange('waterBodyName', e.target.value)}
                       />
                     </FormGroup>
                   </Row>
@@ -760,14 +727,12 @@ const SaveQuoteModal = ({
                     <TextArea
                       placeholder="Access instructions, special considerations..."
                       value={siteForm.notes}
-                      onChange={(e) =>
-                        handleSiteFormChange("notes", e.target.value)
-                      }
+                      onChange={(e) => handleSiteFormChange('notes', e.target.value)}
                     />
                   </FormGroup>
                 </>
               ) : (
-                <div style={{ maxHeight: 200, overflowY: "auto" }}>
+                <div style={{ maxHeight: 200, overflowY: 'auto' }}>
                   {existingSites.map((site) => (
                     <CustomerCard
                       key={site.id}
@@ -794,10 +759,10 @@ const SaveQuoteModal = ({
                     <div
                       key={item.productId}
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: "8px 0",
-                        borderBottom: "1px solid #e5e7eb",
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '8px 0',
+                        borderBottom: '1px solid #e5e7eb',
                       }}
                     >
                       <span>
@@ -813,21 +778,20 @@ const SaveQuoteModal = ({
 
               <Section>
                 <SectionTitle>Customer</SectionTitle>
-                <div style={{ color: "#374151" }}>
-                  {customerTab === "new"
+                <div style={{ color: '#374151' }}>
+                  {customerTab === 'new'
                     ? `${customerForm.name} (${customerForm.email})`
-                    : existingCustomers.find((c) => c.id === selectedCustomerId)
-                        ?.name || "Selected customer"}
+                    : existingCustomers.find((c) => c.id === selectedCustomerId)?.name ||
+                      'Selected customer'}
                 </div>
               </Section>
 
               <Section>
                 <SectionTitle>Site</SectionTitle>
-                <div style={{ color: "#374151" }}>
-                  {siteTab === "new"
+                <div style={{ color: '#374151' }}>
+                  {siteTab === 'new'
                     ? siteForm.name
-                    : existingSites.find((s) => s.id === selectedSiteId)
-                        ?.name || "Selected site"}
+                    : existingSites.find((s) => s.id === selectedSiteId)?.name || 'Selected site'}
                 </div>
               </Section>
 
@@ -855,12 +819,8 @@ const SaveQuoteModal = ({
               Next
             </Button>
           ) : (
-            <Button
-              variant="primary"
-              onClick={handleSaveQuote}
-              disabled={loading || success}
-            >
-              {loading ? "Saving..." : "Save Quote"}
+            <Button variant="primary" onClick={handleSaveQuote} disabled={loading || success}>
+              {loading ? 'Saving...' : 'Save Quote'}
             </Button>
           )}
         </ModalFooter>

@@ -26,27 +26,63 @@ const Grid = styled.div`
   > * {
     min-width: 0;
   }
-  > :nth-child(1) { border-radius: 16px 0 0 0; overflow: hidden; }
-  > :nth-child(3) { border-radius: 0 16px 0 0; overflow: hidden; }
-  > :nth-child(4) { border-radius: 0 0 0 16px; overflow: hidden; }
-  > :nth-child(6) { border-radius: 0 0 16px 0; overflow: hidden; }
+  > :nth-child(1) {
+    border-radius: 16px 0 0 0;
+    overflow: hidden;
+  }
+  > :nth-child(3) {
+    border-radius: 0 16px 0 0;
+    overflow: hidden;
+  }
+  > :nth-child(4) {
+    border-radius: 0 0 0 16px;
+    overflow: hidden;
+  }
+  > :nth-child(6) {
+    border-radius: 0 0 16px 0;
+    overflow: hidden;
+  }
 
   ${({ theme }) => theme.media.md} {
     grid-template-columns: repeat(2, 1fr);
 
-    > :nth-child(1) { border-radius: 16px 0 0 0; }
-    > :nth-child(2) { border-radius: 0 16px 0 0; overflow: hidden; }
-    > :nth-child(3), > :nth-child(4) { border-radius: 0; overflow: hidden; }
-    > :nth-child(5) { border-radius: 0 0 0 16px; overflow: hidden; }
-    > :nth-child(6) { border-radius: 0 0 16px 0; }
+    > :nth-child(1) {
+      border-radius: 16px 0 0 0;
+    }
+    > :nth-child(2) {
+      border-radius: 0 16px 0 0;
+      overflow: hidden;
+    }
+    > :nth-child(3),
+    > :nth-child(4) {
+      border-radius: 0;
+      overflow: hidden;
+    }
+    > :nth-child(5) {
+      border-radius: 0 0 0 16px;
+      overflow: hidden;
+    }
+    > :nth-child(6) {
+      border-radius: 0 0 16px 0;
+    }
   }
 
   ${({ theme }) => theme.media.sm} {
     grid-template-columns: 1fr;
 
-    > :nth-child(1) { border-radius: 16px 16px 0 0; }
-    > :nth-child(2), > :nth-child(3), > :nth-child(4), > :nth-child(5) { border-radius: 0; overflow: hidden; }
-    > :nth-child(6) { border-radius: 0 0 16px 16px; }
+    > :nth-child(1) {
+      border-radius: 16px 16px 0 0;
+    }
+    > :nth-child(2),
+    > :nth-child(3),
+    > :nth-child(4),
+    > :nth-child(5) {
+      border-radius: 0;
+      overflow: hidden;
+    }
+    > :nth-child(6) {
+      border-radius: 0 0 16px 16px;
+    }
   }
 `;
 
@@ -156,7 +192,8 @@ const SensorGrid = () => (
           <SectionTitle>Six parameters. One&nbsp;board.</SectionTitle>
           <SectionDesc>
             Each channel reads through a 16-bit ADS1115 ADC with programmable gain.
-            Factory-calibrated with NIST-traceable references. Field-recalibrate with standard&nbsp;buffers.
+            Factory-calibrated with NIST-traceable references. Field-recalibrate with
+            standard&nbsp;buffers.
           </SectionDesc>
         </RevealOnScroll>
       </Header>
@@ -169,7 +206,9 @@ const SensorGrid = () => (
               <CardTitle>{s.title}</CardTitle>
               <CardDesc>{s.desc}</CardDesc>
               <TagRow>
-                {s.tags.map(t => <Tag key={t}>{t}</Tag>)}
+                {s.tags.map((t) => (
+                  <Tag key={t}>{t}</Tag>
+                ))}
               </TagRow>
             </Card>
           </RevealOnScroll>

@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  getDefaultDashboardRoute,
-  hasRouteAccess,
-  getRoleDisplayName,
-} from './roleRouting';
+import { getDefaultDashboardRoute, hasRouteAccess, getRoleDisplayName } from './roleRouting';
 
 describe('roleRouting', () => {
   describe('getDefaultDashboardRoute', () => {
@@ -26,7 +22,9 @@ describe('roleRouting', () => {
     });
 
     it('should route installer to /dashboard/installer in marketplace mode', () => {
-      expect(getDefaultDashboardRoute({ role: 'installer' }, 'marketplace')).toBe('/dashboard/installer');
+      expect(getDefaultDashboardRoute({ role: 'installer' }, 'marketplace')).toBe(
+        '/dashboard/installer'
+      );
     });
 
     it('should route admin to /marketplace in marketplace mode', () => {
@@ -42,7 +40,9 @@ describe('roleRouting', () => {
     });
 
     it('should route user with unknown role to /marketplace', () => {
-      expect(getDefaultDashboardRoute({ role: 'unknown_role' }, 'marketplace')).toBe('/marketplace');
+      expect(getDefaultDashboardRoute({ role: 'unknown_role' }, 'marketplace')).toBe(
+        '/marketplace'
+      );
     });
 
     // ── Cloud mode ────────────────────────────────────────

@@ -24,15 +24,14 @@ const Indicator = styled.div`
   height: calc(100% - 6px);
   border-radius: 100px;
   background: ${({ $audience }) =>
-    $audience === 'utility'
-      ? 'rgba(59, 130, 246, 0.15)'
-      : 'rgba(6, 182, 212, 0.15)'};
+    $audience === 'utility' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(6, 182, 212, 0.15)'};
   border: 1px solid
     ${({ $audience }) =>
-      $audience === 'utility'
-        ? 'rgba(59, 130, 246, 0.25)'
-        : 'rgba(6, 182, 212, 0.25)'};
-  transition: transform 200ms ${SPRING}, background 200ms ease, border-color 200ms ease;
+      $audience === 'utility' ? 'rgba(59, 130, 246, 0.25)' : 'rgba(6, 182, 212, 0.25)'};
+  transition:
+    transform 200ms ${SPRING},
+    background 200ms ease,
+    border-color 200ms ease;
   transform: translateX(${({ $audience }) => ($audience === 'utility' ? '100%' : '0')});
   pointer-events: none;
 `;

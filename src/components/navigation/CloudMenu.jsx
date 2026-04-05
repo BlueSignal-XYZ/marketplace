@@ -1,8 +1,8 @@
 // /src/components/navigation/CloudMenu.jsx
-import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
-import { safeAreaInsets } from "../../styles/breakpoints";
+import styled from 'styled-components';
+import { Link, useLocation } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
+import { safeAreaInsets } from '../../styles/breakpoints';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -13,7 +13,7 @@ const Backdrop = styled.div`
   z-index: 900;
 
   opacity: ${({ $open }) => ($open ? 1 : 0)};
-  pointer-events: ${({ $open }) => ($open ? "auto" : "none")};
+  pointer-events: ${({ $open }) => ($open ? 'auto' : 'none')};
 
   transition: opacity 0.25s ease-out;
 `;
@@ -26,7 +26,8 @@ const Panel = styled.aside`
   height: 100dvh;
   width: 100%;
   background: #ffffff;
-  box-shadow: -16px 0 48px rgba(15, 23, 42, 0.12),
+  box-shadow:
+    -16px 0 48px rgba(15, 23, 42, 0.12),
     -4px 0 12px rgba(15, 23, 42, 0.06);
   z-index: 1000;
 
@@ -39,7 +40,7 @@ const Panel = styled.aside`
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
-  transform: translateX(${({ $open }) => ($open ? "0%" : "100%")});
+  transform: translateX(${({ $open }) => ($open ? '0%' : '100%')});
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
@@ -59,13 +60,13 @@ const PanelTitle = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 17px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   letter-spacing: -0.01em;
 `;
 
 const CloseButton = styled.button`
   border: none;
-  background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
+  background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
   padding: 0;
   width: 40px;
   height: 40px;
@@ -73,7 +74,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 22px;
   line-height: 1;
-  color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+  color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,8 +83,8 @@ const CloseButton = styled.button`
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
-    background: ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+    background: ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   }
 
   &:active {
@@ -95,7 +96,7 @@ const Divider = styled.div`
   height: 1px;
   background: linear-gradient(
     90deg,
-    ${({ theme }) => theme.colors?.border || "#E5E7EB"} 0%,
+    ${({ theme }) => theme.colors?.border || '#E5E7EB'} 0%,
     transparent 100%
   );
   margin: 12px 0 16px;
@@ -107,7 +108,7 @@ const SectionLabel = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+  color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   margin: 16px 0 8px;
   padding-left: 4px;
 `;
@@ -136,13 +137,9 @@ const NavItem = styled(Link)`
   transition: all 0.2s ease-out;
 
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.primary || "#0066FF"
-      : theme.colors?.text || "#1A1A1A"};
+    $active ? theme.colors?.primary || '#0066FF' : theme.colors?.text || '#1A1A1A'};
   background: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.primaryLight || "#E8F0FE"
-      : "transparent"};
+    $active ? theme.colors?.primaryLight || '#E8F0FE' : 'transparent'};
 
   ${({ $active, theme }) =>
     $active &&
@@ -155,17 +152,15 @@ const NavItem = styled(Link)`
       transform: translateY(-50%);
       width: 3px;
       height: 20px;
-      background: ${theme.colors?.primary || "#0066FF"};
+      background: ${theme.colors?.primary || '#0066FF'};
       border-radius: 0 2px 2px 0;
     }
   `}
 
   &:hover {
     background: ${({ $active, theme }) =>
-      $active
-        ? theme.colors?.primaryLight || "#E8F0FE"
-        : theme.colors?.background || "#FAFAFA"};
-    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+      $active ? theme.colors?.primaryLight || '#E8F0FE' : theme.colors?.background || '#FAFAFA'};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   }
 
   &:active {
@@ -176,13 +171,13 @@ const NavItem = styled(Link)`
 const SmallText = styled.div`
   margin-top: auto;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
   line-height: 1.5;
   padding: 12px 4px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui100 || '#F4F5F7'};
 
   strong {
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
     font-weight: 600;
   }
 `;
@@ -196,20 +191,20 @@ const LogoutButton = styled.button`
   padding: 12px 16px;
   min-height: 44px;
   border-radius: 12px;
-  border: 1.5px solid ${({ theme }) => theme.colors?.red200 || "#FECACA"};
-  background: ${({ theme }) => theme.colors?.red50 || "#FEF2F2"};
+  border: 1.5px solid ${({ theme }) => theme.colors?.red200 || '#FECACA'};
+  background: ${({ theme }) => theme.colors?.red50 || '#FEF2F2'};
   cursor: pointer;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.red600 || "#DC2626"};
+  color: ${({ theme }) => theme.colors?.red600 || '#DC2626'};
   transition: all 0.2s ease-out;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.red100 || "#FEE2E2"};
-    border-color: ${({ theme }) => theme.colors?.red300 || "#FCA5A5"};
+    background: ${({ theme }) => theme.colors?.red100 || '#FEE2E2'};
+    border-color: ${({ theme }) => theme.colors?.red300 || '#FCA5A5'};
   }
 
   &:active {
@@ -227,15 +222,15 @@ const ExternalLink = styled.a`
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4B5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4B5563'};
   background: transparent;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition: all 0.2s ease-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
-    color: ${({ theme }) => theme.colors?.primary600 || "#0F393A"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#F4F5F7'};
+    color: ${({ theme }) => theme.colors?.primary600 || '#0F393A'};
   }
 
   &:active {
@@ -250,8 +245,8 @@ const ExternalIcon = styled.span`
 
 // Role-based menu configuration
 const getMenuConfig = (user) => {
-  const isInstaller = user?.role === "installer";
-  const isAdmin = user?.role === "admin";
+  const isInstaller = user?.role === 'installer';
+  const isAdmin = user?.role === 'admin';
 
   return {
     showInstallerDash: isInstaller || isAdmin,
@@ -277,9 +272,7 @@ export function CloudMenu({ open, onClose, user }) {
   };
 
   // Treat nav as active for exact path or nested routes under it
-  const isActive = (path) =>
-    location.pathname === path ||
-    location.pathname.startsWith(path + "/");
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
     <>
@@ -287,11 +280,7 @@ export function CloudMenu({ open, onClose, user }) {
       <Panel $open={open} aria-label="Sidebar menu">
         <PanelHeader>
           <PanelTitle>BlueSignal Cloud</PanelTitle>
-          <CloseButton
-            type="button"
-            aria-label="Close menu"
-            onClick={onClose}
-          >
+          <CloseButton type="button" aria-label="Close menu" onClick={onClose}>
             ×
           </CloseButton>
         </PanelHeader>
@@ -301,17 +290,13 @@ export function CloudMenu({ open, onClose, user }) {
         {/* Primary Navigation - Always visible */}
         <SectionLabel>Dashboard</SectionLabel>
         <NavList aria-label="Dashboard navigation">
-          <NavItem
-            to="/dashboard/main"
-            $active={isActive("/dashboard/main")}
-            onClick={onClose}
-          >
+          <NavItem to="/dashboard/main" $active={isActive('/dashboard/main')} onClick={onClose}>
             Overview
           </NavItem>
           {menuConfig.showInstallerDash && (
             <NavItem
               to="/dashboard/installer"
-              $active={isActive("/dashboard/installer")}
+              $active={isActive('/dashboard/installer')}
               onClick={onClose}
             >
               Installer Dashboard
@@ -324,25 +309,13 @@ export function CloudMenu({ open, onClose, user }) {
             {/* Sites & Devices - Core functionality */}
             <SectionLabel>Manage</SectionLabel>
             <NavList aria-label="Manage navigation">
-              <NavItem
-                to="/cloud/sites"
-                $active={isActive("/cloud/sites")}
-                onClick={onClose}
-              >
+              <NavItem to="/cloud/sites" $active={isActive('/cloud/sites')} onClick={onClose}>
                 Sites
               </NavItem>
-              <NavItem
-                to="/cloud/devices"
-                $active={isActive("/cloud/devices")}
-                onClick={onClose}
-              >
+              <NavItem to="/cloud/devices" $active={isActive('/cloud/devices')} onClick={onClose}>
                 Devices
               </NavItem>
-              <NavItem
-                to="/cloud/alerts"
-                $active={isActive("/cloud/alerts")}
-                onClick={onClose}
-              >
+              <NavItem to="/cloud/alerts" $active={isActive('/cloud/alerts')} onClick={onClose}>
                 Alerts
               </NavItem>
             </NavList>
@@ -352,22 +325,18 @@ export function CloudMenu({ open, onClose, user }) {
             <NavList aria-label="Quick actions">
               <NavItem
                 to="/cloud/sites/new"
-                $active={isActive("/cloud/sites/new")}
+                $active={isActive('/cloud/sites/new')}
                 onClick={onClose}
               >
                 + Add Site
               </NavItem>
-              <NavItem
-                to="/commission"
-                $active={isActive("/commission")}
-                onClick={onClose}
-              >
+              <NavItem to="/commission" $active={isActive('/commission')} onClick={onClose}>
                 + Add Device
               </NavItem>
               {menuConfig.showCommissioning && (
                 <NavItem
                   to="/cloud/commissioning"
-                  $active={isActive("/cloud/commissioning")}
+                  $active={isActive('/cloud/commissioning')}
                   onClick={onClose}
                 >
                   Commission Device
@@ -380,21 +349,21 @@ export function CloudMenu({ open, onClose, user }) {
             <NavList aria-label="Tools navigation">
               <NavItem
                 to="/cloud/tools/nutrient-calculator"
-                $active={isActive("/cloud/tools/nutrient-calculator")}
+                $active={isActive('/cloud/tools/nutrient-calculator')}
                 onClick={onClose}
               >
                 Nutrient Calculator
               </NavItem>
               <NavItem
                 to="/cloud/tools/verification"
-                $active={isActive("/cloud/tools/verification")}
+                $active={isActive('/cloud/tools/verification')}
                 onClick={onClose}
               >
                 Verification Portal
               </NavItem>
               <NavItem
                 to="/cloud/tools/live"
-                $active={isActive("/cloud/tools/live")}
+                $active={isActive('/cloud/tools/live')}
                 onClick={onClose}
               >
                 Live Stream
@@ -404,11 +373,7 @@ export function CloudMenu({ open, onClose, user }) {
             {/* Account */}
             <SectionLabel>Account</SectionLabel>
             <NavList aria-label="Account navigation">
-              <NavItem
-                to="/cloud/profile"
-                $active={isActive("/cloud/profile")}
-                onClick={onClose}
-              >
+              <NavItem to="/cloud/profile" $active={isActive('/cloud/profile')} onClick={onClose}>
                 Profile
               </NavItem>
             </NavList>
@@ -418,11 +383,7 @@ export function CloudMenu({ open, onClose, user }) {
         {/* Support */}
         <SectionLabel>Support</SectionLabel>
         <NavList aria-label="Support links">
-          <NavItem
-            to="/contact"
-            $active={isActive("/contact")}
-            onClick={onClose}
-          >
+          <NavItem to="/contact" $active={isActive('/contact')} onClick={onClose}>
             Help & Support
           </NavItem>
         </NavList>
@@ -452,17 +413,17 @@ export function CloudMenu({ open, onClose, user }) {
 
         <SmallText>
           {user?.uid ? (
-            <>Signed in as <strong>{user?.email || user?.username}</strong></>
+            <>
+              Signed in as <strong>{user?.email || user?.username}</strong>
+            </>
           ) : (
-            <>Welcome to <strong>BlueSignal Cloud</strong></>
+            <>
+              Welcome to <strong>BlueSignal Cloud</strong>
+            </>
           )}
         </SmallText>
 
-        {user?.uid && (
-          <LogoutButton onClick={handleLogout}>
-            Sign Out
-          </LogoutButton>
-        )}
+        {user?.uid && <LogoutButton onClick={handleLogout}>Sign Out</LogoutButton>}
       </Panel>
     </>
   );

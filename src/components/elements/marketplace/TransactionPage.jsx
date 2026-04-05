@@ -1,9 +1,9 @@
 // /src/components/elements/marketplace/TransactionPage.jsx
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../context/AppContext";
-import { fetchUserOrders } from "../../../services/wqtDataService";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../../context/AppContext';
+import { fetchUserOrders } from '../../../services/wqtDataService';
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -67,7 +67,7 @@ const FilterSelect = styled.select`
 
   &:focus {
     outline: none;
-    border-color: #1D7072;
+    border-color: #1d7072;
   }
 `;
 
@@ -83,7 +83,7 @@ const SearchInput = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #1D7072;
+    border-color: #1d7072;
   }
 
   &::placeholder {
@@ -111,7 +111,7 @@ const TransactionCard = styled.div`
   cursor: pointer;
 
   &:hover {
-    border-color: #1D7072;
+    border-color: #1d7072;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
@@ -149,31 +149,31 @@ const TypeBadge = styled.span`
 
   background: ${({ type }) => {
     switch (type) {
-      case "purchase":
-        return "#dbeafe";
-      case "sale":
-        return "#d1fae5";
-      case "payout":
-        return "#e0e7ff";
-      case "fee":
-        return "#fef3c7";
+      case 'purchase':
+        return '#dbeafe';
+      case 'sale':
+        return '#d1fae5';
+      case 'payout':
+        return '#e0e7ff';
+      case 'fee':
+        return '#fef3c7';
       default:
-        return "#f3f4f6";
+        return '#f3f4f6';
     }
   }};
 
   color: ${({ type }) => {
     switch (type) {
-      case "purchase":
-        return "#1e40af";
-      case "sale":
-        return "#065f46";
-      case "payout":
-        return "#3730a3";
-      case "fee":
-        return "#92400e";
+      case 'purchase':
+        return '#1e40af';
+      case 'sale':
+        return '#065f46';
+      case 'payout':
+        return '#3730a3';
+      case 'fee':
+        return '#92400e';
       default:
-        return "#374151";
+        return '#374151';
     }
   }};
 `;
@@ -187,27 +187,27 @@ const StatusBadge = styled.span`
 
   background: ${({ status }) => {
     switch (status) {
-      case "completed":
-        return "#d1fae5";
-      case "pending":
-        return "#fef3c7";
-      case "failed":
-        return "#fee2e2";
+      case 'completed':
+        return '#d1fae5';
+      case 'pending':
+        return '#fef3c7';
+      case 'failed':
+        return '#fee2e2';
       default:
-        return "#f3f4f6";
+        return '#f3f4f6';
     }
   }};
 
   color: ${({ status }) => {
     switch (status) {
-      case "completed":
-        return "#065f46";
-      case "pending":
-        return "#92400e";
-      case "failed":
-        return "#991b1b";
+      case 'completed':
+        return '#065f46';
+      case 'pending':
+        return '#92400e';
+      case 'failed':
+        return '#991b1b';
       default:
-        return "#374151";
+        return '#374151';
     }
   }};
 `;
@@ -240,7 +240,7 @@ const TransactionAmount = styled.div`
 const Amount = styled.div`
   font-size: 20px;
   font-weight: 700;
-  color: ${({ positive }) => (positive ? "#10b981" : "#ef4444")};
+  color: ${({ positive }) => (positive ? '#10b981' : '#ef4444')};
 `;
 
 const TransactionDate = styled.div`
@@ -277,7 +277,7 @@ const ActionButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
-  background: linear-gradient(135deg, #1D7072 0%, #155e5f 100%);
+  background: linear-gradient(135deg, #1d7072 0%, #155e5f 100%);
   color: #ffffff;
   border: none;
 
@@ -296,7 +296,7 @@ const LoadingSpinner = styled.div`
     width: 40px;
     height: 40px;
     border: 3px solid #e5e7eb;
-    border-top-color: #1D7072;
+    border-top-color: #1d7072;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -323,12 +323,12 @@ const PageButton = styled.button`
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
-  background: ${({ active }) => (active ? "#1D7072" : "#ffffff")};
-  color: ${({ active }) => (active ? "#ffffff" : "#374151")};
-  border: 1px solid ${({ active }) => (active ? "#1D7072" : "#e5e7eb")};
+  background: ${({ active }) => (active ? '#1D7072' : '#ffffff')};
+  color: ${({ active }) => (active ? '#ffffff' : '#374151')};
+  border: 1px solid ${({ active }) => (active ? '#1D7072' : '#e5e7eb')};
 
   &:hover {
-    background: ${({ active }) => (active ? "#155e5f" : "#f3f4f6")};
+    background: ${({ active }) => (active ? '#155e5f' : '#f3f4f6')};
   }
 
   &:disabled {
@@ -338,15 +338,17 @@ const PageButton = styled.button`
 `;
 
 const TransactionPage = () => {
-  useEffect(() => { document.title = 'Transactions — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Transactions — WaterQuality.Trading';
+  }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();
 
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
-  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -360,26 +362,30 @@ const TransactionPage = () => {
       const realOrders = await fetchUserOrders(user?.uid);
 
       if (realOrders.length > 0) {
-        setTransactions(realOrders.map(o => ({
-          id: o.id,
-          type: o.buyerId === user?.uid ? 'purchase' : 'sale',
-          title: `${o.type === 'credit_purchase' ? 'Credit' : 'Device'} ${o.buyerId === user?.uid ? 'Purchase' : 'Sale'}`,
-          description: o.buyerId === user?.uid
-            ? `Purchase from ${o.sellerCompany || o.sellerEmail || 'Seller'}`
-            : `Sale to ${o.buyerCompany || o.buyerEmail || 'Buyer'}`,
-          amount: o.buyerId === user?.uid ? -(o.amount || 0) : (o.amount || 0),
-          date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
-          status: o.status || 'pending',
-          counterparty: o.buyerId === user?.uid
-            ? (o.sellerCompany || o.sellerEmail || 'Unknown')
-            : (o.buyerCompany || o.buyerEmail || 'Unknown'),
-          creditType: o.type === 'credit_purchase' ? 'Credit' : 'Device',
-        })));
+        setTransactions(
+          realOrders.map((o) => ({
+            id: o.id,
+            type: o.buyerId === user?.uid ? 'purchase' : 'sale',
+            title: `${o.type === 'credit_purchase' ? 'Credit' : 'Device'} ${o.buyerId === user?.uid ? 'Purchase' : 'Sale'}`,
+            description:
+              o.buyerId === user?.uid
+                ? `Purchase from ${o.sellerCompany || o.sellerEmail || 'Seller'}`
+                : `Sale to ${o.buyerCompany || o.buyerEmail || 'Buyer'}`,
+            amount: o.buyerId === user?.uid ? -(o.amount || 0) : o.amount || 0,
+            date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
+            status: o.status || 'pending',
+            counterparty:
+              o.buyerId === user?.uid
+                ? o.sellerCompany || o.sellerEmail || 'Unknown'
+                : o.buyerCompany || o.buyerEmail || 'Unknown',
+            creditType: o.type === 'credit_purchase' ? 'Credit' : 'Device',
+          }))
+        );
       } else {
         setTransactions([]);
       }
     } catch (error) {
-      console.error("Error loading transactions:", error);
+      console.error('Error loading transactions:', error);
       setTransactions([]);
     } finally {
       setLoading(false);
@@ -388,15 +394,15 @@ const TransactionPage = () => {
 
   const filteredTransactions = transactions.filter((tx) => {
     // Type filter
-    if (filter !== "all" && tx.type !== filter) return false;
+    if (filter !== 'all' && tx.type !== filter) return false;
 
     // Search filter
     if (search) {
       const searchLower = search.toLowerCase();
       return (
-        (tx.title || "").toLowerCase().includes(searchLower) ||
-        (tx.description || "").toLowerCase().includes(searchLower) ||
-        (tx.counterparty || "").toLowerCase().includes(searchLower)
+        (tx.title || '').toLowerCase().includes(searchLower) ||
+        (tx.description || '').toLowerCase().includes(searchLower) ||
+        (tx.counterparty || '').toLowerCase().includes(searchLower)
       );
     }
 
@@ -405,10 +411,10 @@ const TransactionPage = () => {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -453,13 +459,11 @@ const TransactionPage = () => {
           <EmptyState>
             <h3>No transactions found</h3>
             <p>
-              {search || filter !== "all"
-                ? "Try adjusting your filters or search terms."
+              {search || filter !== 'all'
+                ? 'Try adjusting your filters or search terms.'
                 : "You haven't made any transactions yet. Browse the marketplace to get started."}
             </p>
-            <ActionButton onClick={() => navigate("/marketplace")}>
-              Browse Marketplace
-            </ActionButton>
+            <ActionButton onClick={() => navigate('/marketplace')}>Browse Marketplace</ActionButton>
           </EmptyState>
         ) : (
           <>
@@ -470,10 +474,10 @@ const TransactionPage = () => {
                     <TransactionHeader>
                       <TransactionTitle>{tx.title}</TransactionTitle>
                       <TypeBadge type={tx.type}>
-                        {tx.type ? tx.type.charAt(0).toUpperCase() + tx.type.slice(1) : "—"}
+                        {tx.type ? tx.type.charAt(0).toUpperCase() + tx.type.slice(1) : '—'}
                       </TypeBadge>
                       <StatusBadge status={tx.status}>
-                        {tx.status ? tx.status.charAt(0).toUpperCase() + tx.status.slice(1) : "—"}
+                        {tx.status ? tx.status.charAt(0).toUpperCase() + tx.status.slice(1) : '—'}
                       </StatusBadge>
                     </TransactionHeader>
                     <TransactionDetails>
@@ -484,7 +488,7 @@ const TransactionPage = () => {
                   </TransactionInfo>
                   <TransactionAmount>
                     <Amount positive={tx.amount > 0}>
-                      {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toLocaleString()}
+                      {tx.amount > 0 ? '+' : ''}${Math.abs(tx.amount).toLocaleString()}
                     </Amount>
                     <TransactionDate>{formatDate(tx.date)}</TransactionDate>
                   </TransactionAmount>

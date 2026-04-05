@@ -34,13 +34,15 @@ export function useApi(apiFn, deps = []) {
         setLoading(false);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   useEffect(() => {
     mountedRef.current = true;
     fetchData();
-    return () => { mountedRef.current = false; };
+    return () => {
+      mountedRef.current = false;
+    };
   }, [fetchData]);
 
   const refetch = useCallback(() => {

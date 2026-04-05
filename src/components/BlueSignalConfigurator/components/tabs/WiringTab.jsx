@@ -1,6 +1,6 @@
 // Wiring Tab Component - Enhanced with detailed wire runs and test points
-import { SectionTitle } from "../../styles";
-import { EnhancedWiringDiagram } from "../diagrams";
+import { SectionTitle } from '../../styles';
+import { EnhancedWiringDiagram } from '../diagrams';
 
 const WiringTab = ({ product }) => (
   <div>

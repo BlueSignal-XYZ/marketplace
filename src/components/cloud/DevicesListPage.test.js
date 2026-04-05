@@ -62,7 +62,9 @@ describe('DevicesListPage — mergeDeviceSources', () => {
 
   it('deduplicates devices with the same ID (Firebase wins)', () => {
     const v2 = [{ id: 'pgw-0001', name: 'V2 Name', status: 'online' }];
-    const fb = [{ id: 'pgw-0001', name: 'Firebase Name', lifecycle: 'active', serialNumber: 'SN-001' }];
+    const fb = [
+      { id: 'pgw-0001', name: 'Firebase Name', lifecycle: 'active', serialNumber: 'SN-001' },
+    ];
     const result = mergeDeviceSources(v2, fb);
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Firebase Name'); // Firebase overwrites v2

@@ -82,7 +82,9 @@ const SecondaryBtn = styled.a`
   padding: 14px 28px;
   border-radius: 100px;
   text-decoration: none;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.w30};
@@ -109,18 +111,26 @@ const CTASection = () => (
           <BlueGlow />
           <Title>Let&rsquo;s talk water&nbsp;quality.</Title>
           <Desc>
-            Whether you&rsquo;re ready to order a dev kit, explore a pilot program,
-            or just have questions &mdash; we&rsquo;d love to hear from&nbsp;you.
+            Whether you&rsquo;re ready to order a dev kit, explore a pilot program, or just have
+            questions &mdash; we&rsquo;d love to hear from&nbsp;you.
           </Desc>
           <FormArea>
             <ContactForm />
           </FormArea>
           <DashboardLink>
-            <SecondaryBtn href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('try_dashboard', 'CTA Section')}>
+            <SecondaryBtn
+              href="https://cloud.bluesignal.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackCTA('try_dashboard', 'CTA Section')}
+            >
               Try the Dashboard
             </SecondaryBtn>
           </DashboardLink>
-          <Note style={{ marginTop: 24 }}>WQM-1 Dev Kit $999 &middot; Cloud Monitoring $9.99/mo per device &middot; Free shipping in the&nbsp;US</Note>
+          <Note style={{ marginTop: 24 }}>
+            WQM-1 Dev Kit $999 &middot; Cloud Monitoring $9.99/mo per device &middot; Free shipping
+            in the&nbsp;US
+          </Note>
         </Wrapper>
       </RevealOnScroll>
     </Container>

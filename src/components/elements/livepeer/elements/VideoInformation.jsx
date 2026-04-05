@@ -35,7 +35,7 @@ const InfoItem = styled(motion.p)`
 
 // Video Information Component
 const VideoInformation = ({ videoData }) => {
-  if(!videoData?.name){
+  if (!videoData?.name) {
     return;
   }
   return (

@@ -37,7 +37,9 @@ const Back = styled(Link)`
   align-items: center;
   gap: 4px;
   margin-bottom: 20px;
-  &:hover { color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const HeaderRow = styled.div`
@@ -140,7 +142,9 @@ const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const InfoItem = styled.div`
@@ -204,7 +208,9 @@ function DetailSkeleton() {
       </div>
       <div style={{ height: 32 }} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-        {[1,2,3,4].map(i => <Skeleton key={i} height={80} />)}
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} height={80} />
+        ))}
       </div>
     </Page>
   );
@@ -215,7 +221,7 @@ function verificationLabel(level) {
     'sensor-verified': 'Sensor Verified',
     'third-party': 'Third-Party Verified',
     'self-reported': 'Pending Review',
-    'rejected': 'Rejected',
+    rejected: 'Rejected',
   };
   return map[level] || level || 'Unknown';
 }
@@ -225,7 +231,7 @@ function verificationVariant(level) {
     'sensor-verified': 'verified',
     'third-party': 'positive',
     'self-reported': 'warning',
-    'rejected': 'negative',
+    rejected: 'negative',
   };
   return map[level] || 'neutral';
 }
@@ -233,7 +239,9 @@ function verificationVariant(level) {
 // ── Component ─────────────────────────────────────────────
 
 export function ListingDetailPage() {
-  useEffect(() => { document.title = 'Listing — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Listing — WaterQuality.Trading';
+  }, []);
   const { id } = useParams();
   const navigate = useNavigate();
   const [listing, setListing] = useState(null);
@@ -255,7 +263,9 @@ export function ListingDetailPage() {
     }
   }, [id]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   if (loading) return <DetailSkeleton />;
 
@@ -265,8 +275,12 @@ export function ListingDetailPage() {
         <Back to="/marketplace">← Back to Marketplace</Back>
         <ErrorBox>
           <ErrorTitle>Listing not found</ErrorTitle>
-          <ErrorDesc>{error || 'This listing may have been removed or is no longer available.'}</ErrorDesc>
-          <Button variant="outline" onClick={() => navigate('/marketplace')}>Back to Marketplace</Button>
+          <ErrorDesc>
+            {error || 'This listing may have been removed or is no longer available.'}
+          </ErrorDesc>
+          <Button variant="outline" onClick={() => navigate('/marketplace')}>
+            Back to Marketplace
+          </Button>
         </ErrorBox>
       </Page>
     );
@@ -286,7 +300,12 @@ export function ListingDetailPage() {
       <HeaderRow>
         <HeaderLeft>
           <Title>
-            {listing.nutrientType === 'nitrogen' ? 'Nitrogen' : listing.nutrientType === 'phosphorus' ? 'Phosphorus' : 'Combined'} Credits
+            {listing.nutrientType === 'nitrogen'
+              ? 'Nitrogen'
+              : listing.nutrientType === 'phosphorus'
+                ? 'Phosphorus'
+                : 'Combined'}{' '}
+            Credits
             <Badge variant={verificationVariant(listing.verificationLevel)} size="sm" dot>
               {verificationLabel(listing.verificationLevel)}
             </Badge>
@@ -302,14 +321,29 @@ export function ListingDetailPage() {
         <PriceCard>
           <PriceLabel>Price per Credit</PriceLabel>
           <PriceValue>${(listing.pricePerCredit || 0).toFixed(2)}</PriceValue>
-          <PriceSub>{(listing.quantity || 0).toLocaleString()} kg available · ${totalPrice.toLocaleString()} total</PriceSub>
-          <Button fullWidth onClick={() => navigate(`/purchase/${listing.id}`)}>Buy Credits</Button>
+          <PriceSub>
+            {(listing.quantity || 0).toLocaleString()} kg available · ${totalPrice.toLocaleString()}{' '}
+            total
+          </PriceSub>
+          <Button fullWidth onClick={() => navigate(`/purchase/${listing.id}`)}>
+            Buy Credits
+          </Button>
         </PriceCard>
       </HeaderRow>
 
       <StatsGrid>
-        <DataCard label="Quantity" value={(listing.quantity || 0).toLocaleString()} unit="kg" compact />
-        <DataCard label="Price" value={`$${(listing.pricePerCredit || 0).toFixed(2)}`} unit="/credit" compact />
+        <DataCard
+          label="Quantity"
+          value={(listing.quantity || 0).toLocaleString()}
+          unit="kg"
+          compact
+        />
+        <DataCard
+          label="Price"
+          value={`$${(listing.pricePerCredit || 0).toFixed(2)}`}
+          unit="/credit"
+          compact
+        />
         <DataCard label="Total Value" value={`$${totalPrice.toLocaleString()}`} compact />
         {listing.deviceId && <DataCard label="Device" value={listing.deviceId} compact />}
       </StatsGrid>
@@ -319,14 +353,38 @@ export function ListingDetailPage() {
       {activeTab === 'details' && (
         <Section style={{ marginTop: 24 }}>
           <InfoGrid>
-            <InfoItem><InfoLabel>Credit ID</InfoLabel><InfoValue>{listing.creditId || listing.id}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Nutrient Type</InfoLabel><InfoValue>{listing.nutrientType}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Region</InfoLabel><InfoValue>{listing.region || '—'}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Program</InfoLabel><InfoValue>{listing.programId || '—'}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Vintage</InfoLabel><InfoValue>{listing.vintage || '—'}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Listed</InfoLabel><InfoValue>{listing.createdAt || '—'}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Verification</InfoLabel><InfoValue>{verificationLabel(listing.verificationLevel)}</InfoValue></InfoItem>
-            <InfoItem><InfoLabel>Status</InfoLabel><InfoValue>{listing.status}</InfoValue></InfoItem>
+            <InfoItem>
+              <InfoLabel>Credit ID</InfoLabel>
+              <InfoValue>{listing.creditId || listing.id}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Nutrient Type</InfoLabel>
+              <InfoValue>{listing.nutrientType}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Region</InfoLabel>
+              <InfoValue>{listing.region || '—'}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Program</InfoLabel>
+              <InfoValue>{listing.programId || '—'}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Vintage</InfoLabel>
+              <InfoValue>{listing.vintage || '—'}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Listed</InfoLabel>
+              <InfoValue>{listing.createdAt || '—'}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Verification</InfoLabel>
+              <InfoValue>{verificationLabel(listing.verificationLevel)}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>Status</InfoLabel>
+              <InfoValue>{listing.status}</InfoValue>
+            </InfoItem>
           </InfoGrid>
         </Section>
       )}
@@ -335,7 +393,10 @@ export function ListingDetailPage() {
         <Section style={{ marginTop: 24 }}>
           {listing.certificateId ? (
             <InfoGrid>
-              <InfoItem><InfoLabel>Certificate ID</InfoLabel><InfoValue>{listing.certificateId}</InfoValue></InfoItem>
+              <InfoItem>
+                <InfoLabel>Certificate ID</InfoLabel>
+                <InfoValue>{listing.certificateId}</InfoValue>
+              </InfoItem>
               <InfoItem>
                 <InfoLabel>View Certificate</InfoLabel>
                 <InfoValue>
@@ -348,7 +409,21 @@ export function ListingDetailPage() {
           ) : (
             <EmptyState
               compact
-              icon={<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3-3 3 3"/></svg>}
+              icon={
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                  <path d="M14 2v6h6" />
+                  <path d="M12 18v-6" />
+                  <path d="m9 15 3-3 3 3" />
+                </svg>
+              }
               title="No certificate yet"
               description="On-chain certificate will be available after verification is complete."
             />

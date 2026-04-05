@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { Section, Container, Stack, PageTitle, PageSubtitle } from "../styles/layout";
-import { Card } from "../components/shared/Card/Card";
-import { ButtonPrimary, ButtonSecondary } from "../components/shared/button/Button";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Section, Container, Stack, PageTitle, PageSubtitle } from '../styles/layout';
+import { Card } from '../components/shared/Card/Card';
+import { ButtonPrimary, ButtonSecondary } from '../components/shared/button/Button';
 
 const Page = styled.main`
   width: 100%;
@@ -10,7 +10,7 @@ const Page = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ theme }) => theme.colors?.bg || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.bg || '#fafafa'};
 `;
 
 const CenteredCard = styled(Card)`
@@ -45,15 +45,14 @@ const Home = () => {
             <Stack $gap="lg">
               <div>
                 <PageTitle style={{ marginBottom: 8 }}>Custom Dashboard</PageTitle>
-                <PageSubtitle style={{ maxWidth: "none", textAlign: "center" }}>
-                  This dashboard feature is coming soon. For now, please use your role-based dashboard.
+                <PageSubtitle style={{ maxWidth: 'none', textAlign: 'center' }}>
+                  This dashboard feature is coming soon. For now, please use your role-based
+                  dashboard.
                 </PageSubtitle>
               </div>
               <ButtonGroup>
-                <ButtonSecondary onClick={() => navigate(-1)}>
-                  Go Back
-                </ButtonSecondary>
-                <ButtonPrimary onClick={() => navigate("/marketplace")}>
+                <ButtonSecondary onClick={() => navigate(-1)}>Go Back</ButtonSecondary>
+                <ButtonPrimary onClick={() => navigate('/marketplace')}>
                   Browse Marketplace
                 </ButtonPrimary>
               </ButtonGroup>

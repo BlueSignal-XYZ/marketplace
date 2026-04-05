@@ -5,9 +5,7 @@ const ErrorComponent = styled.div`
 `;
 
 const Error = ({ error }) => {
-  return (
-    <ErrorComponent>{error}</ErrorComponent>
-  )
-}
+  return <ErrorComponent>{error}</ErrorComponent>;
+};
 
-export default Error
+export default Error;

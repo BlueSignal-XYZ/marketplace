@@ -46,9 +46,9 @@ const ToggleButton = styled(motion.div)`
   }
 `;
 
-const PersonalizationTab = ({APP: _APP}) => {
+const PersonalizationTab = ({ APP }) => {
   const [darkMode, setDarkMode] = useState(false);
-  const [primaryColor, setPrimaryColor] = useState("#63c3d1");
+  const [primaryColor, setPrimaryColor] = useState('#63c3d1');
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
   return (
@@ -56,7 +56,11 @@ const PersonalizationTab = ({APP: _APP}) => {
       <OptionGroup>
         <OptionLabel>Dark Mode:</OptionLabel>
         <ThemeToggle onClick={() => setDarkMode(!darkMode)}>
-          <FontAwesomeIcon icon={darkMode ? faToggleOn : faToggleOff} size="2x" color={darkMode ? "#63c3d1" : "#aaa"} />
+          <FontAwesomeIcon
+            icon={darkMode ? faToggleOn : faToggleOff}
+            size="2x"
+            color={darkMode ? '#63c3d1' : '#aaa'}
+          />
         </ThemeToggle>
       </OptionGroup>
 
@@ -68,7 +72,11 @@ const PersonalizationTab = ({APP: _APP}) => {
       <OptionGroup>
         <OptionLabel>Animations:</OptionLabel>
         <ToggleButton onClick={() => setAnimationsEnabled(!animationsEnabled)}>
-          <FontAwesomeIcon icon={animationsEnabled ? faToggleOn : faToggleOff} size="2x" color={animationsEnabled ? "#63c3d1" : "#aaa"} />
+          <FontAwesomeIcon
+            icon={animationsEnabled ? faToggleOn : faToggleOff}
+            size="2x"
+            color={animationsEnabled ? '#63c3d1' : '#aaa'}
+          />
         </ToggleButton>
       </OptionGroup>
     </PersonalizationContainer>

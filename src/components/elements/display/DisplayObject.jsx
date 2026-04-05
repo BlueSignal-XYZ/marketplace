@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 /**
  * ObjectViewer Component
  * The main component to render the object.
- * 
+ *
  * @param {Object} props.data - The object data to render.
  */
 const ObjectViewer = ({ data }) => {
@@ -19,7 +19,7 @@ const ObjectViewer = ({ data }) => {
 /**
  * ObjectItem Component
  * Renders individual key-value pairs.
- * 
+ *
  * @param {Object} props
  * @param {string} props.keyName - The key of the object pair.
  * @param {any} props.value - The value of the object pair.
@@ -31,20 +31,12 @@ const ObjectItem = ({ keyName, value, level = 0 }) => {
 
   return (
     <>
-      <Item
-        level={level}
-        isObject={isObject}
-        onClick={() => isObject && setIsOpen(!isOpen)}
-      >
+      <Item level={level} isObject={isObject} onClick={() => isObject && setIsOpen(!isOpen)}>
         {keyName}: {isObject ? (isOpen ? '▼' : '▶') : String(value)}
       </Item>
       <AnimatePresence>
         {isObject && isOpen && (
-          <Dropdown
-            initial={{ height: 0 }}
-            animate={{ height: 'auto' }}
-            exit={{ height: 0 }}
-          >
+          <Dropdown initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }}>
             <ObjectDisplay data={value} level={level + 1} />
           </Dropdown>
         )}
@@ -56,7 +48,7 @@ const ObjectItem = ({ keyName, value, level = 0 }) => {
 /**
  * ObjectDisplay Component
  * Iterates over an object and renders its keys and values.
- * 
+ *
  * @param {Object} props.data - The object to display.
  * @param {number} props.level - Nesting level.
  */

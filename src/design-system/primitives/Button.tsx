@@ -53,33 +53,47 @@ const variantStyles = {
     background: ${({ theme }) => theme.components.buttonPrimaryBg};
     color: ${({ theme }) => theme.components.buttonPrimaryText};
     border: 1px solid transparent;
-    &:hover:not(:disabled) { opacity: 0.9; }
-    &:active:not(:disabled) { opacity: 0.8; }
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+    &:active:not(:disabled) {
+      opacity: 0.8;
+    }
   `,
   secondary: css`
     background: ${({ theme }) => theme.components.buttonSecondaryBg};
     color: ${({ theme }) => theme.components.buttonSecondaryText};
     border: 1px solid ${({ theme }) => theme.components.buttonSecondaryBorder};
-    &:hover:not(:disabled) { background: ${({ theme }) => theme.components.buttonGhostHover}; }
+    &:hover:not(:disabled) {
+      background: ${({ theme }) => theme.components.buttonGhostHover};
+    }
   `,
   ghost: css`
     background: transparent;
     color: ${({ theme }) => theme.colors.text};
     border: 1px solid transparent;
-    &:hover:not(:disabled) { background: ${({ theme }) => theme.components.buttonGhostHover}; }
+    &:hover:not(:disabled) {
+      background: ${({ theme }) => theme.components.buttonGhostHover};
+    }
   `,
   destructive: css`
-    background: #EF4444;
-    color: #FFFFFF;
+    background: #ef4444;
+    color: #ffffff;
     border: 1px solid transparent;
-    &:hover:not(:disabled) { background: #DC2626; }
-    &:active:not(:disabled) { background: #B91C1C; }
+    &:hover:not(:disabled) {
+      background: #dc2626;
+    }
+    &:active:not(:disabled) {
+      background: #b91c1c;
+    }
   `,
   outline: css`
     background: transparent;
     color: ${({ theme }) => theme.components.buttonSecondaryText};
     border: 1px solid ${({ theme }) => theme.components.buttonSecondaryBorder};
-    &:hover:not(:disabled) { background: ${({ theme }) => theme.components.buttonGhostHover}; }
+    &:hover:not(:disabled) {
+      background: ${({ theme }) => theme.components.buttonGhostHover};
+    }
   `,
 };
 
@@ -127,13 +141,30 @@ const Spinner = styled.span`
   border-right-color: transparent;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 // ── Component ─────────────────────────────────────────────
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'md', fullWidth = false, loading = false, icon, iconRight, children, disabled, ...rest }, ref) => (
+  (
+    {
+      variant = 'primary',
+      size = 'md',
+      fullWidth = false,
+      loading = false,
+      icon,
+      iconRight,
+      children,
+      disabled,
+      ...rest
+    },
+    ref
+  ) => (
     <StyledButton
       ref={ref}
       $variant={variant}
@@ -148,7 +179,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       {children}
       {!loading && iconRight}
     </StyledButton>
-  ),
+  )
 );
 
 Button.displayName = 'Button';

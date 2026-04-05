@@ -41,7 +41,9 @@ const Back = styled(Link)`
   gap: 4px;
   margin-bottom: 20px;
   min-height: 44px;
-  &:hover { color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const Header = styled.div`
@@ -183,7 +185,8 @@ const RangeBtn = styled.button`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 12px;
   font-weight: 500;
-  color: ${({ $active, theme }) => ($active ? theme.colors.textOnPrimary : theme.colors.textSecondary)};
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors.textOnPrimary : theme.colors.textSecondary};
   background: ${({ $active, theme }) => ($active ? theme.colors.primary : 'transparent')};
   border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : 'transparent')};
   border-radius: ${({ theme }) => theme.radius.sm}px;
@@ -191,7 +194,10 @@ const RangeBtn = styled.button`
   min-height: 36px;
   white-space: nowrap;
   flex-shrink: 0;
-  &:hover { background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.background)}; }
+  &:hover {
+    background: ${({ $active, theme }) =>
+      $active ? theme.colors.primary : theme.colors.background};
+  }
 `;
 
 const InfoSection = styled.div`
@@ -211,7 +217,9 @@ const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) { grid-template-columns: 1fr; }
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const InfoRow = styled.div`
@@ -238,9 +246,11 @@ const InfoValue = styled.span`
 const AlertItem = styled.div`
   padding: 12px 16px;
   background: ${({ $severity }) =>
-    $severity === 'critical' ? 'rgba(255,77,77,0.06)' :
-    $severity === 'warning' ? 'rgba(255,176,32,0.06)' :
-    'rgba(0,196,140,0.06)'};
+    $severity === 'critical'
+      ? 'rgba(255,77,77,0.06)'
+      : $severity === 'warning'
+        ? 'rgba(255,176,32,0.06)'
+        : 'rgba(0,196,140,0.06)'};
   border-radius: ${({ theme }) => theme.radius.sm}px;
   margin-bottom: 8px;
   font-size: 13px;
@@ -296,10 +306,16 @@ function DetailSkeleton() {
   return (
     <Page>
       <Skeleton width={140} height={14} />
-      <div style={{ marginTop: 20 }}><Skeleton width={300} height={28} /></div>
-      <div style={{ marginTop: 8 }}><Skeleton width={120} height={13} /></div>
+      <div style={{ marginTop: 20 }}>
+        <Skeleton width={300} height={28} />
+      </div>
+      <div style={{ marginTop: 8 }}>
+        <Skeleton width={120} height={13} />
+      </div>
       <StatsGrid style={{ marginTop: 32 }}>
-        {[1, 2, 3, 4, 5, 6].map((i) => <Skeleton key={i} height={80} />)}
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <Skeleton key={i} height={80} />
+        ))}
       </StatsGrid>
       <Skeleton height={400} />
     </Page>
@@ -309,7 +325,9 @@ function DetailSkeleton() {
 /* ── Component ──────────────────────────────────────────── */
 
 export function DeviceDetailPage() {
-  useEffect(() => { document.title = 'Device Detail — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Device Detail — BlueSignal Cloud';
+  }, []);
   const { deviceId } = useParams();
   const navigate = useNavigate();
 
@@ -349,7 +367,9 @@ export function DeviceDetailPage() {
       }
     }
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [deviceId]);
 
   // Fetch metrics when metric or range changes
@@ -366,7 +386,9 @@ export function DeviceDetailPage() {
     }
   }, [deviceId, activeMetric, range]);
 
-  useEffect(() => { fetchMetrics(); }, [fetchMetrics]);
+  useEffect(() => {
+    fetchMetrics();
+  }, [fetchMetrics]);
 
   if (loading) return <DetailSkeleton />;
 
@@ -377,7 +399,9 @@ export function DeviceDetailPage() {
         <ErrorBox>
           <div style={{ fontSize: 48, marginBottom: 16 }}>📡</div>
           <h2 style={{ margin: '0 0 8px', fontSize: 20 }}>Device Not Found</h2>
-          <p style={{ margin: '0 0 16px', color: '#888', fontSize: 14 }}>{error || `No device found with ID "${deviceId}".`}</p>
+          <p style={{ margin: '0 0 16px', color: '#888', fontSize: 14 }}>
+            {error || `No device found with ID "${deviceId}".`}
+          </p>
           <Button onClick={() => navigate('/v2/dashboard')}>Back to Dashboard</Button>
         </ErrorBox>
       </Page>
@@ -409,7 +433,8 @@ export function DeviceDetailPage() {
           <span>🔴</span>
           <span>
             Device is offline.
-            {device.lastReadingAt && ` Last seen: ${new Date(device.lastReadingAt).toLocaleString()}`}
+            {device.lastReadingAt &&
+              ` Last seen: ${new Date(device.lastReadingAt).toLocaleString()}`}
           </span>
         </OfflineBanner>
       )}
@@ -419,7 +444,9 @@ export function DeviceDetailPage() {
           <Title>
             {device.name}
             <Badge
-              variant={isOffline ? 'negative' : device.status === 'maintenance' ? 'warning' : 'positive'}
+              variant={
+                isOffline ? 'negative' : device.status === 'maintenance' ? 'warning' : 'positive'
+              }
               size="sm"
               dot
             >
@@ -434,9 +461,22 @@ export function DeviceDetailPage() {
         <DataCard label="Battery" value={`${device.battery}`} unit="%" compact />
         <DataCard label="Status" value={device.status} compact />
         <DataCard label="Firmware" value={device.firmwareVersion || '—'} compact />
-        <DataCard label="Last Reading" value={device.lastReadingAt ? timeAgo(device.lastReadingAt) : '—'} compact />
-        <DataCard label="Credits Generated" value={`${device.creditsGenerated}`} unit="kg" compact />
-        <DataCard label="Alerts" value={`${deviceAlerts.filter((a) => a.status === 'active').length}`} compact />
+        <DataCard
+          label="Last Reading"
+          value={device.lastReadingAt ? timeAgo(device.lastReadingAt) : '—'}
+          compact
+        />
+        <DataCard
+          label="Credits Generated"
+          value={`${device.creditsGenerated}`}
+          unit="kg"
+          compact
+        />
+        <DataCard
+          label="Alerts"
+          value={`${deviceAlerts.filter((a) => a.status === 'active').length}`}
+          compact
+        />
       </StatsGrid>
 
       <Tabs tabs={tabs} activeTab={activeMetric} onTabChange={setActiveMetric} />
@@ -447,7 +487,9 @@ export function DeviceDetailPage() {
           {currentValue}
           <ChartUnit>{metricConfig.unit}</ChartUnit>
         </ChartValue>
-        <ChartRange>Normal range: {metricConfig.normalRange} · {lastUpdated}</ChartRange>
+        <ChartRange>
+          Normal range: {metricConfig.normalRange} · {lastUpdated}
+        </ChartRange>
 
         <RangePicker>
           {RANGES.map((r) => (
@@ -463,7 +505,11 @@ export function DeviceDetailPage() {
           ) : chartPoints.length > 0 ? (
             <BarChart>
               {chartPoints.slice(-60).map((p, i) => (
-                <Bar key={i} style={{ height: `${Math.max((p.value / maxVal) * 100, 4)}%` }} title={`${p.value} at ${p.timestamp}`} />
+                <Bar
+                  key={i}
+                  style={{ height: `${Math.max((p.value / maxVal) * 100, 4)}%` }}
+                  title={`${p.value} at ${p.timestamp}`}
+                />
               ))}
             </BarChart>
           ) : (
@@ -480,7 +526,16 @@ export function DeviceDetailPage() {
           {deviceAlerts.slice(0, 10).map((alert) => (
             <AlertItem key={alert.id} $severity={alert.severity}>
               <span>{alert.message}</span>
-              <Badge variant={alert.severity === 'critical' ? 'negative' : alert.severity === 'warning' ? 'warning' : 'neutral'} size="sm">
+              <Badge
+                variant={
+                  alert.severity === 'critical'
+                    ? 'negative'
+                    : alert.severity === 'warning'
+                      ? 'warning'
+                      : 'neutral'
+                }
+                size="sm"
+              >
                 {alert.severity}
               </Badge>
             </AlertItem>
@@ -495,21 +550,47 @@ export function DeviceDetailPage() {
       <RevenueGradeSection deviceId={deviceId} device={device} />
 
       <InfoSection>
-        <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>
-          Device Information
-        </div>
+        <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Device Information</div>
         <InfoGrid>
-          <InfoRow><InfoLabel>Device ID</InfoLabel><InfoValue>{device.id}</InfoValue></InfoRow>
-          <InfoRow><InfoLabel>Serial</InfoLabel><InfoValue>{device.serialNumber}</InfoValue></InfoRow>
-          <InfoRow><InfoLabel>Model</InfoLabel><InfoValue>{device.model}</InfoValue></InfoRow>
-          <InfoRow><InfoLabel>Firmware</InfoLabel><InfoValue>{device.firmwareVersion}</InfoValue></InfoRow>
-          <InfoRow><InfoLabel>Location</InfoLabel><InfoValue>{device.location?.latitude?.toFixed(4)}, {device.location?.longitude?.toFixed(4)}</InfoValue></InfoRow>
-          <InfoRow><InfoLabel>Public Sharing</InfoLabel><InfoValue>{device.isPublicSharing ? 'Yes' : 'No'}</InfoValue></InfoRow>
+          <InfoRow>
+            <InfoLabel>Device ID</InfoLabel>
+            <InfoValue>{device.id}</InfoValue>
+          </InfoRow>
+          <InfoRow>
+            <InfoLabel>Serial</InfoLabel>
+            <InfoValue>{device.serialNumber}</InfoValue>
+          </InfoRow>
+          <InfoRow>
+            <InfoLabel>Model</InfoLabel>
+            <InfoValue>{device.model}</InfoValue>
+          </InfoRow>
+          <InfoRow>
+            <InfoLabel>Firmware</InfoLabel>
+            <InfoValue>{device.firmwareVersion}</InfoValue>
+          </InfoRow>
+          <InfoRow>
+            <InfoLabel>Location</InfoLabel>
+            <InfoValue>
+              {device.location?.latitude?.toFixed(4)}, {device.location?.longitude?.toFixed(4)}
+            </InfoValue>
+          </InfoRow>
+          <InfoRow>
+            <InfoLabel>Public Sharing</InfoLabel>
+            <InfoValue>{device.isPublicSharing ? 'Yes' : 'No'}</InfoValue>
+          </InfoRow>
           {device.calibration?.lastCalibrated && (
-            <InfoRow><InfoLabel>Last Calibrated</InfoLabel><InfoValue>{new Date(device.calibration.lastCalibrated).toLocaleDateString()}</InfoValue></InfoRow>
+            <InfoRow>
+              <InfoLabel>Last Calibrated</InfoLabel>
+              <InfoValue>
+                {new Date(device.calibration.lastCalibrated).toLocaleDateString()}
+              </InfoValue>
+            </InfoRow>
           )}
           {device.siteId && (
-            <InfoRow><InfoLabel>Site</InfoLabel><InfoValue>{device.siteId}</InfoValue></InfoRow>
+            <InfoRow>
+              <InfoLabel>Site</InfoLabel>
+              <InfoValue>{device.siteId}</InfoValue>
+            </InfoRow>
           )}
         </InfoGrid>
       </InfoSection>
@@ -533,7 +614,14 @@ function RelayControlSection({ deviceId, device }) {
 
   return (
     <InfoSection>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}
+      >
         <div style={{ fontSize: 16, fontWeight: 600 }}>Relay Control</div>
         <Badge variant={relayOn ? 'positive' : 'neutral'} size="sm" dot>
           {relayOn ? 'On' : 'Off'}
@@ -554,8 +642,12 @@ function RelayControlSection({ deviceId, device }) {
           value={duration}
           onChange={(e) => setDuration(e.target.value)}
           style={{
-            padding: '6px 12px', borderRadius: 6, border: '1px solid #ddd',
-            width: 120, fontSize: 13, fontFamily: 'inherit',
+            padding: '6px 12px',
+            borderRadius: 6,
+            border: '1px solid #ddd',
+            width: 120,
+            fontSize: 13,
+            fontFamily: 'inherit',
           }}
         />
       </div>
@@ -574,12 +666,15 @@ function RevenueGradeSection({ deviceId, device: _device }) {
   const navigate = useNavigate();
   const { data: rgStatus, isLoading } = useRevenueGradeQuery(deviceId);
 
-  if (isLoading) return (
-    <InfoSection>
-      <Skeleton width={200} height={20} />
-      <div style={{ marginTop: 16 }}><Skeleton height={100} /></div>
-    </InfoSection>
-  );
+  if (isLoading)
+    return (
+      <InfoSection>
+        <Skeleton width={200} height={20} />
+        <div style={{ marginTop: 16 }}>
+          <Skeleton height={100} />
+        </div>
+      </InfoSection>
+    );
 
   if (!rgStatus?.enabled) {
     return (
@@ -589,10 +684,13 @@ function RevenueGradeSection({ deviceId, device: _device }) {
           Status: <span style={{ fontWeight: 600 }}>Not Enabled</span>
         </div>
         <div style={{ fontSize: 14, color: '#666', marginBottom: 16, lineHeight: 1.6 }}>
-          Enable revenue-grade monitoring to generate tradeable water quality credits
-          on WaterQuality.Trading.
+          Enable revenue-grade monitoring to generate tradeable water quality credits on
+          WaterQuality.Trading.
         </div>
-        <Button size="sm" onClick={() => navigate(`/cloud/devices/${deviceId}/revenue-grade/setup`)}>
+        <Button
+          size="sm"
+          onClick={() => navigate(`/cloud/devices/${deviceId}/revenue-grade/setup`)}
+        >
           Enable Revenue Grade
         </Button>
       </InfoSection>
@@ -600,12 +698,27 @@ function RevenueGradeSection({ deviceId, device: _device }) {
   }
 
   const calStatus = rgStatus.calibrationStatus || {};
-  const statusIcon = (s) => s === 'valid' ? '✓' : s === 'expiring_soon' ? '⚠️' : s === 'expired' ? '✗' : '—';
-  const statusColor = (s) => s === 'valid' ? '#10B981' : s === 'expiring_soon' ? '#F59E0B' : s === 'expired' ? '#EF4444' : '#888';
+  const statusIcon = (s) =>
+    s === 'valid' ? '✓' : s === 'expiring_soon' ? '⚠️' : s === 'expired' ? '✗' : '—';
+  const statusColor = (s) =>
+    s === 'valid'
+      ? '#10B981'
+      : s === 'expiring_soon'
+        ? '#F59E0B'
+        : s === 'expired'
+          ? '#EF4444'
+          : '#888';
 
   return (
     <InfoSection>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}
+      >
         <div style={{ fontSize: 16, fontWeight: 600 }}>Credit Generation</div>
         <Badge variant={rgStatus.baselineComplete ? 'positive' : 'warning'} size="sm">
           {rgStatus.baselineComplete ? 'Active' : 'Pending Baseline'}
@@ -621,12 +734,16 @@ function RevenueGradeSection({ deviceId, device: _device }) {
       {/* Baseline */}
       <div style={{ fontSize: 14, marginBottom: 12 }}>
         <strong>Baseline:</strong>{' '}
-        {rgStatus.baselineType === 'monitoring' ? 'Monitoring' :
-         rgStatus.baselineType === 'regulatory' ? 'Regulatory (NPDES permit)' : 'Historical'}
+        {rgStatus.baselineType === 'monitoring'
+          ? 'Monitoring'
+          : rgStatus.baselineType === 'regulatory'
+            ? 'Regulatory (NPDES permit)'
+            : 'Historical'}
         {rgStatus.baselineProgress && !rgStatus.baselineComplete && (
           <span style={{ color: '#888' }}>
-            {' '}— Day {rgStatus.baselineProgress.daysCurrent} of {rgStatus.baselineProgress.daysTotal}
-            {' '}({rgStatus.baselineProgress.percentComplete}%)
+            {' '}
+            — Day {rgStatus.baselineProgress.daysCurrent} of {rgStatus.baselineProgress.daysTotal} (
+            {rgStatus.baselineProgress.percentComplete}%)
           </span>
         )}
       </div>
@@ -636,8 +753,13 @@ function RevenueGradeSection({ deviceId, device: _device }) {
         <strong>Calibration:</strong>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginTop: 6 }}>
           {['ph', 'tds', 'turbidity', 'orp'].map((probe) => (
-            <div key={probe} style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}>
-              <span style={{ color: statusColor(calStatus[probe]) }}>{statusIcon(calStatus[probe])}</span>
+            <div
+              key={probe}
+              style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}
+            >
+              <span style={{ color: statusColor(calStatus[probe]) }}>
+                {statusIcon(calStatus[probe])}
+              </span>
               <span style={{ textTransform: 'uppercase', fontWeight: 500 }}>{probe}</span>
               <span style={{ color: '#888' }}>{calStatus[probe] || 'unknown'}</span>
             </div>
@@ -670,11 +792,19 @@ function RevenueGradeSection({ deviceId, device: _device }) {
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
         {rgStatus.wqtProjectId && (
-          <Button size="sm" variant="outline" onClick={() => window.open('https://waterquality.trading/portfolio', '_blank')}>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => window.open('https://waterquality.trading/portfolio', '_blank')}
+          >
             View on WQT →
           </Button>
         )}
-        <Button size="sm" variant="outline" onClick={() => navigate(`/cloud/devices/${deviceId}/revenue-grade/setup`)}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => navigate(`/cloud/devices/${deviceId}/revenue-grade/setup`)}
+        >
           Recalibrate Probes
         </Button>
       </div>

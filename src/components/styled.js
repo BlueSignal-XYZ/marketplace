@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import styled from "styled-components";
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const ACTION_BUTTON = styled(motion.button)`
   padding: 10px 15px;
@@ -14,7 +14,10 @@ export const ACTION_BUTTON = styled(motion.button)`
   outline: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   user-select: none;
-  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: translateY(-3px);

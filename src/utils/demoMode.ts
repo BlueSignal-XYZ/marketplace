@@ -39,13 +39,15 @@ export function clearDemoMode(): void {
 
 export function getDemoHintForScreen(screenName: string): string | null {
   const hints: Record<string, string> = {
-    'cloud-dashboard': 'For utilities: highlight basin-wide coverage. For installers: show device health at a glance.',
-    'wqt-calculator': 'For farmers: estimate credits from cover crops. For utilities: model offset purchases.',
+    'cloud-dashboard':
+      'For utilities: highlight basin-wide coverage. For installers: show device health at a glance.',
+    'wqt-calculator':
+      'For farmers: estimate credits from cover crops. For utilities: model offset purchases.',
     'wqt-registry': 'For regulators: demonstrate transparency and audit trail.',
     'wqt-marketplace': 'For buyers: browse verified credits. For sellers: showcase your projects.',
-    'commissioning': 'For installers: demonstrate streamlined device setup and validation.',
-    'devices': 'For utilities: show real-time monitoring across your deployment.',
-    'alerts': 'For operators: highlight proactive issue detection and resolution.',
+    commissioning: 'For installers: demonstrate streamlined device setup and validation.',
+    devices: 'For utilities: show real-time monitoring across your deployment.',
+    alerts: 'For operators: highlight proactive issue detection and resolution.',
   };
 
   return hints[screenName] || null;

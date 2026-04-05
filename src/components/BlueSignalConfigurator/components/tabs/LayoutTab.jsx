@@ -1,6 +1,6 @@
 // Layout Tab Component
-import { SectionTitle, SvgContainer } from "../../styles";
-import { LayoutDiagram } from "../diagrams";
+import { SectionTitle, SvgContainer } from '../../styles';
+import { LayoutDiagram } from '../diagrams';
 
 const LayoutTab = ({ product }) => (
   <div>

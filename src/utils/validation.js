@@ -36,16 +36,16 @@ const SERIAL_REGEX = /^BS-\d{4}-\d{6}$/;
 // =============================================================================
 
 const validators = {
-  required: (value, message = "This field is required") => {
-    if (value === null || value === undefined || value === "") {
+  required: (value, message = 'This field is required') => {
+    if (value === null || value === undefined || value === '') {
       return createResult(false, message);
     }
     return createResult(true, null, value);
   },
 
   string: (value, options = {}) => {
-    if (typeof value !== "string") {
-      return createResult(false, "Must be a string");
+    if (typeof value !== 'string') {
+      return createResult(false, 'Must be a string');
     }
 
     if (options.minLength && value.length < options.minLength) {
@@ -57,7 +57,7 @@ const validators = {
     }
 
     if (options.pattern && !options.pattern.test(value)) {
-      return createResult(false, options.patternMessage || "Invalid format");
+      return createResult(false, options.patternMessage || 'Invalid format');
     }
 
     return createResult(true, null, value);
@@ -65,7 +65,7 @@ const validators = {
 
   email: (value) => {
     if (!EMAIL_REGEX.test(value)) {
-      return createResult(false, "Invalid email address");
+      return createResult(false, 'Invalid email address');
     }
     return createResult(true, null, value);
   },
@@ -73,7 +73,7 @@ const validators = {
   phone: (value) => {
     if (!value) return createResult(true, null, value); // Optional
     if (!PHONE_REGEX.test(value)) {
-      return createResult(false, "Invalid phone number");
+      return createResult(false, 'Invalid phone number');
     }
     return createResult(true, null, value);
   },
@@ -81,7 +81,7 @@ const validators = {
   number: (value, options = {}) => {
     const num = Number(value);
     if (isNaN(num)) {
-      return createResult(false, "Must be a number");
+      return createResult(false, 'Must be a number');
     }
 
     if (options.min !== undefined && num < options.min) {
@@ -93,7 +93,7 @@ const validators = {
     }
 
     if (options.positive && num <= 0) {
-      return createResult(false, "Must be a positive number");
+      return createResult(false, 'Must be a positive number');
     }
 
     return createResult(true, null, num);
@@ -101,24 +101,24 @@ const validators = {
 
   enum: (value, allowedValues, message) => {
     if (!allowedValues.includes(value)) {
-      return createResult(false, message || `Must be one of: ${allowedValues.join(", ")}`);
+      return createResult(false, message || `Must be one of: ${allowedValues.join(', ')}`);
     }
     return createResult(true, null, value);
   },
 
   coordinates: (value) => {
-    if (!value || typeof value !== "object") {
-      return createResult(false, "Coordinates required");
+    if (!value || typeof value !== 'object') {
+      return createResult(false, 'Coordinates required');
     }
 
     const { lat, lng } = value;
 
-    if (typeof lat !== "number" || lat < -90 || lat > 90) {
-      return createResult(false, "Invalid latitude");
+    if (typeof lat !== 'number' || lat < -90 || lat > 90) {
+      return createResult(false, 'Invalid latitude');
     }
 
-    if (typeof lng !== "number" || lng < -180 || lng > 180) {
-      return createResult(false, "Invalid longitude");
+    if (typeof lng !== 'number' || lng < -180 || lng > 180) {
+      return createResult(false, 'Invalid longitude');
     }
 
     return createResult(true, null, value);
@@ -126,7 +126,7 @@ const validators = {
 
   serialNumber: (value) => {
     if (!SERIAL_REGEX.test(value)) {
-      return createResult(false, "Invalid serial number format. Expected: BS-YYYY-NNNNNN");
+      return createResult(false, 'Invalid serial number format. Expected: BS-YYYY-NNNNNN');
     }
     return createResult(true, null, value);
   },
@@ -157,7 +157,7 @@ export const userProfileSchema = {
     required: false,
   },
   role: {
-    validate: (v) => validators.enum(v, ["buyer", "seller", "installer", "admin"]),
+    validate: (v) => validators.enum(v, ['buyer', 'seller', 'installer', 'admin']),
     required: true,
   },
 };
@@ -172,7 +172,7 @@ export const siteSchema = {
   },
   type: {
     validate: (v) =>
-      validators.enum(v, ["farm", "lake", "river", "pond", "treatment_plant", "stormwater"]),
+      validators.enum(v, ['farm', 'lake', 'river', 'pond', 'treatment_plant', 'stormwater']),
     required: true,
   },
   coordinates: {
@@ -250,13 +250,13 @@ export const alertThresholdSchema = {
   parameter: {
     validate: (v) =>
       validators.enum(v, [
-        "nitrogen",
-        "phosphorus",
-        "dissolved_oxygen",
-        "temperature",
-        "ph",
-        "turbidity",
-        "conductivity",
+        'nitrogen',
+        'phosphorus',
+        'dissolved_oxygen',
+        'temperature',
+        'ph',
+        'turbidity',
+        'conductivity',
       ]),
     required: true,
   },
@@ -269,7 +269,7 @@ export const alertThresholdSchema = {
     required: false,
   },
   enabled: {
-    validate: (v) => createResult(typeof v === "boolean", "Must be a boolean", v),
+    validate: (v) => createResult(typeof v === 'boolean', 'Must be a boolean', v),
     required: false,
     default: true,
   },
@@ -281,7 +281,7 @@ export const alertThresholdSchema = {
 export const commissionStepSchemas = {
   device_scan: {
     method: {
-      validate: (v) => validators.enum(v, ["qr_scan", "serial_manual"]),
+      validate: (v) => validators.enum(v, ['qr_scan', 'serial_manual']),
       required: true,
     },
     serialNumber: {
@@ -301,7 +301,7 @@ export const commissionStepSchemas = {
       required: true,
     },
     method: {
-      validate: (v) => validators.enum(v, ["gps", "map_pin", "address"]),
+      validate: (v) => validators.enum(v, ['gps', 'map_pin', 'address']),
       required: false,
     },
     address: {
@@ -313,7 +313,7 @@ export const commissionStepSchemas = {
     photos: {
       validate: (v) => {
         if (!Array.isArray(v) || v.length === 0) {
-          return createResult(false, "At least one photo is required");
+          return createResult(false, 'At least one photo is required');
         }
         return createResult(true, null, v);
       },
@@ -339,7 +339,7 @@ export const validateField = (value, fieldSchema) => {
   }
 
   // Skip validation if optional and empty
-  if (!fieldSchema.required && (value === null || value === undefined || value === "")) {
+  if (!fieldSchema.required && (value === null || value === undefined || value === '')) {
     return createResult(true, null, fieldSchema.default ?? value);
   }
 

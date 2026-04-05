@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
 export const mockAxios = {
   get: vi.fn(() => Promise.resolve({ data: {} })),
@@ -24,10 +24,10 @@ export const mockAxios = {
       eject: vi.fn(),
     },
   },
-}
+};
 
 vi.mock('axios', () => ({
   default: mockAxios,
-}))
+}));
 
-export default mockAxios
+export default mockAxios;

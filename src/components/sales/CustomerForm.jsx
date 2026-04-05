@@ -1,10 +1,10 @@
 // Customer Form Component - Create/Edit customer
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { CustomerAPI } from "../../scripts/back_door";
-import customerService from "../../services/customerService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { CustomerAPI } from '../../scripts/back_door';
+import customerService from '../../services/customerService';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 800px;
@@ -94,7 +94,9 @@ const Input = styled.input`
   border: 1px solid #d1d5db;
   border-radius: 6px;
   background: #ffffff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 
   &:focus {
     outline: none;
@@ -147,7 +149,7 @@ const TextArea = styled.textarea`
 
 const Row = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => props.cols || "1fr 1fr"};
+  grid-template-columns: ${(props) => props.cols || '1fr 1fr'};
   gap: 16px;
 
   @media (max-width: 480px) {
@@ -173,7 +175,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -184,8 +186,8 @@ const Button = styled.button`
       transform: translateY(-1px);
     }
   `
-      : props.variant === "danger"
-      ? `
+      : props.variant === 'danger'
+        ? `
     background: #ffffff;
     border: 1px solid #dc2626;
     color: #dc2626;
@@ -194,7 +196,7 @@ const Button = styled.button`
       background: #fef2f2;
     }
   `
-      : `
+        : `
     background: #ffffff;
     border: 1px solid #d1d5db;
     color: #374151;
@@ -230,12 +232,12 @@ const LoadingState = styled.div`
 `;
 
 const CUSTOMER_TYPES = [
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-  { value: "municipal", label: "Municipal" },
-  { value: "agricultural", label: "Agricultural" },
-  { value: "educational", label: "Educational" },
-  { value: "research", label: "Research" },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'municipal', label: 'Municipal' },
+  { value: 'agricultural', label: 'Agricultural' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'research', label: 'Research' },
 ];
 
 const CustomerForm = () => {
@@ -243,25 +245,25 @@ const CustomerForm = () => {
   const { customerId } = useParams();
   const { ACTIONS } = useAppContext();
 
-  const isEditing = customerId && customerId !== "new";
+  const isEditing = customerId && customerId !== 'new';
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    type: "residential",
-    notes: "",
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    type: 'residential',
+    notes: '',
     address: {
-      street: "",
-      city: "",
-      state: "",
-      zip: "",
-      country: "USA",
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      country: 'USA',
     },
   });
 
@@ -276,24 +278,24 @@ const CustomerForm = () => {
       const customer = await CustomerAPI.get(customerId);
       if (customer) {
         setForm({
-          name: customer.name || "",
-          email: customer.email || "",
-          phone: customer.phone || "",
-          company: customer.company || "",
-          type: customer.type || "residential",
-          notes: customer.notes || "",
+          name: customer.name || '',
+          email: customer.email || '',
+          phone: customer.phone || '',
+          company: customer.company || '',
+          type: customer.type || 'residential',
+          notes: customer.notes || '',
           address: customer.address || {
-            street: "",
-            city: "",
-            state: "",
-            zip: "",
-            country: "USA",
+            street: '',
+            city: '',
+            state: '',
+            zip: '',
+            country: 'USA',
           },
         });
       }
     } catch (err) {
-      console.error("Failed to load customer:", err);
-      setError("Failed to load customer");
+      console.error('Failed to load customer:', err);
+      setError('Failed to load customer');
     } finally {
       setLoading(false);
     }
@@ -312,15 +314,15 @@ const CustomerForm = () => {
 
   const validate = () => {
     if (!form.name.trim()) {
-      setError("Name is required");
+      setError('Name is required');
       return false;
     }
     if (!form.email.trim()) {
-      setError("Email is required");
+      setError('Email is required');
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      setError("Please enter a valid email address");
+      setError('Please enter a valid email address');
       return false;
     }
     return true;
@@ -340,33 +342,33 @@ const CustomerForm = () => {
           ...form,
           updatedAt: new Date().toISOString(),
         });
-        ACTIONS?.logNotification?.("success", "Customer updated successfully");
+        ACTIONS?.logNotification?.('success', 'Customer updated successfully');
       } else {
         await customerService.createCustomer(form);
-        ACTIONS?.logNotification?.("success", "Customer created successfully");
+        ACTIONS?.logNotification?.('success', 'Customer created successfully');
       }
-      navigate("/customers");
+      navigate('/customers');
     } catch (err) {
-      console.error("Failed to save customer:", err);
-      setError(err.message || "Failed to save customer");
+      console.error('Failed to save customer:', err);
+      setError(err.message || 'Failed to save customer');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this customer?")) {
+    if (!window.confirm('Are you sure you want to delete this customer?')) {
       return;
     }
 
     setSaving(true);
     try {
       await customerService.deleteCustomer(customerId);
-      ACTIONS?.logNotification?.("success", "Customer deleted successfully");
-      navigate("/customers");
+      ACTIONS?.logNotification?.('success', 'Customer deleted successfully');
+      navigate('/customers');
     } catch (err) {
-      console.error("Failed to delete customer:", err);
-      setError(err.message || "Failed to delete customer");
+      console.error('Failed to delete customer:', err);
+      setError(err.message || 'Failed to delete customer');
     } finally {
       setSaving(false);
     }
@@ -383,10 +385,8 @@ const CustomerForm = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <BackLink onClick={() => navigate("/customers")}>
-          ← Back to Customers
-        </BackLink>
-        <PageTitle>{isEditing ? "Edit Customer" : "New Customer"}</PageTitle>
+        <BackLink onClick={() => navigate('/customers')}>← Back to Customers</BackLink>
+        <PageTitle>{isEditing ? 'Edit Customer' : 'New Customer'}</PageTitle>
       </PageHeader>
 
       <Form onSubmit={handleSubmit}>
@@ -402,7 +402,7 @@ const CustomerForm = () => {
               type="text"
               placeholder="Full name or company name"
               value={form.name}
-              onChange={(e) => handleChange("name", e.target.value)}
+              onChange={(e) => handleChange('name', e.target.value)}
             />
           </FormGroup>
 
@@ -415,7 +415,7 @@ const CustomerForm = () => {
                 type="email"
                 placeholder="email@example.com"
                 value={form.email}
-                onChange={(e) => handleChange("email", e.target.value)}
+                onChange={(e) => handleChange('email', e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -424,7 +424,7 @@ const CustomerForm = () => {
                 type="tel"
                 placeholder="(555) 555-5555"
                 value={form.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
+                onChange={(e) => handleChange('phone', e.target.value)}
               />
             </FormGroup>
           </Row>
@@ -436,15 +436,12 @@ const CustomerForm = () => {
                 type="text"
                 placeholder="Company name"
                 value={form.company}
-                onChange={(e) => handleChange("company", e.target.value)}
+                onChange={(e) => handleChange('company', e.target.value)}
               />
             </FormGroup>
             <FormGroup>
               <Label>Customer Type</Label>
-              <Select
-                value={form.type}
-                onChange={(e) => handleChange("type", e.target.value)}
-              >
+              <Select value={form.type} onChange={(e) => handleChange('type', e.target.value)}>
                 {CUSTOMER_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
                     {t.label}
@@ -463,7 +460,7 @@ const CustomerForm = () => {
               type="text"
               placeholder="123 Main Street"
               value={form.address.street}
-              onChange={(e) => handleAddressChange("street", e.target.value)}
+              onChange={(e) => handleAddressChange('street', e.target.value)}
             />
           </FormGroup>
           <Row cols="2fr 1fr 1fr">
@@ -473,7 +470,7 @@ const CustomerForm = () => {
                 type="text"
                 placeholder="City"
                 value={form.address.city}
-                onChange={(e) => handleAddressChange("city", e.target.value)}
+                onChange={(e) => handleAddressChange('city', e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -482,7 +479,7 @@ const CustomerForm = () => {
                 type="text"
                 placeholder="State"
                 value={form.address.state}
-                onChange={(e) => handleAddressChange("state", e.target.value)}
+                onChange={(e) => handleAddressChange('state', e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -491,7 +488,7 @@ const CustomerForm = () => {
                 type="text"
                 placeholder="12345"
                 value={form.address.zip}
-                onChange={(e) => handleAddressChange("zip", e.target.value)}
+                onChange={(e) => handleAddressChange('zip', e.target.value)}
               />
             </FormGroup>
           </Row>
@@ -503,28 +500,23 @@ const CustomerForm = () => {
             <TextArea
               placeholder="Any additional notes about this customer..."
               value={form.notes}
-              onChange={(e) => handleChange("notes", e.target.value)}
+              onChange={(e) => handleChange('notes', e.target.value)}
             />
           </FormGroup>
         </Section>
 
         <ButtonGroup>
           {isEditing && (
-            <Button
-              type="button"
-              variant="danger"
-              onClick={handleDelete}
-              disabled={saving}
-            >
+            <Button type="button" variant="danger" onClick={handleDelete} disabled={saving}>
               Delete
             </Button>
           )}
           <div style={{ flex: 1 }} />
-          <Button type="button" onClick={() => navigate("/customers")}>
+          <Button type="button" onClick={() => navigate('/customers')}>
             Cancel
           </Button>
           <Button type="submit" variant="primary" disabled={saving}>
-            {saving ? "Saving..." : isEditing ? "Update Customer" : "Create Customer"}
+            {saving ? 'Saving...' : isEditing ? 'Update Customer' : 'Create Customer'}
           </Button>
         </ButtonGroup>
       </Form>

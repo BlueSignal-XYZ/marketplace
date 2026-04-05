@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAppContext } from "../../context/AppContext";
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAppContext } from '../../context/AppContext';
 
 /**
  * Confirmation Dialog
@@ -40,7 +40,7 @@ const Confirmation = () => {
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            transition={{ type: 'spring', stiffness: 300 }}
           >
             <p>{message}</p>
             {onConfirm && (
@@ -112,7 +112,7 @@ const Button = styled.button`
   margin: 8px 4px;
   cursor: pointer;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || '12px'};
   background-color: ${(props) =>
     props.primary ? props.theme.colors.primary500 : props.theme.colors.red500};
   display: flex;
@@ -129,7 +129,7 @@ const Button = styled.button`
   }
 
   &:focus {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
     outline-offset: 2px;
   }
 `;

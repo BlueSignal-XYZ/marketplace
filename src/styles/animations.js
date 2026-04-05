@@ -1,7 +1,7 @@
 // /src/styles/animations.js
 // Reusable animation utilities and keyframes
 
-import { css, keyframes } from "styled-components";
+import { css, keyframes } from 'styled-components';
 
 // ===== KEYFRAMES =====
 
@@ -244,32 +244,32 @@ export const drawCheck = keyframes`
 
 // Duration presets
 const durations = {
-  instant: "0.1s",
-  fast: "0.15s",
-  normal: "0.25s",
-  slow: "0.4s",
-  glacial: "0.6s",
+  instant: '0.1s',
+  fast: '0.15s',
+  normal: '0.25s',
+  slow: '0.4s',
+  glacial: '0.6s',
 };
 
 // Easing presets
 const easings = {
-  ease: "ease-out",
-  spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-  smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
-  bounce: "cubic-bezier(0.68, -0.55, 0.27, 1.55)",
-  snappy: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+  ease: 'ease-out',
+  spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+  smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  bounce: 'cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+  snappy: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
 };
 
 // Apply animation with defaults
 export const animate = (
   animation,
-  duration = "normal",
-  easing = "ease",
-  delay = "0s",
-  fillMode = "forwards"
+  duration = 'normal',
+  easing = 'ease',
+  delay = '0s',
+  fillMode = 'forwards'
 ) => css`
-  animation: ${animation} ${durations[duration] || duration}
-    ${easings[easing] || easing} ${delay} ${fillMode};
+  animation: ${animation} ${durations[duration] || duration} ${easings[easing] || easing} ${delay}
+    ${fillMode};
 `;
 
 // Stagger delay helper for list items
@@ -297,7 +297,9 @@ export const transition = {
   `,
   // Specific property transitions
   color: css`
-    transition: color 0.15s ease-out, background-color 0.15s ease-out,
+    transition:
+      color 0.15s ease-out,
+      background-color 0.15s ease-out,
       border-color 0.15s ease-out;
   `,
   transform: css`
@@ -314,7 +316,9 @@ export const transition = {
 // ===== HOVER EFFECTS =====
 
 export const hoverLift = css`
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.2s ease-out;
 
   &:hover {
     transform: translateY(-2px);
@@ -328,7 +332,9 @@ export const hoverLift = css`
 
 // Enhanced lift with subtle glow
 export const hoverLiftGlow = css`
-  transition: transform 0.2s ease-out, box-shadow 0.25s ease-out;
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.25s ease-out;
 
   &:hover {
     transform: translateY(-3px);
@@ -368,7 +374,7 @@ export const hoverScaleSubtle = css`
   }
 `;
 
-export const hoverGlow = (color = "rgba(56, 189, 190, 0.4)") => css`
+export const hoverGlow = (color = 'rgba(56, 189, 190, 0.4)') => css`
   transition: box-shadow 0.2s ease-out;
 
   &:hover {
@@ -386,10 +392,12 @@ export const hoverBrighten = css`
 
 // Border highlight effect
 export const hoverBorderHighlight = css`
-  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  transition:
+    border-color 0.2s ease-out,
+    box-shadow 0.2s ease-out;
 
   &:hover {
-    border-color: var(--color-primary-300, #5DC9CC);
+    border-color: var(--color-primary-300, #5dc9cc);
     box-shadow: 0 0 0 3px rgba(56, 189, 190, 0.1);
   }
 `;
@@ -398,7 +406,7 @@ export const hoverBorderHighlight = css`
 
 export const focusRing = css`
   &:focus-visible {
-    outline: 2px solid var(--color-primary-400, #38BDBE);
+    outline: 2px solid var(--color-primary-400, #38bdbe);
     outline-offset: 2px;
   }
 `;
@@ -406,7 +414,7 @@ export const focusRing = css`
 export const focusRingInset = css`
   &:focus-visible {
     outline: none;
-    box-shadow: inset 0 0 0 2px var(--color-primary-400, #38BDBE);
+    box-shadow: inset 0 0 0 2px var(--color-primary-400, #38bdbe);
   }
 `;
 
@@ -477,7 +485,7 @@ export const rippleBase = css`
   overflow: hidden;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -486,7 +494,10 @@ export const rippleBase = css`
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.4s ease-out;
+    transition:
+      width 0.4s ease-out,
+      height 0.4s ease-out,
+      opacity 0.4s ease-out;
     opacity: 0;
   }
 

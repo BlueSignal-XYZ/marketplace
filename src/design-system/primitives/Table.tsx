@@ -63,7 +63,7 @@ const Wrapper = styled.div`
       left: 0;
       z-index: 1;
       background: inherit;
-      box-shadow: 2px 0 4px rgba(0,0,0,0.04);
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.04);
     }
   }
 `;
@@ -92,7 +92,9 @@ const Th = styled.th<{ $align: string; $sortable: boolean; $hideBelow?: number }
   white-space: nowrap;
   border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder};
 
-  ${({ $hideBelow }) => $hideBelow && `
+  ${({ $hideBelow }) =>
+    $hideBelow &&
+    `
     @media (max-width: ${$hideBelow - 1}px) {
       display: none;
     }
@@ -113,10 +115,19 @@ const Tbody = styled.tbody``;
 const Tr = styled.tr<{ $clickable: boolean }>`
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   transition: background ${({ theme }) => theme.animation.fast};
-  &:nth-child(even) { background: ${({ theme }) => theme.components.tableHeaderBg}08; }
-  &:hover { background: ${({ theme }) => theme.components.tableRowHover}; }
-  &:not(:last-child) > td { border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder}; }
-  &:focus-visible { outline: 2px solid ${({ theme }) => theme.colors.primary}; outline-offset: -2px; }
+  &:nth-child(even) {
+    background: ${({ theme }) => theme.components.tableHeaderBg}08;
+  }
+  &:hover {
+    background: ${({ theme }) => theme.components.tableRowHover};
+  }
+  &:not(:last-child) > td {
+    border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder};
+  }
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: -2px;
+  }
 `;
 
 const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean; $hideBelow?: number }>`
@@ -127,7 +138,9 @@ const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean; $hideB
   font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : 'inherit')};
   white-space: nowrap;
 
-  ${({ $hideBelow }) => $hideBelow && `
+  ${({ $hideBelow }) =>
+    $hideBelow &&
+    `
     @media (max-width: ${$hideBelow - 1}px) {
       display: none;
     }
@@ -199,7 +212,15 @@ export function Table<T>({
                 $hideBelow={col.hideBelow}
                 style={col.width ? { width: col.width } : undefined}
                 onClick={() => handleSort(col)}
-                aria-sort={col.sortable ? (sortKey === col.key && sortDir ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none') : undefined}
+                aria-sort={
+                  col.sortable
+                    ? sortKey === col.key && sortDir
+                      ? sortDir === 'asc'
+                        ? 'ascending'
+                        : 'descending'
+                      : 'none'
+                    : undefined
+                }
               >
                 {col.header}
                 {col.sortable && (
@@ -223,7 +244,16 @@ export function Table<T>({
                 $clickable={!!onRowClick}
                 onClick={() => onRowClick?.(row)}
                 tabIndex={onRowClick ? 0 : undefined}
-                onKeyDown={onRowClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRowClick(row); } } : undefined}
+                onKeyDown={
+                  onRowClick
+                    ? (e: React.KeyboardEvent) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          onRowClick(row);
+                        }
+                      }
+                    : undefined
+                }
               >
                 {columns.map((col) => (
                   <Td

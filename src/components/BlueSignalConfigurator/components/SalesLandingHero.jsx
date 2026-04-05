@@ -1,6 +1,6 @@
 // SalesLandingHero - Landing section for sales.bluesignal.xyz
-import { useState } from "react";
-import styled from "styled-components";
+import { useState } from 'react';
+import styled from 'styled-components';
 
 const HeroWrapper = styled.div`
   background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
@@ -11,7 +11,7 @@ const HeroWrapper = styled.div`
   overflow: hidden;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -431,7 +431,7 @@ const DIYPathCard = styled.div`
     gap: 6px;
 
     &::before {
-      content: "✓";
+      content: '✓';
       color: #4ade80;
       font-size: 11px;
     }
@@ -471,13 +471,13 @@ const ResourceLink = styled.a`
 export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
   // ROI Calculator state
   const [waterVolume, setWaterVolume] = useState(50000);
-  const [siteType, setSiteType] = useState("pond");
+  const [siteType, setSiteType] = useState('pond');
   const [currentCost, setCurrentCost] = useState(500);
 
   // Simple ROI calculations
   const estimatedCredits = Math.round(waterVolume * 0.02); // $0.02 per gallon/month estimate
   const annualCredits = estimatedCredits * 12;
-  const systemCost = siteType === "pond" ? 1500 : siteType === "lake" ? 3000 : 5000;
+  const systemCost = siteType === 'pond' ? 1500 : siteType === 'lake' ? 3000 : 5000;
   const paybackMonths = Math.round(systemCost / (estimatedCredits + currentCost * 0.3));
   const fiveYearValue = annualCredits * 5 + currentCost * 0.3 * 12 * 5;
 
@@ -489,17 +489,12 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
             Turn Water Quality Into <span>Revenue</span>
           </h1>
           <p>
-            BlueSignal monitoring devices transform your water quality data into
-            tradeable credits. Professional-grade sensors, real-time monitoring,
-            and seamless marketplace integration.
+            BlueSignal monitoring devices transform your water quality data into tradeable credits.
+            Professional-grade sensors, real-time monitoring, and seamless marketplace integration.
           </p>
           <HeroActions>
-            <PrimaryButton onClick={onGetStarted}>
-              Start Your Quote →
-            </PrimaryButton>
-            <SecondaryButton onClick={onWatchDemo}>
-              Watch Demo
-            </SecondaryButton>
+            <PrimaryButton onClick={onGetStarted}>Start Your Quote →</PrimaryButton>
+            <SecondaryButton onClick={onWatchDemo}>Watch Demo</SecondaryButton>
           </HeroActions>
           <TrustBadges>
             <TrustBadge>
@@ -550,10 +545,7 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
             </ROIInput>
             <ROIInput>
               <label>Site Type</label>
-              <select
-                value={siteType}
-                onChange={(e) => setSiteType(e.target.value)}
-              >
+              <select value={siteType} onChange={(e) => setSiteType(e.target.value)}>
                 <option value="pond">Pond / Small Lake</option>
                 <option value="lake">Large Lake</option>
                 <option value="commercial">Commercial / Municipal</option>
@@ -599,10 +591,12 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
       <DIYSection>
         <DIYHeader>
           <DIYTitle>
-            <h3>Build It <span>Yourself</span></h3>
+            <h3>
+              Build It <span>Yourself</span>
+            </h3>
             <p>
-              For those who want to build their own monitoring system, we provide
-              complete documentation, wiring diagrams, and BOM lists.
+              For those who want to build their own monitoring system, we provide complete
+              documentation, wiring diagrams, and BOM lists.
             </p>
           </DIYTitle>
           <DIYBadge>Open Hardware</DIYBadge>
@@ -641,7 +635,8 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
             <div className="icon">Box</div>
             <div className="title">Turnkey System</div>
             <div className="description">
-              Fully assembled and tested system ready to deploy. Just connect power and start monitoring.
+              Fully assembled and tested system ready to deploy. Just connect power and start
+              monitoring.
             </div>
             <div className="features">
               <div className="feature">Factory calibrated</div>
@@ -662,7 +657,11 @@ export default function SalesLandingHero({ onGetStarted, onWatchDemo }) {
           <ResourceLink href="#install" onClick={onGetStarted}>
             Installation Guide
           </ResourceLink>
-          <ResourceLink href="https://github.com/BlueSignal-XYZ" target="_blank" rel="noopener noreferrer">
+          <ResourceLink
+            href="https://github.com/BlueSignal-XYZ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub Repository
           </ResourceLink>
         </DIYResources>

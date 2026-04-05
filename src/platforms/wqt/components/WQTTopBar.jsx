@@ -16,14 +16,46 @@ const WQTLogo = ({ height = 36 }) => {
   const scale = height / 48;
   const width = 320 * scale;
   return (
-    <svg width={width} height={height} viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 320 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g>
-        <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#0F4C81"/>
-        <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-        <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        <path
+          d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z"
+          fill="#0F4C81"
+        />
+        <path
+          d="M16 30L20 26L24 32L28 24L32 28"
+          stroke="#0EA5E9"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <path
+          d="M20 34L23 37L29 31"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
       </g>
-      <text x="50" y="32" fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="22" fill="#0F4C81">
-        <tspan fontWeight="700">WaterQuality</tspan><tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+      <text
+        x="50"
+        y="32"
+        fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        fontSize="22"
+        fill="#0F4C81"
+      >
+        <tspan fontWeight="700">WaterQuality</tspan>
+        <tspan fontWeight="400" fill="#0EA5E9">
+          .Trading
+        </tspan>
       </text>
     </svg>
   );
@@ -295,9 +327,7 @@ export function WQTTopBar() {
             aria-expanded={dropdownOpen}
             aria-haspopup="true"
           >
-            <AvatarCircle>
-              {userInitial || <User size={16} />}
-            </AvatarCircle>
+            <AvatarCircle>{userInitial || <User size={16} />}</AvatarCircle>
             <AvatarChevron size={14} $open={dropdownOpen} />
           </AvatarButton>
 

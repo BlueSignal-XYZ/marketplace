@@ -12,10 +12,10 @@ export interface MarketStats {
   totalCreditsRetired: number;
   activeSensors: number;
   activeListings: number;
-  totalVolume: number;             // USD
-  avgNitrogenPrice: number;        // $/credit
-  avgPhosphorusPrice: number;      // $/credit
-  nitrogenPriceChange24h: number;  // percentage
+  totalVolume: number; // USD
+  avgNitrogenPrice: number; // $/credit
+  avgPhosphorusPrice: number; // $/credit
+  nitrogenPriceChange24h: number; // percentage
   phosphorusPriceChange24h: number;
   last24hTransactions: number;
   last7dVolume: number;
@@ -26,12 +26,12 @@ export interface MarketStats {
 export interface TickerData {
   nutrientType: NutrientType;
   price: number;
-  change24h: number;       // percentage
+  change24h: number; // percentage
   change7d: number;
   volume24h: number;
   high24h: number;
   low24h: number;
-  sparkline7d: number[];   // 7-day price points for mini chart
+  sparkline7d: number[]; // 7-day price points for mini chart
 }
 
 export type MarketTicker = TickerData[];
@@ -43,9 +43,9 @@ export type NutrientType = 'nitrogen' | 'phosphorus' | 'combined';
 // ── Verification Level ────────────────────────────────────
 
 export type VerificationLevel =
-  | 'sensor-verified'    // BlueSignal IoT sensor + blockchain — premium
-  | 'third-party'        // Independent lab/auditor verified
-  | 'self-reported'      // Pending verification
+  | 'sensor-verified' // BlueSignal IoT sensor + blockchain — premium
+  | 'third-party' // Independent lab/auditor verified
+  | 'self-reported' // Pending verification
   | 'rejected';
 
 // ── Listing ───────────────────────────────────────────────
@@ -58,15 +58,15 @@ export interface Listing {
   sellerId: string;
   sellerName: string;
   nutrientType: NutrientType;
-  quantity: number;            // kg
-  pricePerCredit: number;      // USD
+  quantity: number; // kg
+  pricePerCredit: number; // USD
   totalPrice: number;
   region: string;
   watershed?: string;
-  vintage: string;             // e.g. "2025" or "2024-Q3"
+  vintage: string; // e.g. "2025" or "2024-Q3"
   verificationLevel: VerificationLevel;
   status: ListingStatus;
-  deviceId?: string;           // If sensor-verified
+  deviceId?: string; // If sensor-verified
   programId?: string;
   certificateId?: string;
   description?: string;

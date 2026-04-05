@@ -62,7 +62,8 @@ const TabLink = styled(NavLink)`
     color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
 
     svg {
-      color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
+      color: ${({ theme }) =>
+        theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
     }
   }
 `;
@@ -80,11 +81,7 @@ export function WQTBottomTabs() {
   return (
     <TabBarContainer aria-label="Main navigation">
       {TAB_ITEMS.map(({ label, icon: Icon, to }) => (
-        <TabLink
-          key={to}
-          to={to}
-          end={to === '/marketplace' || to === '/dashboard'}
-        >
+        <TabLink key={to} to={to} end={to === '/marketplace' || to === '/dashboard'}>
           <Icon size={20} />
           <TabLabel>{label}</TabLabel>
         </TabLink>

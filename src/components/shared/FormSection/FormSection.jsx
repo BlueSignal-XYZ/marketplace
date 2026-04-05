@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Label } from "../Label/Label";
+import styled from 'styled-components';
+import { Label } from '../Label/Label';
 
 const StyledFormSection = styled.div`
   position: relative;
@@ -20,7 +20,7 @@ const Error = styled.div`
 
 function FormSection({ label, children, error, className }) {
   return (
-    <StyledFormSection className={className ?? ""}>
+    <StyledFormSection className={className ?? ''}>
       <Label>{label}</Label>
       {children}
       <Error>{error}</Error>

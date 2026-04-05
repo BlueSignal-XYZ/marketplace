@@ -19,22 +19,38 @@ const TermsPage = () => (
       <li>Pre-order reservations are non-binding expressions of interest.</li>
       <li>No payment is collected at the time of reservation.</li>
       <li>You will be charged only when your order ships.</li>
-      <li>Full refund is available if the product is not delivered within the estimated timeline.</li>
+      <li>
+        Full refund is available if the product is not delivered within the estimated timeline.
+      </li>
       <li>Pricing is subject to change prior to order confirmation.</li>
     </ul>
 
     <h2>Cloud Services</h2>
     <ul>
-      <li>BlueSignal Cloud is provided on an &ldquo;as-is&rdquo; and &ldquo;as-available&rdquo; basis.</li>
-      <li>We target high availability but do not guarantee a specific uptime SLA during the pre-launch period.</li>
-      <li>We reserve the right to modify, suspend, or discontinue any aspect of the service with reasonable notice.</li>
-      <li>Your data remains your property. We do not claim ownership of sensor data transmitted by your devices.</li>
+      <li>
+        BlueSignal Cloud is provided on an &ldquo;as-is&rdquo; and &ldquo;as-available&rdquo; basis.
+      </li>
+      <li>
+        We target high availability but do not guarantee a specific uptime SLA during the pre-launch
+        period.
+      </li>
+      <li>
+        We reserve the right to modify, suspend, or discontinue any aspect of the service with
+        reasonable notice.
+      </li>
+      <li>
+        Your data remains your property. We do not claim ownership of sensor data transmitted by
+        your devices.
+      </li>
     </ul>
 
     <h2>Acceptable Use</h2>
     <p>You agree not to:</p>
     <ul>
-      <li>Use BlueSignal products as the sole monitoring system for life-safety critical applications without redundant monitoring.</li>
+      <li>
+        Use BlueSignal products as the sole monitoring system for life-safety critical applications
+        without redundant monitoring.
+      </li>
       <li>Reverse engineer, decompile, or disassemble the firmware or cloud software.</li>
       <li>Use the service to transmit malicious code or interfere with other users.</li>
       <li>Resell or sublicense the cloud service without written authorization.</li>
@@ -66,7 +82,8 @@ const TermsPage = () => (
     <h2>Governing Law</h2>
     <p>
       These terms are governed by the laws of the State of Texas, United States, without regard to
-      conflict of law principles. Any disputes shall be resolved in the courts of Travis County, Texas.
+      conflict of law principles. Any disputes shall be resolved in the courts of Travis County,
+      Texas.
     </p>
 
     <h2>Changes</h2>
@@ -77,7 +94,8 @@ const TermsPage = () => (
 
     <h2>Contact</h2>
     <p>
-      Questions about these terms? Contact us at <a href="mailto:hello@bluesignal.xyz">hello@bluesignal.xyz</a>.
+      Questions about these terms? Contact us at{' '}
+      <a href="mailto:hello@bluesignal.xyz">hello@bluesignal.xyz</a>.
     </p>
   </LegalLayout>
 );

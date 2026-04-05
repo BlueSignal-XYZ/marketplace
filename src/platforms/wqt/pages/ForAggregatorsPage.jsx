@@ -13,8 +13,8 @@ const Page = styled.div`
 
 const Hero = styled.section`
   padding: 80px 24px 64px;
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px 24px 96px;
   }
@@ -32,7 +32,9 @@ const Breadcrumb = styled(Link)`
   text-decoration: none;
   margin-bottom: 24px;
   display: inline-block;
-  &:hover { color: rgba(255, 255, 255, 0.6); }
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -41,7 +43,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 20px;
 `;
 
@@ -56,8 +58,10 @@ const HeroSub = styled.p`
 
 const Section = styled.section`
   padding: 96px 24px;
-  background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
-  @media (max-width: 640px) { padding: 64px 20px; }
+  background: ${({ $alt, theme }) => ($alt ? theme.colors.surface : theme.colors.background)};
+  @media (max-width: 640px) {
+    padding: 64px 20px;
+  }
 `;
 
 const SectionInner = styled.div`
@@ -160,7 +164,7 @@ const BulletItem = styled.li`
 
 const CTASection = styled.section`
   padding: 80px 24px;
-  background: linear-gradient(135deg, #0B1120 0%, #0F1B35 100%);
+  background: linear-gradient(135deg, #0b1120 0%, #0f1b35 100%);
   text-align: center;
 `;
 
@@ -168,7 +172,7 @@ const CTATitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(24px, 3.5vw, 36px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 16px;
 `;
 
@@ -197,13 +201,16 @@ const CTAButton = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  color: #ffffff;
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
-  &:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4); }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
+  }
 `;
 
 const CTAButtonOutline = styled(Link)`
@@ -221,11 +228,16 @@ const CTAButtonOutline = styled(Link)`
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
-  &:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 export default function ForAggregatorsPage() {
-  useEffect(() => { document.title = 'For Aggregators — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'For Aggregators — WaterQuality.Trading';
+  }, []);
   return (
     <Page>
       <Hero>
@@ -233,8 +245,8 @@ export default function ForAggregatorsPage() {
           <Breadcrumb to="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>Bundle Projects. Generate Credits. Access Buyers.</HeroTitle>
           <HeroSub>
-            Aggregate water quality improvement projects across your portfolio and monetize
-            verified outcomes on the WaterQuality.Trading marketplace.
+            Aggregate water quality improvement projects across your portfolio and monetize verified
+            outcomes on the WaterQuality.Trading marketplace.
           </HeroSub>
         </HeroInner>
       </Hero>
@@ -243,14 +255,12 @@ export default function ForAggregatorsPage() {
         <SectionInner>
           <SectionTitle>The Opportunity</SectionTitle>
           <SectionDesc>
-            You manage multiple sites — farms implementing nutrient management plans,
-            stormwater retrofits across a municipality, BMP (best management practice)
-            installations for a land conservancy. Each site generates measurable water
-            quality improvements, but individually they're too small to attract buyers.
+            You manage multiple sites — farms implementing nutrient management plans, stormwater
+            retrofits across a municipality, BMP (best management practice) installations for a land
+            conservancy. Each site generates measurable water quality improvements, but individually
+            they&apos;re too small to attract buyers.
           </SectionDesc>
-          <SectionDesc>
-            Aggregated, they're a portfolio.
-          </SectionDesc>
+          <SectionDesc>Aggregated, they&apos;re a portfolio.</SectionDesc>
         </SectionInner>
       </Section>
 
@@ -262,8 +272,8 @@ export default function ForAggregatorsPage() {
               <FlowContent>
                 <FlowTitle>Register Your Portfolio</FlowTitle>
                 <FlowDesc>
-                  Create a project for each site. Upload site locations, baseline data,
-                  and installed BMPs or treatment systems.
+                  Create a project for each site. Upload site locations, baseline data, and
+                  installed BMPs or treatment systems.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -271,8 +281,8 @@ export default function ForAggregatorsPage() {
               <FlowContent>
                 <FlowTitle>Deploy Monitoring</FlowTitle>
                 <FlowDesc>
-                  Install continuous monitoring at each site. The platform ingests
-                  timestamped water quality data and associates it with each project.
+                  Install continuous monitoring at each site. The platform ingests timestamped water
+                  quality data and associates it with each project.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -280,9 +290,9 @@ export default function ForAggregatorsPage() {
               <FlowContent>
                 <FlowTitle>Submit for Batch Verification</FlowTitle>
                 <FlowDesc>
-                  Submit your entire portfolio for verification in a single batch.
-                  The verification workflow reviews each project against its baseline
-                  and flags any that need additional data.
+                  Submit your entire portfolio for verification in a single batch. The verification
+                  workflow reviews each project against its baseline and flags any that need
+                  additional data.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -290,9 +300,9 @@ export default function ForAggregatorsPage() {
               <FlowContent>
                 <FlowTitle>List Bundled Credits</FlowTitle>
                 <FlowDesc>
-                  Once verified, credits from all sites are issued and can be listed
-                  individually or as bundled packages. Utilities and buyers prefer larger
-                  blocks — bundling gives you pricing leverage.
+                  Once verified, credits from all sites are issued and can be listed individually or
+                  as bundled packages. Utilities and buyers prefer larger blocks — bundling gives
+                  you pricing leverage.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -304,11 +314,11 @@ export default function ForAggregatorsPage() {
         <SectionInner>
           <SectionTitle>Your Economics</SectionTitle>
           <SectionDesc>
-            You invest in monitoring equipment and project installation. The platform
-            handles measurement, verification, issuance, and marketplace access. Your
-            revenue comes from credit sales minus the platform's transaction fee. The more
-            sites you aggregate, the lower your per-credit cost and the more attractive
-            your listings are to institutional buyers.
+            You invest in monitoring equipment and project installation. The platform handles
+            measurement, verification, issuance, and marketplace access. Your revenue comes from
+            credit sales minus the platform&apos;s transaction fee. The more sites you aggregate,
+            the lower your per-credit cost and the more attractive your listings are to
+            institutional buyers.
           </SectionDesc>
         </SectionInner>
       </Section>
@@ -319,8 +329,12 @@ export default function ForAggregatorsPage() {
           <BulletList>
             <BulletItem>Environmental consulting firms managing BMP portfolios</BulletItem>
             <BulletItem>Agricultural cooperatives with nutrient management programs</BulletItem>
-            <BulletItem>Stormwater authorities implementing green infrastructure across a jurisdiction</BulletItem>
-            <BulletItem>Land trusts and conservation districts with restoration projects</BulletItem>
+            <BulletItem>
+              Stormwater authorities implementing green infrastructure across a jurisdiction
+            </BulletItem>
+            <BulletItem>
+              Land trusts and conservation districts with restoration projects
+            </BulletItem>
             <BulletItem>Water technology companies deploying treatment systems at scale</BulletItem>
           </BulletList>
         </SectionInner>

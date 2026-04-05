@@ -21,9 +21,5 @@ const queryClient = new QueryClient({
 export { queryClient };
 
 export function QueryProvider({ children }) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

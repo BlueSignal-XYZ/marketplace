@@ -1,23 +1,23 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
-const stages = ["Submitted", "Disputed", "Approved", "Denied"];
+const stages = ['Submitted', 'Disputed', 'Approved', 'Denied'];
 
 const AssetCard = ({ metadata, onClick }) => {
   const { thumbnailUrl, name, description, tags, status } = metadata || {};
-  
+
   const generateCta = (stage) => {
     switch (stage) {
-      case "Submitted":
-        return "Dispute Submission";
-      case "Disputed":
-        return "Resolve Dispute";
-      case "Approved":
-        return "View Approval";
-      case "Denied":
-        return "Dispute Denial";
+      case 'Submitted':
+        return 'Dispute Submission';
+      case 'Disputed':
+        return 'Resolve Dispute';
+      case 'Approved':
+        return 'View Approval';
+      case 'Denied':
+        return 'Dispute Denial';
       default:
-        return "Contact Support";
+        return 'Contact Support';
     }
   };
 
@@ -44,7 +44,9 @@ const AssetCard = ({ metadata, onClick }) => {
         <div className="asset-details">
           <div className="detail">{description}</div>
           {tags?.map((tag, index) => (
-            <div key={index} className="detail">{tag}</div>
+            <div key={index} className="detail">
+              {tag}
+            </div>
           ))}
         </div>
         <div className="status-container">
@@ -55,7 +57,9 @@ const AssetCard = ({ metadata, onClick }) => {
           ))}
         </div>
       </div>
-      <button className="cta-button" onClick={onClick}>{cta}</button>
+      <button className="cta-button" onClick={onClick}>
+        {cta}
+      </button>
     </AssetCardContainer>
   );
 };

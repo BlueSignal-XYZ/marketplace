@@ -1,6 +1,6 @@
 /**
  * WQT Data Service
- * 
+ *
  * Provides real-time data access for WaterQuality.Trading marketplace pages.
  * Reads from Firebase RTDB (credits, listings, sites) and transforms data
  * into the shapes expected by UI components. Falls back to empty arrays
@@ -44,7 +44,7 @@ export const fetchRegistryCredits = async () => {
 export const fetchCreditsByType = async (type) => {
   const credits = await fetchRegistryCredits();
   if (type === 'all') return credits;
-  return credits.filter(c => c.type === type);
+  return credits.filter((c) => c.type === type);
 };
 
 /**
@@ -52,7 +52,7 @@ export const fetchCreditsByType = async (type) => {
  */
 export const fetchRetiredCredits = async () => {
   const credits = await fetchRegistryCredits();
-  return credits.filter(c => c.status === 'retired');
+  return credits.filter((c) => c.status === 'retired');
 };
 
 /**
@@ -61,10 +61,11 @@ export const fetchRetiredCredits = async () => {
 export const searchCredits = (credits, query) => {
   if (!query) return credits;
   const q = query.toLowerCase();
-  return credits.filter(c =>
-    (c.id || "").toLowerCase().includes(q) ||
-    (c.projectName || "").toLowerCase().includes(q) ||
-    (c.location || "").toLowerCase().includes(q)
+  return credits.filter(
+    (c) =>
+      (c.id || '').toLowerCase().includes(q) ||
+      (c.projectName || '').toLowerCase().includes(q) ||
+      (c.location || '').toLowerCase().includes(q)
   );
 };
 
@@ -82,14 +83,14 @@ const transformCreditToRegistry = (id, credit) => ({
   issueDate: credit.verification?.verifiedAt
     ? new Date(credit.verification.verifiedAt).toISOString()
     : new Date().toISOString(),
-  retirementDate: credit.status === 'retired' && credit.verification?.verifiedAt
-    ? new Date(credit.verification.verifiedAt + 86400000).toISOString()
-    : null,
+  retirementDate:
+    credit.status === 'retired' && credit.verification?.verifiedAt
+      ? new Date(credit.verification.verifiedAt + 86400000).toISOString()
+      : null,
   status: credit.status === 'retired' ? 'retired' : 'active',
   verificationId: credit.verification?.certificateHash || `VER-${id.slice(0, 8)}`,
   verifier: credit.ownership?.originalOwner || 'BlueSignal Verification',
 });
-
 
 // ============================================================
 // LISTINGS (for Marketplace Browse and Presale pages)
@@ -122,7 +123,7 @@ export const fetchListings = async () => {
     const listingsData = snapshot.val();
     return Object.entries(listingsData)
       .map(([id, listing]) => transformListingToCard(listing, id))
-      .filter(l => l.status === 'active');
+      .filter((l) => l.status === 'active');
   } catch (error) {
     console.error('Failed to fetch listings:', error);
     return [];
@@ -173,7 +174,6 @@ const transformListingToCard = (listing, id) => ({
   createdAt: listing.timestamps?.created || Date.now(),
   views: listing.metadata?.views || 0,
 });
-
 
 // ============================================================
 // SITES / MAP PROJECTS (for Map page)
@@ -230,7 +230,6 @@ const transformSiteToMapProject = (site, id) => ({
   boundary: site.location?.boundary || null,
 });
 
-
 // ============================================================
 // ORDERS / TRANSACTIONS (for Transaction page and dashboards)
 // ============================================================
@@ -251,7 +250,7 @@ export const fetchUserOrders = async (userId) => {
     const ordersData = snapshot.val();
     return Object.entries(ordersData)
       .map(([id, order]) => transformOrderToTransaction(id, order))
-      .filter(o => o.buyerId === userId || o.sellerId === userId);
+      .filter((o) => o.buyerId === userId || o.sellerId === userId);
   } catch (error) {
     console.error('Failed to fetch user orders:', error);
     return [];
@@ -278,7 +277,6 @@ const transformOrderToTransaction = (id, order) => ({
   completedAt: order.timestamps?.completed || null,
 });
 
-
 // ============================================================
 // USER CREDITS (for Buyer/Seller dashboards)
 // ============================================================
@@ -299,7 +297,7 @@ export const fetchUserCredits = async (userId) => {
     const creditsData = snapshot.val();
     return Object.entries(creditsData)
       .map(([id, credit]) => transformCreditToRegistry(id, credit))
-      .filter(c => {
+      .filter((c) => {
         const raw = creditsData[c.id.startsWith('credit-') ? c.id : c.id];
         return raw?.ownership?.currentOwner === userId;
       });
@@ -325,13 +323,12 @@ export const fetchSellerListings = async (sellerId) => {
     const listingsData = snapshot.val();
     return Object.entries(listingsData)
       .map(([id, listing]) => transformListingToCard(listing, id))
-      .filter(l => l.seller === sellerId);
+      .filter((l) => l.seller === sellerId);
   } catch (error) {
     console.error('Failed to fetch seller listings:', error);
     return [];
   }
 };
-
 
 // ============================================================
 // DEVICES (for cross-platform visibility)

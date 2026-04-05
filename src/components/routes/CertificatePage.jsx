@@ -1,15 +1,11 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { Loading, Error, Certificate } from "../elements/index";
-import { formatCertificate } from "../../scripts/helpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faTwitter,
-  faLinkedinIn,
-} from "@fortawesome/free-brands-svg-icons";
-import configs from "../../../configs";
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { Loading, Error, Certificate } from '../elements/index';
+import { formatCertificate } from '../../scripts/helpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faTwitter, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import configs from '../../../configs';
 
 const Container = styled.div`
   display: flex;
@@ -81,9 +77,7 @@ const ShareLink = styled.a`
 `;
 
 function createFacebookShareLink(url) {
-  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-    url
-  )}`;
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
 }
 
 function createTwitterShareLink(url, text) {
@@ -98,23 +92,23 @@ function createLinkedInShareLink(url, title, summary) {
   )}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`;
 }
 
-const shareText = "My Water Quality Credit Certificate";
+const shareText = 'My Water Quality Credit Certificate';
 
 const CertificatePage = () => {
   const { id } = useParams();
   const certUrl = window.location.href;
   const [certificate, setCertificate] = useState({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
         //API CALL TO GET CERTIFICATE DATA
         fetch(`${configs.server_url}/npc_credits/certificates/${id}`, {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         })
           .then((res) => res.json())
@@ -126,7 +120,7 @@ const CertificatePage = () => {
                 formatCertificate(certificate);
                 setCertificate(certificate);
               } else {
-                setError("Certificate Not Found");
+                setError('Certificate Not Found');
               }
             }
           })
@@ -137,7 +131,7 @@ const CertificatePage = () => {
           );
       } catch (error) {
         console.error(error);
-        setError("Failed to fetch data");
+        setError('Failed to fetch data');
       } finally {
         setLoading(false);
       }
@@ -161,7 +155,11 @@ const CertificatePage = () => {
       </CertificateContainer>
 
       <ShareLinksContainer>
-        <ShareLink href={createFacebookShareLink(certUrl)} target="_blank" rel="noopener noreferrer">
+        <ShareLink
+          href={createFacebookShareLink(certUrl)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <FontAwesomeIcon icon={faFacebookF} />
         </ShareLink>
         <ShareLink
@@ -172,7 +170,7 @@ const CertificatePage = () => {
           <FontAwesomeIcon icon={faTwitter} />
         </ShareLink>
         <ShareLink
-          href={createLinkedInShareLink(certUrl, shareText, "")}
+          href={createLinkedInShareLink(certUrl, shareText, '')}
           target="_blank"
           rel="noopener noreferrer"
         >

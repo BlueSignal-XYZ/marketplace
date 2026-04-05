@@ -1,5 +1,5 @@
 // Bundles Section Component - Quick-add pre-configured packages
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const BundlesWrapper = styled.div`
   margin-bottom: 24px;

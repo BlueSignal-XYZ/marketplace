@@ -72,7 +72,9 @@ const FormRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const ButtonRow = styled.div`
@@ -128,7 +130,9 @@ const ReviewValue = styled.span`
 const STEPS = ['Welcome', 'Organization', 'Verification', 'Devices', 'Review'];
 
 export function SellerOnboardingPage() {
-  useEffect(() => { document.title = 'Seller Onboarding — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Seller Onboarding — WaterQuality.Trading';
+  }, []);
   const { toast } = useToastContext();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
@@ -153,15 +157,17 @@ export function SellerOnboardingPage() {
         ))}
       </Progress>
 
-      <StepLabel>Step {step + 1} of {STEPS.length}</StepLabel>
+      <StepLabel>
+        Step {step + 1} of {STEPS.length}
+      </StepLabel>
 
       <Card>
         {step === 0 && (
           <>
             <Title>Become a Seller</Title>
             <Desc>
-              List your verified environmental credits on WaterQuality.Trading.
-              Our sensor-verified marketplace is designed for trust and transparency.
+              List your verified environmental credits on WaterQuality.Trading. Our sensor-verified
+              marketplace is designed for trust and transparency.
             </Desc>
             <InfoBox>
               <strong>Quality Commitment:</strong> All credits listed on WQT undergo verification.
@@ -179,18 +185,45 @@ export function SellerOnboardingPage() {
             <Title>Organization Details</Title>
             <Desc>Tell us about your organization or operation.</Desc>
             <FormGrid>
-              <Input label="Organization Name" value={form.orgName} onChange={(e) => update('orgName', e.target.value)} placeholder="e.g. EcoRestore LLC" />
+              <Input
+                label="Organization Name"
+                value={form.orgName}
+                onChange={(e) => update('orgName', e.target.value)}
+                placeholder="e.g. EcoRestore LLC"
+              />
               <FormRow>
-                <Input label="Organization Type" value={form.orgType} onChange={(e) => update('orgType', e.target.value)} placeholder="e.g. Farm, Municipality, NGO" />
-                <Input label="Region" value={form.region} onChange={(e) => update('region', e.target.value)} placeholder="e.g. Virginia - James River" />
+                <Input
+                  label="Organization Type"
+                  value={form.orgType}
+                  onChange={(e) => update('orgType', e.target.value)}
+                  placeholder="e.g. Farm, Municipality, NGO"
+                />
+                <Input
+                  label="Region"
+                  value={form.region}
+                  onChange={(e) => update('region', e.target.value)}
+                  placeholder="e.g. Virginia - James River"
+                />
               </FormRow>
               <FormRow>
-                <Input label="Contact Name" value={form.contactName} onChange={(e) => update('contactName', e.target.value)} placeholder="Your name" />
-                <Input label="Contact Email" value={form.contactEmail} onChange={(e) => update('contactEmail', e.target.value)} placeholder="you@org.com" />
+                <Input
+                  label="Contact Name"
+                  value={form.contactName}
+                  onChange={(e) => update('contactName', e.target.value)}
+                  placeholder="Your name"
+                />
+                <Input
+                  label="Contact Email"
+                  value={form.contactEmail}
+                  onChange={(e) => update('contactEmail', e.target.value)}
+                  placeholder="you@org.com"
+                />
               </FormRow>
             </FormGrid>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(0)}>Back</Button>
+              <Button variant="outline" onClick={() => setStep(0)}>
+                Back
+              </Button>
               <Button onClick={() => setStep(2)}>Continue</Button>
             </ButtonRow>
           </>
@@ -199,24 +232,52 @@ export function SellerOnboardingPage() {
         {step === 2 && (
           <>
             <Title>Verification Method</Title>
-            <Desc>How will your credits be verified? Higher verification levels command better prices.</Desc>
+            <Desc>
+              How will your credits be verified? Higher verification levels command better prices.
+            </Desc>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
               {[
-                { id: 'sensor', label: 'Sensor Verified', desc: 'BlueSignal WQM-1 device data. Highest trust.', badge: 'verified' },
-                { id: 'third-party', label: 'Third-Party Verified', desc: 'Independent lab or auditor verification.', badge: 'positive' },
-                { id: 'self-reported', label: 'Self-Reported', desc: 'Manual reporting. Subject to review.', badge: 'warning' },
+                {
+                  id: 'sensor',
+                  label: 'Sensor Verified',
+                  desc: 'BlueSignal WQM-1 device data. Highest trust.',
+                  badge: 'verified',
+                },
+                {
+                  id: 'third-party',
+                  label: 'Third-Party Verified',
+                  desc: 'Independent lab or auditor verification.',
+                  badge: 'positive',
+                },
+                {
+                  id: 'self-reported',
+                  label: 'Self-Reported',
+                  desc: 'Manual reporting. Subject to review.',
+                  badge: 'warning',
+                },
               ].map((opt) => (
                 <CheckItem key={opt.id} onClick={() => update('verificationMethod', opt.id)}>
                   <input type="radio" checked={form.verificationMethod === opt.id} readOnly />
                   <div>
-                    <div style={{ fontWeight: 600 }}>{opt.label} <Badge variant={opt.badge} size="sm">{opt.badge === 'verified' ? 'Premium' : opt.badge === 'positive' ? 'Standard' : 'Basic'}</Badge></div>
+                    <div style={{ fontWeight: 600 }}>
+                      {opt.label}{' '}
+                      <Badge variant={opt.badge} size="sm">
+                        {opt.badge === 'verified'
+                          ? 'Premium'
+                          : opt.badge === 'positive'
+                            ? 'Standard'
+                            : 'Basic'}
+                      </Badge>
+                    </div>
                     <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{opt.desc}</div>
                   </div>
                 </CheckItem>
               ))}
             </div>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
+              <Button variant="outline" onClick={() => setStep(1)}>
+                Back
+              </Button>
               <Button onClick={() => setStep(3)}>Continue</Button>
             </ButtonRow>
           </>
@@ -228,10 +289,16 @@ export function SellerOnboardingPage() {
             <Desc>If using sensor verification, tell us about your monitoring devices.</Desc>
             {form.verificationMethod === 'sensor' ? (
               <FormGrid>
-                <Input label="Number of Devices" type="number" value={form.deviceCount} onChange={(e) => update('deviceCount', e.target.value)} placeholder="e.g. 2" />
+                <Input
+                  label="Number of Devices"
+                  type="number"
+                  value={form.deviceCount}
+                  onChange={(e) => update('deviceCount', e.target.value)}
+                  placeholder="e.g. 2"
+                />
                 <InfoBox>
-                  Each BlueSignal WQM-1 device will be registered and linked to your account.
-                  Device data feeds directly into the verification pipeline.
+                  Each BlueSignal WQM-1 device will be registered and linked to your account. Device
+                  data feeds directly into the verification pipeline.
                 </InfoBox>
               </FormGrid>
             ) : (
@@ -241,7 +308,9 @@ export function SellerOnboardingPage() {
               </InfoBox>
             )}
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
+              <Button variant="outline" onClick={() => setStep(2)}>
+                Back
+              </Button>
               <Button onClick={() => setStep(4)}>Review Application</Button>
             </ButtonRow>
           </>
@@ -252,25 +321,61 @@ export function SellerOnboardingPage() {
             <Title>Review & Submit</Title>
             <Desc>Please review your seller application before submitting.</Desc>
             <div style={{ marginBottom: 24 }}>
-              <ReviewRow><ReviewLabel>Organization</ReviewLabel><ReviewValue>{form.orgName || '—'}</ReviewValue></ReviewRow>
-              <ReviewRow><ReviewLabel>Type</ReviewLabel><ReviewValue>{form.orgType || '—'}</ReviewValue></ReviewRow>
-              <ReviewRow><ReviewLabel>Region</ReviewLabel><ReviewValue>{form.region || '—'}</ReviewValue></ReviewRow>
-              <ReviewRow><ReviewLabel>Contact</ReviewLabel><ReviewValue>{form.contactName || '—'}</ReviewValue></ReviewRow>
-              <ReviewRow><ReviewLabel>Email</ReviewLabel><ReviewValue>{form.contactEmail || '—'}</ReviewValue></ReviewRow>
-              <ReviewRow><ReviewLabel>Verification</ReviewLabel><ReviewValue>{form.verificationMethod}</ReviewValue></ReviewRow>
+              <ReviewRow>
+                <ReviewLabel>Organization</ReviewLabel>
+                <ReviewValue>{form.orgName || '—'}</ReviewValue>
+              </ReviewRow>
+              <ReviewRow>
+                <ReviewLabel>Type</ReviewLabel>
+                <ReviewValue>{form.orgType || '—'}</ReviewValue>
+              </ReviewRow>
+              <ReviewRow>
+                <ReviewLabel>Region</ReviewLabel>
+                <ReviewValue>{form.region || '—'}</ReviewValue>
+              </ReviewRow>
+              <ReviewRow>
+                <ReviewLabel>Contact</ReviewLabel>
+                <ReviewValue>{form.contactName || '—'}</ReviewValue>
+              </ReviewRow>
+              <ReviewRow>
+                <ReviewLabel>Email</ReviewLabel>
+                <ReviewValue>{form.contactEmail || '—'}</ReviewValue>
+              </ReviewRow>
+              <ReviewRow>
+                <ReviewLabel>Verification</ReviewLabel>
+                <ReviewValue>{form.verificationMethod}</ReviewValue>
+              </ReviewRow>
               {form.verificationMethod === 'sensor' && (
-                <ReviewRow><ReviewLabel>Devices</ReviewLabel><ReviewValue>{form.deviceCount || '—'}</ReviewValue></ReviewRow>
+                <ReviewRow>
+                  <ReviewLabel>Devices</ReviewLabel>
+                  <ReviewValue>{form.deviceCount || '—'}</ReviewValue>
+                </ReviewRow>
               )}
             </div>
             <CheckItem>
-              <input type="checkbox" checked={form.acceptTerms} onChange={(e) => update('acceptTerms', e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={form.acceptTerms}
+                onChange={(e) => update('acceptTerms', e.target.checked)}
+              />
               <span style={{ fontSize: 13 }}>
-                I agree to the WQT Seller Terms and understand that submitted credits are subject to verification review.
+                I agree to the WQT Seller Terms and understand that submitted credits are subject to
+                verification review.
               </span>
             </CheckItem>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(3)}>Back</Button>
-              <Button disabled={!form.acceptTerms} onClick={() => toast({ type: 'success', message: 'Application submitted! We\'ll review and get back to you.' })}>
+              <Button variant="outline" onClick={() => setStep(3)}>
+                Back
+              </Button>
+              <Button
+                disabled={!form.acceptTerms}
+                onClick={() =>
+                  toast({
+                    type: 'success',
+                    message: "Application submitted! We'll review and get back to you.",
+                  })
+                }
+              >
                 Submit Application
               </Button>
             </ButtonRow>

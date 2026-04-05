@@ -1,19 +1,10 @@
-import styled from "styled-components";
-import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronUp,
-  faClose,
-  faUser,
-  faUserGear,
-} from "@fortawesome/free-solid-svg-icons";
-import ProfileSettingsTab from "./elements/setting-tabs/ProfileSettings";
-import {
-  AccountSettingsTab,
-  DataSettingsTab,
-  PrivacySettingsTab,
-} from "./elements/setting-tabs";
-import {useAppContext} from "../context/AppContext";
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp, faClose, faUser, faUserGear } from '@fortawesome/free-solid-svg-icons';
+import ProfileSettingsTab from './elements/setting-tabs/ProfileSettings';
+import { AccountSettingsTab, DataSettingsTab, PrivacySettingsTab } from './elements/setting-tabs';
+import { useAppContext } from '../context/AppContext';
 
 /**
  * SettingsMenu Component to render setting tabs
@@ -23,45 +14,36 @@ const SettingsMenu = () => {
   const { user, settingsTab, settingsMenuOpen } = STATES || {};
   const { handleSettingsTab, handleSettingsMenu } = ACTIONS || {};
 
-  if(!user || !settingsMenuOpen){
+  if (!user || !settingsMenuOpen) {
     return;
   }
 
   const tabData = [
     {
-      name: "Profile Settings",
+      name: 'Profile Settings',
       icon: faUser,
       component: <ProfileSettingsTab />,
     },
     {
-      name: "Account Settings",
+      name: 'Account Settings',
       icon: faUserGear,
       component: (
         <>
           <PrivacySettingsTab />
-          <DataSettingsTab  />
+          <DataSettingsTab />
           <AccountSettingsTab />
         </>
       ),
     },
   ];
 
-  const activeComponent = tabData.find(
-    (tab) => tab.name === settingsTab
-  )?.component;
+  const activeComponent = tabData.find((tab) => tab.name === settingsTab)?.component;
 
   return (
-    <Container
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
+    <Container initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       {/* Responsive dropdown for mobile view */}
       <DropdownContainer>
-        <TabDropdown
-          value={settingsTab}
-          onChange={(e) => handleSettingsTab(e.target.value)}
-        >
+        <TabDropdown value={settingsTab} onChange={(e) => handleSettingsTab(e.target.value)}>
           {tabData.map((tab, index) => (
             <option key={index} value={tab.name}>
               {tab.name}
@@ -142,7 +124,7 @@ const TabDropdown = styled.select`
   }
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     top: 100%;
     left: 0;
@@ -194,9 +176,8 @@ const Tab = styled(motion.div)`
   cursor: pointer;
   padding: 15px;
   font-weight: 500;
-  color: ${(props) => (props.active ? "#fff" : props.theme.colors.ui800)};
-  background-color: ${(props) =>
-    props.active ? props.theme.colors.primary500 : "white"};
+  color: ${(props) => (props.active ? '#fff' : props.theme.colors.ui800)};
+  background-color: ${(props) => (props.active ? props.theme.colors.primary500 : 'white')};
   display: flex;
   align-items: center;
   justify-content: center;

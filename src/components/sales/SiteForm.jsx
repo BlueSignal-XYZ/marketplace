@@ -1,10 +1,10 @@
 // Site Form Component - Create/Edit site
-import { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-import { SiteAPI, CustomerAPI } from "../../scripts/back_door";
-import siteService from "../../services/siteService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { SiteAPI, CustomerAPI } from '../../scripts/back_door';
+import siteService from '../../services/siteService';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 800px;
@@ -94,7 +94,9 @@ const Input = styled.input`
   border: 1px solid #d1d5db;
   border-radius: 6px;
   background: #ffffff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 
   &:focus {
     outline: none;
@@ -142,7 +144,7 @@ const TextArea = styled.textarea`
 
 const Row = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => props.cols || "1fr 1fr"};
+  grid-template-columns: ${(props) => props.cols || '1fr 1fr'};
   gap: 16px;
 
   @media (max-width: 480px) {
@@ -168,7 +170,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -179,8 +181,8 @@ const Button = styled.button`
       transform: translateY(-1px);
     }
   `
-      : props.variant === "danger"
-      ? `
+      : props.variant === 'danger'
+        ? `
     background: #ffffff;
     border: 1px solid #dc2626;
     color: #dc2626;
@@ -189,7 +191,7 @@ const Button = styled.button`
       background: #fef2f2;
     }
   `
-      : `
+        : `
     background: #ffffff;
     border: 1px solid #d1d5db;
     color: #374151;
@@ -225,35 +227,35 @@ const LoadingState = styled.div`
 `;
 
 const SITE_TYPES = [
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-  { value: "municipal", label: "Municipal" },
-  { value: "agricultural", label: "Agricultural" },
-  { value: "educational", label: "Educational" },
-  { value: "research", label: "Research" },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'municipal', label: 'Municipal' },
+  { value: 'agricultural', label: 'Agricultural' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'research', label: 'Research' },
 ];
 
 const WATER_BODY_TYPES = [
-  { value: "", label: "Select type..." },
-  { value: "pond", label: "Pond" },
-  { value: "lake", label: "Lake" },
-  { value: "reservoir", label: "Reservoir" },
-  { value: "stream", label: "Stream" },
-  { value: "river", label: "River" },
-  { value: "marina", label: "Marina" },
-  { value: "aquaculture", label: "Aquaculture" },
-  { value: "wastewater", label: "Wastewater" },
-  { value: "other", label: "Other" },
+  { value: '', label: 'Select type...' },
+  { value: 'pond', label: 'Pond' },
+  { value: 'lake', label: 'Lake' },
+  { value: 'reservoir', label: 'Reservoir' },
+  { value: 'stream', label: 'Stream' },
+  { value: 'river', label: 'River' },
+  { value: 'marina', label: 'Marina' },
+  { value: 'aquaculture', label: 'Aquaculture' },
+  { value: 'wastewater', label: 'Wastewater' },
+  { value: 'other', label: 'Other' },
 ];
 
 const SiteForm = () => {
   const navigate = useNavigate();
   const { siteId } = useParams();
   const [searchParams] = useSearchParams();
-  const initialCustomerId = searchParams.get("customer");
+  const initialCustomerId = searchParams.get('customer');
   const { ACTIONS } = useAppContext();
 
-  const isEditing = siteId && siteId !== "new";
+  const isEditing = siteId && siteId !== 'new';
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
@@ -261,15 +263,15 @@ const SiteForm = () => {
   const [customers, setCustomers] = useState([]);
 
   const [form, setForm] = useState({
-    customerId: initialCustomerId || "",
-    name: "",
-    address: "",
-    type: "residential",
-    waterBodyType: "",
-    waterBodyName: "",
-    accessNotes: "",
-    contactName: "",
-    contactPhone: "",
+    customerId: initialCustomerId || '',
+    name: '',
+    address: '',
+    type: 'residential',
+    waterBodyType: '',
+    waterBodyName: '',
+    accessNotes: '',
+    contactName: '',
+    contactPhone: '',
     coordinates: { lat: 0, lng: 0 },
   });
 
@@ -285,7 +287,7 @@ const SiteForm = () => {
       const data = await CustomerAPI.list({ limit: 100 });
       setCustomers(data || []);
     } catch (err) {
-      console.warn("Failed to load customers:", err);
+      console.warn('Failed to load customers:', err);
     }
   };
 
@@ -294,21 +296,21 @@ const SiteForm = () => {
       const site = await SiteAPI.get(siteId);
       if (site) {
         setForm({
-          customerId: site.customerId || "",
-          name: site.name || "",
-          address: site.address || "",
-          type: site.type || "residential",
-          waterBodyType: site.waterBodyType || "",
-          waterBodyName: site.waterBodyName || "",
-          accessNotes: site.accessNotes || "",
-          contactName: site.contactName || "",
-          contactPhone: site.contactPhone || "",
+          customerId: site.customerId || '',
+          name: site.name || '',
+          address: site.address || '',
+          type: site.type || 'residential',
+          waterBodyType: site.waterBodyType || '',
+          waterBodyName: site.waterBodyName || '',
+          accessNotes: site.accessNotes || '',
+          contactName: site.contactName || '',
+          contactPhone: site.contactPhone || '',
           coordinates: site.coordinates || { lat: 0, lng: 0 },
         });
       }
     } catch (err) {
-      console.error("Failed to load site:", err);
-      setError("Failed to load site");
+      console.error('Failed to load site:', err);
+      setError('Failed to load site');
     } finally {
       setLoading(false);
     }
@@ -320,15 +322,15 @@ const SiteForm = () => {
 
   const validate = () => {
     if (!form.customerId) {
-      setError("Please select a customer");
+      setError('Please select a customer');
       return false;
     }
     if (!form.name.trim()) {
-      setError("Site name is required");
+      setError('Site name is required');
       return false;
     }
     if (!form.address.trim()) {
-      setError("Address is required");
+      setError('Address is required');
       return false;
     }
     return true;
@@ -348,33 +350,33 @@ const SiteForm = () => {
           ...form,
           updatedAt: new Date().toISOString(),
         });
-        ACTIONS?.logNotification?.("success", "Site updated successfully");
+        ACTIONS?.logNotification?.('success', 'Site updated successfully');
       } else {
         await siteService.createSite(form);
-        ACTIONS?.logNotification?.("success", "Site created successfully");
+        ACTIONS?.logNotification?.('success', 'Site created successfully');
       }
-      navigate("/sites");
+      navigate('/sites');
     } catch (err) {
-      console.error("Failed to save site:", err);
-      setError(err.message || "Failed to save site");
+      console.error('Failed to save site:', err);
+      setError(err.message || 'Failed to save site');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this site?")) {
+    if (!window.confirm('Are you sure you want to delete this site?')) {
       return;
     }
 
     setSaving(true);
     try {
       await siteService.deleteSite(siteId);
-      ACTIONS?.logNotification?.("success", "Site deleted successfully");
-      navigate("/sites");
+      ACTIONS?.logNotification?.('success', 'Site deleted successfully');
+      navigate('/sites');
     } catch (err) {
-      console.error("Failed to delete site:", err);
-      setError(err.message || "Failed to delete site");
+      console.error('Failed to delete site:', err);
+      setError(err.message || 'Failed to delete site');
     } finally {
       setSaving(false);
     }
@@ -391,8 +393,8 @@ const SiteForm = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <BackLink onClick={() => navigate("/sites")}>← Back to Sites</BackLink>
-        <PageTitle>{isEditing ? "Edit Site" : "New Site"}</PageTitle>
+        <BackLink onClick={() => navigate('/sites')}>← Back to Sites</BackLink>
+        <PageTitle>{isEditing ? 'Edit Site' : 'New Site'}</PageTitle>
       </PageHeader>
 
       <Form onSubmit={handleSubmit}>
@@ -406,7 +408,7 @@ const SiteForm = () => {
             </Label>
             <Select
               value={form.customerId}
-              onChange={(e) => handleChange("customerId", e.target.value)}
+              onChange={(e) => handleChange('customerId', e.target.value)}
             >
               <option value="">Select customer...</option>
               {customers.map((c) => (
@@ -425,7 +427,7 @@ const SiteForm = () => {
               type="text"
               placeholder="e.g., Main Pond, North Lake Installation"
               value={form.name}
-              onChange={(e) => handleChange("name", e.target.value)}
+              onChange={(e) => handleChange('name', e.target.value)}
             />
           </FormGroup>
 
@@ -437,17 +439,14 @@ const SiteForm = () => {
               type="text"
               placeholder="Full street address"
               value={form.address}
-              onChange={(e) => handleChange("address", e.target.value)}
+              onChange={(e) => handleChange('address', e.target.value)}
             />
           </FormGroup>
 
           <Row>
             <FormGroup>
               <Label>Site Type</Label>
-              <Select
-                value={form.type}
-                onChange={(e) => handleChange("type", e.target.value)}
-              >
+              <Select value={form.type} onChange={(e) => handleChange('type', e.target.value)}>
                 {SITE_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
                     {t.label}
@@ -459,7 +458,7 @@ const SiteForm = () => {
               <Label>Water Body Type</Label>
               <Select
                 value={form.waterBodyType}
-                onChange={(e) => handleChange("waterBodyType", e.target.value)}
+                onChange={(e) => handleChange('waterBodyType', e.target.value)}
               >
                 {WATER_BODY_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
@@ -476,7 +475,7 @@ const SiteForm = () => {
               type="text"
               placeholder="e.g., Deep Creek Lake, Mill Pond"
               value={form.waterBodyName}
-              onChange={(e) => handleChange("waterBodyName", e.target.value)}
+              onChange={(e) => handleChange('waterBodyName', e.target.value)}
             />
           </FormGroup>
         </Section>
@@ -490,7 +489,7 @@ const SiteForm = () => {
                 type="text"
                 placeholder="On-site contact person"
                 value={form.contactName}
-                onChange={(e) => handleChange("contactName", e.target.value)}
+                onChange={(e) => handleChange('contactName', e.target.value)}
               />
             </FormGroup>
             <FormGroup>
@@ -499,7 +498,7 @@ const SiteForm = () => {
                 type="tel"
                 placeholder="(555) 555-5555"
                 value={form.contactPhone}
-                onChange={(e) => handleChange("contactPhone", e.target.value)}
+                onChange={(e) => handleChange('contactPhone', e.target.value)}
               />
             </FormGroup>
           </Row>
@@ -511,28 +510,23 @@ const SiteForm = () => {
             <TextArea
               placeholder="Gate codes, directions, parking instructions, best times to visit..."
               value={form.accessNotes}
-              onChange={(e) => handleChange("accessNotes", e.target.value)}
+              onChange={(e) => handleChange('accessNotes', e.target.value)}
             />
           </FormGroup>
         </Section>
 
         <ButtonGroup>
           {isEditing && (
-            <Button
-              type="button"
-              variant="danger"
-              onClick={handleDelete}
-              disabled={saving}
-            >
+            <Button type="button" variant="danger" onClick={handleDelete} disabled={saving}>
               Delete
             </Button>
           )}
           <div style={{ flex: 1 }} />
-          <Button type="button" onClick={() => navigate("/sites")}>
+          <Button type="button" onClick={() => navigate('/sites')}>
             Cancel
           </Button>
           <Button type="submit" variant="primary" disabled={saving}>
-            {saving ? "Saving..." : isEditing ? "Update Site" : "Create Site"}
+            {saving ? 'Saving...' : isEditing ? 'Update Site' : 'Create Site'}
           </Button>
         </ButtonGroup>
       </Form>

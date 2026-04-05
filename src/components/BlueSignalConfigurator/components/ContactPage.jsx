@@ -1,11 +1,11 @@
 // ContactPage - Contact form with Austin location map
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { salesTheme } from "../styles/theme";
-import SalesHeader from "./SalesHeader";
-import SalesFooter from "./SalesFooter";
-import { useNavigate } from "react-router-dom";
-import useFormSubmit from "../hooks/useFormSubmit";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { salesTheme } from '../styles/theme';
+import SalesHeader from './SalesHeader';
+import SalesFooter from './SalesFooter';
+import { useNavigate } from 'react-router-dom';
+import useFormSubmit from '../hooks/useFormSubmit';
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -374,10 +374,10 @@ const ServicePrice = styled.span`
 `;
 
 const productOptions = [
-  { value: "", label: "Select a product (optional)" },
-  { value: "wqm-1", label: "WQM-1 Dev Kit - $999" },
-  { value: "cloud-monitoring", label: "Cloud Monitoring - $9.99/mo" },
-  { value: "other", label: "Other / General Inquiry" },
+  { value: '', label: 'Select a product (optional)' },
+  { value: 'wqm-1', label: 'WQM-1 Dev Kit - $999' },
+  { value: 'cloud-monitoring', label: 'Cloud Monitoring - $9.99/mo' },
+  { value: 'other', label: 'Other / General Inquiry' },
 ];
 
 const localServices = [
@@ -387,9 +387,10 @@ const localServices = [
         <path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
       </svg>
     ),
-    title: "Dock & Pier Pressure Washing",
-    description: "Professional cleaning for boat docks, piers, and waterfront structures. We remove algae, mildew, mineral deposits, and years of grime buildup. Includes deck surface, railings, and dock boxes.",
-    price: "Starting at $249/dock"
+    title: 'Dock & Pier Pressure Washing',
+    description:
+      'Professional cleaning for boat docks, piers, and waterfront structures. We remove algae, mildew, mineral deposits, and years of grime buildup. Includes deck surface, railings, and dock boxes.',
+    price: 'Starting at $249/dock',
   },
   {
     icon: (
@@ -398,9 +399,10 @@ const localServices = [
         <path d="M3 9h18M9 21V9" />
       </svg>
     ),
-    title: "Solar Panel Cleaning",
-    description: "Maximize your solar efficiency with professional cleaning. Dirty panels lose 15-25% efficiency. We use deionized water and soft brushes\u2014no scratches, no residue, no voided warranties.",
-    price: "$15/panel (min 10 panels)"
+    title: 'Solar Panel Cleaning',
+    description:
+      'Maximize your solar efficiency with professional cleaning. Dirty panels lose 15-25% efficiency. We use deionized water and soft brushes\u2014no scratches, no residue, no voided warranties.',
+    price: '$15/panel (min 10 panels)',
   },
   {
     icon: (
@@ -411,9 +413,10 @@ const localServices = [
         <line x1="15" y1="9" x2="15.01" y2="9" />
       </svg>
     ),
-    title: "Pond & Pool Deck Cleaning",
-    description: "Restore your pool deck, pond edges, or patio to like-new condition. We handle concrete, pavers, flagstone, and composite decking. Great for algae-prone areas.",
-    price: "Starting at $0.35/sq ft"
+    title: 'Pond & Pool Deck Cleaning',
+    description:
+      'Restore your pool deck, pond edges, or patio to like-new condition. We handle concrete, pavers, flagstone, and composite decking. Great for algae-prone areas.',
+    price: 'Starting at $0.35/sq ft',
   },
   {
     icon: (
@@ -425,19 +428,20 @@ const localServices = [
         <polyline points="10 9 9 9 8 9" />
       </svg>
     ),
-    title: "Commercial & Municipal",
-    description: "HOA common areas, municipal facilities, marinas, and large-scale projects. Volume discounts available. We carry full liability insurance and can provide COIs.",
-    price: "Contact for quote"
-  }
+    title: 'Commercial & Municipal',
+    description:
+      'HOA common areas, municipal facilities, marinas, and large-scale projects. Volume discounts available. We carry full liability insurance and can provide COIs.',
+    price: 'Contact for quote',
+  },
 ];
 
 export default function ContactPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    product: ""
+    name: '',
+    email: '',
+    message: '',
+    product: '',
   });
   const { formState, submitForm, reset } = useFormSubmit('contact_submissions');
 
@@ -447,7 +451,7 @@ export default function ContactPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -458,11 +462,11 @@ export default function ContactPage() {
       email: formData.email,
       message: formData.message,
       product: formData.product,
-      type: 'contact'
+      type: 'contact',
     });
 
     if (success) {
-      setFormData({ name: "", email: "", message: "", product: "" });
+      setFormData({ name: '', email: '', message: '', product: '' });
     }
   };
 
@@ -480,7 +484,7 @@ export default function ContactPage() {
         activeSection="contact"
         onNavigate={handleNavigate}
         quoteItemCount={0}
-        onOpenQuote={() => navigate("/?quote=true")}
+        onOpenQuote={() => navigate('/?quote=true')}
       />
 
       <MainContent>
@@ -488,7 +492,8 @@ export default function ContactPage() {
           <HeroContainer>
             <PageTitle>Get in Touch</PageTitle>
             <PageSubtitle>
-              Have questions about our products or need help with your water quality project? We're here to help.
+              Have questions about our products or need help with your water quality project?
+              We&apos;re here to help.
             </PageSubtitle>
           </HeroContainer>
         </HeroSection>
@@ -511,7 +516,7 @@ export default function ContactPage() {
                 <SectionTitle>Drop us a line...</SectionTitle>
                 {formState.status === 'success' ? (
                   <SuccessMessage>
-                    Thank you for your message! We'll get back to you within 24 hours.
+                    Thank you for your message! We&apos;ll get back to you within 24 hours.
                   </SuccessMessage>
                 ) : (
                   <Form onSubmit={handleSubmit}>
@@ -565,7 +570,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         disabled={formState.status === 'submitting'}
                       >
-                        {productOptions.map(opt => (
+                        {productOptions.map((opt) => (
                           <option key={opt.value} value={opt.value}>
                             {opt.label}
                           </option>
@@ -574,12 +579,10 @@ export default function ContactPage() {
                     </FormGroup>
 
                     <SubmitButton type="submit" disabled={formState.status === 'submitting'}>
-                      {formState.status === 'submitting' ? "Sending..." : "Submit"}
+                      {formState.status === 'submitting' ? 'Sending...' : 'Submit'}
                     </SubmitButton>
 
-                    {formState.status === 'error' && (
-                      <ErrorMessage>{formState.error}</ErrorMessage>
-                    )}
+                    {formState.status === 'error' && <ErrorMessage>{formState.error}</ErrorMessage>}
 
                     <ContactInfo>
                       <strong>Text or call</strong> +1.512.730.0843
@@ -595,7 +598,8 @@ export default function ContactPage() {
           <ServicesContainer>
             <ServicesSectionTitle>Local Services in Austin</ServicesSectionTitle>
             <ServicesSubtitle>
-              Beyond monitoring equipment, we offer hands-on pressure washing services for the Austin metro area.
+              Beyond monitoring equipment, we offer hands-on pressure washing services for the
+              Austin metro area.
             </ServicesSubtitle>
             <ServicesGrid>
               {localServices.map((service, index) => (

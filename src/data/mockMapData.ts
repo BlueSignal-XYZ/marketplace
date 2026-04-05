@@ -28,18 +28,20 @@ export interface MapProject {
 function generateBoundary(lat: number, lng: number, acreage: number): BoundaryGeometry {
   const sqMeters = acreage * 4047;
   const sideLength = Math.sqrt(sqMeters);
-  const latDelta = (sideLength / 111000) / 2;
-  const lngDelta = (sideLength / 85000) / 2;
+  const latDelta = sideLength / 111000 / 2;
+  const lngDelta = sideLength / 85000 / 2;
 
   return {
     type: 'Polygon',
-    coordinates: [[
-      [lng - lngDelta * 1.1, lat - latDelta * 0.9],
-      [lng + lngDelta * 0.95, lat - latDelta * 1.05],
-      [lng + lngDelta * 1.05, lat + latDelta * 0.95],
-      [lng - lngDelta * 0.9, lat + latDelta * 1.1],
-      [lng - lngDelta * 1.1, lat - latDelta * 0.9],
-    ]]
+    coordinates: [
+      [
+        [lng - lngDelta * 1.1, lat - latDelta * 0.9],
+        [lng + lngDelta * 0.95, lat - latDelta * 1.05],
+        [lng + lngDelta * 1.05, lat + latDelta * 0.95],
+        [lng - lngDelta * 0.9, lat + latDelta * 1.1],
+        [lng - lngDelta * 1.1, lat - latDelta * 0.9],
+      ],
+    ],
   };
 }
 
@@ -178,11 +180,11 @@ export const mockMapProjects: MapProject[] = [
 
 export const getProjectsByType = (type?: string): MapProject[] => {
   if (!type || type === 'all') return mockMapProjects;
-  return mockMapProjects.filter(project => project.creditTypes.includes(type as any));
+  return mockMapProjects.filter((project) => project.creditTypes.includes(type as any));
 };
 
 export const getProjectsByStatus = (status: 'active' | 'pending' | 'completed'): MapProject[] => {
-  return mockMapProjects.filter(project => project.status === status);
+  return mockMapProjects.filter((project) => project.status === status);
 };
 
 export const getCreditTypeColor = (type: string): string => {

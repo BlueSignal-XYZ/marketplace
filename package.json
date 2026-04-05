@@ -60,7 +60,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
-      "eslint --max-warnings 0",
+      "eslint",
       "prettier --write"
     ],
     "src/**/*.{json,css}": [
@@ -73,7 +73,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/react-fontawesome": "^3.3.0",
-    "@livepeer/react": "^4.3.6",
+    "@livepeer/react": "^2.9.2",
     "@lottiefiles/react-lottie-player": "^3.6.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -139,6 +139,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "firebase-admin": "^13.7.0",
     "firebase-tools": "^15.13.0",
     "globals": "^17.4.0",

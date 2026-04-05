@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import styled from "styled-components";
-import {UploadButton} from "./MediaUpload";
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { UploadButton } from './MediaUpload';
 
 const AssetCard = styled(motion.div)`
   border: 1px solid #ccc;
@@ -48,7 +48,7 @@ const AssetDisplay = ({ asset }) => {
   return (
     <AssetCard
       initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
+      animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.5 }}
     >
@@ -59,19 +59,19 @@ const AssetDisplay = ({ asset }) => {
       <p>
         <strong>Playback ID:</strong> {asset.playbackId}
       </p>
-      <UploadButton onClick={handleToggleDetails}>{showDetails ? "Hide Details" : "Show Details"}</UploadButton>
+      <UploadButton onClick={handleToggleDetails}>
+        {showDetails ? 'Hide Details' : 'Show Details'}
+      </UploadButton>
       {showDetails && (
         <div className="asset-details">
           <p>
             <strong>Source Type:</strong> {asset.source.type}
           </p>
           <p>
-            <strong>Created At:</strong>{" "}
-            {new Date(asset.createdAt).toLocaleString()}
+            <strong>Created At:</strong> {new Date(asset.createdAt).toLocaleString()}
           </p>
           <p>
-            <strong>Updated At:</strong>{" "}
-            {new Date(asset.status.updatedAt).toLocaleString()}
+            <strong>Updated At:</strong> {new Date(asset.status.updatedAt).toLocaleString()}
           </p>
         </div>
       )}

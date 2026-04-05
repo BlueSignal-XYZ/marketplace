@@ -3,11 +3,11 @@
  * Updated for new site architecture: How It Works, Audiences, Registry, Ecosystem.
  */
 
-import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
-import { Avatar } from "../../design-system/primitives/Avatar";
-import { safeAreaInsets } from "../../styles/breakpoints";
+import styled from 'styled-components';
+import { Link, useLocation } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
+import { Avatar } from '../../design-system/primitives/Avatar';
+import { safeAreaInsets } from '../../styles/breakpoints';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -18,7 +18,7 @@ const Backdrop = styled.div`
   z-index: 900;
 
   opacity: ${({ $open }) => ($open ? 1 : 0)};
-  pointer-events: ${({ $open }) => ($open ? "auto" : "none")};
+  pointer-events: ${({ $open }) => ($open ? 'auto' : 'none')};
 
   transition: opacity 0.25s ease-out;
 `;
@@ -31,7 +31,8 @@ const Panel = styled.aside`
   height: 100dvh;
   width: 100%;
   background: #ffffff;
-  box-shadow: -16px 0 48px rgba(15, 23, 42, 0.12),
+  box-shadow:
+    -16px 0 48px rgba(15, 23, 42, 0.12),
     -4px 0 12px rgba(15, 23, 42, 0.06);
   z-index: 1000;
 
@@ -44,7 +45,7 @@ const Panel = styled.aside`
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
-  transform: translateX(${({ $open }) => ($open ? "0%" : "100%")});
+  transform: translateX(${({ $open }) => ($open ? '0%' : '100%')});
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
@@ -64,13 +65,13 @@ const PanelTitle = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 17px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   letter-spacing: -0.01em;
 `;
 
 const CloseButton = styled.button`
   border: none;
-  background: ${({ theme }) => theme.colors?.background || "#F7F8FA"};
+  background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
   padding: 0;
   width: 40px;
   height: 40px;
@@ -78,7 +79,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   font-size: 22px;
   line-height: 1;
-  color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+  color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,8 +88,8 @@ const CloseButton = styled.button`
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
-    background: ${({ theme }) => theme.colors?.border || "#E2E4E9"};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+    background: ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   }
 
   &:active {
@@ -100,7 +101,7 @@ const Divider = styled.div`
   height: 1px;
   background: linear-gradient(
     90deg,
-    ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"} 0%,
+    ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'} 0%,
     transparent 100%
   );
   margin: 12px 0 16px;
@@ -112,7 +113,7 @@ const SectionLabel = styled.div`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+  color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   margin: 16px 0 8px;
   padding-left: 4px;
 `;
@@ -141,13 +142,9 @@ const NavItem = styled(Link)`
   transition: all 0.2s ease-out;
 
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.primary || "#0052CC"
-      : theme.colors?.text || "#1A1A1A"};
+    $active ? theme.colors?.primary || '#0052CC' : theme.colors?.text || '#1A1A1A'};
   background: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.primaryLight || "#E6EEFA"
-      : "transparent"};
+    $active ? theme.colors?.primaryLight || '#E6EEFA' : 'transparent'};
 
   ${({ $active, theme }) =>
     $active &&
@@ -160,17 +157,15 @@ const NavItem = styled(Link)`
       transform: translateY(-50%);
       width: 3px;
       height: 20px;
-      background: ${theme.colors?.primary || "#0052CC"};
+      background: ${theme.colors?.primary || '#0052CC'};
       border-radius: 0 2px 2px 0;
     }
   `}
 
   &:hover {
     background: ${({ $active, theme }) =>
-      $active
-        ? theme.colors?.primaryLight || "#E6EEFA"
-        : theme.colors?.background || "#F7F8FA"};
-    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+      $active ? theme.colors?.primaryLight || '#E6EEFA' : theme.colors?.background || '#F7F8FA'};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   }
 
   &:active {
@@ -187,13 +182,13 @@ const UserRow = styled.div`
 const SmallText = styled.div`
   margin-top: auto;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
   line-height: 1.5;
   padding: 12px 4px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui100 || '#F4F5F7'};
 
   strong {
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
     font-weight: 600;
   }
 `;
@@ -207,27 +202,26 @@ const LogoutButton = styled.button`
   padding: 12px 16px;
   min-height: 44px;
   border-radius: 12px;
-  border: 1.5px solid ${({ theme }) => theme.colors?.red200 || "#FECACA"};
-  background: ${({ theme }) => theme.colors?.red50 || "#FEF2F2"};
+  border: 1.5px solid ${({ theme }) => theme.colors?.red200 || '#FECACA'};
+  background: ${({ theme }) => theme.colors?.red50 || '#FEF2F2'};
   cursor: pointer;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.red600 || "#DC2626"};
+  color: ${({ theme }) => theme.colors?.red600 || '#DC2626'};
   transition: all 0.2s ease-out;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.red100 || "#FEE2E2"};
-    border-color: ${({ theme }) => theme.colors?.red300 || "#FCA5A5"};
+    background: ${({ theme }) => theme.colors?.red100 || '#FEE2E2'};
+    border-color: ${({ theme }) => theme.colors?.red300 || '#FCA5A5'};
   }
 
   &:active {
     transform: scale(0.98);
   }
 `;
-
 
 export function MarketplaceMenu({ open, onClose, user }) {
   const location = useLocation();
@@ -244,9 +238,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
     onClose();
   };
 
-  const isActive = (path) =>
-    location.pathname === path ||
-    location.pathname.startsWith(path + "/");
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   return (
     <>
@@ -254,11 +246,7 @@ export function MarketplaceMenu({ open, onClose, user }) {
       <Panel $open={open}>
         <PanelHeader>
           <PanelTitle>WaterQuality.Trading</PanelTitle>
-          <CloseButton
-            type="button"
-            aria-label="Close menu"
-            onClick={onClose}
-          >
+          <CloseButton type="button" aria-label="Close menu" onClick={onClose}>
             &times;
           </CloseButton>
         </PanelHeader>
@@ -267,32 +255,16 @@ export function MarketplaceMenu({ open, onClose, user }) {
 
         {/* Navigation */}
         <NavList>
-          <NavItem
-            to="/marketplace"
-            $active={isActive("/marketplace")}
-            onClick={onClose}
-          >
+          <NavItem to="/marketplace" $active={isActive('/marketplace')} onClick={onClose}>
             Marketplace
           </NavItem>
-          <NavItem
-            to="/registry"
-            $active={isActive("/registry")}
-            onClick={onClose}
-          >
+          <NavItem to="/registry" $active={isActive('/registry')} onClick={onClose}>
             Credit Registry
           </NavItem>
-          <NavItem
-            to="/map"
-            $active={isActive("/map")}
-            onClick={onClose}
-          >
+          <NavItem to="/map" $active={isActive('/map')} onClick={onClose}>
             Project Map
           </NavItem>
-          <NavItem
-            to="/programs"
-            $active={isActive("/programs")}
-            onClick={onClose}
-          >
+          <NavItem to="/programs" $active={isActive('/programs')} onClick={onClose}>
             Trading Programs
           </NavItem>
         </NavList>
@@ -301,25 +273,13 @@ export function MarketplaceMenu({ open, onClose, user }) {
           <>
             <SectionLabel>My Account</SectionLabel>
             <NavList>
-              <NavItem
-                to="/dashboard"
-                $active={isActive("/dashboard")}
-                onClick={onClose}
-              >
+              <NavItem to="/dashboard" $active={isActive('/dashboard')} onClick={onClose}>
                 Dashboard
               </NavItem>
-              <NavItem
-                to="/credits"
-                $active={isActive("/credits")}
-                onClick={onClose}
-              >
+              <NavItem to="/credits" $active={isActive('/credits')} onClick={onClose}>
                 My Credits
               </NavItem>
-              <NavItem
-                to="/profile"
-                $active={isActive("/profile")}
-                onClick={onClose}
-              >
+              <NavItem to="/profile" $active={isActive('/profile')} onClick={onClose}>
                 Profile
               </NavItem>
             </NavList>
@@ -330,18 +290,21 @@ export function MarketplaceMenu({ open, onClose, user }) {
           {user?.uid ? (
             <UserRow>
               <Avatar name={user?.displayName || user?.username || user?.email} size="sm" />
-              <span>Signed in as <strong>{user?.email || user?.username}</strong></span>
+              <span>
+                Signed in as <strong>{user?.email || user?.username}</strong>
+              </span>
             </UserRow>
           ) : (
-            <>Welcome, <strong>guest</strong> &mdash; <a href="/login" style={{ color: 'inherit', fontWeight: 600 }}>Sign in</a></>
+            <>
+              Welcome, <strong>guest</strong> &mdash;{' '}
+              <a href="/login" style={{ color: 'inherit', fontWeight: 600 }}>
+                Sign in
+              </a>
+            </>
           )}
         </SmallText>
 
-        {user?.uid && (
-          <LogoutButton onClick={handleLogout}>
-            Sign Out
-          </LogoutButton>
-        )}
+        {user?.uid && <LogoutButton onClick={handleLogout}>Sign Out</LogoutButton>}
       </Panel>
     </>
   );

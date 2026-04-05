@@ -6,7 +6,16 @@
  *   <ThemeProvider theme={cloudTheme}>...</ThemeProvider>
  */
 
-import { spacing, radius, elevation, animation, fonts, media, zIndex, breakpoints } from '../tokens/shared';
+import {
+  spacing,
+  radius,
+  elevation,
+  animation,
+  fonts,
+  media,
+  zIndex,
+  breakpoints,
+} from '../tokens/shared';
 import { cloudColors, cloudTypography } from '../tokens/cloud';
 
 export const cloudTheme = {

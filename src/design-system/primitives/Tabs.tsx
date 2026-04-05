@@ -35,7 +35,9 @@ const TabList = styled.div<{ $fullWidth: boolean }>`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const TabButton = styled.button<{ $active: boolean; $fullWidth: boolean }>`
@@ -48,8 +50,7 @@ const TabButton = styled.button<{ $active: boolean; $fullWidth: boolean }>`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 14px;
   font-weight: ${({ $active }) => ($active ? 600 : 400)};
-  color: ${({ $active, theme }) =>
-    $active ? theme.colors.primary : theme.colors.textSecondary};
+  color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.textSecondary)};
   background: transparent;
   border: none;
   cursor: pointer;
@@ -69,8 +70,7 @@ const TabButton = styled.button<{ $active: boolean; $fullWidth: boolean }>`
     left: 0;
     right: 0;
     height: 2px;
-    background: ${({ $active, theme }) =>
-      $active ? theme.colors.primary : 'transparent'};
+    background: ${({ $active, theme }) => ($active ? theme.colors.primary : 'transparent')};
     border-radius: 1px 1px 0 0;
     transition: background ${({ theme }) => theme.animation.fast};
   }

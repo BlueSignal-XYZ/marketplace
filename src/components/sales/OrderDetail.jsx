@@ -1,10 +1,10 @@
 // Order Detail Component - View and manage individual order
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { OrderAPI, CustomerAPI, SiteAPI } from "../../scripts/back_door";
-import orderService from "../../services/orderService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { OrderAPI, CustomerAPI, SiteAPI } from '../../scripts/back_door';
+import orderService from '../../services/orderService';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 1000px;
@@ -70,24 +70,24 @@ const StatusBadge = styled.span`
 
   ${(props) => {
     switch (props.status) {
-      case "draft":
-        return "background: #f3f4f6; color: #6b7280;";
-      case "quoted":
-        return "background: #dbeafe; color: #1d4ed8;";
-      case "approved":
-        return "background: #fef3c7; color: #92400e;";
-      case "paid":
-        return "background: #dcfce7; color: #166534;";
-      case "processing":
-        return "background: #e0e7ff; color: #4338ca;";
-      case "shipped":
-        return "background: #cffafe; color: #0891b2;";
-      case "fulfilled":
-        return "background: #d1fae5; color: #047857;";
-      case "cancelled":
-        return "background: #fee2e2; color: #dc2626;";
+      case 'draft':
+        return 'background: #f3f4f6; color: #6b7280;';
+      case 'quoted':
+        return 'background: #dbeafe; color: #1d4ed8;';
+      case 'approved':
+        return 'background: #fef3c7; color: #92400e;';
+      case 'paid':
+        return 'background: #dcfce7; color: #166534;';
+      case 'processing':
+        return 'background: #e0e7ff; color: #4338ca;';
+      case 'shipped':
+        return 'background: #cffafe; color: #0891b2;';
+      case 'fulfilled':
+        return 'background: #d1fae5; color: #047857;';
+      case 'cancelled':
+        return 'background: #fee2e2; color: #dc2626;';
       default:
-        return "background: #f3f4f6; color: #6b7280;";
+        return 'background: #f3f4f6; color: #6b7280;';
     }
   }}
 `;
@@ -214,7 +214,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -224,8 +224,8 @@ const Button = styled.button`
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
     }
   `
-      : props.variant === "success"
-      ? `
+      : props.variant === 'success'
+        ? `
     background: linear-gradient(135deg, #059669 0%, #047857 100%);
     border: none;
     color: #ffffff;
@@ -234,8 +234,8 @@ const Button = styled.button`
       box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
     }
   `
-      : props.variant === "danger"
-      ? `
+        : props.variant === 'danger'
+          ? `
     background: #ffffff;
     border: 1px solid #dc2626;
     color: #dc2626;
@@ -244,7 +244,7 @@ const Button = styled.button`
       background: #fef2f2;
     }
   `
-      : `
+          : `
     background: #ffffff;
     border: 1px solid #d1d5db;
     color: #374151;
@@ -275,7 +275,7 @@ const TimelineDot = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: ${(props) => (props.active ? "#3b82f6" : "#d1d5db")};
+  background: ${(props) => (props.active ? '#3b82f6' : '#d1d5db')};
   margin-top: 4px;
   flex-shrink: 0;
 `;
@@ -330,7 +330,7 @@ const OrderDetail = () => {
     try {
       const orderData = await OrderAPI.get(orderId);
       if (!orderData) {
-        setError("Order not found");
+        setError('Order not found');
         return;
       }
 
@@ -347,8 +347,8 @@ const OrderDetail = () => {
         setSite(siteData);
       }
     } catch (err) {
-      console.error("Failed to load order:", err);
-      setError("Failed to load order");
+      console.error('Failed to load order:', err);
+      setError('Failed to load order');
     } finally {
       setLoading(false);
     }
@@ -358,10 +358,10 @@ const OrderDetail = () => {
     setActionLoading(true);
     try {
       await orderService.sendQuote(orderId);
-      ACTIONS?.logNotification?.("success", "Quote sent to customer");
+      ACTIONS?.logNotification?.('success', 'Quote sent to customer');
       loadOrder();
     } catch (err) {
-      ACTIONS?.logNotification?.("error", err.message);
+      ACTIONS?.logNotification?.('error', err.message);
     } finally {
       setActionLoading(false);
     }
@@ -371,10 +371,10 @@ const OrderDetail = () => {
     setActionLoading(true);
     try {
       await orderService.approveQuote(orderId);
-      ACTIONS?.logNotification?.("success", "Quote approved");
+      ACTIONS?.logNotification?.('success', 'Quote approved');
       loadOrder();
     } catch (err) {
-      ACTIONS?.logNotification?.("error", err.message);
+      ACTIONS?.logNotification?.('error', err.message);
     } finally {
       setActionLoading(false);
     }
@@ -384,10 +384,10 @@ const OrderDetail = () => {
     setActionLoading(true);
     try {
       await orderService.recordPayment(orderId, `manual-${Date.now()}`);
-      ACTIONS?.logNotification?.("success", "Payment recorded");
+      ACTIONS?.logNotification?.('success', 'Payment recorded');
       loadOrder();
     } catch (err) {
-      ACTIONS?.logNotification?.("error", err.message);
+      ACTIONS?.logNotification?.('error', err.message);
     } finally {
       setActionLoading(false);
     }
@@ -397,25 +397,25 @@ const OrderDetail = () => {
     setActionLoading(true);
     try {
       await orderService.shipOrder(orderId);
-      ACTIONS?.logNotification?.("success", "Order marked as shipped");
+      ACTIONS?.logNotification?.('success', 'Order marked as shipped');
       loadOrder();
     } catch (err) {
-      ACTIONS?.logNotification?.("error", err.message);
+      ACTIONS?.logNotification?.('error', err.message);
     } finally {
       setActionLoading(false);
     }
   };
 
   const handleCancel = async () => {
-    if (!window.confirm("Are you sure you want to cancel this order?")) return;
+    if (!window.confirm('Are you sure you want to cancel this order?')) return;
 
     setActionLoading(true);
     try {
-      await orderService.cancelOrder(orderId, "Cancelled by user");
-      ACTIONS?.logNotification?.("success", "Order cancelled");
+      await orderService.cancelOrder(orderId, 'Cancelled by user');
+      ACTIONS?.logNotification?.('success', 'Order cancelled');
       loadOrder();
     } catch (err) {
-      ACTIONS?.logNotification?.("error", err.message);
+      ACTIONS?.logNotification?.('error', err.message);
     } finally {
       setActionLoading(false);
     }
@@ -426,21 +426,21 @@ const OrderDetail = () => {
 
     const actions = [];
     switch (order.status) {
-      case "draft":
-        actions.push({ label: "Send Quote", action: handleSendQuote, variant: "primary" });
-        actions.push({ label: "Cancel", action: handleCancel, variant: "danger" });
+      case 'draft':
+        actions.push({ label: 'Send Quote', action: handleSendQuote, variant: 'primary' });
+        actions.push({ label: 'Cancel', action: handleCancel, variant: 'danger' });
         break;
-      case "quoted":
-        actions.push({ label: "Mark Approved", action: handleApprove, variant: "success" });
-        actions.push({ label: "Cancel", action: handleCancel, variant: "danger" });
+      case 'quoted':
+        actions.push({ label: 'Mark Approved', action: handleApprove, variant: 'success' });
+        actions.push({ label: 'Cancel', action: handleCancel, variant: 'danger' });
         break;
-      case "approved":
-        actions.push({ label: "Record Payment", action: handleMarkPaid, variant: "success" });
-        actions.push({ label: "Cancel", action: handleCancel, variant: "danger" });
+      case 'approved':
+        actions.push({ label: 'Record Payment', action: handleMarkPaid, variant: 'success' });
+        actions.push({ label: 'Cancel', action: handleCancel, variant: 'danger' });
         break;
-      case "paid":
-      case "processing":
-        actions.push({ label: "Mark Shipped", action: handleShip, variant: "primary" });
+      case 'paid':
+      case 'processing':
+        actions.push({ label: 'Mark Shipped', action: handleShip, variant: 'primary' });
         break;
       default:
         break;
@@ -451,24 +451,22 @@ const OrderDetail = () => {
   const getTimeline = () => {
     if (!order) return [];
 
-    const items = [
-      { title: "Order Created", date: order.createdAt, active: true },
-    ];
+    const items = [{ title: 'Order Created', date: order.createdAt, active: true }];
 
     if (order.quotedAt) {
-      items.push({ title: "Quote Sent", date: order.quotedAt, active: true });
+      items.push({ title: 'Quote Sent', date: order.quotedAt, active: true });
     }
 
     if (order.approvedAt) {
-      items.push({ title: "Quote Approved", date: order.approvedAt, active: true });
+      items.push({ title: 'Quote Approved', date: order.approvedAt, active: true });
     }
 
     if (order.paidAt) {
-      items.push({ title: "Payment Received", date: order.paidAt, active: true });
+      items.push({ title: 'Payment Received', date: order.paidAt, active: true });
     }
 
     if (order.fulfilledAt) {
-      items.push({ title: "Order Fulfilled", date: order.fulfilledAt, active: true });
+      items.push({ title: 'Order Fulfilled', date: order.fulfilledAt, active: true });
     }
 
     return items;
@@ -496,13 +494,11 @@ const OrderDetail = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <BackLink onClick={() => navigate("/orders")}>← Back to Orders</BackLink>
+        <BackLink onClick={() => navigate('/orders')}>← Back to Orders</BackLink>
         <HeaderRow>
           <OrderInfo>
             <OrderId>{order.id}</OrderId>
-            <OrderMeta>
-              Created {new Date(order.createdAt).toLocaleDateString()}
-            </OrderMeta>
+            <OrderMeta>Created {new Date(order.createdAt).toLocaleDateString()}</OrderMeta>
           </OrderInfo>
           <StatusBadge status={order.status}>{order.status}</StatusBadge>
         </HeaderRow>
@@ -554,7 +550,7 @@ const OrderDetail = () => {
                 )}
               </>
             ) : (
-              <InfoValue style={{ color: "#6b7280" }}>No customer assigned</InfoValue>
+              <InfoValue style={{ color: '#6b7280' }}>No customer assigned</InfoValue>
             )}
           </SectionBody>
         </Section>
@@ -576,7 +572,7 @@ const OrderDetail = () => {
                 </InfoCard>
               </>
             ) : (
-              <InfoValue style={{ color: "#6b7280" }}>No site assigned</InfoValue>
+              <InfoValue style={{ color: '#6b7280' }}>No site assigned</InfoValue>
             )}
           </SectionBody>
         </Section>
@@ -647,7 +643,7 @@ const OrderDetail = () => {
                 <TimelineContent>
                   <TimelineTitle>{item.title}</TimelineTitle>
                   <TimelineDate>
-                    {item.date ? new Date(item.date).toLocaleString() : "-"}
+                    {item.date ? new Date(item.date).toLocaleString() : '-'}
                   </TimelineDate>
                 </TimelineContent>
               </TimelineItem>
@@ -662,7 +658,7 @@ const OrderDetail = () => {
             <SectionTitle>Notes</SectionTitle>
           </SectionHeader>
           <SectionBody>
-            <p style={{ margin: 0, color: "#374151" }}>{order.notes}</p>
+            <p style={{ margin: 0, color: '#374151' }}>{order.notes}</p>
           </SectionBody>
         </Section>
       )}

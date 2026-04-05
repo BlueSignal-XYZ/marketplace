@@ -4,24 +4,24 @@
 // Provides device CRUD operations with Firebase Realtime Database
 // Used for device registration, inventory management, and lifecycle updates
 
-import { ref, get, set, update } from "firebase/database";
-import { db } from "../apis/firebase";
-import PRODUCTS from "../components/BlueSignalConfigurator/data/products";
+import { ref, get, set, update } from 'firebase/database';
+import { db } from '../apis/firebase';
+import PRODUCTS from '../components/BlueSignalConfigurator/data/products';
 
 /* -------------------------------------------------------------------------- */
 /*                                 CONSTANTS                                  */
 /* -------------------------------------------------------------------------- */
 
 // Serial number prefix
-const SERIAL_PREFIX = "pgw-";
+const SERIAL_PREFIX = 'pgw-';
 
 // SKU to deviceType mapping
 const SKU_TO_DEVICE_TYPE = {
-  "WQM-S-AC": "shore_monitor",
-  "WQM-S-SOL": "shore_monitor",
-  "WQM-S-MON": "shore_monitor",
-  "BS-BUOY-01": "buoy",
-  "BS-BUOY-XL": "buoy_xl",
+  'WQM-S-AC': 'shore_monitor',
+  'WQM-S-SOL': 'shore_monitor',
+  'WQM-S-MON': 'shore_monitor',
+  'BS-BUOY-01': 'buoy',
+  'BS-BUOY-XL': 'buoy_xl',
 };
 
 // Get product details by SKU
@@ -52,7 +52,7 @@ const parseSerialNumber = (serialNumber) => {
   if (!serialNumber || !serialNumber.startsWith(SERIAL_PREFIX)) {
     return 0;
   }
-  const numPart = serialNumber.replace(SERIAL_PREFIX, "");
+  const numPart = serialNumber.replace(SERIAL_PREFIX, '');
   return parseInt(numPart, 10) || 0;
 };
 
@@ -63,7 +63,7 @@ const parseSerialNumber = (serialNumber) => {
  * @returns {string} - e.g., "pgw-0011"
  */
 const formatSerialNumber = (num, prefix = SERIAL_PREFIX) => {
-  return `${prefix}${String(num).padStart(4, "0")}`;
+  return `${prefix}${String(num).padStart(4, '0')}`;
 };
 
 /**
@@ -72,7 +72,7 @@ const formatSerialNumber = (num, prefix = SERIAL_PREFIX) => {
  */
 export const getNextSerialNumber = async () => {
   try {
-    const devicesRef = ref(db, "devices");
+    const devicesRef = ref(db, 'devices');
     const snapshot = await get(devicesRef);
 
     if (!snapshot.exists()) {
@@ -85,7 +85,7 @@ export const getNextSerialNumber = async () => {
 
     // Find the highest serial number
     Object.values(devices).forEach((device) => {
-      const serialNum = parseSerialNumber(device?.serialNumber || device?.id || "");
+      const serialNum = parseSerialNumber(device?.serialNumber || device?.id || '');
       if (serialNum > highestNum) {
         highestNum = serialNum;
       }
@@ -93,7 +93,7 @@ export const getNextSerialNumber = async () => {
 
     return formatSerialNumber(highestNum + 1);
   } catch (error) {
-    console.error("Error getting next serial number:", error);
+    console.error('Error getting next serial number:', error);
     throw error;
   }
 };
@@ -106,7 +106,7 @@ export const getNextSerialNumber = async () => {
  */
 export const getNextSerialNumbers = async (count, prefix = SERIAL_PREFIX) => {
   try {
-    const devicesRef = ref(db, "devices");
+    const devicesRef = ref(db, 'devices');
     const snapshot = await get(devicesRef);
 
     let highestNum = 0;
@@ -114,7 +114,7 @@ export const getNextSerialNumbers = async (count, prefix = SERIAL_PREFIX) => {
     if (snapshot.exists()) {
       const devices = snapshot.val();
       Object.values(devices).forEach((device) => {
-        const serialNum = parseSerialNumber(device?.serialNumber || device?.id || "");
+        const serialNum = parseSerialNumber(device?.serialNumber || device?.id || '');
         if (serialNum > highestNum) {
           highestNum = serialNum;
         }
@@ -129,7 +129,7 @@ export const getNextSerialNumbers = async (count, prefix = SERIAL_PREFIX) => {
 
     return serials;
   } catch (error) {
-    console.error("Error getting next serial numbers:", error);
+    console.error('Error getting next serial numbers:', error);
     throw error;
   }
 };
@@ -149,7 +149,7 @@ export const createDevice = async (deviceData) => {
     await set(deviceRef, deviceData);
     return deviceData;
   } catch (error) {
-    console.error("Error creating device:", error);
+    console.error('Error creating device:', error);
     throw error;
   }
 };
@@ -165,17 +165,17 @@ export const createDevice = async (deviceData) => {
  * @returns {Promise<Object>} - Result with created devices
  */
 export const createDeviceBatch = async (sku, quantity, createdBy, options = {}) => {
-  const { serialPrefix = SERIAL_PREFIX, notes = "" } = options;
+  const { serialPrefix = SERIAL_PREFIX, notes = '' } = options;
 
   // Validate inputs
   if (!sku) {
-    throw new Error("SKU is required");
+    throw new Error('SKU is required');
   }
   if (!quantity || quantity < 1 || quantity > 50) {
-    throw new Error("Quantity must be between 1 and 50");
+    throw new Error('Quantity must be between 1 and 50');
   }
   if (!createdBy) {
-    throw new Error("Creator UID is required");
+    throw new Error('Creator UID is required');
   }
 
   // Get product info
@@ -202,12 +202,12 @@ export const createDeviceBatch = async (sku, quantity, createdBy, options = {}) 
       sku,
       name: product.name,
       deviceType,
-      lifecycle: "inventory",
-      commissionStatus: "pending",
+      lifecycle: 'inventory',
+      commissionStatus: 'pending',
       createdAt: now,
       updatedAt: now,
       createdBy,
-      notes: notes || "",
+      notes: notes || '',
     }));
 
     // Write all devices to Firebase
@@ -227,7 +227,7 @@ export const createDeviceBatch = async (sku, quantity, createdBy, options = {}) 
       devices,
     };
   } catch (error) {
-    console.error("Error creating device batch:", error);
+    console.error('Error creating device batch:', error);
     throw error;
   }
 };
@@ -238,7 +238,7 @@ export const createDeviceBatch = async (sku, quantity, createdBy, options = {}) 
  */
 export const getAllDevices = async () => {
   try {
-    const devicesRef = ref(db, "devices");
+    const devicesRef = ref(db, 'devices');
     const snapshot = await get(devicesRef);
 
     if (!snapshot.exists()) {
@@ -248,7 +248,7 @@ export const getAllDevices = async () => {
     const devices = snapshot.val();
     return Object.values(devices);
   } catch (error) {
-    console.error("Error getting devices:", error);
+    console.error('Error getting devices:', error);
     throw error;
   }
 };
@@ -263,7 +263,7 @@ export const getDevicesByLifecycle = async (lifecycle) => {
     const devices = await getAllDevices();
     return devices.filter((d) => d.lifecycle === lifecycle);
   } catch (error) {
-    console.error("Error getting devices by lifecycle:", error);
+    console.error('Error getting devices by lifecycle:', error);
     throw error;
   }
 };
@@ -273,7 +273,7 @@ export const getDevicesByLifecycle = async (lifecycle) => {
  * @returns {Promise<Array>} - Array of inventory devices
  */
 export const getInventoryDevices = async () => {
-  return getDevicesByLifecycle("inventory");
+  return getDevicesByLifecycle('inventory');
 };
 
 /**
@@ -292,7 +292,7 @@ export const getDevice = async (deviceId) => {
 
     return snapshot.val();
   } catch (error) {
-    console.error("Error getting device:", error);
+    console.error('Error getting device:', error);
     throw error;
   }
 };
@@ -324,7 +324,7 @@ export const updateDevice = async (deviceId, updateData) => {
 
     return updatedDevice;
   } catch (error) {
-    console.error("Error updating device:", error);
+    console.error('Error updating device:', error);
     throw error;
   }
 };
@@ -340,7 +340,7 @@ export const deleteDevice = async (deviceId) => {
     await set(deviceRef, null);
     return true;
   } catch (error) {
-    console.error("Error deleting device:", error);
+    console.error('Error deleting device:', error);
     throw error;
   }
 };
@@ -378,7 +378,7 @@ export const getDeviceCounts = async () => {
 
     return counts;
   } catch (error) {
-    console.error("Error getting device counts:", error);
+    console.error('Error getting device counts:', error);
     throw error;
   }
 };

@@ -26,10 +26,12 @@ const getBaseUrl = () => {
   }
 
   // Sales mode: bluesignal.xyz (primary) or sales.bluesignal.xyz (legacy)
-  if (appMode === 'sales' ||
-      hostname === 'bluesignal.xyz' ||
-      hostname === 'www.bluesignal.xyz' ||
-      hostname.includes('sales')) {
+  if (
+    appMode === 'sales' ||
+    hostname === 'bluesignal.xyz' ||
+    hostname === 'www.bluesignal.xyz' ||
+    hostname.includes('sales')
+  ) {
     return 'https://bluesignal.xyz';
   }
 
@@ -54,9 +56,7 @@ const Breadcrumbs = ({ items, className }) => {
     <>
       {/* JSON-LD Schema */}
       <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
 
       {/* Breadcrumb Navigation */}
@@ -68,14 +68,10 @@ const Breadcrumbs = ({ items, className }) => {
             return (
               <BreadcrumbItem key={item.path}>
                 {isLast ? (
-                  <BreadcrumbCurrent aria-current="page">
-                    {item.label}
-                  </BreadcrumbCurrent>
+                  <BreadcrumbCurrent aria-current="page">{item.label}</BreadcrumbCurrent>
                 ) : (
                   <>
-                    <BreadcrumbLink to={item.path}>
-                      {item.label}
-                    </BreadcrumbLink>
+                    <BreadcrumbLink to={item.path}>{item.label}</BreadcrumbLink>
                     <BreadcrumbSeparator aria-hidden="true">/</BreadcrumbSeparator>
                   </>
                 )}

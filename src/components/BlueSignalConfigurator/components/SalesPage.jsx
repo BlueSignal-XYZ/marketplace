@@ -1,18 +1,18 @@
 // SalesPage - Unified single-page layout for the sales portal
-import { useState, useEffect, useRef, useCallback } from "react";
-import styled, { createGlobalStyle } from "styled-components";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import { salesTheme } from "../styles/theme";
-import { PRODUCTS } from "../data";
-import useFormSubmit from "../hooks/useFormSubmit";
+import { useState, useEffect, useRef, useCallback } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { salesTheme } from '../styles/theme';
+import { PRODUCTS } from '../data';
+import useFormSubmit from '../hooks/useFormSubmit';
 
 // Components
-import SalesHeader from "./SalesHeader";
-import SalesFooter from "./SalesFooter";
-import HeroSection from "./HeroSection";
-import ProductTiers from "./ProductTiers";
-import ProductCatalogSection from "./ProductCatalogSection";
-import ROICalculatorSection from "./ROICalculatorSection";
+import SalesHeader from './SalesHeader';
+import SalesFooter from './SalesFooter';
+import HeroSection from './HeroSection';
+import ProductTiers from './ProductTiers';
+import ProductCatalogSection from './ProductCatalogSection';
+import ROICalculatorSection from './ROICalculatorSection';
 // Dividers removed for cleaner look
 
 // Detail components from original configurator
@@ -30,11 +30,15 @@ import {
   ProductComparisonView,
   QuoteBuilder,
   CustomerNameModal,
-} from "./index";
+} from './index';
 
-import { generateQuotePDF, generateSpecsPDF } from "../utils";
-import SEOHead from "../../seo/SEOHead";
-import { BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, createProductSchema } from "../../seo/schemas";
+import { generateQuotePDF, generateSpecsPDF } from '../utils';
+import SEOHead from '../../seo/SEOHead';
+import {
+  BLUESIGNAL_ORGANIZATION_SCHEMA,
+  SALES_WEBSITE_SCHEMA,
+  createProductSchema,
+} from '../../seo/schemas';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -79,8 +83,12 @@ const ProductDetailOverlay = styled.div`
   animation: fadeIn 0.25s ease-out;
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @media (min-width: ${salesTheme.breakpoints.laptop}) {
@@ -102,8 +110,14 @@ const ProductDetailPanel = styled.div`
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
 
   @keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0.8; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+      transform: translateY(100%);
+      opacity: 0.8;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 
   @media (min-width: ${salesTheme.breakpoints.laptop}) {
@@ -114,8 +128,14 @@ const ProductDetailPanel = styled.div`
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
 
     @keyframes scaleIn {
-      from { opacity: 0; transform: scale(0.92) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
   }
 `;
@@ -241,9 +261,11 @@ const DetailTab = styled.button`
   font-weight: 600;
   border: none;
   background: transparent;
-  color: ${props => props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textMuted};
+  color: ${(props) =>
+    props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textMuted};
   cursor: pointer;
-  border-bottom: 3px solid ${props => props.$active ? salesTheme.colors.accentSecondary : 'transparent'};
+  border-bottom: 3px solid
+    ${(props) => (props.$active ? salesTheme.colors.accentSecondary : 'transparent')};
   transition: all 0.2s ease;
   white-space: nowrap;
   position: relative;
@@ -255,8 +277,9 @@ const DetailTab = styled.button`
   flex-shrink: 0;
 
   &:hover {
-    color: ${props => props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textDark};
-    background: ${props => props.$active ? 'transparent' : 'rgba(0, 0, 0, 0.02)'};
+    color: ${(props) =>
+      props.$active ? salesTheme.colors.accentSecondary : salesTheme.colors.textDark};
+    background: ${(props) => (props.$active ? 'transparent' : 'rgba(0, 0, 0, 0.02)')};
   }
 
   @media (max-width: ${salesTheme.breakpoints.mobile}) {
@@ -318,7 +341,9 @@ const ActionButton = styled.button`
     height: 18px;
   }
 
-  ${props => props.$primary ? `
+  ${(props) =>
+    props.$primary
+      ? `
     background: ${salesTheme.gradients.greenCta};
     border: none;
     color: #0f172a;
@@ -332,7 +357,8 @@ const ActionButton = styled.button`
     &:active {
       transform: translateY(0);
     }
-  ` : `
+  `
+      : `
     background: ${salesTheme.colors.bgCard};
     border: 2px solid ${salesTheme.colors.border};
     color: ${salesTheme.colors.textMuted};
@@ -576,7 +602,7 @@ const ExpandIcon = styled.span`
   flex-shrink: 0;
   color: ${salesTheme.colors.textSecondary};
   transition: transform 0.25s ease;
-  transform: ${props => props.$expanded ? 'rotate(45deg)' : 'rotate(0)'};
+  transform: ${(props) => (props.$expanded ? 'rotate(45deg)' : 'rotate(0)')};
 
   svg {
     width: 20px;
@@ -585,10 +611,12 @@ const ExpandIcon = styled.span`
 `;
 
 const AccordionContent = styled.div`
-  max-height: ${props => props.$expanded ? '500px' : '0'};
+  max-height: ${(props) => (props.$expanded ? '500px' : '0')};
   overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.25s ease;
-  opacity: ${props => props.$expanded ? 1 : 0};
+  transition:
+    max-height 0.3s ease,
+    opacity 0.25s ease;
+  opacity: ${(props) => (props.$expanded ? 1 : 0)};
 `;
 
 const AnswerText = styled.p`
@@ -722,7 +750,7 @@ const MapContainer = styled.div`
 
   /* Overlay to prevent map interactions (scroll/zoom) */
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -1017,67 +1045,79 @@ const ServicePrice = styled.span`
 // ============================================
 const aboutContent = [
   {
-    id: "our-story",
-    title: "Our Story",
-    content: "We deploy and support smart water quality buoys, soil nutrient sensors, and submersible ultrasonic emitters that control and prevent algal blooms. Every system is configured for your site, installed by trained technicians, and backed by ongoing service options. Whether it's a single pond or an entire lake, we help it run clean and stay that way."
+    id: 'our-story',
+    title: 'Our Story',
+    content:
+      "We deploy and support smart water quality buoys, soil nutrient sensors, and submersible ultrasonic emitters that control and prevent algal blooms. Every system is configured for your site, installed by trained technicians, and backed by ongoing service options. Whether it's a single pond or an entire lake, we help it run clean and stay that way.",
   },
   {
-    id: "craftsmanship",
-    title: "Craftsmanship",
-    content: "We start with a conversation\u2014what you manage, what's not working, and what you want to improve. From there, we scope a solution, handle the install, and keep it running with optional maintenance and a free dashboard for remote monitoring. You'll always know what's in your pond, in your field, and where it's headed."
+    id: 'craftsmanship',
+    title: 'Craftsmanship',
+    content:
+      "We start with a conversation\u2014what you manage, what's not working, and what you want to improve. From there, we scope a solution, handle the install, and keep it running with optional maintenance and a free dashboard for remote monitoring. You'll always know what's in your pond, in your field, and where it's headed.",
   },
   {
-    id: "why-we-started",
-    title: "Why We Started",
-    content: "BlueSignal was founded by people who've worked alongside farmers, facility managers, utility staff, and property owners. Water quality solutions are often expensive, fragile, and poorly supported. We built BlueSignal to change that."
+    id: 'why-we-started',
+    title: 'Why We Started',
+    content:
+      "BlueSignal was founded by people who've worked alongside farmers, facility managers, utility staff, and property owners. Water quality solutions are often expensive, fragile, and poorly supported. We built BlueSignal to change that.",
   },
   {
-    id: "mission",
-    title: "Mission and Values",
-    content: "We believe in keeping things simple, building for long term American growth, standing behind our service, and delivering practical tools for managing water and land."
-  }
+    id: 'mission',
+    title: 'Mission and Values',
+    content:
+      'We believe in keeping things simple, building for long term American growth, standing behind our service, and delivering practical tools for managing water and land.',
+  },
 ];
 
 const faqItems = [
   {
-    question: "How do I place an order?",
-    answer: "You can build a custom quote directly on our website using the product configurator. Add items to your quote, then click \"Get a Quote\" to review. From there, you can export a PDF, share the link with your team, or contact us to finalize the purchase. For larger deployments, reach out to our sales team for volume pricing."
+    question: 'How do I place an order?',
+    answer:
+      'You can build a custom quote directly on our website using the product configurator. Add items to your quote, then click "Get a Quote" to review. From there, you can export a PDF, share the link with your team, or contact us to finalize the purchase. For larger deployments, reach out to our sales team for volume pricing.',
   },
   {
-    question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards, ACH bank transfers, and wire transfers for larger orders. For enterprise and municipal customers, we can accommodate purchase orders and NET 30 terms with approved credit. Contact our sales team to set up an account."
+    question: 'What payment methods do you accept?',
+    answer:
+      'We accept all major credit cards, ACH bank transfers, and wire transfers for larger orders. For enterprise and municipal customers, we can accommodate purchase orders and NET 30 terms with approved credit. Contact our sales team to set up an account.',
   },
   {
-    question: "How long does installation take?",
-    answer: "Most WQM-1 installations are completed in 30 minutes or less — it's a plug-and-play HAT for Raspberry Pi. We offer professional installation services in the Austin metro area and can provide remote guidance for DIY installations elsewhere."
+    question: 'How long does installation take?',
+    answer:
+      "Most WQM-1 installations are completed in 30 minutes or less — it's a plug-and-play HAT for Raspberry Pi. We offer professional installation services in the Austin metro area and can provide remote guidance for DIY installations elsewhere.",
   },
   {
-    question: "What is your return policy?",
-    answer: "We offer a 30-day satisfaction guarantee on all hardware. If you're not completely satisfied, return the equipment in its original condition for a full refund. Custom-configured systems may be subject to a 15% restocking fee. Warranty claims are handled separately\u2014see our warranty page for details."
+    question: 'What is your return policy?',
+    answer:
+      "We offer a 30-day satisfaction guarantee on all hardware. If you're not completely satisfied, return the equipment in its original condition for a full refund. Custom-configured systems may be subject to a 15% restocking fee. Warranty claims are handled separately\u2014see our warranty page for details.",
   },
   {
-    question: "How do I get technical support for my product?",
-    answer: "All BlueSignal products include complimentary technical support via email and phone. You can reach our support team at hi@bluesignal.xyz or call +1.512.730.0843 during business hours (9am-6pm CT). Premium support packages with 24/7 availability are available for enterprise customers."
+    question: 'How do I get technical support for my product?',
+    answer:
+      'All BlueSignal products include complimentary technical support via email and phone. You can reach our support team at hi@bluesignal.xyz or call +1.512.730.0843 during business hours (9am-6pm CT). Premium support packages with 24/7 availability are available for enterprise customers.',
   },
   {
-    question: "Is my payment information safe on your website?",
-    answer: "Yes, absolutely. We use industry-standard SSL encryption for all transactions. Payment processing is handled by Stripe, a PCI-DSS Level 1 certified payment processor. We never store your full credit card details on our servers."
+    question: 'Is my payment information safe on your website?',
+    answer:
+      'Yes, absolutely. We use industry-standard SSL encryption for all transactions. Payment processing is handled by Stripe, a PCI-DSS Level 1 certified payment processor. We never store your full credit card details on our servers.',
   },
   {
-    question: "Do you offer installation services in my area?",
-    answer: "We provide full installation services throughout the Austin metro area and Central Texas. For locations outside this region, we offer comprehensive remote installation support including video calls, detailed guides, and pre-configured equipment. We're also building a network of certified installers nationwide."
+    question: 'Do you offer installation services in my area?',
+    answer:
+      "We provide full installation services throughout the Austin metro area and Central Texas. For locations outside this region, we offer comprehensive remote installation support including video calls, detailed guides, and pre-configured equipment. We're also building a network of certified installers nationwide.",
   },
   {
-    question: "What kind of warranty do you offer?",
-    answer: "All BlueSignal monitoring equipment comes with a standard 2-year limited warranty covering manufacturing defects and component failures. Extended warranty options up to 4 years are available at purchase. Ultrasonic transducers and sensors carry a 1-year warranty due to their exposure to harsh environments."
-  }
+    question: 'What kind of warranty do you offer?',
+    answer:
+      'All BlueSignal monitoring equipment comes with a standard 2-year limited warranty covering manufacturing defects and component failures. Extended warranty options up to 4 years are available at purchase. Ultrasonic transducers and sensors carry a 1-year warranty due to their exposure to harsh environments.',
+  },
 ];
 
 const productOptions = [
-  { value: "", label: "Select a product (optional)" },
-  { value: "wqm-1", label: "WQM-1 Dev Kit - $999" },
-  { value: "cloud-monitoring", label: "Cloud Monitoring - $9.99/mo" },
-  { value: "other", label: "Other / General Inquiry" },
+  { value: '', label: 'Select a product (optional)' },
+  { value: 'wqm-1', label: 'WQM-1 Dev Kit - $999' },
+  { value: 'cloud-monitoring', label: 'Cloud Monitoring - $9.99/mo' },
+  { value: 'other', label: 'Other / General Inquiry' },
 ];
 
 const localServices = [
@@ -1087,9 +1127,10 @@ const localServices = [
         <path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3" />
       </svg>
     ),
-    title: "Dock & Pier Pressure Washing",
-    description: "Professional cleaning for boat docks, piers, and waterfront structures. We remove algae, mildew, mineral deposits, and years of grime buildup.",
-    price: "Starting at $249/dock"
+    title: 'Dock & Pier Pressure Washing',
+    description:
+      'Professional cleaning for boat docks, piers, and waterfront structures. We remove algae, mildew, mineral deposits, and years of grime buildup.',
+    price: 'Starting at $249/dock',
   },
   {
     icon: (
@@ -1098,9 +1139,10 @@ const localServices = [
         <path d="M3 9h18M9 21V9" />
       </svg>
     ),
-    title: "Solar Panel Cleaning",
-    description: "Maximize your solar efficiency with professional cleaning. Dirty panels lose 15-25% efficiency. We use deionized water and soft brushes.",
-    price: "$15/panel (min 10 panels)"
+    title: 'Solar Panel Cleaning',
+    description:
+      'Maximize your solar efficiency with professional cleaning. Dirty panels lose 15-25% efficiency. We use deionized water and soft brushes.',
+    price: '$15/panel (min 10 panels)',
   },
   {
     icon: (
@@ -1111,9 +1153,10 @@ const localServices = [
         <line x1="15" y1="9" x2="15.01" y2="9" />
       </svg>
     ),
-    title: "Pond & Pool Deck Cleaning",
-    description: "Restore your pool deck, pond edges, or patio to like-new condition. We handle concrete, pavers, flagstone, and composite decking.",
-    price: "Starting at $0.35/sq ft"
+    title: 'Pond & Pool Deck Cleaning',
+    description:
+      'Restore your pool deck, pond edges, or patio to like-new condition. We handle concrete, pavers, flagstone, and composite decking.',
+    price: 'Starting at $0.35/sq ft',
   },
   {
     icon: (
@@ -1125,18 +1168,19 @@ const localServices = [
         <polyline points="10 9 9 9 8 9" />
       </svg>
     ),
-    title: "Commercial & Municipal",
-    description: "HOA common areas, municipal facilities, marinas, and large-scale projects. Volume discounts available. We carry full liability insurance.",
-    price: "Contact for quote"
-  }
+    title: 'Commercial & Municipal',
+    description:
+      'HOA common areas, municipal facilities, marinas, and large-scale projects. Volume discounts available. We carry full liability insurance.',
+    price: 'Contact for quote',
+  },
 ];
 
 // Tab configuration
 const DETAIL_TABS = [
-  { id: "overview", label: "Overview" },
-  { id: "technical", label: "Technical" },
-  { id: "install", label: "Install" },
-  { id: "pricing", label: "Pricing" },
+  { id: 'overview', label: 'Overview' },
+  { id: 'technical', label: 'Technical' },
+  { id: 'install', label: 'Install' },
+  { id: 'pricing', label: 'Pricing' },
 ];
 
 export default function SalesPage() {
@@ -1161,7 +1205,7 @@ export default function SalesPage() {
 
   // Product state
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
 
   // Compare state
   const [compareMode, setCompareMode] = useState(false);
@@ -1177,21 +1221,24 @@ export default function SalesPage() {
   const [pdfError, setPdfError] = useState(null);
 
   // Quote mode - only show "Add to Quote" buttons when explicitly enabled via URL
-  const isQuoteMode = searchParams.get('quote') === 'true' ||
-                      searchParams.get('quote') === '1' ||
-                      showQuoteBuilder;
+  const isQuoteMode =
+    searchParams.get('quote') === 'true' || searchParams.get('quote') === '1' || showQuoteBuilder;
 
   // FAQ accordion state
   const [expandedFAQ, setExpandedFAQ] = useState(null);
 
   // Contact form state
   const [contactFormData, setContactFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    product: ""
+    name: '',
+    email: '',
+    message: '',
+    product: '',
   });
-  const { formState: contactFormState, submitForm: submitContactForm, reset: resetContactForm } = useFormSubmit('contact_submissions');
+  const {
+    formState: contactFormState,
+    submitForm: submitContactForm,
+    reset: resetContactForm,
+  } = useFormSubmit('contact_submissions');
 
   const toggleFAQ = (index) => {
     setExpandedFAQ(expandedFAQ === index ? null : index);
@@ -1199,14 +1246,14 @@ export default function SalesPage() {
 
   const handleContactChange = (e) => {
     const { name, value } = e.target;
-    setContactFormData(prev => ({ ...prev, [name]: value }));
+    setContactFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     const success = await submitContactForm(contactFormData);
     if (success) {
-      setContactFormData({ name: "", email: "", message: "", product: "" });
+      setContactFormData({ name: '', email: '', message: '', product: '' });
     }
   };
 
@@ -1219,20 +1266,23 @@ export default function SalesPage() {
 
     if (productParam && PRODUCTS[productParam]) {
       setSelectedProduct(productParam);
-      if (tabParam && DETAIL_TABS.find(t => t.id === tabParam)) {
+      if (tabParam && DETAIL_TABS.find((t) => t.id === tabParam)) {
         setActiveTab(tabParam);
       }
     }
 
     if (quoteParam) {
       try {
-        const items = quoteParam.split(',').map(item => {
-          const [productId, qty] = item.split(':');
-          if (PRODUCTS[productId]) {
-            return { productId, quantity: parseInt(qty, 10) || 1 };
-          }
-          return null;
-        }).filter(Boolean);
+        const items = quoteParam
+          .split(',')
+          .map((item) => {
+            const [productId, qty] = item.split(':');
+            if (PRODUCTS[productId]) {
+              return { productId, quantity: parseInt(qty, 10) || 1 };
+            }
+            return null;
+          })
+          .filter(Boolean);
         if (items.length > 0) {
           setQuoteItems(items);
         }
@@ -1262,7 +1312,7 @@ export default function SalesPage() {
     }
 
     if (quoteItems.length > 0) {
-      const quoteString = quoteItems.map(item => `${item.productId}:${item.quantity}`).join(',');
+      const quoteString = quoteItems.map((item) => `${item.productId}:${item.quantity}`).join(',');
       params.set('quote', quoteString);
     }
 
@@ -1284,16 +1334,13 @@ export default function SalesPage() {
 
     Object.entries(sectionRefs).forEach(([id, ref]) => {
       if (ref.current) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setActiveSection(id);
-              }
-            });
-          },
-          options
-        );
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(id);
+            }
+          });
+        }, options);
         observer.observe(ref.current);
         observers.push(observer);
       }
@@ -1325,7 +1372,7 @@ export default function SalesPage() {
   // Product handlers
   const handleSelectProduct = (productId) => {
     setSelectedProduct(productId);
-    setActiveTab("overview");
+    setActiveTab('overview');
   };
 
   const handleCloseDetail = () => {
@@ -1341,9 +1388,9 @@ export default function SalesPage() {
   };
 
   const handleToggleCompareProduct = (productId) => {
-    setCompareProducts(prev => {
+    setCompareProducts((prev) => {
       if (prev.includes(productId)) {
-        return prev.filter(id => id !== productId);
+        return prev.filter((id) => id !== productId);
       }
       if (prev.length >= 4) return prev;
       return [...prev, productId];
@@ -1352,13 +1399,11 @@ export default function SalesPage() {
 
   // Quote handlers
   const handleAddToQuote = (productId) => {
-    setQuoteItems(prev => {
-      const existing = prev.find(item => item.productId === productId);
+    setQuoteItems((prev) => {
+      const existing = prev.find((item) => item.productId === productId);
       if (existing) {
-        return prev.map(item =>
-          item.productId === productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+        return prev.map((item) =>
+          item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
       return [...prev, { productId, quantity: 1 }];
@@ -1367,15 +1412,13 @@ export default function SalesPage() {
 
   const handleUpdateQuantity = (productId, quantity) => {
     if (quantity < 1) return;
-    setQuoteItems(prev =>
-      prev.map(item =>
-        item.productId === productId ? { ...item, quantity } : item
-      )
+    setQuoteItems((prev) =>
+      prev.map((item) => (item.productId === productId ? { ...item, quantity } : item))
     );
   };
 
   const handleRemoveFromQuote = (productId) => {
-    setQuoteItems(prev => prev.filter(item => item.productId !== productId));
+    setQuoteItems((prev) => prev.filter((item) => item.productId !== productId));
   };
 
   const handleClearQuote = () => {
@@ -1384,14 +1427,14 @@ export default function SalesPage() {
 
   // Quote mode handlers
   const enableQuoteMode = () => {
-    setSearchParams(prev => {
+    setSearchParams((prev) => {
       prev.set('quote', 'true');
       return prev;
     });
   };
 
   const disableQuoteMode = () => {
-    setSearchParams(prev => {
+    setSearchParams((prev) => {
       prev.delete('quote');
       return prev;
     });
@@ -1399,10 +1442,10 @@ export default function SalesPage() {
   };
 
   const handleAddBundle = (bundle) => {
-    setQuoteItems(prev => {
+    setQuoteItems((prev) => {
       const newItems = [...prev];
       bundle.products.forEach(({ productId, quantity }) => {
-        const existingIndex = newItems.findIndex(item => item.productId === productId);
+        const existingIndex = newItems.findIndex((item) => item.productId === productId);
         if (existingIndex >= 0) {
           newItems[existingIndex] = {
             ...newItems[existingIndex],
@@ -1446,7 +1489,7 @@ export default function SalesPage() {
       params.set('tab', activeTab);
     }
     if (quoteItems.length > 0) {
-      const quoteString = quoteItems.map(item => `${item.productId}:${item.quantity}`).join(',');
+      const quoteString = quoteItems.map((item) => `${item.productId}:${item.quantity}`).join(',');
       params.set('quote', quoteString);
     }
     const baseUrl = window.location.origin + window.location.pathname;
@@ -1461,20 +1504,15 @@ export default function SalesPage() {
   const exportBomAsCsv = () => {
     if (!selectedProduct) return;
     const product = PRODUCTS[selectedProduct];
-    const headers = ["Category", "Item", "Quantity", "Cost"];
-    const rows = product.bom.map(item => [
-      item.category,
-      item.item,
-      item.qty,
-      item.cost
-    ]);
+    const headers = ['Category', 'Item', 'Quantity', 'Cost'];
+    const rows = product.bom.map((item) => [item.category, item.item, item.qty, item.cost]);
     const total = product.bom.reduce((sum, item) => sum + item.cost, 0);
-    rows.push(["", "TOTAL", "", total]);
+    rows.push(['', 'TOTAL', '', total]);
 
-    const csv = [headers, ...rows].map(row => row.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
+    const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `${product.name}-BOM.csv`;
     a.click();
@@ -1493,36 +1531,66 @@ export default function SalesPage() {
     if (!product) return null;
 
     switch (activeTab) {
-      case "overview":
+      case 'overview':
         return <OverviewTab product={product} />;
-      case "technical":
+      case 'technical':
         return (
           <>
             <SpecsTab product={product} />
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <WiringTab product={product} />
             </div>
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <LayoutTab product={product} />
             </div>
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <PowerTab product={product} />
             </div>
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <EnclosureTab product={product} />
             </div>
           </>
         );
-      case "install":
+      case 'install':
         return (
           <>
             <EnhancedInstallationTab product={product} />
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <OperationsTab product={product} />
             </div>
           </>
         );
-      case "pricing":
+      case 'pricing':
         return <EnhancedBomTab product={product} />;
       default:
         return <OverviewTab product={product} />;
@@ -1530,17 +1598,19 @@ export default function SalesPage() {
   };
 
   // Generate SEO schema
-  const productSchema = product ? createProductSchema({
-    name: product.name,
-    description: product.tagline || `${product.name} water quality monitoring system`,
-    image: `https://bluesignal.xyz/products/${selectedProduct}.png`,
-    brand: 'BlueSignal',
-    sku: selectedProduct.toUpperCase(),
-    price: product.price,
-    currency: 'USD',
-    availability: 'PreOrder',
-    url: `https://bluesignal.xyz?product=${selectedProduct}`,
-  }) : null;
+  const productSchema = product
+    ? createProductSchema({
+        name: product.name,
+        description: product.tagline || `${product.name} water quality monitoring system`,
+        image: `https://bluesignal.xyz/products/${selectedProduct}.png`,
+        brand: 'BlueSignal',
+        sku: selectedProduct.toUpperCase(),
+        price: product.price,
+        currency: 'USD',
+        availability: 'PreOrder',
+        url: `https://bluesignal.xyz?product=${selectedProduct}`,
+      })
+    : null;
 
   return (
     <>
@@ -1550,13 +1620,15 @@ export default function SalesPage() {
         description="WQM-1: 6-channel water quality monitoring HAT for Raspberry Pi. pH, TDS, Turbidity, ORP, Temperature, GPS. LoRaWAN connectivity. $999 dev kit."
         canonical="/"
         keywords="WQM-1, water quality monitor, Raspberry Pi HAT, pH sensor, TDS, turbidity, ORP, LoRaWAN, water monitoring hardware"
-        jsonLd={[BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, ...(productSchema ? [productSchema] : [])]}
+        jsonLd={[
+          BLUESIGNAL_ORGANIZATION_SCHEMA,
+          SALES_WEBSITE_SCHEMA,
+          ...(productSchema ? [productSchema] : []),
+        ]}
       />
 
       <PageWrapper>
-        <SalesHeader
-          onScrollToContact={() => scrollToSection('contact')}
-        />
+        <SalesHeader onScrollToContact={() => scrollToSection('contact')} />
 
         <MainContent>
           {/* Hero Section */}
@@ -1593,9 +1665,7 @@ export default function SalesPage() {
 
           {/* ROI Calculator Section */}
           <div ref={sectionRefs.calculator}>
-            <ROICalculatorSection
-              onGetQuote={() => scrollToSection('products')}
-            />
+            <ROICalculatorSection onGetQuote={() => scrollToSection('products')} />
           </div>
 
           {/* Benchmark Section */}
@@ -1646,7 +1716,8 @@ export default function SalesPage() {
                     Get in Touch
                   </SectionTitle>
                   <ContactSubtitle>
-                    Have questions about our products or need help with your water quality project? We're here to help.
+                    Have questions about our products or need help with your water quality project?
+                    We&apos;re here to help.
                   </ContactSubtitle>
                 </ContactHeader>
                 <ContactGrid>
@@ -1665,7 +1736,7 @@ export default function SalesPage() {
                     <ContactSectionTitle>Drop us a line...</ContactSectionTitle>
                     {contactFormState.status === 'success' ? (
                       <SuccessMessage>
-                        Thank you for your message! We'll get back to you within 24 hours.
+                        Thank you for your message! We&apos;ll get back to you within 24 hours.
                       </SuccessMessage>
                     ) : (
                       <ContactForm onSubmit={handleContactSubmit}>
@@ -1718,7 +1789,7 @@ export default function SalesPage() {
                             value={contactFormData.product}
                             onChange={handleContactChange}
                           >
-                            {productOptions.map(opt => (
+                            {productOptions.map((opt) => (
                               <option key={opt.value} value={opt.value}>
                                 {opt.label}
                               </option>
@@ -1726,8 +1797,11 @@ export default function SalesPage() {
                           </Select>
                         </FormGroup>
 
-                        <SubmitButton type="submit" disabled={contactFormState.status === 'submitting'}>
-                          {contactFormState.status === 'submitting' ? "Sending..." : "Submit"}
+                        <SubmitButton
+                          type="submit"
+                          disabled={contactFormState.status === 'submitting'}
+                        >
+                          {contactFormState.status === 'submitting' ? 'Sending...' : 'Submit'}
                         </SubmitButton>
 
                         <ContactInfo>
@@ -1745,7 +1819,8 @@ export default function SalesPage() {
               <ServicesContainer>
                 <ServicesSectionTitle>Local Services in Austin</ServicesSectionTitle>
                 <ServicesSubtitle>
-                  Beyond monitoring equipment, we offer hands-on pressure washing services for the Austin metro area.
+                  Beyond monitoring equipment, we offer hands-on pressure washing services for the
+                  Austin metro area.
                 </ServicesSubtitle>
                 <ServicesGrid>
                   {localServices.map((service, index) => (
@@ -1781,7 +1856,12 @@ export default function SalesPage() {
                       >
                         <QuestionText>{item.question}</QuestionText>
                         <ExpandIcon $expanded={expandedFAQ === index}>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
                             <path d="M12 5v14M5 12h14" />
                           </svg>
                         </ExpandIcon>
@@ -1832,17 +1912,11 @@ export default function SalesPage() {
                 ))}
               </DetailTabs>
 
-              <DetailContent>
-                {renderTabContent()}
-              </DetailContent>
+              <DetailContent>{renderTabContent()}</DetailContent>
 
               <DetailActions>
-                <ActionButton onClick={exportSpecsPDF}>
-                  Export PDF
-                </ActionButton>
-                <ActionButton onClick={exportBomAsCsv}>
-                  Export BOM
-                </ActionButton>
+                <ActionButton onClick={exportSpecsPDF}>Export PDF</ActionButton>
+                <ActionButton onClick={exportBomAsCsv}>Export BOM</ActionButton>
                 <ActionButton $primary onClick={() => handleAddToQuote(selectedProduct)}>
                   Add to Quote
                 </ActionButton>
@@ -1854,7 +1928,7 @@ export default function SalesPage() {
         {/* Compare Panel */}
         {compareMode && compareProducts.length >= 2 && (
           <ProductComparisonView
-            products={compareProducts.map(id => PRODUCTS[id])}
+            products={compareProducts.map((id) => PRODUCTS[id])}
             onClose={() => setShowComparison(false)}
           />
         )}
@@ -1881,7 +1955,6 @@ export default function SalesPage() {
           isGenerating={isGeneratingPDF}
           error={pdfError}
         />
-
       </PageWrapper>
     </>
   );

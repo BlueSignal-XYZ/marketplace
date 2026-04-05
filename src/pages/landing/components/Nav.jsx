@@ -13,11 +13,15 @@ const NavBar = styled.nav`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
-  background: ${({ $scrolled }) => $scrolled ? 'rgba(8,9,10,0.8)' : 'transparent'};
-  backdrop-filter: ${({ $scrolled }) => $scrolled ? 'blur(40px)' : 'none'};
-  -webkit-backdrop-filter: ${({ $scrolled }) => $scrolled ? 'blur(40px)' : 'none'};
-  border-bottom: 1px solid ${({ $scrolled, theme }) => $scrolled ? theme.colors.w08 : 'transparent'};
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    backdrop-filter 0.3s;
+  background: ${({ $scrolled }) => ($scrolled ? 'rgba(8,9,10,0.8)' : 'transparent')};
+  backdrop-filter: ${({ $scrolled }) => ($scrolled ? 'blur(40px)' : 'none')};
+  -webkit-backdrop-filter: ${({ $scrolled }) => ($scrolled ? 'blur(40px)' : 'none')};
+  border-bottom: 1px solid
+    ${({ $scrolled, theme }) => ($scrolled ? theme.colors.w08 : 'transparent')};
 `;
 
 const NavInner = styled.div`
@@ -89,11 +93,13 @@ const CTAButton = styled.a`
   padding: 8px 20px;
   border-radius: 100px;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 20px rgba(255,255,255,0.15);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
   }
 
   ${({ theme }) => theme.media.md} {
@@ -130,8 +136,9 @@ const HamburgerIcon = styled.div`
     height: 2px;
     background: ${({ theme }) => theme.colors.white};
     border-radius: 1px;
-    transition: transform 0.3s ${({ theme }) => theme.ease},
-                opacity 0.3s ${({ theme }) => theme.ease};
+    transition:
+      transform 0.3s ${({ theme }) => theme.ease},
+      opacity 0.3s ${({ theme }) => theme.ease};
 
     &:nth-child(1) {
       top: 0;
@@ -161,8 +168,9 @@ const MobileOverlay = styled.div`
     -webkit-backdrop-filter: blur(20px);
     opacity: ${({ $open }) => ($open ? 1 : 0)};
     visibility: ${({ $open }) => ($open ? 'visible' : 'hidden')};
-    transition: opacity 0.3s ${({ theme }) => theme.ease},
-                visibility 0.3s ${({ theme }) => theme.ease};
+    transition:
+      opacity 0.3s ${({ theme }) => theme.ease},
+      visibility 0.3s ${({ theme }) => theme.ease};
   }
 `;
 
@@ -182,9 +190,10 @@ const MobileMenu = styled.div`
     opacity: ${({ $open }) => ($open ? 1 : 0)};
     visibility: ${({ $open }) => ($open ? 'visible' : 'hidden')};
     transform: ${({ $open }) => ($open ? 'translateY(0)' : 'translateY(-12px)')};
-    transition: opacity 0.35s ${({ theme }) => theme.ease},
-                visibility 0.35s ${({ theme }) => theme.ease},
-                transform 0.35s ${({ theme }) => theme.ease};
+    transition:
+      opacity 0.35s ${({ theme }) => theme.ease},
+      visibility 0.35s ${({ theme }) => theme.ease},
+      transform 0.35s ${({ theme }) => theme.ease};
   }
 `;
 
@@ -195,12 +204,16 @@ const MobileLink = styled.a`
   color: ${({ theme }) => theme.colors.w70};
   padding: 14px 0;
   text-decoration: none;
-  transition: color 0.2s, opacity 0.3s, transform 0.3s;
+  transition:
+    color 0.2s,
+    opacity 0.3s,
+    transform 0.3s;
   transition-delay: ${({ $index }) => ($index || 0) * 0.05}s;
   opacity: ${({ $open }) => ($open ? 1 : 0)};
   transform: ${({ $open }) => ($open ? 'translateY(0)' : 'translateY(-8px)')};
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     color: ${({ theme }) => theme.colors.white};
   }
 `;
@@ -220,7 +233,9 @@ const MobileCTA = styled.a`
   margin-top: 24px;
   width: 100%;
   max-width: 280px;
-  transition: opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
   transition-delay: ${({ $index }) => ($index || 0) * 0.05}s;
   opacity: ${({ $open }) => ($open ? 1 : 0)};
   transform: ${({ $open }) => ($open ? 'translateY(0)' : 'translateY(-8px)')};
@@ -260,7 +275,9 @@ const Nav = () => {
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
@@ -285,13 +302,22 @@ const Nav = () => {
             <NavLink href="#architecture">Architecture</NavLink>
             <NavLink href="#specs">Specs</NavLink>
             <NavLink href="/download">Downloads</NavLink>
-            <NavLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA('external_cloud', 'Nav')}>Cloud</NavLink>
+            <NavLink
+              href="https://cloud.bluesignal.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackCTA('external_cloud', 'Nav')}
+            >
+              Cloud
+            </NavLink>
           </NavLinks>
 
-          <CTAButton href="#order" onClick={() => trackCTA('order_devkit_hero', 'Nav CTA')}>Order Dev Kit</CTAButton>
+          <CTAButton href="#order" onClick={() => trackCTA('order_devkit_hero', 'Nav CTA')}>
+            Order Dev Kit
+          </CTAButton>
 
           <HamburgerBtn
-            onClick={() => setMenuOpen(prev => !prev)}
+            onClick={() => setMenuOpen((prev) => !prev)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
           >
@@ -318,7 +344,9 @@ const Nav = () => {
             href={link.href}
             $index={i}
             $open={menuOpen}
-            onClick={() => handleLinkClick(link.external ? `external_${link.label.toLowerCase()}` : undefined)}
+            onClick={() =>
+              handleLinkClick(link.external ? `external_${link.label.toLowerCase()}` : undefined)
+            }
             {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           >
             {link.label}

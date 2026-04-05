@@ -2,15 +2,19 @@
 /**
  * Purchase Flow Component - Modal/page for buying credits
  */
-import { useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../context/AppContext";
-import { CreditsMarketplaceAPI } from "../../../scripts/back_door";
-import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
-import { Input } from "../../shared/input/Input";
-import { creditTypeColors } from "../../../styles/colors";
-import { connectAndSign, hasWalletProvider, getConnectedAddress } from "../../../shared/utils/wallet";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../../context/AppContext';
+import { CreditsMarketplaceAPI } from '../../../scripts/back_door';
+import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
+import { Input } from '../../shared/input/Input';
+import { creditTypeColors } from '../../../styles/colors';
+import {
+  connectAndSign,
+  hasWalletProvider,
+  getConnectedAddress,
+} from '../../../shared/utils/wallet';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -42,7 +46,7 @@ const Modal = styled.div`
 
 const ModalHeader = styled.div`
   padding: 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,7 +55,7 @@ const ModalHeader = styled.div`
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 `;
 
@@ -60,8 +64,8 @@ const CloseButton = styled.button`
   height: 32px;
   border-radius: 50%;
   border: none;
-  background: ${({ theme }) => theme.colors?.ui100 || "#f4f4f5"};
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  background: ${({ theme }) => theme.colors?.ui100 || '#f4f4f5'};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   font-size: 18px;
   cursor: pointer;
   display: flex;
@@ -69,7 +73,7 @@ const CloseButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui200 || "#e4e4e7"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#e4e4e7'};
   }
 `;
 
@@ -79,14 +83,14 @@ const ModalBody = styled.div`
 
 const ModalFooter = styled.div`
   padding: 16px 24px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 `;
 
 const ListingInfo = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 24px;
@@ -95,13 +99,13 @@ const ListingInfo = styled.div`
 const ListingTitle = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   margin-bottom: 8px;
 `;
 
 const ListingMeta = styled.div`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
@@ -116,12 +120,12 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const HelpText = styled.div`
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#71717a"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#71717a'};
   margin-top: 6px;
 `;
 
@@ -135,7 +139,7 @@ const QuantityButton = styled.button`
   width: 44px;
   height: 44px;
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   background: #ffffff;
   font-size: 20px;
   font-weight: 600;
@@ -145,7 +149,7 @@ const QuantityButton = styled.button`
   justify-content: center;
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui100 || "#f4f4f5"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#f4f4f5'};
   }
 
   &:disabled {
@@ -162,8 +166,8 @@ const QuantityInput = styled(Input)`
 `;
 
 const PriceSummary = styled.div`
-  background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
-  border: 1px solid ${({ theme }) => theme.colors?.primary200 || "#bae6fd"};
+  background: ${({ theme }) => theme.colors?.primary50 || '#e0f2ff'};
+  border: 1px solid ${({ theme }) => theme.colors?.primary200 || '#bae6fd'};
   border-radius: 12px;
   padding: 16px;
   margin-top: 24px;
@@ -174,15 +178,15 @@ const PriceRow = styled.div`
   justify-content: space-between;
   padding: 8px 0;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 
   &:last-child {
-    border-top: 1px solid ${({ theme }) => theme.colors?.primary200 || "#bae6fd"};
+    border-top: 1px solid ${({ theme }) => theme.colors?.primary200 || '#bae6fd'};
     margin-top: 8px;
     padding-top: 16px;
     font-size: 18px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 `;
 
@@ -204,28 +208,28 @@ const Step = styled.div`
   font-weight: 600;
   background: ${({ $active, $completed, theme }) =>
     $completed
-      ? theme.colors?.primary500 || "#0284c7"
+      ? theme.colors?.primary500 || '#0284c7'
       : $active
-      ? theme.colors?.primary100 || "#e0f2ff"
-      : theme.colors?.ui100 || "#f4f4f5"};
+        ? theme.colors?.primary100 || '#e0f2ff'
+        : theme.colors?.ui100 || '#f4f4f5'};
   color: ${({ $active, $completed, theme }) =>
     $completed
-      ? "#ffffff"
+      ? '#ffffff'
       : $active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui500 || "#71717a"};
+        ? theme.colors?.primary700 || '#0369a1'
+        : theme.colors?.ui500 || '#71717a'};
   border: 2px solid
     ${({ $active, $completed, theme }) =>
       $active || $completed
-        ? theme.colors?.primary500 || "#0284c7"
-        : theme.colors?.ui200 || "#e4e4e7"};
+        ? theme.colors?.primary500 || '#0284c7'
+        : theme.colors?.ui200 || '#e4e4e7'};
 `;
 
 const StepConnector = styled.div`
   width: 40px;
   height: 2px;
   background: ${({ $completed, theme }) =>
-    $completed ? theme.colors?.primary500 || "#0284c7" : theme.colors?.ui200 || "#e4e4e7"};
+    $completed ? theme.colors?.primary500 || '#0284c7' : theme.colors?.ui200 || '#e4e4e7'};
   align-self: center;
 `;
 
@@ -250,18 +254,18 @@ const SuccessIcon = styled.div`
 const SuccessTitle = styled.div`
   font-size: 20px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   margin-bottom: 8px;
 `;
 
 const SuccessMessage = styled.div`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   margin-bottom: 24px;
 `;
 
 const OrderDetails = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   border-radius: 8px;
   padding: 16px;
   text-align: left;
@@ -269,9 +273,9 @@ const OrderDetails = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.red50 || "#fef2f2"};
-  border: 1px solid ${({ theme }) => theme.colors?.red200 || "#fecaca"};
-  color: ${({ theme }) => theme.colors?.red700 || "#b91c1c"};
+  background: ${({ theme }) => theme.colors?.red50 || '#fef2f2'};
+  border: 1px solid ${({ theme }) => theme.colors?.red200 || '#fecaca'};
+  color: ${({ theme }) => theme.colors?.red700 || '#b91c1c'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -281,24 +285,24 @@ const ErrorMessage = styled.div`
 const PaymentMethodCard = styled.div`
   border: 2px solid
     ${({ $selected, theme }) =>
-      $selected ? theme.colors?.primary500 || "#0284c7" : theme.colors?.ui200 || "#e5e7eb"};
+      $selected ? theme.colors?.primary500 || '#0284c7' : theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 12px;
   cursor: pointer;
   transition: all 0.15s ease-out;
   background: ${({ $selected, theme }) =>
-    $selected ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $selected ? theme.colors?.primary50 || '#e0f2ff' : '#ffffff'};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#22d3ee'};
   }
 `;
 
 const PaymentMethodTitle = styled.div`
   font-size: 15px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   display: flex;
   align-items: center;
   gap: 8px;
@@ -306,7 +310,7 @@ const PaymentMethodTitle = styled.div`
 
 const PaymentMethodDesc = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   margin-top: 4px;
 `;
 
@@ -317,9 +321,9 @@ const CreditTypeBadge = styled.span`
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 999px;
-  background: ${({ $creditType }) => creditTypeColors[$creditType]?.bg || "#f3f4f6"};
-  color: ${({ $creditType }) => creditTypeColors[$creditType]?.text || "#374151"};
-  border: 1px solid ${({ $creditType }) => creditTypeColors[$creditType]?.border || "#d1d5db"};
+  background: ${({ $creditType }) => creditTypeColors[$creditType]?.bg || '#f3f4f6'};
+  color: ${({ $creditType }) => creditTypeColors[$creditType]?.text || '#374151'};
+  border: 1px solid ${({ $creditType }) => creditTypeColors[$creditType]?.border || '#d1d5db'};
 `;
 
 /* -------------------------------------------------------------------------- */
@@ -336,7 +340,7 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
   const [error, setError] = useState(null);
 
   const [quantity, setQuantity] = useState(listing?.minimumPurchase || 1);
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [paymentMethod, setPaymentMethod] = useState('card');
   const [orderResult, setOrderResult] = useState(null);
   const [walletAddress, setWalletAddress] = useState(null);
   const [walletConnecting, setWalletConnecting] = useState(false);
@@ -348,8 +352,7 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
     });
   }, []);
 
-  const truncateAddress = (addr) =>
-    addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
+  const truncateAddress = (addr) => (addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : '');
 
   const pricePerUnit = listing?.pricePerUnit || 0;
   const subtotal = quantity * pricePerUnit;
@@ -362,9 +365,9 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
   };
 
   const handleNext = async () => {
-    if (step === 2 && paymentMethod === "crypto") {
+    if (step === 2 && paymentMethod === 'crypto') {
       if (!hasWalletProvider()) {
-        setError("MetaMask is not installed. Please install MetaMask to pay with cryptocurrency.");
+        setError('MetaMask is not installed. Please install MetaMask to pay with cryptocurrency.');
         return;
       }
       if (!walletAddress) {
@@ -374,7 +377,7 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
           const { address } = await connectAndSign();
           setWalletAddress(address);
         } catch (err) {
-          setError(err.message || "Failed to connect wallet. Please try again.");
+          setError(err.message || 'Failed to connect wallet. Please try again.');
           setWalletConnecting(false);
           return;
         }
@@ -402,17 +405,17 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
         buyerId: user?.uid,
         quantity,
         paymentMethod,
-        ...(paymentMethod === "crypto" && walletAddress ? { walletAddress } : {}),
+        ...(paymentMethod === 'crypto' && walletAddress ? { walletAddress } : {}),
       });
 
       setOrderResult(result);
       setStep(4);
 
-      ACTIONS?.logNotification?.("success", "Purchase completed successfully!");
+      ACTIONS?.logNotification?.('success', 'Purchase completed successfully!');
       onSuccess?.(result);
     } catch (err) {
-      console.error("Purchase error:", err);
-      setError(err.message || "Failed to complete purchase. Please try again.");
+      console.error('Purchase error:', err);
+      setError(err.message || 'Failed to complete purchase. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -420,28 +423,26 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
 
   const handleViewOrder = () => {
     onClose?.();
-    navigate("/dashboard/buyer");
+    navigate('/dashboard/buyer');
   };
 
   return (
     <Overlay onClick={(e) => e.target === e.currentTarget && step !== 4 && onClose?.()}>
       <Modal>
         <ModalHeader>
-          <h2>{step === 4 ? "Purchase Complete" : "Purchase Credits"}</h2>
-          {step !== 4 && (
-            <CloseButton onClick={onClose}>X</CloseButton>
-          )}
+          <h2>{step === 4 ? 'Purchase Complete' : 'Purchase Credits'}</h2>
+          {step !== 4 && <CloseButton onClick={onClose}>X</CloseButton>}
         </ModalHeader>
 
         <ModalBody>
           {step !== 4 && (
             <StepIndicator>
               <Step $active={step === 1} $completed={step > 1}>
-                {step > 1 ? "done" : "1"}
+                {step > 1 ? 'done' : '1'}
               </Step>
               <StepConnector $completed={step > 1} />
               <Step $active={step === 2} $completed={step > 2}>
-                {step > 2 ? "done" : "2"}
+                {step > 2 ? 'done' : '2'}
               </Step>
               <StepConnector $completed={step > 2} />
               <Step $active={step === 3} $completed={step > 3}>
@@ -456,15 +457,15 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
           {step === 1 && (
             <>
               <ListingInfo>
-                <ListingTitle>{listing?.title || "Credit Listing"}</ListingTitle>
+                <ListingTitle>{listing?.title || 'Credit Listing'}</ListingTitle>
                 <ListingMeta>
                   <CreditTypeBadge $creditType={listing?.creditType}>
                     {listing?.creditType
                       ? listing.creditType.charAt(0).toUpperCase() + listing.creditType.slice(1)
-                      : "Credits"}
+                      : 'Credits'}
                   </CreditTypeBadge>
                   <span>
-                    ${pricePerUnit.toFixed(2)}/{listing?.unit || "kg"}
+                    ${pricePerUnit.toFixed(2)}/{listing?.unit || 'kg'}
                   </span>
                   <span>{listing?.quantity || 0} available</span>
                 </ListingMeta>
@@ -496,8 +497,7 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
                   </QuantityButton>
                 </QuantitySelector>
                 <HelpText>
-                  Min: {listing?.minimumPurchase || 1} | Max: {listing?.quantity}{" "}
-                  {listing?.unit}
+                  Min: {listing?.minimumPurchase || 1} | Max: {listing?.quantity} {listing?.unit}
                 </HelpText>
               </FormGroup>
 
@@ -527,40 +527,34 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
                 <Label>Select Payment Method</Label>
 
                 <PaymentMethodCard
-                  $selected={paymentMethod === "card"}
-                  onClick={() => setPaymentMethod("card")}
+                  $selected={paymentMethod === 'card'}
+                  onClick={() => setPaymentMethod('card')}
                 >
-                  <PaymentMethodTitle>
-                    Credit/Debit Card
-                  </PaymentMethodTitle>
+                  <PaymentMethodTitle>Credit/Debit Card</PaymentMethodTitle>
                   <PaymentMethodDesc>
                     Pay securely with Visa, Mastercard, or American Express
                   </PaymentMethodDesc>
                 </PaymentMethodCard>
 
                 <PaymentMethodCard
-                  $selected={paymentMethod === "ach"}
-                  onClick={() => setPaymentMethod("ach")}
+                  $selected={paymentMethod === 'ach'}
+                  onClick={() => setPaymentMethod('ach')}
                 >
-                  <PaymentMethodTitle>
-                    Bank Transfer (ACH)
-                  </PaymentMethodTitle>
+                  <PaymentMethodTitle>Bank Transfer (ACH)</PaymentMethodTitle>
                   <PaymentMethodDesc>
                     Direct bank transfer - may take 3-5 business days
                   </PaymentMethodDesc>
                 </PaymentMethodCard>
 
                 <PaymentMethodCard
-                  $selected={paymentMethod === "crypto"}
-                  onClick={() => setPaymentMethod("crypto")}
+                  $selected={paymentMethod === 'crypto'}
+                  onClick={() => setPaymentMethod('crypto')}
                 >
-                  <PaymentMethodTitle>
-                    Cryptocurrency
-                  </PaymentMethodTitle>
+                  <PaymentMethodTitle>Cryptocurrency</PaymentMethodTitle>
                   <PaymentMethodDesc>
                     {walletAddress
                       ? `Wallet connected: ${truncateAddress(walletAddress)}`
-                      : "Connect wallet to pay with USDC or other supported tokens"}
+                      : 'Connect wallet to pay with USDC or other supported tokens'}
                   </PaymentMethodDesc>
                 </PaymentMethodCard>
               </FormGroup>
@@ -590,31 +584,31 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
               </ListingInfo>
 
               <div style={{ marginBottom: 16 }}>
-                <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
+                <PriceRow style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 12 }}>
                   <span>Credits</span>
-                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     {quantity} {listing?.unit}
                     <CreditTypeBadge $creditType={listing?.creditType}>
                       {listing?.creditType
                         ? listing.creditType.charAt(0).toUpperCase() + listing.creditType.slice(1)
-                        : "Credits"}
+                        : 'Credits'}
                     </CreditTypeBadge>
                   </span>
                 </PriceRow>
-                <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
+                <PriceRow style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 12 }}>
                   <span>Seller</span>
-                  <span>{listing?.sellerName || "Verified Seller"}</span>
+                  <span>{listing?.sellerName || 'Verified Seller'}</span>
                 </PriceRow>
-                <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
+                <PriceRow style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 12 }}>
                   <span>Payment Method</span>
-                  <span style={{ textTransform: "capitalize" }}>
-                    {paymentMethod === "ach" ? "Bank Transfer" : paymentMethod}
+                  <span style={{ textTransform: 'capitalize' }}>
+                    {paymentMethod === 'ach' ? 'Bank Transfer' : paymentMethod}
                   </span>
                 </PriceRow>
-                {paymentMethod === "crypto" && walletAddress && (
-                  <PriceRow style={{ borderBottom: "1px solid #e5e7eb", paddingBottom: 12 }}>
+                {paymentMethod === 'crypto' && walletAddress && (
+                  <PriceRow style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: 12 }}>
                     <span>Wallet</span>
-                    <span style={{ fontFamily: "monospace", fontSize: 13 }}>
+                    <span style={{ fontFamily: 'monospace', fontSize: 13 }}>
                       {truncateAddress(walletAddress)}
                     </span>
                   </PriceRow>
@@ -636,9 +630,9 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
                 </PriceRow>
               </PriceSummary>
 
-              <div style={{ marginTop: 16, fontSize: 13, color: "#6b7280", textAlign: "center" }}>
-                By confirming, you agree to our Terms of Service and acknowledge
-                that credits are non-refundable once transferred.
+              <div style={{ marginTop: 16, fontSize: 13, color: '#6b7280', textAlign: 'center' }}>
+                By confirming, you agree to our Terms of Service and acknowledge that credits are
+                non-refundable once transferred.
               </div>
             </>
           )}
@@ -648,14 +642,12 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
             <SuccessContent>
               <SuccessIcon>check</SuccessIcon>
               <SuccessTitle>Purchase Complete!</SuccessTitle>
-              <SuccessMessage>
-                Your credits have been added to your account.
-              </SuccessMessage>
+              <SuccessMessage>Your credits have been added to your account.</SuccessMessage>
 
               <OrderDetails>
                 <PriceRow>
                   <span>Order ID</span>
-                  <span>{orderResult?.orderId || "ORD-" + Date.now()}</span>
+                  <span>{orderResult?.orderId || 'ORD-' + Date.now()}</span>
                 </PriceRow>
                 <PriceRow>
                   <span>Credits Purchased</span>
@@ -685,10 +677,10 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
               <ButtonSecondary onClick={handleBack}>Back</ButtonSecondary>
               <ButtonPrimary onClick={handleNext} disabled={walletConnecting}>
                 {walletConnecting
-                  ? "Connecting Wallet..."
-                  : paymentMethod === "crypto" && !walletAddress
-                  ? "Connect Wallet & Review"
-                  : "Review Order"}
+                  ? 'Connecting Wallet...'
+                  : paymentMethod === 'crypto' && !walletAddress
+                    ? 'Connect Wallet & Review'
+                    : 'Review Order'}
               </ButtonPrimary>
             </>
           )}
@@ -697,7 +689,7 @@ export default function PurchaseFlow({ listing, onClose, onSuccess }) {
             <>
               <ButtonSecondary onClick={handleBack}>Back</ButtonSecondary>
               <ButtonPrimary onClick={handleConfirmPurchase} disabled={loading}>
-                {loading ? "Processing..." : `Pay $${total.toFixed(2)}`}
+                {loading ? 'Processing...' : `Pay $${total.toFixed(2)}`}
               </ButtonPrimary>
             </>
           )}

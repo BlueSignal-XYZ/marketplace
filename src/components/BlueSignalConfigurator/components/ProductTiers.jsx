@@ -1,6 +1,6 @@
 // ProductTiers - DIY, Electronics Only, Turnkey System options
-import styled, { keyframes } from "styled-components";
-import { salesTheme } from "../styles/theme";
+import styled, { keyframes } from 'styled-components';
+import { salesTheme } from '../styles/theme';
 
 const fadeInUp = keyframes`
   from {
@@ -116,16 +116,16 @@ const TierCard = styled.div`
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  animation: ${fadeInUp} 0.6s ease-out ${props => props.$delay || '0s'} both;
+  animation: ${fadeInUp} 0.6s ease-out ${(props) => props.$delay || '0s'} both;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 3px;
-    background: ${props => props.$accentColor || 'linear-gradient(90deg, #10b981, #22d3ee)'};
+    background: ${(props) => props.$accentColor || 'linear-gradient(90deg, #10b981, #22d3ee)'};
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -150,7 +150,7 @@ const TierIconWrapper = styled.div`
   width: 64px;
   height: 64px;
   border-radius: 18px;
-  background: ${props => props.$color || 'rgba(16, 185, 129, 0.12)'};
+  background: ${(props) => props.$color || 'rgba(16, 185, 129, 0.12)'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,7 +164,7 @@ const TierIconWrapper = styled.div`
   svg {
     width: 32px;
     height: 32px;
-    color: ${props => props.$iconColor || salesTheme.colors.accentPrimary};
+    color: ${(props) => props.$iconColor || salesTheme.colors.accentPrimary};
   }
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
@@ -334,7 +334,8 @@ const tiers = [
     color: 'rgba(16, 185, 129, 0.12)',
     accentColor: 'linear-gradient(90deg, #10b981, #059669)',
     title: 'Full DIY Kit',
-    description: 'Source your own components using our complete bill of materials and detailed wiring diagrams.',
+    description:
+      'Source your own components using our complete bill of materials and detailed wiring diagrams.',
     features: [
       'Complete BOM with vendor links',
       'Professional wiring diagrams',
@@ -346,23 +347,24 @@ const tiers = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
-        <rect x="9" y="9" width="6" height="6"/>
-        <line x1="9" y1="1" x2="9" y2="4"/>
-        <line x1="15" y1="1" x2="15" y2="4"/>
-        <line x1="9" y1="20" x2="9" y2="23"/>
-        <line x1="15" y1="20" x2="15" y2="23"/>
-        <line x1="20" y1="9" x2="23" y2="9"/>
-        <line x1="20" y1="14" x2="23" y2="14"/>
-        <line x1="1" y1="9" x2="4" y2="9"/>
-        <line x1="1" y1="14" x2="4" y2="14"/>
+        <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+        <rect x="9" y="9" width="6" height="6" />
+        <line x1="9" y1="1" x2="9" y2="4" />
+        <line x1="15" y1="1" x2="15" y2="4" />
+        <line x1="9" y1="20" x2="9" y2="23" />
+        <line x1="15" y1="20" x2="15" y2="23" />
+        <line x1="20" y1="9" x2="23" y2="9" />
+        <line x1="20" y1="14" x2="23" y2="14" />
+        <line x1="1" y1="9" x2="4" y2="9" />
+        <line x1="1" y1="14" x2="4" y2="14" />
       </svg>
     ),
     iconColor: '#22d3ee',
     color: 'rgba(34, 211, 238, 0.12)',
     accentColor: 'linear-gradient(90deg, #22d3ee, #06b6d4)',
     title: 'Electronics Only',
-    description: 'Pre-assembled PCB with calibrated sensors. Build your own enclosure and power system.',
+    description:
+      'Pre-assembled PCB with calibrated sensors. Build your own enclosure and power system.',
     features: [
       'Pre-flashed microcontroller',
       'Factory calibrated sensors',
@@ -374,16 +376,17 @@ const tiers = [
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-        <line x1="12" y1="22.08" x2="12" y2="12"/>
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+        <line x1="12" y1="22.08" x2="12" y2="12" />
       </svg>
     ),
     iconColor: '#f59e0b',
     color: 'rgba(251, 191, 36, 0.12)',
     accentColor: 'linear-gradient(90deg, #f59e0b, #d97706)',
     title: 'Turnkey System',
-    description: 'Fully assembled and tested. Just mount it, connect power, and start monitoring immediately.',
+    description:
+      'Fully assembled and tested. Just mount it, connect power, and start monitoring immediately.',
     features: [
       'Factory calibrated & tested',
       'Weatherproof IP67 enclosure',
@@ -418,11 +421,11 @@ const resources = [
     href: '#install',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10 9 9 9 8 9"/>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
       </svg>
     ),
   },
@@ -431,7 +434,7 @@ const resources = [
     href: 'https://github.com/BlueSignal-XYZ',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
       </svg>
     ),
     external: true,
@@ -465,8 +468,8 @@ export default function ProductTiers({ onNavigate }) {
             Build It <span>Yourself</span>
           </SectionTitle>
           <SectionDescription>
-            Whether you're a DIY enthusiast or need a ready-to-deploy solution,
-            we have options that fit your needs and technical expertise.
+            Whether you&apos;re a DIY enthusiast or need a ready-to-deploy solution, we have options
+            that fit your needs and technical expertise.
           </SectionDescription>
         </SectionHeader>
 
@@ -488,7 +491,7 @@ export default function ProductTiers({ onNavigate }) {
                   <TierFeature key={i}>
                     <FeatureCheck>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                        <polyline points="20 6 9 17 4 12"/>
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </FeatureCheck>
                     {feature}

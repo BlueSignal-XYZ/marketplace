@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { motion } from "framer-motion";
-import configs from "../../../configs";
-import {useAppContext} from "../../context/AppContext";
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import configs from '../../../configs';
+import { useAppContext } from '../../context/AppContext';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -14,9 +14,11 @@ const Overlay = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
-  opacity: ${(props) => (props.isVisible ? "1" : "0")};
-  transition: visibility 0.3s, opacity 0.3s;
+  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.isVisible ? '1' : '0')};
+  transition:
+    visibility 0.3s,
+    opacity 0.3s;
   z-index: 10000;
 `;
 
@@ -76,18 +78,14 @@ const ResultPopup = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
     >
-      <PopupContainer
-        initial={{ scale: 0.7 }}
-        animate={{ scale: isVisible ? 1 : 0.7 }}
-      >
+      <PopupContainer initial={{ scale: 0.7 }} animate={{ scale: isVisible ? 1 : 0.7 }}>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{title}</Title>
         <Message>{message}</Message>
         {txHash ? (
           <CTAButton
             href={`${
-              configs.blockchain.NETWORKS[configs.blockchain.MODE + "net"]
-                .explorer
+              configs.blockchain.NETWORKS[configs.blockchain.MODE + 'net'].explorer
             }/tx/${txHash}`}
             target="_blank"
             rel="noopener noreferrer"

@@ -7,7 +7,8 @@ import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
+const GOOGLE_SHEETS_URL =
+  'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
 
 const pulse = keyframes`
@@ -18,7 +19,7 @@ const pulse = keyframes`
 const Section = styled.section`
   position: relative;
   padding: 48px clamp(16px, 5vw, 48px);
-  background: #0B1120;
+  background: #0b1120;
   overflow: hidden;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
@@ -59,7 +60,7 @@ const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 16px;
   letter-spacing: -0.03em;
   text-wrap: balance;
@@ -84,7 +85,7 @@ const CTAButton = styled.a`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   background: ${({ theme }) => theme.colors.primary};
   border-radius: 10px;
   text-decoration: none;
@@ -97,7 +98,9 @@ const CTAButton = styled.a`
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
   }
-  &:active { transform: translateY(0); }
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 /* ── Form ──────────────────────────────────────────────── */
@@ -127,22 +130,26 @@ const Label = styled.label`
 const Input = styled.input`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid ${({ $hasError }) => $hasError ? '#EF4444' : 'rgba(255, 255, 255, 0.12)'};
+  border: 1px solid ${({ $hasError }) => ($hasError ? '#EF4444' : 'rgba(255, 255, 255, 0.12)')};
   border-radius: 10px;
   padding: 12px 16px;
   outline: none;
   transition: border-color 200ms;
 
-  &::placeholder { color: rgba(255, 255, 255, 0.25); }
-  &:focus { border-color: ${({ $hasError }) => $hasError ? '#EF4444' : '#3B82F6'}; }
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+  &:focus {
+    border-color: ${({ $hasError }) => ($hasError ? '#EF4444' : '#3B82F6')};
+  }
 `;
 
 const Select = styled.select`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
@@ -152,18 +159,20 @@ const Select = styled.select`
   cursor: pointer;
   transition: border-color 200ms;
 
-  &:focus { border-color: ${({ theme }) => theme.colors.primary}; }
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 
   option {
     background: #1a1f2e;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 `;
 
 const TextArea = styled.textarea`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
@@ -173,15 +182,19 @@ const TextArea = styled.textarea`
   resize: vertical;
   transition: border-color 200ms;
 
-  &::placeholder { color: rgba(255, 255, 255, 0.25); }
-  &:focus { border-color: ${({ theme }) => theme.colors.primary}; }
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const SubmitBtn = styled.button`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   background: ${({ theme }) => theme.colors.primary};
   border: none;
   border-radius: 10px;
@@ -207,9 +220,11 @@ const StatusMessage = styled.div`
   padding: 14px 16px;
   border-radius: 10px;
   text-align: center;
-  background: ${({ $type }) => $type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
-  border: 1px solid ${({ $type }) => $type === 'success' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
-  color: ${({ $type }) => $type === 'success' ? '#10B981' : '#EF4444'};
+  background: ${({ $type }) =>
+    $type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
+  border: 1px solid
+    ${({ $type }) => ($type === 'success' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)')};
+  color: ${({ $type }) => ($type === 'success' ? '#10B981' : '#EF4444')};
 `;
 
 const SecondaryLink = styled.a`
@@ -223,13 +238,15 @@ const SecondaryLink = styled.a`
   text-decoration: none;
   transition: color 200ms;
 
-  &:hover { color: rgba(255, 255, 255, 0.7); }
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
 `;
 
 const ErrorText = styled.span`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 12px;
-  color: #EF4444;
+  color: #ef4444;
 `;
 
 const INQUIRY_OPTIONS = [
@@ -303,8 +320,8 @@ export function CTASection({ audience: _audience, content }) {
   };
 
   const handleChange = (field) => (e) => {
-    setForm(prev => ({ ...prev, [field]: e.target.value }));
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   return (
@@ -312,20 +329,20 @@ export function CTASection({ audience: _audience, content }) {
       <BlueGlow />
       <Inner>
         <RevealOnScroll>
-          <SectionTitle>{content?.headline || 'Start Earning From Your Water Generator'}</SectionTitle>
+          <SectionTitle>
+            {content?.headline || 'Start Earning From Your Water Generator'}
+          </SectionTitle>
           <SectionSub>
-            Tell us about your home, facility, or utility. We&rsquo;ll show you how to
-            get started with an AWG and start earning water credits.
+            Tell us about your home, facility, or utility. We&rsquo;ll show you how to get started
+            with an AWG and start earning water credits.
           </SectionSub>
-          {content?.href && (
-            <CTAButton href={content.href}>{content.label}</CTAButton>
-          )}
+          {content?.href && <CTAButton href={content.href}>{content.label}</CTAButton>}
         </RevealOnScroll>
 
         <RevealOnScroll delay={0.15}>
           {status === 'success' ? (
             <StatusMessage $type="success">
-              Thanks! We'll be in touch within 24 hours.
+              Thanks! We&apos;ll be in touch within 24 hours.
             </StatusMessage>
           ) : (
             <Form onSubmit={handleSubmit} noValidate>
@@ -368,13 +385,11 @@ export function CTASection({ audience: _audience, content }) {
 
               <FieldGroup>
                 <Label htmlFor="wqt-inquiry">Inquiry Type</Label>
-                <Select
-                  id="wqt-inquiry"
-                  value={form.inquiry}
-                  onChange={handleChange('inquiry')}
-                >
-                  {INQUIRY_OPTIONS.map(opt => (
-                    <option key={opt} value={opt}>{opt}</option>
+                <Select id="wqt-inquiry" value={form.inquiry} onChange={handleChange('inquiry')}>
+                  {INQUIRY_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
                   ))}
                 </Select>
               </FieldGroup>
@@ -397,7 +412,10 @@ export function CTASection({ audience: _audience, content }) {
               {status === 'error' && (
                 <StatusMessage $type="error">
                   Something went wrong. Please try again or email us at{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#EF4444', textDecoration: 'underline' }}>
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    style={{ color: '#EF4444', textDecoration: 'underline' }}
+                  >
                     {CONTACT_EMAIL}
                   </a>
                 </StatusMessage>

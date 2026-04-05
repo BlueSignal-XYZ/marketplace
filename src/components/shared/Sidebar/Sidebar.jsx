@@ -1,16 +1,16 @@
-import styled from "styled-components";
-import LogoWhite from "../../../assets/logo.png";
-import SidebarPhone from "./SidebarPhone";
-import SidebarContent from "./SidebarContent";
-import {useAppContext} from "../../../context/AppContext";
+import styled from 'styled-components';
+import LogoWhite from '../../../assets/logo.png';
+import SidebarPhone from './SidebarPhone';
+import SidebarContent from './SidebarContent';
+import { useAppContext } from '../../../context/AppContext';
 
 const Sidebar = () => {
   const { STATES } = useAppContext();
   const { user } = STATES || {};
-  const path = window.location.pathname.replace(/^\//, "");
-  const isMarketplace = path.startsWith("marketplace");
+  const path = window.location.pathname.replace(/^\//, '');
+  const isMarketplace = path.startsWith('marketplace');
 
-  if(!user){
+  if (!user) {
     return;
   }
 

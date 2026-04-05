@@ -63,7 +63,7 @@ const CustomerInfoForm = ({ onNextClick }) => {
       // Refresh the component after sign-in to update form fields
       setIsSignedIn(true);
     } catch (error) {
-      console.error("Error during Google sign-in:", error);
+      console.error('Error during Google sign-in:', error);
       setErrors({ ...errors, signIn: 'Google sign-in failed. Please try again.' });
     }
   };
@@ -83,7 +83,7 @@ const CustomerInfoForm = ({ onNextClick }) => {
         // Proceed to the next form (checkout form)
         onNextClick(customerInfo);
       } catch (error) {
-        console.error("Error during form submission:", error);
+        console.error('Error during form submission:', error);
         setErrors({ ...errors, form: 'Submission failed. Please try again.' });
       } finally {
         setLoading(false);
@@ -105,9 +105,9 @@ const CustomerInfoForm = ({ onNextClick }) => {
           <p>or</p>
         </>
       ) : (
-        <p className='form-title'>Please confirm your details.</p>
+        <p className="form-title">Please confirm your details.</p>
       )}
-        <FormSection  label={"First Name"} error={errors.firstName}>
+      <FormSection label={'First Name'} error={errors.firstName}>
         <Input
           type="text"
           id="firstName"
@@ -116,13 +116,10 @@ const CustomerInfoForm = ({ onNextClick }) => {
           onChange={handleChange}
           className={errors.firstName ? 'error' : ''}
           required
-          />
-          </FormSection>
+        />
+      </FormSection>
 
-      <FormSection
-        error={errors.lastName}
-        label={"Last Name"}
-      >
+      <FormSection error={errors.lastName} label={'Last Name'}>
         <Input
           type="text"
           id="lastName"
@@ -132,7 +129,7 @@ const CustomerInfoForm = ({ onNextClick }) => {
           className={errors.lastName ? 'error' : ''}
         />
       </FormSection>
-      <FormSection label={"Email"} error={errors.email}>
+      <FormSection label={'Email'} error={errors.email}>
         <Input
           type="email"
           id="email"
@@ -143,17 +140,15 @@ const CustomerInfoForm = ({ onNextClick }) => {
           required
         />
       </FormSection>
-      <div className=''>
-        <label className='checkbox-section' htmlFor="isBusiness">
+      <div className="">
+        <label className="checkbox-section" htmlFor="isBusiness">
           <input
             type="checkbox"
             id="isBusiness"
             name="isBusiness"
-            className='checkbox'
+            className="checkbox"
             checked={customerInfo.isBusiness}
-            onChange={(e) =>
-              setCustomerInfo({ ...customerInfo, isBusiness: e.target.checked })
-            }
+            onChange={(e) => setCustomerInfo({ ...customerInfo, isBusiness: e.target.checked })}
           />
           Is this for a business?
         </label>
@@ -175,18 +170,18 @@ const FormContainer = styled.form`
   gap: 15px;
   margin-top: 40px;
 
-  .checkbox-section { 
+  .checkbox-section {
     display: flex;
     align-items: center;
-    gap:8px;
-    font-weight: 500; 
+    gap: 8px;
+    font-weight: 500;
     font-size: 14px;
     .checkbox {
       height: 20px;
       width: 20px;
       margin-bottom: 0px;
-      border: 1px solid ${({theme}) => theme.colors.ui200};
-      accent-color: ${({theme}) => theme.colors.primary500};
+      border: 1px solid ${({ theme }) => theme.colors.ui200};
+      accent-color: ${({ theme }) => theme.colors.primary500};
     }
   }
 
@@ -197,14 +192,13 @@ const FormContainer = styled.form`
   }
 `;
 
-
 const ErrorMessage = styled.div`
   color: red;
   font-size: 12px;
 `;
 
 const SignInButton = styled.button`
-  background-color: #4285F4;
+  background-color: #4285f4;
   color: white;
   border: none;
   padding: 10px 15px;

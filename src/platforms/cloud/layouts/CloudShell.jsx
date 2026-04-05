@@ -80,24 +80,37 @@ export function CloudShell({ user, isAuthLanding, children }) {
           overflow: 'hidden',
           zIndex: 9999,
         }}
-        onFocus={(e) => { e.target.style.position = 'fixed'; e.target.style.left = '16px'; e.target.style.top = '16px'; e.target.style.width = 'auto'; e.target.style.height = 'auto'; e.target.style.overflow = 'visible'; e.target.style.background = '#0066FF'; e.target.style.color = '#fff'; e.target.style.padding = '8px 16px'; e.target.style.borderRadius = '4px'; e.target.style.textDecoration = 'none'; e.target.style.fontWeight = '600'; e.target.style.fontSize = '14px'; }}
-        onBlur={(e) => { e.target.style.position = 'absolute'; e.target.style.left = '-9999px'; e.target.style.width = '1px'; e.target.style.height = '1px'; e.target.style.overflow = 'hidden'; }}
+        onFocus={(e) => {
+          e.target.style.position = 'fixed';
+          e.target.style.left = '16px';
+          e.target.style.top = '16px';
+          e.target.style.width = 'auto';
+          e.target.style.height = 'auto';
+          e.target.style.overflow = 'visible';
+          e.target.style.background = '#0066FF';
+          e.target.style.color = '#fff';
+          e.target.style.padding = '8px 16px';
+          e.target.style.borderRadius = '4px';
+          e.target.style.textDecoration = 'none';
+          e.target.style.fontWeight = '600';
+          e.target.style.fontSize = '14px';
+        }}
+        onBlur={(e) => {
+          e.target.style.position = 'absolute';
+          e.target.style.left = '-9999px';
+          e.target.style.width = '1px';
+          e.target.style.height = '1px';
+          e.target.style.overflow = 'hidden';
+        }}
       >
         Skip to content
       </a>
 
       {/* Top bar — hidden on auth landing */}
-      {showNav && (
-        <CloudTopBar onMenuToggle={() => setMenuOpen((p) => !p)} />
-      )}
+      {showNav && <CloudTopBar onMenuToggle={() => setMenuOpen((p) => !p)} />}
 
       {/* Sidebar — persistent on desktop, drawer on mobile */}
-      {showNav && (
-        <CloudSidebar
-          open={menuOpen}
-          onClose={() => setMenuOpen(false)}
-        />
-      )}
+      {showNav && <CloudSidebar open={menuOpen} onClose={() => setMenuOpen(false)} />}
 
       {/* Content area — offset by sidebar width on desktop */}
       <ContentWrapper $hasSidebar={showNav}>

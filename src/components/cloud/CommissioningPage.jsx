@@ -1,13 +1,13 @@
 // /src/components/cloud/CommissioningPage.jsx
-import { useState, useEffect, useMemo } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import { DeviceAPI, CommissionAPI } from "../../scripts/back_door";
-import { db } from "../../apis/firebase";
-import { ref, get } from "firebase/database";
-import FilterPills from "../shared/FilterPills/FilterPills";
-import { useToastContext } from "../../shared/providers/ToastProvider";
+import { useState, useEffect, useMemo } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import { DeviceAPI, CommissionAPI } from '../../scripts/back_door';
+import { db } from '../../apis/firebase';
+import { ref, get } from 'firebase/database';
+import FilterPills from '../shared/FilterPills/FilterPills';
+import { useToastContext } from '../../shared/providers/ToastProvider';
 
 /* -------------------------------------------------------------------------- */
 /*                               HELPERS                                      */
@@ -15,17 +15,17 @@ import { useToastContext } from "../../shared/providers/ToastProvider";
 
 /** Format a timestamp into a human-readable relative string. */
 const getRelativeTime = (timestamp) => {
-  if (!timestamp) return "—";
+  if (!timestamp) return '—';
   const now = Date.now();
   const then = new Date(timestamp).getTime();
-  if (Number.isNaN(then)) return "—";
+  if (Number.isNaN(then)) return '—';
   const diff = now - then;
 
   const minute = 60 * 1000;
   const hour = 60 * minute;
   const day = 24 * hour;
 
-  if (diff < minute) return "Just now";
+  if (diff < minute) return 'Just now';
   if (diff < hour) return `${Math.floor(diff / minute)}m ago`;
   if (diff < day) return `${Math.floor(diff / hour)}h ago`;
   return `${Math.floor(diff / day)}d ago`;
@@ -37,7 +37,7 @@ const getRelativeTime = (timestamp) => {
 
 const DeviceTable = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 24px;
@@ -58,15 +58,15 @@ const Table = styled.table`
   }
 
   thead {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   }
 
   th {
     text-align: left;
     padding: 14px 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -74,15 +74,15 @@ const Table = styled.table`
 
   td {
     padding: 14px 16px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
+    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   }
 
   tbody tr {
     transition: background 0.15s ease-out;
 
     &:hover {
-      background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+      background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
     }
 
     &:last-child td {
@@ -103,7 +103,7 @@ const MobileDeviceCards = styled.div`
 
 const MobileDeviceCard = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 16px;
 `;
@@ -120,12 +120,12 @@ const MobileCardRow = styled.div`
   }
 
   strong {
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
     font-weight: 600;
   }
 
   span {
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   }
 `;
 
@@ -138,10 +138,10 @@ const StatusPill = styled.span`
   text-transform: uppercase;
   color: #ffffff;
   background: ${({ $status }) => {
-    if ($status === "online") return "#16a34a";
-    if ($status === "warning") return "#f97316";
-    if ($status === "offline") return "#dc2626";
-    return "#9ca3af";
+    if ($status === 'online') return '#16a34a';
+    if ($status === 'warning') return '#f97316';
+    if ($status === 'offline') return '#dc2626';
+    return '#9ca3af';
   }};
 `;
 
@@ -154,10 +154,10 @@ const CommissionStatusPill = styled.span`
   text-transform: uppercase;
   color: #ffffff;
   background: ${({ $status }) => {
-    if ($status === "commissioned") return "#16a34a";
-    if ($status === "failed") return "#dc2626";
-    if ($status === "uncommissioned") return "#9ca3af";
-    return "#9ca3af";
+    if ($status === 'commissioned') return '#16a34a';
+    if ($status === 'failed') return '#dc2626';
+    if ($status === 'uncommissioned') return '#9ca3af';
+    return '#9ca3af';
   }};
 `;
 
@@ -168,15 +168,15 @@ const SignalBar = styled.div`
   font-size: 13px;
   font-weight: 500;
   color: ${({ $strength }) =>
-    $strength >= 80 ? "#16a34a" : $strength >= 50 ? "#f97316" : "#dc2626"};
+    $strength >= 80 ? '#16a34a' : $strength >= 50 ? '#f97316' : '#dc2626'};
 `;
 
 const ActionButton = styled.button`
   padding: 8px 16px;
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.primary || "#0066FF"};
-  background: ${({ theme }) => theme.colors?.primaryLight || "#E8F0FE"};
-  color: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary || '#0066FF'};
+  background: ${({ theme }) => theme.colors?.primaryLight || '#E8F0FE'};
+  color: ${({ theme }) => theme.colors?.primaryDark || '#004DCC'};
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
@@ -184,7 +184,7 @@ const ActionButton = styled.button`
   min-height: 48px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.hover || "rgba(0, 102, 255, 0.08)"};
+    background: ${({ theme }) => theme.colors?.hover || 'rgba(0, 102, 255, 0.08)'};
   }
 
   &:disabled {
@@ -201,9 +201,9 @@ const ActionButton = styled.button`
 const ViewResultButton = styled.button`
   padding: 6px 12px;
   border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   font-weight: 500;
   font-size: 12px;
   cursor: pointer;
@@ -211,8 +211,8 @@ const ViewResultButton = styled.button`
   min-height: 48px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 
   @media (max-width: 767px) {
@@ -224,21 +224,21 @@ const ViewResultButton = styled.button`
 const EmptyDeviceState = styled.div`
   text-align: center;
   padding: 60px 20px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || '12px'};
   margin-bottom: 24px;
 
   h3 {
     font-size: 18px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.text || "#1f2937"};
+    color: ${({ theme }) => theme.colors?.text || '#1f2937'};
     margin: 0 0 8px 0;
   }
 
   p {
     font-size: 14px;
-    color: ${({ theme }) => theme.colors?.textMuted || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.textMuted || '#6b7280'};
     margin: 0;
     max-width: 400px;
     margin-left: auto;
@@ -268,25 +268,26 @@ const ModalContent = styled.div`
   max-width: 700px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 `;
 
 const ModalHeader = styled.div`
   padding: 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 
   h2 {
     margin: 0 0 8px;
     font-size: 20px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#111827'};
   }
 
   p {
     margin: 0;
     font-size: 14px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -296,7 +297,7 @@ const ModalBody = styled.div`
 
 const ModalFooter = styled.div`
   padding: 16px 24px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   display: flex;
   gap: 12px;
   justify-content: flex-end;
@@ -317,12 +318,12 @@ const ModalButton = styled.button`
   min-height: 48px;
 
   ${({ $variant, theme }) =>
-    $variant === "primary"
+    $variant === 'primary'
       ? `
-    background: ${theme?.colors?.primary || "#0066FF"};
+    background: ${theme?.colors?.primary || '#0066FF'};
     color: #ffffff;
     &:hover {
-      background: ${theme?.colors?.primaryDark || "#004DCC"};
+      background: ${theme?.colors?.primaryDark || '#004DCC'};
     }
   `
       : `
@@ -356,17 +357,17 @@ const TestItem = styled.div`
   padding: 12px;
   border-radius: 8px;
   background: ${({ $status }) => {
-    if ($status === "running") return "#fef3c7";
-    if ($status === "passed") return "#d1fae5";
-    if ($status === "failed") return "#fee2e2";
-    return "#f3f4f6";
+    if ($status === 'running') return '#fef3c7';
+    if ($status === 'passed') return '#d1fae5';
+    if ($status === 'failed') return '#fee2e2';
+    return '#f3f4f6';
   }};
   border: 1px solid
     ${({ $status }) => {
-      if ($status === "running") return "#fbbf24";
-      if ($status === "passed") return "#10b981";
-      if ($status === "failed") return "#ef4444";
-      return "#e5e7eb";
+      if ($status === 'running') return '#fbbf24';
+      if ($status === 'passed') return '#10b981';
+      if ($status === 'failed') return '#ef4444';
+      return '#e5e7eb';
     }};
 `;
 
@@ -384,12 +385,12 @@ const TestIcon = styled.div`
 const TestName = styled.div`
   font-weight: 600;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
 `;
 
 const TestDuration = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   font-weight: 500;
 `;
 
@@ -399,7 +400,7 @@ const TestDetails = styled.div`
   background: rgba(0, 0, 0, 0.05);
   border-radius: 6px;
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const OverallStatus = styled.div`
@@ -410,21 +411,16 @@ const OverallStatus = styled.div`
   font-weight: 700;
   font-size: 18px;
   background: ${({ $status }) =>
-    $status === "passed" ? "#d1fae5" : $status === "failed" ? "#fee2e2" : "#e0f2ff"};
+    $status === 'passed' ? '#d1fae5' : $status === 'failed' ? '#fee2e2' : '#e0f2ff'};
   color: ${({ $status }) =>
-    $status === "passed" ? "#065f46" : $status === "failed" ? "#991b1b" : "#0369a1"};
+    $status === 'passed' ? '#065f46' : $status === 'failed' ? '#991b1b' : '#0369a1'};
   border: 2px solid
     ${({ $status }) =>
-      $status === "passed" ? "#10b981" : $status === "failed" ? "#ef4444" : "#06b6d4"};
+      $status === 'passed' ? '#10b981' : $status === 'failed' ? '#ef4444' : '#06b6d4'};
 `;
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
@@ -465,7 +461,7 @@ const StartNewButton = styled.button`
   padding: 12px 24px;
   border-radius: 8px;
   border: none;
-  background: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  background: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
@@ -474,7 +470,7 @@ const StartNewButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
+    background: ${({ theme }) => theme.colors?.primaryDark || '#004DCC'};
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
   }
@@ -501,7 +497,9 @@ const StartNewButton = styled.button`
 //   CommissionAPI.getByDevice() → POST /commission/list (filtered by deviceId) — OK, implemented
 // DeviceAPI.getDevices()        → POST /device/all — v1 endpoint, should migrate to v2 in future pass
 export default function CommissioningPage() {
-  useEffect(() => { document.title = 'Commissioning — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Commissioning — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { toast } = useToastContext();
   const [devices, setDevices] = useState([]);
@@ -510,7 +508,7 @@ export default function CommissioningPage() {
   const [tests, setTests] = useState([]);
   const [commissionResult, setCommissionResult] = useState(null);
   const [viewingResult, setViewingResult] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState('all');
 
   useEffect(() => {
     loadDevices();
@@ -524,7 +522,7 @@ export default function CommissioningPage() {
       const deviceList = Array.isArray(data) ? data : data?.devices || [];
       setDevices(deviceList);
     } catch (error) {
-      console.error("Error loading devices:", error);
+      console.error('Error loading devices:', error);
       setDevices([]);
     } finally {
       setLoading(false);
@@ -538,15 +536,15 @@ export default function CommissioningPage() {
 
     // Define the standard PGP hardware test suite
     const testSuite = [
-      { id: "power_os", name: "Power & OS", status: "pending", duration: 0, details: null },
-      { id: "ads1115", name: "ADS1115 ADC", status: "pending", duration: 0, details: null },
-      { id: "ds18b20", name: "DS18B20 Temp", status: "pending", duration: 0, details: null },
-      { id: "ph_ntu", name: "pH/Turbidity", status: "pending", duration: 0, details: null },
-      { id: "npk", name: "NPK Modbus", status: "pending", duration: 0, details: null },
-      { id: "relay_ch1", name: "Relay Ch1", status: "pending", duration: 0, details: null },
-      { id: "relay_ch2", name: "Relay Ch2", status: "pending", duration: 0, details: null },
-      { id: "lte_wifi", name: "LTE/WiFi", status: "pending", duration: 0, details: null },
-      { id: "cloud_ingest", name: "Cloud Ingest", status: "pending", duration: 0, details: null },
+      { id: 'power_os', name: 'Power & OS', status: 'pending', duration: 0, details: null },
+      { id: 'ads1115', name: 'ADS1115 ADC', status: 'pending', duration: 0, details: null },
+      { id: 'ds18b20', name: 'DS18B20 Temp', status: 'pending', duration: 0, details: null },
+      { id: 'ph_ntu', name: 'pH/Turbidity', status: 'pending', duration: 0, details: null },
+      { id: 'npk', name: 'NPK Modbus', status: 'pending', duration: 0, details: null },
+      { id: 'relay_ch1', name: 'Relay Ch1', status: 'pending', duration: 0, details: null },
+      { id: 'relay_ch2', name: 'Relay Ch2', status: 'pending', duration: 0, details: null },
+      { id: 'lte_wifi', name: 'LTE/WiFi', status: 'pending', duration: 0, details: null },
+      { id: 'cloud_ingest', name: 'Cloud Ingest', status: 'pending', duration: 0, details: null },
     ];
     setTests([...testSuite]);
 
@@ -561,7 +559,7 @@ export default function CommissioningPage() {
       const commissionId = commission?.commissionId || commission?.id;
 
       // 2. Mark all tests as running
-      const runningTests = testSuite.map((t) => ({ ...t, status: "running" }));
+      const runningTests = testSuite.map((t) => ({ ...t, status: 'running' }));
       setTests([...runningTests]);
 
       // 3. Execute tests via backend
@@ -581,7 +579,8 @@ export default function CommissioningPage() {
             : resultTests[t.id]) || {};
         return {
           ...t,
-          status: r.status || (r.passed === true ? "passed" : r.passed === false ? "failed" : "passed"),
+          status:
+            r.status || (r.passed === true ? 'passed' : r.passed === false ? 'failed' : 'passed'),
           duration: r.duration || 0,
           details: r.details || r.error || null,
         };
@@ -589,9 +588,9 @@ export default function CommissioningPage() {
       setTests([...completedTests]);
 
       // 5. Determine overall result
-      const overallStatus = completedTests.every((t) => t.status === "passed")
-        ? "passed"
-        : "failed";
+      const overallStatus = completedTests.every((t) => t.status === 'passed')
+        ? 'passed'
+        : 'failed';
 
       const finalResult = {
         deviceId: device.id,
@@ -607,14 +606,14 @@ export default function CommissioningPage() {
       setCommissionResult(finalResult);
       await loadDevices(); // Reload to update commission status
     } catch (error) {
-      console.error("Commissioning failed:", error);
+      console.error('Commissioning failed:', error);
       // Graceful fallback – show failure result so user isn't stuck
       setCommissionResult({
-        status: "failed",
+        status: 'failed',
         completedAt: new Date().toISOString(),
         tests: testSuite.map((t) =>
-          t.status === "pending" || t.status === "running"
-            ? { ...t, status: "failed", details: error.message }
+          t.status === 'pending' || t.status === 'running'
+            ? { ...t, status: 'failed', details: error.message }
             : t
         ),
       });
@@ -631,7 +630,7 @@ export default function CommissioningPage() {
         // Normalise: API may return the commission record directly or wrapped
         result = apiResult?.result || apiResult || null;
       } catch (apiError) {
-        console.warn("CommissionAPI.getByDevice failed, falling back to RTDB:", apiError);
+        console.warn('CommissionAPI.getByDevice failed, falling back to RTDB:', apiError);
       }
 
       // Fallback: read directly from RTDB commissions path
@@ -642,7 +641,7 @@ export default function CommissioningPage() {
             result = snapshot.val();
           }
         } catch (rtdbError) {
-          console.warn("RTDB commission fallback failed:", rtdbError);
+          console.warn('RTDB commission fallback failed:', rtdbError);
         }
       }
 
@@ -651,18 +650,21 @@ export default function CommissioningPage() {
         if (!result.tests && result.testResults) {
           result.tests = Object.entries(result.testResults).map(([id, r]) => ({
             id,
-            name: id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-            status: r.status || (r.passed ? "passed" : "failed"),
+            name: id.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+            status: r.status || (r.passed ? 'passed' : 'failed'),
             duration: r.duration || 0,
             details: r.details || r.error || null,
           }));
         }
         setViewingResult({ device, result });
       } else {
-        toast({ type: 'info', message: `No commissioning history found for ${device.alias || device.name}` });
+        toast({
+          type: 'info',
+          message: `No commissioning history found for ${device.alias || device.name}`,
+        });
       }
     } catch (error) {
-      console.error("Error loading commission result:", error);
+      console.error('Error loading commission result:', error);
     }
   };
 
@@ -688,10 +690,10 @@ export default function CommissioningPage() {
     };
 
     const blob = new Blob([JSON.stringify(report, null, 2)], {
-      type: "application/json",
+      type: 'application/json',
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `commission-${device.id}-${new Date().toISOString()}.json`;
     a.click();
@@ -699,27 +701,27 @@ export default function CommissioningPage() {
   };
 
   const getTestIcon = (status) => {
-    if (status === "passed") return "✅";
-    if (status === "failed") return "❌";
-    if (status === "running") return "⏳";
-    return "⏸️";
+    if (status === 'passed') return '✅';
+    if (status === 'failed') return '❌';
+    if (status === 'running') return '⏳';
+    return '⏸️';
   };
 
   const formatDuration = (ms) => {
-    if (!ms) return "—";
+    if (!ms) return '—';
     return `${(ms / 1000).toFixed(1)}s`;
   };
 
   // Filter devices based on commission status
   const filteredDevices = useMemo(() => {
-    if (activeFilter === "all") return devices;
+    if (activeFilter === 'all') return devices;
 
     return devices.filter((device) => {
-      const status = device.commissionStatus || "uncommissioned";
-      if (activeFilter === "pending") return status === "uncommissioned";
-      if (activeFilter === "completed") return status === "commissioned";
-      if (activeFilter === "failed") return status === "failed";
-      if (activeFilter === "in_progress") return status === "in_progress";
+      const status = device.commissionStatus || 'uncommissioned';
+      if (activeFilter === 'pending') return status === 'uncommissioned';
+      if (activeFilter === 'completed') return status === 'commissioned';
+      if (activeFilter === 'failed') return status === 'failed';
+      if (activeFilter === 'in_progress') return status === 'in_progress';
       return true;
     });
   }, [devices, activeFilter]);
@@ -728,27 +730,25 @@ export default function CommissioningPage() {
   const filterOptions = useMemo(() => {
     const counts = {
       all: devices.length,
-      pending: devices.filter((d) => !d.commissionStatus || d.commissionStatus === "uncommissioned").length,
-      in_progress: devices.filter((d) => d.commissionStatus === "in_progress").length,
-      completed: devices.filter((d) => d.commissionStatus === "commissioned").length,
-      failed: devices.filter((d) => d.commissionStatus === "failed").length,
+      pending: devices.filter((d) => !d.commissionStatus || d.commissionStatus === 'uncommissioned')
+        .length,
+      in_progress: devices.filter((d) => d.commissionStatus === 'in_progress').length,
+      completed: devices.filter((d) => d.commissionStatus === 'commissioned').length,
+      failed: devices.filter((d) => d.commissionStatus === 'failed').length,
     };
 
     return [
-      { label: "All", value: "all", count: counts.all },
-      { label: "Pending", value: "pending", count: counts.pending },
-      { label: "In Progress", value: "in_progress", count: counts.in_progress },
-      { label: "Completed", value: "completed", count: counts.completed },
-      { label: "Failed", value: "failed", count: counts.failed },
+      { label: 'All', value: 'all', count: counts.all },
+      { label: 'Pending', value: 'pending', count: counts.pending },
+      { label: 'In Progress', value: 'in_progress', count: counts.in_progress },
+      { label: 'Completed', value: 'completed', count: counts.completed },
+      { label: 'Failed', value: 'failed', count: counts.failed },
     ];
   }, [devices]);
 
   if (loading) {
     return (
-      <CloudPageLayout
-        title="Commissioning"
-        subtitle="Field-ready device commissioning wizard"
-      >
+      <CloudPageLayout title="Commissioning" subtitle="Field-ready device commissioning wizard">
         <Skeleton />
       </CloudPageLayout>
     );
@@ -759,7 +759,7 @@ export default function CommissioningPage() {
       title="Commissioning"
       subtitle="Field-ready device commissioning wizard"
       actions={
-        <StartNewButton onClick={() => navigate("/cloud/commissioning/new")}>
+        <StartNewButton onClick={() => navigate('/cloud/commissioning/new')}>
           + Start New Commission
         </StartNewButton>
       }
@@ -776,121 +776,119 @@ export default function CommissioningPage() {
         <EmptyDeviceState>
           <h3>No Devices Found</h3>
           <p>
-            {activeFilter === "all"
-              ? "No devices have been registered yet. Onboard a device first to begin commissioning."
+            {activeFilter === 'all'
+              ? 'No devices have been registered yet. Onboard a device first to begin commissioning.'
               : `No devices match the "${activeFilter}" filter. Try a different filter.`}
           </p>
         </EmptyDeviceState>
       ) : (
-      <DeviceTable>
-        <Table>
-          <thead>
-            <tr>
-              <th>Device ID</th>
-              <th>Alias</th>
-              <th>Site</th>
-              <th>Status</th>
-              <th>Last Seen</th>
-              <th>Signal</th>
-              <th>Commission Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredDevices.map((device) => (
-              <tr key={device.id}>
-                <td>
-                  <div style={{ fontWeight: 600 }}>{device.id}</div>
-                </td>
-                <td>{device.alias || device.name}</td>
-                <td>{device.siteName}</td>
-                <td>
-                  <StatusPill $status={device.status}>{device.status}</StatusPill>
-                </td>
-                <td>{getRelativeTime(device.lastContact)}</td>
-                <td>
-                  <SignalBar $strength={device.signalStrength}>
-                    {device.signalStrength}%
-                  </SignalBar>
-                </td>
-                <td>
-                  <CommissionStatusPill $status={device.commissionStatus}>
-                    {device.commissionStatus || "uncommissioned"}
-                  </CommissionStatusPill>
-                </td>
-                <td>
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    <ActionButton onClick={() => handleStartCommissioning(device)}>
-                      Commission
-                    </ActionButton>
-                    {device.lastCommissioned && (
-                      <ViewResultButton
-                        onClick={() => handleViewLastCommission(device)}
-                      >
-                        View Result
-                      </ViewResultButton>
-                    )}
-                  </div>
-                </td>
+        <DeviceTable>
+          <Table>
+            <thead>
+              <tr>
+                <th>Device ID</th>
+                <th>Alias</th>
+                <th>Site</th>
+                <th>Status</th>
+                <th>Last Seen</th>
+                <th>Signal</th>
+                <th>Commission Status</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {filteredDevices.map((device) => (
+                <tr key={device.id}>
+                  <td>
+                    <div style={{ fontWeight: 600 }}>{device.id}</div>
+                  </td>
+                  <td>{device.alias || device.name}</td>
+                  <td>{device.siteName}</td>
+                  <td>
+                    <StatusPill $status={device.status}>{device.status}</StatusPill>
+                  </td>
+                  <td>{getRelativeTime(device.lastContact)}</td>
+                  <td>
+                    <SignalBar $strength={device.signalStrength}>
+                      {device.signalStrength}%
+                    </SignalBar>
+                  </td>
+                  <td>
+                    <CommissionStatusPill $status={device.commissionStatus}>
+                      {device.commissionStatus || 'uncommissioned'}
+                    </CommissionStatusPill>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <ActionButton onClick={() => handleStartCommissioning(device)}>
+                        Commission
+                      </ActionButton>
+                      {device.lastCommissioned && (
+                        <ViewResultButton onClick={() => handleViewLastCommission(device)}>
+                          View Result
+                        </ViewResultButton>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
 
-        {/* Mobile Cards */}
-        <MobileDeviceCards>
-          {filteredDevices.map((device) => (
-            <MobileDeviceCard key={device.id}>
-              <MobileCardRow>
-                <strong>Device ID:</strong>
-                <span>{device.id}</span>
-              </MobileCardRow>
-              <MobileCardRow>
-                <strong>Alias:</strong>
-                <span>{device.alias || device.name}</span>
-              </MobileCardRow>
-              <MobileCardRow>
-                <strong>Site:</strong>
-                <span>{device.siteName}</span>
-              </MobileCardRow>
-              <MobileCardRow>
-                <strong>Status:</strong>
-                <StatusPill $status={device.status}>{device.status}</StatusPill>
-              </MobileCardRow>
-              <MobileCardRow>
-                <strong>Signal:</strong>
-                <SignalBar $strength={device.signalStrength}>
-                  {device.signalStrength}%
-                </SignalBar>
-              </MobileCardRow>
-              <MobileCardRow>
-                <strong>Commission:</strong>
-                <CommissionStatusPill $status={device.commissionStatus}>
-                  {device.commissionStatus || "uncommissioned"}
-                </CommissionStatusPill>
-              </MobileCardRow>
-              <ActionButton onClick={() => handleStartCommissioning(device)}>
-                Commission Device
-              </ActionButton>
-              {device.lastCommissioned && (
-                <ViewResultButton onClick={() => handleViewLastCommission(device)}>
-                  View Last Result
-                </ViewResultButton>
-              )}
-            </MobileDeviceCard>
-          ))}
-        </MobileDeviceCards>
-      </DeviceTable>
+          {/* Mobile Cards */}
+          <MobileDeviceCards>
+            {filteredDevices.map((device) => (
+              <MobileDeviceCard key={device.id}>
+                <MobileCardRow>
+                  <strong>Device ID:</strong>
+                  <span>{device.id}</span>
+                </MobileCardRow>
+                <MobileCardRow>
+                  <strong>Alias:</strong>
+                  <span>{device.alias || device.name}</span>
+                </MobileCardRow>
+                <MobileCardRow>
+                  <strong>Site:</strong>
+                  <span>{device.siteName}</span>
+                </MobileCardRow>
+                <MobileCardRow>
+                  <strong>Status:</strong>
+                  <StatusPill $status={device.status}>{device.status}</StatusPill>
+                </MobileCardRow>
+                <MobileCardRow>
+                  <strong>Signal:</strong>
+                  <SignalBar $strength={device.signalStrength}>{device.signalStrength}%</SignalBar>
+                </MobileCardRow>
+                <MobileCardRow>
+                  <strong>Commission:</strong>
+                  <CommissionStatusPill $status={device.commissionStatus}>
+                    {device.commissionStatus || 'uncommissioned'}
+                  </CommissionStatusPill>
+                </MobileCardRow>
+                <ActionButton onClick={() => handleStartCommissioning(device)}>
+                  Commission Device
+                </ActionButton>
+                {device.lastCommissioned && (
+                  <ViewResultButton onClick={() => handleViewLastCommission(device)}>
+                    View Last Result
+                  </ViewResultButton>
+                )}
+              </MobileDeviceCard>
+            ))}
+          </MobileDeviceCards>
+        </DeviceTable>
       )}
 
       {/* Commissioning Modal */}
       {commissioningDevice && (
-        <Modal onClick={(e) => e.target === e.currentTarget && commissionResult && handleCloseCommissioning()}>
+        <Modal
+          onClick={(e) =>
+            e.target === e.currentTarget && commissionResult && handleCloseCommissioning()
+          }
+        >
           <ModalContent>
             <ModalHeader>
-              <h2>
-                Commissioning: {commissioningDevice.alias || commissioningDevice.name}
-              </h2>
+              <h2>Commissioning: {commissioningDevice.alias || commissioningDevice.name}</h2>
               <p>Device ID: {commissioningDevice.id}</p>
               {commissioningDevice.gatewayIp && (
                 <WebUILink
@@ -906,9 +904,9 @@ export default function CommissioningPage() {
             <ModalBody>
               {commissionResult && (
                 <OverallStatus $status={commissionResult.status}>
-                  {commissionResult.status === "passed"
-                    ? "✅ Commissioning Passed"
-                    : "❌ Commissioning Failed"}
+                  {commissionResult.status === 'passed'
+                    ? '✅ Commissioning Passed'
+                    : '❌ Commissioning Failed'}
                 </OverallStatus>
               )}
 
@@ -922,7 +920,7 @@ export default function CommissioningPage() {
                       </TestInfo>
                       <TestDuration>{formatDuration(test.duration)}</TestDuration>
                     </TestItem>
-                    {test.details && test.status === "failed" && (
+                    {test.details && test.status === 'failed' && (
                       <TestDetails>Error: {test.details}</TestDetails>
                     )}
                   </div>
@@ -933,9 +931,7 @@ export default function CommissioningPage() {
             <ModalFooter>
               {commissionResult && (
                 <ModalButton
-                  onClick={() =>
-                    handleDownloadReport(commissionResult, commissioningDevice)
-                  }
+                  onClick={() => handleDownloadReport(commissionResult, commissioningDevice)}
                 >
                   Download JSON Report
                 </ModalButton>
@@ -945,7 +941,7 @@ export default function CommissioningPage() {
                 onClick={handleCloseCommissioning}
                 disabled={!commissionResult}
               >
-                {commissionResult ? "Close" : "Commissioning..."}
+                {commissionResult ? 'Close' : 'Commissioning...'}
               </ModalButton>
             </ModalFooter>
           </ModalContent>
@@ -957,20 +953,21 @@ export default function CommissioningPage() {
         <Modal onClick={(e) => e.target === e.currentTarget && handleCloseViewResult()}>
           <ModalContent>
             <ModalHeader>
-              <h2>
-                Commission Result: {viewingResult.device.alias || viewingResult.device.name}
-              </h2>
+              <h2>Commission Result: {viewingResult.device.alias || viewingResult.device.name}</h2>
               <p>Device ID: {viewingResult.device.id}</p>
-              <p style={{ fontSize: "13px", marginTop: "8px" }}>
-                Commissioned: {viewingResult.result?.completedAt ? new Date(viewingResult.result.completedAt).toLocaleString() : "Unknown"}
+              <p style={{ fontSize: '13px', marginTop: '8px' }}>
+                Commissioned:{' '}
+                {viewingResult.result?.completedAt
+                  ? new Date(viewingResult.result.completedAt).toLocaleString()
+                  : 'Unknown'}
               </p>
             </ModalHeader>
 
             <ModalBody>
               <OverallStatus $status={viewingResult.result.status}>
-                {viewingResult.result.status === "passed"
-                  ? "✅ Commissioning Passed"
-                  : "❌ Commissioning Failed"}
+                {viewingResult.result.status === 'passed'
+                  ? '✅ Commissioning Passed'
+                  : '❌ Commissioning Failed'}
               </OverallStatus>
 
               <TestChecklist>
@@ -983,9 +980,7 @@ export default function CommissioningPage() {
                       </TestInfo>
                       <TestDuration>{formatDuration(test.duration)}</TestDuration>
                     </TestItem>
-                    {test.details && (
-                      <TestDetails>{test.details}</TestDetails>
-                    )}
+                    {test.details && <TestDetails>{test.details}</TestDetails>}
                   </div>
                 ))}
               </TestChecklist>
@@ -993,9 +988,7 @@ export default function CommissioningPage() {
 
             <ModalFooter>
               <ModalButton
-                onClick={() =>
-                  handleDownloadReport(viewingResult.result, viewingResult.device)
-                }
+                onClick={() => handleDownloadReport(viewingResult.result, viewingResult.device)}
               >
                 Download JSON Report
               </ModalButton>

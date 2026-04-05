@@ -9,7 +9,7 @@ import RevealOnScroll from './RevealOnScroll';
 
 const Section = styled.section`
   padding: 48px clamp(16px, 5vw, 48px);
-  background: #0B1120;
+  background: #0b1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 64px clamp(20px, 5vw, 48px);
@@ -41,7 +41,7 @@ const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin: 0 0 56px;
   letter-spacing: -0.03em;
@@ -182,7 +182,9 @@ function AnimatedStat({ stat, delay }) {
     <RevealOnScroll delay={delay}>
       <StatCard ref={ref}>
         <StatValue $color={stat.color}>
-          {stat.prefix || ''}{value}{stat.suffix}
+          {stat.prefix || ''}
+          {value}
+          {stat.suffix}
         </StatValue>
         <StatLabel>{stat.label}</StatLabel>
       </StatCard>

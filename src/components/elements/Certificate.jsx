@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import Line from "./Line";
-import { AppIcon } from "../../assets";
+import Line from './Line';
+import { AppIcon } from '../../assets';
 
-import { formatCertificateID, timestampToLocale } from "../../scripts/helpers";
+import { formatCertificateID, timestampToLocale } from '../../scripts/helpers';
 
 const CertificateOutline = styled.div`
   box-sizing: border-box;
@@ -18,7 +18,9 @@ const CertificateOutline = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 5px solid #0d5b84;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  box-shadow:
+    rgba(0, 0, 0, 0.19) 0px 10px 20px,
+    rgba(0, 0, 0, 0.23) 0px 6px 6px;
   margin: auto;
   margin-bottom: 10px;
   span {
@@ -58,7 +60,7 @@ const Signiture = styled.h2`
   font-size: 14px;
   font-style: italic;
   margin-bottom: 10px;
-  font-family: "Dancing Script", cursive;
+  font-family: 'Dancing Script', cursive;
   font-size: 20px;
 `;
 
@@ -87,17 +89,9 @@ const DivBlockInner = styled.div`
 `;
 
 const Certificate = ({ data }) => {
-  const {
-    id,
-    buyer,
-    producer,
-    verifier,
-    balance,
-    timestamp,
-    type,
-    creditType,
-    price,
-  } = data ? data : {};
+  const { id, buyer, producer, verifier, balance, timestamp, type, creditType, price } = data
+    ? data
+    : {};
   const date = timestampToLocale(Number(timestamp));
   return (
     <CertificateOutline id="thin-scroll">
@@ -112,24 +106,21 @@ const Certificate = ({ data }) => {
       <Heading1>
         <span>{Number(balance)}</span> NPRCs
       </Heading1>
-      {type === "transfer" ? (
+      {type === 'transfer' ? (
         <Heading6>
-          This certifies that the ownership of{" "}
+          This certifies that the ownership of{' '}
           <span>{`${Number(balance)} ${creditType?.toUpperCase()} `}</span>
-          Credits was transferred to <span>
-            {buyer?.toUpperCase()}
-          </span> from <span>{producer?.toUpperCase()}</span> on{" "}
-          <span>{date}</span> at the price of <span>${Number(price)}</span>
+          Credits was transferred to <span>{buyer?.toUpperCase()}</span> from{' '}
+          <span>{producer?.toUpperCase()}</span> on <span>{date}</span> at the price of{' '}
+          <span>${Number(price)}</span>
           /Credit.
         </Heading6>
       ) : (
         <Heading6>
-          This certifies that the buyer, <span>{buyer?.toUpperCase()}</span>,
-          paid the producer, <span>{producer?.toUpperCase()}</span>, for the
-          ownership of{" "}
+          This certifies that the buyer, <span>{buyer?.toUpperCase()}</span>, paid the producer,{' '}
+          <span>{producer?.toUpperCase()}</span>, for the ownership of{' '}
           <span>{`${Number(balance)} ${creditType?.toUpperCase()} `}</span>
-          Credits on <span>{date}</span> at the price of{" "}
-          <span>${Number(price)}</span>
+          Credits on <span>{date}</span> at the price of <span>${Number(price)}</span>
           /Credit.
         </Heading6>
       )}
@@ -137,19 +128,19 @@ const Certificate = ({ data }) => {
         <DivBlockInner>
           <Heading4>Supplied by:</Heading4>
           <Signiture>{producer}</Signiture>
-          <Line width={"80%"} />
+          <Line width={'80%'} />
           <Heading2>{producer?.toUpperCase()}</Heading2>
         </DivBlockInner>
         <DivBlockInner>
           <Heading4>Verified by:</Heading4>
           <Signiture>{verifier}</Signiture>
-          <Line width={"80%"} />
+          <Line width={'80%'} />
           <Heading2>{verifier?.toUpperCase()}</Heading2>
         </DivBlockInner>
         <DivBlockInner>
           <Heading4>Issued by:</Heading4>
           <Signiture>Jacques De Jean</Signiture>
-          <Line width={"80%"} />
+          <Line width={'80%'} />
           <Heading2>BLUESIGNAL LLC</Heading2>
         </DivBlockInner>
       </DivBlock>

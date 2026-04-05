@@ -1,18 +1,18 @@
 // /src/components/cloud/SiteCard.jsx
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Card = styled(Link)`
   display: block;
-  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   border-radius: ${({ theme }) => theme.radius?.lg || 16}px;
   padding: 20px;
   text-decoration: none;
   transition: all 0.15s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
     box-shadow: 0 4px 16px rgba(0, 102, 255, 0.06);
     transform: translateY(-1px);
   }
@@ -34,7 +34,7 @@ const SiteName = styled.h3`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
 `;
 
 const StatusPill = styled.span`
@@ -47,17 +47,13 @@ const StatusPill = styled.span`
   font-size: 12px;
   font-weight: 500;
   background: ${({ $variant }) =>
-    $variant === "warning"
-      ? "rgba(245,158,11,0.1)"
-      : $variant === "offline"
-      ? "rgba(239,68,68,0.1)"
-      : "rgba(16,185,129,0.1)"};
+    $variant === 'warning'
+      ? 'rgba(245,158,11,0.1)'
+      : $variant === 'offline'
+        ? 'rgba(239,68,68,0.1)'
+        : 'rgba(16,185,129,0.1)'};
   color: ${({ $variant }) =>
-    $variant === "warning"
-      ? "#D97706"
-      : $variant === "offline"
-      ? "#DC2626"
-      : "#059669"};
+    $variant === 'warning' ? '#D97706' : $variant === 'offline' ? '#DC2626' : '#059669'};
 
   &::before {
     content: '';
@@ -78,11 +74,11 @@ const MetaInfo = styled.div`
 const MetaRow = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
 
   strong {
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   }
 `;
 
@@ -90,7 +86,7 @@ const StatsRow = styled.div`
   display: flex;
   gap: 20px;
   padding-top: 16px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.borderLight || "#F3F4F6"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.borderLight || '#F3F4F6'};
 `;
 
 const Stat = styled.div`
@@ -104,27 +100,27 @@ const Stat = styled.div`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+    color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   }
 
   .value {
     font-family: ${({ theme }) => theme.fonts?.mono || 'monospace'};
     font-size: 18px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   }
 `;
 
 const getStatusVariant = (status) => {
-  if (status === "offline") return "offline";
-  if (status === "warning") return "warning";
-  return "online";
+  if (status === 'offline') return 'offline';
+  if (status === 'warning') return 'warning';
+  return 'online';
 };
 
 const getStatusLabel = (status) => {
-  if (status === "offline") return "Offline";
-  if (status === "warning") return "Warning";
-  return "Online";
+  if (status === 'offline') return 'Offline';
+  if (status === 'warning') return 'Warning';
+  return 'Online';
 };
 
 export default function SiteCard({ site }) {
@@ -139,15 +135,18 @@ export default function SiteCard({ site }) {
 
       <MetaInfo>
         <MetaRow>
-          <strong>Customer:</strong> {site.customer ?? "—"}
+          <strong>Customer:</strong> {site.customer ?? '—'}
         </MetaRow>
         <MetaRow>
-          <strong>Location:</strong> {typeof site.location === "string" ? site.location : (site.location?.address || site.location?.city || "—")}
+          <strong>Location:</strong>{' '}
+          {typeof site.location === 'string'
+            ? site.location
+            : site.location?.address || site.location?.city || '—'}
         </MetaRow>
         {site.coordinates && (
           <MetaRow>
-            <strong>Coordinates:</strong> {site.coordinates?.lat?.toFixed(4) ?? "—"},{" "}
-            {site.coordinates?.lng?.toFixed(4) ?? "—"}
+            <strong>Coordinates:</strong> {site.coordinates?.lat?.toFixed(4) ?? '—'},{' '}
+            {site.coordinates?.lng?.toFixed(4) ?? '—'}
           </MetaRow>
         )}
       </MetaInfo>

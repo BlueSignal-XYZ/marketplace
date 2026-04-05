@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
-import {
-  LivepeerConfig,
-  createReactClient,
-  studioProvider,
-} from '@livepeer/react';
+import { useParams } from 'react-router-dom';
+import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
 import { Stream } from './Stream';
 import { MediaPlayer, BasicStreamPlayer } from './elements';
-import {LivepeerAPI} from '../../../scripts/back_door';
+import { LivepeerAPI } from '../../../scripts/back_door';
 import MediaUpload from './MediaUpload';
 import {
   LoadingState,
@@ -22,30 +18,29 @@ function Livepeer() {
   const [livepeerClient, setLivepeerClient] = useState(null);
   const [key, setKey] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  
-  useEffect(() => {
-    fetchKey()
-  }, [])
 
   useEffect(() => {
-    if(key){
+    fetchKey();
+  }, []);
+
+  useEffect(() => {
+    if (key) {
       const client = createReactClient({
-        provider: studioProvider(key)
-      })
+        provider: studioProvider(key),
+      });
       setLivepeerClient(client);
     }
-  }, [key])
-  
+  }, [key]);
 
-  const fetchKey =  async () => {
-     try {
+  const fetchKey = async () => {
+    try {
       setKey(await LivepeerAPI.getKey());
-     } catch (error) {
+    } catch (error) {
       throw error;
-     } finally {
+    } finally {
       setIsLoading(false);
-     }
-  }
+    }
+  };
 
   const handleRetry = () => {
     window.location.reload();
@@ -54,29 +49,17 @@ function Livepeer() {
   const renderService = (serviceID) => {
     switch (serviceID) {
       case 'stream':
-        return (
-          <Stream />
-        )
+        return <Stream />;
       case 'upload-media':
-        return (
-          <MediaUpload/>
-        )
+        return <MediaUpload />;
       default:
-        return (
-          <ServiceUnavailableState onRetry={handleRetry} />
-        )
+        return <ServiceUnavailableState onRetry={handleRetry} />;
     }
+  };
+
+  if (livepeerClient === null) {
+    return isLoading ? <LoadingState /> : <ClientUnavailableState onRetry={handleRetry} />;
   }
-
-  if(livepeerClient===null){
-    return isLoading ? (
-      <LoadingState />
-    ) : (
-      <ClientUnavailableState onRetry={handleRetry} />
-    );
-  }
-
-
 
   return (
     <LivepeerConfig client={livepeerClient}>

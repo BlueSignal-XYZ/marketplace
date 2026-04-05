@@ -11,7 +11,9 @@ import CTASection from './sections/CTASection';
 
 const LandingPage = () => (
   <>
-    <a href="#main" className="skip-link">Skip to content</a>
+    <a href="#main" className="skip-link">
+      Skip to content
+    </a>
     <Nav />
     <main id="main">
       <HeroSection />

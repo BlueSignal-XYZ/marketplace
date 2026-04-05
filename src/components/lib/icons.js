@@ -1,23 +1,38 @@
-import { faBroadcastTower, faChartSimple, faCircleCheck, faDollarSign, faHome, faHourglassHalf, faLeaf, faMoneyBill1, faPhotoFilm, faQuestion, faSackDollar, faShop, faUpload, faWallet } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBroadcastTower,
+  faChartSimple,
+  faCircleCheck,
+  faDollarSign,
+  faHome,
+  faHourglassHalf,
+  faLeaf,
+  faMoneyBill1,
+  faPhotoFilm,
+  faQuestion,
+  faSackDollar,
+  faShop,
+  faUpload,
+  faWallet,
+} from '@fortawesome/free-solid-svg-icons';
 
 const getIcon = (icon) => {
   switch (icon) {
     case 'wallet':
-      return faWallet
+      return faWallet;
     case 'money-bill-1':
-      return faMoneyBill1
+      return faMoneyBill1;
     case 'sack-dollar':
-      return faSackDollar
+      return faSackDollar;
     case 'hourglass-half':
-      return faHourglassHalf
+      return faHourglassHalf;
     case 'chart-simple':
-      return faChartSimple
+      return faChartSimple;
     case 'leaf':
-      return faLeaf
+      return faLeaf;
     default:
-      return faQuestion
+      return faQuestion;
   }
-}
+};
 
 const renderDashIcon = (dashRoute) => {
   switch (dashRoute) {
@@ -25,32 +40,29 @@ const renderDashIcon = (dashRoute) => {
       return faHome;
 
     case 'financial':
-      return faDollarSign
+      return faDollarSign;
 
     case 'environmental':
-      return faLeaf
+      return faLeaf;
 
     case 'verification':
-      return faCircleCheck
+      return faCircleCheck;
 
     case 'upload':
-      return faUpload
+      return faUpload;
 
-      case 'uploads':
-      return faPhotoFilm
+    case 'uploads':
+      return faPhotoFilm;
 
     case 'stream':
-      return faBroadcastTower
+      return faBroadcastTower;
 
-      case 'marketplace':
+    case 'marketplace':
       return faShop;
 
     default:
-      return faQuestion
+      return faQuestion;
   }
-}
+};
 
-export {
-  getIcon,
-  renderDashIcon
-}
+export { getIcon, renderDashIcon };

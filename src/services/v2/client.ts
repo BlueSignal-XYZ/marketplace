@@ -76,7 +76,7 @@ async function request<T>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   path: string,
   body?: unknown,
-  requireAuth = false,
+  requireAuth = false
 ): Promise<T> {
   const url = `${BASE_URL}${path}`;
 
@@ -100,11 +100,7 @@ async function request<T>(
   try {
     res = await fetch(url, init);
   } catch (err: any) {
-    throw new ApiError(
-      err?.message || 'Network request failed',
-      0,
-      'NETWORK_ERROR',
-    );
+    throw new ApiError(err?.message || 'Network request failed', 0, 'NETWORK_ERROR');
   }
 
   // 403: authenticated but not authorized — do NOT retry, return error normally
@@ -115,11 +111,7 @@ async function request<T>(
     } catch {
       throw new ApiError('Forbidden', 403, 'FORBIDDEN');
     }
-    throw new ApiError(
-      json.error || json.message || 'Forbidden',
-      403,
-      'API_ERROR',
-    );
+    throw new ApiError(json.error || json.message || 'Forbidden', 403, 'API_ERROR');
   }
 
   // 401: token expired or invalid — try refresh once, then surface session-expired
@@ -142,9 +134,11 @@ async function request<T>(
       }
       const retryErr = await retryRes.json().catch(() => ({}));
       throw new ApiError(
-        (retryErr as any)?.error || (retryErr as any)?.message || `Request failed (${retryRes.status})`,
+        (retryErr as any)?.error ||
+          (retryErr as any)?.message ||
+          `Request failed (${retryRes.status})`,
         retryRes.status,
-        'API_ERROR',
+        'API_ERROR'
       );
     } else {
       window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
@@ -163,7 +157,7 @@ async function request<T>(
     throw new ApiError(
       json.error || json.message || `Request failed (${res.status})`,
       res.status,
-      'API_ERROR',
+      'API_ERROR'
     );
   }
 
@@ -194,9 +188,7 @@ export function getListing(id: string): Promise<Listing> {
   return get<Listing>(`/v2/market/listing/${id}`);
 }
 
-export function searchListings(
-  params: Partial<MarketSearchParams>,
-): Promise<MarketSearchResponse> {
+export function searchListings(params: Partial<MarketSearchParams>): Promise<MarketSearchResponse> {
   return post<MarketSearchResponse>('/v2/market/search', {
     page: params.page ?? 1,
     limit: params.limit ?? 20,
@@ -216,14 +208,12 @@ export function getWatersheds(): Promise<Watershed[]> {
 
 // ── Credits endpoints ────────────────────────────────────
 
-export function purchaseCredits(
-  params: PurchaseRequest,
-): Promise<PurchaseResult> {
+export function purchaseCredits(params: PurchaseRequest): Promise<PurchaseResult> {
   return post<PurchaseResult>('/v2/credits/purchase', params, true);
 }
 
 export function submitCredits(
-  params: CreditSubmission,
+  params: CreditSubmission
 ): Promise<{ submissionId: string; status: string }> {
   return post('/v2/credits/submit', params, true);
 }
@@ -234,9 +224,7 @@ export function getPortfolio(userId: string): Promise<PortfolioResponse> {
 
 // ── Blockchain endpoints ─────────────────────────────────
 
-export function mintCertificate(
-  params: MintRequest,
-): Promise<MintResult> {
+export function mintCertificate(params: MintRequest): Promise<MintResult> {
   return post<MintResult>('/v2/blockchain/mint', params, true);
 }
 
@@ -244,9 +232,7 @@ export function getCertificate(id: string): Promise<Certificate> {
   return get<Certificate>(`/v2/blockchain/certificate/${id}`);
 }
 
-export function linkWallet(
-  params: LinkWalletRequest,
-): Promise<LinkWalletResult> {
+export function linkWallet(params: LinkWalletRequest): Promise<LinkWalletResult> {
   return post<LinkWalletResult>('/v2/wallet/link', params, true);
 }
 
@@ -262,7 +248,7 @@ export function getProgram(id: string): Promise<Program> {
 
 export function calculateCredits(
   programId: string,
-  params: CreditCalculationRequest,
+  params: CreditCalculationRequest
 ): Promise<CreditEstimate> {
   return post<CreditEstimate>(`/v2/programs/${programId}/calculate`, params, true);
 }
@@ -288,11 +274,11 @@ export interface MetricsResponse {
 export function getDeviceMetrics(
   deviceId: string,
   metric: string,
-  range: string,
+  range: string
 ): Promise<MetricsResponse> {
   return get<MetricsResponse>(
     `/v2/devices/${deviceId}/metrics?metric=${metric}&range=${range}`,
-    true,
+    true
   );
 }
 
@@ -408,7 +394,7 @@ export interface DeviceCommandResult {
 
 export function sendDeviceCommand(
   deviceId: string,
-  command: DeviceCommandRequest,
+  command: DeviceCommandRequest
 ): Promise<DeviceCommandResult> {
   return post<DeviceCommandResult>(`/v2/devices/${deviceId}/command`, command, true);
 }
@@ -440,7 +426,7 @@ export function getRevenueGradeStatus(deviceId: string): Promise<RevenueGradeSta
 
 export function enableRevenueGrade(
   deviceId: string,
-  params?: Record<string, unknown>,
+  params?: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
   return post(`/v2/devices/${deviceId}/revenue-grade/enable`, params || {}, true);
 }
@@ -451,7 +437,7 @@ export function disableRevenueGrade(deviceId: string): Promise<void> {
 
 export function updateRevenueGrade(
   deviceId: string,
-  updates: Record<string, unknown>,
+  updates: Record<string, unknown>
 ): Promise<void> {
   return request('PUT', `/v2/devices/${deviceId}/revenue-grade`, updates, true);
 }
@@ -485,7 +471,7 @@ export function logCalibration(
     offset_value?: number;
     slope_value?: number;
     photo_urls?: string[];
-  },
+  }
 ): Promise<CalibrationRecord> {
   return post<CalibrationRecord>(`/v2/devices/${deviceId}/calibrations`, calibration, true);
 }
@@ -519,7 +505,9 @@ export function getWQTLinkStatus(): Promise<WQTLinkStatus> {
   return get<WQTLinkStatus>('/v2/account/link-status', true);
 }
 
-export function linkWQTAccount(deviceIds?: string[]): Promise<{ linked: boolean; linkedAt: string }> {
+export function linkWQTAccount(
+  deviceIds?: string[]
+): Promise<{ linked: boolean; linkedAt: string }> {
   return post('/v2/account/link-wqt', { device_ids: deviceIds || [] }, true);
 }
 
@@ -558,9 +546,7 @@ export interface CreditAccrual {
   status: string;
 }
 
-export function registerCreditProject(
-  params: Record<string, unknown>,
-): Promise<CreditProject> {
+export function registerCreditProject(params: Record<string, unknown>): Promise<CreditProject> {
   return post<CreditProject>('/v2/projects', params, true);
 }
 
@@ -578,7 +564,7 @@ export function calculateProjectCredits(projectId: string): Promise<Record<strin
 
 export function submitProjectVerification(
   projectId: string,
-  accrualIds?: string[],
+  accrualIds?: string[]
 ): Promise<Record<string, unknown>> {
   return post(`/v2/projects/${projectId}/submit-verification`, { accrual_ids: accrualIds }, true);
 }

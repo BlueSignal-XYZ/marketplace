@@ -1,34 +1,34 @@
-import { useState, useCallback, useEffect } from "react";
-import { useDropzone } from "react-dropzone";
-import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { Upload, isSupported } from "tus-js-client";
+import { useState, useCallback, useEffect } from 'react';
+import { useDropzone } from 'react-dropzone';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Upload, isSupported } from 'tus-js-client';
 //import { colors } from "../../../styles/colors";
-import { LivepeerAPI, AssetAPI } from "../../../scripts/back_door";
-import { logDev, proxyLivepeerOriginEndpoint } from "../../../scripts/helpers";
-import configs from "../../../../configs";
-import AssetDisplay from "./AssetDisplay";
-import { Player } from "@livepeer/react";
-import { Input } from "../../shared/input/Input";
-import FormSection from "../../shared/FormSection/FormSection";
-import { ButtonPrimary } from "../../shared/button/Button";
-import ButtonLoading from "../../shared/button/ButtonLoading";
-import { DashboardPage } from "../../shared/DashboardPage/DashboardPage";
-import { logoColors } from "../../../styles/colors";
-import { useAppContext } from "../../../context/AppContext";
-import { useNavigate } from "react-router-dom";
-import { isCloudMode } from "../../../utils/modeDetection";
+import { LivepeerAPI, AssetAPI } from '../../../scripts/back_door';
+import { logDev, proxyLivepeerOriginEndpoint } from '../../../scripts/helpers';
+import configs from '../../../../configs';
+import AssetDisplay from './AssetDisplay';
+import { Player } from '@livepeer/react';
+import { Input } from '../../shared/input/Input';
+import FormSection from '../../shared/FormSection/FormSection';
+import { ButtonPrimary } from '../../shared/button/Button';
+import ButtonLoading from '../../shared/button/ButtonLoading';
+import { DashboardPage } from '../../shared/DashboardPage/DashboardPage';
+import { logoColors } from '../../../styles/colors';
+import { useAppContext } from '../../../context/AppContext';
+import { useNavigate } from 'react-router-dom';
+import { isCloudMode } from '../../../utils/modeDetection';
 
 const colors = {
-  primaryBlue: "#1B3B6F",
-  accentBlue: "#62B6F1",
-  white: "#FFFFFF",
-  lightGrey: "#F0F0F0",
-  darkGrey: "#333333",
+  primaryBlue: '#1B3B6F',
+  accentBlue: '#62B6F1',
+  white: '#FFFFFF',
+  lightGrey: '#F0F0F0',
+  darkGrey: '#333333',
 };
 
 const DropZoneContainer = styled(motion.div)`
-width: 50%;
+  width: 50%;
   border: 1px dashed ${({ theme }) => theme.colors.ui300};
   padding: 40px 24px;
   height: 250px;
@@ -157,39 +157,39 @@ const ConcludeButton = styled.div`
 `;
 
 export const UploadButton = styled.div`
- background: ${logoColors.primary};
- color: #fff;
- padding: 0.5rem 1rem;
- border-radius: 0.5rem;
- transition: 0.3s ease-in-out;
- display: flex;
- justify-content: center;
- margin: auto;
- margin-bottom: 1rem;
- cursor: pointer;
+  background: ${logoColors.primary};
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 1rem;
+  cursor: pointer;
 
- &:hover {
- padding: 0.8rem 1.3rem;
- background: ${logoColors.primary};
- color: #fff;
- }
+  &:hover {
+    padding: 0.8rem 1.3rem;
+    background: ${logoColors.primary};
+    color: #fff;
+  }
 `;
 
- const UploadedMediaButton = styled(UploadButton)`
- width: 20%;
+const UploadedMediaButton = styled(UploadButton)`
+  width: 20%;
 `;
 
 const renderPreview = (previewURL, fileType) => {
   if (!(previewURL?.length > 0)) return null;
 
-  if (fileType === "video/mp4") {
+  if (fileType === 'video/mp4') {
     return (
       <VideoPreview controls>
         <source src={previewURL} type="video/mp4" />
         Your browser does not support the video tag.
       </VideoPreview>
     );
-  } else if (fileType === "application/pdf") {
+  } else if (fileType === 'application/pdf') {
     return (
       <DocPreview src={previewURL} title="PDF Preview">
         This browser does not support PDFs. Please download the PDF to view it.
@@ -201,14 +201,14 @@ const renderPreview = (previewURL, fileType) => {
 };
 
 const DEFAULT_THUMBNAIL = [
-  "https://www.ncl.ac.uk/mediav8/newcastle-university-in-singapore/images/key-water.jpg",
+  'https://www.ncl.ac.uk/mediav8/newcastle-university-in-singapore/images/key-water.jpg',
 ];
 
 const MediaUpload = () => {
   const { STATES, ACTIONS } = useAppContext();
   const [file, setFile] = useState(null);
-  const [uploadName, setUploadName] = useState("");
-  const [uploadDescription, setUploadDescription] = useState("");
+  const [uploadName, setUploadName] = useState('');
+  const [uploadDescription, setUploadDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [uploadPercentage, setuploadPercentage] = useState(0);
   const [asset, setAsset] = useState(null);
@@ -234,11 +234,14 @@ const MediaUpload = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     const validFiles = acceptedFiles.filter(
-      (file) => file.type === "video/mp4" || file.type === "application/pdf"
+      (file) => file.type === 'video/mp4' || file.type === 'application/pdf'
     );
 
     if (validFiles.length === 0) {
-      ACTIONS.logNotification("error", "No valid files. Only MP4 videos and PDF files are allowed.");
+      ACTIONS.logNotification(
+        'error',
+        'No valid files. Only MP4 videos and PDF files are allowed.'
+      );
       return;
     }
 
@@ -252,21 +255,19 @@ const MediaUpload = () => {
     onDrop,
     multiple: false,
     accept: {
-      "video/mp4": [".mp4"],
-      "application/pdf": [".pdf"],
+      'video/mp4': ['.mp4'],
+      'application/pdf': ['.pdf'],
     },
   });
 
   const handleOpenUploads = () => {
-    const verificationPath = isCloudMode()
-      ? "/cloud/tools/verification"
-      : "/features/verification";
+    const verificationPath = isCloudMode() ? '/cloud/tools/verification' : '/features/verification';
     navigate(verificationPath);
   };
 
   const handleUpload = async () => {
     if (!activeFile) {
-      ACTIONS.logNotification("error", "No file selected for upload.");
+      ACTIONS.logNotification('error', 'No file selected for upload.');
       return;
     }
 
@@ -277,7 +278,7 @@ const MediaUpload = () => {
         (await LivepeerAPI.createAsset(
           {
             name: uploadName,
-            staticMp4: activeFile.type === "video/mp4",
+            staticMp4: activeFile.type === 'video/mp4',
             storage: {
               ipfs: true,
               metadata: {
@@ -290,16 +291,17 @@ const MediaUpload = () => {
         )) || {};
       const { tusEndpoint, asset } = result || {};
 
-      logDev("Media Upload", { result, tusEndpoint });
+      logDev('Media Upload', { result, tusEndpoint });
 
       if (!isSupported) {
-        ACTIONS.logNotification("error", "This browser does not support uploads. Please use a modern browser instead.");
+        ACTIONS.logNotification(
+          'error',
+          'This browser does not support uploads. Please use a modern browser instead.'
+        );
       }
 
       if (tusEndpoint) {
-        const endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(
-          tusEndpoint
-        )}`;
+        const endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(tusEndpoint)}`;
         //https://github.com/tus/tus-js-client/blob/main/docs/api.md
         const upload = new Upload(activeFile, {
           endpoint: tusEndpoint,
@@ -311,7 +313,7 @@ const MediaUpload = () => {
           uploadSize: activeFile.size,
           overridePatchMethod: true,
           onError(err) {
-            console.error("Error uploading file:", err);
+            console.error('Error uploading file:', err);
             setuploadPercentage(0);
           },
           onProgress(bytesUploaded, bytesTotal) {
@@ -332,11 +334,11 @@ const MediaUpload = () => {
 
         upload.start();
       } else {
-        throw new Error("Could not get upload endpoint");
+        throw new Error('Could not get upload endpoint');
       }
     } catch (error) {
-      console.error("Error uploading the asset:", error);
-      ACTIONS.logNotification("error", "Error uploading the asset. Please try again.");
+      console.error('Error uploading the asset:', error);
+      ACTIONS.logNotification('error', 'Error uploading the asset. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -347,17 +349,15 @@ const MediaUpload = () => {
       }
       const jpegSource = playbackInfo.meta.source.find(
         (source) =>
-          source.type === "image/jpeg" ||
-          (source.hrn === "Thumbnail (JPEG)" && source.type.includes("image"))
+          source.type === 'image/jpeg' ||
+          (source.hrn === 'Thumbnail (JPEG)' && source.type.includes('image'))
       );
 
       if (jpegSource) {
         // If JPEG thumbnail is found, return it as a single-item array
         return [jpegSource.url];
       } else {
-        const vttSource = playbackInfo.meta.source.find(
-          (source) => source.type === "text/vtt"
-        );
+        const vttSource = playbackInfo.meta.source.find((source) => source.type === 'text/vtt');
 
         if (vttSource) {
           // If VTT file is found, parse it to get thumbnail URLs
@@ -375,11 +375,11 @@ const MediaUpload = () => {
       const vttText = await response.text();
 
       // Parse VTT content
-      const lines = vttText.split("\n");
+      const lines = vttText.split('\n');
       const thumbnailUrls = [];
 
       for (let i = 0; i < lines.length; i++) {
-        if (lines[i].endsWith(".jpg")) {
+        if (lines[i].endsWith('.jpg')) {
           thumbnailUrls.push(new URL(lines[i], vttUrl).toString());
         }
       }
@@ -394,7 +394,7 @@ const MediaUpload = () => {
           // *TO-DO Listen When playback is ready
           const { playbackInfo } = await LivepeerAPI.getPlaybackInfo(asset.playbackId);
 
-          logDev("playbackInfo", {
+          logDev('playbackInfo', {
             playbackInfo,
             playbackID: asset.playbackId,
           });
@@ -406,10 +406,8 @@ const MediaUpload = () => {
         const { result } = await AssetAPI.addMetadata(asset.id, {
           name: uploadName,
           description: uploadDescription,
-          tags: ["NPC"],
-          thumbnailUrl: _playbackInfo
-            ? await getThumbnailUrls(_playbackInfo)
-            : DEFAULT_THUMBNAIL,
+          tags: ['NPC'],
+          thumbnailUrl: _playbackInfo ? await getThumbnailUrls(_playbackInfo) : DEFAULT_THUMBNAIL,
         });
 
         setAsset(asset);
@@ -420,17 +418,17 @@ const MediaUpload = () => {
 
   const concludeUpload = () => {
     setFile(null);
-    setUploadName("");
-    setUploadDescription("");
+    setUploadName('');
+    setUploadDescription('');
     setAsset(null);
   };
 
   return (
-    <DashboardPage title={"Media Upload"}>
+    <DashboardPage title={'Media Upload'}>
       <UploadedMediaButton onClick={handleOpenUploads}>My Uploads</UploadedMediaButton>
       <AssetContainer isLoading={isLoading || uploadPercentage > 0}>
         {/*     <UploadProgress progress={50} />
-         */}{" "}
+         */}{' '}
         {/* {(isLoading || uploadPercentage > 0) && (
   {uploadPercentage > 0 && (
     <UploadProgress progress={uploadPercentage} />
@@ -441,21 +439,19 @@ const MediaUpload = () => {
             <div className="flex-col">
               <AssetPlayer title={asset.name} playbackId={asset.playbackId} />
             </div>
-          ) : previewURL?.length > 0 && activeFile?.type === "video/mp4" ? (
-            <div className="flex-col">
-              {renderPreview(previewURL, activeFile.type)}
-            </div>
+          ) : previewURL?.length > 0 && activeFile?.type === 'video/mp4' ? (
+            <div className="flex-col">{renderPreview(previewURL, activeFile.type)}</div>
           ) : (
             <></>
           )}
           {!asset && (
             <DropZoneContainer {...getRootProps()} isPreview={previewURL}>
-            <input {...getInputProps()} />
-            <p className="drag-n-drop-title">
-              Drag & drop a MP4 or PDF file here. <br />
-              Or click to select one
-            </p>
-          </DropZoneContainer>
+              <input {...getInputProps()} />
+              <p className="drag-n-drop-title">
+                Drag & drop a MP4 or PDF file here. <br />
+                Or click to select one
+              </p>
+            </DropZoneContainer>
           )}
         </InputPreviewContainer>
         {asset ? (
@@ -470,11 +466,11 @@ const MediaUpload = () => {
             <AnimatePresence>
               <VideoInputContainer
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+                animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <FormSection label={"File name"}>
+                <FormSection label={'File name'}>
                   <Input
                     type="text"
                     placeholder="Enter file name"
@@ -483,7 +479,7 @@ const MediaUpload = () => {
                   />
                 </FormSection>
 
-                <FormSection label={"File description"}>
+                <FormSection label={'File description'}>
                   <Input
                     type="text"
                     placeholder="Enter file description"
@@ -497,7 +493,7 @@ const MediaUpload = () => {
                   onClick={handleUpload}
                   disabled={isLoading}
                 >
-                  {isLoading ? <ButtonLoading /> : "Upload"}
+                  {isLoading ? <ButtonLoading /> : 'Upload'}
                 </ButtonPrimary>
               </VideoInputContainer>
             </AnimatePresence>

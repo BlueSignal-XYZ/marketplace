@@ -41,12 +41,12 @@ export interface Commission {
 }
 
 export type CommissionWorkflowStatus =
-  | 'pending'     // Created but not started
+  | 'pending' // Created but not started
   | 'in_progress' // Installer actively working
   | 'awaiting_tests' // Checklists done, tests pending
-  | 'passed'      // All checks and tests passed
-  | 'failed'      // One or more failures
-  | 'cancelled';  // Workflow cancelled
+  | 'passed' // All checks and tests passed
+  | 'failed' // One or more failures
+  | 'cancelled'; // Workflow cancelled
 
 export type CommissionChecklistType = 'shore' | 'buoy';
 

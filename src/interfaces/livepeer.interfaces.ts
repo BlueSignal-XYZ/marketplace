@@ -1,4 +1,4 @@
-import { logDev } from "../scripts/helpers";
+import { logDev } from '../scripts/helpers';
 
 export interface Asset {
   id: string;
@@ -43,7 +43,7 @@ export interface Storage {
 }
 
 export interface NewAssetEncryption {
-  encryptedKey: string // Encryption key used to encrypt the asset. Only writable in the upload asset endpoints and cannot be retrieved back. 
+  encryptedKey: string; // Encryption key used to encrypt the asset. Only writable in the upload asset endpoints and cannot be retrieved back.
 }
 
 export interface Ipfs {
@@ -91,7 +91,6 @@ export interface TranscodeProfile {
   encoder?: string; // Encoder setting for the transcoding (options: H.264, HEVC, VP8, VP9)
 }
 
-
 export interface Track {
   type: string;
   codec: string;
@@ -108,7 +107,8 @@ export interface Track {
 }
 
 export interface RequestUpload {
-  request: { //The request object to use for the request.
+  request: {
+    //The request object to use for the request.
     name: string; // The name of the asset
     staticMp4?: boolean; // Whether to generate MP4s for the asset
     playbackPolicy?: PlaybackPolicy; // The playback policy for an asset or stream
@@ -118,9 +118,9 @@ export interface RequestUpload {
     c2pa?: boolean; // Whether the output video should include C2PA signature
     profiles?: TranscodeProfile[]; // Array of transcode profiles
     targetSegmentSizeSecs?: number; // Duration of each output segment in seconds
-  }, 
-  options?: Record<string, unknown>, //Used to set various options for making HTTP requests.
-  fetchOptions?: Record<string, unknown> // Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All Request options, except method and body, are allowed.
+  };
+  options?: Record<string, unknown>; //Used to set various options for making HTTP requests.
+  fetchOptions?: Record<string, unknown>; // Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All Request options, except method and body, are allowed.
 }
 
 export interface RequestUploadResponse {
@@ -139,15 +139,15 @@ export interface RequestUploadData {
 }
 
 export interface Task {
-  id: string; 
+  id: string;
 }
 
-const testType = (type: string, result: string, data: string = "") => {
-  logDev(`Type Test: ${type} => ${result} => ${data}`, {type, result, data})
-}
+const testType = (type: string, result: string, data: string = '') => {
+  logDev(`Type Test: ${type} => ${result} => ${data}`, { type, result, data });
+};
 const ActionTypes = {
   AssetUpload: {
-    request: testType("RequestUpload","RequestUploadResponse", "RequestUploadData"),
-    upload: testType("tusUpload", "response listners", 'upload: { url }')
-  }
-}
+    request: testType('RequestUpload', 'RequestUploadResponse', 'RequestUploadData'),
+    upload: testType('tusUpload', 'response listners', 'upload: { url }'),
+  },
+};

@@ -1,21 +1,31 @@
 // Overview Tab Component
-import { SectionTitle, FeatureList, FeatureItem, SpecGrid, SpecCard, SpecLabel, SpecValue } from "../../styles";
+import {
+  SectionTitle,
+  FeatureList,
+  FeatureItem,
+  SpecGrid,
+  SpecCard,
+  SpecLabel,
+  SpecValue,
+} from '../../styles';
 
 const OverviewTab = ({ product }) => (
   <div>
     {/* SKU Badge */}
     {product.sku && (
       <div style={{ marginBottom: 16 }}>
-        <span style={{
-          background: "rgba(59, 130, 246, 0.2)",
-          border: "1px solid #3b82f6",
-          borderRadius: 4,
-          padding: "4px 12px",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "#60a5fa",
-          fontFamily: "monospace"
-        }}>
+        <span
+          style={{
+            background: 'rgba(59, 130, 246, 0.2)',
+            border: '1px solid #3b82f6',
+            borderRadius: 4,
+            padding: '4px 12px',
+            fontSize: 12,
+            fontWeight: 600,
+            color: '#60a5fa',
+            fontFamily: 'monospace',
+          }}
+        >
           SKU: {product.sku}
         </span>
       </div>
@@ -49,13 +59,18 @@ const OverviewTab = ({ product }) => (
         {product.ultrasonic?.enabled && (
           <SpecCard>
             <SpecLabel>Ultrasonic</SpecLabel>
-            <SpecValue>{product.ultrasonic.watts}W × {product.ultrasonic.units} @ {product.ultrasonic.frequency}</SpecValue>
+            <SpecValue>
+              {product.ultrasonic.watts}W × {product.ultrasonic.units} @{' '}
+              {product.ultrasonic.frequency}
+            </SpecValue>
           </SpecCard>
         )}
         {product.battery && (
           <SpecCard>
             <SpecLabel>Battery</SpecLabel>
-            <SpecValue>{product.battery.voltage}V {product.battery.capacity}Ah ({product.battery.wh}Wh)</SpecValue>
+            <SpecValue>
+              {product.battery.voltage}V {product.battery.capacity}Ah ({product.battery.wh}Wh)
+            </SpecValue>
           </SpecCard>
         )}
         <SpecCard>
@@ -69,7 +84,9 @@ const OverviewTab = ({ product }) => (
         {product.dimensions && (
           <SpecCard>
             <SpecLabel>Dimensions (L×W×H)</SpecLabel>
-            <SpecValue>{product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height}</SpecValue>
+            <SpecValue>
+              {product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height}
+            </SpecValue>
           </SpecCard>
         )}
         {product.enclosure && (

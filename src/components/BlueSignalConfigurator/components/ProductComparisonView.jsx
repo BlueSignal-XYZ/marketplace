@@ -12,24 +12,32 @@ import {
   ComparisonProductHeader,
   ProductName,
   ProductSubtitle,
-} from "../styles";
+} from '../styles';
 
 const ProductComparisonView = ({ products, onClose }) => {
   const comparisonFields = [
-    { key: "price", label: "Price", format: (v) => `$${v.toLocaleString()}` },
-    { key: "deployment", label: "Deployment" },
-    { key: "power.type", label: "Power Type", path: true },
-    { key: "sensors", label: "Sensors", format: (v) => `${v} parameters` },
-    { key: "ultrasonic", label: "Ultrasonic", format: (v) => v?.enabled ? `${v.watts}W @ ${v.frequency}` : "None" },
-    { key: "battery", label: "Battery", format: (v) => v ? `${v.voltage}V ${v.capacity}Ah (${v.wh}Wh)` : "N/A" },
-    { key: "solar", label: "Solar", format: (v) => v ? `${v.watts}W` : "N/A" },
-    { key: "autonomy", label: "Autonomy" },
-    { key: "weight", label: "Weight" },
+    { key: 'price', label: 'Price', format: (v) => `$${v.toLocaleString()}` },
+    { key: 'deployment', label: 'Deployment' },
+    { key: 'power.type', label: 'Power Type', path: true },
+    { key: 'sensors', label: 'Sensors', format: (v) => `${v} parameters` },
+    {
+      key: 'ultrasonic',
+      label: 'Ultrasonic',
+      format: (v) => (v?.enabled ? `${v.watts}W @ ${v.frequency}` : 'None'),
+    },
+    {
+      key: 'battery',
+      label: 'Battery',
+      format: (v) => (v ? `${v.voltage}V ${v.capacity}Ah (${v.wh}Wh)` : 'N/A'),
+    },
+    { key: 'solar', label: 'Solar', format: (v) => (v ? `${v.watts}W` : 'N/A') },
+    { key: 'autonomy', label: 'Autonomy' },
+    { key: 'weight', label: 'Weight' },
   ];
 
   const getValue = (product, field) => {
     if (field.path) {
-      const keys = field.key.split(".");
+      const keys = field.key.split('.');
       let val = product;
       for (const k of keys) val = val?.[k];
       return field.format ? field.format(val) : val;
@@ -39,11 +47,11 @@ const ProductComparisonView = ({ products, onClose }) => {
   };
 
   const findBestValue = (field) => {
-    if (field.key === "price") {
-      return Math.min(...products.map(p => p.price));
+    if (field.key === 'price') {
+      return Math.min(...products.map((p) => p.price));
     }
-    if (field.key === "sensors") {
-      return Math.max(...products.map(p => p.sensors));
+    if (field.key === 'sensors') {
+      return Math.max(...products.map((p) => p.sensors));
     }
     return null;
   };
@@ -75,11 +83,12 @@ const ProductComparisonView = ({ products, onClose }) => {
                 <ComparisonLabel>{field.label}</ComparisonLabel>
                 {products.map((p) => {
                   const value = getValue(p, field);
-                  const isBest = field.key === "price"
-                    ? p.price === bestValue
-                    : field.key === "sensors"
-                    ? p.sensors === bestValue
-                    : false;
+                  const isBest =
+                    field.key === 'price'
+                      ? p.price === bestValue
+                      : field.key === 'sensors'
+                        ? p.sensors === bestValue
+                        : false;
                   return (
                     <ComparisonValue key={p.id} highlight={isBest}>
                       {value}
@@ -94,9 +103,7 @@ const ProductComparisonView = ({ products, onClose }) => {
           <ComparisonRow cols={products.length}>
             <ComparisonLabel>Sensor List</ComparisonLabel>
             {products.map((p) => (
-              <ComparisonValue key={p.id}>
-                {p.sensorList.join(", ")}
-              </ComparisonValue>
+              <ComparisonValue key={p.id}>{p.sensorList.join(', ')}</ComparisonValue>
             ))}
           </ComparisonRow>
 
@@ -105,11 +112,7 @@ const ProductComparisonView = ({ products, onClose }) => {
             <ComparisonLabel>BOM Cost</ComparisonLabel>
             {products.map((p) => {
               const bomTotal = p.bom.reduce((sum, item) => sum + item.cost, 0);
-              return (
-                <ComparisonValue key={p.id}>
-                  ${bomTotal.toLocaleString()}
-                </ComparisonValue>
-              );
+              return <ComparisonValue key={p.id}>${bomTotal.toLocaleString()}</ComparisonValue>;
             })}
           </ComparisonRow>
 
@@ -118,7 +121,7 @@ const ProductComparisonView = ({ products, onClose }) => {
             <ComparisonLabel>Margin</ComparisonLabel>
             {products.map((p) => {
               const bomTotal = p.bom.reduce((sum, item) => sum + item.cost, 0);
-              const margin = ((p.price - bomTotal) / p.price * 100).toFixed(1);
+              const margin = (((p.price - bomTotal) / p.price) * 100).toFixed(1);
               return (
                 <ComparisonValue key={p.id} highlight={parseFloat(margin) >= 40}>
                   {margin}%

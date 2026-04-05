@@ -41,10 +41,7 @@ export const createProject = async (projectData, organizationId) => {
   // Auto-detect basin from coordinates if not provided
   let basinCode = projectData.basinCode;
   if (!basinCode && projectData.latitude && projectData.longitude) {
-    const detectedBasin = getBasinByCoordinates(
-      projectData.latitude,
-      projectData.longitude
-    );
+    const detectedBasin = getBasinByCoordinates(projectData.latitude, projectData.longitude);
     if (detectedBasin) {
       basinCode = detectedBasin.code;
     } else {
@@ -152,16 +149,19 @@ export const createProjectFromSite = async (siteId, projectDetails, organization
   // Get devices at site
   const devices = await DeviceAPI.getBySite(siteId);
 
-  return createProject({
-    ...projectDetails,
-    siteId,
-    basinCode,
-    name: projectDetails.name || site.name,
-    latitude: site.coordinates?.lat,
-    longitude: site.coordinates?.lng,
-    address: site.address,
-    deviceIds: devices?.map(d => d.id) || [],
-  }, organizationId);
+  return createProject(
+    {
+      ...projectDetails,
+      siteId,
+      basinCode,
+      name: projectDetails.name || site.name,
+      latitude: site.coordinates?.lat,
+      longitude: site.coordinates?.lng,
+      address: site.address,
+      deviceIds: devices?.map((d) => d.id) || [],
+    },
+    organizationId
+  );
 };
 
 /**
@@ -200,7 +200,7 @@ export const linkDeviceToProject = async (project, deviceId, role = 'primary') =
 export const unlinkDeviceFromProject = (project, deviceId) => {
   const updatedProject = {
     ...project,
-    deviceIds: project.deviceIds.filter(id => id !== deviceId),
+    deviceIds: project.deviceIds.filter((id) => id !== deviceId),
     updatedAt: new Date().toISOString(),
   };
 
@@ -304,12 +304,14 @@ export const getProjectSummary = async (project) => {
 
   return {
     project,
-    basin: basin ? {
-      code: basin.code,
-      name: basin.name,
-      nitrogenDeliveryFactor: basin.nitrogenDeliveryFactor,
-      phosphorusDeliveryFactor: basin.phosphorusDeliveryFactor,
-    } : null,
+    basin: basin
+      ? {
+          code: basin.code,
+          name: basin.name,
+          nitrogenDeliveryFactor: basin.nitrogenDeliveryFactor,
+          phosphorusDeliveryFactor: basin.phosphorusDeliveryFactor,
+        }
+      : null,
     devices: {
       total: totalDevices,
       online: onlineDevices,
@@ -318,7 +320,7 @@ export const getProjectSummary = async (project) => {
     complianceYear,
     estimatedCredits: {
       nitrogen: {
-        raw: project.baselineNitrogenLoad * 0.3,  // Rough estimate
+        raw: project.baselineNitrogenLoad * 0.3, // Rough estimate
         delivered: project.baselineNitrogenLoad * 0.3 * (basin?.nitrogenDeliveryFactor || 1),
       },
       phosphorus: {
@@ -336,31 +338,32 @@ export const searchProjects = (projects, criteria) => {
   let filtered = [...projects];
 
   if (criteria.basinCode) {
-    filtered = filtered.filter(p => p.basinCode === criteria.basinCode);
+    filtered = filtered.filter((p) => p.basinCode === criteria.basinCode);
   }
 
   if (criteria.status) {
-    filtered = filtered.filter(p => p.status === criteria.status);
+    filtered = filtered.filter((p) => p.status === criteria.status);
   }
 
   if (criteria.sourceType) {
-    filtered = filtered.filter(p => p.sourceType === criteria.sourceType);
+    filtered = filtered.filter((p) => p.sourceType === criteria.sourceType);
   }
 
   if (criteria.practiceType) {
-    filtered = filtered.filter(p => p.practiceType === criteria.practiceType);
+    filtered = filtered.filter((p) => p.practiceType === criteria.practiceType);
   }
 
   if (criteria.organizationId) {
-    filtered = filtered.filter(p => p.organizationId === criteria.organizationId);
+    filtered = filtered.filter((p) => p.organizationId === criteria.organizationId);
   }
 
   if (criteria.search) {
     const searchLower = criteria.search.toLowerCase();
-    filtered = filtered.filter(p =>
-      p.name.toLowerCase().includes(searchLower) ||
-      p.description?.toLowerCase().includes(searchLower) ||
-      p.address?.toLowerCase().includes(searchLower)
+    filtered = filtered.filter(
+      (p) =>
+        p.name.toLowerCase().includes(searchLower) ||
+        p.description?.toLowerCase().includes(searchLower) ||
+        p.address?.toLowerCase().includes(searchLower)
     );
   }
 
@@ -371,7 +374,7 @@ export const searchProjects = (projects, criteria) => {
  * Get all basins as options for dropdowns
  */
 export const getBasinOptions = () => {
-  return Object.values(VIRGINIA_BASINS).map(basin => ({
+  return Object.values(VIRGINIA_BASINS).map((basin) => ({
     value: basin.code,
     label: `${basin.name} (${basin.code})`,
     name: basin.name,

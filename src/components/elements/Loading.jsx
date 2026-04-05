@@ -5,9 +5,7 @@ const LoadingAnimation = styled.div`
 `;
 
 const Loading = () => {
-  return (
-    <LoadingAnimation>Loading...</LoadingAnimation>
-  )
-}
+  return <LoadingAnimation>Loading...</LoadingAnimation>;
+};
 
 export default Loading;

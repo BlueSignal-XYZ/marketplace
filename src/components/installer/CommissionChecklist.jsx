@@ -1,6 +1,6 @@
 // Commission Checklist Component - Interactive checklist for installers
-import { useState } from "react";
-import styled from "styled-components";
+import { useState } from 'react';
+import styled from 'styled-components';
 
 const ChecklistContainer = styled.div`
   background: #ffffff;
@@ -32,9 +32,8 @@ const ProgressBadge = styled.span`
   font-weight: 600;
   border-radius: 4px;
   background: ${(props) =>
-    props.complete ? "#dcfce7" : props.progress > 0 ? "#fef3c7" : "#f3f4f6"};
-  color: ${(props) =>
-    props.complete ? "#166534" : props.progress > 0 ? "#92400e" : "#6b7280"};
+    props.complete ? '#dcfce7' : props.progress > 0 ? '#fef3c7' : '#f3f4f6'};
+  color: ${(props) => (props.complete ? '#166534' : props.progress > 0 ? '#92400e' : '#6b7280')};
 `;
 
 const CategoryGroup = styled.div`
@@ -84,8 +83,8 @@ const Checkbox = styled.div`
   width: 22px;
   height: 22px;
   border-radius: 4px;
-  border: 2px solid ${(props) => (props.checked ? "#22c55e" : "#d1d5db")};
-  background: ${(props) => (props.checked ? "#22c55e" : "#ffffff")};
+  border: 2px solid ${(props) => (props.checked ? '#22c55e' : '#d1d5db')};
+  background: ${(props) => (props.checked ? '#22c55e' : '#ffffff')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,7 +93,7 @@ const Checkbox = styled.div`
   transition: all 0.2s;
 
   &:hover {
-    border-color: ${(props) => (props.checked ? "#16a34a" : "#9ca3af")};
+    border-color: ${(props) => (props.checked ? '#16a34a' : '#9ca3af')};
   }
 
   svg {
@@ -111,8 +110,8 @@ const ItemContent = styled.div`
 
 const ItemText = styled.div`
   font-size: 14px;
-  color: ${(props) => (props.checked ? "#9ca3af" : "#1f2937")};
-  text-decoration: ${(props) => (props.checked ? "line-through" : "none")};
+  color: ${(props) => (props.checked ? '#9ca3af' : '#1f2937')};
+  text-decoration: ${(props) => (props.checked ? 'line-through' : 'none')};
   line-height: 1.4;
 `;
 
@@ -161,7 +160,7 @@ const CheckIcon = () => (
 );
 
 const CommissionChecklist = ({
-  title = "Checklist",
+  title = 'Checklist',
   items = [],
   onItemChange,
   readOnly = false,
@@ -170,7 +169,7 @@ const CommissionChecklist = ({
 
   // Group items by category
   const groupedItems = items.reduce((groups, item) => {
-    const category = item.category || "General";
+    const category = item.category || 'General';
     if (!groups[category]) {
       groups[category] = [];
     }
@@ -213,11 +212,11 @@ const CommissionChecklist = ({
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return null;
     const date = new Date(timestamp);
-    return date.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
     });
   };
 
@@ -238,33 +237,34 @@ const CommissionChecklist = ({
           </CategoryHeader>
           {categoryItems.map((item) => (
             <ChecklistItem key={item.id}>
-              <Checkbox
-                checked={item.completed}
-                onClick={() => handleToggle(item.id)}
-              >
+              <Checkbox checked={item.completed} onClick={() => handleToggle(item.id)}>
                 {item.completed && <CheckIcon />}
               </Checkbox>
               <ItemContent>
                 <ItemText checked={item.completed}>{item.text}</ItemText>
                 <ItemMeta>
-                  {item.completedAt && (
-                    <span>Completed {formatTimestamp(item.completedAt)}</span>
-                  )}
+                  {item.completedAt && <span>Completed {formatTimestamp(item.completedAt)}</span>}
                   {!readOnly && (
                     <NotesToggle onClick={() => toggleNotes(item.id)}>
-                      {expandedNotes[item.id] ? "Hide notes" : item.notes ? "Edit notes" : "Add notes"}
+                      {expandedNotes[item.id]
+                        ? 'Hide notes'
+                        : item.notes
+                          ? 'Edit notes'
+                          : 'Add notes'}
                     </NotesToggle>
                   )}
                 </ItemMeta>
                 {(expandedNotes[item.id] || item.notes) && !readOnly && expandedNotes[item.id] && (
                   <NotesInput
                     placeholder="Add notes..."
-                    value={item.notes || ""}
+                    value={item.notes || ''}
                     onChange={(e) => handleNotesChange(item.id, e.target.value)}
                   />
                 )}
                 {item.notes && !expandedNotes[item.id] && (
-                  <div style={{ marginTop: 6, fontSize: 12, color: "#6b7280", fontStyle: "italic" }}>
+                  <div
+                    style={{ marginTop: 6, fontSize: 12, color: '#6b7280', fontStyle: 'italic' }}
+                  >
                     Note: {item.notes}
                   </div>
                 )}

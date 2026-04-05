@@ -1,11 +1,11 @@
 // /src/components/cloud/OnboardingWizard.jsx
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
-import { UserProfileAPI } from "../../scripts/back_door";
-import { ButtonPrimary, ButtonSecondary } from "../shared/button/Button";
-import { Input } from "../shared/input/Input";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
+import { UserProfileAPI } from '../../scripts/back_door';
+import { ButtonPrimary, ButtonSecondary } from '../shared/button/Button';
+import { Input } from '../shared/input/Input';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -32,7 +32,7 @@ const Card = styled.div`
 
 const ProgressBar = styled.div`
   display: flex;
-  background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
+  background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
 `;
 
 const ProgressStep = styled.div`
@@ -44,17 +44,17 @@ const ProgressStep = styled.div`
   font-weight: 600;
   color: ${({ $active, $completed, theme }) =>
     $active
-      ? theme.colors?.primary || "#0066FF"
+      ? theme.colors?.primary || '#0066FF'
       : $completed
-      ? theme.colors?.primary || "#0066FF"
-      : theme.colors?.textMuted || "#9CA3AF"};
+        ? theme.colors?.primary || '#0066FF'
+        : theme.colors?.textMuted || '#9CA3AF'};
   border-bottom: 3px solid
     ${({ $active, $completed, theme }) =>
       $active
-        ? theme.colors?.primary || "#0066FF"
+        ? theme.colors?.primary || '#0066FF'
         : $completed
-        ? theme.colors?.accent || "#06B6D4"
-        : "transparent"};
+          ? theme.colors?.accent || '#06B6D4'
+          : 'transparent'};
   transition: all 0.2s ease-out;
 `;
 
@@ -67,14 +67,14 @@ const StepTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 24px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
 `;
 
 const StepDescription = styled.p`
   margin: 0 0 32px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
-  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   line-height: 1.6;
 `;
 
@@ -90,10 +90,10 @@ const RoleGrid = styled.div`
 
 const RoleCard = styled.button`
   background: ${({ $selected, theme }) =>
-    $selected ? theme.colors?.primaryLight || "#E8F0FE" : theme.colors?.surface || "#FFFFFF"};
+    $selected ? theme.colors?.primaryLight || '#E8F0FE' : theme.colors?.surface || '#FFFFFF'};
   border: 2px solid
     ${({ $selected, theme }) =>
-      $selected ? theme.colors?.primary || "#0066FF" : theme.colors?.border || "#E5E7EB"};
+      $selected ? theme.colors?.primary || '#0066FF' : theme.colors?.border || '#E5E7EB'};
   border-radius: 12px;
   padding: 24px 16px;
   text-align: center;
@@ -101,8 +101,8 @@ const RoleCard = styled.button`
   transition: all 0.2s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
-    background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
+    background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
   }
 `;
 
@@ -115,14 +115,14 @@ const RoleName = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   margin-bottom: 8px;
 `;
 
 const RoleDescription = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   line-height: 1.4;
 `;
 
@@ -139,26 +139,26 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const TextArea = styled.textarea`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   padding: 12px;
   border-radius: 12px;
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
   width: 100%;
   min-height: 80px;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   resize: vertical;
   font-family: inherit;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || "#EFFBFB"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
   }
 `;
 
@@ -174,8 +174,8 @@ const FeatureItem = styled.li`
   gap: 12px;
   padding: 12px 0;
   font-size: 15px;
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f4f4f5"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f4f4f5'};
 
   &:last-child {
     border-bottom: none;
@@ -189,7 +189,7 @@ const FeatureCheck = styled.span`
 
 const Footer = styled.div`
   padding: 24px 32px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -200,9 +200,9 @@ const Footer = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.red50 || "#fef2f2"};
-  border: 1px solid ${({ theme }) => theme.colors?.red200 || "#fecaca"};
-  color: ${({ theme }) => theme.colors?.red700 || "#b91c1c"};
+  background: ${({ theme }) => theme.colors?.red50 || '#fef2f2'};
+  border: 1px solid ${({ theme }) => theme.colors?.red200 || '#fecaca'};
+  color: ${({ theme }) => theme.colors?.red700 || '#b91c1c'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -213,40 +213,36 @@ const ErrorMessage = styled.div`
 /*                              CONSTANTS                                     */
 /* -------------------------------------------------------------------------- */
 
-const STEPS = ["Role", "Profile", "Review"];
+const STEPS = ['Role', 'Profile', 'Review'];
 
 const ROLES = [
   {
-    id: "buyer",
-    icon: "🛒",
-    name: "Buyer",
-    description: "Purchase nutrient credits to offset environmental impact",
+    id: 'buyer',
+    icon: '🛒',
+    name: 'Buyer',
+    description: 'Purchase nutrient credits to offset environmental impact',
     features: [
-      "Browse and purchase credits",
-      "Track your portfolio",
-      "Verify certificates on blockchain",
+      'Browse and purchase credits',
+      'Track your portfolio',
+      'Verify certificates on blockchain',
     ],
   },
   {
-    id: "seller",
-    icon: "🌱",
-    name: "Seller",
-    description: "List and sell nutrient credits from your operations",
-    features: [
-      "Create credit listings",
-      "Manage inventory",
-      "Track sales and revenue",
-    ],
+    id: 'seller',
+    icon: '🌱',
+    name: 'Seller',
+    description: 'List and sell nutrient credits from your operations',
+    features: ['Create credit listings', 'Manage inventory', 'Track sales and revenue'],
   },
   {
-    id: "installer",
-    icon: "🔧",
-    name: "Installer",
-    description: "Deploy and commission monitoring devices",
+    id: 'installer',
+    icon: '🔧',
+    name: 'Installer',
+    description: 'Deploy and commission monitoring devices',
     features: [
-      "Scan and register devices",
-      "Commission equipment on-site",
-      "Monitor device health",
+      'Scan and register devices',
+      'Commission equipment on-site',
+      'Monitor device health',
     ],
   },
 ];
@@ -256,7 +252,9 @@ const ROLES = [
 /* -------------------------------------------------------------------------- */
 
 export default function OnboardingWizard() {
-  useEffect(() => { document.title = 'Onboarding — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Onboarding — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
@@ -266,11 +264,11 @@ export default function OnboardingWizard() {
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-    role: "",
-    displayName: user?.displayName || "",
-    company: "",
-    phone: "",
-    bio: "",
+    role: '',
+    displayName: user?.displayName || '',
+    company: '',
+    phone: '',
+    bio: '',
   });
 
   const handleRoleSelect = (roleId) => {
@@ -285,12 +283,12 @@ export default function OnboardingWizard() {
     setError(null);
 
     if (step === 0 && !formData.role) {
-      setError("Please select a role to continue");
+      setError('Please select a role to continue');
       return;
     }
 
     if (step === 1 && !formData.displayName.trim()) {
-      setError("Please enter your name");
+      setError('Please enter your name');
       return;
     }
 
@@ -331,16 +329,16 @@ export default function OnboardingWizard() {
       });
 
       const dashboardRoutes = {
-        buyer: "/dashboard/buyer",
-        seller: "/dashboard/seller",
-        installer: "/dashboard/installer",
+        buyer: '/dashboard/buyer',
+        seller: '/dashboard/seller',
+        installer: '/dashboard/installer',
       };
 
-      navigate(dashboardRoutes[formData.role] || "/dashboard/main");
+      navigate(dashboardRoutes[formData.role] || '/dashboard/main');
     } catch (err) {
-      console.error("Onboarding failed:", err?.response?.data || err.message || err);
+      console.error('Onboarding failed:', err?.response?.data || err.message || err);
       const serverMsg = err?.response?.data?.error;
-      setError(serverMsg || err.message || "Failed to update profile. Please try again.");
+      setError(serverMsg || err.message || 'Failed to update profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -353,11 +351,7 @@ export default function OnboardingWizard() {
       <Card>
         <ProgressBar>
           {STEPS.map((s, idx) => (
-            <ProgressStep
-              key={s}
-              $active={idx === step}
-              $completed={idx < step}
-            >
+            <ProgressStep key={s} $active={idx === step} $completed={idx < step}>
               {s}
             </ProgressStep>
           ))}
@@ -371,7 +365,8 @@ export default function OnboardingWizard() {
             <>
               <StepTitle>Choose Your Role</StepTitle>
               <StepDescription>
-                Select how you'll primarily use BlueSignal. You can change this later in settings.
+                Select how you&apos;ll primarily use BlueSignal. You can change this later in
+                settings.
               </StepDescription>
 
               <RoleGrid>
@@ -395,9 +390,7 @@ export default function OnboardingWizard() {
           {step === 1 && (
             <>
               <StepTitle>Tell Us About Yourself</StepTitle>
-              <StepDescription>
-                Help us personalize your experience.
-              </StepDescription>
+              <StepDescription>Help us personalize your experience.</StepDescription>
 
               <FormGroup>
                 <Label htmlFor="displayName">Your Name *</Label>
@@ -405,7 +398,7 @@ export default function OnboardingWizard() {
                   id="displayName"
                   type="text"
                   value={formData.displayName}
-                  onChange={(e) => handleChange("displayName", e.target.value)}
+                  onChange={(e) => handleChange('displayName', e.target.value)}
                   placeholder="Full name"
                 />
               </FormGroup>
@@ -416,7 +409,7 @@ export default function OnboardingWizard() {
                   id="company"
                   type="text"
                   value={formData.company}
-                  onChange={(e) => handleChange("company", e.target.value)}
+                  onChange={(e) => handleChange('company', e.target.value)}
                   placeholder="Your company name"
                 />
               </FormGroup>
@@ -427,7 +420,7 @@ export default function OnboardingWizard() {
                   id="phone"
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => handleChange("phone", e.target.value)}
+                  onChange={(e) => handleChange('phone', e.target.value)}
                   placeholder="+1 (555) 123-4567"
                 />
               </FormGroup>
@@ -437,7 +430,7 @@ export default function OnboardingWizard() {
                 <TextArea
                   id="bio"
                   value={formData.bio}
-                  onChange={(e) => handleChange("bio", e.target.value)}
+                  onChange={(e) => handleChange('bio', e.target.value)}
                   placeholder="Tell us a bit about yourself or your organization..."
                 />
               </FormGroup>
@@ -447,35 +440,42 @@ export default function OnboardingWizard() {
           {/* Step 3: Review */}
           {step === 2 && (
             <>
-              <StepTitle>You're All Set!</StepTitle>
-              <StepDescription>
-                Review your setup before getting started.
-              </StepDescription>
+              <StepTitle>You&apos;re All Set!</StepTitle>
+              <StepDescription>Review your setup before getting started.</StepDescription>
 
-              <div style={{
-                background: "#f9fafb",
-                borderRadius: "12px",
-                padding: "20px",
-                marginBottom: "24px",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
-                  <div style={{ fontSize: "48px" }}>{selectedRole?.icon}</div>
+              <div
+                style={{
+                  background: '#f9fafb',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  marginBottom: '24px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    marginBottom: '16px',
+                  }}
+                >
+                  <div style={{ fontSize: '48px' }}>{selectedRole?.icon}</div>
                   <div>
-                    <div style={{ fontSize: "20px", fontWeight: "700" }}>{formData.displayName}</div>
-                    <div style={{ fontSize: "14px", color: "#6b7280" }}>
+                    <div style={{ fontSize: '20px', fontWeight: '700' }}>
+                      {formData.displayName}
+                    </div>
+                    <div style={{ fontSize: '14px', color: '#6b7280' }}>
                       {selectedRole?.name} Account
                     </div>
                     {formData.company && (
-                      <div style={{ fontSize: "13px", color: "#9ca3af" }}>
-                        {formData.company}
-                      </div>
+                      <div style={{ fontSize: '13px', color: '#9ca3af' }}>{formData.company}</div>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div style={{ fontWeight: "600", marginBottom: "12px" }}>
-                What you'll be able to do:
+              <div style={{ fontWeight: '600', marginBottom: '12px' }}>
+                What you&apos;ll be able to do:
               </div>
 
               <FeatureList>
@@ -504,12 +504,8 @@ export default function OnboardingWizard() {
               Continue
             </ButtonPrimary>
           ) : (
-            <ButtonPrimary
-              type="button"
-              onClick={handleComplete}
-              disabled={loading}
-            >
-              {loading ? "Setting up..." : "Get Started"}
+            <ButtonPrimary type="button" onClick={handleComplete} disabled={loading}>
+              {loading ? 'Setting up...' : 'Get Started'}
             </ButtonPrimary>
           )}
         </Footer>

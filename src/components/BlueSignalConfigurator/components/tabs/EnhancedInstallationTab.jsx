@@ -1,16 +1,16 @@
 // Enhanced Installation Tab with Interactive Checklists
-import { useState } from "react";
-import styled from "styled-components";
-import { SectionTitle, Table, Th, Td } from "../../styles";
-import { ExpandableSection, ChecklistCard } from "../shared";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { SectionTitle, Table, Th, Td } from '../../styles';
+import { ExpandableSection, ChecklistCard } from '../shared';
 import {
   INSTALLATION,
   TEST_POINTS,
   PRE_DEPLOYMENT_CHECKLISTS,
   COMMISSIONING_CHECKLISTS,
   REQUIRED_TOOLS,
-  DEPLOYMENT_STEPS
-} from "../../data";
+  DEPLOYMENT_STEPS,
+} from '../../data';
 
 const SubNav = styled.div`
   display: flex;
@@ -26,10 +26,10 @@ const SubNavButton = styled.button`
   padding: 10px 20px;
   font-size: 13px;
   font-weight: 600;
-  background: ${({ active }) => active ? 'rgba(59, 130, 246, 0.2)' : 'transparent'};
+  background: ${({ active }) => (active ? 'rgba(59, 130, 246, 0.2)' : 'transparent')};
   border: none;
   border-radius: 6px;
-  color: ${({ active }) => active ? '#60a5fa' : '#94a3b8'};
+  color: ${({ active }) => (active ? '#60a5fa' : '#94a3b8')};
   cursor: pointer;
   transition: all 0.2s;
 
@@ -122,7 +122,7 @@ const SpecValue = styled.div`
 
 const EnhancedInstallationTab = ({ product }) => {
   const [activeSection, setActiveSection] = useState('checklist');
-  const isFloating = product.deployment === "Floating";
+  const isFloating = product.deployment === 'Floating';
   const deploymentType = isFloating ? 'buoy' : 'shore';
 
   const installData = isFloating ? INSTALLATION.buoy : INSTALLATION.shore;
@@ -204,7 +204,9 @@ const EnhancedInstallationTab = ({ product }) => {
                         <SpecLabel>{key.replace(/([A-Z])/g, ' $1').trim()}</SpecLabel>
                         <SpecValue style={{ fontSize: 12 }}>
                           {Object.entries(value).map(([k, v]) => (
-                            <div key={k}>{k}: {v}</div>
+                            <div key={k}>
+                              {k}: {v}
+                            </div>
                           ))}
                         </SpecValue>
                       </SpecItem>
@@ -242,11 +244,14 @@ const EnhancedInstallationTab = ({ product }) => {
                         <Td>{tp.location}</Td>
                         <Td style={{ fontFamily: 'monospace', fontSize: 12 }}>
                           {typeof tp.expected === 'object'
-                            ? (product.battery?.voltage === 24 ? tp.expected['24V'] : tp.expected['12V'])
-                            : tp.expected
-                          }
+                            ? product.battery?.voltage === 24
+                              ? tp.expected['24V']
+                              : tp.expected['12V']
+                            : tp.expected}
                         </Td>
-                        <Td style={{ textAlign: 'left', color: '#94a3b8', fontSize: 12 }}>{tp.notes}</Td>
+                        <Td style={{ textAlign: 'left', color: '#94a3b8', fontSize: 12 }}>
+                          {tp.notes}
+                        </Td>
                       </tr>
                     ))}
                   </tbody>
@@ -270,22 +275,13 @@ const EnhancedInstallationTab = ({ product }) => {
         >
           Checklists
         </SubNavButton>
-        <SubNavButton
-          active={activeSection === 'steps'}
-          onClick={() => setActiveSection('steps')}
-        >
+        <SubNavButton active={activeSection === 'steps'} onClick={() => setActiveSection('steps')}>
           Deployment Steps
         </SubNavButton>
-        <SubNavButton
-          active={activeSection === 'tools'}
-          onClick={() => setActiveSection('tools')}
-        >
+        <SubNavButton active={activeSection === 'tools'} onClick={() => setActiveSection('tools')}>
           Required Tools
         </SubNavButton>
-        <SubNavButton
-          active={activeSection === 'specs'}
-          onClick={() => setActiveSection('specs')}
-        >
+        <SubNavButton active={activeSection === 'specs'} onClick={() => setActiveSection('specs')}>
           Mounting Specs
         </SubNavButton>
       </SubNav>

@@ -7,7 +7,7 @@ import {
   PresaleProject,
   getCreditTypeColor,
   getStatusColor,
-  formatStatus
+  formatStatus,
 } from '../../data/mockPresaleData';
 import { fetchListings } from '../../services/wqtDataService';
 import { DemoHint } from '../../components/DemoHint';
@@ -108,9 +108,10 @@ const FilterChipsContainer = styled.div`
 
 const FilterChip = styled.button<{ active: boolean; color?: string }>`
   padding: 8px 16px;
-  border: 1px solid ${props => props.active ? (props.color || '#667eea') : 'rgba(255,255,255,0.2)'};
-  background: ${props => props.active ? (props.color || '#667eea') : 'rgba(255,255,255,0.05)'};
-  color: ${props => props.active ? 'white' : '#cbd5e1'};
+  border: 1px solid
+    ${(props) => (props.active ? props.color || '#667eea' : 'rgba(255,255,255,0.2)')};
+  background: ${(props) => (props.active ? props.color || '#667eea' : 'rgba(255,255,255,0.05)')};
+  color: ${(props) => (props.active ? 'white' : '#cbd5e1')};
   border-radius: 20px;
   font-size: 14px;
   font-weight: 500;
@@ -118,35 +119,35 @@ const FilterChip = styled.button<{ active: boolean; color?: string }>`
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.active ? (props.color || '#5568d3') : 'rgba(255,255,255,0.1)'};
-    border-color: ${props => props.color || 'rgba(255,255,255,0.3)'};
+    background: ${(props) => (props.active ? props.color || '#5568d3' : 'rgba(255,255,255,0.1)')};
+    border-color: ${(props) => props.color || 'rgba(255,255,255,0.3)'};
   }
 `;
 
 const ViewToggle = styled.div`
   display: flex;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
 `;
 
 const ViewButton = styled.button<{ active: boolean }>`
   padding: 6px 16px;
   border: none;
-  background: ${props => props.active ? '#667eea' : 'transparent'};
-  color: ${props => props.active ? 'white' : '#94a3b8'};
+  background: ${(props) => (props.active ? '#667eea' : 'transparent')};
+  color: ${(props) => (props.active ? 'white' : '#94a3b8')};
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 
   &:not(:last-child) {
-    border-right: 1px solid rgba(255,255,255,0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   &:hover {
-    background: ${props => props.active ? '#5568d3' : 'rgba(255,255,255,0.1)'};
+    background: ${(props) => (props.active ? '#5568d3' : 'rgba(255,255,255,0.1)')};
   }
 `;
 
@@ -178,8 +179,8 @@ const MapElement = styled.div`
     padding: 0;
     border-radius: 12px;
     background: #1e293b;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 
   .mapboxgl-popup-close-button {
@@ -210,13 +211,15 @@ const LoadingOverlay = styled.div`
 const Spinner = styled.div`
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(255,255,255,0.1);
+  border: 4px solid rgba(255, 255, 255, 0.1);
   border-top-color: #667eea;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -251,7 +254,7 @@ const PresaleCard = styled.div<{ status: string }>`
     left: 0;
     right: 0;
     height: 4px;
-    background: ${props => getStatusColor(props.status as PresaleProject['status'])};
+    background: ${(props) => getStatusColor(props.status as PresaleProject['status'])};
   }
 
   &:hover {
@@ -287,8 +290,8 @@ const StatusBadge = styled.span<{ status: string }>`
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  background: ${props => getStatusColor(props.status as PresaleProject['status'])}20;
-  color: ${props => getStatusColor(props.status as PresaleProject['status'])};
+  background: ${(props) => getStatusColor(props.status as PresaleProject['status'])}20;
+  color: ${(props) => getStatusColor(props.status as PresaleProject['status'])};
   text-transform: uppercase;
   letter-spacing: 0.05em;
 `;
@@ -299,8 +302,8 @@ const CreditTypeBadge = styled.span<{ type: string }>`
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
-  background: ${props => getCreditTypeColor(props.type)}20;
-  color: ${props => getCreditTypeColor(props.type)};
+  background: ${(props) => getCreditTypeColor(props.type)}20;
+  color: ${(props) => getCreditTypeColor(props.type)};
   text-transform: capitalize;
 `;
 
@@ -360,13 +363,14 @@ const PriceTag = styled.div`
 
 const ActionButton = styled.button<{ disabled?: boolean }>`
   padding: 12px 24px;
-  background: ${props => props.disabled ? '#475569' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
+  background: ${(props) =>
+    props.disabled ? '#475569' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
@@ -420,7 +424,9 @@ const EmptyText = styled.p`
 type ViewMode = 'map' | 'cards';
 
 export function PresalePage() {
-  useEffect(() => { document.title = 'Pre-Sale — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Pre-Sale — WaterQuality.Trading';
+  }, []);
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
@@ -465,18 +471,20 @@ export function PresalePage() {
       }
     };
     loadListings();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
     let result = allProjects;
 
     if (statusFilter !== 'all') {
-      result = result.filter(p => p.status === statusFilter);
+      result = result.filter((p) => p.status === statusFilter);
     }
 
     if (creditFilter !== 'all') {
-      result = result.filter(p => p.creditType === creditFilter);
+      result = result.filter((p) => p.creditType === creditFilter);
     }
 
     setFilteredProjects(result);
@@ -501,11 +509,11 @@ export function PresalePage() {
     }
 
     // Clear existing markers
-    markers.current.forEach(marker => marker.remove());
+    markers.current.forEach((marker) => marker.remove());
     markers.current = [];
 
     // Add markers for filtered projects
-    filteredProjects.forEach(project => {
+    filteredProjects.forEach((project) => {
       const markerColor = getCreditTypeColor(project.creditType);
       const statusColor = getStatusColor(project.status);
 
@@ -590,7 +598,7 @@ export function PresalePage() {
     // Fit bounds if we have projects
     if (filteredProjects.length > 0 && map.current.isStyleLoaded()) {
       const bounds = new mapboxgl.LngLatBounds();
-      filteredProjects.forEach(project => {
+      filteredProjects.forEach((project) => {
         bounds.extend([project.lng, project.lat]);
       });
       map.current.fitBounds(bounds, { padding: 80, maxZoom: 8 });
@@ -615,7 +623,10 @@ export function PresalePage() {
         <Header>
           <TitleRow>
             <Title>Pre-Sale Offerings</Title>
-            <DemoHint screenName="wqt-presale" customHint="Early access to upcoming water credit projects" />
+            <DemoHint
+              screenName="wqt-presale"
+              customHint="Early access to upcoming water credit projects"
+            />
           </TitleRow>
           <Subtitle>Secure early access to verified water quality credit projects</Subtitle>
         </Header>
@@ -625,10 +636,7 @@ export function PresalePage() {
             <FilterGroup>
               <FilterLabel>Status</FilterLabel>
               <FilterChipsContainer>
-                <FilterChip
-                  active={statusFilter === 'all'}
-                  onClick={() => setStatusFilter('all')}
-                >
+                <FilterChip active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
                   All
                 </FilterChip>
                 <FilterChip
@@ -658,10 +666,7 @@ export function PresalePage() {
             <FilterGroup>
               <FilterLabel>Credit Type</FilterLabel>
               <FilterChipsContainer>
-                <FilterChip
-                  active={creditFilter === 'all'}
-                  onClick={() => setCreditFilter('all')}
-                >
+                <FilterChip active={creditFilter === 'all'} onClick={() => setCreditFilter('all')}>
                   All Types
                 </FilterChip>
                 <FilterChip
@@ -725,22 +730,18 @@ export function PresalePage() {
           </EmptyState>
         ) : (
           <CardGrid>
-            {filteredProjects.map(project => (
+            {filteredProjects.map((project) => (
               <PresaleCard key={project.id} status={project.status}>
                 <CardHeader>
                   <div>
                     <CardTitle>{project.name}</CardTitle>
                     <CardLocation>{project.location}</CardLocation>
                   </div>
-                  <StatusBadge status={project.status}>
-                    {formatStatus(project.status)}
-                  </StatusBadge>
+                  <StatusBadge status={project.status}>{formatStatus(project.status)}</StatusBadge>
                 </CardHeader>
 
                 <div style={{ marginBottom: '12px' }}>
-                  <CreditTypeBadge type={project.creditType}>
-                    {project.creditType}
-                  </CreditTypeBadge>
+                  <CreditTypeBadge type={project.creditType}>{project.creditType}</CreditTypeBadge>
                 </div>
 
                 <CardDescription>{project.description}</CardDescription>
@@ -772,11 +773,15 @@ export function PresalePage() {
 
                 <CardFooter>
                   <PriceTag>
-                    ${project.pricePerCredit}<span>/credit</span>
+                    ${project.pricePerCredit}
+                    <span>/credit</span>
                   </PriceTag>
                   <ActionButton disabled={project.status === 'closed'}>
-                    {project.status === 'coming-soon' ? 'Notify Me' :
-                     project.status === 'active' ? 'Purchase' : 'Closed'}
+                    {project.status === 'coming-soon'
+                      ? 'Notify Me'
+                      : project.status === 'active'
+                        ? 'Purchase'
+                        : 'Closed'}
                   </ActionButton>
                 </CardFooter>
               </PresaleCard>

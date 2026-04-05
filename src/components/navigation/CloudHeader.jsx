@@ -1,10 +1,10 @@
 // /src/components/navigation/CloudHeader.jsx
-import styled, { keyframes } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import NotificationBell from "../shared/NotificationBell";
-import BlueSignalLogo from "../shared/BlueSignalLogo";
-import { isDemoMode, setDemoMode } from "../../utils/demoMode";
+import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import NotificationBell from '../shared/NotificationBell';
+import BlueSignalLogo from '../shared/BlueSignalLogo';
+import { isDemoMode, setDemoMode } from '../../utils/demoMode';
 
 // Always show demo toggle — demo mode is now managed via localStorage from Profile page
 const SHOW_DEMO_TOGGLE = true;
@@ -77,14 +77,14 @@ const ModeBadge = styled.span`
   display: none;
   padding: 4px 10px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  background: ${({ theme }) => theme.colors?.primaryLight || "#E8F0FE"};
-  color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  background: ${({ theme }) => theme.colors?.primaryLight || '#E8F0FE'};
+  color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-radius: 6px;
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
 
   @media (min-width: 768px) {
     display: inline-flex;
@@ -102,19 +102,19 @@ const MenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   font-size: 20px;
   line-height: 1;
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
-    background: ${({ theme }) => theme.colors?.hover || "rgba(0,102,255,0.04)"};
-    border-color: ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+    color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
+    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,102,255,0.04)'};
+    border-color: ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary || '#0066FF'};
     outline-offset: 2px;
   }
 

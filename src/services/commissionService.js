@@ -46,14 +46,22 @@ const COMMISSION_TESTS = [
 
 // Get tests applicable to a device type
 const getTestsForDeviceType = (deviceType) => {
-  const baseTests = ['power_os', 'ads1115', 'ph_ntu', 'relay_ch1', 'lte_wifi', 'cloud_ingest', 'gps'];
+  const baseTests = [
+    'power_os',
+    'ads1115',
+    'ph_ntu',
+    'relay_ch1',
+    'lte_wifi',
+    'cloud_ingest',
+    'gps',
+  ];
 
   const deviceSpecificTests = {
     'wqm-1': [...baseTests],
   };
 
   const applicableTestIds = deviceSpecificTests[deviceType] || baseTests;
-  return COMMISSION_TESTS.filter(test => applicableTestIds.includes(test.id));
+  return COMMISSION_TESTS.filter((test) => applicableTestIds.includes(test.id));
 };
 
 // Determine checklist type from device type
@@ -78,7 +86,7 @@ export const initializeCommission = async (deviceId, orderId, installerId) => {
 
     // Build pre-deployment checklist from template
     const preDeploymentTemplate = PRE_DEPLOYMENT_CHECKLISTS[checklistType] || [];
-    const preDeploymentChecks = preDeploymentTemplate.map(item => ({
+    const preDeploymentChecks = preDeploymentTemplate.map((item) => ({
       id: item.id,
       text: item.text,
       category: item.category,
@@ -90,7 +98,7 @@ export const initializeCommission = async (deviceId, orderId, installerId) => {
 
     // Build commissioning checklist from template
     const commissioningTemplate = COMMISSIONING_CHECKLISTS[checklistType] || [];
-    const commissioningChecks = commissioningTemplate.map(item => ({
+    const commissioningChecks = commissioningTemplate.map((item) => ({
       id: item.id,
       text: item.text,
       category: item.category,
@@ -102,7 +110,7 @@ export const initializeCommission = async (deviceId, orderId, installerId) => {
 
     // Initialize test results
     const applicableTests = getTestsForDeviceType(device.deviceType);
-    const testResults = applicableTests.map(test => ({
+    const testResults = applicableTests.map((test) => ({
       id: test.id,
       name: test.name,
       status: 'pending',
@@ -188,7 +196,7 @@ export const updatePreDeploymentCheck = async (commissionId, checkId, completed,
     if (!commission) throw new Error('Commission not found');
 
     const now = new Date().toISOString();
-    const updatedChecks = commission.preDeploymentChecks.map(check => {
+    const updatedChecks = commission.preDeploymentChecks.map((check) => {
       if (check.id === checkId) {
         return {
           ...check,
@@ -222,7 +230,7 @@ export const updateCommissioningCheck = async (commissionId, checkId, completed,
     if (!commission) throw new Error('Commission not found');
 
     const now = new Date().toISOString();
-    const updatedChecks = commission.commissioningChecks.map(check => {
+    const updatedChecks = commission.commissioningChecks.map((check) => {
       if (check.id === checkId) {
         return {
           ...check,
@@ -255,10 +263,10 @@ export const runTests = async (commissionId, specificTests = null) => {
     const commission = await CommissionAPI.get(commissionId);
     if (!commission) throw new Error('Commission not found');
 
-    const testsToRun = specificTests || commission.testResults.map(t => t.id);
+    const testsToRun = specificTests || commission.testResults.map((t) => t.id);
 
     // Mark tests as running
-    const runningTests = commission.testResults.map(test => {
+    const runningTests = commission.testResults.map((test) => {
       if (testsToRun.includes(test.id)) {
         return { ...test, status: 'running' };
       }
@@ -272,11 +280,7 @@ export const runTests = async (commissionId, specificTests = null) => {
     });
 
     // Call backend to run actual hardware tests
-    const testResults = await CommissionAPI.runTests(
-      commissionId,
-      commission.deviceId,
-      testsToRun
-    );
+    const testResults = await CommissionAPI.runTests(commissionId, commission.deviceId, testsToRun);
 
     return testResults;
   } catch (error) {
@@ -293,7 +297,7 @@ export const updateTestResult = async (commissionId, testId, result) => {
     const commission = await CommissionAPI.get(commissionId);
     if (!commission) throw new Error('Commission not found');
 
-    const updatedTests = commission.testResults.map(test => {
+    const updatedTests = commission.testResults.map((test) => {
       if (test.id === testId) {
         return {
           ...test,
@@ -392,10 +396,14 @@ export const completeCommission = async (commissionId) => {
     const now = new Date().toISOString();
 
     // Calculate overall result
-    const failedTests = (commission.testResults || []).filter(t => t.status === 'failed');
+    const failedTests = (commission.testResults || []).filter((t) => t.status === 'failed');
     const allTestsPassed = failedTests.length === 0;
-    const allPreDeploymentComplete = (commission.preDeploymentChecks || []).every(c => c.completed);
-    const allCommissioningComplete = (commission.commissioningChecks || []).every(c => c.completed);
+    const allPreDeploymentComplete = (commission.preDeploymentChecks || []).every(
+      (c) => c.completed
+    );
+    const allCommissioningComplete = (commission.commissioningChecks || []).every(
+      (c) => c.completed
+    );
 
     const passed = allTestsPassed && allPreDeploymentComplete && allCommissioningComplete;
     const status = passed ? 'passed' : 'failed';
@@ -409,7 +417,7 @@ export const completeCommission = async (commissionId) => {
       status,
       tests: commission.testResults,
       overallScore: Math.round(
-        (commission.testResults.filter(t => t.status === 'passed').length /
+        (commission.testResults.filter((t) => t.status === 'passed').length /
           commission.testResults.length) *
           100
       ),

@@ -50,11 +50,13 @@ const HomeBtn = styled.a`
   padding: 14px 28px;
   border-radius: 100px;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 24px rgba(255,255,255,0.15);
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
   }
 `;
 
@@ -69,7 +71,13 @@ const NotFoundPage = () => (
       <HomeBtn href="/">
         Back to Home
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </HomeBtn>
     </Main>

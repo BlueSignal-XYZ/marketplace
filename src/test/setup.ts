@@ -1,55 +1,55 @@
-import '@testing-library/jest-dom'
-import { afterEach, vi } from 'vitest'
-import { cleanup } from '@testing-library/react'
+import '@testing-library/jest-dom';
+import { afterEach, vi } from 'vitest';
+import { cleanup } from '@testing-library/react';
 
 // Cleanup after each test
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});
 
 // Mock sessionStorage
 const sessionStorageMock = (() => {
-  let store: Record<string, string> = {}
+  let store: Record<string, string> = {};
 
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
-      store[key] = value.toString()
+      store[key] = value.toString();
     },
     removeItem: (key: string) => {
-      delete store[key]
+      delete store[key];
     },
     clear: () => {
-      store = {}
+      store = {};
     },
-  }
-})()
+  };
+})();
 
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock,
-})
+});
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store: Record<string, string> = {}
+  let store: Record<string, string> = {};
 
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
-      store[key] = value.toString()
+      store[key] = value.toString();
     },
     removeItem: (key: string) => {
-      delete store[key]
+      delete store[key];
     },
     clear: () => {
-      store = {}
+      store = {};
     },
-  }
-})()
+  };
+})();
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
-})
+});
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -64,7 +64,7 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -72,10 +72,10 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   takeRecords() {
-    return []
+    return [];
   }
   unobserve() {}
-} as any
+} as any;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -83,10 +83,10 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-} as any
+} as any;
 
 // Mock scrollTo
-window.scrollTo = vi.fn()
+window.scrollTo = vi.fn();
 
 // Mock console methods to reduce noise in tests
 global.console = {
@@ -96,7 +96,7 @@ global.console = {
   info: vi.fn(),
   warn: vi.fn(),
   // Keep error for debugging
-}
+};
 
 // Set test environment variables
-process.env.NODE_ENV = 'test'
+process.env.NODE_ENV = 'test';

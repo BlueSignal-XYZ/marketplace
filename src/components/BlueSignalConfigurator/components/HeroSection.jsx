@@ -1,6 +1,6 @@
 // HeroSection - Main hero section for the sales portal
-import styled, { keyframes } from "styled-components";
-import { salesTheme } from "../styles/theme";
+import styled, { keyframes } from 'styled-components';
+import { salesTheme } from '../styles/theme';
 
 const fadeInUp = keyframes`
   from {
@@ -31,7 +31,7 @@ const HeroWrapper = styled.section`
 
   /* Subtle gradient orbs for depth */
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: -20%;
     right: -10%;
@@ -42,7 +42,7 @@ const HeroWrapper = styled.section`
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -30%;
     left: -10%;
@@ -418,28 +418,28 @@ const features = [
     description: 'Continuous monitoring with instant cloud sync',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
       </svg>
-    )
+    ),
   },
   {
     title: 'Credit Ready',
     description: 'Data formatted for marketplace trading',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <line x1="12" y1="1" x2="12" y2="23"/>
-        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
       </svg>
-    )
+    ),
   },
   {
     title: 'Open Source',
     description: 'Full hardware specs and build guides',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
       </svg>
-    )
+    ),
   },
 ];
 
@@ -451,29 +451,36 @@ export default function HeroSection({ onNavigateToProducts, onNavigateToBenchmar
           <HeroText>
             <Eyebrow>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
               </svg>
               Real-Time Water Quality Monitoring
             </Eyebrow>
             <HeroTitle>
-              Turn Water Quality<br />Into <span>Revenue</span>
+              Turn Water Quality
+              <br />
+              Into <span>Revenue</span>
             </HeroTitle>
             <HeroSubtitle>
-              BlueSignal monitoring devices transform your water quality data into
-              tradeable credits. Professional-grade sensors, real-time monitoring,
-              and seamless marketplace integration.
+              BlueSignal monitoring devices transform your water quality data into tradeable
+              credits. Professional-grade sensors, real-time monitoring, and seamless marketplace
+              integration.
             </HeroSubtitle>
             <HeroActions>
               <PrimaryButton onClick={onNavigateToProducts}>
                 Start Your Quote
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </PrimaryButton>
-              <SecondaryButton onClick={onNavigateToBenchmark}>
-                See Comparison
-              </SecondaryButton>
+              <SecondaryButton onClick={onNavigateToBenchmark}>See Comparison</SecondaryButton>
             </HeroActions>
             <TrustBadges>
               <TrustBadge>

@@ -8,13 +8,13 @@
  * as source of truth.
  */
 
-import { useState, useEffect, useCallback } from "react";
-import { useAppContext } from "../context/AppContext";
-import { getDevices } from "../services/v2/api";
+import { useState, useEffect, useCallback } from 'react';
+import { useAppContext } from '../context/AppContext';
+import { getDevices } from '../services/v2/api';
 
 // Cache key for localStorage
-const CACHE_KEY = "bluesignal_has_devices";
-const CACHE_COUNT_KEY = "bluesignal_device_count";
+const CACHE_KEY = 'bluesignal_has_devices';
+const CACHE_COUNT_KEY = 'bluesignal_device_count';
 
 /**
  * Clear the device cache (call on logout)
@@ -37,10 +37,8 @@ export function useUserDevices() {
   const cachedCount = localStorage.getItem(CACHE_COUNT_KEY);
 
   const [devices, setDevices] = useState([]);
-  const [hasDevices, setHasDevices] = useState(cachedHasDevices === "true");
-  const [deviceCount, setDeviceCount] = useState(
-    cachedCount ? parseInt(cachedCount, 10) : 0
-  );
+  const [hasDevices, setHasDevices] = useState(cachedHasDevices === 'true');
+  const [deviceCount, setDeviceCount] = useState(cachedCount ? parseInt(cachedCount, 10) : 0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -83,7 +81,7 @@ export function useUserDevices() {
       localStorage.setItem(CACHE_KEY, String(userHasDevices));
       localStorage.setItem(CACHE_COUNT_KEY, String(count));
     } catch (err) {
-      console.error("Error fetching user devices:", err);
+      console.error('Error fetching user devices:', err);
       setError(err);
       // Don't clear existing state on error - keep showing cached data
       // Only set hasDevices to false if we had no cache

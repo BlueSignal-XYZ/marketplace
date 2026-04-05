@@ -97,7 +97,7 @@ export const mockRegistryCredits: RegistryCredit[] = [
     basinCode: 'POT',
     basinName: 'Potomac River',
     complianceYear: 2025,
-    deliveryFactor: 0.70,
+    deliveryFactor: 0.7,
     sourceType: 'point_source',
   },
   {
@@ -115,7 +115,7 @@ export const mockRegistryCredits: RegistryCredit[] = [
     basinCode: 'YOR',
     basinName: 'York River',
     complianceYear: 2025,
-    deliveryFactor: 0.90,
+    deliveryFactor: 0.9,
     sourceType: 'nonpoint_source',
   },
   {
@@ -294,17 +294,17 @@ export const mockRegistryCredits: RegistryCredit[] = [
 
 export const getCreditsByType = (type?: string): RegistryCredit[] => {
   if (!type || type === 'all') return mockRegistryCredits;
-  return mockRegistryCredits.filter(credit => credit.type === type);
+  return mockRegistryCredits.filter((credit) => credit.type === type);
 };
 
 export const getCreditsByStatus = (status: 'active' | 'retired'): RegistryCredit[] => {
-  return mockRegistryCredits.filter(credit => credit.status === status);
+  return mockRegistryCredits.filter((credit) => credit.status === status);
 };
 
 export const searchCredits = (query: string): RegistryCredit[] => {
   const lowerQuery = query.toLowerCase();
   return mockRegistryCredits.filter(
-    credit =>
+    (credit) =>
       credit.id.toLowerCase().includes(lowerQuery) ||
       credit.projectName.toLowerCase().includes(lowerQuery) ||
       credit.location.toLowerCase().includes(lowerQuery)
@@ -315,27 +315,29 @@ export const searchCredits = (query: string): RegistryCredit[] => {
 
 export const getCreditsByBasin = (basinCode?: string): RegistryCredit[] => {
   if (!basinCode || basinCode === 'all') return mockRegistryCredits;
-  return mockRegistryCredits.filter(credit => credit.basinCode === basinCode);
+  return mockRegistryCredits.filter((credit) => credit.basinCode === basinCode);
 };
 
 export const getVirginiaCredits = (): RegistryCredit[] => {
-  return mockRegistryCredits.filter(credit => credit.basinCode !== undefined);
+  return mockRegistryCredits.filter((credit) => credit.basinCode !== undefined);
 };
 
 export const getCreditsByComplianceYear = (year?: number): RegistryCredit[] => {
   if (!year) return mockRegistryCredits;
-  return mockRegistryCredits.filter(credit => credit.complianceYear === year);
+  return mockRegistryCredits.filter((credit) => credit.complianceYear === year);
 };
 
-export const getCreditsBySourceType = (sourceType?: 'point_source' | 'nonpoint_source'): RegistryCredit[] => {
+export const getCreditsBySourceType = (
+  sourceType?: 'point_source' | 'nonpoint_source'
+): RegistryCredit[] => {
   if (!sourceType) return mockRegistryCredits;
-  return mockRegistryCredits.filter(credit => credit.sourceType === sourceType);
+  return mockRegistryCredits.filter((credit) => credit.sourceType === sourceType);
 };
 
 // Get unique basins from credits
 export const getAvailableBasins = (): { code: string; name: string }[] => {
   const basins = new Map<string, string>();
-  mockRegistryCredits.forEach(credit => {
+  mockRegistryCredits.forEach((credit) => {
     if (credit.basinCode && credit.basinName) {
       basins.set(credit.basinCode, credit.basinName);
     }
@@ -346,7 +348,7 @@ export const getAvailableBasins = (): { code: string; name: string }[] => {
 // Get unique compliance years
 export const getAvailableComplianceYears = (): number[] => {
   const years = new Set<number>();
-  mockRegistryCredits.forEach(credit => {
+  mockRegistryCredits.forEach((credit) => {
     if (credit.complianceYear) {
       years.add(credit.complianceYear);
     }
@@ -362,16 +364,24 @@ export const filterVirginiaCredits = (filters: {
   sourceType?: 'point_source' | 'nonpoint_source';
   status?: 'active' | 'retired';
 }): RegistryCredit[] => {
-  return mockRegistryCredits.filter(credit => {
+  return mockRegistryCredits.filter((credit) => {
     if (!credit.basinCode) return false; // Only Virginia credits
 
-    if (filters.basinCode && filters.basinCode !== 'all' && credit.basinCode !== filters.basinCode) {
+    if (
+      filters.basinCode &&
+      filters.basinCode !== 'all' &&
+      credit.basinCode !== filters.basinCode
+    ) {
       return false;
     }
     if (filters.complianceYear && credit.complianceYear !== filters.complianceYear) {
       return false;
     }
-    if (filters.nutrientType && filters.nutrientType !== 'all' && credit.type !== filters.nutrientType) {
+    if (
+      filters.nutrientType &&
+      filters.nutrientType !== 'all' &&
+      credit.type !== filters.nutrientType
+    ) {
       return false;
     }
     if (filters.sourceType && credit.sourceType !== filters.sourceType) {

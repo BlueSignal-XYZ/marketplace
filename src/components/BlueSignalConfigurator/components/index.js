@@ -18,7 +18,13 @@ export { default as HeroSection } from './HeroSection';
 export { default as ProductTiers } from './ProductTiers';
 export { default as ProductCatalogSection } from './ProductCatalogSection';
 export { default as ROICalculatorSection } from './ROICalculatorSection';
-export { default as SectionDivider, AngledDivider, GradientDivider, WaveDivider, CurvedDivider } from './SectionDivider';
+export {
+  default as SectionDivider,
+  AngledDivider,
+  GradientDivider,
+  WaveDivider,
+  CurvedDivider,
+} from './SectionDivider';
 
 // Information pages
 export { default as AboutPage } from './AboutPage';

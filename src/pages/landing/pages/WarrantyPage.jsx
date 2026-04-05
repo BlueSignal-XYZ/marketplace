@@ -11,7 +11,10 @@ const WarrantyPage = () => (
     <h2>What Is Covered</h2>
     <ul>
       <li>Defects in materials or workmanship of the WQM-1 HAT board.</li>
-      <li>Failure of on-board components (ADC, LoRa transceiver, relay, power regulator) under normal operating conditions.</li>
+      <li>
+        Failure of on-board components (ADC, LoRa transceiver, relay, power regulator) under normal
+        operating conditions.
+      </li>
       <li>Manufacturing defects in included accessories (antenna, power cable, enclosure).</li>
     </ul>
 
@@ -19,7 +22,9 @@ const WarrantyPage = () => (
     <ul>
       <li>Physical damage from drops, impacts, or improper handling.</li>
       <li>Water ingress beyond the rated IP67 enclosure specification (if enclosed).</li>
-      <li>Damage from use outside the specified input voltage range (9&ndash;24&nbsp;V&nbsp;DC).</li>
+      <li>
+        Damage from use outside the specified input voltage range (9&ndash;24&nbsp;V&nbsp;DC).
+      </li>
       <li>Modifications, unauthorized repairs, or alterations to the hardware.</li>
       <li>Normal wear and tear.</li>
       <li>Software or firmware issues (covered by software updates, not hardware warranty).</li>
@@ -40,32 +45,47 @@ const WarrantyPage = () => (
 
     <h2>Warranty Claim Process</h2>
     <ol>
-      <li>Email <a href="mailto:warranty@bluesignal.xyz">warranty@bluesignal.xyz</a> with your order number, device serial number, and a description of the issue.</li>
-      <li>Our support team will respond within 2 business days with troubleshooting steps or a return authorization.</li>
-      <li>If a return is authorized, ship the defective unit to the address provided. We cover return shipping within the US.</li>
+      <li>
+        Email <a href="mailto:warranty@bluesignal.xyz">warranty@bluesignal.xyz</a> with your order
+        number, device serial number, and a description of the issue.
+      </li>
+      <li>
+        Our support team will respond within 2 business days with troubleshooting steps or a return
+        authorization.
+      </li>
+      <li>
+        If a return is authorized, ship the defective unit to the address provided. We cover return
+        shipping within the US.
+      </li>
       <li>Upon inspection, we will repair, replace, or refund the product at our discretion.</li>
     </ol>
 
     <h2>Resolution</h2>
-    <p>
-      At our sole discretion, we will resolve valid warranty claims by:
-    </p>
+    <p>At our sole discretion, we will resolve valid warranty claims by:</p>
     <ul>
-      <li><strong>Repair:</strong> Repairing the defective unit and returning it to you.</li>
-      <li><strong>Replacement:</strong> Sending a new or refurbished replacement unit.</li>
-      <li><strong>Refund:</strong> Issuing a full or partial refund of the original purchase price.</li>
+      <li>
+        <strong>Repair:</strong> Repairing the defective unit and returning it to you.
+      </li>
+      <li>
+        <strong>Replacement:</strong> Sending a new or refurbished replacement unit.
+      </li>
+      <li>
+        <strong>Refund:</strong> Issuing a full or partial refund of the original purchase price.
+      </li>
     </ul>
 
     <h2>Limitations</h2>
     <p>
-      This warranty is the sole and exclusive warranty provided by BlueSignal for the WQM-1 hardware.
-      To the maximum extent permitted by law, BlueSignal disclaims all other warranties, express or
-      implied, including implied warranties of merchantability and fitness for a particular purpose.
+      This warranty is the sole and exclusive warranty provided by BlueSignal for the WQM-1
+      hardware. To the maximum extent permitted by law, BlueSignal disclaims all other warranties,
+      express or implied, including implied warranties of merchantability and fitness for a
+      particular purpose.
     </p>
 
     <h2>Contact</h2>
     <p>
-      For warranty questions or claims, email <a href="mailto:warranty@bluesignal.xyz">warranty@bluesignal.xyz</a>.
+      For warranty questions or claims, email{' '}
+      <a href="mailto:warranty@bluesignal.xyz">warranty@bluesignal.xyz</a>.
     </p>
   </LegalLayout>
 );

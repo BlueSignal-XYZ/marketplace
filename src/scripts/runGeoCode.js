@@ -1,9 +1,9 @@
 import getCoordinates from './geocoding.js';
 import { GoogleMaps_API_KEY } from '../contracts/ref.js';
-import jsonData from '../data/localization.json' assert { type: 'json' };
+import jsonData from '../data/localization.json' with { type: 'json' };
 import fs from 'fs/promises';
 
- async function convertAddressesToCoordinates() {
+async function convertAddressesToCoordinates() {
   // Iterate through each object in the Database array
   const updatedData = await Promise.all(
     jsonData.Database.map(async (company) => {
@@ -41,8 +41,7 @@ convertAddressesToCoordinates()
     // Write the JSON string to the file
     return fs.writeFile(filePath, jsonStr, 'utf-8');
   })
-  .then(() => {
-  })
+  .then(() => {})
   .catch((error) => {
     console.error(`Failed to create new JSON file: ${error}`);
   });

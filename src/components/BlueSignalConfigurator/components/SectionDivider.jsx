@@ -1,6 +1,6 @@
 // SectionDivider - Smooth transitions between sections
-import styled, { keyframes } from "styled-components";
-import { salesTheme } from "../styles/theme";
+import styled, { keyframes } from 'styled-components';
+import { salesTheme } from '../styles/theme';
 
 const flowAnimation = keyframes`
   0% { transform: translateX(0); }
@@ -15,7 +15,7 @@ const DividerBase = styled.div`
   width: 100%;
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    height: ${props => {
+    height: ${(props) => {
       const baseHeight = parseInt(props.$height) || 80;
       return `${Math.max(baseHeight * 0.6, 40)}px`;
     }};
@@ -24,8 +24,8 @@ const DividerBase = styled.div`
 
 // Angled divider - creates a slanted edge between sections
 const AngledDividerWrapper = styled(DividerBase)`
-  height: ${props => props.$height || '80px'};
-  margin-top: ${props => props.$overlap ? `-${props.$height || '80px'}` : '0'};
+  height: ${(props) => props.$height || '80px'};
+  margin-top: ${(props) => (props.$overlap ? `-${props.$height || '80px'}` : '0')};
 `;
 
 const AngledSvg = styled.svg`
@@ -38,15 +38,15 @@ const AngledSvg = styled.svg`
 
 // Gradient fade divider - smooth color transition
 const GradientDividerWrapper = styled.div`
-  height: ${props => props.$height || '120px'};
+  height: ${(props) => props.$height || '120px'};
   background: linear-gradient(
     180deg,
-    ${props => props.$fromColor || salesTheme.colors.bgPrimary} 0%,
-    ${props => props.$toColor || salesTheme.colors.bgSurface} 100%
+    ${(props) => props.$fromColor || salesTheme.colors.bgPrimary} 0%,
+    ${(props) => props.$toColor || salesTheme.colors.bgSurface} 100%
   );
 
   @media (max-width: ${salesTheme.breakpoints.tablet}) {
-    height: ${props => {
+    height: ${(props) => {
       const baseHeight = parseInt(props.$height) || 120;
       return `${Math.max(baseHeight * 0.6, 60)}px`;
     }};
@@ -55,7 +55,7 @@ const GradientDividerWrapper = styled.div`
 
 // Wave divider - organic wavy edge
 const WaveDividerWrapper = styled(DividerBase)`
-  height: ${props => props.$height || '60px'};
+  height: ${(props) => props.$height || '60px'};
 `;
 
 const WaveSvg = styled.svg`
@@ -68,7 +68,7 @@ const WaveSvg = styled.svg`
 
 // Curved divider - smooth curve transition
 const CurvedDividerWrapper = styled(DividerBase)`
-  height: ${props => props.$height || '100px'};
+  height: ${(props) => props.$height || '100px'};
 `;
 
 const CurvedSvg = styled.svg`
@@ -81,7 +81,7 @@ const CurvedSvg = styled.svg`
 
 // Layered wave divider - multiple overlapping waves
 const LayeredDividerWrapper = styled(DividerBase)`
-  height: ${props => props.$height || '150px'};
+  height: ${(props) => props.$height || '150px'};
 `;
 
 const LayeredSvg = styled.svg`
@@ -94,7 +94,7 @@ const LayeredSvg = styled.svg`
 
 // Flowing wave divider with animation
 const FlowingDividerWrapper = styled(DividerBase)`
-  height: ${props => props.$height || '80px'};
+  height: ${(props) => props.$height || '80px'};
 `;
 
 const FlowingSvgContainer = styled.div`
@@ -113,7 +113,7 @@ const FlowingSvg = styled.svg`
 
 // Tilt/slant divider - simple angled line
 const TiltDividerWrapper = styled(DividerBase)`
-  height: ${props => props.$height || '60px'};
+  height: ${(props) => props.$height || '60px'};
 `;
 
 const TiltSvg = styled.svg`
@@ -132,9 +132,7 @@ export function AngledDivider({
   direction = 'left', // 'left' or 'right'
   overlap = false,
 }) {
-  const points = direction === 'left'
-    ? '0,0 100,100 0,100'
-    : '0,100 100,0 100,100';
+  const points = direction === 'left' ? '0,0 100,100 0,100' : '0,100 100,0 100,100';
 
   return (
     <AngledDividerWrapper $height={height} $overlap={overlap}>
@@ -151,13 +149,7 @@ export function GradientDivider({
   toColor = salesTheme.colors.bgSurface,
   height = '120px',
 }) {
-  return (
-    <GradientDividerWrapper
-      $fromColor={fromColor}
-      $toColor={toColor}
-      $height={height}
-    />
-  );
+  return <GradientDividerWrapper $fromColor={fromColor} $toColor={toColor} $height={height} />;
 }
 
 export function WaveDivider({
@@ -254,10 +246,7 @@ export function FlowingDivider({
     <FlowingDividerWrapper $height={height} style={{ background: bgColor }}>
       <FlowingSvgContainer style={{ animationPlayState: animate ? 'running' : 'paused' }}>
         <FlowingSvg viewBox="0 0 2400 80" preserveAspectRatio="none">
-          <path
-            fill={color}
-            d="M0,40 Q300,10 600,40 T1200,40 T1800,40 T2400,40 L2400,80 L0,80 Z"
-          />
+          <path fill={color} d="M0,40 Q300,10 600,40 T1200,40 T1800,40 T2400,40 L2400,80 L0,80 Z" />
         </FlowingSvg>
       </FlowingSvgContainer>
     </FlowingDividerWrapper>
@@ -270,9 +259,8 @@ export function TiltDivider({
   height = '60px',
   direction = 'right', // 'left' or 'right'
 }) {
-  const path = direction === 'right'
-    ? 'M0,0 L1200,60 L1200,60 L0,60 Z'
-    : 'M0,60 L1200,0 L1200,60 L0,60 Z';
+  const path =
+    direction === 'right' ? 'M0,0 L1200,60 L1200,60 L0,60 Z' : 'M0,60 L1200,0 L1200,60 L0,60 Z';
 
   return (
     <TiltDividerWrapper $height={height} style={{ background: bgColor }}>

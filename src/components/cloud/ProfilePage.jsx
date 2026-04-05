@@ -1,13 +1,13 @@
 // /src/components/cloud/ProfilePage.jsx
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import { useAppContext } from "../../context/AppContext";
-import { UserProfileAPI } from "../../scripts/back_door";
-import { ButtonPrimary, ButtonSecondary } from "../shared/button/Button";
-import { Input } from "../shared/input/Input";
-import { isDemoMode, setDemoMode } from "../../utils/demoMode";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import { useAppContext } from '../../context/AppContext';
+import { UserProfileAPI } from '../../scripts/back_door';
+import { ButtonPrimary, ButtonSecondary } from '../shared/button/Button';
+import { Input } from '../shared/input/Input';
+import { isDemoMode, setDemoMode } from '../../utils/demoMode';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -32,7 +32,7 @@ const Sidebar = styled.div`
 
 const AvatarSection = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 24px;
   text-align: center;
@@ -42,8 +42,8 @@ const Avatar = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors?.primary100 || "#e0f2ff"};
-  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+  background: ${({ theme }) => theme.colors?.primary100 || '#e0f2ff'};
+  color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,13 +56,13 @@ const UserName = styled.h3`
   margin: 0 0 4px;
   font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const UserEmail = styled.p`
   margin: 0 0 12px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const RoleBadge = styled.span`
@@ -75,20 +75,30 @@ const RoleBadge = styled.span`
   letter-spacing: 0.5px;
   background: ${({ $role }) => {
     switch ($role) {
-      case "admin": return "#fef3c7";
-      case "installer": return "#dbeafe";
-      case "seller": return "#d1fae5";
-      case "buyer": return "#e0e7ff";
-      default: return "#f3f4f6";
+      case 'admin':
+        return '#fef3c7';
+      case 'installer':
+        return '#dbeafe';
+      case 'seller':
+        return '#d1fae5';
+      case 'buyer':
+        return '#e0e7ff';
+      default:
+        return '#f3f4f6';
     }
   }};
   color: ${({ $role }) => {
     switch ($role) {
-      case "admin": return "#92400e";
-      case "installer": return "#1d4ed8";
-      case "seller": return "#047857";
-      case "buyer": return "#4338ca";
-      default: return "#6b7280";
+      case 'admin':
+        return '#92400e';
+      case 'installer':
+        return '#1d4ed8';
+      case 'seller':
+        return '#047857';
+      case 'buyer':
+        return '#4338ca';
+      default:
+        return '#6b7280';
     }
   }};
 `;
@@ -101,7 +111,7 @@ const MainContent = styled.div`
 
 const Section = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 24px;
 `;
@@ -110,9 +120,9 @@ const SectionTitle = styled.h2`
   margin: 0 0 20px;
   font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   padding-bottom: 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 `;
 
 const FormGroup = styled.div`
@@ -128,45 +138,45 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const Select = styled.select`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
-  height: ${({ theme }) => theme.formHeightMd || "44px"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
+  height: ${({ theme }) => theme.formHeightMd || '44px'};
   padding: 0px 12px;
-  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || '12px'};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
   width: 100%;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || "#EFFBFB"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
   }
 `;
 
 const TextArea = styled.textarea`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   padding: 12px;
-  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || '12px'};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
   width: 100%;
   min-height: 100px;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   resize: vertical;
   font-family: inherit;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || "#EFFBFB"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
   }
 `;
 
@@ -182,9 +192,9 @@ const ButtonGroup = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.red50 || "#fef2f2"};
-  border: 1px solid ${({ theme }) => theme.colors?.red200 || "#fecaca"};
-  color: ${({ theme }) => theme.colors?.red700 || "#b91c1c"};
+  background: ${({ theme }) => theme.colors?.red50 || '#fef2f2'};
+  border: 1px solid ${({ theme }) => theme.colors?.red200 || '#fecaca'};
+  color: ${({ theme }) => theme.colors?.red700 || '#b91c1c'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -205,7 +215,7 @@ const StatRow = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f4f4f5"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f4f4f5'};
 
   &:last-child {
     border-bottom: none;
@@ -214,30 +224,29 @@ const StatRow = styled.div`
 
 const StatLabel = styled.span`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
 `;
 
 const StatValue = styled.span`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#18181b"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#18181b'};
 `;
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
-  height: ${({ $height }) => $height || "200px"};
+  height: ${({ $height }) => $height || '200px'};
 
   @keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 `;
 
@@ -255,13 +264,13 @@ const ToggleInfo = styled.div`
 const ToggleLabel = styled.div`
   font-size: 15px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   margin-bottom: 4px;
 `;
 
 const ToggleDescription = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   line-height: 1.5;
 `;
 
@@ -274,18 +283,18 @@ const ToggleSwitch = styled.button`
   cursor: pointer;
   flex-shrink: 0;
   transition: background 0.2s ease-out;
-  background: ${({ $active }) => ($active ? "#0066FF" : "#D1D5DB")};
+  background: ${({ $active }) => ($active ? '#0066FF' : '#D1D5DB')};
   min-height: 28px;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 2px;
-    left: ${({ $active }) => ($active ? "22px" : "2px")};
+    left: ${({ $active }) => ($active ? '22px' : '2px')};
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
     transition: left 0.2s ease-out;
   }
@@ -294,11 +303,11 @@ const ToggleSwitch = styled.button`
 const DemoWarning = styled.div`
   margin-top: 12px;
   padding: 10px 14px;
-  background: #FFFBEB;
-  border: 1px solid #FDE68A;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
   border-radius: 8px;
   font-size: 13px;
-  color: #92400E;
+  color: #92400e;
   line-height: 1.5;
 `;
 
@@ -307,7 +316,9 @@ const DemoWarning = styled.div`
 /* -------------------------------------------------------------------------- */
 
 export default function ProfilePage() {
-  useEffect(() => { document.title = 'Profile — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Profile — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
@@ -318,18 +329,18 @@ export default function ProfilePage() {
   const [success, setSuccess] = useState(null);
   const [demoEnabled, setDemoEnabled] = useState(isDemoMode());
   const [profile, setProfile] = useState({
-    displayName: "",
-    email: "",
-    phone: "",
-    company: "",
-    role: "buyer",
-    bio: "",
+    displayName: '',
+    email: '',
+    phone: '',
+    company: '',
+    role: 'buyer',
+    bio: '',
     address: {
-      street: "",
-      city: "",
-      state: "",
-      zip: "",
-      country: "",
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      country: '',
     },
     preferences: {
       emailNotifications: true,
@@ -350,18 +361,18 @@ export default function ProfilePage() {
       const data = await UserProfileAPI.get(user.uid);
       if (data) {
         setProfile({
-          displayName: data.displayName || user.displayName || "",
-          email: data.email || user.email || "",
-          phone: data.phone || "",
-          company: data.company || "",
-          role: data.role || "buyer",
-          bio: data.bio || "",
+          displayName: data.displayName || user.displayName || '',
+          email: data.email || user.email || '',
+          phone: data.phone || '',
+          company: data.company || '',
+          role: data.role || 'buyer',
+          bio: data.bio || '',
           address: data.address || {
-            street: "",
-            city: "",
-            state: "",
-            zip: "",
-            country: "",
+            street: '',
+            city: '',
+            state: '',
+            zip: '',
+            country: '',
           },
           preferences: data.preferences || {
             emailNotifications: true,
@@ -370,13 +381,13 @@ export default function ProfilePage() {
         });
       }
     } catch (err) {
-      console.error("Error loading profile:", err);
+      console.error('Error loading profile:', err);
       // Use local user data as fallback
       setProfile((prev) => ({
         ...prev,
-        displayName: user?.displayName || "",
-        email: user?.email || "",
-        role: user?.role || "buyer",
+        displayName: user?.displayName || '',
+        email: user?.email || '',
+        role: user?.role || 'buyer',
       }));
     } finally {
       setLoading(false);
@@ -418,7 +429,7 @@ export default function ProfilePage() {
 
     try {
       await UserProfileAPI.update(user.uid, profile);
-      setSuccess("Profile updated successfully!");
+      setSuccess('Profile updated successfully!');
 
       // Update local user state if name changed
       if (profile.displayName !== user?.displayName) {
@@ -430,18 +441,18 @@ export default function ProfilePage() {
       }
     } catch (err) {
       const serverMsg = err?.response?.data?.error || err?.response?.data?.message;
-      setError(serverMsg || err.message || "Failed to save profile. Please try again.");
+      setError(serverMsg || err.message || 'Failed to save profile. Please try again.');
     } finally {
       setSaving(false);
     }
   };
 
   const getInitials = (name) => {
-    if (!name) return "?";
+    if (!name) return '?';
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
       .slice(0, 2);
   };
@@ -468,7 +479,7 @@ export default function ProfilePage() {
           <Sidebar>
             <AvatarSection>
               <Avatar>{getInitials(profile.displayName)}</Avatar>
-              <UserName>{profile.displayName || "Unnamed User"}</UserName>
+              <UserName>{profile.displayName || 'Unnamed User'}</UserName>
               <UserEmail>{profile.email}</UserEmail>
               <RoleBadge $role={profile.role}>{profile.role}</RoleBadge>
             </AvatarSection>
@@ -478,22 +489,18 @@ export default function ProfilePage() {
               <StatRow>
                 <StatLabel>Member Since</StatLabel>
                 <StatValue>
-                  {user?.createdAt
-                    ? new Date(user.createdAt).toLocaleDateString()
-                    : "N/A"}
+                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                 </StatValue>
               </StatRow>
               <StatRow>
                 <StatLabel>Last Login</StatLabel>
                 <StatValue>
-                  {user?.lastLogin
-                    ? new Date(user.lastLogin).toLocaleDateString()
-                    : "Today"}
+                  {user?.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Today'}
                 </StatValue>
               </StatRow>
               <StatRow>
                 <StatLabel>Verified</StatLabel>
-                <StatValue>{user?.emailVerified ? "Yes" : "No"}</StatValue>
+                <StatValue>{user?.emailVerified ? 'Yes' : 'No'}</StatValue>
               </StatRow>
             </Section>
           </Sidebar>
@@ -511,7 +518,7 @@ export default function ProfilePage() {
                   id="displayName"
                   type="text"
                   value={profile.displayName}
-                  onChange={(e) => handleChange("displayName", e.target.value)}
+                  onChange={(e) => handleChange('displayName', e.target.value)}
                   placeholder="Your full name"
                 />
               </FormGroup>
@@ -533,7 +540,7 @@ export default function ProfilePage() {
                   id="phone"
                   type="tel"
                   value={profile.phone}
-                  onChange={(e) => handleChange("phone", e.target.value)}
+                  onChange={(e) => handleChange('phone', e.target.value)}
                   placeholder="+1 (555) 123-4567"
                 />
               </FormGroup>
@@ -544,7 +551,7 @@ export default function ProfilePage() {
                   id="company"
                   type="text"
                   value={profile.company}
-                  onChange={(e) => handleChange("company", e.target.value)}
+                  onChange={(e) => handleChange('company', e.target.value)}
                   placeholder="Your company name"
                 />
               </FormGroup>
@@ -554,7 +561,7 @@ export default function ProfilePage() {
                 <TextArea
                   id="bio"
                   value={profile.bio}
-                  onChange={(e) => handleChange("bio", e.target.value)}
+                  onChange={(e) => handleChange('bio', e.target.value)}
                   placeholder="Tell us about yourself..."
                 />
               </FormGroup>
@@ -568,7 +575,7 @@ export default function ProfilePage() {
                 <Select
                   id="role"
                   value={profile.role}
-                  onChange={(e) => handleChange("role", e.target.value)}
+                  onChange={(e) => handleChange('role', e.target.value)}
                 >
                   <option value="buyer">Buyer - Purchase nutrient credits</option>
                   <option value="seller">Seller - List and sell credits</option>
@@ -586,19 +593,19 @@ export default function ProfilePage() {
                   id="street"
                   type="text"
                   value={profile.address.street}
-                  onChange={(e) => handleAddressChange("street", e.target.value)}
+                  onChange={(e) => handleAddressChange('street', e.target.value)}
                   placeholder="123 Main Street"
                 />
               </FormGroup>
 
-              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "16px" }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
                 <FormGroup>
                   <Label htmlFor="city">City</Label>
                   <Input
                     id="city"
                     type="text"
                     value={profile.address.city}
-                    onChange={(e) => handleAddressChange("city", e.target.value)}
+                    onChange={(e) => handleAddressChange('city', e.target.value)}
                     placeholder="City"
                   />
                 </FormGroup>
@@ -609,20 +616,20 @@ export default function ProfilePage() {
                     id="state"
                     type="text"
                     value={profile.address.state}
-                    onChange={(e) => handleAddressChange("state", e.target.value)}
+                    onChange={(e) => handleAddressChange('state', e.target.value)}
                     placeholder="State"
                   />
                 </FormGroup>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <FormGroup>
                   <Label htmlFor="zip">ZIP / Postal Code</Label>
                   <Input
                     id="zip"
                     type="text"
                     value={profile.address.zip}
-                    onChange={(e) => handleAddressChange("zip", e.target.value)}
+                    onChange={(e) => handleAddressChange('zip', e.target.value)}
                     placeholder="12345"
                   />
                 </FormGroup>
@@ -633,7 +640,7 @@ export default function ProfilePage() {
                     id="country"
                     type="text"
                     value={profile.address.country}
-                    onChange={(e) => handleAddressChange("country", e.target.value)}
+                    onChange={(e) => handleAddressChange('country', e.target.value)}
                     placeholder="United States"
                   />
                 </FormGroup>
@@ -644,26 +651,32 @@ export default function ProfilePage() {
               <SectionTitle>Notification Preferences</SectionTitle>
 
               <FormGroup>
-                <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                <label
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+                >
                   <input
                     type="checkbox"
                     checked={profile.preferences.emailNotifications}
-                    onChange={(e) => handlePreferenceChange("emailNotifications", e.target.checked)}
-                    style={{ width: "20px", height: "20px" }}
+                    onChange={(e) => handlePreferenceChange('emailNotifications', e.target.checked)}
+                    style={{ width: '20px', height: '20px' }}
                   />
-                  <span style={{ fontSize: "14px" }}>Email notifications for alerts and updates</span>
+                  <span style={{ fontSize: '14px' }}>
+                    Email notifications for alerts and updates
+                  </span>
                 </label>
               </FormGroup>
 
               <FormGroup>
-                <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}>
+                <label
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+                >
                   <input
                     type="checkbox"
                     checked={profile.preferences.smsNotifications}
-                    onChange={(e) => handlePreferenceChange("smsNotifications", e.target.checked)}
-                    style={{ width: "20px", height: "20px" }}
+                    onChange={(e) => handlePreferenceChange('smsNotifications', e.target.checked)}
+                    style={{ width: '20px', height: '20px' }}
                   />
-                  <span style={{ fontSize: "14px" }}>SMS notifications for critical alerts</span>
+                  <span style={{ fontSize: '14px' }}>SMS notifications for critical alerts</span>
                 </label>
               </FormGroup>
             </Section>
@@ -674,8 +687,8 @@ export default function ProfilePage() {
                 <ToggleInfo>
                   <ToggleLabel>Enable Demo Mode</ToggleLabel>
                   <ToggleDescription>
-                    Show sample devices, sites, and telemetry data across the platform.
-                    Useful for exploring the platform before connecting real hardware.
+                    Show sample devices, sites, and telemetry data across the platform. Useful for
+                    exploring the platform before connecting real hardware.
                   </ToggleDescription>
                 </ToggleInfo>
                 <ToggleSwitch
@@ -688,13 +701,13 @@ export default function ProfilePage() {
                     // Reload so all pages pick up the new demo state
                     window.location.reload();
                   }}
-                  aria-label={demoEnabled ? "Disable demo mode" : "Enable demo mode"}
+                  aria-label={demoEnabled ? 'Disable demo mode' : 'Enable demo mode'}
                 />
               </ToggleRow>
               {demoEnabled && (
                 <DemoWarning>
-                  Demo mode is active. All data shown across the platform is sample data.
-                  Disable demo mode to see only your real devices and sites.
+                  Demo mode is active. All data shown across the platform is sample data. Disable
+                  demo mode to see only your real devices and sites.
                 </DemoWarning>
               )}
             </Section>
@@ -704,7 +717,7 @@ export default function ProfilePage() {
                 Cancel
               </ButtonSecondary>
               <ButtonPrimary type="submit" disabled={saving}>
-                {saving ? "Saving..." : "Save Changes"}
+                {saving ? 'Saving...' : 'Save Changes'}
               </ButtonPrimary>
             </ButtonGroup>
           </MainContent>

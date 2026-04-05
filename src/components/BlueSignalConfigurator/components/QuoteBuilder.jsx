@@ -1,6 +1,6 @@
 // Quote Builder Component for Sales Configurator
-import { useState, useEffect } from "react";
-import styled from "styled-components";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 
 const QuotePanel = styled.div`
   position: fixed;
@@ -220,7 +220,7 @@ const ActionButton = styled.button`
   transition: all 0.2s;
 
   ${({ variant }) =>
-    variant === "primary"
+    variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -450,7 +450,7 @@ const NoSavedQuotes = styled.div`
 `;
 
 // LocalStorage helpers for saved quotes
-const SAVED_QUOTES_KEY = "bluesignal_saved_quotes";
+const SAVED_QUOTES_KEY = 'bluesignal_saved_quotes';
 
 const getSavedQuotes = () => {
   try {
@@ -496,7 +496,7 @@ export const QuoteBuilder = ({
   products,
 }) => {
   const [savedQuotes, setSavedQuotes] = useState([]);
-  const [saveQuoteName, setSaveQuoteName] = useState("");
+  const [saveQuoteName, setSaveQuoteName] = useState('');
   const [showSaveInput, setShowSaveInput] = useState(false);
 
   // Load saved quotes on mount
@@ -524,7 +524,7 @@ export const QuoteBuilder = ({
     if (saveQuoteName.trim() && quoteItems.length > 0) {
       saveQuoteToStorage(saveQuoteName.trim(), quoteItems);
       setSavedQuotes(getSavedQuotes());
-      setSaveQuoteName("");
+      setSaveQuoteName('');
       setShowSaveInput(false);
     }
   };
@@ -542,11 +542,11 @@ export const QuoteBuilder = ({
 
   const formatDate = (isoString) => {
     const date = new Date(isoString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
     });
   };
 
@@ -561,7 +561,7 @@ export const QuoteBuilder = ({
         {quoteItems.length === 0 ? (
           <EmptyState>
             <h4>No items in quote</h4>
-            <p>Click "Add to Quote" on any product to start building your quote.</p>
+            <p>Click &quot;Add to Quote&quot; on any product to start building your quote.</p>
           </EmptyState>
         ) : (
           quoteItems.map((item) => {
@@ -573,9 +573,7 @@ export const QuoteBuilder = ({
                     <ItemName>{product.name}</ItemName>
                     <ItemSubtitle>{product.subtitle}</ItemSubtitle>
                   </div>
-                  <RemoveButton onClick={() => onRemoveItem(item.productId)}>
-                    ×
-                  </RemoveButton>
+                  <RemoveButton onClick={() => onRemoveItem(item.productId)}>×</RemoveButton>
                 </ItemHeader>
                 <ItemControls>
                   <QuantityControl>
@@ -592,9 +590,7 @@ export const QuoteBuilder = ({
                       +
                     </QuantityButton>
                   </QuantityControl>
-                  <ItemPrice>
-                    ${(product.price * item.quantity).toLocaleString()}
-                  </ItemPrice>
+                  <ItemPrice>${(product.price * item.quantity).toLocaleString()}</ItemPrice>
                 </ItemControls>
               </QuoteItem>
             );
@@ -610,14 +606,14 @@ export const QuoteBuilder = ({
             <button
               onClick={() => setShowSaveInput(true)}
               style={{
-                padding: "4px 10px",
-                fontSize: "11px",
+                padding: '4px 10px',
+                fontSize: '11px',
                 fontWeight: 600,
-                background: "#059669",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
+                background: '#059669',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
               }}
             >
               Save Current
@@ -632,7 +628,7 @@ export const QuoteBuilder = ({
               placeholder="Quote name..."
               value={saveQuoteName}
               onChange={(e) => setSaveQuoteName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSaveQuote()}
+              onKeyDown={(e) => e.key === 'Enter' && handleSaveQuote()}
               autoFocus
             />
             <button onClick={handleSaveQuote} disabled={!saveQuoteName.trim()}>
@@ -641,15 +637,15 @@ export const QuoteBuilder = ({
             <button
               onClick={() => {
                 setShowSaveInput(false);
-                setSaveQuoteName("");
+                setSaveQuoteName('');
               }}
               style={{
-                padding: "8px 12px",
-                background: "#f3f4f6",
-                color: "#6b7280",
-                border: "1px solid #e5e7eb",
-                borderRadius: "6px",
-                cursor: "pointer",
+                padding: '8px 12px',
+                background: '#f3f4f6',
+                color: '#6b7280',
+                border: '1px solid #e5e7eb',
+                borderRadius: '6px',
+                cursor: 'pointer',
               }}
             >
               Cancel
@@ -670,16 +666,10 @@ export const QuoteBuilder = ({
                   </span>
                 </div>
                 <div className="quote-actions">
-                  <button
-                    className="load-btn"
-                    onClick={() => handleLoadQuote(quote)}
-                  >
+                  <button className="load-btn" onClick={() => handleLoadQuote(quote)}>
                     Load
                   </button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteQuote(quote.id)}
-                  >
+                  <button className="delete-btn" onClick={() => handleDeleteQuote(quote.id)}>
                     ×
                   </button>
                 </div>
@@ -699,23 +689,13 @@ export const QuoteBuilder = ({
           <TotalValue>${subtotal.toLocaleString()}</TotalValue>
         </TotalRow>
         <ActionButtons>
-          <ActionButton
-            onClick={onClearQuote}
-            disabled={quoteItems.length === 0}
-          >
+          <ActionButton onClick={onClearQuote} disabled={quoteItems.length === 0}>
             Clear
           </ActionButton>
-          <ActionButton
-            onClick={handleShareQuote}
-            disabled={quoteItems.length === 0}
-          >
+          <ActionButton onClick={handleShareQuote} disabled={quoteItems.length === 0}>
             Share
           </ActionButton>
-          <ActionButton
-            variant="primary"
-            onClick={onExportPDF}
-            disabled={quoteItems.length === 0}
-          >
+          <ActionButton variant="primary" onClick={onExportPDF} disabled={quoteItems.length === 0}>
             Export PDF
           </ActionButton>
         </ActionButtons>
@@ -734,9 +714,7 @@ export const QuoteFloatingButton = ({ itemCount, onClick }) => (
 
 // Add to quote button for product cards
 export const AddToQuoteBtn = ({ onClick, inQuote }) => (
-  <AddToQuoteButton onClick={onClick}>
-    {inQuote ? "✓ In Quote" : "+ Add to Quote"}
-  </AddToQuoteButton>
+  <AddToQuoteButton onClick={onClick}>{inQuote ? '✓ In Quote' : '+ Add to Quote'}</AddToQuoteButton>
 );
 
 export default QuoteBuilder;

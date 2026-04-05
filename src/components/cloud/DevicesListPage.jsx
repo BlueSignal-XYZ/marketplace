@@ -1,27 +1,27 @@
 // /src/components/cloud/DevicesListPage.jsx
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import { getDevices } from "../../services/v2/api";
-import DeviceService from "../../services/deviceService";
-import AddDeviceModal from "./AddDeviceModal";
-import { useAppContext } from "../../context/AppContext";
-import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Link, useNavigate } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import { getDevices } from '../../services/v2/api';
+import DeviceService from '../../services/deviceService';
+import AddDeviceModal from './AddDeviceModal';
+import { useAppContext } from '../../context/AppContext';
+import { EmptyState as DSEmptyState } from '../../design-system/primitives/EmptyState';
 
 /** Format a timestamp into a human-readable relative string. */
 const getRelativeTime = (timestamp) => {
-  if (!timestamp) return "—";
+  if (!timestamp) return '—';
   const now = Date.now();
   const then = new Date(timestamp).getTime();
-  if (Number.isNaN(then)) return "—";
+  if (Number.isNaN(then)) return '—';
   const diff = now - then;
 
   const minute = 60 * 1000;
   const hour = 60 * minute;
   const day = 24 * hour;
 
-  if (diff < minute) return "just now";
+  if (diff < minute) return 'just now';
   if (diff < hour) return `${Math.floor(diff / minute)} min ago`;
   if (diff < day) return `${Math.floor(diff / hour)} hr ago`;
   return `${Math.floor(diff / day)} days ago`;
@@ -43,8 +43,8 @@ const AddDeviceButton = styled.button`
   border-radius: 8px;
   border: none;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  background: ${({ theme }) => theme.colors?.primary || "#0066FF"};
-  color: ${({ theme }) => theme.colors?.textOnPrimary || "#FFFFFF"};
+  background: ${({ theme }) => theme.colors?.primary || '#0066FF'};
+  color: ${({ theme }) => theme.colors?.textOnPrimary || '#FFFFFF'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -55,7 +55,7 @@ const AddDeviceButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
+    background: ${({ theme }) => theme.colors?.primaryDark || '#004DCC'};
     transform: translateY(-1px);
   }
 
@@ -68,10 +68,10 @@ const AddDeviceButton = styled.button`
 const CommissionButton = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary || '#0066FF'};
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  background: ${({ theme }) => theme.colors?.primaryLight || "#E8F0FE"};
-  color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  background: ${({ theme }) => theme.colors?.primaryLight || '#E8F0FE'};
+  color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -82,7 +82,7 @@ const CommissionButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.hover || "rgba(0,102,255,0.08)"};
+    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,102,255,0.08)'};
     transform: translateY(-1px);
   }
 
@@ -110,20 +110,20 @@ const SearchBar = styled.input`
   max-width: 400px;
   padding: 10px 16px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
-  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+  background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.focus || "rgba(0,102,255,0.16)"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.focus || 'rgba(0,102,255,0.16)'};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+    color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   }
 `;
 
@@ -137,9 +137,7 @@ const FilterChip = styled.button`
   border-radius: 999px;
   border: 1px solid
     ${({ $active, theme }) =>
-      $active
-        ? theme.colors?.primary || "#0066FF"
-        : theme.colors?.border || "#E5E7EB"};
+      $active ? theme.colors?.primary || '#0066FF' : theme.colors?.border || '#E5E7EB'};
   padding: 6px 14px;
   min-height: 32px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
@@ -149,20 +147,18 @@ const FilterChip = styled.button`
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary || "#0066FF" : theme.colors?.surface || "#FFFFFF"};
+    $active ? theme.colors?.primary || '#0066FF' : theme.colors?.surface || '#FFFFFF'};
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.textOnPrimary || "#FFFFFF"
-      : theme.colors?.textSecondary || "#6B7280"};
+    $active ? theme.colors?.textOnPrimary || '#FFFFFF' : theme.colors?.textSecondary || '#6B7280'};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   }
 `;
 
 const TableContainer = styled.div`
-  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   border-radius: ${({ theme }) => theme.radius?.md || 12}px;
   overflow: hidden;
 `;
@@ -174,15 +170,15 @@ const Table = styled.table`
   font-size: 14px;
 
   thead {
-    background: ${({ theme }) => theme.colors?.background || "#FAFAFA"};
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+    background: ${({ theme }) => theme.colors?.background || '#FAFAFA'};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   }
 
   th {
     text-align: left;
     padding: 10px 14px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
+    color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -190,15 +186,15 @@ const Table = styled.table`
 
   td {
     padding: 12px 14px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || "#F3F4F6"};
-    color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.borderLight || '#F3F4F6'};
+    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   }
 
   tbody tr {
     transition: background 0.15s ease-out;
 
     &:hover {
-      background: ${({ theme }) => theme.colors?.hover || "rgba(0,102,255,0.04)"};
+      background: ${({ theme }) => theme.colors?.hover || 'rgba(0,102,255,0.04)'};
     }
 
     &:last-child td {
@@ -210,7 +206,7 @@ const Table = styled.table`
 const DeviceLink = styled(Link)`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+  color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   text-decoration: none;
 
   &:hover {
@@ -228,17 +224,13 @@ const StatusPill = styled.span`
   font-size: 12px;
   font-weight: 500;
   background: ${({ $variant }) =>
-    $variant === "warning"
-      ? "rgba(245,158,11,0.1)"
-      : $variant === "offline"
-      ? "rgba(239,68,68,0.1)"
-      : "rgba(16,185,129,0.1)"};
+    $variant === 'warning'
+      ? 'rgba(245,158,11,0.1)'
+      : $variant === 'offline'
+        ? 'rgba(239,68,68,0.1)'
+        : 'rgba(16,185,129,0.1)'};
   color: ${({ $variant }) =>
-    $variant === "warning"
-      ? "#D97706"
-      : $variant === "offline"
-      ? "#DC2626"
-      : "#059669"};
+    $variant === 'warning' ? '#D97706' : $variant === 'offline' ? '#DC2626' : '#059669'};
 
   &::before {
     content: '';
@@ -259,70 +251,69 @@ const LifecycleBadge = styled.span`
   letter-spacing: 0.5px;
   background: ${({ $lifecycle }) => {
     switch ($lifecycle) {
-      case "inventory":
-        return "#e0f2fe";
-      case "allocated":
-        return "#fef3c7";
-      case "shipped":
-        return "#dbeafe";
-      case "delivered":
-        return "#d1fae5";
-      case "installed":
-        return "#cffafe";
-      case "commissioned":
-        return "#c7d2fe";
-      case "active":
-        return "#bbf7d0";
-      case "maintenance":
-        return "#fed7aa";
-      case "decommissioned":
-        return "#e5e7eb";
+      case 'inventory':
+        return '#e0f2fe';
+      case 'allocated':
+        return '#fef3c7';
+      case 'shipped':
+        return '#dbeafe';
+      case 'delivered':
+        return '#d1fae5';
+      case 'installed':
+        return '#cffafe';
+      case 'commissioned':
+        return '#c7d2fe';
+      case 'active':
+        return '#bbf7d0';
+      case 'maintenance':
+        return '#fed7aa';
+      case 'decommissioned':
+        return '#e5e7eb';
       default:
-        return "#f3f4f6";
+        return '#f3f4f6';
     }
   }};
   color: ${({ $lifecycle }) => {
     switch ($lifecycle) {
-      case "inventory":
-        return "#0369a1";
-      case "allocated":
-        return "#92400e";
-      case "shipped":
-        return "#1d4ed8";
-      case "delivered":
-        return "#047857";
-      case "installed":
-        return "#0891b2";
-      case "commissioned":
-        return "#4338ca";
-      case "active":
-        return "#15803d";
-      case "maintenance":
-        return "#c2410c";
-      case "decommissioned":
-        return "#4b5563";
+      case 'inventory':
+        return '#0369a1';
+      case 'allocated':
+        return '#92400e';
+      case 'shipped':
+        return '#1d4ed8';
+      case 'delivered':
+        return '#047857';
+      case 'installed':
+        return '#0891b2';
+      case 'commissioned':
+        return '#4338ca';
+      case 'active':
+        return '#15803d';
+      case 'maintenance':
+        return '#c2410c';
+      case 'decommissioned':
+        return '#4b5563';
       default:
-        return "#6b7280";
+        return '#6b7280';
     }
   }};
 `;
 
 const BatteryIndicator = styled.span`
   font-weight: 500;
-  color: ${({ $level }) =>
-    $level < 20 ? "#dc2626" : $level < 50 ? "#f97316" : "#16a34a"};
+  color: ${({ $level }) => ($level < 20 ? '#dc2626' : $level < 50 ? '#f97316' : '#16a34a')};
 `;
 
 const EmptyState = styled.div`
   text-align: center;
   padding: 48px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
 
   h3 {
     margin: 0 0 8px;
     font-size: 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   }
 
   p {
@@ -339,8 +330,8 @@ const FleetSummary = styled.div`
 `;
 
 const SummaryCard = styled.div`
-  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   border-radius: ${({ theme }) => theme.radius?.md || 12}px;
   padding: 16px;
   display: flex;
@@ -356,21 +347,21 @@ const SummaryCard = styled.div`
     justify-content: center;
     font-size: 16px;
     background: ${({ $variant }) =>
-      $variant === "online"
-        ? "rgba(16,185,129,0.1)"
-        : $variant === "warning"
-        ? "rgba(245,158,11,0.1)"
-        : $variant === "offline"
-        ? "rgba(239,68,68,0.1)"
-        : "rgba(0,102,255,0.06)"};
+      $variant === 'online'
+        ? 'rgba(16,185,129,0.1)'
+        : $variant === 'warning'
+          ? 'rgba(245,158,11,0.1)'
+          : $variant === 'offline'
+            ? 'rgba(239,68,68,0.1)'
+            : 'rgba(0,102,255,0.06)'};
     color: ${({ $variant }) =>
-      $variant === "online"
-        ? "#10B981"
-        : $variant === "warning"
-        ? "#F59E0B"
-        : $variant === "offline"
-        ? "#EF4444"
-        : "#0066FF"};
+      $variant === 'online'
+        ? '#10B981'
+        : $variant === 'warning'
+          ? '#F59E0B'
+          : $variant === 'offline'
+            ? '#EF4444'
+            : '#0066FF'};
   }
 
   .content {
@@ -380,7 +371,7 @@ const SummaryCard = styled.div`
       font-family: ${({ theme }) => theme.fonts?.mono || 'monospace'};
       font-size: 20px;
       font-weight: 700;
-      color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+      color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
     }
 
     .label {
@@ -389,22 +380,17 @@ const SummaryCard = styled.div`
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.03em;
-      color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+      color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
     }
   }
 `;
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
-  height: ${({ $height }) => $height || "400px"};
+  height: ${({ $height }) => $height || '400px'};
 
   @keyframes loading {
     0% {
@@ -417,37 +403,92 @@ const Skeleton = styled.div`
 `;
 
 const DeviceEmptyIcon = () => (
-  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
+  <svg
+    width="64"
+    height="64"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <rect
+      x="12"
+      y="20"
+      width="40"
+      height="28"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      opacity="0.6"
+    />
     <circle cx="32" cy="34" r="6" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
-    <path d="M32 28v-4M32 42v4M26 34h-4M38 34h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+    <path
+      d="M32 28v-4M32 42v4M26 34h-4M38 34h4"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      opacity="0.5"
+    />
   </svg>
 );
 
 const DeviceErrorIcon = () => (
-  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <rect x="14" y="22" width="36" height="24" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
+  <svg
+    width="64"
+    height="64"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <rect
+      x="14"
+      y="22"
+      width="36"
+      height="24"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      opacity="0.4"
+    />
     <circle cx="32" cy="34" r="5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
-    <path d="M32 26v-3M32 44v2M24 34h-3M42 34h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-    <path d="M32 16l-4 6h8l-4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+    <path
+      d="M32 26v-3M32 44v2M24 34h-3M42 34h2"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      opacity="0.4"
+    />
+    <path
+      d="M32 16l-4 6h8l-4 6"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.5"
+    />
   </svg>
 );
 
 export default function DevicesListPage() {
-  useEffect(() => { document.title = 'Devices — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Devices — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const { user } = STATES;
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role === 'admin';
 
   const [devices, setDevices] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("all");
-  const [lifecycleFilter, setLifecycleFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [lifecycleFilter, setLifecycleFilter] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
@@ -474,14 +515,14 @@ export default function DevicesListPage() {
       // Source 1: v2 API (handles demo/real switching automatically)
       let v2Devices = [];
       try {
-        v2Devices = await getDevices(user?.uid) || [];
+        v2Devices = (await getDevices(user?.uid)) || [];
       } catch (e) {
-        setLoadError(e?.message || "Failed to load devices. Check your connection and try again.");
+        setLoadError(e?.message || 'Failed to load devices. Check your connection and try again.');
       }
       (v2Devices || []).forEach((d) => {
         deviceMap.set(d.id, {
           ...d,
-          lifecycle: d.lifecycle || "active",
+          lifecycle: d.lifecycle || 'active',
         });
       });
 
@@ -490,9 +531,9 @@ export default function DevicesListPage() {
       firebaseDevices.forEach((d) => {
         deviceMap.set(d.id, {
           ...d,
-          siteName: d.siteName || "Unassigned",
-          customer: d.customer || "-",
-          status: d.lifecycle === "active" ? "online" : "offline",
+          siteName: d.siteName || 'Unassigned',
+          customer: d.customer || '-',
+          status: d.lifecycle === 'active' ? 'online' : 'offline',
           lastContact: d.updatedAt || d.createdAt,
           batteryLevel: d.batteryLevel || 100,
           gatewayId: d.id,
@@ -502,8 +543,8 @@ export default function DevicesListPage() {
 
       setDevices(Array.from(deviceMap.values()));
     } catch (error) {
-      console.error("Error loading devices:", error);
-      setLoadError(error?.message || "Failed to load devices.");
+      console.error('Error loading devices:', error);
+      setLoadError(error?.message || 'Failed to load devices.');
     } finally {
       setLoading(false);
     }
@@ -522,27 +563,27 @@ export default function DevicesListPage() {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (d) =>
-          (d.name || "").toLowerCase().includes(query) ||
-          (d.siteName || "").toLowerCase().includes(query) ||
-          (d.deviceType || "").toLowerCase().includes(query) ||
-          (d.customer || "").toLowerCase().includes(query) ||
-          (d.serialNumber || "").toLowerCase().includes(query) ||
-          (d.sku || "").toLowerCase().includes(query)
+          (d.name || '').toLowerCase().includes(query) ||
+          (d.siteName || '').toLowerCase().includes(query) ||
+          (d.deviceType || '').toLowerCase().includes(query) ||
+          (d.customer || '').toLowerCase().includes(query) ||
+          (d.serialNumber || '').toLowerCase().includes(query) ||
+          (d.sku || '').toLowerCase().includes(query)
       );
     }
 
     // Apply status filter
-    if (statusFilter !== "all") {
+    if (statusFilter !== 'all') {
       filtered = filtered.filter((d) => d.status === statusFilter);
     }
 
     // Apply type filter
-    if (typeFilter !== "all") {
+    if (typeFilter !== 'all') {
       filtered = filtered.filter((d) => d.deviceType === typeFilter);
     }
 
     // Apply lifecycle filter
-    if (lifecycleFilter !== "all") {
+    if (lifecycleFilter !== 'all') {
       filtered = filtered.filter((d) => d.lifecycle === lifecycleFilter);
     }
 
@@ -550,17 +591,17 @@ export default function DevicesListPage() {
   };
 
   const getStatusVariant = (status) => {
-    if (status === "offline") return "offline";
-    if (status === "warning") return "warning";
-    return "online";
+    if (status === 'offline') return 'offline';
+    if (status === 'warning') return 'warning';
+    return 'online';
   };
 
   // Calculate fleet stats
   const fleetStats = {
     total: devices.length,
-    online: devices.filter((d) => d.status === "online").length,
-    warning: devices.filter((d) => d.status === "warning").length,
-    offline: devices.filter((d) => d.status === "offline").length,
+    online: devices.filter((d) => d.status === 'online').length,
+    warning: devices.filter((d) => d.status === 'warning').length,
+    offline: devices.filter((d) => d.status === 'offline').length,
     lowBattery: devices.filter((d) => d.batteryLevel != null && d.batteryLevel < 20).length,
   };
 
@@ -569,10 +610,7 @@ export default function DevicesListPage() {
 
   if (loading) {
     return (
-      <CloudPageLayout
-        title="Devices"
-        subtitle="Monitor and manage all deployed devices"
-      >
+      <CloudPageLayout title="Devices" subtitle="Monitor and manage all deployed devices">
         <Skeleton $height="400px" />
       </CloudPageLayout>
     );
@@ -584,13 +622,11 @@ export default function DevicesListPage() {
       subtitle="Monitor and manage all deployed devices"
       actions={
         <ActionButtonsWrapper>
-          <CommissionButton onClick={() => navigate("/cloud/commissioning/new")}>
+          <CommissionButton onClick={() => navigate('/cloud/commissioning/new')}>
             Commission Device
           </CommissionButton>
           {isAdmin && (
-            <AddDeviceButton onClick={() => setShowAddModal(true)}>
-              + Add Device
-            </AddDeviceButton>
+            <AddDeviceButton onClick={() => setShowAddModal(true)}>+ Add Device</AddDeviceButton>
           )}
         </ActionButtonsWrapper>
       }
@@ -646,27 +682,21 @@ export default function DevicesListPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <Filters>
-          <FilterChip
-            $active={statusFilter === "all"}
-            onClick={() => setStatusFilter("all")}
-          >
+          <FilterChip $active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
             All
           </FilterChip>
-          <FilterChip
-            $active={statusFilter === "online"}
-            onClick={() => setStatusFilter("online")}
-          >
+          <FilterChip $active={statusFilter === 'online'} onClick={() => setStatusFilter('online')}>
             Online
           </FilterChip>
           <FilterChip
-            $active={statusFilter === "warning"}
-            onClick={() => setStatusFilter("warning")}
+            $active={statusFilter === 'warning'}
+            onClick={() => setStatusFilter('warning')}
           >
             Warning
           </FilterChip>
           <FilterChip
-            $active={statusFilter === "offline"}
-            onClick={() => setStatusFilter("offline")}
+            $active={statusFilter === 'offline'}
+            onClick={() => setStatusFilter('offline')}
           >
             Offline
           </FilterChip>
@@ -674,14 +704,9 @@ export default function DevicesListPage() {
       </Controls>
 
       {uniqueTypes.length > 1 && (
-        <Filters style={{ marginBottom: "16px" }}>
-          <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
-            Type:
-          </span>
-          <FilterChip
-            $active={typeFilter === "all"}
-            onClick={() => setTypeFilter("all")}
-          >
+        <Filters style={{ marginBottom: '16px' }}>
+          <span style={{ fontSize: '13px', color: '#6b7280', marginRight: '8px' }}>Type:</span>
+          <FilterChip $active={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>
             All Types
           </FilterChip>
           {uniqueTypes.map((type) => (
@@ -697,14 +722,9 @@ export default function DevicesListPage() {
       )}
 
       {uniqueLifecycles.length > 1 && (
-        <Filters style={{ marginBottom: "16px" }}>
-          <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
-            Lifecycle:
-          </span>
-          <FilterChip
-            $active={lifecycleFilter === "all"}
-            onClick={() => setLifecycleFilter("all")}
-          >
+        <Filters style={{ marginBottom: '16px' }}>
+          <span style={{ fontSize: '13px', color: '#6b7280', marginRight: '8px' }}>Lifecycle:</span>
+          <FilterChip $active={lifecycleFilter === 'all'} onClick={() => setLifecycleFilter('all')}>
             All States
           </FilterChip>
           {uniqueLifecycles.map((lifecycle) => (
@@ -724,105 +744,114 @@ export default function DevicesListPage() {
           icon={<DeviceErrorIcon />}
           title="Unable to Connect"
           description="Unable to connect to the device service. Check your connection and try again."
-          action={{ label: "Retry", onClick: loadDevices }}
+          action={{ label: 'Retry', onClick: loadDevices }}
         />
       ) : (
-      <TableContainer>
-        {filteredDevices.length === 0 ? (
-          <DSEmptyState
-            icon={<DeviceEmptyIcon />}
-            title={searchQuery || statusFilter !== "all" || typeFilter !== "all" ? "No devices found" : "No Devices Yet"}
-            description={
-              searchQuery || statusFilter !== "all" || typeFilter !== "all"
-                ? "Try adjusting your filters or search query."
-                : "No devices commissioned yet. Commission your first device to get started."
-            }
-            action={!searchQuery && statusFilter === "all" ? { label: "Commission Device", onClick: () => navigate("/cloud/commissioning/new") } : undefined}
-          />
-        ) : (
-          <Table>
-            <thead>
-              <tr>
-                <th>Device Name</th>
-                <th>Site / Customer</th>
-                <th>Type</th>
-                <th>Lifecycle</th>
-                <th>Status</th>
-                <th>Last Contact</th>
-                <th>Battery</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredDevices.map((device) => (
-                <tr key={device.id}>
-                  <td>
-                    <DeviceLink to={`/cloud/devices/${device.id}`}>
-                      {device.name || device.serialNumber || device.id}
-                    </DeviceLink>
-                    {device.serialNumber && device.name !== device.serialNumber && (
-                      <div style={{ fontSize: "11px", color: "#9ca3af" }}>
-                        {device.serialNumber}
-                      </div>
-                    )}
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                      <span>{device.siteName || "Unassigned"}</span>
-                      <span style={{ fontSize: "12px", color: "#6b7280" }}>
-                        {device.customer || "-"}
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                      <span>{device.deviceType || "-"}</span>
-                      {device.sku && (
-                        <span style={{ fontSize: "11px", color: "#9ca3af" }}>
-                          {device.sku}
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <LifecycleBadge $lifecycle={device.lifecycle}>
-                      {device.lifecycle || "unknown"}
-                    </LifecycleBadge>
-                  </td>
-                  <td>
-                    <StatusPill $variant={getStatusVariant(device.status)}>
-                      {device.status === "online"
-                        ? "Online"
-                        : device.status === "warning"
-                        ? "Warning"
-                        : "Offline"}
-                    </StatusPill>
-                  </td>
-                  <td>
-                    {device.lastContact ? (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                        <span>{getRelativeTime(device.lastContact)}</span>
-                        <span
-                          style={{ fontSize: "11px", color: "#9ca3af" }}
-                          title={new Date(device.lastContact).toLocaleString()}
-                        >
-                          {new Date(device.lastContact).toLocaleString()}
-                        </span>
-                      </div>
-                    ) : (
-                      <span style={{ color: "#9ca3af" }}>-</span>
-                    )}
-                  </td>
-                  <td>
-                    <BatteryIndicator $level={device.batteryLevel || 0}>
-                      {device.batteryLevel != null ? `${device.batteryLevel}%` : "-"}
-                    </BatteryIndicator>
-                  </td>
+        <TableContainer>
+          {filteredDevices.length === 0 ? (
+            <DSEmptyState
+              icon={<DeviceEmptyIcon />}
+              title={
+                searchQuery || statusFilter !== 'all' || typeFilter !== 'all'
+                  ? 'No devices found'
+                  : 'No Devices Yet'
+              }
+              description={
+                searchQuery || statusFilter !== 'all' || typeFilter !== 'all'
+                  ? 'Try adjusting your filters or search query.'
+                  : 'No devices commissioned yet. Commission your first device to get started.'
+              }
+              action={
+                !searchQuery && statusFilter === 'all'
+                  ? {
+                      label: 'Commission Device',
+                      onClick: () => navigate('/cloud/commissioning/new'),
+                    }
+                  : undefined
+              }
+            />
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Device Name</th>
+                  <th>Site / Customer</th>
+                  <th>Type</th>
+                  <th>Lifecycle</th>
+                  <th>Status</th>
+                  <th>Last Contact</th>
+                  <th>Battery</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </TableContainer>
+              </thead>
+              <tbody>
+                {filteredDevices.map((device) => (
+                  <tr key={device.id}>
+                    <td>
+                      <DeviceLink to={`/cloud/devices/${device.id}`}>
+                        {device.name || device.serialNumber || device.id}
+                      </DeviceLink>
+                      {device.serialNumber && device.name !== device.serialNumber && (
+                        <div style={{ fontSize: '11px', color: '#9ca3af' }}>
+                          {device.serialNumber}
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span>{device.siteName || 'Unassigned'}</span>
+                        <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                          {device.customer || '-'}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span>{device.deviceType || '-'}</span>
+                        {device.sku && (
+                          <span style={{ fontSize: '11px', color: '#9ca3af' }}>{device.sku}</span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <LifecycleBadge $lifecycle={device.lifecycle}>
+                        {device.lifecycle || 'unknown'}
+                      </LifecycleBadge>
+                    </td>
+                    <td>
+                      <StatusPill $variant={getStatusVariant(device.status)}>
+                        {device.status === 'online'
+                          ? 'Online'
+                          : device.status === 'warning'
+                            ? 'Warning'
+                            : 'Offline'}
+                      </StatusPill>
+                    </td>
+                    <td>
+                      {device.lastContact ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                          <span>{getRelativeTime(device.lastContact)}</span>
+                          <span
+                            style={{ fontSize: '11px', color: '#9ca3af' }}
+                            title={new Date(device.lastContact).toLocaleString()}
+                          >
+                            {new Date(device.lastContact).toLocaleString()}
+                          </span>
+                        </div>
+                      ) : (
+                        <span style={{ color: '#9ca3af' }}>-</span>
+                      )}
+                    </td>
+                    <td>
+                      <BatteryIndicator $level={device.batteryLevel || 0}>
+                        {device.batteryLevel != null ? `${device.batteryLevel}%` : '-'}
+                      </BatteryIndicator>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </TableContainer>
       )}
 
       <AddDeviceModal

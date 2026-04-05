@@ -58,13 +58,7 @@ const Img = styled.img`
 
 // ── Component ─────────────────────────────────────────────
 
-export const Avatar: React.FC<AvatarProps> = ({
-  src,
-  alt,
-  name,
-  size = 'md',
-  className,
-}) => {
+export const Avatar: React.FC<AvatarProps> = ({ src, alt, name, size = 'md', className }) => {
   const px = sizeMap[size];
   const fs = fontMap[size];
 

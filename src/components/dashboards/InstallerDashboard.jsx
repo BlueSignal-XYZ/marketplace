@@ -173,11 +173,7 @@ const StatusPill = styled.span`
   font-weight: 600;
   color: #ffffff;
   background: ${({ variant }) =>
-    variant === 'warning'
-      ? '#f97316'
-      : variant === 'offline'
-      ? '#dc2626'
-      : '#16a34a'};
+    variant === 'warning' ? '#f97316' : variant === 'offline' ? '#dc2626' : '#16a34a'};
 `;
 
 const Table = styled.table`
@@ -269,7 +265,9 @@ const ToolCard = styled.div`
 `;
 
 const InstallerDashboard = () => {
-  useEffect(() => { document.title = 'Installer Dashboard — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Installer Dashboard — BlueSignal Cloud';
+  }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();
@@ -297,10 +295,13 @@ const InstallerDashboard = () => {
         name: d.name || d.id,
         type: d.model || 'Water Quality Monitor',
         location: d.location?.address || d.location?.city || 'Unknown',
-        status: d.onlineStatus === 'online' ? 'online' : d.onlineStatus === 'offline' ? 'offline' : 'warning',
-        lastPing: d.lastReadingAt
-          ? new Date(d.lastReadingAt).toLocaleString()
-          : 'No data',
+        status:
+          d.onlineStatus === 'online'
+            ? 'online'
+            : d.onlineStatus === 'offline'
+              ? 'offline'
+              : 'warning',
+        lastPing: d.lastReadingAt ? new Date(d.lastReadingAt).toLocaleString() : 'No data',
         readings: d.latestReadings
           ? d.latestReadings.map((r) => `${r.type}: ${r.value}${r.unit}`).join(' · ')
           : 'No readings',
@@ -314,7 +315,8 @@ const InstallerDashboard = () => {
           id: a.id,
           site: a.deviceName || a.deviceId,
           task: a.message || 'Alert needs attention',
-          priority: a.severity === 'critical' ? 'high' : a.severity === 'warning' ? 'medium' : 'low',
+          priority:
+            a.severity === 'critical' ? 'high' : a.severity === 'warning' ? 'medium' : 'low',
           deadline: a.createdAt || '',
         }));
       setJobs(pendingJobs);
@@ -358,9 +360,7 @@ const InstallerDashboard = () => {
         <Header>
           <div>
             <h1>Installer Dashboard</h1>
-            <p>
-              Monitor deployed devices, manage installation jobs, and track site status.
-            </p>
+            <p>Monitor deployed devices, manage installation jobs, and track site status.</p>
           </div>
           <ActionButton onClick={handleAddDevice}>+ Add Device</ActionButton>
         </Header>
@@ -397,9 +397,7 @@ const InstallerDashboard = () => {
             <EmptyState>
               <p>No devices registered yet.</p>
               <p style={{ marginTop: '12px' }}>
-                <ActionButton onClick={handleAddDevice}>
-                  Add Your First Device
-                </ActionButton>
+                <ActionButton onClick={handleAddDevice}>Add Your First Device</ActionButton>
               </p>
             </EmptyState>
           ) : (
@@ -412,8 +410,8 @@ const InstallerDashboard = () => {
                       {device.status === 'online'
                         ? 'Online'
                         : device.status === 'warning'
-                        ? 'Warning'
-                        : 'Offline'}
+                          ? 'Warning'
+                          : 'Offline'}
                     </StatusPill>
                   </div>
                   <div className="device-meta">
@@ -459,21 +457,12 @@ const InstallerDashboard = () => {
                   <tr key={job.id}>
                     <td style={{ fontWeight: 500 }}>{job.site}</td>
                     <td>{job.task}</td>
-                    <td
-                      className={
-                        job.priority === 'high'
-                          ? 'priority-high'
-                          : 'priority-medium'
-                      }
-                    >
+                    <td className={job.priority === 'high' ? 'priority-high' : 'priority-medium'}>
                       {job.priority.toUpperCase()}
                     </td>
                     <td>{job.deadline}</td>
                     <td>
-                      <span
-                        className="btn-link"
-                        onClick={() => handleViewJob(job.id)}
-                      >
+                      <span className="btn-link" onClick={() => handleViewJob(job.id)}>
                         View Details
                       </span>
                     </td>
@@ -490,25 +479,19 @@ const InstallerDashboard = () => {
             <ToolCard onClick={() => navigate('/cloud/tools/upload-media')}>
               <div className="tool-icon">📸</div>
               <div className="tool-name">Upload Media</div>
-              <div className="tool-desc">
-                Document site with photos or videos
-              </div>
+              <div className="tool-desc">Document site with photos or videos</div>
             </ToolCard>
 
             <ToolCard onClick={() => navigate('/cloud/tools/live')}>
               <div className="tool-icon">📡</div>
               <div className="tool-name">Live Stream</div>
-              <div className="tool-desc">
-                Stream live video from site
-              </div>
+              <div className="tool-desc">Stream live video from site</div>
             </ToolCard>
 
             <ToolCard onClick={() => navigate('/cloud/tools/verification')}>
               <div className="tool-icon">✓</div>
               <div className="tool-name">Verification</div>
-              <div className="tool-desc">
-                Verify device installation
-              </div>
+              <div className="tool-desc">Verify device installation</div>
             </ToolCard>
           </DeviceGrid>
         </Section>
@@ -528,9 +511,7 @@ const InstallerDashboard = () => {
                   <DeviceCard key={device.id}>
                     <div className="device-header">
                       <div className="device-name">{device.name}</div>
-                      <StatusPill variant={device.status}>
-                        Online
-                      </StatusPill>
+                      <StatusPill variant={device.status}>Online</StatusPill>
                     </div>
                     <div className="device-meta">
                       <div>

@@ -1,8 +1,8 @@
 // /src/components/cloud/DeviceDetailPage.jsx
-import { useState, useEffect, useMemo } from "react";
-import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
-import { Line } from "react-chartjs-2";
+import { useState, useEffect, useMemo } from 'react';
+import styled from 'styled-components';
+import { Link, useParams } from 'react-router-dom';
+import { Line } from 'react-chartjs-2';
 
 /** Wrapper that guarantees Chart.js never receives null/invalid data. */
 const SafeLine = ({ data, options }) => {
@@ -19,24 +19,24 @@ import {
   Tooltip,
   Legend,
   Filler,
-} from "chart.js";
-import CloudPageLayout from "./CloudPageLayout";
-import { getDevice, getDeviceAlerts } from "../../services/v2/api";
-import { ReadingsAPI, CommissionAPI } from "../../scripts/back_door";
+} from 'chart.js';
+import CloudPageLayout from './CloudPageLayout';
+import { getDevice, getDeviceAlerts } from '../../services/v2/api';
+import { ReadingsAPI, CommissionAPI } from '../../scripts/back_door';
 
 /** Format a timestamp into a human-readable relative string. */
 const getRelativeTime = (timestamp) => {
-  if (!timestamp) return "—";
+  if (!timestamp) return '—';
   const now = Date.now();
   const then = new Date(timestamp).getTime();
-  if (Number.isNaN(then)) return "—";
+  if (Number.isNaN(then)) return '—';
   const diff = now - then;
 
   const minute = 60 * 1000;
   const hour = 60 * minute;
   const day = 24 * hour;
 
-  if (diff < minute) return "just now";
+  if (diff < minute) return 'just now';
   if (diff < hour) return `${Math.floor(diff / minute)} min ago`;
   if (diff < day) return `${Math.floor(diff / hour)} hr ago`;
   return `${Math.floor(diff / day)} days ago`;
@@ -56,14 +56,14 @@ ChartJS.register(
 
 const ContentWrapper = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   overflow: hidden;
 `;
 
 const DeviceHeader = styled.div`
   padding: 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -87,7 +87,7 @@ const DeviceName = styled.h2`
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const StatusPill = styled.span`
@@ -98,11 +98,7 @@ const StatusPill = styled.span`
   font-weight: 600;
   color: #ffffff;
   background: ${({ $variant }) =>
-    $variant === "warning"
-      ? "#f97316"
-      : $variant === "offline"
-      ? "#dc2626"
-      : "#16a34a"};
+    $variant === 'warning' ? '#f97316' : $variant === 'offline' ? '#dc2626' : '#16a34a'};
 `;
 
 const MetaRow = styled.div`
@@ -110,7 +106,7 @@ const MetaRow = styled.div`
   gap: 24px;
   flex-wrap: wrap;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 
   .meta-item {
     display: flex;
@@ -119,15 +115,15 @@ const MetaRow = styled.div`
 
     strong {
       font-weight: 600;
-      color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+      color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
     }
   }
 `;
 
 const ActionButton = styled.button`
-  border: 1px solid ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  border: 1px solid ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   border-radius: 8px;
   padding: 10px 20px;
   font-size: 14px;
@@ -136,13 +132,13 @@ const ActionButton = styled.button`
   transition: all 0.15s ease-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
+    background: ${({ theme }) => theme.colors?.primary50 || '#e0f2ff'};
   }
 `;
 
 const Tabs = styled.div`
   display: flex;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 
@@ -162,16 +158,13 @@ const Tab = styled.button`
   white-space: nowrap;
   min-height: 44px;
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui600 || "#4b5563"};
+    $active ? theme.colors?.primary700 || '#0369a1' : theme.colors?.ui600 || '#4b5563'};
   border-bottom: 2px solid
-    ${({ $active, theme }) =>
-      $active ? theme.colors?.primary600 || "#0284c7" : "transparent"};
+    ${({ $active, theme }) => ($active ? theme.colors?.primary600 || '#0284c7' : 'transparent')};
   transition: all 0.15s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
   }
 `;
 
@@ -203,18 +196,18 @@ const InfoCard = styled.div`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   }
 
   .value {
     font-size: 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   .subvalue {
     font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -230,17 +223,9 @@ const AlertRow = styled.div`
   border-radius: 8px;
   border: 1px solid
     ${({ $severity }) =>
-      $severity === "critical"
-        ? "#fca5a5"
-        : $severity === "warning"
-        ? "#fdba74"
-        : "#e5e7eb"};
+      $severity === 'critical' ? '#fca5a5' : $severity === 'warning' ? '#fdba74' : '#e5e7eb'};
   background: ${({ $severity }) =>
-    $severity === "critical"
-      ? "#fef2f2"
-      : $severity === "warning"
-      ? "#fff7ed"
-      : "#f9fafb"};
+    $severity === 'critical' ? '#fef2f2' : $severity === 'warning' ? '#fff7ed' : '#f9fafb'};
   font-size: 13px;
 
   .alert-message {
@@ -250,13 +235,13 @@ const AlertRow = styled.div`
 
   .alert-time {
     font-size: 11px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   }
 `;
 
 const ChartContainer = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 24px;
@@ -265,7 +250,7 @@ const ChartContainer = styled.div`
     margin: 0 0 16px;
     font-size: 14px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   }
 
   .chart-wrapper {
@@ -284,9 +269,7 @@ const TimeRangeButton = styled.button`
   border-radius: 6px;
   border: 1px solid
     ${({ $active, theme }) =>
-      $active
-        ? theme.colors?.primary500 || "#06b6d4"
-        : theme.colors?.ui200 || "#e5e7eb"};
+      $active ? theme.colors?.primary500 || '#06b6d4' : theme.colors?.ui200 || '#e5e7eb'};
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 500;
@@ -294,14 +277,12 @@ const TimeRangeButton = styled.button`
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $active ? theme.colors?.primary50 || '#e0f2ff' : '#ffffff'};
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui700 || "#374151"};
+    $active ? theme.colors?.primary700 || '#0369a1' : theme.colors?.ui700 || '#374151'};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#22d3ee'};
   }
 `;
 
@@ -314,8 +295,8 @@ const LogsTable = styled.table`
     text-align: left;
     padding: 12px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
+    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -323,29 +304,24 @@ const LogsTable = styled.table`
 
   td {
     padding: 12px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
+    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   }
 `;
 
 const EmptyState = styled.div`
   text-align: center;
   padding: 40px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   font-size: 14px;
 `;
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
-  height: ${({ $height }) => $height || "400px"};
+  height: ${({ $height }) => $height || '400px'};
 
   @keyframes loading {
     0% {
@@ -361,9 +337,9 @@ const CommissionSection = styled.div`
   margin-top: 32px;
   margin-bottom: 32px;
   padding: 20px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
 `;
 
 const CommissionHeader = styled.div`
@@ -384,10 +360,10 @@ const CommissionStatusPill = styled.span`
   text-transform: uppercase;
   color: #ffffff;
   background: ${({ $status }) => {
-    if ($status === "commissioned") return "#16a34a";
-    if ($status === "failed") return "#dc2626";
-    if ($status === "uncommissioned") return "#9ca3af";
-    return "#9ca3af";
+    if ($status === 'commissioned') return '#16a34a';
+    if ($status === 'failed') return '#dc2626';
+    if ($status === 'uncommissioned') return '#9ca3af';
+    return '#9ca3af';
   }};
 `;
 
@@ -419,7 +395,7 @@ const TestSummaryItem = styled.div`
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 
   .test-icon {
     font-size: 16px;
@@ -431,7 +407,7 @@ const TestSummaryItem = styled.div`
   }
 
   .test-duration {
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     font-size: 12px;
   }
 `;
@@ -442,7 +418,7 @@ const ToggleTestsButton = styled.button`
   padding: 8px 0;
   font-size: 13px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   cursor: pointer;
   text-decoration: none;
   margin-top: 8px;
@@ -455,18 +431,18 @@ const ToggleTestsButton = styled.button`
 // Helper function to format PGP sensor field names for display
 const formatSensorLabel = (fieldName) => {
   const labels = {
-    temp_c: "Temperature (°C)",
-    ph: "pH Level",
-    ntu: "Turbidity (NTU)",
-    tds_ppm: "TDS (ppm)",
-    conductivity: "Conductivity (µS/cm)",
-    gps_lat: "GPS Latitude",
-    gps_lng: "GPS Longitude",
-    temperature: "Temperature (°C)",
-    pH: "pH Level",
-    turbidity: "Turbidity (NTU)",
-    TDS: "TDS (ppm)",
-    ORP: "ORP (mV)",
+    temp_c: 'Temperature (°C)',
+    ph: 'pH Level',
+    ntu: 'Turbidity (NTU)',
+    tds_ppm: 'TDS (ppm)',
+    conductivity: 'Conductivity (µS/cm)',
+    gps_lat: 'GPS Latitude',
+    gps_lng: 'GPS Longitude',
+    temperature: 'Temperature (°C)',
+    pH: 'pH Level',
+    turbidity: 'Turbidity (NTU)',
+    TDS: 'TDS (ppm)',
+    ORP: 'ORP (mV)',
   };
   return labels[fieldName] || fieldName;
 };
@@ -479,12 +455,12 @@ const normalizeReadings = (readings) => {
   if (!Array.isArray(readings)) return readings;
 
   const typeToField = {
-    temperature: "temp_c",
-    pH: "ph",
-    turbidity: "ntu",
-    TDS: "tds_ppm",
-    ORP: "orp_mv",
-    conductivity: "conductivity",
+    temperature: 'temp_c',
+    pH: 'ph',
+    turbidity: 'ntu',
+    TDS: 'tds_ppm',
+    ORP: 'orp_mv',
+    conductivity: 'conductivity',
   };
 
   const flat = {};
@@ -501,8 +477,8 @@ export default function DeviceDetailPage() {
   const [alerts, setAlerts] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview");
-  const [timeRange, setTimeRange] = useState("24h");
+  const [activeTab, setActiveTab] = useState('overview');
+  const [timeRange, setTimeRange] = useState('24h');
   const [timeSeriesData, setTimeSeriesData] = useState(null);
   const [loadingChart, setLoadingChart] = useState(false);
   const [commissionResult, setCommissionResult] = useState(null);
@@ -519,7 +495,7 @@ export default function DeviceDetailPage() {
   }, [deviceId]);
 
   useEffect(() => {
-    if (activeTab === "livedata") {
+    if (activeTab === 'livedata') {
       loadTimeSeriesData();
     }
   }, [activeTab, timeRange, deviceId]);
@@ -545,12 +521,13 @@ export default function DeviceDetailPage() {
             const sensorKeys = Object.keys(r.sensors || {}).filter(
               (k) => r.sensors[k]?.value != null
             );
-            const summary = sensorKeys.length > 0
-              ? `Sensors: ${sensorKeys.join(", ")}`
-              : "Sensor data received";
+            const summary =
+              sensorKeys.length > 0 ? `Sensors: ${sensorKeys.join(', ')}` : 'Sensor data received';
             return {
-              timestamp: r.timestamp ? new Date(r.timestamp).toISOString() : new Date().toISOString(),
-              event: "reading",
+              timestamp: r.timestamp
+                ? new Date(r.timestamp).toISOString()
+                : new Date().toISOString(),
+              event: 'reading',
               message: summary,
             };
           });
@@ -569,15 +546,15 @@ export default function DeviceDetailPage() {
       if (normalised && !normalised.tests && normalised.testResults) {
         normalised.tests = Object.entries(normalised.testResults).map(([id, r]) => ({
           id,
-          name: id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-          status: r.status || (r.passed ? "passed" : "failed"),
+          name: id.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+          status: r.status || (r.passed ? 'passed' : 'failed'),
           duration: r.duration || 0,
           details: r.details || r.error || null,
         }));
       }
       setCommissionResult(normalised);
     } catch (error) {
-      console.error("Error loading device data:", error);
+      console.error('Error loading device data:', error);
     } finally {
       setLoading(false);
     }
@@ -589,11 +566,11 @@ export default function DeviceDetailPage() {
       // Use ReadingsAPI (v1 /readings/get — registered and working)
       const now = Date.now();
       const rangeMs = {
-        "24h": 24 * 60 * 60 * 1000,
-        "7d": 7 * 24 * 60 * 60 * 1000,
-        "30d": 30 * 24 * 60 * 60 * 1000,
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000,
+        '30d': 30 * 24 * 60 * 60 * 1000,
       };
-      const startTime = now - (rangeMs[timeRange] || rangeMs["24h"]);
+      const startTime = now - (rangeMs[timeRange] || rangeMs['24h']);
 
       const result = await ReadingsAPI.get(deviceId, 500, startTime, now).catch(() => null);
 
@@ -603,7 +580,10 @@ export default function DeviceDetailPage() {
           .sort((a, b) => a.timestamp - b.timestamp)
           .map((r) => ({
             timestamp: r.timestamp,
-            time: new Date(r.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            time: new Date(r.timestamp).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
             temp_c: r.sensors?.temperature?.value ?? null,
             ph: r.sensors?.ph?.value ?? null,
             ntu: r.sensors?.turbidity?.value ?? null,
@@ -615,7 +595,7 @@ export default function DeviceDetailPage() {
         setTimeSeriesData([]);
       }
     } catch (error) {
-      console.error("Error loading time series data:", error);
+      console.error('Error loading time series data:', error);
       setTimeSeriesData([]);
     } finally {
       setLoadingChart(false);
@@ -630,20 +610,20 @@ export default function DeviceDetailPage() {
     return {
       labels: timeSeriesData.map((point) => {
         const date = new Date(point.timestamp);
-        if (timeRange === "24h") {
+        if (timeRange === '24h') {
           return date.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           });
-        } else if (timeRange === "7d") {
+        } else if (timeRange === '7d') {
           return date.toLocaleDateString([], {
-            month: "short",
-            day: "numeric",
+            month: 'short',
+            day: 'numeric',
           });
         } else {
           return date.toLocaleDateString([], {
-            month: "short",
-            day: "numeric",
+            month: 'short',
+            day: 'numeric',
           });
         }
       }),
@@ -656,7 +636,7 @@ export default function DeviceDetailPage() {
           borderWidth: 2,
           tension: 0.3,
           fill: true,
-          pointRadius: timeRange === "24h" ? 2 : 0,
+          pointRadius: timeRange === '24h' ? 2 : 0,
           pointHoverRadius: 5,
         },
       ],
@@ -671,7 +651,7 @@ export default function DeviceDetailPage() {
         display: false,
       },
       tooltip: {
-        mode: "index",
+        mode: 'index',
         intersect: false,
       },
     },
@@ -679,7 +659,7 @@ export default function DeviceDetailPage() {
       y: {
         beginAtZero: false,
         grid: {
-          color: "#f3f4f6",
+          color: '#f3f4f6',
         },
       },
       x: {
@@ -695,20 +675,20 @@ export default function DeviceDetailPage() {
   };
 
   const getStatusVariant = (status) => {
-    if (status === "offline") return "offline";
-    if (status === "warning") return "warning";
-    return "online";
+    if (status === 'offline') return 'offline';
+    if (status === 'warning') return 'warning';
+    return 'online';
   };
 
   const getTestIcon = (status) => {
-    if (status === "passed") return "✅";
-    if (status === "failed") return "❌";
-    if (status === "running") return "⏳";
-    return "⏸️";
+    if (status === 'passed') return '✅';
+    if (status === 'failed') return '❌';
+    if (status === 'running') return '⏳';
+    return '⏸️';
   };
 
   const formatDuration = (ms) => {
-    if (!ms) return "—";
+    if (!ms) return '—';
     return `${(ms / 1000).toFixed(1)}s`;
   };
 
@@ -743,9 +723,7 @@ export default function DeviceDetailPage() {
       >
         <EmptyState>
           <h3>Device not found</h3>
-          <p>
-            The device you're looking for doesn't exist or has been removed.
-          </p>
+          <p>The device you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         </EmptyState>
       </CloudPageLayout>
     );
@@ -768,11 +746,11 @@ export default function DeviceDetailPage() {
             <HeaderRow>
               <DeviceName>{device.name}</DeviceName>
               <StatusPill $variant={getStatusVariant(device.status)}>
-                {device.status === "online"
-                  ? "Online"
-                  : device.status === "warning"
-                  ? "Warning"
-                  : "Offline"}
+                {device.status === 'online'
+                  ? 'Online'
+                  : device.status === 'warning'
+                    ? 'Warning'
+                    : 'Offline'}
               </StatusPill>
             </HeaderRow>
             <MetaRow>
@@ -783,8 +761,8 @@ export default function DeviceDetailPage() {
                 <strong>Type:</strong> {device.deviceType}
               </div>
               <div className="meta-item">
-                <strong>Coordinates:</strong> {device.coordinates?.lat ?? "—"},{" "}
-                {device.coordinates?.lng ?? "—"}
+                <strong>Coordinates:</strong> {device.coordinates?.lat ?? '—'},{' '}
+                {device.coordinates?.lng ?? '—'}
               </div>
             </MetaRow>
           </HeaderInfo>
@@ -801,71 +779,64 @@ export default function DeviceDetailPage() {
         </DeviceHeader>
 
         <Tabs>
-          <Tab
-            $active={activeTab === "overview"}
-            onClick={() => setActiveTab("overview")}
-          >
+          <Tab $active={activeTab === 'overview'} onClick={() => setActiveTab('overview')}>
             Overview
           </Tab>
-          <Tab
-            $active={activeTab === "livedata"}
-            onClick={() => setActiveTab("livedata")}
-          >
+          <Tab $active={activeTab === 'livedata'} onClick={() => setActiveTab('livedata')}>
             Live Data
           </Tab>
           <Tab
-            $active={activeTab === "configuration"}
-            onClick={() => setActiveTab("configuration")}
+            $active={activeTab === 'configuration'}
+            onClick={() => setActiveTab('configuration')}
           >
             Configuration
           </Tab>
-          <Tab
-            $active={activeTab === "logs"}
-            onClick={() => setActiveTab("logs")}
-          >
+          <Tab $active={activeTab === 'logs'} onClick={() => setActiveTab('logs')}>
             Logs
           </Tab>
         </Tabs>
 
         <TabContent>
-          {activeTab === "overview" && (
+          {activeTab === 'overview' && (
             <>
               <InfoGrid>
                 <InfoCard>
                   <div className="label">Last Contact</div>
-                  <div className="value">
-                    {getRelativeTime(device.lastContact)}
-                  </div>
+                  <div className="value">{getRelativeTime(device.lastContact)}</div>
                   <div className="subvalue">
-                    {device.lastContact ? new Date(device.lastContact).toLocaleString() : "—"}
+                    {device.lastContact ? new Date(device.lastContact).toLocaleString() : '—'}
                   </div>
                 </InfoCard>
 
                 <InfoCard>
                   <div className="label">Signal Strength</div>
-                  <div className="value">{device.signalStrength != null ? `${device.signalStrength}%` : "—"}</div>
+                  <div className="value">
+                    {device.signalStrength != null ? `${device.signalStrength}%` : '—'}
+                  </div>
                   <div className="subvalue">
                     {device.signalStrength != null
                       ? device.signalStrength > 80
-                        ? "Excellent"
+                        ? 'Excellent'
                         : device.signalStrength > 50
-                        ? "Good"
-                        : "Poor"
-                      : "No data"}
+                          ? 'Good'
+                          : 'Poor'
+                      : 'No data'}
                   </div>
                 </InfoCard>
 
                 <InfoCard>
                   <div className="label">Battery</div>
-                  <div className="value">{device.batteryLevel != null ? `${device.batteryLevel}%` : "—"}</div>
+                  <div className="value">
+                    {device.batteryLevel != null ? `${device.batteryLevel}%` : '—'}
+                  </div>
                   <div className="subvalue">
                     {device.batteryLevel != null
                       ? device.batteryLevel > 50
-                        ? "Good"
+                        ? 'Good'
                         : device.batteryLevel > 20
-                        ? "Low"
-                        : "Critical"
-                      : "No data"}
+                          ? 'Low'
+                          : 'Critical'
+                      : 'No data'}
                   </div>
                 </InfoCard>
 
@@ -890,19 +861,17 @@ export default function DeviceDetailPage() {
 
               {readings && (
                 <>
-                  <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
+                  <h3 style={{ marginTop: '32px', marginBottom: '16px' }}>
                     Latest Sensor Readings (from PGP)
                   </h3>
                   <InfoGrid>
                     {Object.entries(readings)
-                      .filter(([_key, value]) => value !== null) // Filter out null values (sensor not applicable)
+                      .filter(([key, value]) => value !== null) // Filter out null values (sensor not applicable)
                       .map(([key, value]) => (
                         <InfoCard key={key}>
                           <div className="label">{formatSensorLabel(key)}</div>
                           <div className="value">
-                            {typeof value === "number"
-                              ? value.toFixed(2)
-                              : value}
+                            {typeof value === 'number' ? value.toFixed(2) : value}
                           </div>
                         </InfoCard>
                       ))}
@@ -912,15 +881,13 @@ export default function DeviceDetailPage() {
 
               {/* Commissioning Status Section */}
               <CommissionSection>
-                <h3 style={{ margin: "0 0 16px", fontSize: "16px" }}>
-                  Commissioning Status
-                </h3>
+                <h3 style={{ margin: '0 0 16px', fontSize: '16px' }}>Commissioning Status</h3>
                 <CommissionHeader>
-                  <CommissionStatusPill $status={device.commissionStatus || "uncommissioned"}>
-                    {device.commissionStatus || "uncommissioned"}
+                  <CommissionStatusPill $status={device.commissionStatus || 'uncommissioned'}>
+                    {device.commissionStatus || 'uncommissioned'}
                   </CommissionStatusPill>
                   {device.lastCommissioned && (
-                    <div style={{ fontSize: "13px", color: "#6b7280" }}>
+                    <div style={{ fontSize: '13px', color: '#6b7280' }}>
                       Last commissioned: {new Date(device.lastCommissioned).toLocaleString()}
                     </div>
                   )}
@@ -929,7 +896,10 @@ export default function DeviceDetailPage() {
                 {commissionResult && commissionResult.tests ? (
                   <>
                     <TestSummary>
-                      {(showAllTests ? commissionResult.tests : commissionResult.tests.slice(0, 3)).map((test) => (
+                      {(showAllTests
+                        ? commissionResult.tests
+                        : commissionResult.tests.slice(0, 3)
+                      ).map((test) => (
                         <TestSummaryItem key={test.id}>
                           <span className="test-icon">{getTestIcon(test.status)}</span>
                           <span className="test-name">{test.name}</span>
@@ -946,15 +916,15 @@ export default function DeviceDetailPage() {
                     )}
                   </>
                 ) : (
-                  <div style={{ fontSize: "14px", color: "#6b7280", marginTop: "8px" }}>
-                    {device.commissionStatus === "uncommissioned"
-                      ? "This device has not been commissioned yet."
-                      : "No commissioning data available."}
+                  <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px' }}>
+                    {device.commissionStatus === 'uncommissioned'
+                      ? 'This device has not been commissioned yet.'
+                      : 'No commissioning data available.'}
                   </div>
                 )}
 
-                {device.commissionStatus === "uncommissioned" && (
-                  <CommissionCTA to={`/cloud/commissioning`} style={{ marginTop: "16px" }}>
+                {device.commissionStatus === 'uncommissioned' && (
+                  <CommissionCTA to={`/cloud/commissioning`} style={{ marginTop: '16px' }}>
                     Start Commissioning →
                   </CommissionCTA>
                 )}
@@ -962,16 +932,12 @@ export default function DeviceDetailPage() {
 
               {alerts.length > 0 && (
                 <>
-                  <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
-                    Recent Alerts
-                  </h3>
+                  <h3 style={{ marginTop: '32px', marginBottom: '16px' }}>Recent Alerts</h3>
                   <AlertsList>
                     {alerts.slice(0, 5).map((alert) => (
                       <AlertRow key={alert.id} $severity={alert.severity}>
                         <div className="alert-message">{alert.message}</div>
-                        <div className="alert-time">
-                          {getRelativeTime(alert.firstSeen)}
-                        </div>
+                        <div className="alert-time">{getRelativeTime(alert.firstSeen)}</div>
                       </AlertRow>
                     ))}
                   </AlertsList>
@@ -980,25 +946,16 @@ export default function DeviceDetailPage() {
             </>
           )}
 
-          {activeTab === "livedata" && (
+          {activeTab === 'livedata' && (
             <>
               <TimeRangeSelector>
-                <TimeRangeButton
-                  $active={timeRange === "24h"}
-                  onClick={() => setTimeRange("24h")}
-                >
+                <TimeRangeButton $active={timeRange === '24h'} onClick={() => setTimeRange('24h')}>
                   Last 24 Hours
                 </TimeRangeButton>
-                <TimeRangeButton
-                  $active={timeRange === "7d"}
-                  onClick={() => setTimeRange("7d")}
-                >
+                <TimeRangeButton $active={timeRange === '7d'} onClick={() => setTimeRange('7d')}>
                   Last 7 Days
                 </TimeRangeButton>
-                <TimeRangeButton
-                  $active={timeRange === "30d"}
-                  onClick={() => setTimeRange("30d")}
-                >
+                <TimeRangeButton $active={timeRange === '30d'} onClick={() => setTimeRange('30d')}>
                   Last 30 Days
                 </TimeRangeButton>
               </TimeRangeSelector>
@@ -1014,11 +971,7 @@ export default function DeviceDetailPage() {
                           <h4>Temperature (°C)</h4>
                           <div className="chart-wrapper">
                             <SafeLine
-                              data={createChartData(
-                                "temp_c",
-                                "Temperature",
-                                "#06b6d4"
-                              )}
+                              data={createChartData('temp_c', 'Temperature', '#06b6d4')}
                               options={chartOptions}
                             />
                           </div>
@@ -1030,7 +983,7 @@ export default function DeviceDetailPage() {
                           <h4>pH Level</h4>
                           <div className="chart-wrapper">
                             <SafeLine
-                              data={createChartData("ph", "pH", "#8b5cf6")}
+                              data={createChartData('ph', 'pH', '#8b5cf6')}
                               options={chartOptions}
                             />
                           </div>
@@ -1042,11 +995,7 @@ export default function DeviceDetailPage() {
                           <h4>Turbidity (NTU)</h4>
                           <div className="chart-wrapper">
                             <SafeLine
-                              data={createChartData(
-                                "ntu",
-                                "Turbidity",
-                                "#f59e0b"
-                              )}
+                              data={createChartData('ntu', 'Turbidity', '#f59e0b')}
                               options={chartOptions}
                             />
                           </div>
@@ -1058,11 +1007,7 @@ export default function DeviceDetailPage() {
                           <h4>Total Dissolved Solids (ppm)</h4>
                           <div className="chart-wrapper">
                             <SafeLine
-                              data={createChartData(
-                                "tds_ppm",
-                                "TDS",
-                                "#10b981"
-                              )}
+                              data={createChartData('tds_ppm', 'TDS', '#10b981')}
                               options={chartOptions}
                             />
                           </div>
@@ -1074,11 +1019,7 @@ export default function DeviceDetailPage() {
                           <h4>Conductivity (µS/cm)</h4>
                           <div className="chart-wrapper">
                             <SafeLine
-                              data={createChartData(
-                                "conductivity",
-                                "Conductivity",
-                                "#3b82f6"
-                              )}
+                              data={createChartData('conductivity', 'Conductivity', '#3b82f6')}
                               options={chartOptions}
                             />
                           </div>
@@ -1087,16 +1028,25 @@ export default function DeviceDetailPage() {
 
                       {/* GPS Coordinates Display */}
                       {(readings.gps_lat != null || device.installation?.location) && (
-                        <div style={{
-                          background: '#f8fafc',
-                          borderRadius: '10px',
-                          padding: '16px 20px',
-                          marginTop: '16px',
-                        }}>
+                        <div
+                          style={{
+                            background: '#f8fafc',
+                            borderRadius: '10px',
+                            padding: '16px 20px',
+                            marginTop: '16px',
+                          }}
+                        >
                           <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#475569' }}>
                             GPS Coordinates
                           </h4>
-                          <div style={{ display: 'flex', gap: '24px', fontSize: '15px', color: '#1e293b' }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              gap: '24px',
+                              fontSize: '15px',
+                              color: '#1e293b',
+                            }}
+                          >
                             <span>
                               <strong>Lat:</strong>{' '}
                               {readings.gps_lat ?? device.installation?.location?.lat ?? 'N/A'}
@@ -1111,20 +1061,16 @@ export default function DeviceDetailPage() {
                     </>
                   )}
 
-                  <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>
-                    Current Readings
-                  </h3>
+                  <h3 style={{ marginTop: '32px', marginBottom: '16px' }}>Current Readings</h3>
                   {readings && (
                     <InfoGrid>
                       {Object.entries(readings)
-                        .filter(([_key, value]) => value !== null)
+                        .filter(([key, value]) => value !== null)
                         .map(([key, value]) => (
                           <InfoCard key={key}>
                             <div className="label">{formatSensorLabel(key)}</div>
                             <div className="value">
-                              {typeof value === "number"
-                                ? value.toFixed(2)
-                                : value}
+                              {typeof value === 'number' ? value.toFixed(2) : value}
                             </div>
                           </InfoCard>
                         ))}
@@ -1135,7 +1081,7 @@ export default function DeviceDetailPage() {
             </>
           )}
 
-          {activeTab === "configuration" && (
+          {activeTab === 'configuration' && (
             <>
               <InfoGrid>
                 <InfoCard>
@@ -1161,25 +1107,24 @@ export default function DeviceDetailPage() {
                 <InfoCard>
                   <div className="label">Coordinates</div>
                   <div className="value">
-                    {device.coordinates?.lat ?? "—"}, {device.coordinates?.lng ?? "—"}
+                    {device.coordinates?.lat ?? '—'}, {device.coordinates?.lng ?? '—'}
                   </div>
                 </InfoCard>
               </InfoGrid>
 
               <div
                 style={{
-                  marginTop: "24px",
-                  padding: "16px",
-                  background: "#fff7ed",
-                  border: "1px solid #fdba74",
-                  borderRadius: "8px",
-                  fontSize: "13px",
-                  color: "#9a3412",
+                  marginTop: '24px',
+                  padding: '16px',
+                  background: '#fff7ed',
+                  border: '1px solid #fdba74',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  color: '#9a3412',
                 }}
               >
-                <strong>Note:</strong> Device configuration can only be edited
-                through Pollution Gateway Pro web-commission interface. Cloud is
-                read-only.
+                <strong>Note:</strong> Device configuration can only be edited through Pollution
+                Gateway Pro web-commission interface. Cloud is read-only.
               </div>
 
               {device.gatewayWebUrl && (
@@ -1188,7 +1133,7 @@ export default function DeviceDetailPage() {
                   href={device.gatewayWebUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ marginTop: "16px" }}
+                  style={{ marginTop: '16px' }}
                 >
                   Open PGP Web UI →
                 </ActionButton>
@@ -1196,10 +1141,12 @@ export default function DeviceDetailPage() {
             </>
           )}
 
-          {activeTab === "logs" && (
+          {activeTab === 'logs' && (
             <>
               {logs.length === 0 ? (
-                <EmptyState>No logs recorded yet. Logs will appear as device events are received.</EmptyState>
+                <EmptyState>
+                  No logs recorded yet. Logs will appear as device events are received.
+                </EmptyState>
               ) : (
                 <LogsTable>
                   <thead>

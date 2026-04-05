@@ -13,8 +13,8 @@ const Page = styled.div`
 
 const Hero = styled.section`
   padding: 80px 24px 64px;
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px 24px 96px;
   }
@@ -32,7 +32,9 @@ const Breadcrumb = styled(Link)`
   text-decoration: none;
   margin-bottom: 24px;
   display: inline-block;
-  &:hover { color: rgba(255, 255, 255, 0.6); }
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -41,7 +43,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 20px;
 `;
 
@@ -56,8 +58,10 @@ const HeroSub = styled.p`
 
 const Section = styled.section`
   padding: 96px 24px;
-  background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
-  @media (max-width: 640px) { padding: 64px 20px; }
+  background: ${({ $alt, theme }) => ($alt ? theme.colors.surface : theme.colors.background)};
+  @media (max-width: 640px) {
+    padding: 64px 20px;
+  }
 `;
 
 const SectionInner = styled.div`
@@ -188,7 +192,7 @@ const BulletItem = styled.li`
 
 const CTASection = styled.section`
   padding: 80px 24px;
-  background: linear-gradient(135deg, #0B1120 0%, #0F1B35 100%);
+  background: linear-gradient(135deg, #0b1120 0%, #0f1b35 100%);
   text-align: center;
 `;
 
@@ -196,7 +200,7 @@ const CTATitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(24px, 3.5vw, 36px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 16px;
 `;
 
@@ -225,13 +229,16 @@ const CTAButton = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  color: #ffffff;
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
-  &:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4); }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
+  }
 `;
 
 const CTAButtonOutline = styled.a`
@@ -249,11 +256,16 @@ const CTAButtonOutline = styled.a`
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
-  &:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 export default function ForHomeownersPage() {
-  useEffect(() => { document.title = 'For Homeowners — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'For Homeowners — WaterQuality.Trading';
+  }, []);
   return (
     <Page>
       <Hero>
@@ -261,20 +273,20 @@ export default function ForHomeownersPage() {
           <Breadcrumb to="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>Your Property Generates Water Quality Credits</HeroTitle>
           <HeroSub>
-            If you manage stormwater, treat well water, or maintain a rainwater system,
-            the improvements you make can be measured, verified, and sold.
+            If you manage stormwater, treat well water, or maintain a rainwater system, the
+            improvements you make can be measured, verified, and sold.
           </HeroSub>
         </HeroInner>
       </Hero>
 
       <Section>
         <SectionInner>
-          <SectionTitle>You're Already Doing the Work</SectionTitle>
+          <SectionTitle>You&apos;re Already Doing the Work</SectionTitle>
           <SectionDesc>
-            You installed a rain garden. You maintain a septic system that outperforms
-            county minimums. You run a residential water treatment system. You've invested
-            in your property's water quality — but until now, there's been no way to
-            capture the value of that investment beyond your own property line.
+            You installed a rain garden. You maintain a septic system that outperforms county
+            minimums. You run a residential water treatment system. You&apos;ve invested in your
+            property&apos;s water quality — but until now, there&apos;s been no way to capture the
+            value of that investment beyond your own property line.
           </SectionDesc>
         </SectionInner>
       </Section>
@@ -288,8 +300,8 @@ export default function ForHomeownersPage() {
                 <FlowTitle>Install a Monitor</FlowTitle>
                 <FlowDesc>
                   A BlueSignal WQM-1 device at your discharge point or well head continuously
-                  measures water quality — pH, nutrients, sediment, temperature. It runs on
-                  solar or AC power and transmits data automatically.
+                  measures water quality — pH, nutrients, sediment, temperature. It runs on solar or
+                  AC power and transmits data automatically.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -297,9 +309,8 @@ export default function ForHomeownersPage() {
               <FlowContent>
                 <FlowTitle>Establish a Baseline</FlowTitle>
                 <FlowDesc>
-                  The platform compares your current water quality against a regulatory
-                  baseline or your pre-improvement condition. The difference is your
-                  credit-generating capacity.
+                  The platform compares your current water quality against a regulatory baseline or
+                  your pre-improvement condition. The difference is your credit-generating capacity.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -308,8 +319,8 @@ export default function ForHomeownersPage() {
                 <FlowTitle>Earn Credits</FlowTitle>
                 <FlowDesc>
                   As your system continues to perform, verified credits accumulate in your
-                  WaterQuality.Trading account. You can hold them, sell them on the
-                  marketplace, or retire them as a personal environmental offset.
+                  WaterQuality.Trading account. You can hold them, sell them on the marketplace, or
+                  retire them as a personal environmental offset.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -324,14 +335,13 @@ export default function ForHomeownersPage() {
             <CalloutTitle>Example: 5-Acre Chesapeake Bay Property</CalloutTitle>
             <CalloutDesc>
               A homeowner with a 5-acre property in a Chesapeake Bay watershed installs a
-              bioretention system and a BlueSignal monitor. The system reduces phosphorus
-              runoff by 12 lbs/year compared to the pre-project baseline.
+              bioretention system and a BlueSignal monitor. The system reduces phosphorus runoff by
+              12 lbs/year compared to the pre-project baseline.
             </CalloutDesc>
             <CalloutDesc>
-              After a 6-month
-              verification period, the platform issues 12 phosphorus credits. At current
-              regional prices, those credits have market value — potentially enough to offset
-              the cost of the monitoring equipment within 2–3 years.
+              After a 6-month verification period, the platform issues 12 phosphorus credits. At
+              current regional prices, those credits have market value — potentially enough to
+              offset the cost of the monitoring equipment within 2–3 years.
             </CalloutDesc>
           </Callout>
         </SectionInner>
@@ -344,8 +354,12 @@ export default function ForHomeownersPage() {
             <BulletItem>Waterfront property owners (docks, ponds, lakefront)</BulletItem>
             <BulletItem>Rural well and spring water system operators</BulletItem>
             <BulletItem>Rainwater harvesting system owners</BulletItem>
-            <BulletItem>Homeowners with rain gardens, bioswales, or constructed wetlands</BulletItem>
-            <BulletItem>Residential septic system operators exceeding baseline performance</BulletItem>
+            <BulletItem>
+              Homeowners with rain gardens, bioswales, or constructed wetlands
+            </BulletItem>
+            <BulletItem>
+              Residential septic system operators exceeding baseline performance
+            </BulletItem>
           </BulletList>
         </SectionInner>
       </Section>

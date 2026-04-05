@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
 // Mock Firebase Auth
 export const mockAuth = {
@@ -8,7 +8,7 @@ export const mockAuth = {
   signOut: vi.fn(),
   createUserWithEmailAndPassword: vi.fn(),
   signInWithPopup: vi.fn(),
-}
+};
 
 // Mock Firebase Database
 export const mockDatabase = {
@@ -20,12 +20,12 @@ export const mockDatabase = {
     remove: vi.fn(),
     once: vi.fn(),
   })),
-}
+};
 
 // Mock Firebase modules
 vi.mock('firebase/app', () => ({
   initializeApp: vi.fn(() => ({})),
-}))
+}));
 
 vi.mock('firebase/auth', () => ({
   getAuth: vi.fn(() => mockAuth),
@@ -34,7 +34,7 @@ vi.mock('firebase/auth', () => ({
   createUserWithEmailAndPassword: vi.fn(),
   signInWithPopup: vi.fn(),
   GoogleAuthProvider: vi.fn(),
-}))
+}));
 
 vi.mock('firebase/database', () => ({
   getDatabase: vi.fn(() => mockDatabase),
@@ -45,4 +45,4 @@ vi.mock('firebase/database', () => ({
   remove: vi.fn(),
   onValue: vi.fn(),
   off: vi.fn(),
-}))
+}));

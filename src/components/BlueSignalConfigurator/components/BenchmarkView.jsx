@@ -1,8 +1,8 @@
 // Benchmark View Component - Market Comparison
-import styled from "styled-components";
-import { PRODUCTS } from "../data";
-import { COMPETITORS } from "../data";
-import { salesTheme } from "../styles/theme";
+import styled from 'styled-components';
+import { PRODUCTS } from '../data';
+import { COMPETITORS } from '../data';
+import { salesTheme } from '../styles/theme';
 
 // Dark-mode compatible styled components for Benchmark section
 const BenchmarkGrid = styled.div`
@@ -15,12 +15,15 @@ const BenchmarkCard = styled.div`
   background: ${({ highlight }) =>
     highlight
       ? `linear-gradient(135deg, ${salesTheme.colors.accentPrimary}15 0%, ${salesTheme.colors.accentPrimary}25 100%)`
-      : "rgba(255, 255, 255, 0.05)"};
-  border: 2px solid ${({ highlight }) => (highlight ? salesTheme.colors.accentPrimary : "rgba(255, 255, 255, 0.1)")};
+      : 'rgba(255, 255, 255, 0.05)'};
+  border: 2px solid
+    ${({ highlight }) => (highlight ? salesTheme.colors.accentPrimary : 'rgba(255, 255, 255, 0.1)')};
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
@@ -38,7 +41,7 @@ const BenchmarkName = styled.h4`
 const BenchmarkPrice = styled.div`
   font-size: 24px;
   font-weight: 700;
-  color: ${({ highlight }) => (highlight ? salesTheme.colors.accentPrimary : "#f59e0b")};
+  color: ${({ highlight }) => (highlight ? salesTheme.colors.accentPrimary : '#f59e0b')};
   margin-bottom: 16px;
 `;
 
@@ -67,8 +70,8 @@ const BenchmarkSection = styled.div`
       gap: 8px;
 
       &::before {
-        content: "${({ type }) => (type === "pro" ? "✓" : "✗")}";
-        color: ${({ type }) => (type === "pro" ? salesTheme.colors.accentPrimary : "#ef4444")};
+        content: '${({ type }) => (type === 'pro' ? '✓' : '✗')}';
+        color: ${({ type }) => (type === 'pro' ? salesTheme.colors.accentPrimary : '#ef4444')};
         font-weight: 600;
       }
     }
@@ -223,12 +226,12 @@ const BenchmarkView = () => {
       <SavingsCallout>
         <h4>Cost Advantage</h4>
         <p>
-          BlueSignal WQM-1 delivers <strong>6-channel water quality monitoring</strong> starting at{" "}
+          BlueSignal WQM-1 delivers <strong>6-channel water quality monitoring</strong> starting at{' '}
           <strong>$999</strong> — compared to <strong>$6,000+</strong> for equivalent professional
           sondes (YSI, Hach, In-Situ).
         </p>
         <p style={{ marginTop: 12 }}>
-          <strong>That's up to 83% cost savings</strong> with LoRaWAN connectivity and cloud
+          <strong>That&apos;s up to 83% cost savings</strong> with LoRaWAN connectivity and cloud
           dashboard included ($9.99/mo).
         </p>
       </SavingsCallout>
@@ -236,7 +239,7 @@ const BenchmarkView = () => {
       {/* Product comparison table */}
       <div style={{ marginTop: 32 }}>
         <SectionTitle>BlueSignal Product Line</SectionTitle>
-        <div style={{ overflowX: "auto" }}>
+        <div style={{ overflowX: 'auto' }}>
           <Table>
             <thead>
               <tr>
@@ -254,11 +257,17 @@ const BenchmarkView = () => {
                   <Td>
                     <strong style={{ color: salesTheme.colors.textPrimary }}>{p.name}</strong>
                     <br />
-                    <span style={{ fontSize: 12, color: salesTheme.colors.textSecondary }}>{p.subtitle}</span>
+                    <span style={{ fontSize: 12, color: salesTheme.colors.textSecondary }}>
+                      {p.subtitle}
+                    </span>
                   </Td>
-                  <Td style={{ color: salesTheme.colors.accentPrimary, fontWeight: 700 }}>${p.price.toLocaleString()}</Td>
+                  <Td style={{ color: salesTheme.colors.accentPrimary, fontWeight: 700 }}>
+                    ${p.price.toLocaleString()}
+                  </Td>
                   <Td style={{ color: salesTheme.colors.textSecondary }}>{p.deployment}</Td>
-                  <Td style={{ color: salesTheme.colors.textSecondary }}>{p.ultrasonic?.enabled ? `${p.ultrasonic.watts}W` : "—"}</Td>
+                  <Td style={{ color: salesTheme.colors.textSecondary }}>
+                    {p.ultrasonic?.enabled ? `${p.ultrasonic.watts}W` : '—'}
+                  </Td>
                   <Td style={{ color: salesTheme.colors.textSecondary }}>{p.sensors}</Td>
                   <Td style={{ color: salesTheme.colors.textSecondary }}>{p.autonomy}</Td>
                 </tr>

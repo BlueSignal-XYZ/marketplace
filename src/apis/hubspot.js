@@ -40,10 +40,9 @@ export const ORDER_STATUS_TO_DEAL_STAGE = {
 // HubSpot Contact API
 const createContact = async (contactData) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/contacts/create`,
-      { contactData }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/contacts/create`, {
+      contactData,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error creating HubSpot contact:', error);
@@ -53,10 +52,10 @@ const createContact = async (contactData) => {
 
 const updateContact = async (hubspotId, contactData) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/contacts/update`,
-      { hubspotId, contactData }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/contacts/update`, {
+      hubspotId,
+      contactData,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error updating HubSpot contact:', error);
@@ -66,10 +65,9 @@ const updateContact = async (hubspotId, contactData) => {
 
 const getContactByEmail = async (email) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/contacts/get-by-email`,
-      { email }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/contacts/get-by-email`, {
+      email,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error fetching HubSpot contact by email:', error);
@@ -79,10 +77,7 @@ const getContactByEmail = async (email) => {
 
 const getContact = async (hubspotId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/contacts/get`,
-      { hubspotId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/contacts/get`, { hubspotId });
     return response?.data;
   } catch (error) {
     console.error('Error fetching HubSpot contact:', error);
@@ -92,10 +87,7 @@ const getContact = async (hubspotId) => {
 
 const searchContacts = async (query) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/contacts/search`,
-      { query }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/contacts/search`, { query });
     return response?.data;
   } catch (error) {
     console.error('Error searching HubSpot contacts:', error);
@@ -106,10 +98,7 @@ const searchContacts = async (query) => {
 // HubSpot Deal API
 const createDeal = async (dealData) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/deals/create`,
-      { dealData }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/deals/create`, { dealData });
     return response?.data;
   } catch (error) {
     console.error('Error creating HubSpot deal:', error);
@@ -119,10 +108,10 @@ const createDeal = async (dealData) => {
 
 const updateDeal = async (hubspotId, dealData) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/deals/update`,
-      { hubspotId, dealData }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/deals/update`, {
+      hubspotId,
+      dealData,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error updating HubSpot deal:', error);
@@ -132,10 +121,10 @@ const updateDeal = async (hubspotId, dealData) => {
 
 const updateDealStage = async (hubspotId, stage) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/deals/update-stage`,
-      { hubspotId, stage }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/deals/update-stage`, {
+      hubspotId,
+      stage,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error updating HubSpot deal stage:', error);
@@ -145,10 +134,7 @@ const updateDealStage = async (hubspotId, stage) => {
 
 const getDeal = async (hubspotId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/deals/get`,
-      { hubspotId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/deals/get`, { hubspotId });
     return response?.data;
   } catch (error) {
     console.error('Error fetching HubSpot deal:', error);
@@ -158,10 +144,7 @@ const getDeal = async (hubspotId) => {
 
 const searchDeals = async (query) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/deals/search`,
-      { query }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/deals/search`, { query });
     return response?.data;
   } catch (error) {
     console.error('Error searching HubSpot deals:', error);
@@ -171,10 +154,10 @@ const searchDeals = async (query) => {
 
 const associateDealWithContact = async (dealId, contactId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/deals/associate-contact`,
-      { dealId, contactId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/deals/associate-contact`, {
+      dealId,
+      contactId,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error associating HubSpot deal with contact:', error);
@@ -185,10 +168,10 @@ const associateDealWithContact = async (dealId, contactId) => {
 // HubSpot Device Custom Object API
 const createDevice = async (deviceData, dealId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/devices/create`,
-      { deviceData, dealId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/devices/create`, {
+      deviceData,
+      dealId,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error creating HubSpot device:', error);
@@ -198,10 +181,10 @@ const createDevice = async (deviceData, dealId) => {
 
 const updateDevice = async (hubspotId, deviceData) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/devices/update`,
-      { hubspotId, deviceData }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/devices/update`, {
+      hubspotId,
+      deviceData,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error updating HubSpot device:', error);
@@ -211,10 +194,7 @@ const updateDevice = async (hubspotId, deviceData) => {
 
 const getDevice = async (hubspotId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/devices/get`,
-      { hubspotId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/devices/get`, { hubspotId });
     return response?.data;
   } catch (error) {
     console.error('Error fetching HubSpot device:', error);
@@ -224,10 +204,10 @@ const getDevice = async (hubspotId) => {
 
 const associateDeviceWithDeal = async (deviceId, dealId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/devices/associate-deal`,
-      { deviceId, dealId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/devices/associate-deal`, {
+      deviceId,
+      dealId,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error associating HubSpot device with deal:', error);
@@ -238,10 +218,10 @@ const associateDeviceWithDeal = async (deviceId, dealId) => {
 // HubSpot Sync Status API
 const getSyncStatus = async (entityType, entityId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/sync/status`,
-      { entityType, entityId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/sync/status`, {
+      entityType,
+      entityId,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error fetching HubSpot sync status:', error);
@@ -251,10 +231,11 @@ const getSyncStatus = async (entityType, entityId) => {
 
 const syncEntity = async (entityType, entityId, forceSync = false) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/sync/entity`,
-      { entityType, entityId, forceSync }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/sync/entity`, {
+      entityType,
+      entityId,
+      forceSync,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error syncing entity to HubSpot:', error);
@@ -265,10 +246,7 @@ const syncEntity = async (entityType, entityId, forceSync = false) => {
 // Batch sync multiple entities
 const batchSync = async (entities) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/sync/batch`,
-      { entities }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/sync/batch`, { entities });
     return response?.data;
   } catch (error) {
     console.error('Error batch syncing to HubSpot:', error);
@@ -279,9 +257,7 @@ const batchSync = async (entities) => {
 // Get all sync errors
 const getSyncErrors = async () => {
   try {
-    const response = await axios.get(
-      `${configs.server_url}/hubspot/sync/errors`
-    );
+    const response = await axios.get(`${configs.server_url}/hubspot/sync/errors`);
     return response?.data;
   } catch (error) {
     console.error('Error fetching sync errors:', error);
@@ -292,10 +268,7 @@ const getSyncErrors = async () => {
 // Retry a failed sync
 const retrySyncError = async (errorId) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/sync/retry`,
-      { errorId }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/sync/retry`, { errorId });
     return response?.data;
   } catch (error) {
     console.error('Error retrying sync:', error);
@@ -306,9 +279,7 @@ const retrySyncError = async (errorId) => {
 // Get sync statistics
 const getSyncStats = async () => {
   try {
-    const response = await axios.get(
-      `${configs.server_url}/hubspot/sync/stats`
-    );
+    const response = await axios.get(`${configs.server_url}/hubspot/sync/stats`);
     return response?.data;
   } catch (error) {
     console.error('Error fetching sync stats:', error);
@@ -408,10 +379,7 @@ const syncDeviceToHubSpot = async (device, dealId) => {
 // HubSpot Webhook handling
 const handleDealWebhook = async (payload) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/webhooks/deal`,
-      { payload }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/webhooks/deal`, { payload });
     return response?.data;
   } catch (error) {
     console.error('Error handling HubSpot deal webhook:', error);
@@ -421,10 +389,9 @@ const handleDealWebhook = async (payload) => {
 
 const handleContactWebhook = async (payload) => {
   try {
-    const response = await axios.post(
-      `${configs.server_url}/hubspot/webhooks/contact`,
-      { payload }
-    );
+    const response = await axios.post(`${configs.server_url}/hubspot/webhooks/contact`, {
+      payload,
+    });
     return response?.data;
   } catch (error) {
     console.error('Error handling HubSpot contact webhook:', error);

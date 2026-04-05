@@ -40,7 +40,6 @@ export function initGA(measurementId?: string): void {
   // Initialize the dataLayer + gtag function
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
-     
     window.dataLayer.push(arguments);
   };
   window.gtag('js', new Date());

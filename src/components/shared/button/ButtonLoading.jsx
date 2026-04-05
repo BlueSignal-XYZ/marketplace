@@ -1,8 +1,7 @@
-import { Spinner } from "react-bootstrap";
-
+import { Spinner } from 'react-bootstrap';
 
 function ButtonLoading(props) {
-  const { text = "Loading" } = props;
+  const { text = 'Loading' } = props;
 
   return (
     <div>

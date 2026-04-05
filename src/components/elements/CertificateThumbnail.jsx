@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import icon from "../../assets/icon.png";
+import styled from 'styled-components';
+import icon from '../../assets/icon.png';
 
 const CardWrapper = styled.div`
   display: flex;
@@ -18,8 +18,11 @@ const CardWrapper = styled.div`
   -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.75);
   margin-bottom: 25px;
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
-    rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.09) 0px 2px 1px,
+    rgba(0, 0, 0, 0.09) 0px 4px 2px,
+    rgba(0, 0, 0, 0.09) 0px 8px 4px,
+    rgba(0, 0, 0, 0.09) 0px 16px 8px,
     rgba(0, 0, 0, 0.09) 0px 32px 16px;
   transition: transform 0.2s ease-in-out;
 
@@ -74,8 +77,7 @@ const Card = styled.a`
   color: black;
 `;
 
-const formatCertificateID = (number) =>
-  "NPRC-" + String(number).padStart(7, "0");
+const formatCertificateID = (number) => 'NPRC-' + String(number).padStart(7, '0');
 
 const CertificateThumbnail = ({ certificate }) => {
   const { id, producer, balance } = certificate ? certificate : {};

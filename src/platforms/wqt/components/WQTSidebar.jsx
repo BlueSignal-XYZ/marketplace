@@ -35,7 +35,9 @@ const SidebarContainer = styled.nav`
   flex-direction: column;
   padding: 16px 12px;
   overflow-y: auto;
-  transition: width 200ms ease-out, padding 200ms ease-out;
+  transition:
+    width 200ms ease-out,
+    padding 200ms ease-out;
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) {
     display: flex;
@@ -83,7 +85,9 @@ const StyledNavLink = styled(NavLink)`
   border-left: 3px solid transparent;
 
   /* Tablet: center icon in narrow rail */
-  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({ theme }) => (theme.breakpoints?.lg || 1024) - 1}px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({
+      theme,
+    }) => (theme.breakpoints?.lg || 1024) - 1}px) {
     justify-content: center;
     padding: 0;
     width: 48px;
@@ -103,18 +107,22 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    background: ${({ theme }) => theme.components?.navActiveBg || theme.colors?.primaryLight || '#E6EEFA'};
+    background: ${({ theme }) =>
+      theme.components?.navActiveBg || theme.colors?.primaryLight || '#E6EEFA'};
     color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
     border-left-color: ${({ theme }) => theme.colors?.primary || '#0052CC'};
     font-weight: 600;
 
     /* Tablet: no left border indicator, use background only */
-    @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({ theme }) => (theme.breakpoints?.lg || 1024) - 1}px) {
+    @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({
+        theme,
+      }) => (theme.breakpoints?.lg || 1024) - 1}px) {
       border-left-color: transparent;
     }
 
     svg {
-      color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
+      color: ${({ theme }) =>
+        theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
     }
   }
 `;
@@ -126,7 +134,9 @@ const VersionText = styled.div`
   color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   opacity: 0.6;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({ theme }) => (theme.breakpoints?.lg || 1024) - 1}px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints?.md || 768}px) and (max-width: ${({
+      theme,
+    }) => (theme.breakpoints?.lg || 1024) - 1}px) {
     display: none;
   }
 `;

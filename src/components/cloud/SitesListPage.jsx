@@ -1,20 +1,20 @@
 // /src/components/cloud/SitesListPage.jsx
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import SiteCard from "./SiteCard";
-import { getSites } from "../../services/v2/api";
-import { useAppContext } from "../../context/AppContext";
-import { EmptyState } from "../../design-system/primitives/EmptyState";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import SiteCard from './SiteCard';
+import { getSites } from '../../services/v2/api';
+import { useAppContext } from '../../context/AppContext';
+import { EmptyState } from '../../design-system/primitives/EmptyState';
 
 const CreateSiteButton = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  background: ${({ theme }) => theme.colors?.primary || "#0066FF"};
-  color: ${({ theme }) => theme.colors?.textOnPrimary || "#FFFFFF"};
+  background: ${({ theme }) => theme.colors?.primary || '#0066FF'};
+  color: ${({ theme }) => theme.colors?.textOnPrimary || '#FFFFFF'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -25,7 +25,7 @@ const CreateSiteButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primaryDark || "#004DCC"};
+    background: ${({ theme }) => theme.colors?.primaryDark || '#004DCC'};
     transform: translateY(-1px);
   }
 
@@ -53,20 +53,20 @@ const SearchBar = styled.input`
   max-width: 400px;
   padding: 10px 16px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  border: 1px solid ${({ theme }) => theme.colors?.border || "#E5E7EB"};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
-  background: ${({ theme }) => theme.colors?.surface || "#FFFFFF"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
+  background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.focus || "rgba(0,102,255,0.16)"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.focus || 'rgba(0,102,255,0.16)'};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.textMuted || "#9CA3AF"};
+    color: ${({ theme }) => theme.colors?.textMuted || '#9CA3AF'};
   }
 `;
 
@@ -80,9 +80,7 @@ const FilterChip = styled.button`
   border-radius: 999px;
   border: 1px solid
     ${({ $active, theme }) =>
-      $active
-        ? theme.colors?.primary || "#0066FF"
-        : theme.colors?.border || "#E5E7EB"};
+      $active ? theme.colors?.primary || '#0066FF' : theme.colors?.border || '#E5E7EB'};
   padding: 6px 14px;
   min-height: 32px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
@@ -92,14 +90,12 @@ const FilterChip = styled.button`
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary || "#0066FF" : theme.colors?.surface || "#FFFFFF"};
+    $active ? theme.colors?.primary || '#0066FF' : theme.colors?.surface || '#FFFFFF'};
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.textOnPrimary || "#FFFFFF"
-      : theme.colors?.textSecondary || "#6B7280"};
+    $active ? theme.colors?.textOnPrimary || '#FFFFFF' : theme.colors?.textSecondary || '#6B7280'};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   }
 `;
 
@@ -120,12 +116,7 @@ const Grid = styled.div`
 /* EmptyState imported from design system */
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 12px;
@@ -142,7 +133,9 @@ const Skeleton = styled.div`
 `;
 
 export default function SitesListPage() {
-  useEffect(() => { document.title = 'Sites — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Sites — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const { user } = STATES || {};
@@ -150,8 +143,8 @@ export default function SitesListPage() {
   const [sites, setSites] = useState([]);
   const [filteredSites, setFilteredSites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     loadSites();
@@ -168,7 +161,7 @@ export default function SitesListPage() {
       const data = await getSites(user?.uid).catch(() => []);
       setSites(data || []);
     } catch (error) {
-      console.error("Error loading sites:", error);
+      console.error('Error loading sites:', error);
     } finally {
       setLoading(false);
     }
@@ -182,14 +175,16 @@ export default function SitesListPage() {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (s) =>
-          (s.name || "").toLowerCase().includes(query) ||
-          (s.customer || "").toLowerCase().includes(query) ||
-          ((typeof s.location === "string" ? s.location : s.location?.address) || "").toLowerCase().includes(query)
+          (s.name || '').toLowerCase().includes(query) ||
+          (s.customer || '').toLowerCase().includes(query) ||
+          ((typeof s.location === 'string' ? s.location : s.location?.address) || '')
+            .toLowerCase()
+            .includes(query)
       );
     }
 
     // Apply status filter
-    if (statusFilter !== "all") {
+    if (statusFilter !== 'all') {
       filtered = filtered.filter((s) => s.status === statusFilter);
     }
 
@@ -198,10 +193,7 @@ export default function SitesListPage() {
 
   if (loading) {
     return (
-      <CloudPageLayout
-        title="Sites"
-        subtitle="Manage all monitoring locations"
-      >
+      <CloudPageLayout title="Sites" subtitle="Manage all monitoring locations">
         <Grid>
           <Skeleton />
           <Skeleton />
@@ -216,7 +208,7 @@ export default function SitesListPage() {
       title="Sites"
       subtitle="Manage all monitoring locations"
       actions={
-        <CreateSiteButton onClick={() => navigate("/cloud/sites/new")}>
+        <CreateSiteButton onClick={() => navigate('/cloud/sites/new')}>
           + Create Site
         </CreateSiteButton>
       }
@@ -229,27 +221,21 @@ export default function SitesListPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <Filters>
-          <FilterChip
-            $active={statusFilter === "all"}
-            onClick={() => setStatusFilter("all")}
-          >
+          <FilterChip $active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
             All
           </FilterChip>
-          <FilterChip
-            $active={statusFilter === "online"}
-            onClick={() => setStatusFilter("online")}
-          >
+          <FilterChip $active={statusFilter === 'online'} onClick={() => setStatusFilter('online')}>
             Online
           </FilterChip>
           <FilterChip
-            $active={statusFilter === "warning"}
-            onClick={() => setStatusFilter("warning")}
+            $active={statusFilter === 'warning'}
+            onClick={() => setStatusFilter('warning')}
           >
             Warning
           </FilterChip>
           <FilterChip
-            $active={statusFilter === "offline"}
-            onClick={() => setStatusFilter("offline")}
+            $active={statusFilter === 'offline'}
+            onClick={() => setStatusFilter('offline')}
           >
             Offline
           </FilterChip>
@@ -258,14 +244,30 @@ export default function SitesListPage() {
 
       {filteredSites.length === 0 ? (
         <EmptyState
-          icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>}
-          title={searchQuery || statusFilter !== "all" ? "No sites found" : "No Sites Yet"}
-          description={
-            searchQuery || statusFilter !== "all"
-              ? "Try adjusting your filters or search query."
-              : "No sites registered yet. Create your first site or enable Demo Mode in Profile to explore with sample data."
+          icon={
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
           }
-          action={!searchQuery && statusFilter === "all" ? { label: "Create Site", onClick: () => navigate("/cloud/sites/new") } : undefined}
+          title={searchQuery || statusFilter !== 'all' ? 'No sites found' : 'No Sites Yet'}
+          description={
+            searchQuery || statusFilter !== 'all'
+              ? 'Try adjusting your filters or search query.'
+              : 'No sites registered yet. Create your first site or enable Demo Mode in Profile to explore with sample data.'
+          }
+          action={
+            !searchQuery && statusFilter === 'all'
+              ? { label: 'Create Site', onClick: () => navigate('/cloud/sites/new') }
+              : undefined
+          }
         />
       ) : (
         <Grid>

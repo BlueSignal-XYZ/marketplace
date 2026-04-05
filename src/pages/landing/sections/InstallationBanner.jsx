@@ -42,11 +42,14 @@ const StateTag = styled.div`
   border-radius: 100px;
   white-space: nowrap;
 
-  ${({ $available, theme }) => $available ? `
+  ${({ $available, theme }) =>
+    $available
+      ? `
     color: ${theme.colors.green};
     background: ${theme.colors.greenDim};
     border: 1px solid rgba(52,211,153,0.25);
-  ` : `
+  `
+      : `
     color: ${theme.colors.w30};
     background: ${theme.colors.w04};
     border: 1px solid ${theme.colors.w08};
@@ -57,7 +60,7 @@ const StateDot = styled.span`
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: ${({ $available, theme }) => $available ? theme.colors.green : theme.colors.w30};
+  background: ${({ $available, theme }) => ($available ? theme.colors.green : theme.colors.w30)};
   ${({ $available }) => $available && 'animation: pulse 2s ease-in-out infinite;'}
 `;
 
@@ -74,11 +77,13 @@ const CTAButton = styled.a`
   border-radius: 100px;
   text-decoration: none;
   white-space: nowrap;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 24px rgba(255,255,255,0.15);
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
   }
 
   margin-top: 24px;
@@ -93,37 +98,37 @@ const InstallationBanner = () => (
     <Container>
       <RevealOnScroll>
         <Banner>
-            <Content>
-              <SectionLabel>Professional Installation</SectionLabel>
-              <SectionTitle>We install it for&nbsp;you.</SectionTitle>
-              <Desc>
-                Full-service installation for commercial and residential sites.
-                Site survey, mounting, probe calibration, LoRa gateway setup, and
-                cloud dashboard configuration — all included in one&nbsp;visit.
-              </Desc>
-              <StateTags>
-                <StateTag $available>
-                  <StateDot $available />
-                  Texas — Available Now
-                </StateTag>
-                <StateTag>
-                  <StateDot />
-                  Florida — Coming Soon
-                </StateTag>
-              </StateTags>
-              <CTAButton
-                href="#order"
-                onClick={(e) => {
-                  e.preventDefault();
-                  trackCTA('request_install_quote', 'Installation Banner');
-                  window.dispatchEvent(new CustomEvent('prefill-inquiry', { detail: 'quote' }));
-                  const section = document.getElementById('order');
-                  if (section) section.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                Request Installation Quote
-              </CTAButton>
-            </Content>
+          <Content>
+            <SectionLabel>Professional Installation</SectionLabel>
+            <SectionTitle>We install it for&nbsp;you.</SectionTitle>
+            <Desc>
+              Full-service installation for commercial and residential sites. Site survey, mounting,
+              probe calibration, LoRa gateway setup, and cloud dashboard configuration — all
+              included in one&nbsp;visit.
+            </Desc>
+            <StateTags>
+              <StateTag $available>
+                <StateDot $available />
+                Texas — Available Now
+              </StateTag>
+              <StateTag>
+                <StateDot />
+                Florida — Coming Soon
+              </StateTag>
+            </StateTags>
+            <CTAButton
+              href="#order"
+              onClick={(e) => {
+                e.preventDefault();
+                trackCTA('request_install_quote', 'Installation Banner');
+                window.dispatchEvent(new CustomEvent('prefill-inquiry', { detail: 'quote' }));
+                const section = document.getElementById('order');
+                if (section) section.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Request Installation Quote
+            </CTAButton>
+          </Content>
         </Banner>
       </RevealOnScroll>
     </Container>

@@ -174,9 +174,7 @@ export async function clearDatabase(): Promise<void> {
 export async function clearAuth(): Promise<void> {
   try {
     // Auth emulator exposes a REST endpoint for clearing
-    await axios.delete(
-      `http://${AUTH_EMULATOR}/emulator/v1/projects/${PROJECT_ID}/accounts`
-    );
+    await axios.delete(`http://${AUTH_EMULATOR}/emulator/v1/projects/${PROJECT_ID}/accounts`);
   } catch {
     // Ignore errors if emulator isn't running
   }

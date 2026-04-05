@@ -34,12 +34,7 @@ export const createOrganizationSchema = ({
 /**
  * WebSite Schema - for homepage with search
  */
-export const createWebSiteSchema = ({
-  name,
-  url,
-  description,
-  searchUrl,
-}) => ({
+export const createWebSiteSchema = ({ name, url, description, searchUrl }) => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name,
@@ -90,13 +85,14 @@ export const createProductSchema = ({
     availability: `https://schema.org/${availability}`,
     url,
   },
-  ...(reviewCount && ratingValue && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue,
-      reviewCount,
-    },
-  }),
+  ...(reviewCount &&
+    ratingValue && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue,
+        reviewCount,
+      },
+    }),
 });
 
 /**
@@ -228,12 +224,7 @@ export const createSoftwareApplicationSchema = ({
 /**
  * ItemList Schema - for listing pages (marketplace, registry, etc.)
  */
-export const createItemListSchema = ({
-  name,
-  description,
-  url,
-  items,
-}) => ({
+export const createItemListSchema = ({ name, description, url, items }) => ({
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name,
@@ -253,10 +244,9 @@ export const WQT_ORGANIZATION_SCHEMA = createOrganizationSchema({
   name: 'WaterQuality.Trading',
   url: 'https://waterquality.trading',
   logo: 'https://waterquality.trading/logo.png',
-  description: 'B2B marketplace for water quality credit trading. Buy, sell, and verify nutrient credits, stormwater credits, and thermal credits.',
-  sameAs: [
-    'https://linkedin.com/company/waterqualitytrading',
-  ],
+  description:
+    'B2B marketplace for water quality credit trading. Buy, sell, and verify nutrient credits, stormwater credits, and thermal credits.',
+  sameAs: ['https://linkedin.com/company/waterqualitytrading'],
 });
 
 export const WQT_WEBSITE_SCHEMA = createWebSiteSchema({
@@ -271,10 +261,9 @@ export const BLUESIGNAL_ORGANIZATION_SCHEMA = createOrganizationSchema({
   name: 'BlueSignal',
   url: 'https://bluesignal.xyz',
   logo: 'https://bluesignal.xyz/logo.png',
-  description: 'Smart water quality monitoring systems. Real-time sensors, smart buoys, and cloud analytics for lakes, ponds, and watersheds.',
-  sameAs: [
-    'https://linkedin.com/company/bluesignal',
-  ],
+  description:
+    'Smart water quality monitoring systems. Real-time sensors, smart buoys, and cloud analytics for lakes, ponds, and watersheds.',
+  sameAs: ['https://linkedin.com/company/bluesignal'],
 });
 
 export const BLUESIGNAL_WEBSITE_SCHEMA = createWebSiteSchema({

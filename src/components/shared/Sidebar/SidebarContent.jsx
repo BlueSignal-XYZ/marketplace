@@ -1,7 +1,7 @@
-import { useState } from "react";
-import * as Accordion from "@radix-ui/react-accordion";
-import { Sidebar_MenuItem } from "../../elements";
-import { FaChevronDown } from "react-icons/fa6";
+import { useState } from 'react';
+import * as Accordion from '@radix-ui/react-accordion';
+import { Sidebar_MenuItem } from '../../elements';
+import { FaChevronDown } from 'react-icons/fa6';
 import {
   faBroadcastTower,
   faCalculator,
@@ -10,10 +10,10 @@ import {
   faLeaf,
   faShop,
   faStore,
-} from "@fortawesome/free-solid-svg-icons";
-import styled, { keyframes } from "styled-components";
-import { Link } from "react-router-dom";
-import { ProfileDropMenu } from "../../elements/navbar/elements";
+} from '@fortawesome/free-solid-svg-icons';
+import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
+import { ProfileDropMenu } from '../../elements/navbar/elements';
 
 const StyledSidebarContent = styled.div`
   height: 100%;
@@ -29,61 +29,61 @@ const StyledSidebarContent = styled.div`
 
 const sidebarItems = [
   {
-    route: "environmental",
-    cta: "Environment",
+    route: 'environmental',
+    cta: 'Environment',
     icon: faLeaf,
     hasSubMenu: true,
   },
   {
-    route: "/marketplace",
-    cta: "Marketplace",
+    route: '/marketplace',
+    cta: 'Marketplace',
     icon: faShop,
   },
   {
-    route: "financial",
-    cta: "Finance",
+    route: 'financial',
+    cta: 'Finance',
     icon: faDollarSign,
   },
   {
-    route: "/marketplace/seller-dashboard",
-    cta: "Dashboard",
+    route: '/marketplace/seller-dashboard',
+    cta: 'Dashboard',
     icon: faStore,
   },
 ];
 
 const environmentRoutes = [
   {
-    route: "/dashboard/environmental",
-    cta: "Dashboard",
+    route: '/dashboard/environmental',
+    cta: 'Dashboard',
     icon: faLeaf,
     hasSubMenu: true,
   },
   {
-    route: "/features/nutrient-calculator",
-    cta: "Nutrient Calculator",   // ✅ RESTORED TO ORIGINAL
+    route: '/features/nutrient-calculator',
+    cta: 'Nutrient Calculator', // ✅ RESTORED TO ORIGINAL
     onclick: null,
     icon: faCalculator,
   },
   {
-    route: "/features/stream",
-    cta: "Broadcast Live",
+    route: '/features/stream',
+    cta: 'Broadcast Live',
     icon: faBroadcastTower,
   },
   {
-    route: "/features/upload-media",
-    cta: "Upload Media",
+    route: '/features/upload-media',
+    cta: 'Upload Media',
     icon: faLeaf,
   },
   {
-    route: "/features/verification",
-    cta: "Verification",
+    route: '/features/verification',
+    cta: 'Verification',
     onclick: null,
     icon: faCheckCircle,
   },
 ];
 
 function SidebarContent() {
-  const [openSection, setOpenSection] = useState("");
+  const [openSection, setOpenSection] = useState('');
   return (
     <StyledSidebarContent>
       <StyledAccordion
@@ -99,15 +99,11 @@ function SidebarContent() {
           return hasSubMenu ? (
             <Accordion.Item value="environmental" key={index}>
               <StyledAccordionTrigger className="trigger">
-                <Sidebar_MenuItem
-                  icon={icon}
-                  itemName={cta}
-                  isAccordionTrigger
-                />
+                <Sidebar_MenuItem icon={icon} itemName={cta} isAccordionTrigger />
                 <FaChevronDown className="AccordionChevron" aria-hidden />
               </StyledAccordionTrigger>
               <StyledAccordionContent className="content">
-                {environmentRoutes.map((subData, _subIndex) => {
+                {environmentRoutes.map((subData, subIndex) => {
                   const { route, cta, icon, onclick } = subData || {};
                   return (
                     <Link to={route} className="cta" key={cta}>
@@ -158,10 +154,10 @@ const slideDown = keyframes`
 const StyledAccordion = styled(Accordion.Root)`
   width: 100%;
 
-  .content[data-state="open"] {
+  .content[data-state='open'] {
     animation: ${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1);
   }
-  .content[data-state="closed"] {
+  .content[data-state='closed'] {
     animation: ${slideUp} 300ms cubic-bezier(0.87, 0, 0.13, 1);
   }
 `;
@@ -178,7 +174,7 @@ const StyledAccordionTrigger = styled(Accordion.Trigger)`
   .cta {
     font-weight: 500;
   }
-  &[data-state="open"] {
+  &[data-state='open'] {
     .AccordionChevron {
       transform: rotate(180deg);
     }

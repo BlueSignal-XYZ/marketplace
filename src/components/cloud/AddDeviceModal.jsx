@@ -1,10 +1,10 @@
 // /src/components/cloud/AddDeviceModal.jsx
 // Modal for adding new devices to inventory (admin only)
 
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import DeviceService from "../../services/deviceService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import DeviceService from '../../services/deviceService';
+import { useAppContext } from '../../context/AppContext';
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLES                                   */
@@ -36,14 +36,14 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 `;
 
 const Title = styled.h2`
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const CloseButton = styled.button`
@@ -52,7 +52,7 @@ const CloseButton = styled.button`
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -60,8 +60,8 @@ const CloseButton = styled.button`
   transition: all 0.15s;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   }
 
   svg {
@@ -86,29 +86,29 @@ const Label = styled.label`
   display: block;
   font-size: 14px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   margin-bottom: 8px;
 `;
 
 const Select = styled.select`
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   background: #ffffff;
   cursor: pointer;
   transition: all 0.15s;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#0284c7"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#0284c7'};
     box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
     cursor: not-allowed;
   }
 `;
@@ -116,35 +116,35 @@ const Select = styled.select`
 const Input = styled.input`
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   transition: all 0.15s;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#0284c7"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#0284c7'};
     box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
     cursor: not-allowed;
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 `;
 
 const TextArea = styled.textarea`
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   resize: vertical;
   min-height: 80px;
   font-family: inherit;
@@ -152,24 +152,24 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#0284c7"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#0284c7'};
     box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
     cursor: not-allowed;
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 `;
 
 const HelpText = styled.p`
   margin: 6px 0 0;
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
 `;
 
 const ErrorText = styled.p`
@@ -181,28 +181,28 @@ const ErrorText = styled.p`
 const ProductInfo = styled.div`
   margin-top: 12px;
   padding: 12px 14px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 `;
 
 const ProductName = styled.div`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   margin-bottom: 4px;
 `;
 
 const ProductPrice = styled.div`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const Footer = styled.div`
   display: flex;
   gap: 12px;
   padding: 20px 24px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   justify-content: flex-end;
 `;
 
@@ -223,21 +223,21 @@ const Button = styled.button`
 
 const CancelButton = styled(Button)`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
   }
 `;
 
 const SubmitButton = styled(Button)`
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  background: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   border: none;
   color: #ffffff;
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    background: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
   }
 `;
 
@@ -267,10 +267,10 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
   const { user } = STATES;
   const { logNotification } = ACTIONS;
 
-  const [sku, setSku] = useState("");
+  const [sku, setSku] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [serialPrefix, setSerialPrefix] = useState("pgw-");
-  const [notes, setNotes] = useState("");
+  const [serialPrefix, setSerialPrefix] = useState('pgw-');
+  const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [products, setProducts] = useState([]);
@@ -295,10 +295,10 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
   // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
-      setSku("");
+      setSku('');
       setQuantity(1);
-      setSerialPrefix("pgw-");
-      setNotes("");
+      setSerialPrefix('pgw-');
+      setNotes('');
       setErrors({});
       setSelectedProduct(null);
     }
@@ -309,17 +309,17 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
     const newErrors = {};
 
     if (!sku) {
-      newErrors.sku = "Please select a product";
+      newErrors.sku = 'Please select a product';
     }
 
     if (!quantity || quantity < 1) {
-      newErrors.quantity = "Quantity must be at least 1";
+      newErrors.quantity = 'Quantity must be at least 1';
     } else if (quantity > 50) {
-      newErrors.quantity = "Maximum quantity is 50";
+      newErrors.quantity = 'Maximum quantity is 50';
     }
 
     if (!serialPrefix || serialPrefix.length < 2) {
-      newErrors.serialPrefix = "Prefix must be at least 2 characters";
+      newErrors.serialPrefix = 'Prefix must be at least 2 characters';
     }
 
     setErrors(newErrors);
@@ -335,8 +335,8 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
     }
 
     // Check admin role
-    if (user?.role !== "admin") {
-      logNotification("error", "Only administrators can add devices");
+    if (user?.role !== 'admin') {
+      logNotification('error', 'Only administrators can add devices');
       return;
     }
 
@@ -354,7 +354,7 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
             ? `Created device ${result.firstSerial}`
             : `Created ${result.count} devices (${result.firstSerial} to ${result.lastSerial})`;
 
-        logNotification("success", message);
+        logNotification('success', message);
 
         if (onSuccess) {
           onSuccess(result);
@@ -363,8 +363,8 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
         onClose();
       }
     } catch (error) {
-      console.error("Error creating devices:", error);
-      logNotification("error", error.message || "Failed to create devices");
+      console.error('Error creating devices:', error);
+      logNotification('error', error.message || 'Failed to create devices');
     } finally {
       setLoading(false);
     }
@@ -380,13 +380,13 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === "Escape" && isOpen && !loading) {
+      if (e.key === 'Escape' && isOpen && !loading) {
         onClose();
       }
     };
 
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen, loading, onClose]);
 
   if (!isOpen) {
@@ -432,9 +432,7 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
               {selectedProduct && (
                 <ProductInfo>
                   <ProductName>{selectedProduct.name}</ProductName>
-                  <ProductPrice>
-                    Unit Price: ${selectedProduct.price.toLocaleString()}
-                  </ProductPrice>
+                  <ProductPrice>Unit Price: ${selectedProduct.price.toLocaleString()}</ProductPrice>
                 </ProductInfo>
               )}
             </FormGroup>
@@ -464,9 +462,7 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
                 placeholder="pgw-"
                 disabled={loading}
               />
-              <HelpText>
-                Default: pgw- (generates pgw-0001, pgw-0002, etc.)
-              </HelpText>
+              <HelpText>Default: pgw- (generates pgw-0001, pgw-0002, etc.)</HelpText>
               {errors.serialPrefix && <ErrorText>{errors.serialPrefix}</ErrorText>}
             </FormGroup>
 
@@ -488,7 +484,9 @@ export default function AddDeviceModal({ isOpen, onClose, onSuccess }) {
             </CancelButton>
             <SubmitButton type="submit" disabled={loading || !sku}>
               {loading && <LoadingSpinner />}
-              {loading ? "Creating..." : `Create ${quantity > 1 ? `${quantity} Devices` : "Device"}`}
+              {loading
+                ? 'Creating...'
+                : `Create ${quantity > 1 ? `${quantity} Devices` : 'Device'}`}
             </SubmitButton>
           </Footer>
         </form>

@@ -1,9 +1,9 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../data/styles";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { colors } from '../../data/styles';
+import { motion } from 'framer-motion';
 
 const Container = styled(motion.div)`
   display: flex;
@@ -80,7 +80,7 @@ const TableContainer = styled(motion.div)`
   padding: 5px;
   border-radius: 20px;
 
-  ${({ isOpen }) => !isOpen && "display: none;"}
+  ${({ isOpen }) => !isOpen && 'display: none;'}
 
   @media (max-width: 768px) {
     font-size: 0.7rem;
@@ -98,7 +98,7 @@ const TitleRow = styled(Row)`
   background: ${colors.accentLight};
   color: ${colors.primaryDark};
 
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     font-size: 2.5vw;
   }
 `;
@@ -143,36 +143,28 @@ const ProducersData = ({ producersData }) => {
   };
 
   const containerVariants = {
-    expanded: { height: "auto", opacity: 1, overflow: "visible" },
-    collapsed: { height: "0", opacity: 0, overflow: "hidden" },
+    expanded: { height: 'auto', opacity: 1, overflow: 'visible' },
+    collapsed: { height: '0', opacity: 0, overflow: 'hidden' },
   };
 
   return (
     <Container
       initial={{ opacity: 0, scale: 1 }}
       animate={{ opacity: 1, scale: [1, 1.05, 1] }}
-      transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+      transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
     >
       {producersData?.map((producerData) => (
         <div key={producerData.producer}>
           <Producer onClick={() => handleExpand(producerData.producer)}>
             <Value>{producerData.producer.toUpperCase()}</Value>
             <FontAwesomeIcon
-              icon={
-                expandedProducer === producerData.producer
-                  ? faAngleUp
-                  : faAngleDown
-              }
+              icon={expandedProducer === producerData.producer ? faAngleUp : faAngleDown}
             />
           </Producer>
           <TableContainer
-            animate={
-              expandedProducer === producerData.producer
-                ? "expanded"
-                : "collapsed"
-            }
+            animate={expandedProducer === producerData.producer ? 'expanded' : 'collapsed'}
             variants={containerVariants}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
             <TitleRow>
               <CreditType>TYPE</CreditType>
@@ -187,16 +179,12 @@ const ProducersData = ({ producersData }) => {
                   return (
                     <VerifierRow key={index}>
                       <CreditType>{supply.creditType}</CreditType>
-                      <Verifier>{verifierData.verifier?.toUpperCase() ?? "—"}</Verifier>
+                      <Verifier>{verifierData.verifier?.toUpperCase() ?? '—'}</Verifier>
                       <AvailableNPC>{supply.issuedSupply}</AvailableNPC>
-                      <SoldNPC>
-                        {supply.availableSupply}
-                      </SoldNPC>
-                      <DonatedNPC>
-                        {supply.donatedSupply}
-                      </DonatedNPC>
+                      <SoldNPC>{supply.availableSupply}</SoldNPC>
+                      <DonatedNPC>{supply.donatedSupply}</DonatedNPC>
                     </VerifierRow>
-                  )
+                  );
                 })}
               </div>
             ))}

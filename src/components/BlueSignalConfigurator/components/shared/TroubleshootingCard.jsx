@@ -1,6 +1,6 @@
 // Troubleshooting Decision Tree Card Component
-import { useState } from "react";
-import styled from "styled-components";
+import { useState } from 'react';
+import styled from 'styled-components';
 
 const CardWrapper = styled.div`
   background: rgba(255, 255, 255, 0.03);
@@ -16,7 +16,7 @@ const CardHeader = styled.button`
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: ${({ isOpen }) => isOpen ? 'rgba(59, 130, 246, 0.1)' : 'transparent'};
+  background: ${({ isOpen }) => (isOpen ? 'rgba(59, 130, 246, 0.1)' : 'transparent')};
   border: none;
   cursor: pointer;
   transition: all 0.2s;
@@ -57,28 +57,26 @@ const SeverityBadge = styled.span`
   text-transform: uppercase;
   letter-spacing: 0.03em;
   background: ${({ severity }) =>
-    severity === 'high' ? 'rgba(239, 68, 68, 0.2)' :
-    severity === 'medium' ? 'rgba(251, 146, 60, 0.2)' :
-    'rgba(74, 222, 128, 0.2)'
-  };
+    severity === 'high'
+      ? 'rgba(239, 68, 68, 0.2)'
+      : severity === 'medium'
+        ? 'rgba(251, 146, 60, 0.2)'
+        : 'rgba(74, 222, 128, 0.2)'};
   color: ${({ severity }) =>
-    severity === 'high' ? '#f87171' :
-    severity === 'medium' ? '#fb923c' :
-    '#4ade80'
-  };
+    severity === 'high' ? '#f87171' : severity === 'medium' ? '#fb923c' : '#4ade80'};
 `;
 
 const Chevron = styled.span`
   color: #64748b;
   transition: transform 0.2s;
-  transform: ${({ isOpen }) => isOpen ? 'rotate(180deg)' : 'rotate(0)'};
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0)')};
   font-size: 12px;
 `;
 
 const Content = styled.div`
-  padding: ${({ isOpen }) => isOpen ? '0' : '0'};
-  max-height: ${({ isOpen }) => isOpen ? '2000px' : '0'};
-  opacity: ${({ isOpen }) => isOpen ? 1 : 0};
+  padding: ${({ isOpen }) => (isOpen ? '0' : '0')};
+  max-height: ${({ isOpen }) => (isOpen ? '2000px' : '0')};
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   overflow: hidden;
   transition: all 0.3s ease;
 `;
@@ -143,15 +141,13 @@ const DifficultyBadge = styled.span`
   padding: 2px 8px;
   border-radius: 4px;
   background: ${({ difficulty }) =>
-    difficulty === 'easy' ? 'rgba(74, 222, 128, 0.2)' :
-    difficulty === 'medium' ? 'rgba(251, 191, 36, 0.2)' :
-    'rgba(239, 68, 68, 0.2)'
-  };
+    difficulty === 'easy'
+      ? 'rgba(74, 222, 128, 0.2)'
+      : difficulty === 'medium'
+        ? 'rgba(251, 191, 36, 0.2)'
+        : 'rgba(239, 68, 68, 0.2)'};
   color: ${({ difficulty }) =>
-    difficulty === 'easy' ? '#4ade80' :
-    difficulty === 'medium' ? '#fbbf24' :
-    '#f87171'
-  };
+    difficulty === 'easy' ? '#4ade80' : difficulty === 'medium' ? '#fbbf24' : '#f87171'};
   font-weight: 600;
   text-transform: uppercase;
   margin-left: 12px;
@@ -180,7 +176,9 @@ const TroubleshootingCard = ({ issue }) => {
           <SectionTitle>Possible Causes</SectionTitle>
           <List>
             {issue.causes.map((cause, i) => (
-              <ListItem key={i} bullet="?" bulletColor="#f59e0b">{cause}</ListItem>
+              <ListItem key={i} bullet="?" bulletColor="#f59e0b">
+                {cause}
+              </ListItem>
             ))}
           </List>
         </Section>
@@ -189,7 +187,9 @@ const TroubleshootingCard = ({ issue }) => {
           <SectionTitle>Diagnostic Steps</SectionTitle>
           <List>
             {issue.diagnosticSteps.map((step, i) => (
-              <ListItem key={i} bullet={`${i + 1}.`} bulletColor="#60a5fa">{step}</ListItem>
+              <ListItem key={i} bullet={`${i + 1}.`} bulletColor="#60a5fa">
+                {step}
+              </ListItem>
             ))}
           </List>
         </Section>

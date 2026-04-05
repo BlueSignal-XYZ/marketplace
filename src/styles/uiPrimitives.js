@@ -27,7 +27,8 @@ const spin = keyframes`
 export const PageShell = styled.div`
   min-height: 100vh;
   padding: 80px 20px 40px;
-  background: ${({ theme }) => theme.gradients?.surface || 'linear-gradient(180deg, #FFFFFF 0%, #F4F5F7 100%)'};
+  background: ${({ theme }) =>
+    theme.gradients?.surface || 'linear-gradient(180deg, #FFFFFF 0%, #F4F5F7 100%)'};
 
   @media (max-width: 768px) {
     padding: 70px 16px 24px;
@@ -79,7 +80,9 @@ export const Card = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.sm};
   transition: ${({ theme }) => theme.transitions.default};
 
-  ${({ $hoverable }) => $hoverable && `
+  ${({ $hoverable }) =>
+    $hoverable &&
+    `
     cursor: pointer;
     &:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -98,9 +101,10 @@ export const StatCard = styled(Card)`
 
 export const FilterChip = styled.button`
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
-  border: 1px solid ${({ theme, $active }) => $active ? theme.colors.primary500 : theme.colors.ui200};
-  background: ${({ theme, $active }) => $active ? theme.colors.primary500 : '#fff'};
-  color: ${({ theme, $active }) => $active ? '#fff' : theme.colors.ui600};
+  border: 1px solid
+    ${({ theme, $active }) => ($active ? theme.colors.primary500 : theme.colors.ui200)};
+  background: ${({ theme, $active }) => ($active ? theme.colors.primary500 : '#fff')};
+  color: ${({ theme, $active }) => ($active ? '#fff' : theme.colors.ui600)};
   border-radius: ${({ theme }) => theme.borderRadius.full};
   font-size: 14px;
   font-weight: 500;
@@ -108,7 +112,7 @@ export const FilterChip = styled.button`
   transition: ${({ theme }) => theme.transitions.default};
 
   &:hover {
-    background: ${({ theme, $active }) => $active ? theme.colors.primary600 : theme.colors.ui50};
+    background: ${({ theme, $active }) => ($active ? theme.colors.primary600 : theme.colors.ui50)};
   }
 `;
 
@@ -124,18 +128,18 @@ export const FiltersRow = styled.div`
 /* ------------------------------------------------------------------ */
 
 const statusColors = {
-  active:   { bg: 'success100', text: 'success800' },
+  active: { bg: 'success100', text: 'success800' },
   verified: { bg: 'success100', text: 'success800' },
   enrolled: { bg: 'success100', text: 'success800' },
   upcoming: { bg: 'warning100', text: 'warning800' },
-  pending:  { bg: 'warning100', text: 'warning800' },
+  pending: { bg: 'warning100', text: 'warning800' },
   'pending-review': { bg: 'warning100', text: 'warning800' },
-  listed:   { bg: 'primary100', text: 'primary700' },
-  closed:   { bg: 'ui200', text: 'ui600' },
-  sold:     { bg: 'ui200', text: 'ui600' },
-  suspended:{ bg: 'red100', text: 'red700' },
-  retired:  { bg: 'red100', text: 'red700' },
-  withdrawn:{ bg: 'ui200', text: 'ui600' },
+  listed: { bg: 'primary100', text: 'primary700' },
+  closed: { bg: 'ui200', text: 'ui600' },
+  sold: { bg: 'ui200', text: 'ui600' },
+  suspended: { bg: 'red100', text: 'red700' },
+  retired: { bg: 'red100', text: 'red700' },
+  withdrawn: { bg: 'ui200', text: 'ui600' },
 };
 
 export const StatusBadge = styled.span`
@@ -160,16 +164,14 @@ export const StatusBadge = styled.span`
 /* ------------------------------------------------------------------ */
 
 export const PrimaryButton = styled.button`
-  padding: ${({ $size }) => $size === 'lg' ? '16px 24px' : '10px 20px'};
-  background: ${({ theme, disabled }) => disabled
-    ? theme.colors.ui400
-    : theme.gradients.primary};
+  padding: ${({ $size }) => ($size === 'lg' ? '16px 24px' : '10px 20px')};
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.ui400 : theme.gradients.primary)};
   color: #fff;
   border: none;
   border-radius: ${({ theme }) => theme.borderRadius.default};
-  font-size: ${({ $size }) => $size === 'lg' ? '16px' : '14px'};
+  font-size: ${({ $size }) => ($size === 'lg' ? '16px' : '14px')};
   font-weight: 600;
-  cursor: ${({ disabled }) => disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   transition: ${({ theme }) => theme.transitions.default};
 
   &:hover:not(:disabled) {
@@ -310,10 +312,15 @@ export const WarningBanner = styled.div`
 
 export const notificationTypeColor = (type, theme) => {
   switch (type) {
-    case 'trading-program-available': return theme.colors.success500;
-    case 'credit-generated':         return theme.colors.primary400;
-    case 'alert':                    return theme.colors.red500;
-    case 'enrollment-update':        return theme.colors.warning500;
-    default:                         return theme.colors.ui400;
+    case 'trading-program-available':
+      return theme.colors.success500;
+    case 'credit-generated':
+      return theme.colors.primary400;
+    case 'alert':
+      return theme.colors.red500;
+    case 'enrollment-update':
+      return theme.colors.warning500;
+    default:
+      return theme.colors.ui400;
   }
 };

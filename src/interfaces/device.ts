@@ -61,24 +61,24 @@ export interface Device {
 }
 
 export type DeviceLifecycle =
-  | 'inventory'      // Device created/received, in warehouse
-  | 'allocated'      // Linked to an order
-  | 'shipped'        // In transit to site
-  | 'delivered'      // On-site, awaiting installation
-  | 'installed'      // Physically installed, not tested
-  | 'commissioned'   // Tests passed, pending activation
-  | 'active'         // Operational, sending data
-  | 'maintenance'    // Temporarily offline for service
+  | 'inventory' // Device created/received, in warehouse
+  | 'allocated' // Linked to an order
+  | 'shipped' // In transit to site
+  | 'delivered' // On-site, awaiting installation
+  | 'installed' // Physically installed, not tested
+  | 'commissioned' // Tests passed, pending activation
+  | 'active' // Operational, sending data
+  | 'maintenance' // Temporarily offline for service
   | 'decommissioned'; // Removed from service
 
 export type DeviceCommissionStatus =
-  | 'pending'     // Not yet commissioned
+  | 'pending' // Not yet commissioned
   | 'in_progress' // Commission workflow started
-  | 'passed'      // All tests passed
-  | 'failed';     // One or more tests failed
+  | 'passed' // All tests passed
+  | 'failed'; // One or more tests failed
 
 export type DeviceStatus =
-  | 'online'  // Receiving data
+  | 'online' // Receiving data
   | 'warning' // Partial connectivity or alerts
   | 'offline'; // No recent contact
 
@@ -131,26 +131,21 @@ export interface CommissionTest {
 }
 
 export type CommissionTestId =
-  | 'power_os'       // Power & OS boot
-  | 'ads1115'        // ADS1115 ADC detection
-  | 'ds18b20'        // DS18B20 temperature sensor
-  | 'ph_ntu'         // pH/Turbidity sensors
-  | 'npk'            // NPK Modbus (soil probes only)
-  | 'relay_ch1'      // Relay channel 1
-  | 'relay_ch2'      // Relay channel 2
-  | 'lte_wifi'       // Cellular/WiFi connectivity
-  | 'cloud_ingest'   // Cloud data upload test
-  | 'gps'            // GPS position lock
-  | 'ultrasonic'     // Ultrasonic transducer test
-  | 'solar_mppt'     // Solar MPPT charging
+  | 'power_os' // Power & OS boot
+  | 'ads1115' // ADS1115 ADC detection
+  | 'ds18b20' // DS18B20 temperature sensor
+  | 'ph_ntu' // pH/Turbidity sensors
+  | 'npk' // NPK Modbus (soil probes only)
+  | 'relay_ch1' // Relay channel 1
+  | 'relay_ch2' // Relay channel 2
+  | 'lte_wifi' // Cellular/WiFi connectivity
+  | 'cloud_ingest' // Cloud data upload test
+  | 'gps' // GPS position lock
+  | 'ultrasonic' // Ultrasonic transducer test
+  | 'solar_mppt' // Solar MPPT charging
   | 'battery_voltage'; // Battery voltage check
 
-export type CommissionTestStatus =
-  | 'pending'
-  | 'running'
-  | 'passed'
-  | 'failed'
-  | 'skipped';
+export type CommissionTestStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped';
 
 // Device API payload types
 export interface DeviceCreatePayload {
