@@ -106,9 +106,10 @@ export default function TermsPage() {
         <Inner>
           <H2>1. Acceptance of Terms</H2>
           <P>
-            By accessing or using waterquality.trading ("the Platform"), operated by BlueSignal LTD
-            ("BlueSignal", "we", "us", "our"), you agree to be bound by these Terms of Service
-            ("Terms"). If you do not agree, do not use the Platform.
+            By accessing or using waterquality.trading (&quot;the Platform&quot;), operated by
+            BlueSignal LTD (&quot;BlueSignal&quot;, &quot;we&quot;, &quot;us&quot;,
+            &quot;our&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;).
+            If you do not agree, do not use the Platform.
           </P>
 
           <H2>2. Platform Description</H2>
@@ -141,11 +142,11 @@ export default function TermsPage() {
           <H2>5. Credit Listings and Transactions</H2>
           <P>
             All nutrient credits listed on the Platform must be generated through verified
-            monitoring systems and meet the Platform's verification requirements. Credit listings
-            must accurately represent the type, quantity, source location, and verification status
-            of the credits offered. The Platform facilitates transactions but does not guarantee the
-            performance of any credit or the outcome of any environmental program. Pricing is
-            influenced by utility-controlled rate structures, regional demand, and market
+            monitoring systems and meet the Platform&apos;s verification requirements. Credit
+            listings must accurately represent the type, quantity, source location, and verification
+            status of the credits offered. The Platform facilitates transactions but does not
+            guarantee the performance of any credit or the outcome of any environmental program.
+            Pricing is influenced by utility-controlled rate structures, regional demand, and market
             conditions. All transactions are subject to verification confirmation before settlement.
             Credits may be subject to adjustment or revocation if verification discrepancies are
             identified post-transaction.
@@ -177,7 +178,7 @@ export default function TermsPage() {
             You agree not to: submit fraudulent credit listings or falsified monitoring data;
             manipulate, tamper with, or interfere with the verification process or monitoring
             devices; use the Platform for money laundering, terrorist financing, or other illegal
-            financial activities; attempt to access other users' accounts, data, or private
+            financial activities; attempt to access other users&apos; accounts, data, or private
             information; reverse engineer, decompile, or disassemble any part of the Platform; use
             automated bots, scrapers, or other systems to collect data from the Platform without
             authorization; circumvent any security measures or access controls; create multiple
@@ -195,12 +196,13 @@ export default function TermsPage() {
 
           <H2>10. Disclaimers</H2>
           <P>
-            THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND,
-            EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
-            FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not guarantee that credits will
-            maintain their value, that utility rebate programs will continue, that regulatory
-            frameworks will remain unchanged, or that the Platform will be uninterrupted or
-            error-free. Environmental outcomes depend on many factors outside our control.
+            THE PLATFORM IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT
+            WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not
+            guarantee that credits will maintain their value, that utility rebate programs will
+            continue, that regulatory frameworks will remain unchanged, or that the Platform will be
+            uninterrupted or error-free. Environmental outcomes depend on many factors outside our
+            control.
           </P>
 
           <H2>11. Limitation of Liability</H2>
@@ -216,7 +218,7 @@ export default function TermsPage() {
           <P>
             You agree to indemnify, defend, and hold harmless BlueSignal LTD and its officers,
             directors, employees, agents, and affiliates from and against any and all claims,
-            liabilities, damages, losses, and expenses (including reasonable attorneys' fees)
+            liabilities, damages, losses, and expenses (including reasonable attorneys&apos; fees)
             arising from your use of the Platform, your violation of these Terms, or your violation
             of any rights of a third party.
           </P>

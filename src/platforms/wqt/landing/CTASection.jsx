@@ -342,7 +342,7 @@ export function CTASection({ audience, content }) {
         <RevealOnScroll delay={0.15}>
           {status === 'success' ? (
             <StatusMessage $type="success">
-              Thanks! We'll be in touch within 24 hours.
+              Thanks! We&apos;ll be in touch within 24 hours.
             </StatusMessage>
           ) : (
             <Form onSubmit={handleSubmit} noValidate>

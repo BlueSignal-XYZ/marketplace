@@ -433,7 +433,7 @@ const NotificationBell = ({ light = false }) => {
                   </svg>
                 </EmptyIcon>
                 <EmptyTitle>No new notifications</EmptyTitle>
-                <EmptyText>You're all caught up</EmptyText>
+                <EmptyText>You&apos;re all caught up</EmptyText>
               </EmptyNotifications>
             ) : (
               notifications.map((notification) => (

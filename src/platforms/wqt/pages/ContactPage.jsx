@@ -522,7 +522,7 @@ export default function ContactPage() {
             </svg>
           </SuccessIcon>
           <SuccessTitle>Message sent!</SuccessTitle>
-          <SuccessDesc>Thanks &mdash; we'll be in touch within 24&nbsp;hours.</SuccessDesc>
+          <SuccessDesc>Thanks &mdash; we&apos;ll be in touch within 24&nbsp;hours.</SuccessDesc>
         </SuccessCard>
       );
     }
@@ -681,8 +681,8 @@ export default function ContactPage() {
         <HeroInner>
           <HeroTitle>Contact Us</HeroTitle>
           <HeroSub>
-            Questions about the marketplace, credit programs, or partnerships? We'd love to hear
-            from you.
+            Questions about the marketplace, credit programs, or partnerships? We&apos;d love to
+            hear from you.
           </HeroSub>
         </HeroInner>
       </Hero>

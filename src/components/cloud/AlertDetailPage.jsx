@@ -288,7 +288,7 @@ export default function AlertDetailPage() {
       >
         <EmptyState>
           <h3>Alert not found</h3>
-          <p>The alert you're looking for doesn't exist or has been removed.</p>
+          <p>The alert you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         </EmptyState>
       </CloudPageLayout>
     );

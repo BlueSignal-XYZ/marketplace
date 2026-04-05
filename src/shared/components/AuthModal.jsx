@@ -356,7 +356,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
         <SwitchRow>
           {mode === 'login' ? (
             <>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <SwitchLink
                 onClick={() => {
                   setMode('signup');

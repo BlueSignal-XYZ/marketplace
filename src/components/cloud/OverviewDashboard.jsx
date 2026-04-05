@@ -947,9 +947,9 @@ export default function OverviewDashboard() {
 
       {/* Bottom Row: Today's Tasks */}
       <Section>
-        <h2>Today's Tasks</h2>
+        <h2>Today&apos;s Tasks</h2>
         {todayTasks.length === 0 ? (
-          <EmptyState>No tasks scheduled for today. You're all caught up!</EmptyState>
+          <EmptyState>No tasks scheduled for today. You&apos;re all caught up!</EmptyState>
         ) : (
           <TasksList>
             {todayTasks.map((task) => (

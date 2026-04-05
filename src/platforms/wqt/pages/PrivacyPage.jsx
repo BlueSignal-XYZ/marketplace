@@ -106,9 +106,10 @@ export default function PrivacyPage() {
         <Inner>
           <H2>1. Introduction</H2>
           <P>
-            BlueSignal LTD ("we", "us", "our") operates waterquality.trading, cloud.bluesignal.xyz,
-            and bluesignal.xyz. This Privacy Policy describes how we collect, use, store, and
-            protect your personal information when you use our platforms and services.
+            BlueSignal LTD (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates
+            waterquality.trading, cloud.bluesignal.xyz, and bluesignal.xyz. This Privacy Policy
+            describes how we collect, use, store, and protect your personal information when you use
+            our platforms and services.
           </P>
 
           <H2>2. Information We Collect</H2>
@@ -221,7 +222,7 @@ export default function PrivacyPage() {
             or email privacy@bluesignal.xyz. We will respond within thirty (30) days.
           </P>
 
-          <H2>9. Children's Privacy</H2>
+          <H2>9. Children&apos;s Privacy</H2>
           <P>
             The Platform is not intended for individuals under 18 years of age. We do not knowingly
             collect personal information from children. If we become aware that we have
@@ -240,8 +241,9 @@ export default function PrivacyPage() {
           <P>
             We may update this Privacy Policy periodically to reflect changes in our practices,
             services, or legal requirements. Material changes will be communicated through the
-            Platform or via email at least thirty (30) days before they take effect. The "Last
-            Updated" date at the top of this page indicates when the most recent revision was made.
+            Platform or via email at least thirty (30) days before they take effect. The &quot;Last
+            Updated&quot; date at the top of this page indicates when the most recent revision was
+            made.
           </P>
 
           <H2>12. Contact</H2>

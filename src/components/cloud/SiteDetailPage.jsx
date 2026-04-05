@@ -500,7 +500,7 @@ export default function SiteDetailPage() {
       >
         <EmptyState>
           <h3>Site not found</h3>
-          <p>The site you're looking for doesn't exist or has been removed.</p>
+          <p>The site you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         </EmptyState>
       </CloudPageLayout>
     );

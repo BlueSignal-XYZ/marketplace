@@ -709,8 +709,8 @@ const BuyerDashboard = () => {
             <GettingStartedContent>
               <h3>Get Started with Water Credits</h3>
               <p>
-                Welcome to WaterQuality.Trading! Here's how to make your first credit purchase and
-                start meeting your environmental compliance goals.
+                Welcome to WaterQuality.Trading! Here&apos;s how to make your first credit purchase
+                and start meeting your environmental compliance goals.
               </p>
               <StepList>
                 <Step onClick={handleBrowseMarketplace}>

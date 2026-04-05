@@ -654,7 +654,7 @@ export default function DeviceOnboardingWizard() {
             <>
               <StepTitle>Select Device Type</StepTitle>
               <StepDescription>
-                Choose the type of device you're adding to your fleet.
+                Choose the type of device you&apos;re adding to your fleet.
               </StepDescription>
 
               <DeviceTypeGrid>

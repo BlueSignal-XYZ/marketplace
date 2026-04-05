@@ -571,8 +571,8 @@ export function RevenueGradeWizardPage() {
             <StepLabel>Step 3 of 5</StepLabel>
             <Title>Establish Your Baseline</Title>
             <Desc>
-              Before credits can be generated, we need to know what "normal" looks like at your
-              site. Choose a baseline type.
+              Before credits can be generated, we need to know what &quot;normal&quot; looks like at
+              your site. Choose a baseline type.
             </Desc>
 
             <FormArea>
@@ -623,8 +623,8 @@ export function RevenueGradeWizardPage() {
                 <RadioContent>
                   <RadioTitle>Regulatory Baseline</RadioTitle>
                   <RadioDesc>
-                    Use your facility's permitted discharge limits (NPDES permit). Credits equal
-                    improvement beyond your permit requirements.
+                    Use your facility&apos;s permitted discharge limits (NPDES permit). Credits
+                    equal improvement beyond your permit requirements.
                   </RadioDesc>
                   {baseline.type === 'regulatory' && (
                     <div

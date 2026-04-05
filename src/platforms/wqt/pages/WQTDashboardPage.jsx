@@ -448,7 +448,9 @@ export function WQTDashboardPage() {
       <Page>
         <GettingStartedWrap>
           <Greeting>Welcome to WaterQuality.Trading</Greeting>
-          <GettingStartedSub>Your account is set up. Here's how to get started:</GettingStartedSub>
+          <GettingStartedSub>
+            Your account is set up. Here&apos;s how to get started:
+          </GettingStartedSub>
 
           <GettingStartedGrid>
             <StartCard onClick={() => navigate('/marketplace')}>

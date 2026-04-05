@@ -561,7 +561,7 @@ export const QuoteBuilder = ({
         {quoteItems.length === 0 ? (
           <EmptyState>
             <h4>No items in quote</h4>
-            <p>Click "Add to Quote" on any product to start building your quote.</p>
+            <p>Click &quot;Add to Quote&quot; on any product to start building your quote.</p>
           </EmptyState>
         ) : (
           quoteItems.map((item) => {

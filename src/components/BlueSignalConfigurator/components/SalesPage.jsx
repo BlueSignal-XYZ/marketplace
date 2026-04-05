@@ -1717,7 +1717,7 @@ export default function SalesPage() {
                   </SectionTitle>
                   <ContactSubtitle>
                     Have questions about our products or need help with your water quality project?
-                    We're here to help.
+                    We&apos;re here to help.
                   </ContactSubtitle>
                 </ContactHeader>
                 <ContactGrid>
@@ -1736,7 +1736,7 @@ export default function SalesPage() {
                     <ContactSectionTitle>Drop us a line...</ContactSectionTitle>
                     {contactFormState.status === 'success' ? (
                       <SuccessMessage>
-                        Thank you for your message! We'll get back to you within 24 hours.
+                        Thank you for your message! We&apos;ll get back to you within 24 hours.
                       </SuccessMessage>
                     ) : (
                       <ContactForm onSubmit={handleContactSubmit}>
