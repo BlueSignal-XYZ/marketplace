@@ -256,7 +256,7 @@ const INQUIRY_OPTIONS = [
   'General Inquiry',
 ];
 
-export function CTASection({ audience, content }) {
+export function CTASection({ audience: _audience, content }) {
   const [form, setForm] = useState({
     name: '',
     email: '',

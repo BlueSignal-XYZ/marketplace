@@ -41,11 +41,6 @@ const MobileMenu = ({ APP }) => {
     animate: { opacity: 1, y: 0, transition: { delay: 0.3 } },
   };
 
-  const variants = {
-    open: { x: 0 },
-    closed: { x: '100%' },
-  };
-
   return (
     <MobileMenuContainer>
       <MenuIcon
@@ -151,14 +146,6 @@ const MenuSection = styled.div`
   margin-bottom: 2rem;
 `;
 
-const MenuHeader = styled.h2`
-  font-size: 1.5rem;
-  border-bottom: 1px solid #333;
-  margin-bottom: 1rem;
-  margin-top: 0;
-  color: #333;
-`;
-
 const MenuItem = styled.div`
   display: flex;
   align-items: center;
@@ -170,20 +157,6 @@ const MenuItem = styled.div`
 const MenuItemIcon = styled(FontAwesomeIcon)`
   font-size: 1.5rem;
   color: #333;
-`;
-
-const LogOutButton = styled.button`
-  background-color: #ff4500;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #e44d26;
-  }
 `;
 
 const FooterLinks = styled.div`

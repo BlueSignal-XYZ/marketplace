@@ -204,7 +204,7 @@ function toSite(site, allDevices) {
  * Get all devices for a user.
  * @returns {Promise<DeviceSummary[]>}
  */
-export async function getDevices(userId) {
+export async function getDevices(_userId) {
   const devices = await CloudMockAPI.devices.getAll();
   return (devices || []).map(toDeviceSummary);
 }
@@ -260,7 +260,7 @@ export async function getDeviceAlerts(deviceId) {
  * Get all alerts for a user.
  * @returns {Promise<Alert[]>}
  */
-export async function getAlerts(userId) {
+export async function getAlerts(_userId) {
   const alerts = await CloudMockAPI.alerts.getAll();
   return (alerts || []).map(toAlert);
 }
@@ -269,7 +269,7 @@ export async function getAlerts(userId) {
  * Get all sites for a user.
  * @returns {Promise<Site[]>}
  */
-export async function getSites(userId) {
+export async function getSites(_userId) {
   const [sites, devices] = await Promise.all([
     CloudMockAPI.sites.getAll(),
     CloudMockAPI.devices.getAll(),
@@ -391,7 +391,7 @@ export async function enableRevenueGrade(deviceId, params) {
   return { enabled: true, enabledAt: new Date().toISOString(), ...params };
 }
 
-export async function disableRevenueGrade(deviceId) {
+export async function disableRevenueGrade(_deviceId) {
   await new Promise((r) => setTimeout(r, 300));
 }
 
@@ -449,7 +449,7 @@ export async function logCalibration(deviceId, calibration) {
 
 // ── Device Commands (demo stubs) ─────────────────────────────────────────
 
-export async function sendDeviceCommand(deviceId, command) {
+export async function sendDeviceCommand(_deviceId, _command) {
   await new Promise((r) => setTimeout(r, 400));
   return {
     commandId: `cmd-demo-${Date.now()}`,
@@ -460,7 +460,7 @@ export async function sendDeviceCommand(deviceId, command) {
 
 // ── HUC Lookup (demo stub) ───────────────────────────────────────────────
 
-export async function lookupHUC(lat, lng) {
+export async function lookupHUC(_lat, _lng) {
   await new Promise((r) => setTimeout(r, 300));
   return {
     huc12: '020700100101',
@@ -485,7 +485,7 @@ export async function getWQTLinkStatus() {
   };
 }
 
-export async function linkWQTAccount(deviceIds) {
+export async function linkWQTAccount(_deviceIds) {
   await new Promise((r) => setTimeout(r, 500));
   return { linked: true, linkedAt: new Date().toISOString() };
 }

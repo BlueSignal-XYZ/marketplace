@@ -236,7 +236,7 @@ export function RevenueGradeWizardPage() {
   const { deviceId } = useParams();
   const navigate = useNavigate();
   const { STATES } = useAppContext();
-  const user = STATES?.user;
+  const _user = STATES?.user;
   const toast = useToastContext();
 
   const [step, setStep] = useState(0);
@@ -269,7 +269,7 @@ export function RevenueGradeWizardPage() {
 
   // Queries
   const enableMutation = useEnableRevenueGradeMutation();
-  const calMutation = useLogCalibrationMutation();
+  const _calMutation = useLogCalibrationMutation();
   const linkMutation = useLinkWQTMutation();
   const registerMutation = useRegisterProjectMutation();
 

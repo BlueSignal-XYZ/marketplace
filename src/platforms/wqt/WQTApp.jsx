@@ -93,7 +93,7 @@ const LoadingFallback = () => (
 
 // ── Landing redirect ──────────────────────────────────────
 
-function MarketplaceLanding({ user, authLoading }) {
+function MarketplaceLanding({ user: _user, authLoading }) {
   if (authLoading) return <LoadingFallback />;
 
   // Always show landing page — authenticated users can navigate away via nav/CTA

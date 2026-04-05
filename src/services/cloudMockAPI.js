@@ -709,7 +709,7 @@ export const CloudMockAPI = {
         orp_mv: 250 + Math.random() * 150,
       }));
     },
-    getLogs: async (deviceId) => {
+    getLogs: async (_deviceId) => {
       await delay();
       return [
         {
@@ -860,11 +860,11 @@ export const CloudMockAPI = {
 
   // Installer Jobs
   installer: {
-    getJobs: async (userId) => {
+    getJobs: async (_userId) => {
       await delay();
       return [...MOCK_INSTALLER_JOBS];
     },
-    getRecentlyCommissioned: async (userId) => {
+    getRecentlyCommissioned: async (_userId) => {
       await delay();
       return MOCK_COMMISSIONING.filter((c) => c.status === 'completed').slice(0, 5);
     },

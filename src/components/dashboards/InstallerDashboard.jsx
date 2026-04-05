@@ -335,7 +335,7 @@ const InstallerDashboard = () => {
     navigate(`/dashboard/${deviceId}`);
   };
 
-  const handleViewJob = (jobId) => {
+  const handleViewJob = (_jobId) => {
     navigate(`/dashboard/alerts`);
   };
 

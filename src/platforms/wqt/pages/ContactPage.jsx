@@ -447,7 +447,7 @@ export default function ContactPage() {
       setStatus('success');
       resetForm();
       return;
-    } catch (err) {
+    } catch (_err) {
       // fetch failed, try sendBeacon
     }
 

@@ -459,7 +459,7 @@ function GenericIcon({ color }) {
   );
 }
 
-export function HowItWorksSection({ audience, content, trust }) {
+export function HowItWorksSection({ audience: _audience, content, trust }) {
   // Use audience-specific value props when provided, otherwise default features
   const features = content || FEATURES;
   const isAudienceContent = !!content;

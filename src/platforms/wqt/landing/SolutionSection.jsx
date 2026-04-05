@@ -263,7 +263,7 @@ const STEPS = [
   },
 ];
 
-export function SolutionSection({ audience, content }) {
+export function SolutionSection({ audience: _audience, content }) {
   // Use audience-specific steps when provided, otherwise default 5-step
   const steps = content?.steps || STEPS;
   const colCount = steps.length;

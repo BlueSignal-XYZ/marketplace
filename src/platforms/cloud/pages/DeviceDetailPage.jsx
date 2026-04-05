@@ -662,7 +662,7 @@ function RelayControlSection({ deviceId, device }) {
 
 /* ── Revenue Grade Section ─────────────────────────────── */
 
-function RevenueGradeSection({ deviceId, device }) {
+function RevenueGradeSection({ deviceId, device: _device }) {
   const navigate = useNavigate();
   const { data: rgStatus, isLoading } = useRevenueGradeQuery(deviceId);
 
