@@ -105,12 +105,31 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash][extname]',
           // Landing page uses a minimal Firebase set (Firestore only for lead capture)
-          manualChunks: buildTarget === 'landing'
-            ? { vendor: ['react', 'react-dom'] }
-            : {
-                vendor: ['react', 'react-dom', 'react-router-dom', 'styled-components', '@tanstack/react-query'],
-                firebase: ['firebase/app', 'firebase/auth', 'firebase/database'],
+          manualChunks(id) {
+            if (buildTarget === 'landing') {
+              if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
+                return 'vendor';
               }
+            } else {
+              if (
+                id.includes('node_modules/react-dom') ||
+                id.includes('node_modules/react/') ||
+                id.includes('node_modules/react-router-dom') ||
+                id.includes('node_modules/styled-components') ||
+                id.includes('node_modules/@tanstack/react-query')
+              ) {
+                return 'vendor';
+              }
+              if (
+                id.includes('node_modules/firebase/app') ||
+                id.includes('node_modules/firebase/auth') ||
+                id.includes('node_modules/firebase/database') ||
+                id.includes('node_modules/@firebase/')
+              ) {
+                return 'firebase';
+              }
+            }
+          }
         }
       }
     }
