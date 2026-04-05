@@ -33,6 +33,11 @@ export const wqtTheme = {
   zIndex,
   breakpoints,
 
+  /** Gradient overrides so legacy ButtonPrimary picks up WQT brand blue */
+  gradients: {
+    primaryLight: `linear-gradient(135deg, ${wqtColors.primary} 0%, ${wqtColors.primaryDark} 100%)`,
+  },
+
   /** Component-level semantic tokens — mapped from color palette */
   components: {
     // Header
