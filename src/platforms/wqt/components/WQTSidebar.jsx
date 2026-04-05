@@ -5,7 +5,7 @@
 
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { Home, TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';
+import { TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';
 
 /* ── Constants ─────────────────────────────────────────── */
 
@@ -13,7 +13,6 @@ const SIDEBAR_WIDTH = 240;
 const SIDEBAR_WIDTH_TABLET = 68;
 
 const NAV_ITEMS = [
-  { label: 'Home', icon: Home, to: '/dashboard' },
   { label: 'Market', icon: TrendingUp, to: '/marketplace' },
   { label: 'Registry', icon: ShieldCheck, to: '/registry' },
   { label: 'Map', icon: Globe, to: '/map' },
@@ -148,12 +147,7 @@ export function WQTSidebar() {
     <SidebarContainer aria-label="Main navigation">
       <NavList>
         {NAV_ITEMS.map(({ label, icon: Icon, to }) => (
-          <StyledNavLink
-            key={to}
-            to={to}
-            end={to === '/marketplace' || to === '/dashboard'}
-            title={label}
-          >
+          <StyledNavLink key={to} to={to} end={to === '/marketplace'} title={label}>
             <Icon size={20} />
             <NavLabel>{label}</NavLabel>
           </StyledNavLink>
