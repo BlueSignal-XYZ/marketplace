@@ -4,7 +4,8 @@ import { trackCTA } from '../utils/analytics';
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
+const GOOGLE_SHEETS_URL =
+  'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const FormWrapper = styled.div`
@@ -39,7 +40,7 @@ const Input = styled.input`
   font-size: 15px;
   color: ${({ theme }) => theme.colors.white};
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme, $hasError }) => $hasError ? theme.colors.red : theme.colors.w15};
+  border: 1px solid ${({ theme, $hasError }) => ($hasError ? theme.colors.red : theme.colors.w15)};
   border-radius: 10px;
   padding: 12px 16px;
   outline: none;
@@ -50,7 +51,7 @@ const Input = styled.input`
   }
 
   &:focus {
-    border-color: ${({ theme, $hasError }) => $hasError ? theme.colors.red : theme.colors.blue};
+    border-color: ${({ theme, $hasError }) => ($hasError ? theme.colors.red : theme.colors.blue)};
   }
 `;
 
@@ -59,7 +60,7 @@ const TextArea = styled.textarea`
   font-size: 15px;
   color: ${({ theme }) => theme.colors.white};
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme, $hasError }) => $hasError ? theme.colors.red : theme.colors.w15};
+  border: 1px solid ${({ theme, $hasError }) => ($hasError ? theme.colors.red : theme.colors.w15)};
   border-radius: 10px;
   padding: 12px 16px;
   outline: none;
@@ -73,7 +74,7 @@ const TextArea = styled.textarea`
   }
 
   &:focus {
-    border-color: ${({ theme, $hasError }) => $hasError ? theme.colors.red : theme.colors.blue};
+    border-color: ${({ theme, $hasError }) => ($hasError ? theme.colors.red : theme.colors.blue)};
   }
 `;
 
@@ -133,12 +134,15 @@ const SubmitBtn = styled.button`
   border-radius: 100px;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
   margin-top: 8px;
 
   &:hover:not(:disabled) {
     transform: scale(1.04);
-    box-shadow: 0 0 24px rgba(255,255,255,0.15);
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
   }
 
   &:disabled {
@@ -358,26 +362,41 @@ const ContactForm = () => {
     return (
       <SuccessWrapper>
         <SuccessIcon>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </SuccessIcon>
         <SuccessTitle>Message sent!</SuccessTitle>
-        <SuccessDesc>
-          Thanks! We&rsquo;ll be in touch within 24&nbsp;hours.
-        </SuccessDesc>
+        <SuccessDesc>Thanks! We&rsquo;ll be in touch within 24&nbsp;hours.</SuccessDesc>
       </SuccessWrapper>
     );
   }
 
-  {/* FIX: Added an explicit error state so users see what went wrong
+  {
+    /* FIX: Added an explicit error state so users see what went wrong
       instead of being silently redirected to mailto. Includes a direct
-      email link and a retry button so the user isn't stuck. */}
+      email link and a retry button so the user isn't stuck. */
+  }
   if (status === 'error') {
     return (
       <SuccessWrapper>
         <SuccessIcon style={{ background: 'rgba(248,113,113,0.15)' }}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#f87171' }}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ color: '#f87171' }}
+          >
             <circle cx="12" cy="12" r="10" />
             <line x1="15" y1="9" x2="9" y2="15" />
             <line x1="9" y1="9" x2="15" y2="15" />
@@ -385,13 +404,15 @@ const ContactForm = () => {
         </SuccessIcon>
         <SuccessTitle>Something went wrong</SuccessTitle>
         <SuccessDesc>
-          {errorMsg || 'We could not submit your message.'}{' '}
-          You can email us directly at{' '}
+          {errorMsg || 'We could not submit your message.'} You can email us directly at{' '}
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
         </SuccessDesc>
         <SubmitBtn
           type="button"
-          onClick={() => { setStatus('idle'); setErrorMsg(''); }}
+          onClick={() => {
+            setStatus('idle');
+            setErrorMsg('');
+          }}
           style={{ marginTop: '16px' }}
         >
           Try Again
@@ -418,7 +439,11 @@ const ContactForm = () => {
               aria-describedby={errors.name ? 'cf-name-error' : undefined}
               aria-invalid={!!errors.name}
             />
-            {errors.name && <FieldError id="cf-name-error" role="alert">{errors.name}</FieldError>}
+            {errors.name && (
+              <FieldError id="cf-name-error" role="alert">
+                {errors.name}
+              </FieldError>
+            )}
           </FieldGroup>
 
           <FieldGroup>
@@ -435,7 +460,11 @@ const ContactForm = () => {
               aria-describedby={errors.email ? 'cf-email-error' : undefined}
               aria-invalid={!!errors.email}
             />
-            {errors.email && <FieldError id="cf-email-error" role="alert">{errors.email}</FieldError>}
+            {errors.email && (
+              <FieldError id="cf-email-error" role="alert">
+                {errors.email}
+              </FieldError>
+            )}
           </FieldGroup>
         </Row>
 
@@ -482,7 +511,11 @@ const ContactForm = () => {
             aria-describedby={errors.message ? 'cf-message-error' : undefined}
             aria-invalid={!!errors.message}
           />
-          {errors.message && <FieldError id="cf-message-error" role="alert">{errors.message}</FieldError>}
+          {errors.message && (
+            <FieldError id="cf-message-error" role="alert">
+              {errors.message}
+            </FieldError>
+          )}
         </FieldGroup>
 
         {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
@@ -491,7 +524,13 @@ const ContactForm = () => {
           {status === 'submitting' ? 'Sending...' : 'Send Message'}
           {status !== 'submitting' && (
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           )}
         </SubmitBtn>

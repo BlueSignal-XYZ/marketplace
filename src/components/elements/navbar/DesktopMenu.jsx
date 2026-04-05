@@ -1,20 +1,12 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faBellSlash,
-  faGear,
-  faGears,
-  faSignOutAlt,
-} from '@fortawesome/free-solid-svg-icons';
+
 import styled from 'styled-components';
 import { ProfileDropMenu } from './elements';
 import { motion } from 'framer-motion';
 
 const iconVariants = {
   hover: { scale: 1.1 },
-  tap: { scale: 0.9 }
+  tap: { scale: 0.9 },
 };
 
 /**
@@ -23,20 +15,12 @@ const iconVariants = {
  * @param {Object} APP - Application state and actions
  */
 const DesktopMenu = ({ APP }) => {
-  const {
-    notificationBarOpen,
-    settingsMenuOpen,
-  } = APP ? APP.STATES : {};
+  const { notificationBarOpen, settingsMenuOpen } = APP ? APP.STATES : {};
 
-  const {
-    handleNotificationsBar,
-    handleSettingsMenu,
-    handleLogOut,
-  } = APP ? APP.ACTIONS : {};
+  const { handleNotificationsBar, handleSettingsMenu, handleLogOut } = APP ? APP.ACTIONS : {};
 
   return (
     <DesktopMenuContainer>
-
       {/* Notification Icon */}
       {/* <IconContainer whileHover='hover' whileTap="tap">
         <FontAwesomeIcon
@@ -44,12 +28,9 @@ const DesktopMenu = ({ APP }) => {
           onClick={handleNotificationsBar}
         />
       </IconContainer> */}
-      
 
       {/* Profile DropMenu */}
       <ProfileDropMenu APP={APP} />
-
-
     </DesktopMenuContainer>
   );
 };
@@ -65,7 +46,7 @@ const DesktopMenuContainer = styled.div`
   // align-items: center;
   // justify-content: flex-end;
   // gap: 10px;
-  
+
   width: 100%;
   display: flex;
   align-items: center;

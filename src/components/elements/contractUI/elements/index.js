@@ -1,5 +1,3 @@
-import TransactionReceipt from "./TransactionReceipt";
+import TransactionReceipt from './TransactionReceipt';
 
-export {
-    TransactionReceipt
-}
+export { TransactionReceipt };

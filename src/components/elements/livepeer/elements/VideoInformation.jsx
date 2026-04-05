@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -36,7 +35,7 @@ const InfoItem = styled(motion.p)`
 
 // Video Information Component
 const VideoInformation = ({ videoData }) => {
-  if(!videoData?.name){
+  if (!videoData?.name) {
     return;
   }
   return (

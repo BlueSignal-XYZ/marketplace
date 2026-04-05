@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../apis/firebase";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../apis/firebase';
 
 const provider = new GoogleAuthProvider();
 
 const Wrapper = styled.div`
   min-height: 100vh;
   padding: 32px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   background: #f5f5f7;
 
   h1 {
@@ -37,11 +42,11 @@ const Wrapper = styled.div`
 
 const AuthTest = () => {
   const [loading, setLoading] = useState(false);
-  const [resultText, setResultText] = useState("");
+  const [resultText, setResultText] = useState('');
 
   const handleTestSignIn = async () => {
     setLoading(true);
-    setResultText("");
+    setResultText('');
 
     try {
       const origin = window.location.origin;
@@ -64,8 +69,8 @@ const AuthTest = () => {
       const payload = {
         ok: false,
         origin,
-        code: err.code || "auth/error",
-        message: err.message || "Unknown error",
+        code: err.code || 'auth/error',
+        message: err.message || 'Unknown error',
       };
 
       setResultText(JSON.stringify(payload, null, 2));
@@ -82,17 +87,14 @@ const AuthTest = () => {
       </p>
       <p>
         This page ignores your app&apos;s context/routes and only tests
-        <code> signInWithPopup </code> using <code>auth</code> from{" "}
-        <code>../apis/firebase</code>.
+        <code> signInWithPopup </code> using <code>auth</code> from <code>../apis/firebase</code>.
       </p>
 
       <button onClick={handleTestSignIn} disabled={loading}>
-        {loading ? "Signing in..." : "Test Google Sign-in"}
+        {loading ? 'Signing in...' : 'Test Google Sign-in'}
       </button>
 
-      {resultText && (
-        <pre>{resultText}</pre>
-      )}
+      {resultText && <pre>{resultText}</pre>}
     </Wrapper>
   );
 };

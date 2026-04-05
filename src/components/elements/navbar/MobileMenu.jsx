@@ -1,8 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBell, faBellSlash, faClose, faGear, faGears } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBars,
+  faBell,
+  faBellSlash,
+  faClose,
+  faGear,
+  faGears,
+} from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import ProfileDropMenu from './elements/ProfileDropMenu';
 import { BUTTON } from '../../lib/styled';
@@ -13,12 +20,8 @@ import { BUTTON } from '../../lib/styled';
  */
 const MobileMenu = ({ APP }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { notificationBarOpen, sidebarOpen, settingsMenuOpen} = APP ? APP.STATES : {};
-  const {
-    handleNotificationsBar,
-    handleSettingsMenu,
-    handleLogOut,
-  } = APP ? APP.ACTIONS : {};
+  const { notificationBarOpen, sidebarOpen, settingsMenuOpen } = APP ? APP.STATES : {};
+  const { handleNotificationsBar, handleSettingsMenu, handleLogOut } = APP ? APP.ACTIONS : {};
 
   const handleAction = useCallback((action) => {
     setIsOpen(false);
@@ -45,24 +48,23 @@ const MobileMenu = ({ APP }) => {
 
   return (
     <MobileMenuContainer>
-      <MenuIcon icon={isOpen ? faClose : faBars} onClick={() => setIsOpen(!isOpen)} sidebarOpen={sidebarOpen} />
+      <MenuIcon
+        icon={isOpen ? faClose : faBars}
+        onClick={() => setIsOpen(!isOpen)}
+        sidebarOpen={sidebarOpen}
+      />
       <AnimatePresence>
         {isOpen && (
-          <SideMenu
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={sideMenuVariants}
-          >
+          <SideMenu initial="closed" animate="open" exit="closed" variants={sideMenuVariants}>
             <MenuSection>
               <ProfileDropMenu APP={APP} />
             </MenuSection>
 
             <MenuSection>
-              <MenuItem onClick={()=>handleAction(handleNotificationsBar)}>
+              <MenuItem onClick={() => handleAction(handleNotificationsBar)}>
                 <MenuItemIcon icon={notificationBarOpen ? faBellSlash : faBell} />
               </MenuItem>
-              <MenuItem onClick={()=>handleAction(handleSettingsMenu)}>
+              <MenuItem onClick={() => handleAction(handleSettingsMenu)}>
                 <MenuItemIcon icon={settingsMenuOpen ? faGear : faGears} />
               </MenuItem>
             </MenuSection>
@@ -108,7 +110,9 @@ const MenuIcon = styled(FontAwesomeIcon)`
   color: #000;
   cursor: pointer;
   transition: color 0.3s ease;
-  ${({sidebarOpen}) => sidebarOpen && `
+  ${({ sidebarOpen }) =>
+    sidebarOpen &&
+    `
   right: 10px;
   `}
   z-index: 9999;

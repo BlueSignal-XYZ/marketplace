@@ -3,13 +3,12 @@
  * Focused on the Demand Response Program value proposition.
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
 const Section = styled.section`
   padding: 48px clamp(16px, 5vw, 48px);
-  background: #0B1120;
+  background: #0b1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 64px clamp(20px, 5vw, 48px);
@@ -41,7 +40,7 @@ const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin: 0 0 16px;
   letter-spacing: -0.03em;
@@ -107,7 +106,7 @@ const AudienceTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(20px, 2.5vw, 24px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 12px;
   letter-spacing: -0.01em;
 `;
@@ -179,7 +178,8 @@ const AUDIENCES = [
       'Rebates appear on your water bill',
       'Track earnings in real-time',
     ],
-    iconPath: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+    iconPath:
+      'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   },
   {
     href: '/for-utilities',
@@ -193,7 +193,8 @@ const AUDIENCES = [
       'Automated credit generation and settlement',
       'No changes to your existing billing systems',
     ],
-    iconPath: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
+    iconPath:
+      'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
   },
 ];
 
@@ -205,8 +206,8 @@ export function AudienceSection() {
           <SectionLabel>Your Path</SectionLabel>
           <SectionTitle>Ready to Start Earning?</SectionTitle>
           <SectionSub>
-            Whether you want to earn rebates at home or launch a program for your
-            service area — here's where to start.
+            Whether you want to earn rebates at home or launch a program for your service area —
+            here&apos;s where to start.
           </SectionSub>
         </RevealOnScroll>
 
@@ -215,8 +216,16 @@ export function AudienceSection() {
             <RevealOnScroll key={a.title} delay={i * 0.12}>
               <AudienceCard href={a.href} $accent={a.accent}>
                 <AudienceIcon $bg={a.bg}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke={a.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={a.accent}
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <path d={a.iconPath} />
                   </svg>
                 </AudienceIcon>
@@ -224,7 +233,9 @@ export function AudienceSection() {
                 <AudienceDesc>{a.desc}</AudienceDesc>
                 <FeatureList>
                   {a.features.map((f) => (
-                    <FeatureItem key={f} $accent={a.accent}>{f}</FeatureItem>
+                    <FeatureItem key={f} $accent={a.accent}>
+                      {f}
+                    </FeatureItem>
                   ))}
                 </FeatureList>
                 <CardLink $color={a.accent}>

@@ -5,7 +5,7 @@
  * URL: /how-it-works
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { GlossaryTooltip } from '../components/GlossaryTooltip';
@@ -16,8 +16,8 @@ const Page = styled.div`
 
 const Hero = styled.section`
   padding: 80px 24px 64px;
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px 24px 96px;
   }
@@ -35,7 +35,9 @@ const Breadcrumb = styled(Link)`
   text-decoration: none;
   margin-bottom: 24px;
   display: inline-block;
-  &:hover { color: rgba(255, 255, 255, 0.6); }
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -44,7 +46,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 20px;
 `;
 
@@ -59,8 +61,10 @@ const HeroSub = styled.p`
 
 const Section = styled.section`
   padding: 96px 24px;
-  background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
-  @media (max-width: 640px) { padding: 64px 20px; }
+  background: ${({ $alt, theme }) => ($alt ? theme.colors.surface : theme.colors.background)};
+  @media (max-width: 640px) {
+    padding: 64px 20px;
+  }
 `;
 
 const SectionInner = styled.div`
@@ -84,9 +88,16 @@ const Prose = styled.div`
   line-height: 1.75;
   max-width: 680px;
 
-  p { margin: 0 0 24px; }
-  p:last-child { margin-bottom: 0; }
-  strong { color: ${({ theme }) => theme.colors.text}; font-weight: 600; }
+  p {
+    margin: 0 0 24px;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  strong {
+    color: ${({ theme }) => theme.colors.text};
+    font-weight: 600;
+  }
 `;
 
 const Grid = styled.div`
@@ -196,7 +207,7 @@ const FlowDesc = styled.p`
 
 const CTASection = styled.section`
   padding: 80px 24px;
-  background: linear-gradient(135deg, #0B1120 0%, #0F1B35 100%);
+  background: linear-gradient(135deg, #0b1120 0%, #0f1b35 100%);
   text-align: center;
 `;
 
@@ -204,7 +215,7 @@ const CTATitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(24px, 3.5vw, 36px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 16px;
 `;
 
@@ -225,13 +236,16 @@ const CTAButton = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  color: #ffffff;
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
-  &:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4); }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
+  }
 `;
 
 const CTAButtonOutline = styled(Link)`
@@ -249,11 +263,16 @@ const CTAButtonOutline = styled(Link)`
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
-  &:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 export default function HowItWorksPage() {
-  useEffect(() => { document.title = 'How It Works — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'How It Works — WaterQuality.Trading';
+  }, []);
 
   return (
     <Page>
@@ -262,8 +281,8 @@ export default function HowItWorksPage() {
           <Breadcrumb to="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>How Water Quality Credits Work</HeroTitle>
           <HeroSub>
-            Generate, verify, and trade environmental credits from real water quality
-            improvements — measured by sensors, not spreadsheets.
+            Generate, verify, and trade environmental credits from real water quality improvements —
+            measured by sensors, not spreadsheets.
           </HeroSub>
         </HeroInner>
       </Hero>
@@ -274,14 +293,14 @@ export default function HowItWorksPage() {
           <SectionTitle>What Are Water Quality Credits?</SectionTitle>
           <Prose>
             <p>
-              Water quality credits represent verified, measurable improvements in water
-              conditions. When a property owner, facility operator, or municipality reduces
-              pollutant discharge or improves water quality beyond regulatory baselines,
-              the difference can be quantified and issued as a tradeable credit.
+              Water quality credits represent verified, measurable improvements in water conditions.
+              When a property owner, facility operator, or municipality reduces pollutant discharge
+              or improves water quality beyond regulatory baselines, the difference can be
+              quantified and issued as a tradeable credit.
             </p>
             <p>
-              Each credit is tied to a specific geographic location, a verified measurement
-              dataset, and a defined baseline — not estimates or models.
+              Each credit is tied to a specific geographic location, a verified measurement dataset,
+              and a defined baseline — not estimates or models.
             </p>
           </Prose>
 
@@ -289,29 +308,29 @@ export default function HowItWorksPage() {
             <Card>
               <CardTitle>AWG Credits (Water Generation)</CardTitle>
               <CardDesc>
-                Issued when a project reduces the total volume of polluted discharge entering
-                a waterway. Stormwater retention systems, rainwater harvesting, and green
-                infrastructure that diverts runoff from impaired streams generate AWG credits.
-                One AWG credit represents one verified unit of volume reduction against an
-                established baseline.
+                Issued when a project reduces the total volume of polluted discharge entering a
+                waterway. Stormwater retention systems, rainwater harvesting, and green
+                infrastructure that diverts runoff from impaired streams generate AWG credits. One
+                AWG credit represents one verified unit of volume reduction against an established
+                baseline.
               </CardDesc>
             </Card>
             <Card>
               <CardTitle>Nitrogen Credits</CardTitle>
               <CardDesc>
-                Issued specifically for reductions in total nitrogen (TN) loading. Agricultural
-                best management practices, upgraded wastewater treatment, and riparian buffer
-                installations that reduce nitrogen runoff generate these credits. Measured in
-                pounds of nitrogen reduced per year.
+                Issued specifically for reductions in total nitrogen (TN) loading. Agricultural best
+                management practices, upgraded wastewater treatment, and riparian buffer
+                installations that reduce nitrogen runoff generate these credits. Measured in pounds
+                of nitrogen reduced per year.
               </CardDesc>
             </Card>
             <Card>
               <CardTitle>Phosphorus Credits</CardTitle>
               <CardDesc>
                 Issued specifically for reductions in total phosphorus (TP) loading. Nutrient
-                management plans, stormwater retrofits, and point-source treatment upgrades
-                that reduce phosphorus discharge generate these credits. Measured in pounds of
-                phosphorus reduced per year.
+                management plans, stormwater retrofits, and point-source treatment upgrades that
+                reduce phosphorus discharge generate these credits. Measured in pounds of phosphorus
+                reduced per year.
               </CardDesc>
             </Card>
           </Grid>
@@ -331,10 +350,10 @@ export default function HowItWorksPage() {
               <FlowContent>
                 <FlowTitle>Measurement</FlowTitle>
                 <FlowDesc>
-                  A monitoring device (such as the BlueSignal WQM-1) continuously measures
-                  water quality parameters — pH, turbidity, dissolved solids, nutrient
-                  concentrations, temperature — at the project site. Data is transmitted
-                  automatically to the cloud and stored with GPS coordinates and timestamps.
+                  A monitoring device (such as the BlueSignal WQM-1) continuously measures water
+                  quality parameters — pH, turbidity, dissolved solids, nutrient concentrations,
+                  temperature — at the project site. Data is transmitted automatically to the cloud
+                  and stored with GPS coordinates and timestamps.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -343,9 +362,9 @@ export default function HowItWorksPage() {
                 <FlowTitle>Baseline Establishment</FlowTitle>
                 <FlowDesc>
                   Before credits can be issued, a baseline must be established. This is the
-                  "before" condition — either a regulatory discharge limit, a historical
-                  average, or a pre-project measurement period. The baseline defines the
-                  floor. Only improvements above this floor generate credits.
+                  &quot;before&quot; condition — either a regulatory discharge limit, a historical
+                  average, or a pre-project measurement period. The baseline defines the floor. Only
+                  improvements above this floor generate credits.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -354,10 +373,9 @@ export default function HowItWorksPage() {
                 <FlowTitle>Verification</FlowTitle>
                 <FlowDesc>
                   Sensor data is submitted to the WaterQuality.Trading verification portal.
-                  Verification confirms that the improvement is real, sustained, and
-                  attributable to the project — not seasonal variation or upstream changes.
-                  Verification reviews sensor calibration records, data continuity, and
-                  statistical significance.
+                  Verification confirms that the improvement is real, sustained, and attributable to
+                  the project — not seasonal variation or upstream changes. Verification reviews
+                  sensor calibration records, data continuity, and statistical significance.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -365,10 +383,10 @@ export default function HowItWorksPage() {
               <FlowContent>
                 <FlowTitle>Issuance</FlowTitle>
                 <FlowDesc>
-                  Once verified, credits are minted on the WaterQuality.Trading registry with
-                  a unique credit ID, the originating site, the credit type, the quantity,
-                  the verification period, and the supporting dataset. Credits are visible in
-                  the registry and available for trading.
+                  Once verified, credits are minted on the WaterQuality.Trading registry with a
+                  unique credit ID, the originating site, the credit type, the quantity, the
+                  verification period, and the supporting dataset. Credits are visible in the
+                  registry and available for trading.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -382,23 +400,48 @@ export default function HowItWorksPage() {
           <SectionTitle>How Trading Works</SectionTitle>
           <Prose>
             <p>
-              <GlossaryTooltip term="Nutrient trading" definition="A market mechanism where polluters can buy credits from projects that reduce pollution, instead of upgrading their own facilities. Lowers compliance costs while meeting water quality goals." source="EPA Water Quality Trading" /> works like this: credits listed on the <GlossaryTooltip term="credit registry" definition="A public ledger of verified water quality credits. Each credit has a unique ID, origin, verification status, and ownership history. Regulators and buyers use it to verify compliance." source="EPA, state DEQ programs" /> can be purchased by entities that need to
-              offset their own water quality impacts — utilities facing <GlossaryTooltip term="nutrient limits" definition="Regulatory caps on nitrogen and phosphorus discharge. Facilities must stay under these limits or purchase credits to offset excess loading." source="EPA TMDL, NPDES permits" />,
-              <GlossaryTooltip term="developers" definition="Land and real estate developers who must manage stormwater from new construction. Not software developers." source="MS4 permits, post-construction requirements" /> with <GlossaryTooltip term="stormwater obligations" definition="Requirements to manage runoff from developed sites. Often tied to MS4 permits and post-construction stormwater management plans." source="EPA MS4, state DEQ" />, or municipalities under consent
-              decrees.
+              <GlossaryTooltip
+                term="Nutrient trading"
+                definition="A market mechanism where polluters can buy credits from projects that reduce pollution, instead of upgrading their own facilities. Lowers compliance costs while meeting water quality goals."
+                source="EPA Water Quality Trading"
+              />{' '}
+              works like this: credits listed on the{' '}
+              <GlossaryTooltip
+                term="credit registry"
+                definition="A public ledger of verified water quality credits. Each credit has a unique ID, origin, verification status, and ownership history. Regulators and buyers use it to verify compliance."
+                source="EPA, state DEQ programs"
+              />{' '}
+              can be purchased by entities that need to offset their own water quality impacts —
+              utilities facing{' '}
+              <GlossaryTooltip
+                term="nutrient limits"
+                definition="Regulatory caps on nitrogen and phosphorus discharge. Facilities must stay under these limits or purchase credits to offset excess loading."
+                source="EPA TMDL, NPDES permits"
+              />
+              ,
+              <GlossaryTooltip
+                term="developers"
+                definition="Land and real estate developers who must manage stormwater from new construction. Not software developers."
+                source="MS4 permits, post-construction requirements"
+              />{' '}
+              with{' '}
+              <GlossaryTooltip
+                term="stormwater obligations"
+                definition="Requirements to manage runoff from developed sites. Often tied to MS4 permits and post-construction stormwater management plans."
+                source="EPA MS4, state DEQ"
+              />
+              , or municipalities under consent decrees.
             </p>
             <p>
-              <strong>Pricing</strong> is determined by supply and demand within each
-              watershed or trading region. Credits in impaired watersheds with regulatory
-              pressure command higher prices. The platform displays current listings,
-              recent transaction prices, and regional context so both buyers and sellers
-              can make informed decisions.
+              <strong>Pricing</strong> is determined by supply and demand within each watershed or
+              trading region. Credits in impaired watersheds with regulatory pressure command higher
+              prices. The platform displays current listings, recent transaction prices, and
+              regional context so both buyers and sellers can make informed decisions.
             </p>
             <p>
-              <strong>Settlement</strong> occurs on-platform. When a buyer purchases
-              credits, ownership transfers in the registry. The buyer receives a
-              certificate of credit retirement that can be submitted to their regulatory
-              authority as proof of offset.
+              <strong>Settlement</strong> occurs on-platform. When a buyer purchases credits,
+              ownership transfers in the registry. The buyer receives a certificate of credit
+              retirement that can be submitted to their regulatory authority as proof of offset.
             </p>
           </Prose>
         </SectionInner>
@@ -410,10 +453,9 @@ export default function HowItWorksPage() {
           <SectionTitle>What Makes This Different</SectionTitle>
           <Prose>
             <p>
-              Most water quality trading today happens through state-run programs with
-              manual verification, paper-based registries, and limited participation.
-              These programs work, but they're slow, opaque, and inaccessible to
-              small-scale generators.
+              Most water quality trading today happens through state-run programs with manual
+              verification, paper-based registries, and limited participation. These programs work,
+              but they&apos;re slow, opaque, and inaccessible to small-scale generators.
             </p>
           </Prose>
 
@@ -421,25 +463,25 @@ export default function HowItWorksPage() {
             <DifferentCard>
               <CardTitle>Sensor-Verified, Not Self-Reported</CardTitle>
               <CardDesc>
-                Credits are backed by continuous monitoring data from calibrated instruments,
-                not annual reports or engineering estimates. The data exists, it's
-                timestamped, and it's auditable.
+                Credits are backed by continuous monitoring data from calibrated instruments, not
+                annual reports or engineering estimates. The data exists, it&apos;s timestamped, and
+                it&apos;s auditable.
               </CardDesc>
             </DifferentCard>
             <DifferentCard>
               <CardTitle>Open Registry</CardTitle>
               <CardDesc>
-                Any qualified project can register. Any verified buyer can purchase. The
-                registry is transparent — every credit's origin, verification status, and
-                ownership history is visible.
+                Any qualified project can register. Any verified buyer can purchase. The registry is
+                transparent — every credit&apos;s origin, verification status, and ownership history
+                is visible.
               </CardDesc>
             </DifferentCard>
             <DifferentCard>
               <CardTitle>Technology-Native Infrastructure</CardTitle>
               <CardDesc>
-                The platform handles measurement, verification, issuance, listing, and
-                settlement in one system. No separate spreadsheets, no mailed forms, no
-                phone calls to a state office.
+                The platform handles measurement, verification, issuance, listing, and settlement in
+                one system. No separate spreadsheets, no mailed forms, no phone calls to a state
+                office.
               </CardDesc>
             </DifferentCard>
           </DifferentGrid>

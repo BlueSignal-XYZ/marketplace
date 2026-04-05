@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -13,7 +13,6 @@ import {
   PageSubtitle,
   SectionHeading,
   Card,
-  FiltersRow,
   FilterChip,
   StatusBadge,
   PrimaryButton,
@@ -183,7 +182,9 @@ const EnrollmentLabel = styled.div`
 /* ---- component ---- */
 
 export function CreditPortfolioPage() {
-  useEffect(() => { document.title = 'Credits — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Credits — WaterQuality.Trading';
+  }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();
@@ -207,7 +208,9 @@ export function CreditPortfolioPage() {
     try {
       const [userCredits, userEnrollments] = await Promise.all([
         fetchUserCredits(user.uid),
-        EnrollmentAPI.list(user.uid).then(r => r?.enrollments || []).catch(() => []),
+        EnrollmentAPI.list(user.uid)
+          .then((r) => r?.enrollments || [])
+          .catch(() => []),
       ]);
       setCredits(userCredits);
       setEnrollments(Array.isArray(userEnrollments) ? userEnrollments : []);
@@ -222,18 +225,20 @@ export function CreditPortfolioPage() {
   const filteredCredits = useMemo(() => {
     let result = credits;
     if (statusFilter !== 'all') {
-      result = result.filter(c => c.status === statusFilter);
+      result = result.filter((c) => c.status === statusFilter);
     }
     if (typeFilter !== 'all') {
-      result = result.filter(c => c.type === typeFilter);
+      result = result.filter((c) => c.type === typeFilter);
     }
     return result;
   }, [credits, statusFilter, typeFilter]);
 
   const stats = useMemo(() => {
     const total = credits.length;
-    const available = credits.filter(c => c.status === 'active' || c.status === 'verified').length;
-    const listed = credits.filter(c => c.status === 'listed').length;
+    const available = credits.filter(
+      (c) => c.status === 'active' || c.status === 'verified'
+    ).length;
+    const listed = credits.filter((c) => c.status === 'listed').length;
     const totalQuantity = credits.reduce((sum, c) => sum + (c.quantity || 0), 0);
     return { total, available, listed, totalQuantity };
   }, [credits]);
@@ -268,7 +273,9 @@ export function CreditPortfolioPage() {
         {error && <ErrorBanner>{error}</ErrorBanner>}
 
         {loading ? (
-          <LoadingContainer><Spinner /></LoadingContainer>
+          <LoadingContainer>
+            <Spinner />
+          </LoadingContainer>
         ) : (
           <>
             <StatsGrid>
@@ -278,28 +285,16 @@ export function CreditPortfolioPage() {
                 unit={`${stats.totalQuantity.toFixed(2)} units`}
                 compact
               />
-              <DataCard
-                label="Available"
-                value={stats.available}
-                compact
-              />
-              <DataCard
-                label="Listed"
-                value={stats.listed}
-                compact
-              />
-              <DataCard
-                label="Enrollments"
-                value={enrollments.length}
-                compact
-              />
+              <DataCard label="Available" value={stats.available} compact />
+              <DataCard label="Listed" value={stats.listed} compact />
+              <DataCard label="Enrollments" value={enrollments.length} compact />
             </StatsGrid>
 
             {/* Active Enrollments */}
             {enrollments.length > 0 && (
               <EnrollmentsSection>
                 <SectionHeading>Active Enrollments</SectionHeading>
-                {enrollments.map(enrollment => (
+                {enrollments.map((enrollment) => (
                   <EnrollmentItem key={enrollment.id}>
                     <div style={{ flex: 1 }}>
                       <EnrollmentDevice>{enrollment.deviceId}</EnrollmentDevice>
@@ -324,16 +319,28 @@ export function CreditPortfolioPage() {
                 <FilterChip $active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
                   All Status
                 </FilterChip>
-                <FilterChip $active={statusFilter === 'verified'} onClick={() => setStatusFilter('verified')}>
+                <FilterChip
+                  $active={statusFilter === 'verified'}
+                  onClick={() => setStatusFilter('verified')}
+                >
                   Verified
                 </FilterChip>
-                <FilterChip $active={statusFilter === 'pending'} onClick={() => setStatusFilter('pending')}>
+                <FilterChip
+                  $active={statusFilter === 'pending'}
+                  onClick={() => setStatusFilter('pending')}
+                >
                   Pending
                 </FilterChip>
-                <FilterChip $active={statusFilter === 'listed'} onClick={() => setStatusFilter('listed')}>
+                <FilterChip
+                  $active={statusFilter === 'listed'}
+                  onClick={() => setStatusFilter('listed')}
+                >
                   Listed
                 </FilterChip>
-                <FilterChip $active={statusFilter === 'retired'} onClick={() => setStatusFilter('retired')}>
+                <FilterChip
+                  $active={statusFilter === 'retired'}
+                  onClick={() => setStatusFilter('retired')}
+                >
                   Retired
                 </FilterChip>
               </FiltersRowLocal>
@@ -341,16 +348,28 @@ export function CreditPortfolioPage() {
                 <FilterChip $active={typeFilter === 'all'} onClick={() => setTypeFilter('all')}>
                   All Types
                 </FilterChip>
-                <FilterChip $active={typeFilter === 'nitrogen'} onClick={() => setTypeFilter('nitrogen')}>
+                <FilterChip
+                  $active={typeFilter === 'nitrogen'}
+                  onClick={() => setTypeFilter('nitrogen')}
+                >
                   Nitrogen
                 </FilterChip>
-                <FilterChip $active={typeFilter === 'phosphorus'} onClick={() => setTypeFilter('phosphorus')}>
+                <FilterChip
+                  $active={typeFilter === 'phosphorus'}
+                  onClick={() => setTypeFilter('phosphorus')}
+                >
                   Phosphorus
                 </FilterChip>
-                <FilterChip $active={typeFilter === 'stormwater'} onClick={() => setTypeFilter('stormwater')}>
+                <FilterChip
+                  $active={typeFilter === 'stormwater'}
+                  onClick={() => setTypeFilter('stormwater')}
+                >
                   Stormwater
                 </FilterChip>
-                <FilterChip $active={typeFilter === 'thermal'} onClick={() => setTypeFilter('thermal')}>
+                <FilterChip
+                  $active={typeFilter === 'thermal'}
+                  onClick={() => setTypeFilter('thermal')}
+                >
                   Thermal
                 </FilterChip>
               </FiltersRowLocal>
@@ -377,7 +396,7 @@ export function CreditPortfolioPage() {
               </EmptyStateWrapper>
             ) : (
               <CreditGrid>
-                {filteredCredits.map(credit => (
+                {filteredCredits.map((credit) => (
                   <CreditCard key={credit.id} $type={credit.type} $hoverable>
                     <CreditHeader>
                       <CreditId>{credit.id}</CreditId>
@@ -391,7 +410,8 @@ export function CreditPortfolioPage() {
                       {credit.projectName || credit.location || 'Unknown origin'}
                     </CreditMeta>
                     <CreditMeta>
-                      Issued: {credit.issueDate
+                      Issued:{' '}
+                      {credit.issueDate
                         ? new Date(credit.issueDate).toLocaleDateString()
                         : 'Pending'}
                     </CreditMeta>

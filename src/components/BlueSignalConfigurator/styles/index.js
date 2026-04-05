@@ -1,6 +1,6 @@
 // BlueSignal Configurator Styled Components
-import styled, { css, keyframes } from "styled-components";
-import { media, safeAreaInsets } from "../../../styles/breakpoints";
+import styled, { css, keyframes } from 'styled-components';
+import { media, safeAreaInsets } from '../../../styles/breakpoints';
 
 // ============================================================================
 // ANIMATIONS
@@ -21,7 +21,8 @@ export const pulse = keyframes`
 // ============================================================================
 
 export const ConfiguratorWrapper = styled.div`
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background: #ffffff;
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
@@ -31,7 +32,9 @@ export const ConfiguratorWrapper = styled.div`
   color: #1f2937;
   overflow-x: hidden;
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 
@@ -90,7 +93,7 @@ export const NavTab = styled.button`
   padding: 10px 16px;
   font-size: 14px;
   font-weight: 600;
-  border: 1px solid ${({ active }) => (active ? "#3b82f6" : "#e5e7eb")};
+  border: 1px solid ${({ active }) => (active ? '#3b82f6' : '#e5e7eb')};
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
@@ -98,17 +101,17 @@ export const NavTab = styled.button`
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 
-  background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
-  color: ${({ active }) => (active ? "#ffffff" : "#4b5563")};
+  background: ${({ active }) => (active ? '#3b82f6' : '#ffffff')};
+  color: ${({ active }) => (active ? '#ffffff' : '#4b5563')};
 
   ${media.lg} {
     padding: 12px 32px;
   }
 
   &:hover {
-    background: ${({ active }) => (active ? "#2563eb" : "#f9fafb")};
-    border-color: ${({ active }) => (active ? "#2563eb" : "#d1d5db")};
-    color: ${({ active }) => (active ? "#ffffff" : "#1f2937")};
+    background: ${({ active }) => (active ? '#2563eb' : '#f9fafb')};
+    border-color: ${({ active }) => (active ? '#2563eb' : '#d1d5db')};
+    color: ${({ active }) => (active ? '#ffffff' : '#1f2937')};
   }
 
   &:active {
@@ -140,17 +143,17 @@ export const ProductGrid = styled.div`
 export const ProductCard = styled.div`
   background: ${({ selected }) =>
     selected
-      ? "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)"
-      : "linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)"};
-  border: 2px solid ${({ selected }) => (selected ? "#3b82f6" : "#e5e7eb")};
+      ? 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)'
+      : 'linear-gradient(180deg, #ffffff 0%, #fafbfc 100%)'};
+  border: 2px solid ${({ selected }) => (selected ? '#3b82f6' : '#e5e7eb')};
   border-radius: 14px;
   padding: 20px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow: ${({ selected }) =>
     selected
-      ? "0 8px 24px rgba(59, 130, 246, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9)"
-      : "0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8)"};
+      ? '0 8px 24px rgba(59, 130, 246, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9)'
+      : '0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8)'};
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   position: relative;
@@ -158,7 +161,7 @@ export const ProductCard = styled.div`
 
   /* Selected indicator bar */
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -182,9 +185,9 @@ export const ProductCard = styled.div`
   /* Hover only on non-touch devices */
   ${media.mouse} {
     &:hover {
-      border-color: ${({ selected }) => (selected ? "#3b82f6" : "#d1d5db")};
+      border-color: ${({ selected }) => (selected ? '#3b82f6' : '#d1d5db')};
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
   }
 `;
@@ -253,21 +256,21 @@ export const Badge = styled.span`
   font-weight: 600;
   border-radius: 4px;
   background: ${({ variant }) =>
-    variant === "ultrasonic"
-      ? "#fef3c7"
-      : variant === "solar"
-      ? "#dcfce7"
-      : variant === "sensors"
-      ? "#dbeafe"
-      : "#f3f4f6"};
+    variant === 'ultrasonic'
+      ? '#fef3c7'
+      : variant === 'solar'
+        ? '#dcfce7'
+        : variant === 'sensors'
+          ? '#dbeafe'
+          : '#f3f4f6'};
   color: ${({ variant }) =>
-    variant === "ultrasonic"
-      ? "#d97706"
-      : variant === "solar"
-      ? "#16a34a"
-      : variant === "sensors"
-      ? "#2563eb"
-      : "#6b7280"};
+    variant === 'ultrasonic'
+      ? '#d97706'
+      : variant === 'solar'
+        ? '#16a34a'
+        : variant === 'sensors'
+          ? '#2563eb'
+          : '#6b7280'};
 `;
 
 // ============================================================================
@@ -279,7 +282,7 @@ export const DetailPanel = styled.div`
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   ${media.lg} {
     border-radius: 16px;
@@ -303,8 +306,20 @@ export const DetailTabs = styled.div`
 
   /* Fade indicators for scroll */
   ${media.mobileOnly} {
-    mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 8px), transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 8px), transparent);
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8px,
+      black calc(100% - 8px),
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8px,
+      black calc(100% - 8px),
+      transparent
+    );
   }
 
   ${media.lg} {
@@ -318,10 +333,10 @@ export const DetailTab = styled.button`
   font-size: 13px;
   font-weight: 600;
   border: none;
-  background: ${({ active }) => (active ? "#ffffff" : "transparent")};
-  color: ${({ active }) => (active ? "#3b82f6" : "#4b5563")};
+  background: ${({ active }) => (active ? '#ffffff' : 'transparent')};
+  color: ${({ active }) => (active ? '#3b82f6' : '#4b5563')};
   cursor: pointer;
-  border-bottom: 2px solid ${({ active }) => (active ? "#3b82f6" : "transparent")};
+  border-bottom: 2px solid ${({ active }) => (active ? '#3b82f6' : 'transparent')};
   transition: all 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
@@ -335,8 +350,8 @@ export const DetailTab = styled.button`
   }
 
   &:hover {
-    color: ${({ active }) => (active ? "#3b82f6" : "#1f2937")};
-    background: ${({ active }) => (active ? "#ffffff" : "#f3f4f6")};
+    color: ${({ active }) => (active ? '#3b82f6' : '#1f2937')};
+    background: ${({ active }) => (active ? '#ffffff' : '#f3f4f6')};
   }
 
   &:active {
@@ -388,7 +403,7 @@ export const FeatureItem = styled.li`
   line-height: 1.5;
 
   &::before {
-    content: "✓";
+    content: '✓';
     color: #10b981;
     font-weight: bold;
     flex-shrink: 0;
@@ -521,7 +536,7 @@ export const GpioList = styled.ul`
     color: #4b5563;
     padding: 6px 0;
     border-bottom: 1px solid #f3f4f6;
-    font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
 
     &:last-child {
       border-bottom: none;
@@ -541,11 +556,11 @@ export const BenchmarkGrid = styled.div`
 
 export const BenchmarkCard = styled.div`
   background: ${({ highlight }) =>
-    highlight ? "linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)" : "#ffffff"};
-  border: 2px solid ${({ highlight }) => (highlight ? "#10b981" : "#e5e7eb")};
+    highlight ? 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)' : '#ffffff'};
+  border: 2px solid ${({ highlight }) => (highlight ? '#10b981' : '#e5e7eb')};
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 `;
 
 export const BenchmarkName = styled.h4`
@@ -558,7 +573,7 @@ export const BenchmarkName = styled.h4`
 export const BenchmarkPrice = styled.div`
   font-size: 24px;
   font-weight: 700;
-  color: ${({ highlight }) => (highlight ? "#059669" : "#d97706")};
+  color: ${({ highlight }) => (highlight ? '#059669' : '#d97706')};
   margin-bottom: 16px;
 `;
 
@@ -587,8 +602,8 @@ export const BenchmarkSection = styled.div`
       gap: 8px;
 
       &::before {
-        content: "${({ type }) => (type === "pro" ? "✓" : "✗")}";
-        color: ${({ type }) => (type === "pro" ? "#16a34a" : "#dc2626")};
+        content: '${({ type }) => (type === 'pro' ? '✓' : '✗')}';
+        color: ${({ type }) => (type === 'pro' ? '#16a34a' : '#dc2626')};
       }
     }
   }
@@ -625,8 +640,8 @@ export const MarginBadge = styled.span`
   font-size: 11px;
   font-weight: 600;
   border-radius: 4px;
-  background: ${({ good }) => (good ? "#dcfce7" : "#fef3c7")};
-  color: ${({ good }) => (good ? "#16a34a" : "#d97706")};
+  background: ${({ good }) => (good ? '#dcfce7' : '#fef3c7')};
+  color: ${({ good }) => (good ? '#16a34a' : '#d97706')};
   margin-left: 8px;
 `;
 
@@ -643,7 +658,7 @@ export const FilterBar = styled.div`
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   ${media.lg} {
     flex-direction: row;
@@ -750,10 +765,10 @@ export const CompareButton = styled.button`
   padding: 12px 16px;
   font-size: 14px;
   font-weight: 600;
-  background: ${({ active }) => (active ? "#3b82f6" : "#ffffff")};
+  background: ${({ active }) => (active ? '#3b82f6' : '#ffffff')};
   border: 1px solid #3b82f6;
   border-radius: 8px;
-  color: ${({ active }) => (active ? "#ffffff" : "#3b82f6")};
+  color: ${({ active }) => (active ? '#ffffff' : '#3b82f6')};
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -772,7 +787,7 @@ export const CompareButton = styled.button`
   }
 
   &:hover {
-    background: ${({ active }) => (active ? "#2563eb" : "#eff6ff")};
+    background: ${({ active }) => (active ? '#2563eb' : '#eff6ff')};
   }
 
   &:active {
@@ -785,7 +800,7 @@ export const CompareButton = styled.button`
   }
 `;
 
-export const CompareCheckbox = styled.input.attrs({ type: "checkbox" })`
+export const CompareCheckbox = styled.input.attrs({ type: 'checkbox' })`
   position: absolute;
   top: 10px;
   right: 10px;
@@ -795,9 +810,11 @@ export const CompareCheckbox = styled.input.attrs({ type: "checkbox" })`
   accent-color: #3b82f6;
   touch-action: manipulation;
 
-  ${({ show }) => !show && css`
-    display: none;
-  `}
+  ${({ show }) =>
+    !show &&
+    css`
+      display: none;
+    `}
 `;
 
 export const ComparisonPanel = styled.div`
@@ -815,7 +832,7 @@ export const ComparisonPanel = styled.div`
   z-index: 100;
   animation: ${fadeIn} 0.3s ease;
   backdrop-filter: blur(8px);
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
 
   ${media.lg} {
     flex-direction: row;
@@ -937,13 +954,13 @@ export const ComparisonContent = styled.div`
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   animation: ${fadeIn} 0.3s ease;
-  box-shadow: 0 -20px 60px rgba(0,0,0,0.2);
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.2);
 
   ${media.lg} {
     border-radius: 16px;
     max-width: 1200px;
     max-height: 90vh;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -1014,8 +1031,8 @@ export const ComparisonLabel = styled.div`
 
 export const ComparisonValue = styled.div`
   font-size: 14px;
-  color: ${({ highlight }) => (highlight ? "#059669" : "#374151")};
-  font-weight: ${({ highlight }) => (highlight ? "600" : "400")};
+  color: ${({ highlight }) => (highlight ? '#059669' : '#374151')};
+  font-weight: ${({ highlight }) => (highlight ? '600' : '400')};
 `;
 
 export const ComparisonProductHeader = styled.div`
@@ -1150,8 +1167,8 @@ export const TabNavigation = styled.div`
 export const MiniNavButton = styled.button`
   background: none;
   border: none;
-  color: ${({ disabled }) => (disabled ? "#d1d5db" : "#3b82f6")};
-  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+  color: ${({ disabled }) => (disabled ? '#d1d5db' : '#3b82f6')};
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   font-size: 18px;
   padding: 4px 8px;
   transition: all 0.2s;

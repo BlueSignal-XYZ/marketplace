@@ -6,7 +6,16 @@
  *   <ThemeProvider theme={wqtTheme}>...</ThemeProvider>
  */
 
-import { spacing, radius, elevation, animation, fonts, media, zIndex, breakpoints } from '../tokens/shared';
+import {
+  spacing,
+  radius,
+  elevation,
+  animation,
+  fonts,
+  media,
+  zIndex,
+  breakpoints,
+} from '../tokens/shared';
 import { wqtColors, wqtTypography } from '../tokens/wqt';
 
 export const wqtTheme = {

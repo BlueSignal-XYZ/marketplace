@@ -3,17 +3,16 @@
  * Wired to /v2/market/stats, /v2/credits/portfolio.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ShoppingCart, Cpu, Search, TrendingUp, ArrowRight } from 'lucide-react';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
-import { Button } from '../../../design-system/primitives/Button';
 import { Table } from '../../../design-system/primitives/Table';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
-import { getMarketStats, getPortfolio, ApiError } from '../../../services/v2/client';
+import { getMarketStats, getPortfolio } from '../../../services/v2/client';
 import { useAppContext } from '../../../context/AppContext';
 
 /* ── Layout ─────────────────────────────────────────────── */
@@ -77,7 +76,9 @@ const SectionLink = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 /* ── Stats Grid ─────────────────────────────────────────── */
@@ -210,7 +211,9 @@ const StartCard = styled.div`
   border-radius: ${({ theme }) => theme.radius.lg}px;
   padding: 24px;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -299,12 +302,16 @@ const ActionButton = styled.button`
   padding: 10px 20px;
   border-radius: ${({ theme }) => theme.radius.md}px;
   cursor: pointer;
-  transition: opacity 0.15s, border-color 0.15s;
+  transition:
+    opacity 0.15s,
+    border-color 0.15s;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 
-  &:hover { opacity: 0.85; }
+  &:hover {
+    opacity: 0.85;
+  }
 
   ${({ $primary, theme }) =>
     $primary
@@ -359,7 +366,9 @@ const TX_COLS = [
 /* ── Component ──────────────────────────────────────────── */
 
 export function WQTDashboardPage() {
-  useEffect(() => { document.title = 'Dashboard — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Dashboard — WaterQuality.Trading';
+  }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const user = STATES?.user;
@@ -440,7 +449,7 @@ export function WQTDashboardPage() {
         <GettingStartedWrap>
           <Greeting>Welcome to WaterQuality.Trading</Greeting>
           <GettingStartedSub>
-            Your account is set up. Here's how to get started:
+            Your account is set up. Here&apos;s how to get started:
           </GettingStartedSub>
 
           <GettingStartedGrid>
@@ -449,17 +458,13 @@ export function WQTDashboardPage() {
                 <ShoppingCart size={20} />
               </StartCardIcon>
               <StartCardTitle>Buy Credits</StartCardTitle>
-              <StartCardDesc>
-                Browse the marketplace and buy verified credits
-              </StartCardDesc>
+              <StartCardDesc>Browse the marketplace and buy verified credits</StartCardDesc>
               <StartCardArrow>
                 Get started <ArrowRight size={14} />
               </StartCardArrow>
             </StartCard>
 
-            <StartCard
-              onClick={() => window.open('https://cloud.bluesignal.xyz', '_blank')}
-            >
+            <StartCard onClick={() => window.open('https://cloud.bluesignal.xyz', '_blank')}>
               <StartCardIcon>
                 <Cpu size={20} />
               </StartCardIcon>
@@ -477,9 +482,7 @@ export function WQTDashboardPage() {
                 <Search size={20} />
               </StartCardIcon>
               <StartCardTitle>Explore Market</StartCardTitle>
-              <StartCardDesc>
-                View the registry and live credit map
-              </StartCardDesc>
+              <StartCardDesc>View the registry and live credit map</StartCardDesc>
               <StartCardArrow>
                 Get started <ArrowRight size={14} />
               </StartCardArrow>
@@ -565,9 +568,7 @@ export function WQTDashboardPage() {
           <DataCard
             label="Avg N Price"
             value={
-              stats?.avgNitrogenPrice != null
-                ? `$${stats.avgNitrogenPrice.toFixed(2)}`
-                : '\u2014'
+              stats?.avgNitrogenPrice != null ? `$${stats.avgNitrogenPrice.toFixed(2)}` : '\u2014'
             }
             unit="/kg"
             compact
@@ -592,9 +593,7 @@ export function WQTDashboardPage() {
           <ChartPlaceholderIcon>
             <TrendingUp size={32} />
           </ChartPlaceholderIcon>
-          <ChartPlaceholderText>
-            Market data visualization available soon
-          </ChartPlaceholderText>
+          <ChartPlaceholderText>Market data visualization available soon</ChartPlaceholderText>
         </ChartPlaceholder>
       </Section>
 
@@ -635,9 +634,7 @@ export function WQTDashboardPage() {
           <ActionButton onClick={() => navigate('/marketplace/seller-dashboard')}>
             Sell Credits
           </ActionButton>
-          <ActionButton onClick={() => navigate('/portfolio')}>
-            View Portfolio
-          </ActionButton>
+          <ActionButton onClick={() => navigate('/portfolio')}>View Portfolio</ActionButton>
         </QuickActions>
       </Section>
     </Page>

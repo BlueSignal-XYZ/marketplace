@@ -27,9 +27,9 @@ export async function requestQuote(payload) {
     id: `qr_${Date.now()}`,
     creditId: payload.creditId,
     requestedQuantity: payload.requestedQuantity,
-    buyerNote: payload.buyerNote || "",
-    status: "received",
-    createdAt: new Date().toISOString()
+    buyerNote: payload.buyerNote || '',
+    status: 'received',
+    createdAt: new Date().toISOString(),
   };
 
   MOCK_PURCHASES.push(quote);

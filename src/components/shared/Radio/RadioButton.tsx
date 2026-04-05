@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const RadioButton = styled.input.attrs({ type: "radio" })`
+export const RadioButton = styled.input.attrs({ type: 'radio' })`
   height: 20px;
   width: 20px;
   border-radius: 50%;

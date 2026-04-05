@@ -72,9 +72,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         label: ds.label,
         data: ds.data,
         borderColor: ds.color || '#0052CC',
-        backgroundColor: ds.fill
-          ? `${ds.color || '#0052CC'}18`
-          : 'transparent',
+        backgroundColor: ds.fill ? `${ds.color || '#0052CC'}18` : 'transparent',
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 4,
@@ -82,7 +80,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         fill: ds.fill ?? false,
       })),
     }),
-    [labels, datasets],
+    [labels, datasets]
   );
 
   const options: ChartOptions<'line'> = useMemo(
@@ -98,7 +96,9 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           bodyFont: { family: "'JetBrains Mono', monospace", size: 12 },
           padding: 10,
           cornerRadius: 8,
-          callbacks: yUnit ? { label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue} ${yUnit}` } : undefined,
+          callbacks: yUnit
+            ? { label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue} ${yUnit}` }
+            : undefined,
         },
       },
       scales: {
@@ -116,7 +116,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         },
       },
     }),
-    [showLegend, showGrid, yUnit],
+    [showLegend, showGrid, yUnit]
   );
 
   return (
@@ -160,7 +160,7 @@ export const Sparkline: React.FC<SparklineProps> = ({
         },
       ],
     }),
-    [data, color],
+    [data, color]
   );
 
   const opts: ChartOptions<'line'> = useMemo(
@@ -173,7 +173,7 @@ export const Sparkline: React.FC<SparklineProps> = ({
         y: { display: false },
       },
     }),
-    [],
+    []
   );
 
   return (

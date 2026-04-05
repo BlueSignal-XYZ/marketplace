@@ -58,8 +58,8 @@ const HintPopup = styled.div<{ visible: boolean }>`
   max-width: 360px;
   white-space: normal;
   z-index: 10001;
-  opacity: ${props => props.visible ? 1 : 0};
-  pointer-events: ${props => props.visible ? 'auto' : 'none'};
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  pointer-events: ${(props) => (props.visible ? 'auto' : 'none')};
   transition: opacity 0.2s;
 
   &::before {
@@ -99,9 +99,7 @@ export function DemoHint({ screenName, customHint }: DemoHintProps) {
       >
         ?
       </HintButton>
-      <HintPopup visible={visible}>
-        {hint}
-      </HintPopup>
+      <HintPopup visible={visible}>{hint}</HintPopup>
     </HintContainer>
   );
 }

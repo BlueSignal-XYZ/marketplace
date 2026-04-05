@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import {ButtonDanger, ButtonSecondary} from '../../shared/button/Button'
+import { ButtonDanger, ButtonSecondary } from '../../shared/button/Button';
 const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,7 +35,6 @@ const DangerButton = styled(Button)`
 `;
 
 const DataSettingsTab = () => {
-  
   const handleBackup = () => {
     // Logic to trigger data backup
   };
@@ -46,18 +44,26 @@ const DataSettingsTab = () => {
   };
 
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete your data? This action is irreversible.")) {
+    if (window.confirm('Are you sure you want to delete your data? This action is irreversible.')) {
       // Logic to delete user data
     }
   };
 
   return (
     <DataContainer>
-      <ButtonSecondary whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleBackup}>
+      <ButtonSecondary
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={handleBackup}
+      >
         Backup My Data
       </ButtonSecondary>
 
-      <ButtonSecondary whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleExport}>
+      <ButtonSecondary
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={handleExport}
+      >
         Export My Data
       </ButtonSecondary>
 

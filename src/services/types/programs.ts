@@ -12,8 +12,8 @@ export type ProgramStatus = 'active' | 'pilot' | 'upcoming' | 'archived';
 
 export interface Program extends Timestamped {
   id: string;
-  name: string;                  // e.g. "Virginia Nutrient Credit Exchange"
-  shortName: string;             // e.g. "VA-NCE"
+  name: string; // e.g. "Virginia Nutrient Credit Exchange"
+  shortName: string; // e.g. "VA-NCE"
   description: string;
   status: ProgramStatus;
   /** Geographic scope */
@@ -67,7 +67,7 @@ export interface CreditCalculationRequest {
 
 export interface CalculationReading {
   timestamp: string;
-  type: string;       // pH, TDS, etc.
+  type: string; // pH, TDS, etc.
   value: number;
   unit: string;
 }
@@ -93,7 +93,7 @@ export interface CreditEstimate {
     readingCount: number;
     coveragePercent: number;
     gapsDetected: number;
-    qualityScore: number;   // 0-100
+    qualityScore: number; // 0-100
   };
 }
 
@@ -124,16 +124,8 @@ export interface ProgramService {
     readings: CalculationReading[],
     program: Program,
     regionId: string,
-    nutrientType: NutrientType,
+    nutrientType: NutrientType
   ): CreditEstimate;
-  generateCredits(
-    deviceId: string,
-    program: Program,
-    regionId: string,
-  ): Promise<string[]>;  // returns credit IDs
-  validateTransfer(
-    creditId: string,
-    fromRegion: string,
-    toRegion: string,
-  ): TransferValidation;
+  generateCredits(deviceId: string, program: Program, regionId: string): Promise<string[]>; // returns credit IDs
+  validateTransfer(creditId: string, fromRegion: string, toRegion: string): TransferValidation;
 }

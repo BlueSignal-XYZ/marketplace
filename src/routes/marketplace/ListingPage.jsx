@@ -1,11 +1,11 @@
 // /src/components/elements/marketplace/ListingPage.jsx
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { getCreditById } from "../../../apis/creditsApi";
-import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
-import { RequestQuoteModal } from "./RequestQuoteModal";
+import { getCreditById } from '../../../apis/creditsApi';
+import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
+import { RequestQuoteModal } from './RequestQuoteModal';
 
 const Page = styled.div`
   max-width: 960px;
@@ -130,7 +130,7 @@ export default function ListingPage() {
           setCredit(data);
         }
       } catch (err) {
-        console.error("Failed to load credit", err);
+        console.error('Failed to load credit', err);
         if (!cancelled) {
           setNotFound(true);
         }
@@ -151,7 +151,7 @@ export default function ListingPage() {
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate("/marketplace");
+      navigate('/marketplace');
     }
   };
 
@@ -198,17 +198,15 @@ export default function ListingPage() {
           </BadgeRow>
         </TitleBlock>
 
-        <div style={{ textAlign: "right", minWidth: 220 }}>
-          <div style={{ fontSize: "0.8rem", opacity: 0.7 }}>Price per unit</div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 700, marginBottom: 8 }}>
+        <div style={{ textAlign: 'right', minWidth: 220 }}>
+          <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>Price per unit</div>
+          <div style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 8 }}>
             ${credit.pricePerUnit.toLocaleString()}/{credit.unit}
           </div>
-          <ButtonPrimary onClick={() => setQuoteOpen(true)}>
-            Request quote
-          </ButtonPrimary>
+          <ButtonPrimary onClick={() => setQuoteOpen(true)}>Request quote</ButtonPrimary>
 
           <div style={{ marginTop: 8 }}>
-            <ButtonSecondary onClick={() => navigate("/marketplace")}>
+            <ButtonSecondary onClick={() => navigate('/marketplace')}>
               Keep browsing
             </ButtonSecondary>
           </div>
@@ -236,9 +234,7 @@ export default function ListingPage() {
         <StatCard>
           <StatLabel>Tags</StatLabel>
           <StatValue>
-            {credit.tags && credit.tags.length
-              ? credit.tags.join(" · ")
-              : "None"}
+            {credit.tags && credit.tags.length ? credit.tags.join(' · ') : 'None'}
           </StatValue>
         </StatCard>
       </StatGrid>
@@ -255,11 +251,7 @@ export default function ListingPage() {
         </Section>
       )}
 
-      <RequestQuoteModal
-        open={quoteOpen}
-        onClose={() => setQuoteOpen(false)}
-        credit={credit}
-      />
+      <RequestQuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} credit={credit} />
     </Page>
   );
 }

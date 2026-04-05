@@ -27,7 +27,9 @@ vi.mock('../../services/v2/api', () => ({
   getAlerts: vi.fn(() => Promise.resolve([])),
 }));
 
-vi.mock('../CloudPageLayout', () => ({ default: ({ children }) => <div data-testid="cloud-layout">{children}</div> }));
+vi.mock('../CloudPageLayout', () => ({
+  default: ({ children }) => <div data-testid="cloud-layout">{children}</div>,
+}));
 
 describe('SiteDetailPage', () => {
   beforeEach(() => {
@@ -44,9 +46,12 @@ describe('SiteDetailPage', () => {
       </MemoryRouter>
     );
     // Wait for site content to load (no crash)
-    await waitFor(() => {
-      expect(screen.getByText('Site Overview')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Site Overview')).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('handles site not found gracefully', async () => {
@@ -62,8 +67,11 @@ describe('SiteDetailPage', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.queryByText(/Site not found|not exist/)).toBeTruthy();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.queryByText(/Site not found|not exist/)).toBeTruthy();
+      },
+      { timeout: 3000 }
+    );
   });
 });

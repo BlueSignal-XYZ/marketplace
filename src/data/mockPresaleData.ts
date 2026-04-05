@@ -38,7 +38,8 @@ export const mockPresaleProjects: PresaleProject[] = [
     startDate: '2025-01-15',
     endDate: '2025-03-15',
     status: 'active',
-    description: 'Large-scale nitrogen reduction project in the Chesapeake Bay watershed. Cover crops and buffer strips implementation.',
+    description:
+      'Large-scale nitrogen reduction project in the Chesapeake Bay watershed. Cover crops and buffer strips implementation.',
     features: ['Third-party verified', 'Real-time monitoring', 'Annual audit'],
     minimumPurchase: 100,
   },
@@ -58,7 +59,8 @@ export const mockPresaleProjects: PresaleProject[] = [
     startDate: '2025-02-01',
     endDate: '2025-04-30',
     status: 'coming-soon',
-    description: 'Phosphorus reduction through precision agriculture and wetland restoration in the Minnesota River Basin.',
+    description:
+      'Phosphorus reduction through precision agriculture and wetland restoration in the Minnesota River Basin.',
     features: ['Satellite imagery', 'Quarterly reports', 'Carbon co-benefits'],
     minimumPurchase: 50,
   },
@@ -98,7 +100,8 @@ export const mockPresaleProjects: PresaleProject[] = [
     startDate: '2025-03-01',
     endDate: '2025-06-30',
     status: 'coming-soon',
-    description: 'Stream temperature reduction through riparian restoration and shade enhancement for salmon habitat.',
+    description:
+      'Stream temperature reduction through riparian restoration and shade enhancement for salmon habitat.',
     features: ['Temperature monitoring', 'Salmon tracking', 'EPA approved'],
     minimumPurchase: 25,
   },
@@ -118,7 +121,8 @@ export const mockPresaleProjects: PresaleProject[] = [
     startDate: '2025-01-01',
     endDate: '2025-05-31',
     status: 'active',
-    description: 'Comprehensive nutrient management covering nitrogen and phosphorus reduction in the Lake Michigan watershed.',
+    description:
+      'Comprehensive nutrient management covering nitrogen and phosphorus reduction in the Lake Michigan watershed.',
     features: ['Dual nutrient tracking', 'Farmer network', 'Government subsidy eligible'],
     minimumPurchase: 100,
   },
@@ -138,7 +142,8 @@ export const mockPresaleProjects: PresaleProject[] = [
     startDate: '2025-04-01',
     endDate: '2025-07-31',
     status: 'coming-soon',
-    description: 'Nitrogen reduction in the Delaware River watershed serving Philadelphia metro water supply.',
+    description:
+      'Nitrogen reduction in the Delaware River watershed serving Philadelphia metro water supply.',
     features: ['Urban water protection', 'Community engagement', 'Transparency reports'],
     minimumPurchase: 50,
   },
@@ -146,12 +151,14 @@ export const mockPresaleProjects: PresaleProject[] = [
 
 // Helper functions
 export const getPresalesByStatus = (status: PresaleProject['status']): PresaleProject[] => {
-  return mockPresaleProjects.filter(p => p.status === status);
+  return mockPresaleProjects.filter((p) => p.status === status);
 };
 
-export const getPresalesByCreditType = (type: PresaleProject['creditType'] | 'all'): PresaleProject[] => {
+export const getPresalesByCreditType = (
+  type: PresaleProject['creditType'] | 'all'
+): PresaleProject[] => {
   if (type === 'all') return mockPresaleProjects;
-  return mockPresaleProjects.filter(p => p.creditType === type);
+  return mockPresaleProjects.filter((p) => p.creditType === type);
 };
 
 export const getCreditTypeColor = (type: string): string => {
@@ -168,8 +175,8 @@ export const getCreditTypeColor = (type: string): string => {
 export const getStatusColor = (status: PresaleProject['status']): string => {
   const colors: Record<string, string> = {
     'coming-soon': '#f59e0b',
-    'active': '#10b981',
-    'closed': '#6b7280',
+    active: '#10b981',
+    closed: '#6b7280',
   };
   return colors[status] || '#6b7280';
 };
@@ -177,8 +184,8 @@ export const getStatusColor = (status: PresaleProject['status']): string => {
 export const formatStatus = (status: PresaleProject['status']): string => {
   const labels: Record<string, string> = {
     'coming-soon': 'Coming Soon',
-    'active': 'Active',
-    'closed': 'Closed',
+    active: 'Active',
+    closed: 'Closed',
   };
   return labels[status] || status;
 };

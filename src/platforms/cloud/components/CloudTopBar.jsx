@@ -19,9 +19,27 @@ const BlueSignalLogoSVG = ({ size = 32 }) => (
     xmlns="http://www.w3.org/2000/svg"
     aria-label="BlueSignal"
   >
-    <path d="M4 8 C8 5, 16 5, 24 8" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 14 C8 11, 16 11, 24 14" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 20 C8 17, 16 17, 24 20" stroke="#2d8cf0" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path
+      d="M4 8 C8 5, 16 5, 24 8"
+      stroke="#2d8cf0"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path
+      d="M4 14 C8 11, 16 11, 24 14"
+      stroke="#2d8cf0"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path
+      d="M4 20 C8 17, 16 17, 24 20"
+      stroke="#2d8cf0"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      fill="none"
+    />
   </svg>
 );
 import NotificationBell from '../../../components/shared/NotificationBell';
@@ -144,12 +162,13 @@ const DemoToggle = styled.button`
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-radius: ${({ theme }) => theme.radius?.full || 9999}px;
-  border: 1px solid ${({ $active, theme }) =>
-    $active ? (theme.colors?.primary || '#0066FF') : (theme.colors?.border || '#E5E7EB')};
+  border: 1px solid
+    ${({ $active, theme }) =>
+      $active ? theme.colors?.primary || '#0066FF' : theme.colors?.border || '#E5E7EB'};
   background: ${({ $active, theme }) =>
-    $active ? (theme.colors?.primary || '#0066FF') : (theme.colors?.background || '#FAFAFA')};
+    $active ? theme.colors?.primary || '#0066FF' : theme.colors?.background || '#FAFAFA'};
   color: ${({ $active, theme }) =>
-    $active ? (theme.colors?.textOnPrimary || '#FFFFFF') : (theme.colors?.textSecondary || '#9CA3AF')};
+    $active ? theme.colors?.textOnPrimary || '#FFFFFF' : theme.colors?.textSecondary || '#9CA3AF'};
   cursor: pointer;
   transition: all 200ms ease-out;
   white-space: nowrap;
@@ -252,7 +271,9 @@ const DropdownMenu = styled.div`
   background: ${({ theme }) => theme.colors?.surface || '#FFFFFF'};
   border: 1px solid ${({ theme }) => theme.colors?.border || '#E5E7EB'};
   border-radius: ${({ theme }) => theme.radius?.md || 12}px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   z-index: ${({ theme }) => theme.zIndex?.dropdown || 100};
   padding: 4px;
   overflow: hidden;
@@ -272,12 +293,12 @@ const DropdownItem = styled.button`
   font-size: 13px;
   font-weight: 500;
   color: ${({ $danger, theme }) =>
-    $danger ? (theme.colors?.error || '#EF4444') : (theme.colors?.text || '#1A1A1A')};
+    $danger ? theme.colors?.error || '#EF4444' : theme.colors?.text || '#1A1A1A'};
   transition: background 200ms ease-out;
 
   &:hover {
     background: ${({ $danger, theme }) =>
-      $danger ? '#FEF2F2' : (theme.colors?.hover || 'rgba(0, 102, 255, 0.04)')};
+      $danger ? '#FEF2F2' : theme.colors?.hover || 'rgba(0, 102, 255, 0.04)'};
   }
 `;
 
@@ -315,10 +336,7 @@ export function CloudTopBar({ onMenuToggle }) {
   return (
     <TopBarOuter>
       <LeftGroup>
-        <HamburgerButton
-          onClick={onMenuToggle}
-          aria-label="Toggle navigation menu"
-        >
+        <HamburgerButton onClick={onMenuToggle} aria-label="Toggle navigation menu">
           <Menu size={22} />
         </HamburgerButton>
 

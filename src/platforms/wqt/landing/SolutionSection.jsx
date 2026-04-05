@@ -4,7 +4,7 @@
  * otherwise falls back to the default 5-step lifecycle.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -15,7 +15,7 @@ const flowPulse = keyframes`
 
 const Section = styled.section`
   padding: 48px clamp(16px, 5vw, 48px);
-  background: #0B1120;
+  background: #0b1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 64px clamp(20px, 5vw, 48px);
@@ -47,7 +47,7 @@ const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin: 0 0 16px;
   letter-spacing: -0.03em;
@@ -118,7 +118,7 @@ const StepCircle = styled.div`
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: #0B1120;
+  background: #0b1120;
   border: 2px solid ${({ $color }) => $color};
   display: flex;
   align-items: center;
@@ -149,7 +149,7 @@ const StepTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 15px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 8px;
 `;
 
@@ -209,7 +209,7 @@ const MobileTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 15px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
 `;
 
@@ -225,11 +225,7 @@ const MobileConnector = styled.div`
   width: 2px;
   height: 24px;
   margin: 0 0 0 40px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.12),
-    rgba(255, 255, 255, 0.04)
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
 `;
 
 /* ── Data ──────────────────────────────────────────────── */
@@ -239,7 +235,7 @@ const STEPS = [
     color: '#0052CC',
     bg: 'rgba(0, 82, 204, 0.12)',
     title: 'Utility Launches Program',
-    desc: 'Your utility sets rebate rates and defines the service area. You don\'t have to do anything here — they handle it.',
+    desc: "Your utility sets rebate rates and defines the service area. You don't have to do anything here — they handle it.",
   },
   {
     color: '#06B6D4',
@@ -293,8 +289,8 @@ export function SolutionSection({ audience, content }) {
           <SectionLabel>How It Works</SectionLabel>
           <SectionTitle>From Air to Water to Money</SectionTitle>
           <SectionSub>
-            An atmospheric water generator harvests water from the air. A BlueSignal
-            sensor verifies every drop. Your utility pays you for each gallon — automatically.
+            An atmospheric water generator harvests water from the air. A BlueSignal sensor verifies
+            every drop. Your utility pays you for each gallon — automatically.
           </SectionSub>
         </RevealOnScroll>
 
@@ -322,12 +318,14 @@ export function SolutionSection({ audience, content }) {
                 {i > 0 && <MobileConnector />}
                 <MobileCard>
                   <MobileCircle $color={step.color} $bg={`${step.color}1F`}>
-                    <span style={{
-                      fontFamily: "'IBM Plex Mono', monospace",
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: step.color,
-                    }}>
+                    <span
+                      style={{
+                        fontFamily: "'IBM Plex Mono', monospace",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: step.color,
+                      }}
+                    >
                       {String(i + 1).padStart(2, '0')}
                     </span>
                   </MobileCircle>

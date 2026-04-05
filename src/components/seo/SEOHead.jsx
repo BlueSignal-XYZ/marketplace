@@ -55,10 +55,12 @@ const getCurrentSite = () => {
   }
 
   // Sales mode: bluesignal.xyz (primary) or sales.bluesignal.xyz (legacy)
-  if (appMode === 'sales' ||
-      hostname === 'bluesignal.xyz' ||
-      hostname === 'www.bluesignal.xyz' ||
-      hostname.includes('sales')) {
+  if (
+    appMode === 'sales' ||
+    hostname === 'bluesignal.xyz' ||
+    hostname === 'www.bluesignal.xyz' ||
+    hostname.includes('sales')
+  ) {
     return 'bluesignal.xyz';
   }
 
@@ -68,26 +70,25 @@ const getCurrentSite = () => {
 /**
  * SEOHead Component
  */
+/** @param {Record<string, any>} props */
 const SEOHead = ({
   title,
   description,
   canonical,
-  ogImage,
+  ogImage = '',
   ogType = 'website',
   jsonLd,
   noindex = false,
-  keywords,
-  author,
-  publishedTime,
-  modifiedTime,
+  keywords = '',
+  author = '',
+  publishedTime = '',
+  modifiedTime = '',
 }) => {
   const currentSite = getCurrentSite();
   const config = SITE_CONFIG[currentSite] || SITE_CONFIG['waterquality.trading'];
 
   // Build full title with site name
-  const fullTitle = title.includes(config.siteName)
-    ? title
-    : `${title} | ${config.siteName}`;
+  const fullTitle = title.includes(config.siteName) ? title : `${title} | ${config.siteName}`;
 
   // Build canonical URL
   const fullCanonical = canonical?.startsWith('http')
@@ -113,7 +114,10 @@ const SEOHead = ({
       {noindex ? (
         <meta name="robots" content="noindex, nofollow" />
       ) : (
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
       )}
 
       {/* Open Graph / Facebook */}

@@ -1,11 +1,11 @@
 // User roles in the WaterQuality.Trading / BlueSignal ecosystem
 export type UserRole =
-  | 'buyer'       // Purchases credits/offsets
-  | 'seller'      // Lists and sells credits
-  | 'installer'   // BlueSignal hardware tech, installs devices
-  | 'farmer'      // Farm operator (seller + installer use case)
-  | 'admin'       // Platform administrator
-  | 'operator';   // Facility operator
+  | 'buyer' // Purchases credits/offsets
+  | 'seller' // Lists and sells credits
+  | 'installer' // BlueSignal hardware tech, installs devices
+  | 'farmer' // Farm operator (seller + installer use case)
+  | 'admin' // Platform administrator
+  | 'operator'; // Facility operator
 
 export interface User {
   uid: string;

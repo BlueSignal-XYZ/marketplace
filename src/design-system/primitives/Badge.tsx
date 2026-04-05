@@ -9,12 +9,12 @@ import styled from 'styled-components';
 // ── Types ─────────────────────────────────────────────────
 
 export type BadgeVariant =
-  | 'positive'    // verified, online, approved
-  | 'negative'    // rejected, offline, error
-  | 'warning'     // pending, low battery
-  | 'neutral'     // default, inactive
-  | 'verified'    // blockchain-verified — purple (WQT only)
-  | 'info';       // informational — primary color
+  | 'positive' // verified, online, approved
+  | 'negative' // rejected, offline, error
+  | 'warning' // pending, low battery
+  | 'neutral' // default, inactive
+  | 'verified' // blockchain-verified — purple (WQT only)
+  | 'info'; // informational — primary color
 
 export type BadgeSize = 'sm' | 'md';
 
@@ -32,15 +32,24 @@ function getColors(variant: BadgeVariant, theme: any) {
   const c = theme.components;
   switch (variant) {
     case 'positive':
-      return { bg: c.badgePositiveBg ?? c.badgeSuccessBg, text: c.badgePositiveText ?? c.badgeSuccessText };
+      return {
+        bg: c.badgePositiveBg ?? c.badgeSuccessBg,
+        text: c.badgePositiveText ?? c.badgeSuccessText,
+      };
     case 'negative':
-      return { bg: c.badgeNegativeBg ?? c.badgeErrorBg, text: c.badgeNegativeText ?? c.badgeErrorText };
+      return {
+        bg: c.badgeNegativeBg ?? c.badgeErrorBg,
+        text: c.badgeNegativeText ?? c.badgeErrorText,
+      };
     case 'warning':
       return { bg: c.badgeWarningBg, text: c.badgeWarningText };
     case 'neutral':
       return { bg: c.badgeNeutralBg, text: c.badgeNeutralText };
     case 'verified':
-      return { bg: c.badgeVerifiedBg ?? 'rgba(139,92,246,0.1)', text: c.badgeVerifiedText ?? '#8B5CF6' };
+      return {
+        bg: c.badgeVerifiedBg ?? 'rgba(139,92,246,0.1)',
+        text: c.badgeVerifiedText ?? '#8B5CF6',
+      };
     case 'info':
       return { bg: theme.colors.primaryLight, text: theme.colors.primary };
     default:

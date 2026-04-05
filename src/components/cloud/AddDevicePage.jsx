@@ -5,15 +5,15 @@
  * that assumes the user already knows the product.
  */
 
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
-import { DeviceAPI } from "../../scripts/back_door";
-import CloudPageLayout from "./CloudPageLayout";
-import { ButtonPrimary, ButtonSecondary } from "../shared/button/Button";
-import { Input } from "../shared/input/Input";
-import { clearDeviceCache } from "../../hooks/useUserDevices";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
+import { DeviceAPI } from '../../scripts/back_door';
+import CloudPageLayout from './CloudPageLayout';
+import { ButtonPrimary, ButtonSecondary } from '../shared/button/Button';
+import { Input } from '../shared/input/Input';
+import { clearDeviceCache } from '../../hooks/useUserDevices';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -21,7 +21,7 @@ import { clearDeviceCache } from "../../hooks/useUserDevices";
 
 const FormCard = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 16px;
   padding: 32px;
   max-width: 560px;
@@ -32,13 +32,13 @@ const FormCard = styled.div`
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   margin: 0 0 8px;
 `;
 
 const Subtitle = styled.p`
   font-size: 15px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   margin: 0 0 32px;
   line-height: 1.5;
 `;
@@ -58,12 +58,12 @@ const FormGroup = styled.div`
 const Label = styled.label`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const HelpText = styled.span`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   margin-top: 4px;
 `;
 
@@ -75,10 +75,10 @@ const DeviceTypeGrid = styled.div`
 
 const DeviceTypeCard = styled.button`
   background: ${({ $selected, theme }) =>
-    $selected ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $selected ? theme.colors?.primary50 || '#e0f2ff' : '#ffffff'};
   border: 2px solid
     ${({ $selected, theme }) =>
-      $selected ? theme.colors?.primary500 || "#1D7072" : theme.colors?.ui200 || "#e5e7eb"};
+      $selected ? theme.colors?.primary500 || '#1D7072' : theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 16px 12px;
   text-align: center;
@@ -86,8 +86,8 @@ const DeviceTypeCard = styled.button`
   transition: all 0.2s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#38BDBE"};
-    background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#38BDBE'};
+    background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   }
 
   .icon {
@@ -98,7 +98,7 @@ const DeviceTypeCard = styled.button`
   .name {
     font-size: 13px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 `;
 
@@ -114,18 +114,18 @@ const ButtonRow = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.red50 || "#fef2f2"};
-  border: 1px solid ${({ theme }) => theme.colors?.red200 || "#fecaca"};
-  color: ${({ theme }) => theme.colors?.red700 || "#b91c1c"};
+  background: ${({ theme }) => theme.colors?.red50 || '#fef2f2'};
+  border: 1px solid ${({ theme }) => theme.colors?.red200 || '#fecaca'};
+  color: ${({ theme }) => theme.colors?.red700 || '#b91c1c'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
 `;
 
 const SuccessMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.green50 || "#f0fdf4"};
-  border: 1px solid ${({ theme }) => theme.colors?.green200 || "#bbf7d0"};
-  color: ${({ theme }) => theme.colors?.green700 || "#15803d"};
+  background: ${({ theme }) => theme.colors?.green50 || '#f0fdf4'};
+  border: 1px solid ${({ theme }) => theme.colors?.green200 || '#bbf7d0'};
+  color: ${({ theme }) => theme.colors?.green700 || '#15803d'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -136,7 +136,7 @@ const ScanHint = styled.div`
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
   border-radius: 12px;
   margin-bottom: 24px;
 
@@ -146,7 +146,7 @@ const ScanHint = styled.div`
 
   .text {
     font-size: 14px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
     line-height: 1.4;
   }
 `;
@@ -156,11 +156,11 @@ const ScanHint = styled.div`
 /* -------------------------------------------------------------------------- */
 
 const DEVICE_TYPES = [
-  { id: "buoy", icon: "🔵", name: "Water Buoy" },
-  { id: "soil", icon: "🟤", name: "Soil Probe" },
-  { id: "gateway", icon: "📡", name: "Gateway" },
-  { id: "emitter", icon: "🔊", name: "Algae Emitter" },
-  { id: "other", icon: "⚙️", name: "Other" },
+  { id: 'buoy', icon: '🔵', name: 'Water Buoy' },
+  { id: 'soil', icon: '🟤', name: 'Soil Probe' },
+  { id: 'gateway', icon: '📡', name: 'Gateway' },
+  { id: 'emitter', icon: '🔊', name: 'Algae Emitter' },
+  { id: 'other', icon: '⚙️', name: 'Other' },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -172,9 +172,9 @@ export default function AddDevicePage() {
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
 
-  const [deviceId, setDeviceId] = useState("");
-  const [deviceName, setDeviceName] = useState("");
-  const [deviceType, setDeviceType] = useState("");
+  const [deviceId, setDeviceId] = useState('');
+  const [deviceName, setDeviceName] = useState('');
+  const [deviceType, setDeviceType] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -190,23 +190,21 @@ export default function AddDevicePage() {
       // Validate device ID format (pgw-XXXX or BS-XXXXXX)
       const trimmedId = deviceId.trim().toUpperCase();
       const validFormats = [
-        /^PGW-[A-Z0-9]{4,12}$/i,  // Pollution Gateway format
-        /^BS-[A-Z0-9]{6,12}$/i,   // BlueSignal format
+        /^PGW-[A-Z0-9]{4,12}$/i, // Pollution Gateway format
+        /^BS-[A-Z0-9]{6,12}$/i, // BlueSignal format
       ];
 
       const isValidFormat = validFormats.some((pattern) => pattern.test(trimmedId));
       if (!isValidFormat) {
-        throw new Error(
-          "Invalid device ID format. Expected: PGW-XXXX or BS-XXXXXX"
-        );
+        throw new Error('Invalid device ID format. Expected: PGW-XXXX or BS-XXXXXX');
       }
 
       // Prepare device payload
       const devicePayload = {
         deviceId: trimmedId,
         name: deviceName.trim() || `Device ${trimmedId.slice(-4)}`,
-        deviceType: deviceType || "other",
-        status: "pending",
+        deviceType: deviceType || 'other',
+        status: 'pending',
         ownerId: user.uid,
         addedAt: new Date().toISOString(),
       };
@@ -220,17 +218,17 @@ export default function AddDevicePage() {
       setSuccess(true);
 
       // Notify user
-      ACTIONS.logNotification("success", "Device added successfully!");
+      ACTIONS.logNotification('success', 'Device added successfully!');
 
       // Navigate to device list after short delay
       setTimeout(() => {
-        navigate("/cloud/devices", {
-          state: { message: "Device added successfully!" },
+        navigate('/cloud/devices', {
+          state: { message: 'Device added successfully!' },
         });
       }, 1500);
     } catch (err) {
-      console.error("Error adding device:", err);
-      setError(err.message || "Failed to add device. Please try again.");
+      console.error('Error adding device:', err);
+      setError(err.message || 'Failed to add device. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -244,31 +242,26 @@ export default function AddDevicePage() {
     return (
       <CloudPageLayout title="Add Device">
         <FormCard>
-          <SuccessMessage>
-            Device added successfully! Redirecting to your devices...
-          </SuccessMessage>
+          <SuccessMessage>Device added successfully! Redirecting to your devices...</SuccessMessage>
         </FormCard>
       </CloudPageLayout>
     );
   }
 
   return (
-    <CloudPageLayout
-      title="Add Device"
-      subtitle="Register a new device to your account"
-    >
+    <CloudPageLayout title="Add Device" subtitle="Register a new device to your account">
       <FormCard>
         <Title>Add a Device</Title>
         <Subtitle>
-          Enter the device ID from the label on your BlueSignal hardware.
-          You can find this on the QR code sticker or printed on the device.
+          Enter the device ID from the label on your BlueSignal hardware. You can find this on the
+          QR code sticker or printed on the device.
         </Subtitle>
 
         <ScanHint>
           <div className="icon">📱</div>
           <div className="text">
-            <strong>Tip:</strong> You can also scan the QR code on your device
-            using the BlueSignal mobile app for faster setup.
+            <strong>Tip:</strong> You can also scan the QR code on your device using the BlueSignal
+            mobile app for faster setup.
           </div>
         </ScanHint>
 
@@ -284,9 +277,7 @@ export default function AddDevicePage() {
               required
               disabled={loading}
             />
-            <HelpText>
-              Found on the device label (e.g., PGW-0001, BS-ABC123)
-            </HelpText>
+            <HelpText>Found on the device label (e.g., PGW-0001, BS-ABC123)</HelpText>
           </FormGroup>
 
           <FormGroup>
@@ -299,9 +290,7 @@ export default function AddDevicePage() {
               placeholder="e.g., North Pond Monitor"
               disabled={loading}
             />
-            <HelpText>
-              A friendly name to help you identify this device
-            </HelpText>
+            <HelpText>A friendly name to help you identify this device</HelpText>
           </FormGroup>
 
           <FormGroup>
@@ -325,15 +314,11 @@ export default function AddDevicePage() {
           {error && <ErrorMessage>{error}</ErrorMessage>}
 
           <ButtonRow>
-            <ButtonSecondary
-              type="button"
-              onClick={handleCancel}
-              disabled={loading}
-            >
+            <ButtonSecondary type="button" onClick={handleCancel} disabled={loading}>
               Cancel
             </ButtonSecondary>
             <ButtonPrimary type="submit" disabled={loading || !deviceId.trim()}>
-              {loading ? "Adding..." : "Add Device"}
+              {loading ? 'Adding...' : 'Add Device'}
             </ButtonPrimary>
           </ButtonRow>
         </Form>

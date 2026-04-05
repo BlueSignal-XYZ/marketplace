@@ -1,19 +1,23 @@
 // /src/routes/marketplace/Marketplace.jsx
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
-import { fetchListings } from "../../services/wqtDataService";
-import SEOHead from "../../components/seo/SEOHead";
-import { WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, createItemListSchema } from "../../components/seo/schemas";
-import { media, safeAreaInsets } from "../../styles/breakpoints";
-import { useAppContext } from "../../context/AppContext";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate, Link } from 'react-router-dom';
+import { fetchListings } from '../../services/wqtDataService';
+import SEOHead from '../../components/seo/SEOHead';
+import {
+  WQT_ORGANIZATION_SCHEMA,
+  WQT_WEBSITE_SCHEMA,
+  createItemListSchema,
+} from '../../components/seo/schemas';
+import { media, safeAreaInsets } from '../../styles/breakpoints';
+import { useAppContext } from '../../context/AppContext';
 
 const PageWrapper = styled.div`
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) => theme.colors?.bg || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.bg || '#fafafa'};
 `;
 
 const MarketplaceShell = styled.main`
@@ -38,7 +42,7 @@ const HeaderBlock = styled.header`
     margin: 0 0 12px;
     font-size: clamp(24px, 6vw, 32px);
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
     letter-spacing: -0.02em;
   }
 
@@ -46,7 +50,7 @@ const HeaderBlock = styled.header`
     margin: 0;
     font-size: 15px;
     line-height: 1.6;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
     max-width: clamp(280px, 80vw, 600px);
     margin: 0 auto;
   }
@@ -70,7 +74,7 @@ const Grid = styled.div`
 
 const Card = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: clamp(16px, 3vw, 24px);
   cursor: pointer;
@@ -95,7 +99,7 @@ const Card = styled.div`
   /* Hover only on non-touch devices */
   ${media.mouse} {
     &:hover {
-      border-color: ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
+      border-color: ${({ theme }) => theme.colors?.primary300 || '#7dd3fc'};
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
       transform: translateY(-2px);
     }
@@ -105,7 +109,7 @@ const Card = styled.div`
     margin: 0;
     font-size: 17px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 
     ${media.lg} {
       font-size: 18px;
@@ -116,13 +120,13 @@ const Card = styled.div`
     margin: 0;
     font-size: 14px;
     line-height: 1.5;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
 const MetaRow = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
 `;
 
 const TagRow = styled.div`
@@ -136,8 +140,8 @@ const Tag = styled.span`
   font-size: 11px;
   padding: 3px 8px;
   border-radius: 999px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
 `;
 
 const PriceRow = styled.div`
@@ -151,39 +155,39 @@ const PriceRow = styled.div`
 
 const Price = styled.span`
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const Quantity = styled.span`
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
 `;
 
 const EmptyState = styled.div`
   text-align: center;
   padding: 64px 20px;
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 16px;
 
   h2 {
     margin: 0 0 12px;
     font-size: 20px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   p {
     margin: 0 0 24px;
     font-size: 14px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
 const LoadingState = styled.div`
   text-align: center;
   padding: 48px 20px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   font-size: 14px;
 `;
 
@@ -205,7 +209,7 @@ const PrimaryButton = styled(Link)`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  background: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -218,7 +222,7 @@ const PrimaryButton = styled(Link)`
 
   ${media.mouse} {
     &:hover {
-      background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+      background: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
     }
@@ -231,8 +235,8 @@ const SecondaryActionButton = styled(Link)`
   justify-content: center;
   gap: 8px;
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
-  border: 1px solid ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
+  color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
+  border: 1px solid ${({ theme }) => theme.colors?.primary300 || '#7dd3fc'};
   border-radius: 8px;
   padding: 12px 24px;
   min-height: 44px;
@@ -243,7 +247,7 @@ const SecondaryActionButton = styled(Link)`
 
   ${media.mouse} {
     &:hover {
-      background: ${({ theme }) => theme.colors?.primary50 || "#e0f2fe"};
+      background: ${({ theme }) => theme.colors?.primary50 || '#e0f2fe'};
       transform: translateY(-1px);
     }
   }
@@ -259,19 +263,19 @@ const Marketplace = () => {
 
   const exploreOptions = [
     {
-      title: "Registry",
-      description: "View all registered producers, verifiers, and credit supply data.",
-      path: "/registry",
+      title: 'Registry',
+      description: 'View all registered producers, verifiers, and credit supply data.',
+      path: '/registry',
     },
     {
-      title: "Map",
-      description: "Explore producers and facilities on an interactive map.",
-      path: "/map",
+      title: 'Map',
+      description: 'Explore producers and facilities on an interactive map.',
+      path: '/map',
     },
     {
-      title: "Recent Removals",
-      description: "Track recent nutrient removal activity and transactions.",
-      path: "/recent-removals",
+      title: 'Recent Removals',
+      description: 'Track recent nutrient removal activity and transactions.',
+      path: '/recent-removals',
     },
   ];
 
@@ -282,7 +286,7 @@ const Marketplace = () => {
       const data = await fetchListings();
       setListings(Array.isArray(data) ? data : []);
     } catch (err) {
-      setLoadError(err?.message || "Unable to load listings right now.");
+      setLoadError(err?.message || 'Unable to load listings right now.');
       setListings([]);
     } finally {
       setLoading(false);
@@ -294,17 +298,18 @@ const Marketplace = () => {
   }, [loadListings]);
 
   // Build dynamic JSON-LD schema for listings
-  const marketplaceSchema = listings.length > 0
-    ? createItemListSchema({
-        name: 'Water Quality Credit Listings',
-        description: 'Active water quality credit listings on WaterQuality.Trading marketplace',
-        url: 'https://waterquality.trading/marketplace',
-        items: listings.slice(0, 10).map(listing => ({
-          name: listing.name,
-          url: `https://waterquality.trading/marketplace/listing/${listing.id}`,
-        })),
-      })
-    : null;
+  const marketplaceSchema =
+    listings.length > 0
+      ? createItemListSchema({
+          name: 'Water Quality Credit Listings',
+          description: 'Active water quality credit listings on WaterQuality.Trading marketplace',
+          url: 'https://waterquality.trading/marketplace',
+          items: listings.slice(0, 10).map((listing) => ({
+            name: listing.name,
+            url: `https://waterquality.trading/marketplace/listing/${listing.id}`,
+          })),
+        })
+      : null;
 
   return (
     <PageWrapper>
@@ -313,7 +318,11 @@ const Marketplace = () => {
         description="Buy and sell nutrient, stormwater, and thermal credits. The modern B2B marketplace for water quality trading. Connect with verified sellers and meet regulatory requirements."
         canonical="/marketplace"
         keywords="water quality credits, nutrient credits, stormwater credits, thermal credits, water trading, environmental credits"
-        jsonLd={[WQT_ORGANIZATION_SCHEMA, WQT_WEBSITE_SCHEMA, ...(marketplaceSchema ? [marketplaceSchema] : [])]}
+        jsonLd={[
+          WQT_ORGANIZATION_SCHEMA,
+          WQT_WEBSITE_SCHEMA,
+          ...(marketplaceSchema ? [marketplaceSchema] : []),
+        ]}
       />
       <MarketplaceShell>
         <HeaderBlock>
@@ -327,15 +336,11 @@ const Marketplace = () => {
         {/* Quick Actions for authenticated users */}
         {user?.uid && (
           <QuickActionsRow>
-            <PrimaryButton to="/marketplace/create-listing">
-              + Create Listing
-            </PrimaryButton>
+            <PrimaryButton to="/marketplace/create-listing">+ Create Listing</PrimaryButton>
             <SecondaryActionButton to="/marketplace/seller-dashboard">
               Seller Dashboard
             </SecondaryActionButton>
-            <SecondaryActionButton to="/dashboard/buyer">
-              Buyer Dashboard
-            </SecondaryActionButton>
+            <SecondaryActionButton to="/dashboard/buyer">Buyer Dashboard</SecondaryActionButton>
           </QuickActionsRow>
         )}
 
@@ -346,7 +351,10 @@ const Marketplace = () => {
             <EmptyState>
               <h2>We couldn’t load listings</h2>
               <p>{loadError}</p>
-              <button onClick={loadListings} style={{ marginTop: 16, padding: '10px 20px', cursor: 'pointer' }}>
+              <button
+                onClick={loadListings}
+                style={{ marginTop: 16, padding: '10px 20px', cursor: 'pointer' }}
+              >
                 Retry
               </button>
             </EmptyState>
@@ -361,8 +369,8 @@ const Marketplace = () => {
               </p>
             </EmptyState>
 
-            <HeaderBlock style={{ marginTop: "48px", marginBottom: "24px" }}>
-              <h1 style={{ fontSize: "24px" }}>Explore</h1>
+            <HeaderBlock style={{ marginTop: '48px', marginBottom: '24px' }}>
+              <h1 style={{ fontSize: '24px' }}>Explore</h1>
               <p>Browse producers, verify credits, and track environmental impact.</p>
             </HeaderBlock>
 
@@ -401,10 +409,11 @@ const Marketplace = () => {
 
                   <PriceRow>
                     <Price>
-                      ${(listing.pricePerUnit ?? 0).toLocaleString()}/{listing.unit || "unit"}
+                      ${(listing.pricePerUnit ?? 0).toLocaleString()}/{listing.unit || 'unit'}
                     </Price>
                     <Quantity>
-                      {(listing.quantityAvailable ?? 0).toLocaleString()} {listing.unit || "unit"} available
+                      {(listing.quantityAvailable ?? 0).toLocaleString()} {listing.unit || 'unit'}{' '}
+                      available
                     </Quantity>
                   </PriceRow>
                 </Card>

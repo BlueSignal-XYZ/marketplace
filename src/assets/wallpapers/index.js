@@ -1,5 +1,3 @@
-import neptune_ocean from "./neptune_ocean.png"
+import neptune_ocean from './neptune_ocean.png';
 
-export {
-    neptune_ocean
-}
+export { neptune_ocean };

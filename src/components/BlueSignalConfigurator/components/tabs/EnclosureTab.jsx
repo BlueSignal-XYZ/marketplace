@@ -1,7 +1,6 @@
 // Enclosure Tab Component - Interactive enclosure view with component details
-import React from "react";
-import styled from "styled-components";
-import { EnclosureView } from "../diagrams";
+import styled from 'styled-components';
+import { EnclosureView } from '../diagrams';
 
 // Dark wrapper for neon-styled enclosure view
 const DarkWrapper = styled.div`

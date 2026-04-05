@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -10,17 +10,13 @@ const TableWrapper = styled.div`
   /* Fade indicator on mobile to show scrollable content */
   @media (max-width: 768px) {
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       right: 0;
       bottom: 0;
       width: 40px;
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 0.95)
-      );
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95));
       pointer-events: none;
       opacity: ${({ $hasScroll }) => ($hasScroll ? 1 : 0)};
       transition: opacity 0.2s;
@@ -41,8 +37,8 @@ const Table = styled.table`
 `;
 
 const TableHead = styled.thead`
-  background: ${({ theme }) => theme.colors?.ui100 || "#f1f5f9"};
-  border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e2e8f0"};
+  background: ${({ theme }) => theme.colors?.ui100 || '#f1f5f9'};
+  border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || '#e2e8f0'};
 `;
 
 const TableHeader = styled.th`
@@ -50,7 +46,7 @@ const TableHeader = styled.th`
   text-align: left;
   font-size: 13px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#334155"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#334155'};
   white-space: nowrap;
 
   @media (max-width: 768px) {
@@ -62,16 +58,16 @@ const TableHeader = styled.th`
 const TableBody = styled.tbody``;
 
 const TableRow = styled.tr`
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e2e8f0"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e2e8f0'};
   transition: background 0.15s;
 
   /* Zebra striping for better readability */
   &:nth-child(even) {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f8fafc"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f8fafc'};
   }
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary50 || "#e6f7f8"};
+    background: ${({ theme }) => theme.colors?.primary50 || '#e6f7f8'};
   }
 
   &:last-child {
@@ -88,7 +84,7 @@ const TableRow = styled.tr`
 const TableCell = styled.td`
   padding: 14px 16px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 
   @media (max-width: 768px) {
     padding: 12px;
@@ -99,11 +95,17 @@ const TableCell = styled.td`
 const EmptyState = styled.div`
   padding: 48px 24px;
   text-align: center;
-  color: ${({ theme }) => theme.colors?.ui500 || "#64748b"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#64748b'};
   font-size: 14px;
 `;
 
-const ResponsiveTable = ({ headers, data, onRowClick, emptyMessage = "No data available", renderRow }) => {
+const ResponsiveTable = ({
+  headers,
+  data,
+  onRowClick,
+  emptyMessage = 'No data available',
+  renderRow,
+}) => {
   const [hasScroll, setHasScroll] = React.useState(false);
   const wrapperRef = React.useRef(null);
 
@@ -116,8 +118,8 @@ const ResponsiveTable = ({ headers, data, onRowClick, emptyMessage = "No data av
     };
 
     checkScroll();
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
   }, [data]);
 
   if (!data || data.length === 0) {
@@ -141,13 +143,11 @@ const ResponsiveTable = ({ headers, data, onRowClick, emptyMessage = "No data av
               onClick={() => onRowClick && onRowClick(row)}
               $clickable={!!onRowClick}
             >
-              {renderRow ? (
-                renderRow(row)
-              ) : (
-                headers.map((header, cellIndex) => (
-                  <TableCell key={cellIndex}>{row[header]}</TableCell>
-                ))
-              )}
+              {renderRow
+                ? renderRow(row)
+                : headers.map((header, cellIndex) => (
+                    <TableCell key={cellIndex}>{row[header]}</TableCell>
+                  ))}
             </TableRow>
           ))}
         </TableBody>

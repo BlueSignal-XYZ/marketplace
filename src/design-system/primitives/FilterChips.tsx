@@ -41,7 +41,9 @@ const Container = styled.div`
     gap: 6px;
     padding-bottom: 4px;
 
-    &::-webkit-scrollbar { display: none; }
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
@@ -67,10 +69,9 @@ const Chip = styled.button<{ $active: boolean }>`
   border-radius: ${({ theme }) => theme.radius.full}px;
   cursor: pointer;
   transition: all ${({ theme }) => theme.animation.fast};
-  border: 1px solid ${({ $active, theme }) =>
-    $active ? theme.colors.primary : theme.colors.border};
-  background: ${({ $active, theme }) =>
-    $active ? theme.colors.primary : theme.colors.surface};
+  border: 1px solid
+    ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
+  background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.surface)};
   color: ${({ $active, theme }) =>
     $active ? theme.colors.textOnPrimary : theme.colors.textSecondary};
 
@@ -96,8 +97,7 @@ const ChipCount = styled.span<{ $active: boolean }>`
   border-radius: ${({ theme }) => theme.radius.full}px;
   background: ${({ $active, theme }) =>
     $active ? 'rgba(255,255,255,0.2)' : theme.colors.background};
-  color: ${({ $active, theme }) =>
-    $active ? theme.colors.textOnPrimary : theme.colors.textMuted};
+  color: ${({ $active, theme }) => ($active ? theme.colors.textOnPrimary : theme.colors.textMuted)};
 `;
 
 // ── Component ─────────────────────────────────────────────

@@ -14,7 +14,6 @@
  */
 
 import {
-  VIRGINIA_BASINS,
   UNCERTAINTY_RATIOS,
   OFFSET_FUND_PRICES,
   getBasinByCode,
@@ -79,7 +78,7 @@ export class VirginiaCreditCalculator {
     this.project = project;
     this.basin = getBasinByCode(project.basinCode);
     this.options = {
-      useFloorPrice: false,  // Use Offset Fund floor prices for valuation
+      useFloorPrice: false, // Use Offset Fund floor prices for valuation
       ...options,
     };
 
@@ -99,10 +98,7 @@ export class VirginiaCreditCalculator {
     const yearData = generateComplianceYear(complianceYear);
 
     // Get monitoring data for the period
-    const monitoringData = await this.getMonitoringData(
-      yearData.startDate,
-      yearData.endDate
-    );
+    const monitoringData = await this.getMonitoringData(yearData.startDate, yearData.endDate);
 
     // Calculate reductions from baseline
     const nitrogenReduction = this.calculateNutrientReduction(
@@ -163,14 +159,14 @@ export class VirginiaCreditCalculator {
       try {
         const response = await ReadingsAPI.get(
           deviceId,
-          1000,  // limit
+          1000, // limit
           new Date(startDate).getTime(),
           new Date(endDate).getTime()
         );
 
         if (response?.readings) {
           allReadings = allReadings.concat(
-            response.readings.map(r => ({
+            response.readings.map((r) => ({
               ...r,
               deviceId,
               source: 'sensor',
@@ -183,11 +179,11 @@ export class VirginiaCreditCalculator {
     }
 
     // Separate by nutrient type
-    const nitrogenReadings = allReadings.filter(r =>
+    const nitrogenReadings = allReadings.filter((r) =>
       ['nitrogen', 'nitrate', 'ammonia', 'TN', 'total_nitrogen'].includes(r.type?.toLowerCase())
     );
 
-    const phosphorusReadings = allReadings.filter(r =>
+    const phosphorusReadings = allReadings.filter((r) =>
       ['phosphorus', 'phosphate', 'TP', 'total_phosphorus'].includes(r.type?.toLowerCase())
     );
 
@@ -206,9 +202,10 @@ export class VirginiaCreditCalculator {
    * Calculate nutrient reduction from baseline based on monitoring data
    */
   calculateNutrientReduction(monitoringData, nutrientType, baselineLoad) {
-    const readings = nutrientType === 'nitrogen'
-      ? (monitoringData.nitrogenReadings || [])
-      : (monitoringData.phosphorusReadings || []);
+    const readings =
+      nutrientType === 'nitrogen'
+        ? monitoringData.nitrogenReadings || []
+        : monitoringData.phosphorusReadings || [];
 
     if (readings.length === 0) {
       // No sensor data - use practice-based calculation
@@ -238,16 +235,16 @@ export class VirginiaCreditCalculator {
   calculatePracticeBasedReduction(nutrientType) {
     const practiceEfficiencies = {
       // Practice type: { nitrogen: efficiency, phosphorus: efficiency }
-      cover_crop: { nitrogen: 0.20, phosphorus: 0.10 },
+      cover_crop: { nitrogen: 0.2, phosphorus: 0.1 },
       nutrient_management: { nitrogen: 0.15, phosphorus: 0.12 },
-      forest_buffer: { nitrogen: 0.50, phosphorus: 0.45 },
-      stream_restoration: { nitrogen: 0.30, phosphorus: 0.35 },
-      urban_bmp: { nitrogen: 0.25, phosphorus: 0.30 },
-      agricultural_bmp: { nitrogen: 0.35, phosphorus: 0.30 },
-      land_conversion: { nitrogen: 0.60, phosphorus: 0.55 },
-      oyster_aquaculture: { nitrogen: 0.08, phosphorus: 0.00 },  // Oysters remove N, not P directly
-      septic_upgrade: { nitrogen: 0.50, phosphorus: 0.30 },
-      wastewater_treatment: { nitrogen: 0.80, phosphorus: 0.85 },
+      forest_buffer: { nitrogen: 0.5, phosphorus: 0.45 },
+      stream_restoration: { nitrogen: 0.3, phosphorus: 0.35 },
+      urban_bmp: { nitrogen: 0.25, phosphorus: 0.3 },
+      agricultural_bmp: { nitrogen: 0.35, phosphorus: 0.3 },
+      land_conversion: { nitrogen: 0.6, phosphorus: 0.55 },
+      oyster_aquaculture: { nitrogen: 0.08, phosphorus: 0.0 }, // Oysters remove N, not P directly
+      septic_upgrade: { nitrogen: 0.5, phosphorus: 0.3 },
+      wastewater_treatment: { nitrogen: 0.8, phosphorus: 0.85 },
     };
 
     const efficiency = practiceEfficiencies[this.project.practiceType];
@@ -255,13 +252,13 @@ export class VirginiaCreditCalculator {
       return 0;
     }
 
-    const baselineLoad = nutrientType === 'nitrogen'
-      ? this.project.baselineNitrogenLoad
-      : this.project.baselinePhosphorusLoad;
+    const baselineLoad =
+      nutrientType === 'nitrogen'
+        ? this.project.baselineNitrogenLoad
+        : this.project.baselinePhosphorusLoad;
 
-    const practiceEfficiency = nutrientType === 'nitrogen'
-      ? efficiency.nitrogen
-      : efficiency.phosphorus;
+    const practiceEfficiency =
+      nutrientType === 'nitrogen' ? efficiency.nitrogen : efficiency.phosphorus;
 
     return baselineLoad * practiceEfficiency;
   }
@@ -272,8 +269,8 @@ export class VirginiaCreditCalculator {
   calculateAverageConcentration(readings) {
     if (readings.length === 0) return 0;
 
-    const validReadings = readings.filter(r =>
-      typeof r.value === 'number' && !isNaN(r.value) && r.value >= 0
+    const validReadings = readings.filter(
+      (r) => typeof r.value === 'number' && !isNaN(r.value) && r.value >= 0
     );
 
     if (validReadings.length === 0) return 0;
@@ -288,29 +285,30 @@ export class VirginiaCreditCalculator {
    */
   estimateAnnualFlow(monitoringData) {
     // Flow readings
-    const flowReadings = monitoringData.allReadings.filter(r =>
+    const flowReadings = monitoringData.allReadings.filter((r) =>
       ['flow', 'discharge', 'Q'].includes(r.type?.toLowerCase())
     );
 
     if (flowReadings.length > 0) {
       const avgFlow = flowReadings.reduce((acc, r) => acc + r.value, 0) / flowReadings.length;
-      return avgFlow;  // Assume MGD
+      return avgFlow; // Assume MGD
     }
 
     // Default estimate based on acreage
     // Rough estimate: 1 inch/acre/year = 27,154 gallons
     // Assume 30 inches runoff for Virginia
     const annualGallons = this.project.acreage * 30 * 27154;
-    return annualGallons / 365 / 1000000;  // Convert to MGD
+    return annualGallons / 365 / 1000000; // Convert to MGD
   }
 
   /**
    * Apply delivery factors and uncertainty ratios to raw reduction
    */
   applyFactors(rawReductionLbs, nutrientType, complianceYear, periodStart, periodEnd, readings) {
-    const deliveryFactor = nutrientType === 'nitrogen'
-      ? this.basin.nitrogenDeliveryFactor
-      : this.basin.phosphorusDeliveryFactor;
+    const deliveryFactor =
+      nutrientType === 'nitrogen'
+        ? this.basin.nitrogenDeliveryFactor
+        : this.basin.phosphorusDeliveryFactor;
 
     const uncertaintyRatio = UNCERTAINTY_RATIOS[this.project.sourceType];
 
@@ -338,7 +336,7 @@ export class VirginiaCreditCalculator {
       dataSource: readings.length > 0 ? 'sensor' : 'manual',
       periodStart,
       periodEnd,
-      readings: readings.slice(0, 100),  // Include sample of readings
+      readings: readings.slice(0, 100), // Include sample of readings
     });
   }
 
@@ -422,11 +420,7 @@ export class VirginiaCreditCalculator {
 /**
  * Validate a credit purchase/transfer between basins
  */
-export function validateCreditTransfer(
-  credit,
-  buyerBasinCode,
-  quantityLbs
-) {
+export function validateCreditTransfer(credit, buyerBasinCode, quantityLbs) {
   const errors = [];
   const warnings = [];
 
@@ -441,7 +435,7 @@ export function validateCreditTransfer(
     const effectiveCredits = quantityLbs / exchangeRatio;
     warnings.push(
       `Cross-basin trade requires ${exchangeRatio}:1 ratio. ` +
-      `${quantityLbs} lbs purchased = ${effectiveCredits.toFixed(2)} lbs effective credit`
+        `${quantityLbs} lbs purchased = ${effectiveCredits.toFixed(2)} lbs effective credit`
     );
   }
 
@@ -476,11 +470,7 @@ export function validateCreditTransfer(
 /**
  * Calculate the effective price per pound considering exchange ratios
  */
-export function calculateEffectivePrice(
-  pricePerLb,
-  buyerBasinCode,
-  sellerBasinCode
-) {
+export function calculateEffectivePrice(pricePerLb, buyerBasinCode, sellerBasinCode) {
   const exchangeRatio = getExchangeRatio(buyerBasinCode, sellerBasinCode);
   return pricePerLb * exchangeRatio;
 }

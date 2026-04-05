@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
@@ -55,26 +55,27 @@ const StepCircle = styled.div`
   font-size: 14px;
   font-weight: 600;
   background: ${({ $active, $done, theme }) =>
-    $done ? theme.colors.primary :
-    $active ? theme.colors.primary :
-    theme.colors.background};
+    $done ? theme.colors.primary : $active ? theme.colors.primary : theme.colors.background};
   color: ${({ $active, $done, theme }) =>
-    ($done || $active) ? theme.colors.textOnPrimary : theme.colors.textMuted};
-  border: 2px solid ${({ $active, $done, theme }) =>
-    ($done || $active) ? theme.colors.primary : theme.colors.border};
+    $done || $active ? theme.colors.textOnPrimary : theme.colors.textMuted};
+  border: 2px solid
+    ${({ $active, $done, theme }) =>
+      $done || $active ? theme.colors.primary : theme.colors.border};
 `;
 
 const StepLabel = styled.span`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13px;
-  color: ${({ $active, theme }) => $active ? theme.colors.text : theme.colors.textMuted};
-  @media (max-width: 640px) { display: none; }
+  color: ${({ $active, theme }) => ($active ? theme.colors.text : theme.colors.textMuted)};
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 const StepLine = styled.div`
   width: 40px;
   height: 2px;
-  background: ${({ $done, theme }) => $done ? theme.colors.primary : theme.colors.border};
+  background: ${({ $done, theme }) => ($done ? theme.colors.primary : theme.colors.border)};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     width: 20px;
@@ -180,11 +181,15 @@ const PaymentOption = styled.div`
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: ${({ $selected, theme }) => $selected ? `${theme.colors.primary}08` : theme.colors.background};
-  border: 2px solid ${({ $selected, theme }) => $selected ? theme.colors.primary : theme.colors.border};
+  background: ${({ $selected, theme }) =>
+    $selected ? `${theme.colors.primary}08` : theme.colors.background};
+  border: 2px solid
+    ${({ $selected, theme }) => ($selected ? theme.colors.primary : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.md}px;
   cursor: pointer;
-  &:hover { border-color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const PaymentLabel = styled.div`
@@ -238,7 +243,11 @@ const SpinnerText = styled.p`
 const STEPS = ['Review', 'Payment', 'Confirm', 'Receipt'];
 
 function verificationLabel(level) {
-  const map = { 'sensor-verified': 'Sensor Verified', 'third-party': 'Third-Party', 'self-reported': 'Pending' };
+  const map = {
+    'sensor-verified': 'Sensor Verified',
+    'third-party': 'Third-Party',
+    'self-reported': 'Pending',
+  };
   return map[level] || level || 'Unknown';
 }
 
@@ -249,8 +258,16 @@ function LoadingSkeleton() {
       <div style={{ height: 12 }} />
       <Skeleton width={300} height={14} />
       <div style={{ height: 24 }} />
-      {[1,2,3,4,5].map(i => (
-        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div
+          key={i}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '12px 0',
+            borderBottom: '1px solid #f0f0f0',
+          }}
+        >
           <Skeleton width={100} height={14} />
           <Skeleton width={80} height={14} />
         </div>
@@ -260,7 +277,9 @@ function LoadingSkeleton() {
 }
 
 export function PurchaseFlowPage() {
-  useEffect(() => { document.title = 'Purchase — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Purchase — WaterQuality.Trading';
+  }, []);
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToastContext();
@@ -301,7 +320,9 @@ export function PurchaseFlowPage() {
       }
     }
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   const total = listing ? (quantity * (listing.pricePerCredit || 0)).toFixed(2) : '0.00';
@@ -317,22 +338,34 @@ export function PurchaseFlowPage() {
         onSuccess: (result) => {
           setPurchaseResult(result);
           setStep(3);
-          toast({ type: 'success', message: 'Purchase complete! Credits added to your portfolio.' });
+          toast({
+            type: 'success',
+            message: 'Purchase complete! Credits added to your portfolio.',
+          });
         },
         onError: (err) => {
           const msg = err instanceof ApiError ? err.message : 'Purchase failed. Please try again.';
           setPurchaseError(msg);
           toast({ type: 'error', message: msg });
         },
-      },
+      }
     );
   }, [listing, id, quantity, paymentMethod, toast, purchaseMutation]);
 
-  const handleBack = useCallback((targetStep) => {
-    if (step >= 2 && !window.confirm('Are you sure you want to go back? Your progress on this step will be lost.')) return;
-    setStep(targetStep);
-    setPurchaseError(null);
-  }, [step]);
+  const handleBack = useCallback(
+    (targetStep) => {
+      if (
+        step >= 2 &&
+        !window.confirm(
+          'Are you sure you want to go back? Your progress on this step will be lost.'
+        )
+      )
+        return;
+      setStep(targetStep);
+      setPurchaseError(null);
+    },
+    [step]
+  );
 
   // Loading state
   if (listingLoading) {
@@ -342,7 +375,12 @@ export function PurchaseFlowPage() {
           {STEPS.map((s, i) => (
             <React.Fragment key={s}>
               {i > 0 && <StepLine $done={false} />}
-              <Step><StepCircle $active={i === 0} $done={false}>{i + 1}</StepCircle><StepLabel $active={i === 0}>{s}</StepLabel></Step>
+              <Step>
+                <StepCircle $active={i === 0} $done={false}>
+                  {i + 1}
+                </StepCircle>
+                <StepLabel $active={i === 0}>{s}</StepLabel>
+              </Step>
             </React.Fragment>
           ))}
         </StepIndicator>
@@ -359,14 +397,21 @@ export function PurchaseFlowPage() {
           <Title>Listing not found</Title>
           <Desc>{listingError || 'This listing may no longer be available.'}</Desc>
           <ButtonRow>
-            <Button variant="outline" onClick={() => navigate('/marketplace')}>Back to Marketplace</Button>
+            <Button variant="outline" onClick={() => navigate('/marketplace')}>
+              Back to Marketplace
+            </Button>
           </ButtonRow>
         </Card>
       </Page>
     );
   }
 
-  const nutrientLabel = listing.nutrientType === 'nitrogen' ? 'Nitrogen (N)' : listing.nutrientType === 'phosphorus' ? 'Phosphorus (P)' : 'Combined';
+  const nutrientLabel =
+    listing.nutrientType === 'nitrogen'
+      ? 'Nitrogen (N)'
+      : listing.nutrientType === 'phosphorus'
+        ? 'Phosphorus (P)'
+        : 'Combined';
 
   return (
     <Page>
@@ -390,18 +435,39 @@ export function PurchaseFlowPage() {
           <>
             <Title>Review Order</Title>
             <Desc>Confirm the details of your credit purchase.</Desc>
-            <Row><RowLabel>Credit Type</RowLabel><RowValue>{nutrientLabel}</RowValue></Row>
-            <Row><RowLabel>Region</RowLabel><RowValue>{listing.region || '\u2014'}</RowValue></Row>
-            <Row><RowLabel>Seller</RowLabel><RowValue>{listing.sellerName || '\u2014'}</RowValue></Row>
-            <Row><RowLabel>Verification</RowLabel><RowValue><Badge variant="verified" size="sm" dot>{verificationLabel(listing.verificationLevel)}</Badge></RowValue></Row>
-            <Row><RowLabel>Price per Credit</RowLabel><RowValue>${(listing.pricePerCredit || 0).toFixed(2)}</RowValue></Row>
+            <Row>
+              <RowLabel>Credit Type</RowLabel>
+              <RowValue>{nutrientLabel}</RowValue>
+            </Row>
+            <Row>
+              <RowLabel>Region</RowLabel>
+              <RowValue>{listing.region || '\u2014'}</RowValue>
+            </Row>
+            <Row>
+              <RowLabel>Seller</RowLabel>
+              <RowValue>{listing.sellerName || '\u2014'}</RowValue>
+            </Row>
+            <Row>
+              <RowLabel>Verification</RowLabel>
+              <RowValue>
+                <Badge variant="verified" size="sm" dot>
+                  {verificationLabel(listing.verificationLevel)}
+                </Badge>
+              </RowValue>
+            </Row>
+            <Row>
+              <RowLabel>Price per Credit</RowLabel>
+              <RowValue>${(listing.pricePerCredit || 0).toFixed(2)}</RowValue>
+            </Row>
             <Row>
               <RowLabel>Quantity (kg)</RowLabel>
               <div style={{ width: 100 }}>
                 <Input
                   type="number"
                   value={quantity}
-                  onChange={(e) => setQuantity(Math.min(maxQty, Math.max(1, parseInt(e.target.value) || 1)))}
+                  onChange={(e) =>
+                    setQuantity(Math.min(maxQty, Math.max(1, parseInt(e.target.value) || 1)))
+                  }
                   min={1}
                   max={maxQty}
                 />
@@ -412,7 +478,9 @@ export function PurchaseFlowPage() {
               <TotalValue>${total}</TotalValue>
             </TotalRow>
             <ButtonRow>
-              <Button variant="outline" onClick={() => navigate(-1)}>Cancel</Button>
+              <Button variant="outline" onClick={() => navigate(-1)}>
+                Cancel
+              </Button>
               <Button onClick={() => setStep(1)}>Continue to Payment</Button>
             </ButtonRow>
           </>
@@ -422,15 +490,23 @@ export function PurchaseFlowPage() {
         {step === 1 && (
           <>
             <Title>Payment Method</Title>
-            <Desc>Choose how you'd like to pay for {quantity} kg of {listing.nutrientType} credits.</Desc>
+            <Desc>
+              Choose how you&apos;d like to pay for {quantity} kg of {listing.nutrientType} credits.
+            </Desc>
             <PaymentOptions>
-              <PaymentOption $selected={paymentMethod === 'stripe'} onClick={() => setPaymentMethod('stripe')}>
+              <PaymentOption
+                $selected={paymentMethod === 'stripe'}
+                onClick={() => setPaymentMethod('stripe')}
+              >
                 <div>
                   <PaymentLabel>Credit / Debit Card</PaymentLabel>
                   <PaymentDesc>Processed securely via Stripe</PaymentDesc>
                 </div>
               </PaymentOption>
-              <PaymentOption $selected={paymentMethod === 'wallet'} onClick={() => setPaymentMethod('wallet')}>
+              <PaymentOption
+                $selected={paymentMethod === 'wallet'}
+                onClick={() => setPaymentMethod('wallet')}
+              >
                 <div>
                   <PaymentLabel>Crypto Wallet</PaymentLabel>
                   <PaymentDesc>Pay with MATIC or USDC on Polygon</PaymentDesc>
@@ -450,7 +526,8 @@ export function PurchaseFlowPage() {
 
             {paymentMethod === 'wallet' && (
               <div style={{ padding: 24, textAlign: 'center', color: '#888', fontSize: 14 }}>
-                Your connected wallet will be used to pay with MATIC or USDC on Polygon. Ensure MetaMask is connected.
+                Your connected wallet will be used to pay with MATIC or USDC on Polygon. Ensure
+                MetaMask is connected.
               </div>
             )}
 
@@ -459,7 +536,9 @@ export function PurchaseFlowPage() {
               <TotalValue>${total}</TotalValue>
             </TotalRow>
             <ButtonRow>
-              <Button variant="outline" onClick={() => handleBack(0)}>Back</Button>
+              <Button variant="outline" onClick={() => handleBack(0)}>
+                Back
+              </Button>
               <Button onClick={() => setStep(2)}>Review &amp; Confirm</Button>
             </ButtonRow>
           </>
@@ -474,7 +553,9 @@ export function PurchaseFlowPage() {
             {purchaseError && (
               <ErrorBanner>
                 <ErrorText>{purchaseError}</ErrorText>
-                <Button variant="outline" size="sm" onClick={() => setPurchaseError(null)}>Dismiss</Button>
+                <Button variant="outline" size="sm" onClick={() => setPurchaseError(null)}>
+                  Dismiss
+                </Button>
               </ErrorBanner>
             )}
 
@@ -486,19 +567,33 @@ export function PurchaseFlowPage() {
               </SpinnerWrap>
             ) : (
               <>
-                <Row><RowLabel>Quantity</RowLabel><RowValue>{quantity} kg {listing.nutrientType}</RowValue></Row>
-                <Row><RowLabel>Price</RowLabel><RowValue>${(listing.pricePerCredit || 0).toFixed(2)} / credit</RowValue></Row>
-                <Row><RowLabel>Payment</RowLabel><RowValue>{paymentMethod === 'stripe' ? 'Card' : 'Wallet'}</RowValue></Row>
-                <Row><RowLabel>Network</RowLabel><RowValue>Polygon</RowValue></Row>
+                <Row>
+                  <RowLabel>Quantity</RowLabel>
+                  <RowValue>
+                    {quantity} kg {listing.nutrientType}
+                  </RowValue>
+                </Row>
+                <Row>
+                  <RowLabel>Price</RowLabel>
+                  <RowValue>${(listing.pricePerCredit || 0).toFixed(2)} / credit</RowValue>
+                </Row>
+                <Row>
+                  <RowLabel>Payment</RowLabel>
+                  <RowValue>{paymentMethod === 'stripe' ? 'Card' : 'Wallet'}</RowValue>
+                </Row>
+                <Row>
+                  <RowLabel>Network</RowLabel>
+                  <RowValue>Polygon</RowValue>
+                </Row>
                 <TotalRow>
                   <RowLabel style={{ fontSize: 16, fontWeight: 600 }}>Total</RowLabel>
                   <TotalValue>${total}</TotalValue>
                 </TotalRow>
                 <ButtonRow>
-                  <Button variant="outline" onClick={() => handleBack(1)}>Back</Button>
-                  <Button onClick={handlePurchase}>
-                    Confirm Purchase
+                  <Button variant="outline" onClick={() => handleBack(1)}>
+                    Back
                   </Button>
+                  <Button onClick={handlePurchase}>Confirm Purchase</Button>
                 </ButtonRow>
               </>
             )}
@@ -513,8 +608,15 @@ export function PurchaseFlowPage() {
             <SuccessSub>
               {quantity} kg of {listing.nutrientType} credits have been added to your portfolio.
             </SuccessSub>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
-              <DataCard label="Credits" value={quantity.toString()} unit={`kg ${listing.nutrientType === 'nitrogen' ? 'N' : 'P'}`} compact />
+            <div
+              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}
+            >
+              <DataCard
+                label="Credits"
+                value={quantity.toString()}
+                unit={`kg ${listing.nutrientType === 'nitrogen' ? 'N' : 'P'}`}
+                compact
+              />
               <DataCard label="Total Paid" value={`$${total}`} compact />
             </div>
             <Row>
@@ -524,7 +626,10 @@ export function PurchaseFlowPage() {
             <Row>
               <RowLabel>Status</RowLabel>
               <RowValue>
-                <Badge variant={purchaseResult?.status === 'confirmed' ? 'verified' : 'warning'} size="sm">
+                <Badge
+                  variant={purchaseResult?.status === 'confirmed' ? 'verified' : 'warning'}
+                  size="sm"
+                >
                   {purchaseResult?.status || 'pending'}
                 </Badge>
               </RowValue>
@@ -536,7 +641,9 @@ export function PurchaseFlowPage() {
               </Row>
             )}
             <ButtonRow>
-              <Button variant="outline" onClick={() => navigate('/marketplace')}>Back to Marketplace</Button>
+              <Button variant="outline" onClick={() => navigate('/marketplace')}>
+                Back to Marketplace
+              </Button>
               <Button onClick={() => navigate('/portfolio')}>View Portfolio</Button>
             </ButtonRow>
           </>

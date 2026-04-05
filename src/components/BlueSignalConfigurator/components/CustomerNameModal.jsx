@@ -1,6 +1,6 @@
 // Customer Name Modal - Collect customer info before PDF export
-import React, { useState } from "react";
-import styled from "styled-components";
+import { useState } from 'react';
+import styled from 'styled-components';
 
 const Overlay = styled.div`
   position: fixed;
@@ -16,8 +16,12 @@ const Overlay = styled.div`
   animation: fadeIn 0.2s ease;
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;
 
@@ -106,7 +110,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${({ variant }) =>
-    variant === "primary"
+    variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -158,7 +162,9 @@ const LoadingSpinner = styled.span`
   margin-right: 8px;
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -169,7 +175,7 @@ export const CustomerNameModal = ({
   isGenerating = false,
   error = null,
 }) => {
-  const [customerName, setCustomerName] = useState("");
+  const [customerName, setCustomerName] = useState('');
 
   if (!isOpen) return null;
 
@@ -178,10 +184,10 @@ export const CustomerNameModal = ({
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !isGenerating) {
+    if (e.key === 'Enter' && !isGenerating) {
       handleGenerate();
     }
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       onClose();
     }
   };
@@ -191,7 +197,8 @@ export const CustomerNameModal = ({
       <Modal onClick={(e) => e.stopPropagation()}>
         <Title>Generate Quote PDF</Title>
         <Description>
-          Enter the customer name to include in the quote. This will be used in the PDF filename and header.
+          Enter the customer name to include in the quote. This will be used in the PDF filename and
+          header.
         </Description>
 
         <InputGroup>
@@ -213,25 +220,19 @@ export const CustomerNameModal = ({
           <Button onClick={onClose} disabled={isGenerating}>
             Cancel
           </Button>
-          <Button
-            variant="primary"
-            onClick={handleGenerate}
-            disabled={isGenerating}
-          >
+          <Button variant="primary" onClick={handleGenerate} disabled={isGenerating}>
             {isGenerating ? (
               <>
                 <LoadingSpinner />
                 Generating...
               </>
             ) : (
-              "Generate PDF"
+              'Generate PDF'
             )}
           </Button>
         </ButtonGroup>
 
-        <SkipNote>
-          Leave blank to generate without customer name
-        </SkipNote>
+        <SkipNote>Leave blank to generate without customer name</SkipNote>
       </Modal>
     </Overlay>
   );

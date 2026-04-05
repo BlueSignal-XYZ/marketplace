@@ -41,12 +41,10 @@ const PageBtn = styled.button<{ $active?: boolean }>`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13px;
   font-weight: 500;
-  color: ${({ $active, theme }) =>
-    $active ? theme.colors.textOnPrimary : theme.colors.text};
-  background: ${({ $active, theme }) =>
-    $active ? theme.colors.primary : theme.colors.surface};
-  border: 1px solid ${({ $active, theme }) =>
-    $active ? theme.colors.primary : theme.colors.border};
+  color: ${({ $active, theme }) => ($active ? theme.colors.textOnPrimary : theme.colors.text)};
+  background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.surface)};
+  border: 1px solid
+    ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.sm}px;
   cursor: pointer;
   transition: all ${({ theme }) => theme.animation.fast};
@@ -102,16 +100,14 @@ export const Pagination: React.FC<PaginationProps> = ({
         p === 'ellipsis' ? (
           <Ellipsis key={`e-${i}`}>…</Ellipsis>
         ) : (
-          <PageBtn
-            key={p}
-            $active={page === p}
-            onClick={() => onPageChange(p as number)}
-          >
+          <PageBtn key={p} $active={page === p} onClick={() => onPageChange(p as number)}>
             {p}
           </PageBtn>
-        ),
+        )
       )}
-      <PageInfo>Page {page} of {totalPages}</PageInfo>
+      <PageInfo>
+        Page {page} of {totalPages}
+      </PageInfo>
       <PageBtn disabled={page === totalPages} onClick={() => onPageChange(page + 1)}>
         Next →
       </PageBtn>

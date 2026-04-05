@@ -1,9 +1,8 @@
 // Enhanced Specs Tab with Expandable Sections
-import React from "react";
-import styled from "styled-components";
-import { ExpandableSection, BlueSignalCTA } from "../shared";
-import { SectionTitle, SpecGrid, SpecCard, SpecLabel, SpecValue, Table, Th, Td } from "../../styles";
-import { FULL_SPECS, GPIO_PINOUT, GPIO_TYPE_COLORS } from "../../data";
+import styled from 'styled-components';
+import { ExpandableSection, BlueSignalCTA } from '../shared';
+import { SectionTitle } from '../../styles';
+import { FULL_SPECS } from '../../data';
 
 const QuickSpecsGrid = styled.div`
   display: grid;
@@ -114,7 +113,7 @@ const GpioList = styled.ul`
     font-size: 12px;
     color: #cbd5e1;
     padding: 4px 0;
-    font-family: "SF Mono", Monaco, monospace;
+    font-family: 'SF Mono', Monaco, monospace;
   }
 `;
 
@@ -125,7 +124,10 @@ const SpecsTab = ({ product }) => {
   // Quick specs (always visible at top)
   const quickSpecs = [
     { label: 'Deployment', value: product.deployment },
-    { label: 'Power', value: product.power.type + (product.solar ? ` (${product.solar.watts}W)` : '') },
+    {
+      label: 'Power',
+      value: product.power.type + (product.solar ? ` (${product.solar.watts}W)` : ''),
+    },
     { label: 'Sensors', value: `${product.sensors} parameters` },
     { label: 'Autonomy', value: product.autonomy },
     { label: 'Weight', value: product.weight },
@@ -139,7 +141,7 @@ const SpecsTab = ({ product }) => {
     { label: 'Humidity', value: fullSpecs.humidity },
     { label: 'IP Rating', value: fullSpecs.ipRating },
     { label: 'IP Description', value: fullSpecs.ipDescription },
-  ].filter(s => s.value);
+  ].filter((s) => s.value);
 
   // Electrical specs
   const elecSpecs = [
@@ -153,7 +155,7 @@ const SpecsTab = ({ product }) => {
     { label: 'MPPT Controller', value: fullSpecs.mpptController },
     { label: 'LVD', value: fullSpecs.lvd },
     { label: 'Inverter', value: fullSpecs.inverter },
-  ].filter(s => s.value);
+  ].filter((s) => s.value);
 
   // Connectivity specs
   const connSpecs = [
@@ -162,7 +164,7 @@ const SpecsTab = ({ product }) => {
     { label: 'GPS Accuracy', value: fullSpecs.gpsAccuracy },
     { label: 'Data Usage', value: fullSpecs.dataUsage },
     { label: 'Antenna Type', value: fullSpecs.antennaType },
-  ].filter(s => s.value);
+  ].filter((s) => s.value);
 
   // Physical specs (for buoys)
   const physSpecs = [
@@ -177,7 +179,7 @@ const SpecsTab = ({ product }) => {
     { label: 'Nav Light', value: fullSpecs.navLight },
     { label: 'Dimensions', value: fullSpecs.dimensions },
     { label: 'Mooring Depth', value: fullSpecs.mooringDepth },
-  ].filter(s => s.value);
+  ].filter((s) => s.value);
 
   // Maintenance specs
   const maintSpecs = [
@@ -185,7 +187,7 @@ const SpecsTab = ({ product }) => {
     { label: 'Warranty', value: fullSpecs.warrantyPeriod },
     { label: 'Calibration Interval', value: fullSpecs.calibrationInterval },
     { label: 'Upgrade Note', value: fullSpecs.upgradeNote },
-  ].filter(s => s.value);
+  ].filter((s) => s.value);
 
   return (
     <div>
@@ -274,17 +276,15 @@ const SpecsTab = ({ product }) => {
       )}
 
       {hasGpio && (
-        <ExpandableSection
-          id="gpio"
-          title="GPIO & Pinout"
-          icon="🔌"
-        >
+        <ExpandableSection id="gpio" title="GPIO & Pinout" icon="🔌">
           <GpioGrid>
             {product.gpio.i2c?.length > 0 && (
               <GpioSection>
                 <GpioTitle>I2C Bus</GpioTitle>
                 <GpioList>
-                  {product.gpio.i2c.map((pin, i) => <li key={i}>{pin}</li>)}
+                  {product.gpio.i2c.map((pin, i) => (
+                    <li key={i}>{pin}</li>
+                  ))}
                 </GpioList>
               </GpioSection>
             )}
@@ -292,7 +292,9 @@ const SpecsTab = ({ product }) => {
               <GpioSection>
                 <GpioTitle>UART</GpioTitle>
                 <GpioList>
-                  {product.gpio.uart.map((pin, i) => <li key={i}>{pin}</li>)}
+                  {product.gpio.uart.map((pin, i) => (
+                    <li key={i}>{pin}</li>
+                  ))}
                 </GpioList>
               </GpioSection>
             )}
@@ -300,7 +302,9 @@ const SpecsTab = ({ product }) => {
               <GpioSection>
                 <GpioTitle>1-Wire</GpioTitle>
                 <GpioList>
-                  {product.gpio.oneWire.map((pin, i) => <li key={i}>{pin}</li>)}
+                  {product.gpio.oneWire.map((pin, i) => (
+                    <li key={i}>{pin}</li>
+                  ))}
                 </GpioList>
               </GpioSection>
             )}
@@ -308,7 +312,9 @@ const SpecsTab = ({ product }) => {
               <GpioSection>
                 <GpioTitle>Digital GPIO</GpioTitle>
                 <GpioList>
-                  {product.gpio.gpio.map((pin, i) => <li key={i}>{pin}</li>)}
+                  {product.gpio.gpio.map((pin, i) => (
+                    <li key={i}>{pin}</li>
+                  ))}
                 </GpioList>
               </GpioSection>
             )}

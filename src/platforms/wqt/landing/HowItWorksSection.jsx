@@ -3,7 +3,7 @@
  * Sensor-Verified. Utility-Controlled. Fully Automated.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -14,7 +14,7 @@ const blink = keyframes`
 
 const Section = styled.section`
   padding: 48px clamp(16px, 5vw, 48px);
-  background: #0B1120;
+  background: #0b1120;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 64px clamp(20px, 5vw, 48px);
@@ -46,7 +46,7 @@ const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin: 0 0 16px;
   letter-spacing: -0.03em;
@@ -115,7 +115,7 @@ const FeatureTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(18px, 2vw, 22px);
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 10px;
 `;
 
@@ -130,19 +130,20 @@ const FeatureDesc = styled.p`
 /* ── Terminal code viewer ──────────────────────────────── */
 
 const Terminal = styled.div`
-  background: #0D1117;
+  background: #0d1117;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45),
-              0 0 0 1px rgba(255, 255, 255, 0.03);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
 `;
 
 const TermBar = styled.div`
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: #161B22;
+  background: #161b22;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 `;
 
@@ -217,10 +218,18 @@ const Code = styled.span`
   white-space: pre;
 `;
 
-const Comment = styled.span`color: #6A737D;`;
-const Key = styled.span`color: #79C0FF;`;
-const Str = styled.span`color: #A5D6FF;`;
-const Val = styled.span`color: #7EE787;`;
+const Comment = styled.span`
+  color: #6a737d;
+`;
+const Key = styled.span`
+  color: #79c0ff;
+`;
+const Str = styled.span`
+  color: #a5d6ff;
+`;
+const Val = styled.span`
+  color: #7ee787;
+`;
 const Cursor = styled.span`
   display: inline-block;
   width: 8px;
@@ -260,7 +269,16 @@ const FEATURES = [
     title: 'Always-On Verification',
     desc: 'The WQM-1 sensor paired with your AWG reads water quality around the clock. Every reading is timestamped, encrypted, and stored.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#06B6D4"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
       </svg>
     ),
@@ -271,7 +289,16 @@ const FEATURES = [
     title: 'Two Ways to Earn',
     desc: 'Quantity Credits for every gallon your AWG produces. Quality Credits when your water exceeds purity thresholds. Both stack.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#0052CC"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <rect x="2" y="3" width="20" height="14" rx="2" />
         <path d="M8 21h8M12 17v4" />
       </svg>
@@ -283,7 +310,16 @@ const FEATURES = [
     title: 'Your Utility Sets the Rate',
     desc: 'Rebate rates are set by your water utility — transparent, configurable, and backed by real economics. Not crypto. Not tokens.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#10B981"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
       </svg>
     ),
@@ -292,29 +328,132 @@ const FEATURES = [
 
 const CODE_LINES = [
   { content: <Comment># program_config.yaml</Comment> },
-  { content: <><Key>program</Key>:</> },
-  { content: <>&nbsp;&nbsp;<Key>name</Key>: <Str>"Metro Water District DR"</Str></> },
-  { content: <>&nbsp;&nbsp;<Key>type</Key>: <Str>"demand_response"</Str></> },
-  { content: <>&nbsp;&nbsp;<Key>status</Key>: <Val>active</Val></> },
+  {
+    content: (
+      <>
+        <Key>program</Key>:
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>name</Key>: <Str>&quot;Metro Water District DR&quot;</Str>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>type</Key>: <Str>&quot;demand_response&quot;</Str>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>status</Key>: <Val>active</Val>
+      </>
+    ),
+  },
   { content: <></> },
-  { content: <><Key>source</Key>:</> },
-  { content: <>&nbsp;&nbsp;<Key>device</Key>: <Str>"AWG + BlueSignal WQM-1"</Str></> },
-  { content: <>&nbsp;&nbsp;<Key>output</Key>: <Str>"potable water"</Str> <Comment># sensor-verified</Comment></> },
+  {
+    content: (
+      <>
+        <Key>source</Key>:
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>device</Key>: <Str>&quot;AWG + BlueSignal WQM-1&quot;</Str>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>output</Key>: <Str>&quot;potable water&quot;</Str>{' '}
+        <Comment># sensor-verified</Comment>
+      </>
+    ),
+  },
   { content: <></> },
-  { content: <><Key>credits</Key>:</> },
-  { content: <>&nbsp;&nbsp;<Key>quantity_rate</Key>: <Val>0.50</Val> <Comment># $/gallon conserved</Comment></> },
-  { content: <>&nbsp;&nbsp;<Key>quality_multiplier</Key>: <Val>1.25</Val> <Comment># N/P offset bonus</Comment></> },
-  { content: <>&nbsp;&nbsp;<Key>verification</Key>: <Str>"three_layer"</Str></> },
+  {
+    content: (
+      <>
+        <Key>credits</Key>:
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>quantity_rate</Key>: <Val>0.50</Val>{' '}
+        <Comment># $/gallon conserved</Comment>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>quality_multiplier</Key>: <Val>1.25</Val>{' '}
+        <Comment># N/P offset bonus</Comment>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>verification</Key>: <Str>&quot;three_layer&quot;</Str>
+      </>
+    ),
+  },
   { content: <></> },
-  { content: <><Key>settlement</Key>:</> },
-  { content: <>&nbsp;&nbsp;<Key>method</Key>: <Str>"utility_bill_credit"</Str></> },
-  { content: <>&nbsp;&nbsp;<Key>frequency</Key>: <Str>"monthly"</Str></> },
-  { content: <>&nbsp;&nbsp;<Key>auto_generate</Key>: <Val>true</Val><Cursor /></> },
+  {
+    content: (
+      <>
+        <Key>settlement</Key>:
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>method</Key>: <Str>&quot;utility_bill_credit&quot;</Str>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>frequency</Key>: <Str>&quot;monthly&quot;</Str>
+      </>
+    ),
+  },
+  {
+    content: (
+      <>
+        &nbsp;&nbsp;<Key>auto_generate</Key>: <Val>true</Val>
+        <Cursor />
+      </>
+    ),
+  },
 ];
 
 function GenericIcon({ color }) {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
     </svg>
   );
@@ -348,8 +487,8 @@ export function HowItWorksSection({ audience, content, trust }) {
           <SectionLabel>Under the Hood</SectionLabel>
           <SectionTitle>Real Sensors. Real Credits. Real Money.</SectionTitle>
           <SectionSub>
-            No guesswork. No tokens. No speculation. Every credit comes from a real sensor
-            reading — and every rebate hits your real water bill.
+            No guesswork. No tokens. No speculation. Every credit comes from a real sensor reading —
+            and every rebate hits your real water bill.
           </SectionSub>
         </RevealOnScroll>
 

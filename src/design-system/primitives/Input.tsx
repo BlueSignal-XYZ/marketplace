@@ -23,9 +23,21 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 // ── Sizes ─────────────────────────────────────────────────
 
 const sizeMap = {
-  sm: css`height: 36px; font-size: 16px; padding: 0 10px;`,
-  md: css`height: 44px; font-size: 16px; padding: 0 12px;`,
-  lg: css`height: 48px; font-size: 16px; padding: 0 16px;`,
+  sm: css`
+    height: 36px;
+    font-size: 16px;
+    padding: 0 10px;
+  `,
+  md: css`
+    height: 44px;
+    font-size: 16px;
+    padding: 0 12px;
+  `,
+  lg: css`
+    height: 48px;
+    font-size: 16px;
+    padding: 0 16px;
+  `,
 };
 
 // ── Styled ────────────────────────────────────────────────
@@ -69,23 +81,33 @@ const StyledInput = styled.input<{
   font-family: ${({ theme }) => theme.fonts.sans};
   color: ${({ theme }) => theme.colors.text};
   background: ${({ theme }) => theme.components.inputBg};
-  border: 1px solid ${({ theme, $hasError }) =>
-    $hasError ? '#EF4444' : theme.components.inputBorder};
+  border: 1px solid
+    ${({ theme, $hasError }) => ($hasError ? '#EF4444' : theme.components.inputBorder)};
   border-radius: ${({ theme }) => theme.radius.sm}px;
   transition: border-color ${({ theme }) => theme.animation.fast};
   outline: none;
 
   ${({ $inputSize }) => sizeMap[$inputSize]}
-  ${({ $hasLeftIcon }) => $hasLeftIcon && css`padding-left: 36px;`}
-  ${({ $hasRightIcon }) => $hasRightIcon && css`padding-right: 36px;`}
+  ${({ $hasLeftIcon }) =>
+    $hasLeftIcon &&
+    css`
+      padding-left: 36px;
+    `}
+  ${({ $hasRightIcon }) =>
+    $hasRightIcon &&
+    css`
+      padding-right: 36px;
+    `}
 
-  &::placeholder { color: ${({ theme }) => theme.components.inputPlaceholder}; }
+  &::placeholder {
+    color: ${({ theme }) => theme.components.inputPlaceholder};
+  }
 
   &:focus {
     border-color: ${({ theme, $hasError }) =>
       $hasError ? '#EF4444' : theme.components.inputFocusBorder};
-    box-shadow: 0 0 0 3px ${({ theme, $hasError }) =>
-      $hasError ? 'rgba(239,68,68,0.1)' : theme.colors.focus};
+    box-shadow: 0 0 0 3px
+      ${({ theme, $hasError }) => ($hasError ? 'rgba(239,68,68,0.1)' : theme.colors.focus)};
   }
 
   &:disabled {
@@ -121,7 +143,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       </InputRow>
       {(error || hint) && <HintText $error={!!error}>{error || hint}</HintText>}
     </Wrapper>
-  ),
+  )
 );
 
 Input.displayName = 'Input';

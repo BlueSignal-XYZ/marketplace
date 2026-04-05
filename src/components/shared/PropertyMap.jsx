@@ -1,8 +1,8 @@
 // src/components/shared/PropertyMap.jsx
-import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { useRef, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Set Mapbox access token (only if valid)
 const _mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -12,7 +12,7 @@ if (_mapboxToken && _mapboxToken.startsWith('pk.')) {
 
 const MapWrapper = styled.div`
   width: 100%;
-  height: ${(props) => props.$height || "300px"};
+  height: ${(props) => props.$height || '300px'};
   border-radius: 12px;
   overflow: hidden;
   position: relative;
@@ -84,12 +84,12 @@ const ErrorText = styled.div`
  */
 function getBoundaryColor(pollutant) {
   const colors = {
-    N: "#3b82f6", // Nitrogen - blue
-    P: "#10b981", // Phosphorus - green
-    TSS: "#06b6d4", // Sediment - cyan
-    Temp: "#f59e0b", // Thermal - amber
+    N: '#3b82f6', // Nitrogen - blue
+    P: '#10b981', // Phosphorus - green
+    TSS: '#06b6d4', // Sediment - cyan
+    Temp: '#f59e0b', // Thermal - amber
   };
-  return colors[pollutant] || "#667eea";
+  return colors[pollutant] || '#667eea';
 }
 
 /**
@@ -111,9 +111,9 @@ export function PropertyMap({
   boundary,
   pollutant,
   propertyName,
-  height = "300px",
+  height = '300px',
   zoom,
-  mapStyle = "mapbox://styles/mapbox/outdoors-v12",
+  mapStyle = 'mapbox://styles/mapbox/outdoors-v12',
 }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -123,12 +123,12 @@ export function PropertyMap({
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (!lat || !lng) {
-      setError("No coordinates available");
+      setError('No coordinates available');
       setLoading(false);
       return;
     }
     if (!mapboxgl.accessToken) {
-      setError("Map service unavailable");
+      setError('Map service unavailable');
       setLoading(false);
       return;
     }
@@ -150,7 +150,7 @@ export function PropertyMap({
 
       mapRef.current = map;
 
-      map.on("load", () => {
+      map.on('load', () => {
         setLoading(false);
 
         // Add boundary polygon if available
@@ -158,10 +158,10 @@ export function PropertyMap({
           const boundaryColor = getBoundaryColor(pollutant);
 
           // Add the boundary as a source
-          map.addSource("property-boundary", {
-            type: "geojson",
+          map.addSource('property-boundary', {
+            type: 'geojson',
             data: {
-              type: "Feature",
+              type: 'Feature',
               geometry: boundary,
               properties: {
                 name: propertyName,
@@ -171,24 +171,24 @@ export function PropertyMap({
 
           // Add fill layer
           map.addLayer({
-            id: "property-boundary-fill",
-            type: "fill",
-            source: "property-boundary",
+            id: 'property-boundary-fill',
+            type: 'fill',
+            source: 'property-boundary',
             paint: {
-              "fill-color": boundaryColor,
-              "fill-opacity": 0.25,
+              'fill-color': boundaryColor,
+              'fill-opacity': 0.25,
             },
           });
 
           // Add outline layer
           map.addLayer({
-            id: "property-boundary-outline",
-            type: "line",
-            source: "property-boundary",
+            id: 'property-boundary-outline',
+            type: 'line',
+            source: 'property-boundary',
             paint: {
-              "line-color": boundaryColor,
-              "line-width": 3,
-              "line-opacity": 0.8,
+              'line-color': boundaryColor,
+              'line-width': 3,
+              'line-opacity': 0.8,
             },
           });
 
@@ -206,28 +206,28 @@ export function PropertyMap({
         }
 
         // Add center marker
-        const markerEl = document.createElement("div");
-        markerEl.style.width = "24px";
-        markerEl.style.height = "24px";
-        markerEl.style.borderRadius = "50%";
+        const markerEl = document.createElement('div');
+        markerEl.style.width = '24px';
+        markerEl.style.height = '24px';
+        markerEl.style.borderRadius = '50%';
         markerEl.style.backgroundColor = getBoundaryColor(pollutant);
-        markerEl.style.border = "3px solid white";
-        markerEl.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
+        markerEl.style.border = '3px solid white';
+        markerEl.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.3)';
 
         new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
 
         // Add navigation controls
-        map.addControl(new mapboxgl.NavigationControl(), "top-right");
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
       });
 
-      map.on("error", (e) => {
-        console.error("Mapbox error:", e);
-        setError("Failed to load map");
+      map.on('error', (e) => {
+        console.error('Mapbox error:', e);
+        setError('Failed to load map');
         setLoading(false);
       });
     } catch (err) {
-      console.error("Map initialization error:", err);
-      setError("Failed to initialize map");
+      console.error('Map initialization error:', err);
+      setError('Failed to initialize map');
       setLoading(false);
     }
 

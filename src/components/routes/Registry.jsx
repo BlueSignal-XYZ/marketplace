@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
-import {
-  EventData,
-  ProducersData,
-  AccountSearch,
-  Line,
-} from "../elements/index";
-import { NUMBERS } from "../../scripts/helpers";
-import { NPCCreditsAPI } from "../../scripts/back_door";
-import useFetchNPCCreditEvents from "../../hooks/useFetchNPCCreditEvents";
-import { media, safeAreaInsets } from "../../styles/breakpoints";
+import { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { EventData, ProducersData, AccountSearch, Line } from '../elements/index';
+import { NUMBERS } from '../../scripts/helpers';
+import { NPCCreditsAPI } from '../../scripts/back_door';
+import { media, safeAreaInsets } from '../../styles/breakpoints';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -43,7 +37,7 @@ const Content = styled.div`
 const Heading = styled.h1`
   font-size: clamp(16px, 4vw, 24px);
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#111827'};
   margin: 0;
   letter-spacing: -0.01em;
 `;
@@ -62,7 +56,7 @@ const Heading2 = styled.h2`
   padding-top: 5px;
   padding-bottom: 5px;
   margin-bottom: 20px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#111827'};
 `;
 
 const TableWrapper = styled.div`
@@ -70,7 +64,7 @@ const TableWrapper = styled.div`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 12px;
-  box-shadow: ${({ theme }) => theme.shadows?.sm || "0 1px 3px rgba(0,0,0,0.1)"};
+  box-shadow: ${({ theme }) => theme.shadows?.sm || '0 1px 3px rgba(0,0,0,0.1)'};
 `;
 
 const StyledTable = styled.table`
@@ -81,7 +75,7 @@ const StyledTable = styled.table`
 
 const StyledTh = styled.th`
   padding: 12px 16px;
-  background: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+  background: ${({ theme }) => theme.colors?.ui900 || '#111827'};
   color: #ffffff;
   text-align: left;
   font-size: 12px;
@@ -96,9 +90,9 @@ const StyledTh = styled.th`
 
 const StyledTd = styled.td`
   padding: 12px 16px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 
   ${media.mobileOnly} {
     padding: 10px 12px;
@@ -114,8 +108,8 @@ const spin = keyframes`
 const LoadingSpinner = styled.div`
   display: inline-block;
   margin: 64px auto;
-  border: 3px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  border-left-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
+  border: 3px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  border-left-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -131,20 +125,15 @@ const MessageContainer = styled.div`
   align-items: center;
   gap: 12px;
   background: ${({ type, theme }) =>
-    type === "error"
-      ? theme.colors?.red50 || "#fef2f2"
-      : theme.colors?.success50 || "#ecfdf5"};
+    type === 'error' ? theme.colors?.red50 || '#fef2f2' : theme.colors?.success50 || '#ecfdf5'};
   color: ${({ type, theme }) =>
-    type === "error"
-      ? theme.colors?.red700 || "#b91c1c"
-      : theme.colors?.success700 || "#047857"};
-  border: 1px solid ${({ type, theme }) =>
-    type === "error"
-      ? theme.colors?.red200 || "#fecaca"
-      : theme.colors?.success200 || "#a7f3d0"};
+    type === 'error' ? theme.colors?.red700 || '#b91c1c' : theme.colors?.success700 || '#047857'};
+  border: 1px solid
+    ${({ type, theme }) =>
+      type === 'error' ? theme.colors?.red200 || '#fecaca' : theme.colors?.success200 || '#a7f3d0'};
   padding: 12px 20px;
   border-radius: 12px;
-  box-shadow: ${({ theme }) => theme.shadows?.lg || "0 10px 15px -3px rgba(0,0,0,0.1)"};
+  box-shadow: ${({ theme }) => theme.shadows?.lg || '0 10px 15px -3px rgba(0,0,0,0.1)'};
   font-size: 14px;
   max-width: calc(100vw - 32px);
 `;
@@ -168,9 +157,9 @@ const CloseButton = styled.button`
 const AccountSearchButton = styled.button`
   border-radius: 8px;
   padding: 8px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -178,8 +167,8 @@ const AccountSearchButton = styled.button`
   min-height: 44px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
-    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
+    border-color: ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   }
 
   &:active {
@@ -204,9 +193,9 @@ const FixedTitle = styled.div`
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   padding: 0 16px;
-  box-shadow: ${({ theme }) => theme.shadows?.xs || "0 1px 2px rgba(0,0,0,0.05)"};
+  box-shadow: ${({ theme }) => theme.shadows?.xs || '0 1px 2px rgba(0,0,0,0.05)'};
   box-sizing: border-box;
   z-index: 10;
   border-radius: 12px 12px 0 0;
@@ -251,7 +240,7 @@ function ExplorerPage() {
       setUpdateCache(event);
     };
 
-    NPCCreditsAPI.on("*", (e) => {
+    NPCCreditsAPI.on('*', (e) => {
       handleEvent(e);
       e.removeListener();
     });
@@ -259,7 +248,7 @@ function ExplorerPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const cacheKey = "REGISTRY_OVERVIEW_DATA";
+      const cacheKey = 'REGISTRY_OVERVIEW_DATA';
 
       if (!isCacheStale(cacheKey, cacheExpiryTime) || !updateCache) {
         const cachedData = JSON.parse(localStorage.getItem(cacheKey));
@@ -277,41 +266,39 @@ function ExplorerPage() {
           const totalBurnedSupply = await NPCCreditsAPI.getTotalSold(); //***FIX ****/
           const totalCertificates = await NPCCreditsAPI.getTotalCertificates();
           const _producers = await NPCCreditsAPI.getAllProducers();
-          const creditTypes = await NPCCreditsAPI.getCreditTypes(
-            1
-          ); /** FIX ** */
+          const creditTypes = await NPCCreditsAPI.getCreditTypes(1); /** FIX ** */
 
           //Append credit types to live cache for internal use by app
           setLiveCache({ ...liveCache, creditTypes });
 
           const newData = [
             {
-              label: "Total Supply",
+              label: 'Total Supply',
               value:
                 totalSupply?.toString() +
-                " " +
-                `${NUMBERS.toNumber(totalSupply) > 0 ? "AWG Credits" : "AWG Credit"}`,
+                ' ' +
+                `${NUMBERS.toNumber(totalSupply) > 0 ? 'AWG Credits' : 'AWG Credit'}`,
             },
             {
-              label: "Total Sold",
+              label: 'Total Sold',
               value:
                 totalSold?.toString() +
-                " " +
-                `${NUMBERS.toNumber(totalSold) > 0 ? "AWG Credits" : "AWG Credit"}`,
+                ' ' +
+                `${NUMBERS.toNumber(totalSold) > 0 ? 'AWG Credits' : 'AWG Credit'}`,
             },
             {
-              label: "Total Donated Credits",
+              label: 'Total Donated Credits',
               value:
                 totalBurnedSupply?.toString() +
-                " " +
-                `${NUMBERS.toNumber(totalBurnedSupply) > 0 ? "AWG Credits" : "AWG Credit"}`,
+                ' ' +
+                `${NUMBERS.toNumber(totalBurnedSupply) > 0 ? 'AWG Credits' : 'AWG Credit'}`,
             },
-            { label: "Credit Types", value: creditTypes?.join(", ") },
+            { label: 'Credit Types', value: creditTypes?.join(', ') },
             {
-              label: "Total Certificates",
+              label: 'Total Certificates',
               value: totalCertificates?.toString(),
             },
-            { label: "Total Farmers", value: _producers?.length },
+            { label: 'Total Farmers', value: _producers?.length },
           ];
 
           // Cache the fetched data
@@ -346,7 +333,7 @@ function ExplorerPage() {
 
   useEffect(() => {
     const fetchProducerData = async () => {
-      const cacheKey = "REGISTRY_PRODUCER_DATA";
+      const cacheKey = 'REGISTRY_PRODUCER_DATA';
 
       if (!isCacheStale(cacheKey, cacheExpiryTime) || !updateCache) {
         const cachedData = JSON.parse(localStorage.getItem(cacheKey));
@@ -365,18 +352,12 @@ function ExplorerPage() {
           }
           const _producersData = await Promise.all(
             producers.map(async (producer) => {
-              const verifiers = await NPCCreditsAPI.getProducerVerifiers(
-                producer
-              );
+              const verifiers = await NPCCreditsAPI.getProducerVerifiers(producer);
               const verifiersData = await Promise.all(
                 verifiers.map(async (verifier) => {
                   const Supplies = await Promise.all(
                     creditTypes.map(async (creditType) => {
-                      const supply = await NPCCreditsAPI.getSupply(
-                        producer,
-                        verifier,
-                        creditType
-                      );
+                      const supply = await NPCCreditsAPI.getSupply(producer, verifier, creditType);
                       return {
                         creditType,
                         issuedSupply: NUMBERS.toNumber(supply?.issued),
@@ -412,7 +393,7 @@ function ExplorerPage() {
           setUpdateCache(false);
         } catch (error) {
           console.error(error);
-          setErrorMessage("Failed to fetch producer data");
+          setErrorMessage('Failed to fetch producer data');
         }
       }
     };
@@ -425,7 +406,7 @@ function ExplorerPage() {
   // Event Management
   useEffect(() => {
     async function fetchEvents() {
-      const cacheKey = "REGISTRY_EVENT_DATA";
+      const cacheKey = 'REGISTRY_EVENT_DATA';
 
       if (!isCacheStale(cacheKey, cacheExpiryTime) || !updateCache) {
         const cachedData = JSON.parse(localStorage.getItem(cacheKey));
@@ -435,15 +416,10 @@ function ExplorerPage() {
         }
       }
 
-      //FIX
+      // TODO: replace with proper async fetch when backend is restored
       if (updateCache || !events) {
-        const { eventsData, errorMessage, loading } =
-          useFetchNPCCreditEvents(updateCache);
+        const eventsData = [];
 
-        if (errorMessage) {
-          setErrorMessage(String(errorMessage));
-          return;
-        }
         // Cache the fetched data
         localStorage.setItem(
           cacheKey,
@@ -503,10 +479,10 @@ function ExplorerPage() {
             </TableWrapper>
             <DynamicList>
               <Heading2>Farmers</Heading2>
-              <Line width={"100%"} />
+              <Line width={'100%'} />
               <ProducersData producersData={producersData} />
               <Heading2>Events</Heading2>
-              <Line width={"100%"} />
+              <Line width={'100%'} />
               {events.map((event, index) => (
                 <EventData key={index} event={event} />
               ))}
@@ -521,10 +497,7 @@ function ExplorerPage() {
             </CloseButton>
           </MessageContainer>
         )}
-        <AccountSearch
-          isOpen={isAccountSearchOpen}
-          setIsOpen={handleAccountSearchToggle}
-        />
+        <AccountSearch isOpen={isAccountSearchOpen} setIsOpen={handleAccountSearchToggle} />
       </Content>
     </Container>
   );

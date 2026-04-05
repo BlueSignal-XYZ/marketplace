@@ -2,11 +2,10 @@
  * WQT Watershed Dashboard — aggregated water quality data per watershed.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
-import { Tabs } from '../../../design-system/primitives/Tabs';
 
 const Page = styled.div`
   max-width: 1280px;
@@ -46,12 +45,15 @@ const StatsRow = styled.div`
 
 const WatershedCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
+  border: 1px solid
+    ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.md}px;
   padding: 24px;
   cursor: pointer;
   transition: all 0.15s;
-  &:hover { border-color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 
   @media (max-width: 640px) {
     padding: 20px;
@@ -149,19 +151,64 @@ const ChartPlaceholder = styled.div`
 // ── Placeholder data ──────────────────────────────────────
 
 const WATERSHEDS = [
-  { id: 'james-river', name: 'James River Basin', state: 'Virginia', sensors: 4, area: '10,000 sq mi', health: 'good', totalCredits: 1250, avgPh: 7.2, avgTds: 342, avgTurbidity: 4.1 },
-  { id: 'potomac', name: 'Potomac River Basin', state: 'Virginia / DC', sensors: 3, area: '14,670 sq mi', health: 'fair', totalCredits: 890, avgPh: 7.5, avgTds: 298, avgTurbidity: 3.8 },
-  { id: 'chesapeake', name: 'Chesapeake Bay', state: 'Multi-state', sensors: 6, area: '64,000 sq mi', health: 'impaired', totalCredits: 3200, avgPh: 7.0, avgTds: 410, avgTurbidity: 6.1 },
-  { id: 'york', name: 'York River Basin', state: 'Virginia', sensors: 2, area: '2,670 sq mi', health: 'good', totalCredits: 560, avgPh: 7.1, avgTds: 275, avgTurbidity: 3.4 },
+  {
+    id: 'james-river',
+    name: 'James River Basin',
+    state: 'Virginia',
+    sensors: 4,
+    area: '10,000 sq mi',
+    health: 'good',
+    totalCredits: 1250,
+    avgPh: 7.2,
+    avgTds: 342,
+    avgTurbidity: 4.1,
+  },
+  {
+    id: 'potomac',
+    name: 'Potomac River Basin',
+    state: 'Virginia / DC',
+    sensors: 3,
+    area: '14,670 sq mi',
+    health: 'fair',
+    totalCredits: 890,
+    avgPh: 7.5,
+    avgTds: 298,
+    avgTurbidity: 3.8,
+  },
+  {
+    id: 'chesapeake',
+    name: 'Chesapeake Bay',
+    state: 'Multi-state',
+    sensors: 6,
+    area: '64,000 sq mi',
+    health: 'impaired',
+    totalCredits: 3200,
+    avgPh: 7.0,
+    avgTds: 410,
+    avgTurbidity: 6.1,
+  },
+  {
+    id: 'york',
+    name: 'York River Basin',
+    state: 'Virginia',
+    sensors: 2,
+    area: '2,670 sq mi',
+    health: 'good',
+    totalCredits: 560,
+    avgPh: 7.1,
+    avgTds: 275,
+    avgTurbidity: 3.4,
+  },
 ];
 
 export function WatershedDashboardPage() {
-  useEffect(() => { document.title = 'Watershed Dashboard — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Watershed Dashboard — WaterQuality.Trading';
+  }, []);
   const [selected, setSelected] = useState(null);
   const ws = selected ? WATERSHEDS.find((w) => w.id === selected) : null;
 
-  const healthVariant = (h) =>
-    h === 'good' ? 'positive' : h === 'fair' ? 'warning' : 'negative';
+  const healthVariant = (h) => (h === 'good' ? 'positive' : h === 'fair' ? 'warning' : 'negative');
 
   return (
     <Page>
@@ -183,10 +230,16 @@ export function WatershedDashboardPage() {
             onClick={() => setSelected(selected === w.id ? null : w.id)}
           >
             <WatershedName>{w.name}</WatershedName>
-            <WatershedMeta>{w.state} · {w.area} · {w.sensors} sensors</WatershedMeta>
+            <WatershedMeta>
+              {w.state} · {w.area} · {w.sensors} sensors
+            </WatershedMeta>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <Badge variant={healthVariant(w.health)} size="sm" dot>{w.health}</Badge>
-              <Badge variant="info" size="sm">{w.totalCredits.toLocaleString()} credits</Badge>
+              <Badge variant={healthVariant(w.health)} size="sm" dot>
+                {w.health}
+              </Badge>
+              <Badge variant="info" size="sm">
+                {w.totalCredits.toLocaleString()} credits
+              </Badge>
             </div>
           </WatershedCard>
         ))}
@@ -202,16 +255,24 @@ export function WatershedDashboardPage() {
             </Metric>
             <Metric>
               <MetricLabel>Avg TDS</MetricLabel>
-              <MetricValue>{ws.avgTds}<MetricUnit>ppm</MetricUnit></MetricValue>
+              <MetricValue>
+                {ws.avgTds}
+                <MetricUnit>ppm</MetricUnit>
+              </MetricValue>
             </Metric>
             <Metric>
               <MetricLabel>Avg Turbidity</MetricLabel>
-              <MetricValue>{ws.avgTurbidity}<MetricUnit>NTU</MetricUnit></MetricValue>
+              <MetricValue>
+                {ws.avgTurbidity}
+                <MetricUnit>NTU</MetricUnit>
+              </MetricValue>
             </Metric>
             <Metric>
               <MetricLabel>Health</MetricLabel>
               <MetricValue>
-                <Badge variant={healthVariant(ws.health)} dot>{ws.health}</Badge>
+                <Badge variant={healthVariant(ws.health)} dot>
+                  {ws.health}
+                </Badge>
               </MetricValue>
             </Metric>
             <Metric>
@@ -220,7 +281,10 @@ export function WatershedDashboardPage() {
             </Metric>
             <Metric>
               <MetricLabel>Credits Generated</MetricLabel>
-              <MetricValue>{ws.totalCredits.toLocaleString()}<MetricUnit>kg</MetricUnit></MetricValue>
+              <MetricValue>
+                {ws.totalCredits.toLocaleString()}
+                <MetricUnit>kg</MetricUnit>
+              </MetricValue>
             </Metric>
           </MetricGrid>
           <ChartPlaceholder>

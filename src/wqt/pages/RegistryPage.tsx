@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
 import { RegistryCredit, mockRegistryCredits } from '../../data/mockRegistryData';
 import { fetchRegistryCredits } from '../../services/wqtDataService';
 import { isDemoMode } from '../../utils/demoMode';
@@ -152,7 +151,11 @@ function creditTypeBadge(type: string) {
     nitrogen: 'Nitrogen',
     phosphorus: 'Phosphorus',
   };
-  return <Badge variant={variants[type] || 'neutral'} size="sm">{labels[type] || type}</Badge>;
+  return (
+    <Badge variant={variants[type] || 'neutral'} size="sm">
+      {labels[type] || type}
+    </Badge>
+  );
 }
 
 function statusBadge(status: string) {
@@ -198,9 +201,12 @@ const COLUMNS = [
     mono: true,
     sortable: true,
     width: '110px',
-    render: (row: RegistryCredit) => new Date(row.issueDate).toLocaleDateString('en-US', {
-      year: 'numeric', month: 'short', day: 'numeric',
-    }),
+    render: (row: RegistryCredit) =>
+      new Date(row.issueDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }),
   },
   {
     key: 'status',
@@ -229,7 +235,9 @@ function TableSkeleton() {
 }
 
 export function RegistryPage() {
-  useEffect(() => { document.title = 'Credit Registry — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Credit Registry — WaterQuality.Trading';
+  }, []);
   const [loading, setLoading] = useState(true);
   const [allCredits, setAllCredits] = useState<RegistryCredit[]>([]);
   const [filterType, setFilterType] = useState('all');
@@ -262,14 +270,15 @@ export function RegistryPage() {
   const filteredCredits = useMemo(() => {
     let credits = allCredits;
     if (filterType !== 'all') {
-      credits = credits.filter(c => c.type === filterType);
+      credits = credits.filter((c) => c.type === filterType);
     }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      credits = credits.filter(c =>
-        c.id.toLowerCase().includes(q) ||
-        c.projectName.toLowerCase().includes(q) ||
-        c.location.toLowerCase().includes(q)
+      credits = credits.filter(
+        (c) =>
+          c.id.toLowerCase().includes(q) ||
+          c.projectName.toLowerCase().includes(q) ||
+          c.location.toLowerCase().includes(q)
       );
     }
     return credits;
@@ -304,22 +313,22 @@ export function RegistryPage() {
       </FilterRow>
 
       <ChipsRow>
-        <FilterChips
-          options={FILTER_OPTIONS}
-          value={filterType}
-          onChange={setFilterType}
-        />
+        <FilterChips options={FILTER_OPTIONS} value={filterType} onChange={setFilterType} />
       </ChipsRow>
 
       {error && (
         <ErrorBanner>
           <ErrorText>{error}</ErrorText>
-          <Button variant="outline" size="sm" onClick={loadCredits}>Retry</Button>
+          <Button variant="outline" size="sm" onClick={loadCredits}>
+            Retry
+          </Button>
         </ErrorBanner>
       )}
 
       <ResultCount>
-        {loading ? 'Loading...' : `${filteredCredits.length} credit${filteredCredits.length !== 1 ? 's' : ''} found`}
+        {loading
+          ? 'Loading...'
+          : `${filteredCredits.length} credit${filteredCredits.length !== 1 ? 's' : ''} found`}
       </ResultCount>
 
       {loading ? (
@@ -333,7 +342,17 @@ export function RegistryPage() {
               ? 'Try adjusting your search or filter criteria.'
               : 'No credits have been registered yet. Check back soon.'
           }
-          action={searchQuery ? { label: 'Clear Search', onClick: () => { setSearchQuery(''); setFilterType('all'); } } : undefined}
+          action={
+            searchQuery
+              ? {
+                  label: 'Clear Search',
+                  onClick: () => {
+                    setSearchQuery('');
+                    setFilterType('all');
+                  },
+                }
+              : undefined
+          }
         />
       ) : (
         <Table
@@ -362,7 +381,9 @@ export function RegistryPage() {
             </DetailRow>
             <DetailRow>
               <DetailLabel>Quantity</DetailLabel>
-              <DetailValue>{selectedCredit.quantity.toLocaleString()} {selectedCredit.unit}</DetailValue>
+              <DetailValue>
+                {selectedCredit.quantity.toLocaleString()} {selectedCredit.unit}
+              </DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailLabel>Project ID</DetailLabel>
@@ -374,12 +395,24 @@ export function RegistryPage() {
             </DetailRow>
             <DetailRow>
               <DetailLabel>Issue Date</DetailLabel>
-              <DetailValue>{new Date(selectedCredit.issueDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</DetailValue>
+              <DetailValue>
+                {new Date(selectedCredit.issueDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </DetailValue>
             </DetailRow>
             {selectedCredit.retirementDate && (
               <DetailRow>
                 <DetailLabel>Retirement Date</DetailLabel>
-                <DetailValue>{new Date(selectedCredit.retirementDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</DetailValue>
+                <DetailValue>
+                  {new Date(selectedCredit.retirementDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </DetailValue>
               </DetailRow>
             )}
             <DetailRow>

@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { Bar } from 'react-chartjs-2';
-import { fetchSellerListings, fetchUserOrders, fetchUserDevices } from '../../services/wqtDataService';
+import {
+  fetchSellerListings,
+  fetchUserOrders,
+  fetchUserDevices,
+} from '../../services/wqtDataService';
 import { isDemoMode } from '../../utils/demoMode';
 import {
   Chart as ChartJS,
@@ -105,22 +109,15 @@ const ActionButton = styled.button`
   transition: all 0.2s;
 
   background: ${({ variant }) =>
-    variant === 'secondary'
-      ? '#ffffff'
-      : 'linear-gradient(135deg, #1D7072 0%, #155e5f 100%)'};
+    variant === 'secondary' ? '#ffffff' : 'linear-gradient(135deg, #1D7072 0%, #155e5f 100%)'};
   color: ${({ variant }) => (variant === 'secondary' ? '#1D7072' : '#ffffff')};
-  border: ${({ variant }) =>
-    variant === 'secondary' ? '1px solid #1D7072' : 'none'};
+  border: ${({ variant }) => (variant === 'secondary' ? '1px solid #1D7072' : 'none')};
   box-shadow: ${({ variant }) =>
-    variant === 'secondary'
-      ? 'none'
-      : '0 4px 12px rgba(29, 112, 114, 0.3)'};
+    variant === 'secondary' ? 'none' : '0 4px 12px rgba(29, 112, 114, 0.3)'};
 
   &:hover {
     background: ${({ variant }) =>
-      variant === 'secondary'
-        ? '#e0f7f8'
-        : 'linear-gradient(135deg, #155e5f 0%, #0f4344 100%)'};
+      variant === 'secondary' ? '#e0f7f8' : 'linear-gradient(135deg, #155e5f 0%, #0f4344 100%)'};
     transform: translateY(-2px);
   }
 
@@ -234,7 +231,7 @@ const SectionHeader = styled.div`
 
 const ViewAllLink = styled.span`
   font-size: 14px;
-  color: #1D7072;
+  color: #1d7072;
   cursor: pointer;
   font-weight: 500;
 
@@ -276,7 +273,7 @@ const ListingCard = styled.div`
   cursor: pointer;
 
   &:hover {
-    border-color: #1D7072;
+    border-color: #1d7072;
     background: #f8fafc;
   }
 
@@ -429,7 +426,7 @@ const SaleAmount = styled.div`
   .price {
     font-size: 16px;
     font-weight: 600;
-    color: #1D7072;
+    color: #1d7072;
   }
 
   .date {
@@ -504,7 +501,7 @@ const LoadingSpinner = styled.div`
     width: 40px;
     height: 40px;
     border: 3px solid #e5e7eb;
-    border-top-color: #1D7072;
+    border-top-color: #1d7072;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -518,7 +515,7 @@ const LoadingSpinner = styled.div`
 
 const GettingStartedCard = styled.div`
   background: linear-gradient(135deg, #e0f7f8 0%, #c5e8e9 100%);
-  border: 1px solid #1D7072;
+  border: 1px solid #1d7072;
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
@@ -536,7 +533,7 @@ const GettingStartedIcon = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: #1D7072;
+  background: #1d7072;
   color: white;
   display: flex;
   align-items: center;
@@ -578,12 +575,12 @@ const Step = styled.div`
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
-  color: #1D7072;
+  color: #1d7072;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: #1D7072;
+    background: #1d7072;
     color: white;
   }
 
@@ -591,7 +588,7 @@ const Step = styled.div`
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #1D7072;
+    background: #1d7072;
     color: white;
     font-size: 11px;
     display: flex;
@@ -601,7 +598,9 @@ const Step = styled.div`
 `;
 
 const SellerDashboard = () => {
-  useEffect(() => { document.title = 'Seller Dashboard — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Seller Dashboard — WaterQuality.Trading';
+  }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();
@@ -613,7 +612,9 @@ const SellerDashboard = () => {
 
   useEffect(() => {
     loadDashboardData();
-    fetchUserDevices().then(d => setDevices(Array.isArray(d) ? d : [])).catch(() => setDevices([]));
+    fetchUserDevices()
+      .then((d) => setDevices(Array.isArray(d) ? d : []))
+      .catch(() => setDevices([]));
   }, [user?.uid]);
 
   const loadDashboardData = async () => {
@@ -626,34 +627,38 @@ const SellerDashboard = () => {
       ]);
 
       if (realListings.length > 0) {
-        setListings(realListings.map(l => ({
-          id: l.id,
-          type: l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : 'Nitrogen',
-          name: l.name || 'Water Quality Credits',
-          amount: l.quantity || 0,
-          unit: l.type === 'stormwater' ? 'gal' : `lbs ${(l.type || 'N').charAt(0).toUpperCase()}`,
-          price: l.pricePerUnit || 0,
-          status: l.status === 'active' ? 'Active' : 'Pending',
-          listedDate: l.createdAt ? new Date(l.createdAt).toISOString().split('T')[0] : '',
-          views: l.views || 0,
-          inquiries: 0,
-        })));
+        setListings(
+          realListings.map((l) => ({
+            id: l.id,
+            type: l.type ? l.type.charAt(0).toUpperCase() + l.type.slice(1) : 'Nitrogen',
+            name: l.name || 'Water Quality Credits',
+            amount: l.quantity || 0,
+            unit:
+              l.type === 'stormwater' ? 'gal' : `lbs ${(l.type || 'N').charAt(0).toUpperCase()}`,
+            price: l.pricePerUnit || 0,
+            status: l.status === 'active' ? 'Active' : 'Pending',
+            listedDate: l.createdAt ? new Date(l.createdAt).toISOString().split('T')[0] : '',
+            views: l.views || 0,
+            inquiries: 0,
+          }))
+        );
       } else {
         setListings([]);
       }
 
       if (realOrders.length > 0) {
-        setSales(realOrders
-          .filter(o => o.sellerId === user?.uid && o.status === 'completed')
-          .map(o => ({
-            id: o.id,
-            date: o.completedAt ? new Date(o.completedAt).toISOString().split('T')[0] : '',
-            type: 'Credit Sale',
-            amount: 0,
-            unit: '',
-            buyer: o.buyerCompany || o.buyerEmail || 'Unknown',
-            price: o.amount || 0,
-          }))
+        setSales(
+          realOrders
+            .filter((o) => o.sellerId === user?.uid && o.status === 'completed')
+            .map((o) => ({
+              id: o.id,
+              date: o.completedAt ? new Date(o.completedAt).toISOString().split('T')[0] : '',
+              type: 'Credit Sale',
+              amount: 0,
+              unit: '',
+              buyer: o.buyerCompany || o.buyerEmail || 'Unknown',
+              price: o.amount || 0,
+            }))
         );
       } else {
         setSales([]);
@@ -746,16 +751,19 @@ const SellerDashboard = () => {
     <Page>
       <Shell>
         <Header>
-          <h1>
-            {user?.username ? `Welcome back, ${user.username}` : 'Seller Dashboard'}
-          </h1>
-          <p>Manage your listings, track sales, and maximize revenue from water quality improvements.</p>
+          <h1>{user?.username ? `Welcome back, ${user.username}` : 'Seller Dashboard'}</h1>
+          <p>
+            Manage your listings, track sales, and maximize revenue from water quality improvements.
+          </p>
         </Header>
 
         {isDemoMode() && (
           <DemoBanner data-testid="sample-data-banner">
             <span className="icon">ℹ️</span>
-            <span><strong>Sample Data:</strong> This dashboard shows example listings and sales for demonstration purposes. Your actual data will appear here once you create listings.</span>
+            <span>
+              <strong>Sample Data:</strong> This dashboard shows example listings and sales for
+              demonstration purposes. Your actual data will appear here once you create listings.
+            </span>
           </DemoBanner>
         )}
 
@@ -788,9 +796,7 @@ const SellerDashboard = () => {
 
         <HeaderActions>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <ActionButton onClick={handleCreateListing}>
-              + Create New Listing
-            </ActionButton>
+            <ActionButton onClick={handleCreateListing}>+ Create New Listing</ActionButton>
             <ActionButton variant="secondary" onClick={() => navigate('/dashboard/financial')}>
               View Financial Report
             </ActionButton>
@@ -809,7 +815,9 @@ const SellerDashboard = () => {
             <CardIcon color="#dbeafe">$</CardIcon>
             <CardLabel>Total Revenue</CardLabel>
             <CardValue>${(totalRevenue / 1000).toFixed(1)}k</CardValue>
-            <CardSubtext positive={totalRevenue > 0}>{totalRevenue > 0 ? 'From sales' : 'No sales yet'}</CardSubtext>
+            <CardSubtext positive={totalRevenue > 0}>
+              {totalRevenue > 0 ? 'From sales' : 'No sales yet'}
+            </CardSubtext>
           </StatusCard>
 
           <StatusCard>
@@ -860,11 +868,15 @@ const SellerDashboard = () => {
                     <ListingStats>
                       <ListingStat>
                         <div className="label">Available</div>
-                        <div className="value">{listing.amount.toLocaleString()} {listing.unit}</div>
+                        <div className="value">
+                          {listing.amount.toLocaleString()} {listing.unit}
+                        </div>
                       </ListingStat>
                       <ListingStat highlight>
                         <div className="label">Price</div>
-                        <div className="value">${listing.price}/{listing.unit.split(' ')[1] || 'unit'}</div>
+                        <div className="value">
+                          ${listing.price}/{listing.unit.split(' ')[1] || 'unit'}
+                        </div>
                       </ListingStat>
                       <ListingStat>
                         <div className="label">Views</div>
@@ -957,7 +969,9 @@ const SellerDashboard = () => {
           <Section style={{ marginTop: '24px' }}>
             <SectionHeader>
               <h2>My Devices</h2>
-              <ViewAllLink onClick={() => window.open('https://cloud.bluesignal.xyz/cloud/devices', '_blank')}>
+              <ViewAllLink
+                onClick={() => window.open('https://cloud.bluesignal.xyz/cloud/devices', '_blank')}
+              >
                 Manage in Cloud
               </ViewAllLink>
             </SectionHeader>
@@ -968,7 +982,11 @@ const SellerDashboard = () => {
                   <CardValue style={{ fontSize: '16px' }}>
                     {device.type || device.deviceType || 'WQM-1'}
                   </CardValue>
-                  <CardSubtext positive={device.installation?.status === 'active' || device.lifecycle === 'active'}>
+                  <CardSubtext
+                    positive={
+                      device.installation?.status === 'active' || device.lifecycle === 'active'
+                    }
+                  >
                     {device.installation?.status || device.lifecycle || 'Unknown'}
                   </CardSubtext>
                 </StatusCard>

@@ -109,7 +109,8 @@ const StatChange = styled.span`
   gap: 2px;
   font-size: 12px;
   font-weight: 500;
-  color: ${({ $positive, theme }) => $positive ? (theme.colors.positive || '#10B981') : (theme.colors.negative || '#EF4444')};
+  color: ${({ $positive, theme }) =>
+    $positive ? theme.colors.positive || '#10B981' : theme.colors.negative || '#EF4444'};
 `;
 
 const StatDivider = styled.span`
@@ -145,9 +146,11 @@ const CreditTab = styled.button`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13px;
   font-weight: 500;
-  color: ${({ $active, theme }) => $active ? (theme.colors.textOnPrimary || '#fff') : theme.colors.text};
-  background: ${({ $active, theme }) => $active ? theme.colors.primary : theme.colors.surface};
-  border: 1px solid ${({ $active, theme }) => $active ? theme.colors.primary : theme.colors.border};
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors.textOnPrimary || '#fff' : theme.colors.text};
+  background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.surface)};
+  border: 1px solid
+    ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: 9999px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -204,13 +207,12 @@ const OrderToggleBtn = styled.button`
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
-  color: ${({ $active, $isBuy, theme }) =>
-    $active ? '#fff' : theme.colors.text};
+  color: ${({ $active, $isBuy, theme }) => ($active ? '#fff' : theme.colors.text)};
   background: ${({ $active, $isBuy, theme }) =>
     $active
       ? $isBuy
-        ? (theme.colors.positive || '#10B981')
-        : (theme.colors.negative || '#EF4444')
+        ? theme.colors.positive || '#10B981'
+        : theme.colors.negative || '#EF4444'
       : theme.colors.background || '#f8f8f8'};
 
   &:hover {
@@ -305,7 +307,7 @@ const PlaceOrderBtn = styled.button`
   font-weight: 600;
   color: #fff;
   background: ${({ $isBuy, theme }) =>
-    $isBuy ? (theme.colors.positive || '#10B981') : (theme.colors.negative || '#EF4444')};
+    $isBuy ? theme.colors.positive || '#10B981' : theme.colors.negative || '#EF4444'};
   border: none;
   border-radius: ${({ theme }) => theme.radius.sm}px;
   cursor: pointer;
@@ -403,11 +405,17 @@ const PageBtn = styled.button`
   font-weight: 500;
   color: ${({ $active, theme }) => ($active ? theme.colors.textOnPrimary : theme.colors.text)};
   background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.surface)};
-  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
+  border: 1px solid
+    ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.sm}px;
   cursor: pointer;
-  &:hover { opacity: 0.85; }
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:hover {
+    opacity: 0.85;
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 `;
 
 const ErrorBanner = styled.div`
@@ -457,10 +465,14 @@ function VerificationBadge({ level }) {
     'sensor-verified': { variant: 'verified', label: 'Sensor Verified' },
     'third-party': { variant: 'positive', label: 'Third-Party' },
     'self-reported': { variant: 'warning', label: 'Pending' },
-    'rejected': { variant: 'negative', label: 'Rejected' },
+    rejected: { variant: 'negative', label: 'Rejected' },
   };
   const cfg = map[level] || map['self-reported'];
-  return <Badge variant={cfg.variant} size="sm" dot>{cfg.label}</Badge>;
+  return (
+    <Badge variant={cfg.variant} size="sm" dot>
+      {cfg.label}
+    </Badge>
+  );
 }
 
 function NutrientBadge({ type }) {
@@ -611,18 +623,10 @@ function OrderPanel() {
         <OrderPanelTitle>Place Order</OrderPanelTitle>
 
         <OrderToggle>
-          <OrderToggleBtn
-            $active={isBuy}
-            $isBuy={true}
-            onClick={() => setSide('buy')}
-          >
+          <OrderToggleBtn $active={isBuy} $isBuy={true} onClick={() => setSide('buy')}>
             Buy
           </OrderToggleBtn>
-          <OrderToggleBtn
-            $active={!isBuy}
-            $isBuy={false}
-            onClick={() => setSide('sell')}
-          >
+          <OrderToggleBtn $active={!isBuy} $isBuy={false} onClick={() => setSide('sell')}>
             Sell
           </OrderToggleBtn>
         </OrderToggle>
@@ -673,11 +677,7 @@ function OrderPanel() {
           <TotalValue>${total.toFixed(2)}</TotalValue>
         </OrderTotal>
 
-        <PlaceOrderBtn
-          $isBuy={isBuy}
-          onClick={handlePlaceOrder}
-          disabled={qty <= 0 || prc <= 0}
-        >
+        <PlaceOrderBtn $isBuy={isBuy} onClick={handlePlaceOrder} disabled={qty <= 0 || prc <= 0}>
           {isBuy ? 'Place Buy Order' : 'Place Sell Order'}
         </PlaceOrderBtn>
       </OrderPanelCard>
@@ -696,7 +696,9 @@ export function MarketplacePage() {
   const { STATES } = useAppContext();
   const user = STATES?.user;
 
-  useEffect(() => { document.title = 'Marketplace — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Marketplace — WaterQuality.Trading';
+  }, []);
 
   // ── Market stats ──────────────────────────────────────
   const [marketStats, setMarketStats] = useState(null);
@@ -715,7 +717,9 @@ export function MarketplacePage() {
       .finally(() => {
         if (!cancelled) setMarketStatsLoading(false);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const [searchInput, setSearchInput] = useState(searchParams.get('q') || '');
@@ -806,9 +810,12 @@ export function MarketplacePage() {
     setPage(1);
   }, []);
 
-  const handleRowClick = useCallback((row) => {
-    navigate(`/marketplace/listing/${row.id}`);
-  }, [navigate]);
+  const handleRowClick = useCallback(
+    (row) => {
+      navigate(`/marketplace/listing/${row.id}`);
+    },
+    [navigate]
+  );
 
   const totalPages = pagination?.totalPages || 1;
   const total = pagination?.total || listings.length;
@@ -892,7 +899,9 @@ export function MarketplacePage() {
       {error && (
         <ErrorBanner>
           <ErrorText>{error}</ErrorText>
-          <Button variant="outline" size="sm" onClick={() => refetch()}>Retry</Button>
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            Retry
+          </Button>
         </ErrorBanner>
       )}
 
@@ -908,14 +917,47 @@ export function MarketplacePage() {
         ) : listings.length === 0 && !error ? (
           search || filters.nutrientType || filters.verificationLevel ? (
             <EmptyState
-              icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>}
+              icon={
+                <svg
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+              }
               title="No listings found"
               description="Try adjusting your filters or search terms."
-              action={{ label: 'Clear Filters', onClick: () => { setSearchInput(''); setSearch(''); setFilters({ nutrientType: '', verificationLevel: '' }); setPage(1); } }}
+              action={{
+                label: 'Clear Filters',
+                onClick: () => {
+                  setSearchInput('');
+                  setSearch('');
+                  setFilters({ nutrientType: '', verificationLevel: '' });
+                  setPage(1);
+                },
+              }}
             />
           ) : (
             <EmptyState
-              icon={<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>}
+              icon={
+                <svg
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                  <path d="M3 6h18" />
+                  <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+              }
               title="No listings yet"
               description="Check back soon — verified water quality credits will appear here as they're listed."
             />
@@ -930,11 +972,7 @@ export function MarketplacePage() {
               compact
             />
             {totalPages > 1 && (
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-              />
+              <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
             )}
           </>
         ) : null}

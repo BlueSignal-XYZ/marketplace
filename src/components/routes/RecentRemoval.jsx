@@ -1,8 +1,8 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
-import styled, { keyframes } from "styled-components";
-import { Loading, Error } from "../elements";
-import { NUMBERS, formatCertificate } from "../../scripts/helpers";
-import {NPCCreditsAPI} from "../../scripts/back_door";
+import { useState, useEffect, lazy, Suspense } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { Loading, Error } from '../elements';
+import { NUMBERS, formatCertificate } from '../../scripts/helpers';
+import { NPCCreditsAPI } from '../../scripts/back_door';
 
 const fadeIn = keyframes`
   0% {
@@ -16,7 +16,7 @@ const fadeIn = keyframes`
 `;
 
 const HomeWrapper = styled.div`
-margin: 0 auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,7 +31,6 @@ margin: 0 auto;
 `;
 
 const FixedTitle = styled.div`
-
   position: fixed;
   width: 100%;
   max-height: 100px;
@@ -43,17 +42,17 @@ const FixedTitle = styled.div`
 `;
 
 const Title = styled.h1`
-font-size: 2rem;
-font-weight: bold;
-margin: auto;
-text-align: center;
-color: black;
-padding: 10px;
-letter-spacing: 2px;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+  color: black;
+  padding: 10px;
+  letter-spacing: 2px;
 `;
 
 const CertificateList = styled.ul`
-position: absolute;
+  position: absolute;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -67,14 +66,12 @@ position: absolute;
   top: 0;
 `;
 
-const LazyCertificateThumbnail = lazy(() =>
-  import("../elements/CertificateThumbnail")
-);
+const LazyCertificateThumbnail = lazy(() => import('../elements/CertificateThumbnail'));
 
 const RecentRemoval = () => {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -123,10 +120,7 @@ const RecentRemoval = () => {
       <CertificateList id="invisible-scroll">
         <Suspense fallback={<Loading />}>
           {certificates.map((certificate) => (
-            <LazyCertificateThumbnail
-              key={certificate.id}
-              certificate={certificate}
-            />
+            <LazyCertificateThumbnail key={certificate.id} certificate={certificate} />
           ))}
         </Suspense>
       </CertificateList>

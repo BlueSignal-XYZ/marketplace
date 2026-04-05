@@ -26,21 +26,16 @@ export interface Order {
 }
 
 export type OrderStatus =
-  | 'draft'      // Initial creation, can be edited
-  | 'quoted'     // Quote sent to customer
-  | 'approved'   // Customer approved quote
-  | 'paid'       // Payment received
+  | 'draft' // Initial creation, can be edited
+  | 'quoted' // Quote sent to customer
+  | 'approved' // Customer approved quote
+  | 'paid' // Payment received
   | 'processing' // Order being prepared
-  | 'shipped'    // Devices shipped
-  | 'fulfilled'  // All devices delivered and commissioned
+  | 'shipped' // Devices shipped
+  | 'fulfilled' // All devices delivered and commissioned
   | 'cancelled'; // Order cancelled
 
-export type PaymentStatus =
-  | 'pending'
-  | 'paid'
-  | 'partial'
-  | 'failed'
-  | 'refunded';
+export type PaymentStatus = 'pending' | 'paid' | 'partial' | 'failed' | 'refunded';
 
 export interface OrderLineItem {
   id: string;

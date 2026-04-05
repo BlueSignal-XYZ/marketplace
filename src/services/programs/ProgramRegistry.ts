@@ -41,9 +41,7 @@ export function getActivePrograms(): ProgramService[] {
 export function getProgramsByNutrient(
   nutrientType: 'nitrogen' | 'phosphorus' | 'combined'
 ): ProgramService[] {
-  return getActivePrograms().filter((p) =>
-    p.metadata.supportedNutrients.includes(nutrientType)
-  );
+  return getActivePrograms().filter((p) => p.metadata.supportedNutrients.includes(nutrientType));
 }
 
 // ── Register built-in programs ────────────────────────────

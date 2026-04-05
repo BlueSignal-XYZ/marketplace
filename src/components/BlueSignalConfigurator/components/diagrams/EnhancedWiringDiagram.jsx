@@ -1,7 +1,7 @@
 // EnhancedWiringDiagram - Realistic wiring diagram with wire runs and test points
-import React, { useState } from "react";
-import styled from "styled-components";
-import { WIRING_DIAGRAMS, WIRE_LEGEND } from "../../data";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { WIRING_DIAGRAMS, WIRE_LEGEND } from '../../data';
 
 const Container = styled.div`
   display: flex;
@@ -75,7 +75,7 @@ const LegendColor = styled.div`
   height: 12px;
   border-radius: 2px;
   background: ${({ color }) => color};
-  border: ${({ border }) => (border ? "1px solid #9ca3af" : "none")};
+  border: ${({ border }) => (border ? '1px solid #9ca3af' : 'none')};
 `;
 
 const LegendInfo = styled.div``;
@@ -197,7 +197,7 @@ const SafetyItem = styled.li`
   padding: 2px 0;
 
   &::before {
-    content: "•";
+    content: '•';
     margin-right: 8px;
   }
 `;
@@ -252,12 +252,12 @@ const WireColor = styled.span`
   gap: 6px;
 
   &::before {
-    content: "";
+    content: '';
     width: 12px;
     height: 4px;
     border-radius: 1px;
-    background: ${({ color }) => color || "#9ca3af"};
-    border: ${({ hasBorder }) => (hasBorder ? "1px solid #9ca3af" : "none")};
+    background: ${({ color }) => color || '#9ca3af'};
+    border: ${({ hasBorder }) => (hasBorder ? '1px solid #9ca3af' : 'none')};
   }
 `;
 
@@ -270,15 +270,13 @@ const Notes = styled.span`
 // Color mapping for wire types
 const getWireColor = (type, color) => {
   const colorMap = {
-    ac: "#1f2937",
-    power: "#dc2626",
-    ground: "#1f2937",
-    signal: "#22c55e",
-    data: "#3b82f6",
+    ac: '#1f2937',
+    power: '#dc2626',
+    ground: '#1f2937',
+    signal: '#22c55e',
+    data: '#3b82f6',
   };
-  return color?.toLowerCase().includes("white")
-    ? "#f3f4f6"
-    : colorMap[type] || "#9ca3af";
+  return color?.toLowerCase().includes('white') ? '#f3f4f6' : colorMap[type] || '#9ca3af';
 };
 
 const EnhancedWiringDiagram = ({ product }) => {
@@ -290,7 +288,7 @@ const EnhancedWiringDiagram = ({ product }) => {
       <Container>
         <DiagramCard>
           <DiagramTitle>Wiring Diagram</DiagramTitle>
-          <div style={{ textAlign: "center", padding: "32px", color: "#6b7280" }}>
+          <div style={{ textAlign: 'center', padding: '32px', color: '#6b7280' }}>
             Detailed wiring diagram not available for this product
           </div>
         </DiagramCard>
@@ -298,30 +296,21 @@ const EnhancedWiringDiagram = ({ product }) => {
     );
   }
 
-  const hasAC =
-    product.power.type === "AC" || diagram.buses.some((b) => b.id.includes("ac"));
+  const hasAC = product.power.type === 'AC' || diagram.buses.some((b) => b.id.includes('ac'));
 
   return (
     <Container>
       {/* Main Diagram */}
       <DiagramCard>
-        <DiagramTitle>{product.name} - {diagram.description}</DiagramTitle>
+        <DiagramTitle>
+          {product.name} - {diagram.description}
+        </DiagramTitle>
         <SvgWrapper>
           <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
             {/* Background grid */}
             <defs>
-              <pattern
-                id="grid"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 20 0 L 0 0 0 20"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  strokeWidth="0.5"
-                />
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e5e7eb" strokeWidth="0.5" />
               </pattern>
             </defs>
             <rect width="800" height="500" fill="url(#grid)" />
@@ -342,33 +331,30 @@ const EnhancedWiringDiagram = ({ product }) => {
                   AC ZONE BELOW (120V)
                 </text>
                 <text x="10" y="30" fontSize="11" fill="#374151" fontWeight="600">
-                  DC ZONE ({diagram.buses.find(b => b.id === '24v' || b.id === '12v')?.voltage || '12V'})
+                  DC ZONE (
+                  {diagram.buses.find((b) => b.id === '24v' || b.id === '12v')?.voltage || '12V'})
                 </text>
               </>
             )}
 
             {/* Voltage Buses */}
-            {diagram.buses.filter(b => b.rail).map((bus, idx) => (
-              <g key={bus.id}>
-                <line
-                  x1="50"
-                  y1={80 + idx * 30}
-                  x2="750"
-                  y2={80 + idx * 30}
-                  stroke={bus.color}
-                  strokeWidth={idx === 0 ? 4 : 3}
-                />
-                <text
-                  x="55"
-                  y={95 + idx * 30}
-                  fontSize="10"
-                  fill={bus.color}
-                  fontWeight="600"
-                >
-                  {bus.name} ({bus.voltage})
-                </text>
-              </g>
-            ))}
+            {diagram.buses
+              .filter((b) => b.rail)
+              .map((bus, idx) => (
+                <g key={bus.id}>
+                  <line
+                    x1="50"
+                    y1={80 + idx * 30}
+                    x2="750"
+                    y2={80 + idx * 30}
+                    stroke={bus.color}
+                    strokeWidth={idx === 0 ? 4 : 3}
+                  />
+                  <text x="55" y={95 + idx * 30} fontSize="10" fill={bus.color} fontWeight="600">
+                    {bus.name} ({bus.voltage})
+                  </text>
+                </g>
+              ))}
 
             {/* GND Bus at bottom */}
             <line x1="50" y1="460" x2="750" y2="460" stroke="#64748b" strokeWidth="4" />
@@ -383,26 +369,26 @@ const EnhancedWiringDiagram = ({ product }) => {
                 width="100"
                 height="70"
                 rx="6"
-                fill={product.power.type === "AC" ? "#fef3c7" : "#dcfce7"}
-                stroke={product.power.type === "AC" ? "#f59e0b" : "#16a34a"}
+                fill={product.power.type === 'AC' ? '#fef3c7' : '#dcfce7'}
+                stroke={product.power.type === 'AC' ? '#f59e0b' : '#16a34a'}
                 strokeWidth="2"
               />
               <text
                 x="50"
                 y="25"
                 textAnchor="middle"
-                fill={product.power.type === "AC" ? "#b45309" : "#166534"}
+                fill={product.power.type === 'AC' ? '#b45309' : '#166534'}
                 fontSize="10"
                 fontWeight="600"
               >
-                {product.power.type === "AC" ? "AC/DC PSU" : "SOLAR + MPPT"}
+                {product.power.type === 'AC' ? 'AC/DC PSU' : 'SOLAR + MPPT'}
               </text>
               {product.solar && (
                 <text x="50" y="45" textAnchor="middle" fill="#374151" fontSize="9">
                   {product.solar.watts}W Panel
                 </text>
               )}
-              {product.power.type === "AC" && (
+              {product.power.type === 'AC' && (
                 <text x="50" y="45" textAnchor="middle" fill="#374151" fontSize="9">
                   {product.power.voltage}
                 </text>
@@ -441,14 +427,7 @@ const EnhancedWiringDiagram = ({ product }) => {
 
             {/* Buck Converter */}
             <g transform="translate(320, 180)">
-              <rect
-                width="80"
-                height="50"
-                rx="6"
-                fill="#fef3c7"
-                stroke="#f59e0b"
-                strokeWidth="2"
-              />
+              <rect width="80" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" />
               <text x="40" y="20" textAnchor="middle" fill="#b45309" fontSize="10" fontWeight="600">
                 BUCK
               </text>
@@ -485,14 +464,7 @@ const EnhancedWiringDiagram = ({ product }) => {
 
             {/* LTE HAT */}
             <g transform="translate(570, 175)">
-              <rect
-                width="90"
-                height="60"
-                rx="6"
-                fill="#e0e7ff"
-                stroke="#6366f1"
-                strokeWidth="2"
-              />
+              <rect width="90" height="60" rx="6" fill="#e0e7ff" stroke="#6366f1" strokeWidth="2" />
               <text x="45" y="22" textAnchor="middle" fill="#4338ca" fontSize="10" fontWeight="600">
                 SIM7670G
               </text>
@@ -506,14 +478,7 @@ const EnhancedWiringDiagram = ({ product }) => {
 
             {/* ADC */}
             <g transform="translate(320, 280)">
-              <rect
-                width="70"
-                height="50"
-                rx="6"
-                fill="#f3e8ff"
-                stroke="#9333ea"
-                strokeWidth="2"
-              />
+              <rect width="70" height="50" rx="6" fill="#f3e8ff" stroke="#9333ea" strokeWidth="2" />
               <text x="35" y="20" textAnchor="middle" fill="#7e22ce" fontSize="10" fontWeight="600">
                 ADS1115
               </text>
@@ -554,14 +519,7 @@ const EnhancedWiringDiagram = ({ product }) => {
 
             {/* Relay Module */}
             <g transform="translate(430, 280)">
-              <rect
-                width="80"
-                height="60"
-                rx="6"
-                fill="#fee2e2"
-                stroke="#dc2626"
-                strokeWidth="2"
-              />
+              <rect width="80" height="60" rx="6" fill="#fee2e2" stroke="#dc2626" strokeWidth="2" />
               <text x="40" y="22" textAnchor="middle" fill="#b91c1c" fontSize="10" fontWeight="600">
                 RELAYS
               </text>
@@ -584,7 +542,14 @@ const EnhancedWiringDiagram = ({ product }) => {
                   stroke="#f59e0b"
                   strokeWidth="2"
                 />
-                <text x="50" y="22" textAnchor="middle" fill="#b45309" fontSize="10" fontWeight="600">
+                <text
+                  x="50"
+                  y="22"
+                  textAnchor="middle"
+                  fill="#b45309"
+                  fontSize="10"
+                  fontWeight="600"
+                >
                   ULTRASONIC
                 </text>
                 <text x="50" y="40" textAnchor="middle" fill="#374151" fontSize="9">
@@ -603,32 +568,12 @@ const EnhancedWiringDiagram = ({ product }) => {
 
             {/* Wire connections (simplified) */}
             {/* Power connections */}
-            <path
-              d="M 170 200 L 200 200"
-              stroke="#dc2626"
-              strokeWidth="2"
-              fill="none"
-            />
+            <path d="M 170 200 L 200 200" stroke="#dc2626" strokeWidth="2" fill="none" />
             {product.battery && (
-              <path
-                d="M 290 200 L 320 200"
-                stroke="#dc2626"
-                strokeWidth="2"
-                fill="none"
-              />
+              <path d="M 290 200 L 320 200" stroke="#dc2626" strokeWidth="2" fill="none" />
             )}
-            <path
-              d="M 400 200 L 430 200"
-              stroke="#22c55e"
-              strokeWidth="2"
-              fill="none"
-            />
-            <path
-              d="M 540 210 L 570 210"
-              stroke="#22c55e"
-              strokeWidth="2"
-              fill="none"
-            />
+            <path d="M 400 200 L 430 200" stroke="#22c55e" strokeWidth="2" fill="none" />
+            <path d="M 540 210 L 570 210" stroke="#22c55e" strokeWidth="2" fill="none" />
 
             {/* I2C connections */}
             <path
@@ -647,12 +592,7 @@ const EnhancedWiringDiagram = ({ product }) => {
             />
 
             {/* GPIO to Relays */}
-            <path
-              d="M 495 250 L 495 280"
-              stroke="#22c55e"
-              strokeWidth="1.5"
-              fill="none"
-            />
+            <path d="M 495 250 L 495 280" stroke="#22c55e" strokeWidth="1.5" fill="none" />
 
             {/* Legend */}
             <g transform="translate(50, 420)">
@@ -754,21 +694,23 @@ const EnhancedWiringDiagram = ({ product }) => {
                     <Td>
                       <WireColor
                         color={getWireColor(run.wire.type, run.wire.color)}
-                        hasBorder={run.wire.color?.toLowerCase().includes("white")}
+                        hasBorder={run.wire.color?.toLowerCase().includes('white')}
                       >
                         {run.wire.color} {run.wire.gauge}
                       </WireColor>
                     </Td>
                     <Td>{run.length}</Td>
                     <Td>
-                      <Notes>{run.notes || "—"}</Notes>
+                      <Notes>{run.notes || '—'}</Notes>
                     </Td>
                   </tr>
                 ))}
               </tbody>
             </Table>
             {diagram.runs.length > 15 && (
-              <div style={{ padding: "12px", textAlign: "center", color: "#6b7280", fontSize: "12px" }}>
+              <div
+                style={{ padding: '12px', textAlign: 'center', color: '#6b7280', fontSize: '12px' }}
+              >
                 Showing first 15 of {diagram.runs.length} wire runs
               </div>
             )}

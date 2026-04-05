@@ -1,51 +1,51 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'vitest';
 
 describe('Firebase Configuration', () => {
   it('should have correct WaterQuality.Trading project ID', () => {
-    const expectedProjectId = 'waterquality-trading'
-    const expectedAuthDomain = 'waterquality-trading.firebaseapp.com'
+    const expectedProjectId = 'waterquality-trading';
+    const expectedAuthDomain = 'waterquality-trading.firebaseapp.com';
 
-    expect(expectedProjectId).toBe('waterquality-trading')
-    expect(expectedAuthDomain).toBe('waterquality-trading.firebaseapp.com')
-  })
+    expect(expectedProjectId).toBe('waterquality-trading');
+    expect(expectedAuthDomain).toBe('waterquality-trading.firebaseapp.com');
+  });
 
   it('should have valid Firebase API key format', () => {
     // Use a mock API key for testing - real key should come from environment variables
-    const mockApiKey = 'AIzaMOCK_TEST_KEY_NOT_REAL_123456789'
+    const mockApiKey = 'AIzaMOCK_TEST_KEY_NOT_REAL_123456789';
 
     // Firebase API keys start with "AIza"
-    expect(mockApiKey).toMatch(/^AIza/)
+    expect(mockApiKey).toMatch(/^AIza/);
     // Actual Firebase API keys are 39 characters
-    expect(39).toBeGreaterThan(0)
-  })
+    expect(39).toBeGreaterThan(0);
+  });
 
   it('should have valid measurement ID format', () => {
-    const measurementId = 'G-ECMFLV2Y6B'
+    const measurementId = 'G-ECMFLV2Y6B';
 
     // Google Analytics measurement IDs start with "G-"
-    expect(measurementId).toMatch(/^G-/)
-  })
+    expect(measurementId).toMatch(/^G-/);
+  });
 
   it('should have valid app ID format', () => {
-    const appId = '1:1006831487182:web:a58405168a345d8728689f'
+    const appId = '1:1006831487182:web:a58405168a345d8728689f';
 
     // Firebase app IDs follow the pattern "1:messagingSenderId:platform:hash"
-    expect(appId).toMatch(/^1:\d+:web:/)
-  })
+    expect(appId).toMatch(/^1:\d+:web:/);
+  });
 
   it('should have matching messaging sender ID in app ID', () => {
-    const messagingSenderId = '1006831487182'
-    const appId = '1:1006831487182:web:a58405168a345d8728689f'
+    const messagingSenderId = '1006831487182';
+    const appId = '1:1006831487182:web:a58405168a345d8728689f';
 
-    expect(appId).toContain(messagingSenderId)
-  })
+    expect(appId).toContain(messagingSenderId);
+  });
 
   it('should have correct storage bucket format', () => {
-    const storageBucket = 'waterquality-trading.firebasestorage.app'
+    const storageBucket = 'waterquality-trading.firebasestorage.app';
 
-    expect(storageBucket).toMatch(/^waterquality-trading\.firebasestorage\.app$/)
-  })
-})
+    expect(storageBucket).toMatch(/^waterquality-trading\.firebasestorage\.app$/);
+  });
+});
 
 describe('Firebase Security Recommendations', () => {
   it('should document that API keys should be moved to environment variables', () => {
@@ -53,11 +53,11 @@ describe('Firebase Security Recommendations', () => {
       current: 'API keys are hardcoded in firebase.js',
       recommended: 'Use VITE_FIREBASE_API_KEY environment variable',
       reason: 'Prevent accidental exposure in version control',
-    }
+    };
 
-    expect(recommendation.current).toBeTruthy()
-    expect(recommendation.recommended).toContain('VITE_FIREBASE_API_KEY')
-  })
+    expect(recommendation.current).toBeTruthy();
+    expect(recommendation.recommended).toContain('VITE_FIREBASE_API_KEY');
+  });
 
   it('should validate environment variable names for Vite', () => {
     const validViteEnvVars = [
@@ -68,11 +68,11 @@ describe('Firebase Security Recommendations', () => {
       'VITE_FIREBASE_MESSAGING_SENDER_ID',
       'VITE_FIREBASE_APP_ID',
       'VITE_FIREBASE_MEASUREMENT_ID',
-    ]
+    ];
 
     // All Vite environment variables must start with VITE_
     validViteEnvVars.forEach((envVar) => {
-      expect(envVar).toMatch(/^VITE_/)
-    })
-  })
-})
+      expect(envVar).toMatch(/^VITE_/);
+    });
+  });
+});

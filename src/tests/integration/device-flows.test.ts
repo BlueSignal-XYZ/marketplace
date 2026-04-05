@@ -12,13 +12,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import {
-  createTestUser,
-  writeUserProfile,
-  apiRequest,
-  clearAll,
-  getAdminDb,
-} from './setup';
+import { createTestUser, writeUserProfile, apiRequest, clearAll, getAdminDb } from './setup';
 
 describe('Device Registration → Readings → Dashboard (integration)', () => {
   let installer: { uid: string; token: string };
@@ -234,12 +228,7 @@ describe('Device Registration → Readings → Dashboard (integration)', () => {
     });
 
     // 1. Acknowledge alert
-    const ackRes = await apiRequest(
-      'POST',
-      '/alerts/acknowledge',
-      { alertId },
-      installer.token
-    );
+    const ackRes = await apiRequest('POST', '/alerts/acknowledge', { alertId }, installer.token);
     expect(ackRes.status).toBe(200);
 
     // Verify status changed
@@ -259,12 +248,7 @@ describe('Device Registration → Readings → Dashboard (integration)', () => {
     expect(alertSnapshot.val()).toBe('resolved');
 
     // 3. Reopen alert
-    const reopenRes = await apiRequest(
-      'POST',
-      '/alerts/reopen',
-      { alertId },
-      installer.token
-    );
+    const reopenRes = await apiRequest('POST', '/alerts/reopen', { alertId }, installer.token);
     expect(reopenRes.status).toBe(200);
 
     alertSnapshot = await db.ref(`alerts/${alertId}/status`).once('value');

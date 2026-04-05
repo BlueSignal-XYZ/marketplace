@@ -70,8 +70,5 @@ export interface ProgramService {
   getBaseline(nutrientType: 'nitrogen' | 'phosphorus'): number;
 
   /** Get trading ratio (credits per kg removed) */
-  getTradingRatio(
-    nutrientType: 'nitrogen' | 'phosphorus',
-    verificationLevel: string
-  ): number;
+  getTradingRatio(nutrientType: 'nitrogen' | 'phosphorus', verificationLevel: string): number;
 }

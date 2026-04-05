@@ -30,17 +30,17 @@ export const isLandingMode = () => {
   const params = new URLSearchParams(window.location.search);
 
   // Explicitly exclude cloud subdomain
-  if (host === "cloud.bluesignal.xyz" || host.endsWith(".cloud.bluesignal.xyz")) {
+  if (host === 'cloud.bluesignal.xyz' || host.endsWith('.cloud.bluesignal.xyz')) {
     return false;
   }
 
   return (
-    host === "bluesignal.xyz" ||
-    host === "www.bluesignal.xyz" ||
-    host === "sales.bluesignal.xyz" ||
-    host.endsWith(".sales.bluesignal.xyz") ||
-    host === "sales-bluesignal.web.app" ||
-    params.get("app") === "landing"
+    host === 'bluesignal.xyz' ||
+    host === 'www.bluesignal.xyz' ||
+    host === 'sales.bluesignal.xyz' ||
+    host.endsWith('.sales.bluesignal.xyz') ||
+    host === 'sales-bluesignal.web.app' ||
+    params.get('app') === 'landing'
   );
 };
 
@@ -62,10 +62,10 @@ export const isCloudMode = () => {
   const params = new URLSearchParams(window.location.search);
 
   return (
-    host === "cloud.bluesignal.xyz" ||
-    host.endsWith(".cloud.bluesignal.xyz") ||
-    host === "cloud-bluesignal.web.app" ||
-    params.get("app") === "cloud"
+    host === 'cloud.bluesignal.xyz' ||
+    host.endsWith('.cloud.bluesignal.xyz') ||
+    host === 'cloud-bluesignal.web.app' ||
+    params.get('app') === 'cloud'
   );
 };
 
@@ -90,7 +90,7 @@ export const isMarketplaceMode = () => {
  * @returns {'cloud' | 'marketplace' | 'landing'} - The current mode
  */
 export const getAppMode = () => {
-  if (isLandingMode()) return "landing";
-  if (isCloudMode()) return "cloud";
-  return "marketplace";
+  if (isLandingMode()) return 'landing';
+  if (isCloudMode()) return 'cloud';
+  return 'marketplace';
 };

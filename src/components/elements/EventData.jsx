@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../data/styles";
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { colors } from '../../data/styles';
 import { motion } from 'framer-motion';
-import { formatCertificateID } from "../../scripts/helpers";
+import { formatCertificateID } from '../../scripts/helpers';
 
 const fadeIn = keyframes`
   from {
@@ -73,7 +73,7 @@ const Row = styled.div`
 `;
 
 const Event = styled(Row)`
-background: ${colors.accent};
+  background: ${colors.accent};
   border-radius: 0;
   color: white;
   cursor: pointer;
@@ -94,10 +94,9 @@ const Value = styled.span`
 
 const ArgsContainer = styled.div`
   overflow: hidden;
-  height: ${({ expanded }) => (expanded ? "auto" : "0")};
-  animation: ${({ expanded }) => (expanded ? slideDown : slideUp)} 0.5s
-    ease-in-out;
-  opacity: ${({ expanded }) => (expanded ? "1" : "0")};
+  height: ${({ expanded }) => (expanded ? 'auto' : '0')};
+  animation: ${({ expanded }) => (expanded ? slideDown : slideUp)} 0.5s ease-in-out;
+  opacity: ${({ expanded }) => (expanded ? '1' : '0')};
 `;
 
 const ViewReceiptsButton = styled.button`
@@ -143,7 +142,7 @@ function EventData({ event }) {
 
   const handleViewCertificate = () => {
     const txURL = `/certificate?id=${formattedArgs[0].value}`;
-    window.open(txURL, "_blank");
+    window.open(txURL, '_blank');
   };
 
   const handleExpand = () => {
@@ -151,21 +150,21 @@ function EventData({ event }) {
   };
 
   const containerVariants = {
-    expanded: { height: "auto", opacity: 1 },
-    collapsed: { height: "0", opacity: 0 }
-  }
+    expanded: { height: 'auto', opacity: 1 },
+    collapsed: { height: '0', opacity: 0 },
+  };
 
   return (
     <Container
       initial={{ opacity: 0, scale: 1 }}
       animate={{ opacity: 1, scale: [1, 1.05, 1] }}
-      transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+      transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
     >
       <Event onClick={handleExpand}>
         <Value>
-          {event.event.replace(/([a-z])([A-Z])/g, "$1 $2")} | {event.timestamp}
+          {event.event.replace(/([a-z])([A-Z])/g, '$1 $2')} | {event.timestamp}
         </Value>
-        {event.event === "CertificateCreated" && (
+        {event.event === 'CertificateCreated' && (
           <>
             <ViewReceiptsButton onClick={handleViewCertificate}>
               View Certificate
@@ -175,14 +174,16 @@ function EventData({ event }) {
         )}
       </Event>
       <motion.div
-        animate={expanded ? "expanded" : "collapsed"}
+        animate={expanded ? 'expanded' : 'collapsed'}
         variants={containerVariants}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
       >
         {formattedArgs.map((arg, index) => (
           <Row key={index}>
             <Key>{arg.key}: </Key>
-            <Value>{arg.key === "CERTIFICATEID" ? formatCertificateID(arg.value) : arg.value}</Value>
+            <Value>
+              {arg.key === 'CERTIFICATEID' ? formatCertificateID(arg.value) : arg.value}
+            </Value>
           </Row>
         ))}
       </motion.div>
@@ -207,7 +208,7 @@ function formatArgs(args) {
 }
 
 function formatValue(value) {
-  if (value == null) return "—";
+  if (value == null) return '—';
   return String(value).toUpperCase();
 }
 

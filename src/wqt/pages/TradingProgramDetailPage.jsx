@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TradingProgramAPI, EnrollmentAPI, DeviceAPI } from '../../scripts/back_door';
@@ -54,7 +54,11 @@ const Section = styled.div`
 `;
 
 const IncentiveCard = styled.div`
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.success50} 0%, ${({ theme }) => theme.colors.success100} 100%);
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.success50} 0%,
+    ${({ theme }) => theme.colors.success100} 100%
+  );
   border: 1px solid ${({ theme }) => theme.colors.success200};
   border-radius: ${({ theme }) => theme.borderRadius.default};
   padding: ${({ theme }) => theme.spacing.card};
@@ -120,14 +124,17 @@ const DeviceItem = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.lg};
-  background: ${({ theme, $selected }) => $selected ? theme.colors.success50 : theme.colors.bgAlt};
-  border: 2px solid ${({ theme, $selected }) => $selected ? theme.colors.success500 : 'transparent'};
+  background: ${({ theme, $selected }) =>
+    $selected ? theme.colors.success50 : theme.colors.bgAlt};
+  border: 2px solid
+    ${({ theme, $selected }) => ($selected ? theme.colors.success500 : 'transparent')};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   cursor: pointer;
   transition: ${({ theme }) => theme.transitions.default};
 
   &:hover {
-    background: ${({ theme, $selected }) => $selected ? theme.colors.success50 : theme.colors.ui100};
+    background: ${({ theme, $selected }) =>
+      $selected ? theme.colors.success50 : theme.colors.ui100};
   }
 `;
 
@@ -147,7 +154,7 @@ const CheckMark = styled.div`
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: ${({ theme, $checked }) => $checked ? theme.colors.success500 : theme.colors.ui200};
+  background: ${({ theme, $checked }) => ($checked ? theme.colors.success500 : theme.colors.ui200)};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,7 +183,9 @@ const EmptyText = styled.div`
 /* ---- component ---- */
 
 export function TradingProgramDetailPage() {
-  useEffect(() => { document.title = 'Program Details — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Program Details — WaterQuality.Trading';
+  }, []);
   const { programId } = useParams();
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
@@ -206,7 +215,9 @@ export function TradingProgramDetailPage() {
           setLoading(false);
           return;
         }
-      } catch { /* Fall through */ }
+      } catch {
+        /* Fall through */
+      }
 
       const programRef = ref(db, `tradingPrograms/${programId}`);
       const snapshot = await get(programRef);
@@ -232,10 +243,8 @@ export function TradingProgramDetailPage() {
   };
 
   const toggleDevice = (deviceId) => {
-    setSelectedDevices(prev =>
-      prev.includes(deviceId)
-        ? prev.filter(id => id !== deviceId)
-        : [...prev, deviceId]
+    setSelectedDevices((prev) =>
+      prev.includes(deviceId) ? prev.filter((id) => id !== deviceId) : [...prev, deviceId]
     );
   };
 
@@ -269,7 +278,10 @@ export function TradingProgramDetailPage() {
       }
 
       setEnrolled(true);
-      ACTIONS?.logNotification?.('success', `Successfully enrolled ${selectedDevices.length} device(s) in ${program.name}`);
+      ACTIONS?.logNotification?.(
+        'success',
+        `Successfully enrolled ${selectedDevices.length} device(s) in ${program.name}`
+      );
     } catch (err) {
       console.error('Enrollment failed:', err);
       ACTIONS?.logNotification?.('error', 'Failed to enroll devices. Please try again.');
@@ -282,7 +294,9 @@ export function TradingProgramDetailPage() {
     return (
       <PageShell>
         <ContentWrapper $maxWidth="900px">
-          <LoadingContainer><Spinner /></LoadingContainer>
+          <LoadingContainer>
+            <Spinner />
+          </LoadingContainer>
         </ContentWrapper>
       </PageShell>
     );
@@ -305,15 +319,14 @@ export function TradingProgramDetailPage() {
   return (
     <PageShell>
       <ContentWrapper $maxWidth="900px">
-        <BackButton onClick={() => navigate('/programs')}>
-          ← Back to Programs
-        </BackButton>
+        <BackButton onClick={() => navigate('/programs')}>← Back to Programs</BackButton>
 
         {error && <ErrorBanner>{error}</ErrorBanner>}
 
         {enrolled && (
           <SuccessBanner>
-            Your devices have been enrolled in this program. Credits will begin generating once enrollment is activated.
+            Your devices have been enrolled in this program. Credits will begin generating once
+            enrollment is activated.
           </SuccessBanner>
         )}
 
@@ -332,7 +345,8 @@ export function TradingProgramDetailPage() {
                 ${program.incentives.ratePerUnit}/{program.incentives.unit || 'unit'}
               </IncentiveRate>
               <IncentiveDescription>
-                {program.incentives.description || 'Earn credits for qualifying water quality improvements'}
+                {program.incentives.description ||
+                  'Earn credits for qualifying water quality improvements'}
               </IncentiveDescription>
             </IncentiveCard>
           )}
@@ -386,21 +400,27 @@ export function TradingProgramDetailPage() {
               </WarningBanner>
             ) : enrolled ? (
               <EmptyText>
-                <p>Your selected devices are now enrolled. Visit the BlueSignal Cloud dashboard to monitor credit generation.</p>
+                <p>
+                  Your selected devices are now enrolled. Visit the BlueSignal Cloud dashboard to
+                  monitor credit generation.
+                </p>
               </EmptyText>
             ) : devices.length === 0 ? (
               <EmptyText>
                 <h3>No Devices Found</h3>
-                <p>Commission a device in BlueSignal Cloud first, then come back to enroll it in this program.</p>
+                <p>
+                  Commission a device in BlueSignal Cloud first, then come back to enroll it in this
+                  program.
+                </p>
               </EmptyText>
             ) : (
               <>
                 <SelectHint>
-                  Select the devices you want to enroll in this trading program.
-                  Each device will begin generating credits once activated.
+                  Select the devices you want to enroll in this trading program. Each device will
+                  begin generating credits once activated.
                 </SelectHint>
                 <DeviceList>
-                  {devices.map(device => {
+                  {devices.map((device) => {
                     const id = device.id || device.serialNumber;
                     return (
                       <DeviceItem

@@ -1,5 +1,5 @@
 // /src/components/shared/button/Button.jsx
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 // Base button with enhanced styling
 const Button = styled.button`
@@ -9,10 +9,10 @@ const Button = styled.button`
   justify-content: center;
   gap: 8px;
   padding: 0px 24px;
-  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || '12px'};
   font-size: 14px;
   font-weight: 600;
-  width: ${(props) => (props.fullWidth ? "100%" : "auto")};
+  width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: none;
   position: relative;
@@ -24,7 +24,7 @@ const Button = styled.button`
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary400 || "#38BDBE"};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary400 || '#38BDBE'};
     outline-offset: 2px;
   }
 
@@ -39,8 +39,7 @@ const Button = styled.button`
 // Primary button with gradient and glow effect
 export const ButtonPrimary = styled(Button)`
   background: ${({ theme }) =>
-    theme.gradients?.primaryLight ||
-    "linear-gradient(135deg, #38BDBE 0%, #1D7072 100%)"};
+    theme.gradients?.primaryLight || 'linear-gradient(135deg, #38BDBE 0%, #1D7072 100%)'};
   color: white;
   box-shadow:
     0 2px 8px rgba(29, 112, 114, 0.25),
@@ -49,24 +48,20 @@ export const ButtonPrimary = styled(Button)`
 
   /* Shine overlay */
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 50%;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
     pointer-events: none;
     border-radius: inherit;
   }
 
   /* Ripple effect base */
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -75,7 +70,10 @@ export const ButtonPrimary = styled(Button)`
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.4s ease-out;
+    transition:
+      width 0.4s ease-out,
+      height 0.4s ease-out,
+      opacity 0.4s ease-out;
     opacity: 0;
     pointer-events: none;
   }
@@ -103,12 +101,13 @@ export const ButtonPrimary = styled(Button)`
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
-    color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
     box-shadow: none;
     cursor: not-allowed;
 
-    &::before, &::after {
+    &::before,
+    &::after {
       display: none;
     }
   }
@@ -117,52 +116,52 @@ export const ButtonPrimary = styled(Button)`
 // Secondary button with refined border
 export const ButtonSecondary = styled(Button)`
   background: white;
-  color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
-  border: 1.5px solid ${({ theme }) => theme.colors?.primary300 || "#5DC9CC"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#196061'};
+  border: 1.5px solid ${({ theme }) => theme.colors?.primary300 || '#5DC9CC'};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.primary50 || "#E6F7F8"};
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#38BDBE"};
+    background: ${({ theme }) => theme.colors?.primary50 || '#E6F7F8'};
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#38BDBE'};
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(29, 112, 114, 0.15);
   }
 
   &:active:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.primary100 || "#C0EAEB"};
+    background: ${({ theme }) => theme.colors?.primary100 || '#C0EAEB'};
     transform: translateY(0);
   }
 
   &:disabled {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9CA3AF"};
-    border-color: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
-    background: ${({ theme }) => theme.colors?.ui50 || "#FAFAFA"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9CA3AF'};
+    border-color: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
+    background: ${({ theme }) => theme.colors?.ui50 || '#FAFAFA'};
   }
 `;
 
 // Ghost button - minimal styling
 export const ButtonGhost = styled(Button)`
   background: transparent;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   border: none;
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
-    color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#F4F5F7'};
+    color: ${({ theme }) => theme.colors?.ui900 || '#111827'};
   }
 
   &:active:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
   }
 
   &:disabled {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9CA3AF"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9CA3AF'};
   }
 `;
 
 // Text link button
 export const ButtonLink = styled(Button)`
-  color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#196061'};
   padding: 0px;
   background: transparent;
   box-shadow: none;
@@ -170,12 +169,12 @@ export const ButtonLink = styled(Button)`
   font-weight: 500;
 
   &:hover:not(:disabled) {
-    color: ${({ theme }) => theme.colors?.primary700 || "#0F393A"};
+    color: ${({ theme }) => theme.colors?.primary700 || '#0F393A'};
     text-decoration: underline;
   }
 
   svg {
-    color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
     font-size: 12px;
   }
 `;
@@ -185,20 +184,20 @@ export const ButtonIcon = styled(Button)`
   height: 44px;
   width: 44px;
   font-size: 18px;
-  border-radius: ${({ theme }) => theme.borderRadius?.default || "12px"};
-  background: ${({ theme }) => theme.colors?.ui50 || "#FAFAFA"};
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
+  border-radius: ${({ theme }) => theme.borderRadius?.default || '12px'};
+  background: ${({ theme }) => theme.colors?.ui50 || '#FAFAFA'};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
   padding: 0px;
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
-    border-color: ${({ theme }) => theme.colors?.ui300 || "#D1D5DB"};
-    color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#F4F5F7'};
+    border-color: ${({ theme }) => theme.colors?.ui300 || '#D1D5DB'};
+    color: ${({ theme }) => theme.colors?.ui900 || '#111827'};
   }
 
   &:active:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
     transform: scale(0.95);
   }
 
@@ -210,22 +209,18 @@ export const ButtonIcon = styled(Button)`
 
 // Danger button
 export const ButtonDanger = styled(Button)`
-  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0) 50%
-    );
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
     pointer-events: none;
   }
 
@@ -240,30 +235,26 @@ export const ButtonDanger = styled(Button)`
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
-    color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
     box-shadow: none;
   }
 `;
 
 // Success button
 export const ButtonSuccess = styled(Button)`
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0) 50%
-    );
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 50%);
     pointer-events: none;
   }
 
@@ -277,8 +268,8 @@ export const ButtonSuccess = styled(Button)`
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
-    color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
     box-shadow: none;
   }
 `;
@@ -286,23 +277,23 @@ export const ButtonSuccess = styled(Button)`
 // Outlined button
 export const ButtonOutlined = styled(Button)`
   background: transparent;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-  border: 1.5px solid ${({ theme }) => theme.colors?.ui300 || "#D1D5DB"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
+  border: 1.5px solid ${({ theme }) => theme.colors?.ui300 || '#D1D5DB'};
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui50 || "#FAFAFA"};
-    border-color: ${({ theme }) => theme.colors?.ui400 || "#9CA3AF"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#FAFAFA'};
+    border-color: ${({ theme }) => theme.colors?.ui400 || '#9CA3AF'};
     transform: translateY(-1px);
   }
 
   &:active:not(:disabled) {
-    background: ${({ theme }) => theme.colors?.ui100 || "#F4F5F7"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#F4F5F7'};
     transform: translateY(0);
   }
 
   &:disabled {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9CA3AF"};
-    border-color: ${({ theme }) => theme.colors?.ui200 || "#E5E7EB"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9CA3AF'};
+    border-color: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
   }
 `;
 

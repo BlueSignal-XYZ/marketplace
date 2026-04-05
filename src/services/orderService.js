@@ -40,12 +40,12 @@ const calculateShipping = (lineItems) => {
   const itemCount = lineItems.reduce((sum, item) => sum + item.quantity, 0);
   const baseShipping = 0; // Free shipping for now
   const perItemShipping = 0;
-  return baseShipping + (itemCount * perItemShipping);
+  return baseShipping + itemCount * perItemShipping;
 };
 
 // Get product info from SKU
 const getProductBySku = (sku) => {
-  return Object.values(PRODUCTS).find(p => p.sku === sku) || null;
+  return Object.values(PRODUCTS).find((p) => p.sku === sku) || null;
 };
 
 /**
@@ -57,7 +57,7 @@ export const createQuote = async (quoteData, createdBy) => {
     const now = new Date().toISOString();
 
     // Build line items with product details
-    const lineItems = quoteData.lineItems.map(item => {
+    const lineItems = quoteData.lineItems.map((item) => {
       const product = getProductBySku(item.sku);
       const unitPrice = item.unitPrice ?? product?.price ?? 0;
       const totalPrice = unitPrice * item.quantity;
@@ -108,7 +108,7 @@ export const updateQuote = async (orderId, updates) => {
   try {
     // Recalculate totals if line items changed
     if (updates.lineItems) {
-      const lineItems = updates.lineItems.map(item => {
+      const lineItems = updates.lineItems.map((item) => {
         const product = getProductBySku(item.sku);
         const unitPrice = item.unitPrice ?? product?.price ?? 0;
         const totalPrice = unitPrice * item.quantity;
@@ -244,8 +244,8 @@ export const allocateDevicesToOrder = async (orderId, deviceAssignments) => {
     if (!order) throw new Error('Order not found');
 
     // Update line items with device IDs
-    const updatedLineItems = order.lineItems.map(item => {
-      const assignment = deviceAssignments.find(a => a.lineItemId === item.id);
+    const updatedLineItems = order.lineItems.map((item) => {
+      const assignment = deviceAssignments.find((a) => a.lineItemId === item.id);
       if (assignment) {
         return { ...item, deviceIds: assignment.deviceIds };
       }
@@ -260,7 +260,7 @@ export const allocateDevicesToOrder = async (orderId, deviceAssignments) => {
     });
 
     // Update device lifecycle for each allocated device
-    const allDeviceIds = deviceAssignments.flatMap(a => a.deviceIds);
+    const allDeviceIds = deviceAssignments.flatMap((a) => a.deviceIds);
     for (const deviceId of allDeviceIds) {
       await DeviceAPI.updateLifecycle(deviceId, 'allocated', {
         orderId,
@@ -299,7 +299,7 @@ export const shipOrder = async (orderId, shippingDetails = {}) => {
     });
 
     // Update all allocated devices to shipped
-    const deviceIds = order.lineItems.flatMap(item => item.deviceIds || []);
+    const deviceIds = order.lineItems.flatMap((item) => item.deviceIds || []);
     for (const deviceId of deviceIds) {
       await DeviceAPI.updateLifecycle(deviceId, 'shipped', {
         shippedAt: now,
@@ -355,7 +355,7 @@ export const cancelOrder = async (orderId, reason) => {
     if (!order) throw new Error('Order not found');
 
     // Release any allocated devices back to inventory
-    const deviceIds = order.lineItems.flatMap(item => item.deviceIds || []);
+    const deviceIds = order.lineItems.flatMap((item) => item.deviceIds || []);
     for (const deviceId of deviceIds) {
       await DeviceAPI.updateLifecycle(deviceId, 'inventory', {
         deallocatedAt: new Date().toISOString(),
@@ -427,7 +427,9 @@ export const checkOrderFulfillmentStatus = async (orderId) => {
       return { fulfilled: false, pending: 0, commissioned: 0 };
     }
 
-    const commissioned = devices.filter(d => d.lifecycle === 'commissioned' || d.lifecycle === 'active');
+    const commissioned = devices.filter(
+      (d) => d.lifecycle === 'commissioned' || d.lifecycle === 'active'
+    );
     const pending = devices.length - commissioned.length;
 
     return {

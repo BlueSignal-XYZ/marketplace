@@ -30,15 +30,15 @@ export const cloudColors = {
 } as const;
 
 export const cloudTypography = {
-  display:   { size: 48, lineHeight: 56, tracking: -0.02, weight: 600 },
-  h1:        { size: 36, lineHeight: 44, tracking: -0.02, weight: 600 },
-  h2:        { size: 28, lineHeight: 36, tracking: -0.01, weight: 600 },
-  h3:        { size: 22, lineHeight: 28, tracking: 0,     weight: 600 },
-  h4:        { size: 18, lineHeight: 24, tracking: 0,     weight: 600 },
-  body:      { size: 16, lineHeight: 24, tracking: 0,     weight: 400 },
-  bodySmall: { size: 14, lineHeight: 20, tracking: 0,     weight: 400 },
-  caption:   { size: 12, lineHeight: 16, tracking: 0.02,  weight: 500 },
-  label:     { size: 14, lineHeight: 16, tracking: 0.01,  weight: 500 },
+  display: { size: 48, lineHeight: 56, tracking: -0.02, weight: 600 },
+  h1: { size: 36, lineHeight: 44, tracking: -0.02, weight: 600 },
+  h2: { size: 28, lineHeight: 36, tracking: -0.01, weight: 600 },
+  h3: { size: 22, lineHeight: 28, tracking: 0, weight: 600 },
+  h4: { size: 18, lineHeight: 24, tracking: 0, weight: 600 },
+  body: { size: 16, lineHeight: 24, tracking: 0, weight: 400 },
+  bodySmall: { size: 14, lineHeight: 20, tracking: 0, weight: 400 },
+  caption: { size: 12, lineHeight: 16, tracking: 0.02, weight: 500 },
+  label: { size: 14, lineHeight: 16, tracking: 0.01, weight: 500 },
 } as const;
 
 // ── Type exports ──────────────────────────────────────────

@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "styled-components";
-import { motion } from "framer-motion";
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import {
   FaUpload,
   FaFileVideo,
@@ -12,8 +11,8 @@ import {
   FaWifi,
   FaServer,
   FaCloudUploadAlt,
-} from "react-icons/fa";
-import { ButtonPrimary } from "../button/Button";
+} from 'react-icons/fa';
+import { ButtonPrimary } from '../button/Button';
 
 const Container = styled(motion.div)`
   display: flex;
@@ -22,7 +21,7 @@ const Container = styled(motion.div)`
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  min-height: ${({ $minHeight }) => $minHeight || "300px"};
+  min-height: ${({ $minHeight }) => $minHeight || '300px'};
   width: 100%;
   box-sizing: border-box;
 `;
@@ -33,14 +32,14 @@ const IconWrapper = styled.div`
   border-radius: 50%;
   background: ${({ theme, $variant }) => {
     switch ($variant) {
-      case "error":
-        return "rgba(239, 68, 68, 0.1)";
-      case "warning":
-        return "rgba(245, 158, 11, 0.1)";
-      case "success":
-        return "rgba(16, 185, 129, 0.1)";
+      case 'error':
+        return 'rgba(239, 68, 68, 0.1)';
+      case 'warning':
+        return 'rgba(245, 158, 11, 0.1)';
+      case 'success':
+        return 'rgba(16, 185, 129, 0.1)';
       default:
-        return theme.colors?.ui100 || "rgba(99, 102, 241, 0.1)";
+        return theme.colors?.ui100 || 'rgba(99, 102, 241, 0.1)';
     }
   }};
   display: flex;
@@ -53,14 +52,14 @@ const IconWrapper = styled.div`
     height: 36px;
     color: ${({ theme, $variant }) => {
       switch ($variant) {
-        case "error":
-          return "#ef4444";
-        case "warning":
-          return "#f59e0b";
-        case "success":
-          return "#10b981";
+        case 'error':
+          return '#ef4444';
+        case 'warning':
+          return '#f59e0b';
+        case 'success':
+          return '#10b981';
         default:
-          return theme.colors?.primary || "#6366f1";
+          return theme.colors?.primary || '#6366f1';
       }
     }};
   }
@@ -69,13 +68,13 @@ const IconWrapper = styled.div`
 const Title = styled.h3`
   font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   margin: 0 0 8px 0;
 `;
 
 const Description = styled.p`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   margin: 0 0 24px 0;
   max-width: 400px;
   line-height: 1.5;
@@ -91,7 +90,7 @@ const SecondaryAction = styled.button`
   margin-top: 12px;
   background: none;
   border: none;
-  color: ${({ theme }) => theme.colors?.primary || "#6366f1"};
+  color: ${({ theme }) => theme.colors?.primary || '#6366f1'};
   font-size: 14px;
   cursor: pointer;
   text-decoration: underline;
@@ -131,14 +130,14 @@ const ICONS = {
  * @param {ReactNode} customIcon - Custom icon component to use instead of preset
  */
 export const EmptyState = ({
-  icon = "inbox",
-  title = "No items found",
+  icon = 'inbox',
+  title = 'No items found',
   description,
   actionLabel,
   onAction,
   secondaryActionLabel,
   onSecondaryAction,
-  variant = "default",
+  variant = 'default',
   minHeight,
   customIcon: CustomIcon,
 }) => {
@@ -156,13 +155,9 @@ export const EmptyState = ({
       </IconWrapper>
       <Title>{title}</Title>
       {description && <Description>{description}</Description>}
-      {actionLabel && onAction && (
-        <ActionButton onClick={onAction}>{actionLabel}</ActionButton>
-      )}
+      {actionLabel && onAction && <ActionButton onClick={onAction}>{actionLabel}</ActionButton>}
       {secondaryActionLabel && onSecondaryAction && (
-        <SecondaryAction onClick={onSecondaryAction}>
-          {secondaryActionLabel}
-        </SecondaryAction>
+        <SecondaryAction onClick={onSecondaryAction}>{secondaryActionLabel}</SecondaryAction>
       )}
     </Container>
   );
@@ -176,7 +171,7 @@ export const NoUploadsState = ({ onUpload }) => (
     icon="upload"
     title="No uploads yet"
     description="Upload site documentation to get started. Supported formats include MP4 videos and PDF documents."
-    actionLabel={onUpload ? "Upload Media" : undefined}
+    actionLabel={onUpload ? 'Upload Media' : undefined}
     onAction={onUpload}
   />
 );
@@ -186,7 +181,7 @@ export const NoSubmissionsState = ({ onSubmit }) => (
     icon="verification"
     title="No submissions"
     description="Submit credits for verification. Upload media first, then submit for review."
-    actionLabel={onSubmit ? "Upload Media" : undefined}
+    actionLabel={onSubmit ? 'Upload Media' : undefined}
     onAction={onSubmit}
   />
 );
@@ -214,7 +209,7 @@ export const ServiceUnavailableState = ({ onRetry }) => (
     title="Service Unavailable"
     description="We're having trouble connecting to the service. This might be a temporary issue."
     variant="error"
-    actionLabel={onRetry ? "Try Again" : undefined}
+    actionLabel={onRetry ? 'Try Again' : undefined}
     onAction={onRetry}
   />
 );
@@ -225,7 +220,7 @@ export const ClientUnavailableState = ({ onRetry }) => (
     title="Connection Unavailable"
     description="Unable to establish a connection. Please check your internet connection and try again."
     variant="warning"
-    actionLabel={onRetry ? "Retry Connection" : undefined}
+    actionLabel={onRetry ? 'Retry Connection' : undefined}
     onAction={onRetry}
   />
 );
@@ -245,7 +240,7 @@ export const NoStreamsState = ({ onCreate }) => (
     icon="stream"
     title="No active streams"
     description="Start broadcasting by creating a new stream. You'll receive a stream key to use with your broadcasting software."
-    actionLabel={onCreate ? "Create Stream" : undefined}
+    actionLabel={onCreate ? 'Create Stream' : undefined}
     onAction={onCreate}
   />
 );
@@ -255,7 +250,7 @@ export const NoVideosState = ({ onUpload }) => (
     icon="media"
     title="No videos found"
     description="Your uploaded videos will appear here. Start by uploading your first video."
-    actionLabel={onUpload ? "Upload Video" : undefined}
+    actionLabel={onUpload ? 'Upload Video' : undefined}
     onAction={onUpload}
   />
 );

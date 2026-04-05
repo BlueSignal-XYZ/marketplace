@@ -4,11 +4,10 @@
  * Renders as a centered modal overlay.
  */
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Button } from '../../design-system/primitives/Button';
 import { Input } from '../../design-system/primitives/Input';
-import { useAppContext } from '../../context/AppContext';
 
 // Firebase
 import {
@@ -88,7 +87,8 @@ const Divider = styled.div`
   align-items: center;
   gap: 12px;
   margin: 8px 0;
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     flex: 1;
     height: 1px;
@@ -134,7 +134,9 @@ const SuccessText = styled.div`
 
 const WalletButton = styled(Button)`
   background: linear-gradient(135deg, #8b5cf6, #6366f1);
-  &:hover { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+  &:hover {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  }
 `;
 
 export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = 'wqt', message }) {
@@ -149,50 +151,58 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
   const auth = getAuth();
   const toast = useToastContext();
 
-  const handleEmailAuth = useCallback(async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    setLoading(true);
+  const handleEmailAuth = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setError('');
+      setSuccess('');
+      setLoading(true);
 
-    try {
-      if (mode === 'login') {
-        await signInWithEmailAndPassword(auth, email, password);
-        onClose?.();
-      } else if (mode === 'signup') {
-        if (password !== confirmPassword) {
-          setError('Passwords do not match');
-          setLoading(false);
-          return;
+      try {
+        if (mode === 'login') {
+          await signInWithEmailAndPassword(auth, email, password);
+          onClose?.();
+        } else if (mode === 'signup') {
+          if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+          }
+          if (password.length < 6) {
+            setError('Password must be at least 6 characters');
+            setLoading(false);
+            return;
+          }
+          const result = await createUserWithEmailAndPassword(auth, email, password);
+          // Send email verification (best-effort — don't block signup)
+          try {
+            await sendEmailVerification(result.user);
+          } catch (_) {
+            // Silently continue — user can request verification later
+          }
+          onClose?.();
+        } else if (mode === 'reset') {
+          await sendPasswordResetEmail(auth, email);
+          setSuccess('Password reset email sent. Check your inbox.');
         }
-        if (password.length < 6) {
-          setError('Password must be at least 6 characters');
-          setLoading(false);
-          return;
-        }
-        const result = await createUserWithEmailAndPassword(auth, email, password);
-        // Send email verification (best-effort — don't block signup)
-        try {
-          await sendEmailVerification(result.user);
-        } catch (_) {
-          // Silently continue — user can request verification later
-        }
-        onClose?.();
-      } else if (mode === 'reset') {
-        await sendPasswordResetEmail(auth, email);
-        setSuccess('Password reset email sent. Check your inbox.');
+      } catch (err) {
+        const msg =
+          err.code === 'auth/user-not-found'
+            ? 'No account with that email'
+            : err.code === 'auth/wrong-password'
+              ? 'Incorrect password'
+              : err.code === 'auth/email-already-in-use'
+                ? 'Email already registered'
+                : err.code === 'auth/invalid-email'
+                  ? 'Invalid email address'
+                  : err.message || 'Authentication failed';
+        setError(msg);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      const msg = err.code === 'auth/user-not-found' ? 'No account with that email'
-        : err.code === 'auth/wrong-password' ? 'Incorrect password'
-        : err.code === 'auth/email-already-in-use' ? 'Email already registered'
-        : err.code === 'auth/invalid-email' ? 'Invalid email address'
-        : err.message || 'Authentication failed';
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
-  }, [mode, email, password, confirmPassword, auth, onClose]);
+    },
+    [mode, email, password, confirmPassword, auth, onClose]
+  );
 
   const handleGoogle = useCallback(async () => {
     setError('');
@@ -231,17 +241,23 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
       });
 
       setSuccess(`Wallet connected: ${address.slice(0, 6)}…${address.slice(-4)}`);
-      toast({ type: 'success', message: `Wallet ${address.slice(0, 6)}…${address.slice(-4)} linked successfully.` });
+      toast({
+        type: 'success',
+        message: `Wallet ${address.slice(0, 6)}…${address.slice(-4)} linked successfully.`,
+      });
       onClose?.();
     } catch (err) {
       if (err.code === 4001 || err.message?.includes('rejected')) {
         setError('Wallet connection cancelled.');
         return;
       }
-      const isNetworkError = err instanceof ApiError && (err.status === 0 || err.code === 'NETWORK_ERROR');
+      const isNetworkError =
+        err instanceof ApiError && (err.status === 0 || err.code === 'NETWORK_ERROR');
       const msg = isNetworkError
         ? 'Connection failed — please try again'
-        : (err instanceof ApiError ? err.message : err.message || 'Failed to connect wallet.');
+        : err instanceof ApiError
+          ? err.message
+          : err.message || 'Failed to connect wallet.';
       setError(msg);
       toast({ type: 'error', message: msg });
     } finally {
@@ -259,9 +275,12 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
         <Brand>
           <BrandName>{platformName}</BrandName>
           <BrandSub>
-            {message || (mode === 'login' ? 'Sign in to your account' :
-             mode === 'signup' ? 'Create your account' :
-             'Reset your password')}
+            {message ||
+              (mode === 'login'
+                ? 'Sign in to your account'
+                : mode === 'signup'
+                  ? 'Create your account'
+                  : 'Reset your password')}
           </BrandSub>
         </Brand>
 
@@ -301,10 +320,13 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
           {success && <SuccessText>{success}</SuccessText>}
 
           <Button type="submit" fullWidth disabled={loading}>
-            {loading ? 'Processing…' :
-             mode === 'login' ? 'Sign In' :
-             mode === 'signup' ? 'Create Account' :
-             'Send Reset Email'}
+            {loading
+              ? 'Processing…'
+              : mode === 'login'
+                ? 'Sign In'
+                : mode === 'signup'
+                  ? 'Create Account'
+                  : 'Send Reset Email'}
           </Button>
         </Form>
 
@@ -334,19 +356,48 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
         <SwitchRow>
           {mode === 'login' ? (
             <>
-              Don't have an account?{' '}
-              <SwitchLink onClick={() => { setMode('signup'); setError(''); }}>Sign up</SwitchLink>
+              Don&apos;t have an account?{' '}
+              <SwitchLink
+                onClick={() => {
+                  setMode('signup');
+                  setError('');
+                }}
+              >
+                Sign up
+              </SwitchLink>
               {' · '}
-              <SwitchLink onClick={() => { setMode('reset'); setError(''); }}>Forgot password?</SwitchLink>
+              <SwitchLink
+                onClick={() => {
+                  setMode('reset');
+                  setError('');
+                }}
+              >
+                Forgot password?
+              </SwitchLink>
             </>
           ) : mode === 'signup' ? (
             <>
               Already have an account?{' '}
-              <SwitchLink onClick={() => { setMode('login'); setError(''); }}>Sign in</SwitchLink>
+              <SwitchLink
+                onClick={() => {
+                  setMode('login');
+                  setError('');
+                }}
+              >
+                Sign in
+              </SwitchLink>
             </>
           ) : (
             <>
-              <SwitchLink onClick={() => { setMode('login'); setError(''); setSuccess(''); }}>Back to sign in</SwitchLink>
+              <SwitchLink
+                onClick={() => {
+                  setMode('login');
+                  setError('');
+                  setSuccess('');
+                }}
+              >
+                Back to sign in
+              </SwitchLink>
             </>
           )}
         </SwitchRow>

@@ -19,9 +19,27 @@ const BlueSignalLogo = ({ size = 28, color = 'currentColor', className }) => (
     className={className}
     aria-label="BlueSignal"
   >
-    <path d="M4 8 C8 5, 16 5, 24 8" stroke={color} strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 14 C8 11, 16 11, 24 14" stroke={color} strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    <path d="M4 20 C8 17, 16 17, 24 20" stroke={color} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path
+      d="M4 8 C8 5, 16 5, 24 8"
+      stroke={color}
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path
+      d="M4 14 C8 11, 16 11, 24 14"
+      stroke={color}
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      fill="none"
+    />
+    <path
+      d="M4 20 C8 17, 16 17, 24 20"
+      stroke={color}
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      fill="none"
+    />
   </svg>
 );
 

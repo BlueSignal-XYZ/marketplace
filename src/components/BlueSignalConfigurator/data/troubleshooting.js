@@ -214,16 +214,76 @@ export const TROUBLESHOOTING = [
 
 // LED Status Code Reference (expanded)
 export const LED_STATUS_CODES = [
-  { pattern: '1 blink / 2 sec', color: 'green', meaning: 'Booting', action: 'Wait 60-90 seconds', duration: 'Boot only' },
-  { pattern: '2 blinks / 2 sec', color: 'green', meaning: 'Connecting to cellular', action: 'Wait 2 min; check SIM if persists', duration: 'Up to 3 min' },
-  { pattern: '3 blinks / 2 sec', color: 'green', meaning: 'Online and operational', action: 'Normal - no action needed', duration: 'Continuous' },
-  { pattern: 'Solid ON', color: 'blue', meaning: 'Ultrasonic active', action: 'Normal during 15-min treatment', duration: '15 min' },
-  { pattern: 'Rapid blink (5/sec)', color: 'red', meaning: 'Error condition', action: 'Check dashboard for details', duration: 'Until resolved' },
-  { pattern: '1 long, 2 short', color: 'amber', meaning: 'Low battery warning', action: 'Check solar/charging system', duration: 'Until charged' },
-  { pattern: 'OFF', color: 'none', meaning: 'No power or deep sleep', action: 'Check power, battery, LVD', duration: 'N/A' },
-  { pattern: 'Alternating G/A', color: 'green/amber', meaning: 'Firmware update', action: 'Do NOT power off - wait', duration: '5-15 min' },
-  { pattern: 'Slow pulse (1Hz)', color: 'green', meaning: 'Normal heartbeat', action: 'None - healthy status', duration: 'Continuous' },
-  { pattern: '1 blink / 5 sec', color: 'red', meaning: 'Sensor error', action: 'Check specific sensor in dashboard', duration: 'Until fixed' },
+  {
+    pattern: '1 blink / 2 sec',
+    color: 'green',
+    meaning: 'Booting',
+    action: 'Wait 60-90 seconds',
+    duration: 'Boot only',
+  },
+  {
+    pattern: '2 blinks / 2 sec',
+    color: 'green',
+    meaning: 'Connecting to cellular',
+    action: 'Wait 2 min; check SIM if persists',
+    duration: 'Up to 3 min',
+  },
+  {
+    pattern: '3 blinks / 2 sec',
+    color: 'green',
+    meaning: 'Online and operational',
+    action: 'Normal - no action needed',
+    duration: 'Continuous',
+  },
+  {
+    pattern: 'Solid ON',
+    color: 'blue',
+    meaning: 'Ultrasonic active',
+    action: 'Normal during 15-min treatment',
+    duration: '15 min',
+  },
+  {
+    pattern: 'Rapid blink (5/sec)',
+    color: 'red',
+    meaning: 'Error condition',
+    action: 'Check dashboard for details',
+    duration: 'Until resolved',
+  },
+  {
+    pattern: '1 long, 2 short',
+    color: 'amber',
+    meaning: 'Low battery warning',
+    action: 'Check solar/charging system',
+    duration: 'Until charged',
+  },
+  {
+    pattern: 'OFF',
+    color: 'none',
+    meaning: 'No power or deep sleep',
+    action: 'Check power, battery, LVD',
+    duration: 'N/A',
+  },
+  {
+    pattern: 'Alternating G/A',
+    color: 'green/amber',
+    meaning: 'Firmware update',
+    action: 'Do NOT power off - wait',
+    duration: '5-15 min',
+  },
+  {
+    pattern: 'Slow pulse (1Hz)',
+    color: 'green',
+    meaning: 'Normal heartbeat',
+    action: 'None - healthy status',
+    duration: 'Continuous',
+  },
+  {
+    pattern: '1 blink / 5 sec',
+    color: 'red',
+    meaning: 'Sensor error',
+    action: 'Check specific sensor in dashboard',
+    duration: 'Until fixed',
+  },
 ];
 
 // LED Color hex values

@@ -2,14 +2,14 @@
 /**
  * Create Listing Page - Allow sellers to list nutrient credits for sale
  */
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../context/AppContext";
-import { CreditsMarketplaceAPI } from "../../../scripts/back_door";
-import { getSites } from "../../../services/v2/api";
-import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
-import { Input } from "../../shared/input/Input";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../../context/AppContext';
+import { CreditsMarketplaceAPI } from '../../../scripts/back_door';
+import { getSites } from '../../../services/v2/api';
+import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
+import { Input } from '../../shared/input/Input';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -28,19 +28,19 @@ const PageHeader = styled.div`
     margin: 0 0 8px;
     font-size: 28px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   p {
     margin: 0;
     font-size: 15px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
   }
 `;
 
 const Section = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
@@ -50,9 +50,9 @@ const SectionTitle = styled.h2`
   margin: 0 0 20px;
   font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   padding-bottom: 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 `;
 
 const FormGroup = styled.div`
@@ -68,62 +68,62 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+  color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
 const Required = styled.span`
-  color: ${({ theme }) => theme.colors?.red500 || "#ef4444"};
+  color: ${({ theme }) => theme.colors?.red500 || '#ef4444'};
   margin-left: 2px;
 `;
 
 const HelpText = styled.div`
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#71717a"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#71717a'};
   margin-top: 6px;
 `;
 
 const Select = styled.select`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   height: 44px;
   padding: 0px 12px;
   border-radius: 12px;
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
   width: 100%;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || "#EFFBFB"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
   }
 `;
 
 const TextArea = styled.textarea`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
   padding: 12px;
   border-radius: 12px;
-  color: ${({ theme }) => theme.colors?.ui800 || "#27272a"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
   width: 100%;
   min-height: 100px;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   resize: vertical;
   font-family: inherit;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#1D7072"};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || "#EFFBFB"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
   }
 `;
 
 const Row = styled.div`
   display: grid;
-  grid-template-columns: ${({ $cols }) => $cols || "1fr 1fr"};
+  grid-template-columns: ${({ $cols }) => $cols || '1fr 1fr'};
   gap: 16px;
 
   @media (max-width: 600px) {
@@ -139,19 +139,19 @@ const PriceInput = styled.div`
   }
 
   &::before {
-    content: "$";
+    content: '$';
     position: absolute;
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: ${({ theme }) => theme.colors?.ui500 || "#71717a"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#71717a'};
     font-weight: 500;
   }
 `;
 
 const PreviewCard = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#fafafa"};
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 20px;
 `;
@@ -159,7 +159,7 @@ const PreviewCard = styled.div`
 const PreviewTitle = styled.div`
   font-size: 18px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   margin-bottom: 12px;
 `;
 
@@ -168,7 +168,7 @@ const PreviewRow = styled.div`
   justify-content: space-between;
   padding: 8px 0;
   font-size: 14px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 
   &:last-child {
     border-bottom: none;
@@ -176,18 +176,18 @@ const PreviewRow = styled.div`
 `;
 
 const PreviewLabel = styled.span`
-  color: ${({ theme }) => theme.colors?.ui600 || "#52525b"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#52525b'};
 `;
 
 const PreviewValue = styled.span`
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const TotalRow = styled(PreviewRow)`
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 2px solid ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border-top: 2px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   font-size: 16px;
 `;
 
@@ -203,9 +203,9 @@ const ButtonGroup = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  background: ${({ theme }) => theme.colors?.red50 || "#fef2f2"};
-  border: 1px solid ${({ theme }) => theme.colors?.red200 || "#fecaca"};
-  color: ${({ theme }) => theme.colors?.red700 || "#b91c1c"};
+  background: ${({ theme }) => theme.colors?.red50 || '#fef2f2'};
+  border: 1px solid ${({ theme }) => theme.colors?.red200 || '#fecaca'};
+  color: ${({ theme }) => theme.colors?.red700 || '#b91c1c'};
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -213,7 +213,7 @@ const ErrorMessage = styled.div`
 `;
 
 const ImageUploadArea = styled.div`
-  border: 2px dashed ${({ theme }) => theme.colors?.ui300 || "#d4d4d8"};
+  border: 2px dashed ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
   border-radius: 12px;
   padding: 32px;
   text-align: center;
@@ -221,8 +221,8 @@ const ImageUploadArea = styled.div`
   transition: all 0.2s;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#0284c7"};
-    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#0284c7'};
+    background: ${({ theme }) => theme.colors?.primary50 || '#e0f2ff'};
   }
 
   input {
@@ -273,18 +273,18 @@ const ImagePreview = styled.div`
 /* -------------------------------------------------------------------------- */
 
 const CREDIT_TYPES = [
-  { value: "nitrogen", label: "Nitrogen Credits" },
-  { value: "phosphorus", label: "Phosphorus Credits" },
-  { value: "carbon", label: "Carbon Credits" },
-  { value: "water_quality", label: "Water Quality Credits" },
+  { value: 'nitrogen', label: 'Nitrogen Credits' },
+  { value: 'phosphorus', label: 'Phosphorus Credits' },
+  { value: 'carbon', label: 'Carbon Credits' },
+  { value: 'water_quality', label: 'Water Quality Credits' },
 ];
 
 const VERIFICATION_STANDARDS = [
-  { value: "verra", label: "Verra VCS" },
-  { value: "gold_standard", label: "Gold Standard" },
-  { value: "american_carbon", label: "American Carbon Registry" },
-  { value: "climate_action", label: "Climate Action Reserve" },
-  { value: "internal", label: "Internal Verification" },
+  { value: 'verra', label: 'Verra VCS' },
+  { value: 'gold_standard', label: 'Gold Standard' },
+  { value: 'american_carbon', label: 'American Carbon Registry' },
+  { value: 'climate_action', label: 'Climate Action Reserve' },
+  { value: 'internal', label: 'Internal Verification' },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -292,7 +292,9 @@ const VERIFICATION_STANDARDS = [
 /* -------------------------------------------------------------------------- */
 
 export default function CreateListingPage() {
-  useEffect(() => { document.title = 'Create Listing — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Create Listing — WaterQuality.Trading';
+  }, []);
   const navigate = useNavigate();
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES || {};
@@ -302,22 +304,22 @@ export default function CreateListingPage() {
   const [sites, setSites] = useState([]);
 
   const [formData, setFormData] = useState({
-    title: "",
-    creditType: "nitrogen",
-    quantity: "",
-    unit: "kg",
-    pricePerUnit: "",
-    description: "",
-    siteId: "",
-    verificationStandard: "",
+    title: '',
+    creditType: 'nitrogen',
+    quantity: '',
+    unit: 'kg',
+    pricePerUnit: '',
+    description: '',
+    siteId: '',
+    verificationStandard: '',
     vintageYear: new Date().getFullYear().toString(),
-    expirationDate: "",
-    minimumPurchase: "1",
+    expirationDate: '',
+    minimumPurchase: '1',
     images: [],
     metadata: {
-      projectName: "",
-      methodology: "",
-      additionalInfo: "",
+      projectName: '',
+      methodology: '',
+      additionalInfo: '',
     },
   });
 
@@ -331,7 +333,7 @@ export default function CreateListingPage() {
       const data = await getSites(user?.uid);
       setSites(data || []);
     } catch (err) {
-      console.error("Error loading sites:", err);
+      console.error('Error loading sites:', err);
     }
   };
 
@@ -387,22 +389,22 @@ export default function CreateListingPage() {
 
   const validateForm = () => {
     if (!formData.title.trim()) {
-      setError("Title is required");
+      setError('Title is required');
       return false;
     }
 
     if (!formData.quantity || parseFloat(formData.quantity) <= 0) {
-      setError("Valid quantity is required");
+      setError('Valid quantity is required');
       return false;
     }
 
     if (!formData.pricePerUnit || parseFloat(formData.pricePerUnit) <= 0) {
-      setError("Valid price is required");
+      setError('Valid price is required');
       return false;
     }
 
     if (!formData.siteId) {
-      setError("Please select a site");
+      setError('Please select a site');
       return false;
     }
 
@@ -424,7 +426,7 @@ export default function CreateListingPage() {
         quantity: parseFloat(formData.quantity),
         unit: formData.unit,
         pricePerUnit: parseFloat(formData.pricePerUnit),
-        currency: "USD",
+        currency: 'USD',
         siteId: formData.siteId,
         title: formData.title,
         description: formData.description,
@@ -438,17 +440,18 @@ export default function CreateListingPage() {
 
       const result = await CreditsMarketplaceAPI.createListing(listingData);
 
-      ACTIONS?.logNotification?.("success", "Listing created successfully!");
+      ACTIONS?.logNotification?.('success', 'Listing created successfully!');
       navigate(`/marketplace/listing/${result.listingId}`);
     } catch (err) {
-      console.error("Error creating listing:", err);
-      setError(err.message || "Failed to create listing. Please try again.");
+      console.error('Error creating listing:', err);
+      setError(err.message || 'Failed to create listing. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const totalValue = (parseFloat(formData.quantity) || 0) * (parseFloat(formData.pricePerUnit) || 0);
+  const totalValue =
+    (parseFloat(formData.quantity) || 0) * (parseFloat(formData.pricePerUnit) || 0);
 
   return (
     <PageContainer>
@@ -471,7 +474,7 @@ export default function CreateListingPage() {
               id="title"
               type="text"
               value={formData.title}
-              onChange={(e) => handleChange("title", e.target.value)}
+              onChange={(e) => handleChange('title', e.target.value)}
               placeholder="e.g., Premium Nitrogen Credits - Deep Creek Project"
             />
           </FormGroup>
@@ -483,7 +486,7 @@ export default function CreateListingPage() {
             <Select
               id="creditType"
               value={formData.creditType}
-              onChange={(e) => handleChange("creditType", e.target.value)}
+              onChange={(e) => handleChange('creditType', e.target.value)}
             >
               {CREDIT_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -504,7 +507,7 @@ export default function CreateListingPage() {
                 min="0"
                 step="0.01"
                 value={formData.quantity}
-                onChange={(e) => handleChange("quantity", e.target.value)}
+                onChange={(e) => handleChange('quantity', e.target.value)}
                 placeholder="100"
               />
               <HelpText>Number of credits to list</HelpText>
@@ -515,7 +518,7 @@ export default function CreateListingPage() {
               <Select
                 id="unit"
                 value={formData.unit}
-                onChange={(e) => handleChange("unit", e.target.value)}
+                onChange={(e) => handleChange('unit', e.target.value)}
               >
                 <option value="kg">Kilograms (kg)</option>
                 <option value="tonne">Tonnes</option>
@@ -536,7 +539,7 @@ export default function CreateListingPage() {
                   min="0"
                   step="0.01"
                   value={formData.pricePerUnit}
-                  onChange={(e) => handleChange("pricePerUnit", e.target.value)}
+                  onChange={(e) => handleChange('pricePerUnit', e.target.value)}
                   placeholder="25.00"
                 />
               </PriceInput>
@@ -550,7 +553,7 @@ export default function CreateListingPage() {
                 type="number"
                 min="1"
                 value={formData.minimumPurchase}
-                onChange={(e) => handleChange("minimumPurchase", e.target.value)}
+                onChange={(e) => handleChange('minimumPurchase', e.target.value)}
                 placeholder="1"
               />
               <HelpText>Minimum quantity per order</HelpText>
@@ -562,7 +565,7 @@ export default function CreateListingPage() {
             <TextArea
               id="description"
               value={formData.description}
-              onChange={(e) => handleChange("description", e.target.value)}
+              onChange={(e) => handleChange('description', e.target.value)}
               placeholder="Describe your credits, the project, and any relevant details..."
             />
           </FormGroup>
@@ -578,7 +581,7 @@ export default function CreateListingPage() {
             <Select
               id="siteId"
               value={formData.siteId}
-              onChange={(e) => handleChange("siteId", e.target.value)}
+              onChange={(e) => handleChange('siteId', e.target.value)}
             >
               <option value="">Select a site...</option>
               {sites.map((site) => (
@@ -589,8 +592,8 @@ export default function CreateListingPage() {
             </Select>
             <HelpText>
               <span
-                style={{ color: "#0284c7", cursor: "pointer" }}
-                onClick={() => navigate("/cloud/sites/new")}
+                style={{ color: '#0284c7', cursor: 'pointer' }}
+                onClick={() => navigate('/cloud/sites/new')}
               >
                 + Create new site
               </span>
@@ -603,7 +606,7 @@ export default function CreateListingPage() {
               <Select
                 id="verificationStandard"
                 value={formData.verificationStandard}
-                onChange={(e) => handleChange("verificationStandard", e.target.value)}
+                onChange={(e) => handleChange('verificationStandard', e.target.value)}
               >
                 <option value="">Select standard...</option>
                 {VERIFICATION_STANDARDS.map((std) => (
@@ -619,7 +622,7 @@ export default function CreateListingPage() {
               <Select
                 id="vintageYear"
                 value={formData.vintageYear}
-                onChange={(e) => handleChange("vintageYear", e.target.value)}
+                onChange={(e) => handleChange('vintageYear', e.target.value)}
               >
                 {Array.from({ length: 10 }, (_, i) => {
                   const year = new Date().getFullYear() - i;
@@ -639,7 +642,7 @@ export default function CreateListingPage() {
               id="expirationDate"
               type="date"
               value={formData.expirationDate}
-              onChange={(e) => handleChange("expirationDate", e.target.value)}
+              onChange={(e) => handleChange('expirationDate', e.target.value)}
             />
             <HelpText>Leave blank if credits do not expire</HelpText>
           </FormGroup>
@@ -650,7 +653,7 @@ export default function CreateListingPage() {
               id="projectName"
               type="text"
               value={formData.metadata.projectName}
-              onChange={(e) => handleMetadataChange("projectName", e.target.value)}
+              onChange={(e) => handleMetadataChange('projectName', e.target.value)}
               placeholder="Official project name"
             />
           </FormGroup>
@@ -661,7 +664,7 @@ export default function CreateListingPage() {
               id="methodology"
               type="text"
               value={formData.metadata.methodology}
-              onChange={(e) => handleMetadataChange("methodology", e.target.value)}
+              onChange={(e) => handleMetadataChange('methodology', e.target.value)}
               placeholder="e.g., VM0042 - Improved Agricultural Land Management"
             />
           </FormGroup>
@@ -671,15 +674,10 @@ export default function CreateListingPage() {
           <SectionTitle>Images</SectionTitle>
 
           <ImageUploadArea as="label">
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageUpload}
-            />
+            <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
             <div style={{ fontSize: 32, marginBottom: 8 }}>📷</div>
             <div style={{ fontWeight: 600 }}>Upload Images</div>
-            <div style={{ fontSize: 13, color: "#6b7280", marginTop: 4 }}>
+            <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>
               Drag and drop or click to browse
             </div>
           </ImageUploadArea>
@@ -702,7 +700,7 @@ export default function CreateListingPage() {
           <SectionTitle>Listing Preview</SectionTitle>
 
           <PreviewCard>
-            <PreviewTitle>{formData.title || "Untitled Listing"}</PreviewTitle>
+            <PreviewTitle>{formData.title || 'Untitled Listing'}</PreviewTitle>
 
             <PreviewRow>
               <PreviewLabel>Credit Type</PreviewLabel>
@@ -714,7 +712,7 @@ export default function CreateListingPage() {
             <PreviewRow>
               <PreviewLabel>Quantity</PreviewLabel>
               <PreviewValue>
-                {formData.quantity || "0"} {formData.unit}
+                {formData.quantity || '0'} {formData.unit}
               </PreviewValue>
             </PreviewRow>
 
@@ -727,8 +725,8 @@ export default function CreateListingPage() {
 
             <TotalRow>
               <PreviewLabel>Total Listing Value</PreviewLabel>
-              <PreviewValue style={{ color: "#16a34a" }}>
-                ${totalValue.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              <PreviewValue style={{ color: '#16a34a' }}>
+                ${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </PreviewValue>
             </TotalRow>
           </PreviewCard>
@@ -739,7 +737,7 @@ export default function CreateListingPage() {
             Cancel
           </ButtonSecondary>
           <ButtonPrimary type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Create Listing"}
+            {loading ? 'Creating...' : 'Create Listing'}
           </ButtonPrimary>
         </ButtonGroup>
       </form>

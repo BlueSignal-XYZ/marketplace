@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import { useEffect } from 'react';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -8,7 +8,12 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   background: #eef2f5;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
 
   .box {
     background: white;
@@ -33,13 +38,17 @@ const Wrapper = styled.div`
 `;
 
 const WelcomeMinimal = () => {
-  useEffect(() => { document.title = 'Sign In — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Sign In — WaterQuality.Trading';
+  }, []);
   return (
     <Wrapper>
       <div className="box">
         <h2>WelcomeMinimal.jsx</h2>
         <p>This is the testing version of the welcome screen.</p>
-        <p><code>{window.location.origin}</code></p>
+        <p>
+          <code>{window.location.origin}</code>
+        </p>
       </div>
     </Wrapper>
   );

@@ -64,7 +64,8 @@ const Content = styled.div`
     margin-bottom: 16px;
   }
 
-  ul, ol {
+  ul,
+  ol {
     padding-left: 24px;
     margin-bottom: 16px;
   }

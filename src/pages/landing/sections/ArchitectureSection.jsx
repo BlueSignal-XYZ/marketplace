@@ -27,12 +27,13 @@ const Grid = styled.div`
 /* ── IDE Terminal chrome ────────────────────────────────── */
 
 const Terminal = styled.div`
-  background: #0D1117;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45),
-              0 0 0 1px rgba(255,255,255,0.03);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
   max-width: 100%;
   min-width: 0;
 `;
@@ -41,8 +42,8 @@ const TermBar = styled.div`
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: #161B22;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: #161b22;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
   ${({ theme }) => theme.media.sm} {
     padding: 10px 14px;
@@ -70,11 +71,11 @@ const Dot = styled.span`
 const TabLabel = styled.span`
   margin-left: 14px;
   padding: 4px 12px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 4px;
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 12px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
   white-space: nowrap;
 
   ${({ theme }) => theme.media.sm} {
@@ -110,10 +111,10 @@ const Gutter = styled.span`
   padding: 0 14px 0 20px;
   text-align: right;
   user-select: none;
-  color: rgba(139,148,158,0.35);
+  color: rgba(139, 148, 158, 0.35);
   font-size: 0.85em;
   vertical-align: top;
-  border-right: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
 
   ${({ theme }) => theme.media.sm} {
     padding: 0 10px 0 12px;
@@ -125,7 +126,7 @@ const Code = styled.span`
   padding-left: 16px;
   padding-right: 24px;
   white-space: pre;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 
   ${({ theme }) => theme.media.sm} {
     padding-left: 12px;
@@ -135,11 +136,21 @@ const Code = styled.span`
 
 /* ── Syntax-highlight tokens ────────────────────────────── */
 
-const Cm = styled.span`color: #6A9955;`;                        /* comments  */
-const Ky = styled.span`color: #9CDCFE;`;                        /* keys      */
-const St = styled.span`color: #CE9178;`;                        /* strings   */
-const Ar = styled.span`color: #4EC9B0;`;                        /* arrows →  */
-const Ds = styled.span`color: rgba(255,255,255,0.7);`;          /* dashes -  */
+const Cm = styled.span`
+  color: #6a9955;
+`; /* comments  */
+const Ky = styled.span`
+  color: #9cdcfe;
+`; /* keys      */
+const St = styled.span`
+  color: #ce9178;
+`; /* strings   */
+const Ar = styled.span`
+  color: #4ec9b0;
+`; /* arrows →  */
+const Ds = styled.span`
+  color: rgba(255, 255, 255, 0.7);
+`; /* dashes -  */
 
 /* ── Blinking cursor ────────────────────────────────────── */
 
@@ -152,7 +163,7 @@ const Cursor = styled.span`
   display: inline-block;
   width: 8px;
   height: 1.15em;
-  background: rgba(255,255,255,0.45);
+  background: rgba(255, 255, 255, 0.45);
   vertical-align: text-bottom;
   margin-left: 2px;
   animation: ${blink} 1.1s step-end infinite;
@@ -182,31 +193,103 @@ const PipelineTerminal = () => (
 
     <CodeScroll>
       <CodeTable>
-        <L n={1}><Cm># WQM-1 Data Pipeline</Cm></L>
+        <L n={1}>
+          <Cm># WQM-1 Data Pipeline</Cm>
+        </L>
         <L n={2} />
-        <L n={3}><Ky>sensors</Ky>:</L>
-        <L n={4}>{'  '}<Ds>-</Ds>{' '}<St>pH</St>{'          '}<Cm># BNC analog → ADS1115</Cm></L>
-        <L n={5}>{'  '}<Ds>-</Ds>{' '}<St>TDS</St>{'         '}<Cm># JST-XH analog → ADS1115</Cm></L>
-        <L n={6}>{'  '}<Ds>-</Ds>{' '}<St>turbidity</St>{'   '}<Cm># JST-XH analog → ADS1115</Cm></L>
-        <L n={7}>{'  '}<Ds>-</Ds>{' '}<St>ORP</St>{'         '}<Cm># JST-XH analog → ADS1115</Cm></L>
-        <L n={8}>{'  '}<Ds>-</Ds>{' '}<St>temperature</St>{' '}<Cm># DS18B20 OneWire</Cm></L>
-        <L n={9}>{'  '}<Ds>-</Ds>{' '}<St>GPS</St>{'         '}<Cm># UART serial</Cm></L>
+        <L n={3}>
+          <Ky>sensors</Ky>:
+        </L>
+        <L n={4}>
+          {'  '}
+          <Ds>-</Ds> <St>pH</St>
+          {'          '}
+          <Cm># BNC analog → ADS1115</Cm>
+        </L>
+        <L n={5}>
+          {'  '}
+          <Ds>-</Ds> <St>TDS</St>
+          {'         '}
+          <Cm># JST-XH analog → ADS1115</Cm>
+        </L>
+        <L n={6}>
+          {'  '}
+          <Ds>-</Ds> <St>turbidity</St>
+          {'   '}
+          <Cm># JST-XH analog → ADS1115</Cm>
+        </L>
+        <L n={7}>
+          {'  '}
+          <Ds>-</Ds> <St>ORP</St>
+          {'         '}
+          <Cm># JST-XH analog → ADS1115</Cm>
+        </L>
+        <L n={8}>
+          {'  '}
+          <Ds>-</Ds> <St>temperature</St> <Cm># DS18B20 OneWire</Cm>
+        </L>
+        <L n={9}>
+          {'  '}
+          <Ds>-</Ds> <St>GPS</St>
+          {'         '}
+          <Cm># UART serial</Cm>
+        </L>
         <L n={10} />
-        <L n={11}><Ky>processor</Ky>:</L>
-        <L n={12}>{'  '}<Ky>board</Ky>:{' '}<St>Pi Zero 2W</St></L>
-        <L n={13}>{'  '}<Ky>adc</Ky>:{' '}<St>ADS1115 16-bit</St></L>
-        <L n={14}>{'  '}<Ky>storage</Ky>:{' '}<St>SQLite WAL buffer</St></L>
+        <L n={11}>
+          <Ky>processor</Ky>:
+        </L>
+        <L n={12}>
+          {'  '}
+          <Ky>board</Ky>: <St>Pi Zero 2W</St>
+        </L>
+        <L n={13}>
+          {'  '}
+          <Ky>adc</Ky>: <St>ADS1115 16-bit</St>
+        </L>
+        <L n={14}>
+          {'  '}
+          <Ky>storage</Ky>: <St>SQLite WAL buffer</St>
+        </L>
         <L n={15} />
-        <L n={16}><Ky>radio</Ky>:</L>
-        <L n={17}>{'  '}<Ky>module</Ky>:{' '}<St>SX1262 LoRa</St></L>
-        <L n={18}>{'  '}<Ky>encoding</Ky>:{' '}<St>Cayenne LPP</St></L>
-        <L n={19}>{'  '}<Ky>encryption</Ky>:{' '}<St>AES-128</St></L>
-        <L n={20}>{'  '}<Ky>range</Ky>:{' '}<St>15 km line-of-sight</St></L>
+        <L n={16}>
+          <Ky>radio</Ky>:
+        </L>
+        <L n={17}>
+          {'  '}
+          <Ky>module</Ky>: <St>SX1262 LoRa</St>
+        </L>
+        <L n={18}>
+          {'  '}
+          <Ky>encoding</Ky>: <St>Cayenne LPP</St>
+        </L>
+        <L n={19}>
+          {'  '}
+          <Ky>encryption</Ky>: <St>AES-128</St>
+        </L>
+        <L n={20}>
+          {'  '}
+          <Ky>range</Ky>: <St>15 km line-of-sight</St>
+        </L>
         <L n={21} />
-        <L n={22}><Ky>upstream</Ky>:</L>
-        <L n={23}>{'  '}<St>ingest</St>{' '}<Ar>→</Ar>{' '}<St>store</St>{' '}<Ar>→</Ar>{' '}<St>alert</St>{' '}<Ar>→</Ar>{' '}<St>dashboard</St></L>
-        <L n={24}>{'  '}<Ky>dashboard</Ky>:{'  '}<St>cloud.bluesignal.xyz</St></L>
-        <L n={25}>{'  '}<Ky>registry</Ky>:{'   '}<St>waterquality.trading</St><Cursor /></L>
+        <L n={22}>
+          <Ky>upstream</Ky>:
+        </L>
+        <L n={23}>
+          {'  '}
+          <St>ingest</St> <Ar>→</Ar> <St>store</St> <Ar>→</Ar> <St>alert</St> <Ar>→</Ar>{' '}
+          <St>dashboard</St>
+        </L>
+        <L n={24}>
+          {'  '}
+          <Ky>dashboard</Ky>:{'  '}
+          <St>cloud.bluesignal.xyz</St>
+        </L>
+        <L n={25}>
+          {'  '}
+          <Ky>registry</Ky>:{'   '}
+          <St>waterquality.trading</St>
+          <Cursor />
+        </L>
       </CodeTable>
     </CodeScroll>
   </Terminal>
@@ -220,24 +303,52 @@ const Cards = styled.div`
   gap: 2px;
   min-width: 0;
 
-  > :first-child { border-radius: 16px 0 0 16px; overflow: hidden; }
-  > :last-child { border-radius: 0 16px 16px 0; overflow: hidden; }
+  > :first-child {
+    border-radius: 16px 0 0 16px;
+    overflow: hidden;
+  }
+  > :last-child {
+    border-radius: 0 16px 16px 0;
+    overflow: hidden;
+  }
 
   ${({ theme }) => theme.media.lg} {
     grid-template-columns: repeat(2, 1fr);
 
-    > :first-child { border-radius: 16px 0 0 0; overflow: hidden; }
-    > :nth-child(2) { border-radius: 0 16px 0 0; overflow: hidden; }
-    > :nth-child(3) { border-radius: 0 0 0 16px; overflow: hidden; }
-    > :last-child { border-radius: 0 0 16px 0; overflow: hidden; }
+    > :first-child {
+      border-radius: 16px 0 0 0;
+      overflow: hidden;
+    }
+    > :nth-child(2) {
+      border-radius: 0 16px 0 0;
+      overflow: hidden;
+    }
+    > :nth-child(3) {
+      border-radius: 0 0 0 16px;
+      overflow: hidden;
+    }
+    > :last-child {
+      border-radius: 0 0 16px 0;
+      overflow: hidden;
+    }
   }
 
   ${({ theme }) => theme.media.sm} {
     grid-template-columns: 1fr;
 
-    > :first-child { border-radius: 16px 16px 0 0; overflow: hidden; }
-    > :nth-child(2), > :nth-child(3) { border-radius: 0; overflow: hidden; }
-    > :last-child { border-radius: 0 0 16px 16px; overflow: hidden; }
+    > :first-child {
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+    }
+    > :nth-child(2),
+    > :nth-child(3) {
+      border-radius: 0;
+      overflow: hidden;
+    }
+    > :last-child {
+      border-radius: 0 0 16px 16px;
+      overflow: hidden;
+    }
   }
 `;
 
