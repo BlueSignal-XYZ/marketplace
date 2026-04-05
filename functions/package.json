@@ -21,7 +21,7 @@
     "qrcode": "^1.5.3",
     "@googlemaps/google-maps-services-js": "^3.4.0",
     "@sendgrid/mail": "^8.1.0",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "eslint": "^10.2.0"
