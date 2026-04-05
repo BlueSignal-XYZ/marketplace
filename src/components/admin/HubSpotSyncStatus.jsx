@@ -1,9 +1,9 @@
 // HubSpot Sync Status Admin Component
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import HubSpotAPI from "../../apis/hubspot";
-import { CustomerAPI, OrderAPI } from "../../scripts/back_door";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import HubSpotAPI from '../../apis/hubspot';
+import { CustomerAPI, OrderAPI } from '../../scripts/back_door';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -51,7 +51,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #ff7a59 0%, #ff5c35 100%);
     border: none;
@@ -100,7 +100,7 @@ const StatCard = styled.div`
 const StatValue = styled.div`
   font-size: 32px;
   font-weight: 700;
-  color: ${(props) => props.color || "#1f2937"};
+  color: ${(props) => props.color || '#1f2937'};
 `;
 
 const StatLabel = styled.div`
@@ -121,14 +121,14 @@ const Tab = styled.button`
   border: none;
   font-size: 14px;
   font-weight: 600;
-  color: ${(props) => (props.active ? "#ff7a59" : "#6b7280")};
-  border-bottom: 2px solid ${(props) => (props.active ? "#ff7a59" : "transparent")};
+  color: ${(props) => (props.active ? '#ff7a59' : '#6b7280')};
+  border-bottom: 2px solid ${(props) => (props.active ? '#ff7a59' : 'transparent')};
   margin-bottom: -2px;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    color: ${(props) => (props.active ? "#ff7a59" : "#374151")};
+    color: ${(props) => (props.active ? '#ff7a59' : '#374151')};
   }
 `;
 
@@ -204,7 +204,7 @@ const SyncDot = styled.span`
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: ${(props) => (props.synced ? "#22c55e" : "#f59e0b")};
+  background: ${(props) => (props.synced ? '#22c55e' : '#f59e0b')};
 `;
 
 const HubSpotLink = styled.a`
@@ -264,7 +264,7 @@ const HubSpotSyncStatus = () => {
   const { ACTIONS } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
-  const [activeTab, setActiveTab] = useState("customers");
+  const [activeTab, setActiveTab] = useState('customers');
   const [customers, setCustomers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -303,7 +303,7 @@ const HubSpotSyncStatus = () => {
         totalErrors: errors.length,
       });
     } catch (error) {
-      console.error("Failed to load data:", error);
+      console.error('Failed to load data:', error);
     } finally {
       setLoading(false);
     }
@@ -317,20 +317,20 @@ const HubSpotSyncStatus = () => {
       const unsyncedOrders = orders.filter((o) => !o.hubspotDealId);
 
       const entities = [
-        ...unsyncedCustomers.map((c) => ({ type: "customer", id: c.id, data: c })),
-        ...unsyncedOrders.map((o) => ({ type: "order", id: o.id, data: o })),
+        ...unsyncedCustomers.map((c) => ({ type: 'customer', id: c.id, data: c })),
+        ...unsyncedOrders.map((o) => ({ type: 'order', id: o.id, data: o })),
       ];
 
       if (entities.length > 0) {
         await HubSpotAPI.sync.batchSync(entities);
-        ACTIONS?.logNotification?.("success", `Synced ${entities.length} entities to HubSpot`);
+        ACTIONS?.logNotification?.('success', `Synced ${entities.length} entities to HubSpot`);
         await loadData();
       } else {
-        ACTIONS?.logNotification?.("info", "All entities already synced");
+        ACTIONS?.logNotification?.('info', 'All entities already synced');
       }
     } catch (error) {
-      console.error("Sync failed:", error);
-      ACTIONS?.logNotification?.("error", "Sync failed: " + error.message);
+      console.error('Sync failed:', error);
+      ACTIONS?.logNotification?.('error', 'Sync failed: ' + error.message);
     } finally {
       setSyncing(false);
     }
@@ -339,21 +339,21 @@ const HubSpotSyncStatus = () => {
   const handleSyncEntity = async (type, id) => {
     try {
       await HubSpotAPI.sync.syncEntity(type, id, true);
-      ACTIONS?.logNotification?.("success", "Entity synced to HubSpot");
+      ACTIONS?.logNotification?.('success', 'Entity synced to HubSpot');
       await loadData();
     } catch (error) {
-      ACTIONS?.logNotification?.("error", "Sync failed: " + error.message);
+      ACTIONS?.logNotification?.('error', 'Sync failed: ' + error.message);
     }
   };
 
   const formatTimestamp = (timestamp) => {
-    if (!timestamp) return "Never";
+    if (!timestamp) return 'Never';
     const date = new Date(timestamp);
-    return date.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
     });
   };
 
@@ -384,7 +384,7 @@ const HubSpotSyncStatus = () => {
         <ActionButtons>
           <Button onClick={loadData}>Refresh</Button>
           <Button variant="primary" onClick={handleSyncAll} disabled={syncing}>
-            {syncing ? "Syncing..." : "Sync All"}
+            {syncing ? 'Syncing...' : 'Sync All'}
           </Button>
         </ActionButtons>
       </PageHeader>
@@ -407,7 +407,7 @@ const HubSpotSyncStatus = () => {
           <StatLabel>Orders Synced</StatLabel>
         </StatCard>
         <StatCard>
-          <StatValue color={stats.totalErrors > 0 ? "#dc2626" : "#22c55e"}>
+          <StatValue color={stats.totalErrors > 0 ? '#dc2626' : '#22c55e'}>
             {stats.totalErrors}
           </StatValue>
           <StatLabel>Sync Errors</StatLabel>
@@ -415,18 +415,18 @@ const HubSpotSyncStatus = () => {
       </StatsGrid>
 
       <TabNav>
-        <Tab active={activeTab === "customers"} onClick={() => setActiveTab("customers")}>
+        <Tab active={activeTab === 'customers'} onClick={() => setActiveTab('customers')}>
           Customers ({stats.totalCustomers})
         </Tab>
-        <Tab active={activeTab === "orders"} onClick={() => setActiveTab("orders")}>
+        <Tab active={activeTab === 'orders'} onClick={() => setActiveTab('orders')}>
           Orders ({stats.totalOrders})
         </Tab>
-        <Tab active={activeTab === "errors"} onClick={() => setActiveTab("errors")}>
+        <Tab active={activeTab === 'errors'} onClick={() => setActiveTab('errors')}>
           Errors ({stats.totalErrors})
         </Tab>
       </TabNav>
 
-      {activeTab === "customers" && (
+      {activeTab === 'customers' && (
         <Card>
           <CardHeader>
             <CardTitle>Customer → Contact Sync</CardTitle>
@@ -453,7 +453,7 @@ const HubSpotSyncStatus = () => {
                     <Td>
                       <SyncBadge synced={!!customer.hubspotContactId}>
                         <SyncDot synced={!!customer.hubspotContactId} />
-                        {customer.hubspotContactId ? "Synced" : "Not Synced"}
+                        {customer.hubspotContactId ? 'Synced' : 'Not Synced'}
                       </SyncBadge>
                     </Td>
                     <Td>
@@ -466,15 +466,15 @@ const HubSpotSyncStatus = () => {
                           {customer.hubspotContactId}
                         </HubSpotLink>
                       ) : (
-                        "-"
+                        '-'
                       )}
                     </Td>
                     <Td>
                       <Timestamp>{formatTimestamp(customer.hubspotSyncedAt)}</Timestamp>
                     </Td>
                     <Td>
-                      <RetryButton onClick={() => handleSyncEntity("customer", customer.id)}>
-                        {customer.hubspotContactId ? "Re-sync" : "Sync"}
+                      <RetryButton onClick={() => handleSyncEntity('customer', customer.id)}>
+                        {customer.hubspotContactId ? 'Re-sync' : 'Sync'}
                       </RetryButton>
                     </Td>
                   </tr>
@@ -485,7 +485,7 @@ const HubSpotSyncStatus = () => {
         </Card>
       )}
 
-      {activeTab === "orders" && (
+      {activeTab === 'orders' && (
         <Card>
           <CardHeader>
             <CardTitle>Order → Deal Sync</CardTitle>
@@ -508,13 +508,13 @@ const HubSpotSyncStatus = () => {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id}>
-                    <Td style={{ fontFamily: "monospace" }}>{order.id}</Td>
-                    <Td>{order.customerName || order.customerId || "-"}</Td>
+                    <Td style={{ fontFamily: 'monospace' }}>{order.id}</Td>
+                    <Td>{order.customerName || order.customerId || '-'}</Td>
                     <Td>{order.status}</Td>
                     <Td>
                       <SyncBadge synced={!!order.hubspotDealId}>
                         <SyncDot synced={!!order.hubspotDealId} />
-                        {order.hubspotDealId ? "Synced" : "Not Synced"}
+                        {order.hubspotDealId ? 'Synced' : 'Not Synced'}
                       </SyncBadge>
                     </Td>
                     <Td>
@@ -527,15 +527,15 @@ const HubSpotSyncStatus = () => {
                           {order.hubspotDealId}
                         </HubSpotLink>
                       ) : (
-                        "-"
+                        '-'
                       )}
                     </Td>
                     <Td>
                       <Timestamp>{formatTimestamp(order.hubspotSyncedAt)}</Timestamp>
                     </Td>
                     <Td>
-                      <RetryButton onClick={() => handleSyncEntity("order", order.id)}>
-                        {order.hubspotDealId ? "Re-sync" : "Sync"}
+                      <RetryButton onClick={() => handleSyncEntity('order', order.id)}>
+                        {order.hubspotDealId ? 'Re-sync' : 'Sync'}
                       </RetryButton>
                     </Td>
                   </tr>
@@ -546,7 +546,7 @@ const HubSpotSyncStatus = () => {
         </Card>
       )}
 
-      {activeTab === "errors" && (
+      {activeTab === 'errors' && (
         <Card>
           <CardHeader>
             <CardTitle>Sync Errors</CardTitle>
@@ -568,7 +568,7 @@ const HubSpotSyncStatus = () => {
                 {errors.map((error) => (
                   <ErrorRow key={error.id}>
                     <Td>{error.type}</Td>
-                    <Td style={{ fontFamily: "monospace" }}>{error.entityId}</Td>
+                    <Td style={{ fontFamily: 'monospace' }}>{error.entityId}</Td>
                     <Td>
                       <ErrorMessage>{error.error}</ErrorMessage>
                     </Td>
@@ -576,9 +576,7 @@ const HubSpotSyncStatus = () => {
                       <Timestamp>{formatTimestamp(error.timestamp)}</Timestamp>
                     </Td>
                     <Td>
-                      <RetryButton
-                        onClick={() => handleSyncEntity(error.type, error.entityId)}
-                      >
+                      <RetryButton onClick={() => handleSyncEntity(error.type, error.entityId)}>
                         Retry
                       </RetryButton>
                     </Td>

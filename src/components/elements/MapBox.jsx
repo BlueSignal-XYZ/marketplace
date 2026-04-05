@@ -1,11 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-import { MapsAPI } from "../../scripts/back_door";
+import { useRef, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { MapsAPI } from '../../scripts/back_door';
 
 const MapContainer = styled.div`
-height: 400px;
-width: 100%;
-
+  height: 400px;
+  width: 100%;
 
   border-radius: 10px;
   /* Hide the links at the bottom of the map */
@@ -34,11 +33,11 @@ function MapBox() {
         if (key) {
           setApiKey(key);
         } else {
-          setError("Could not load map API key");
+          setError('Could not load map API key');
         }
       } catch (err) {
-        console.error("Failed to fetch Maps API key:", err);
-        setError("Failed to load map configuration");
+        console.error('Failed to fetch Maps API key:', err);
+        setError('Failed to load map configuration');
       } finally {
         setLoading(false);
       }
@@ -56,7 +55,7 @@ function MapBox() {
       return;
     }
 
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
     script.async = true;
     script.defer = true;
@@ -67,7 +66,7 @@ function MapBox() {
     };
 
     script.onerror = () => {
-      setError("Failed to load Google Maps");
+      setError('Failed to load Google Maps');
     };
 
     return () => {
@@ -84,19 +83,42 @@ function MapBox() {
           center: { lat: 48.8036, lng: -95.0969 },
           zoom: 13,
           disableDefaultUI: true,
-          gestureHandling: "none",
-          mapTypeId: "satellite",
+          gestureHandling: 'none',
+          mapTypeId: 'satellite',
         })
       );
     }
   };
 
   if (loading) {
-    return <MapContainer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f3f4f6' }}>Loading map...</MapContainer>;
+    return (
+      <MapContainer
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#f3f4f6',
+        }}
+      >
+        Loading map...
+      </MapContainer>
+    );
   }
 
   if (error) {
-    return <MapContainer style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fef2f2', color: '#991b1b' }}>{error}</MapContainer>;
+    return (
+      <MapContainer
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#fef2f2',
+          color: '#991b1b',
+        }}
+      >
+        {error}
+      </MapContainer>
+    );
   }
 
   return <MapContainer ref={mapContainerRef} />;

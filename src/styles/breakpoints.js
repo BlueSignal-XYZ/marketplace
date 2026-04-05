@@ -2,11 +2,11 @@
 
 // Raw breakpoint values (for JS logic if you ever need it)
 export const breakpoints = {
-  xs: '320px',   // Small phones (iPhone SE)
-  sm: '375px',   // Standard phones (iPhone 12/13/14)
-  md: '428px',   // Large phones / phablets (iPhone Pro Max)
-  lg: '768px',   // Tablets (iPad Mini)
-  xl: '1024px',  // Small laptops / iPad Pro
+  xs: '320px', // Small phones (iPhone SE)
+  sm: '375px', // Standard phones (iPhone 12/13/14)
+  md: '428px', // Large phones / phablets (iPhone Pro Max)
+  lg: '768px', // Tablets (iPad Mini)
+  xl: '1024px', // Small laptops / iPad Pro
   xxl: '1280px', // Desktops
 };
 
@@ -57,7 +57,8 @@ export const safeAreaInsets = {
 export const withSafeArea = (position) => {
   if (position === 'top') return `padding-top: ${safeAreaInsets.top};`;
   if (position === 'bottom') return `padding-bottom: ${safeAreaInsets.bottom};`;
-  if (position === 'both') return `
+  if (position === 'both')
+    return `
     padding-top: ${safeAreaInsets.top};
     padding-bottom: ${safeAreaInsets.bottom};
   `;

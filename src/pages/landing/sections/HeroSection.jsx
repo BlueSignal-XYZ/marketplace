@@ -129,11 +129,13 @@ const PrimaryBtn = styled.a`
   padding: 14px 28px;
   border-radius: 100px;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 24px rgba(255,255,255,0.15);
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
   }
 
   ${({ theme }) => theme.media.sm} {
@@ -154,7 +156,9 @@ const SecondaryBtn = styled.a`
   padding: 14px 28px;
   border-radius: 100px;
   text-decoration: none;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.w30};
@@ -214,7 +218,8 @@ const MobileStage = styled.div`
   gap: 12px;
   width: 100%;
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme, $highlight }) => $highlight ? 'rgba(52,211,153,0.3)' : theme.colors.w08};
+  border: 1px solid
+    ${({ theme, $highlight }) => ($highlight ? 'rgba(52,211,153,0.3)' : theme.colors.w08)};
   border-radius: 12px;
   padding: 12px 16px;
   position: relative;
@@ -299,8 +304,17 @@ const MobileHeroViz = () => (
   <MobileVizWrapper>
     <MobileStage>
       <MobileStageIcon $bg="rgba(45,140,240,0.1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#2d8cf0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#2d8cf0"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
         </svg>
       </MobileStageIcon>
       <MobileStageText>
@@ -313,13 +327,24 @@ const MobileHeroViz = () => (
 
     <MobileStage $highlight>
       <MobileStageIcon $bg="rgba(52,211,153,0.12)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="4" y="4" width="16" height="16" rx="2" /><line x1="9" y1="9" x2="15" y2="9" /><line x1="9" y1="13" x2="13" y2="13" />
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#34d399"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <line x1="9" y1="9" x2="15" y2="9" />
+          <line x1="9" y1="13" x2="13" y2="13" />
         </svg>
       </MobileStageIcon>
       <MobileStageText>
         <MobileStageName>BlueSignal WQM-1</MobileStageName>
-        <MobileStageDetail>pH &middot; TDS &middot; Turbidity &middot; ORP &middot; Temp</MobileStageDetail>
+        <MobileStageDetail>
+          pH &middot; TDS &middot; Turbidity &middot; ORP &middot; Temp
+        </MobileStageDetail>
       </MobileStageText>
       <PulseDotMobile />
     </MobileStage>
@@ -328,8 +353,17 @@ const MobileHeroViz = () => (
 
     <MobileStage>
       <MobileStageIcon $bg="rgba(45,140,240,0.1)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#5badff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#5badff"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
         </svg>
       </MobileStageIcon>
       <MobileStageText>
@@ -411,22 +445,32 @@ const HeroSection = () => (
       </Badge>
 
       <Headline>
-        Monitor. Detect.<br /><GradientWord>Control.</GradientWord>
+        Monitor. Detect.
+        <br />
+        <GradientWord>Control.</GradientWord>
       </Headline>
 
       <Subhead>
-        Continuous water quality monitoring for tanks, ponds, and treatment systems.
-        Detect contamination and algae before they start — then automate the&nbsp;response.
+        Continuous water quality monitoring for tanks, ponds, and treatment systems. Detect
+        contamination and algae before they start — then automate the&nbsp;response.
       </Subhead>
 
       <CTARow>
         <PrimaryBtn href="#order" onClick={() => trackCTA('order_devkit_hero', 'Hero CTA')}>
           Order Dev Kit — $999
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M3 8h10M9 4l4 4-4 4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </PrimaryBtn>
-        <SecondaryBtn href="#specs" onClick={() => trackCTA('view_specs', 'Hero Specs')}>Full Specifications</SecondaryBtn>
+        <SecondaryBtn href="#specs" onClick={() => trackCTA('view_specs', 'Hero Specs')}>
+          Full Specifications
+        </SecondaryBtn>
       </CTARow>
 
       <SceneWrapper>

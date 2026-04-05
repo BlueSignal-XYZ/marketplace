@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import {useAppContext} from '../../../../context/AppContext';
+import { useAppContext } from '../../../../context/AppContext';
 
 /**
  * ProfileDropMenu Component
@@ -30,39 +30,26 @@ const ProfileDropMenu = () => {
 
   const variants = {
     open: { opacity: 1, height: 'auto' },
-    closed: { opacity: 0, height: 0 }
+    closed: { opacity: 0, height: 0 },
   };
 
   const menuItems = [
     { label: 'Profile', icon: faUser, action: '/profile' },
-    { label: 'Log out', icon: faSignOutAlt, action: () => handleLogOut()}
+    { label: 'Log out', icon: faSignOutAlt, action: () => handleLogOut() },
   ];
 
   return (
     <UserProfile>
       <ProfileDropMenuContainer onClick={() => setIsOpen(!isOpen)}>
-        {
-          user && (
-        <ProfileWrap>
-        <ProfileImage>
-          {user.username?.charAt(0).toUpperCase()}
-        </ProfileImage>
-        <ProfileNameWrap>
-
-        <ProfileName>{username}</ProfileName>
-        {
-          user?.type && (
-            <ProfileType>
-          {user.type.toLowerCase()}
-        </ProfileType>
-             
-            )
-          }
-          </ProfileNameWrap>
+        {user && (
+          <ProfileWrap>
+            <ProfileImage>{user.username?.charAt(0).toUpperCase()}</ProfileImage>
+            <ProfileNameWrap>
+              <ProfileName>{username}</ProfileName>
+              {user?.type && <ProfileType>{user.type.toLowerCase()}</ProfileType>}
+            </ProfileNameWrap>
           </ProfileWrap>
-            
-          )
-        }
+        )}
         <FontAwesomeIcon icon={faCaretDown} size="lg" />
       </ProfileDropMenuContainer>
 
@@ -86,44 +73,43 @@ const UserProfile = styled.div`
   position: relative;
 `;
 
-
 const ProfileNameWrap = styled.div`
-display: flex;
-flex-direction: column;
-text-align: left; 
-gap:2px;
-`
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 2px;
+`;
 
 const ProfileWrap = styled.div`
-display: flex;
-align-items: center;
-gap:8px
-`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
 
 const ProfileImage = styled.div`
-height: 40px; 
-width: 40px;
-border-radius: 50%;
-background: ${({theme}) => theme.colors.ui200};
-display: inline-flex;
-align-items: center;
-justify-content: center;
-`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.ui200};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const ProfileName = styled.div`
-text-transform: capitalize;
-`
+  text-transform: capitalize;
+`;
 const ProfileType = styled.div`
-color: ${({theme}) => theme.colors.ui800};
-font-weight: 500;
-text-transform: capitalize;
-font-size: 12px;
-`
+  color: ${({ theme }) => theme.colors.ui800};
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 12px;
+`;
 const ProfileDropMenuContainer = styled.button`
   background: none;
   position: relative;
   border: none;
-  color: ${props => props.theme.colors.primary500};
+  color: ${(props) => props.theme.colors.primary500};
   width: 100%;
   display: flex;
   align-items: center;
@@ -132,12 +118,12 @@ const ProfileDropMenuContainer = styled.button`
   padding: 8px 0px;
   font-weight: 600;
   font-size: 14px;
-  svg { 
-    color: ${({theme}) => theme.colors.ui500}
+  svg {
+    color: ${({ theme }) => theme.colors.ui500};
   }
   :hover {
-     background: none;
-     border: none;
+    background: none;
+    border: none;
   }
 `;
 
@@ -149,7 +135,7 @@ const ProfileDropMenuItems = styled(motion.div)`
   z-index: 9999;
   background-color: white;
   border-radius: 4px;
-  box-shadow: ${({theme}) => theme.boxShadow.light};
+  box-shadow: ${({ theme }) => theme.boxShadow.light};
 `;
 
 const ListItem = styled.div`
@@ -159,13 +145,13 @@ const ListItem = styled.div`
   font-size: 14px;
   display: flex;
   align-items: center;
-  gap:16px; 
+  gap: 16px;
   font-weight: 500;
-  color: ${props => props.theme.colors.primary700};
+  color: ${(props) => props.theme.colors.primary700};
   cursor: pointer;
 
   &:hover {
-    background-color: ${({theme}) => theme.colors.ui100}
+    background-color: ${({ theme }) => theme.colors.ui100};
   }
 `;
 

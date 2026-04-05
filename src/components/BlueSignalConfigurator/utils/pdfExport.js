@@ -9,8 +9,8 @@ import jsPDF from 'jspdf';
  */
 export const generateQuotePDF = async (quoteItems, products, options = {}) => {
   const {
-    companyName = "BlueSignal",
-    customerName = "",
+    companyName = 'BlueSignal',
+    customerName = '',
     quoteNumber = `QT-${Date.now().toString(36).toUpperCase()}`,
     validDays = 30,
   } = options;
@@ -44,12 +44,13 @@ export const generateQuotePDF = async (quoteItems, products, options = {}) => {
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const margin = 54; // 0.75 inch margins
-  const contentWidth = pageWidth - (margin * 2);
+  const contentWidth = pageWidth - margin * 2;
   let yPos = margin;
 
   // Helper functions
   const formatCurrency = (amount) => `$${amount.toLocaleString()}`;
-  const formatDate = (date) => date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const formatDate = (date) =>
+    date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   // Header - Logo and Quote Info
   pdf.setFontSize(28);
@@ -135,7 +136,7 @@ export const generateQuotePDF = async (quoteItems, products, options = {}) => {
     featuresToShow.forEach((feature, fi) => {
       pdf.setFontSize(8);
       pdf.setTextColor(107, 114, 128);
-      pdf.text(`• ${feature}`, margin + 12, yPos + 35 + (fi * 10));
+      pdf.text(`• ${feature}`, margin + 12, yPos + 35 + fi * 10);
     });
 
     // Price columns
@@ -219,7 +220,7 @@ export const generateQuotePDF = async (quoteItems, products, options = {}) => {
   pdf.setFontSize(9);
   pdf.setTextColor(107, 114, 128);
   terms.forEach((term, i) => {
-    pdf.text(`• ${term}`, margin + 16, yPos + 34 + (i * 11));
+    pdf.text(`• ${term}`, margin + 16, yPos + 34 + i * 11);
   });
 
   yPos += 110;
@@ -232,11 +233,17 @@ export const generateQuotePDF = async (quoteItems, products, options = {}) => {
   yPos += 18;
   pdf.setFontSize(9);
   pdf.setTextColor(156, 163, 175);
-  pdf.text('BlueSignal Water Quality Monitoring Solutions', pageWidth / 2, yPos, { align: 'center' });
-  pdf.text('Questions? Contact your sales representative', pageWidth / 2, yPos + 12, { align: 'center' });
+  pdf.text('BlueSignal Water Quality Monitoring Solutions', pageWidth / 2, yPos, {
+    align: 'center',
+  });
+  pdf.text('Questions? Contact your sales representative', pageWidth / 2, yPos + 12, {
+    align: 'center',
+  });
 
   // Generate filename: BlueSignal_Quote_{CustomerName}_{YYYY-MM-DD}.pdf
-  const sanitizedName = customerName ? customerName.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30) : 'Customer';
+  const sanitizedName = customerName
+    ? customerName.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30)
+    : 'Customer';
   const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
   const filename = `BlueSignal_Quote_${sanitizedName}_${dateStr}.pdf`;
 
@@ -252,8 +259,8 @@ export const generateQuotePDF = async (quoteItems, products, options = {}) => {
  */
 export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
   const {
-    companyName = "BlueSignal",
-    customerName = "",
+    companyName = 'BlueSignal',
+    customerName = '',
     quoteNumber = `QT-${Date.now().toString(36).toUpperCase()}`,
     validDays = 30,
   } = options;
@@ -278,7 +285,7 @@ export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
     };
   });
 
-  const printWindow = window.open("", "_blank", "width=800,height=600");
+  const printWindow = window.open('', '_blank', 'width=800,height=600');
 
   printWindow.document.write(`
 <!DOCTYPE html>
@@ -554,7 +561,7 @@ export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
     <div class="customer-section">
       <div class="customer">
         <div class="section-title">Prepared For</div>
-        <div class="customer-name">${customerName || "[Customer Name]"}</div>
+        <div class="customer-name">${customerName || '[Customer Name]'}</div>
       </div>
       <div class="validity">
         <div class="section-title">Valid Until</div>
@@ -581,7 +588,7 @@ export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
               <div class="item-subtitle">${item.subtitle}</div>
               <div class="item-sku">${item.sku}</div>
               <ul class="item-features">
-                ${item.features.map((f) => `<li>${f}</li>`).join("")}
+                ${item.features.map((f) => `<li>${f}</li>`).join('')}
               </ul>
             </td>
             <td class="unit-price">$${item.unitPrice.toLocaleString()}</td>
@@ -590,7 +597,7 @@ export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
           </tr>
         `
           )
-          .join("")}
+          .join('')}
       </tbody>
     </table>
 
@@ -645,7 +652,7 @@ export const generateQuotePDFPrint = (quoteItems, products, options = {}) => {
 export const generateSpecsPDF = (product) => {
   const bomTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);
 
-  const printWindow = window.open("", "_blank", "width=800,height=600");
+  const printWindow = window.open('', '_blank', 'width=800,height=600');
 
   printWindow.document.write(`
 <!DOCTYPE html>
@@ -839,7 +846,7 @@ export const generateSpecsPDF = (product) => {
       </div>
       <div class="spec-card">
         <div class="spec-label">Power</div>
-        <div class="spec-value">${product.power.type}${product.solar ? ` (${product.solar.watts}W)` : ""}</div>
+        <div class="spec-value">${product.power.type}${product.solar ? ` (${product.solar.watts}W)` : ''}</div>
       </div>
       <div class="spec-card">
         <div class="spec-label">Sensors</div>
@@ -852,7 +859,7 @@ export const generateSpecsPDF = (product) => {
         <div class="spec-label">Ultrasonic</div>
         <div class="spec-value">${product.ultrasonic.watts}W @ ${product.ultrasonic.frequency}</div>
       </div>`
-          : ""
+          : ''
       }
       ${
         product.battery
@@ -861,7 +868,7 @@ export const generateSpecsPDF = (product) => {
         <div class="spec-label">Battery</div>
         <div class="spec-value">${product.battery.voltage}V ${product.battery.capacity}Ah (${product.battery.wh}Wh)</div>
       </div>`
-          : ""
+          : ''
       }
       <div class="spec-card">
         <div class="spec-label">Autonomy</div>
@@ -879,12 +886,12 @@ export const generateSpecsPDF = (product) => {
 
     <h2>Features</h2>
     <ul class="features-list">
-      ${product.features.map((f) => `<li>${f}</li>`).join("")}
+      ${product.features.map((f) => `<li>${f}</li>`).join('')}
     </ul>
 
     <h2>Sensor Suite</h2>
     <ul class="features-list">
-      ${product.sensorList.map((s) => `<li>${s}</li>`).join("")}
+      ${product.sensorList.map((s) => `<li>${s}</li>`).join('')}
     </ul>
 
     <h2>Bill of Materials</h2>
@@ -898,14 +905,18 @@ export const generateSpecsPDF = (product) => {
         </tr>
       </thead>
       <tbody>
-        ${product.bom.map((item) => `
+        ${product.bom
+          .map(
+            (item) => `
           <tr>
             <td>${item.category}</td>
             <td>${item.item}</td>
             <td>${item.qty}</td>
             <td>$${item.cost.toLocaleString()}</td>
           </tr>
-        `).join("")}
+        `
+          )
+          .join('')}
         <tr class="bom-total">
           <td colspan="3"><strong>Total BOM Cost</strong></td>
           <td><strong>$${bomTotal.toLocaleString()}</strong></td>

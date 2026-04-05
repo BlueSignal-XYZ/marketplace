@@ -4,8 +4,9 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.7s ${({ theme }) => theme.ease},
-              transform 0.7s ${({ theme }) => theme.ease};
+  transition:
+    opacity 0.7s ${({ theme }) => theme.ease},
+    transform 0.7s ${({ theme }) => theme.ease};
   transition-delay: ${({ $delay }) => $delay || 0}s;
   min-width: 0;
   max-width: 100%;
@@ -16,7 +17,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const RevealOnScroll = ({ children, delay = 0, threshold = 0.08, rootMargin = '0px 0px -40px 0px', className }) => {
+const RevealOnScroll = ({
+  children,
+  delay = 0,
+  threshold = 0.08,
+  rootMargin = '0px 0px -40px 0px',
+  className,
+}) => {
   const ref = useRef(null);
 
   useEffect(() => {

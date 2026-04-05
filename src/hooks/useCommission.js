@@ -3,21 +3,21 @@
  * Manages the device commissioning workflow
  */
 
-import { useState, useCallback, useEffect } from "react";
-import { ref, onValue, off } from "firebase/database";
-import { db, auth } from "../apis/firebase";
-import axios from "axios";
-import configs from "../../configs";
+import { useState, useCallback, useEffect } from 'react';
+import { ref, onValue, off } from 'firebase/database';
+import { db, auth } from '../apis/firebase';
+import axios from 'axios';
+import configs from '../../configs';
 
 // Commission workflow steps
 const COMMISSION_STEPS = [
-  { step: 1, name: "device_scan", label: "Scan Device", required: true },
-  { step: 2, name: "site_selection", label: "Select Site", required: true },
-  { step: 3, name: "location_capture", label: "Set Location", required: true },
-  { step: 4, name: "photo_upload", label: "Upload Photos", required: true },
-  { step: 5, name: "connectivity_test", label: "Test Device", required: true },
-  { step: 6, name: "sensor_calibration", label: "Calibration", required: false },
-  { step: 7, name: "review_confirm", label: "Review & Confirm", required: true },
+  { step: 1, name: 'device_scan', label: 'Scan Device', required: true },
+  { step: 2, name: 'site_selection', label: 'Select Site', required: true },
+  { step: 3, name: 'location_capture', label: 'Set Location', required: true },
+  { step: 4, name: 'photo_upload', label: 'Upload Photos', required: true },
+  { step: 5, name: 'connectivity_test', label: 'Test Device', required: true },
+  { step: 6, name: 'sensor_calibration', label: 'Calibration', required: false },
+  { step: 7, name: 'review_confirm', label: 'Review & Confirm', required: true },
 ];
 
 /**
@@ -31,7 +31,7 @@ const getAuthHeaders = async () => {
       return { Authorization: `Bearer ${token}` };
     }
   } catch (error) {
-    console.error("Error getting auth token:", error);
+    console.error('Error getting auth token:', error);
   }
   return {};
 };
@@ -43,7 +43,7 @@ export function useCommission() {
   const [commissionId, setCommissionId] = useState(null);
   const [commission, setCommission] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
-  const [status, setStatus] = useState("idle"); // idle, in_progress, completed, failed
+  const [status, setStatus] = useState('idle'); // idle, in_progress, completed, failed
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -62,7 +62,7 @@ export function useCommission() {
     };
 
     onValue(commissionRef, handleUpdate, (err) => {
-      console.error("Commission subscription error:", err);
+      console.error('Commission subscription error:', err);
     });
 
     return () => off(commissionRef);
@@ -86,11 +86,11 @@ export function useCommission() {
       const data = response.data;
       setCommissionId(data.commissionId);
       setCurrentStep(1);
-      setStatus("initiated");
+      setStatus('initiated');
 
       return data.commissionId;
     } catch (err) {
-      const message = err.response?.data?.error || err.message || "Failed to initiate commission";
+      const message = err.response?.data?.error || err.message || 'Failed to initiate commission';
       setError(message);
       throw new Error(message);
     } finally {
@@ -104,7 +104,7 @@ export function useCommission() {
   const updateStep = useCallback(
     async (stepName, stepData) => {
       if (!commissionId) {
-        throw new Error("No active commission");
+        throw new Error('No active commission');
       }
 
       setLoading(true);
@@ -120,7 +120,7 @@ export function useCommission() {
 
         return response.data;
       } catch (err) {
-        const message = err.response?.data?.error || err.message || "Failed to update step";
+        const message = err.response?.data?.error || err.message || 'Failed to update step';
         setError(message);
         throw new Error(message);
       } finally {
@@ -135,7 +135,7 @@ export function useCommission() {
    */
   const complete = useCallback(async () => {
     if (!commissionId) {
-      throw new Error("No active commission");
+      throw new Error('No active commission');
     }
 
     setLoading(true);
@@ -149,10 +149,10 @@ export function useCommission() {
         { headers }
       );
 
-      setStatus("completed");
+      setStatus('completed');
       return response.data;
     } catch (err) {
-      const message = err.response?.data?.error || err.message || "Failed to complete commission";
+      const message = err.response?.data?.error || err.message || 'Failed to complete commission';
       setError(message);
       throw new Error(message);
     } finally {
@@ -164,9 +164,9 @@ export function useCommission() {
    * Cancel the commissioning process
    */
   const cancel = useCallback(
-    async (reason = "") => {
+    async (reason = '') => {
       if (!commissionId) {
-        throw new Error("No active commission");
+        throw new Error('No active commission');
       }
 
       setLoading(true);
@@ -180,12 +180,12 @@ export function useCommission() {
           { headers }
         );
 
-        setStatus("failed");
+        setStatus('failed');
         setCommissionId(null);
         setCommission(null);
         setCurrentStep(1);
       } catch (err) {
-        const message = err.response?.data?.error || err.message || "Failed to cancel commission";
+        const message = err.response?.data?.error || err.message || 'Failed to cancel commission';
         setError(message);
         throw new Error(message);
       } finally {
@@ -201,7 +201,7 @@ export function useCommission() {
   const runTests = useCallback(
     async (deviceId, tests = null) => {
       if (!commissionId) {
-        throw new Error("No active commission");
+        throw new Error('No active commission');
       }
 
       setLoading(true);
@@ -217,7 +217,7 @@ export function useCommission() {
 
         return response.data;
       } catch (err) {
-        const message = err.response?.data?.error || err.message || "Failed to run tests";
+        const message = err.response?.data?.error || err.message || 'Failed to run tests';
         setError(message);
         throw new Error(message);
       } finally {
@@ -240,9 +240,9 @@ export function useCommission() {
    */
   const getStepStatus = useCallback(
     (stepName) => {
-      if (!commission?.workflow?.steps) return "pending";
+      if (!commission?.workflow?.steps) return 'pending';
       const step = commission.workflow.steps.find((s) => s.name === stepName);
-      return step?.status || "pending";
+      return step?.status || 'pending';
     },
     [commission]
   );
@@ -252,7 +252,7 @@ export function useCommission() {
    */
   const isStepCompleted = useCallback(
     (stepName) => {
-      return getStepStatus(stepName) === "completed";
+      return getStepStatus(stepName) === 'completed';
     },
     [getStepStatus]
   );
@@ -294,7 +294,7 @@ export function useCommission() {
     setCommissionId(null);
     setCommission(null);
     setCurrentStep(1);
-    setStatus("idle");
+    setStatus('idle');
     setError(null);
   }, []);
 
@@ -321,7 +321,7 @@ export function useCommission() {
 
       return data.commission;
     } catch (err) {
-      const message = err.response?.data?.error || err.message || "Failed to load commission";
+      const message = err.response?.data?.error || err.message || 'Failed to load commission';
       setError(message);
       throw new Error(message);
     } finally {
@@ -359,10 +359,16 @@ export function useCommission() {
     getStepsWithStatus,
 
     // Status checks
-    isIdle: status === "idle",
-    isInProgress: status === "initiated" || status.startsWith("device_") || status.startsWith("site_") || status.startsWith("location_") || status.startsWith("photo_") || status.startsWith("tests_"),
-    isCompleted: status === "completed",
-    isFailed: status === "failed",
+    isIdle: status === 'idle',
+    isInProgress:
+      status === 'initiated' ||
+      status.startsWith('device_') ||
+      status.startsWith('site_') ||
+      status.startsWith('location_') ||
+      status.startsWith('photo_') ||
+      status.startsWith('tests_'),
+    isCompleted: status === 'completed',
+    isFailed: status === 'failed',
   };
 }
 

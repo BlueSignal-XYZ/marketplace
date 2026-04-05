@@ -1,26 +1,21 @@
 // /src/routes/components/welcome/LoginForm.jsx
-import React, { useState } from "react";
-import styled from "styled-components";
-import {
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth, googleProvider } from "../../../apis/firebase";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { auth, googleProvider } from '../../../apis/firebase';
 
-import Notification from "../../../components/popups/NotificationPopup";
-import { PROMPT_CARD, PROMPT_FORM } from "../../../components/lib/styled";
-import { formVariant } from "./motion_variants";
-import FormSection from "../../../components/shared/FormSection/FormSection";
-import { Input } from "../../../components/shared/input/Input";
+import Notification from '../../../components/popups/NotificationPopup';
+import { PROMPT_CARD, PROMPT_FORM } from '../../../components/lib/styled';
+import { formVariant } from './motion_variants';
+import FormSection from '../../../components/shared/FormSection/FormSection';
+import { Input } from '../../../components/shared/input/Input';
 import {
   ButtonLink,
   ButtonPrimary,
   ButtonSecondary,
-} from "../../../components/shared/button/Button";
-import { useAppContext } from "../../../context/AppContext";
-import { getAppMode } from "../../../utils/modeDetection";
+} from '../../../components/shared/button/Button';
+import { getAppMode } from '../../../utils/modeDetection';
 
 /* -------------------------------------------------------------------------- */
 /*                               STYLED WRAPPERS                               */
@@ -44,13 +39,13 @@ const Header = styled.div`
     margin: 0;
     font-size: 20px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   p {
     margin: 4px 0 0;
     font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -72,10 +67,10 @@ const ActionsRow = styled.div`
 const FooterRow = styled.div`
   margin-top: 12px;
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 
   a {
-    color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
     text-decoration: underline;
     cursor: pointer;
   }
@@ -88,10 +83,10 @@ const GoogleButton = styled.button`
   justify-content: center;
   gap: 12px;
   padding: 12px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -99,8 +94,8 @@ const GoogleButton = styled.button`
   min-height: 48px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 
   &:disabled {
@@ -122,15 +117,15 @@ const Divider = styled.div`
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     flex: 1;
     height: 1px;
-    background: ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   }
 
   span {
     font-size: 12px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -152,12 +147,12 @@ function isValidEmail(email) {
 // Mode-specific login content
 const LOGIN_CONTENT = {
   cloud: {
-    heading: "Sign in to Cloud",
-    subheading: "Access your sensors, dashboards, and monitoring tools.",
+    heading: 'Sign in to Cloud',
+    subheading: 'Access your sensors, dashboards, and monitoring tools.',
   },
   marketplace: {
-    heading: "Sign in to continue",
-    subheading: "Access your marketplace tools, dashboards, and projects.",
+    heading: 'Sign in to continue',
+    subheading: 'Access your marketplace tools, dashboards, and projects.',
   },
 };
 
@@ -167,8 +162,8 @@ const LoginForm = () => {
   const isCloud = mode === 'cloud';
   const content = isCloud ? LOGIN_CONTENT.cloud : LOGIN_CONTENT.marketplace;
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [submitting, setSubmitting] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -178,7 +173,7 @@ const LoginForm = () => {
 
   const handleError = (message) => {
     setNotification({
-      type: "error",
+      type: 'error',
       message,
     });
   };
@@ -187,12 +182,12 @@ const LoginForm = () => {
     e.preventDefault();
 
     if (!email || !password) {
-      handleError("Please enter both email and password.");
+      handleError('Please enter both email and password.');
       return;
     }
 
     if (!isValidEmail(email)) {
-      handleError("Please enter a valid email address.");
+      handleError('Please enter a valid email address.');
       return;
     }
 
@@ -202,19 +197,19 @@ const LoginForm = () => {
       // Auth listener will handle the rest
     } catch (err) {
       // SECURITY: Use generic error message to prevent user enumeration
-      handleError("Invalid email or password. Please try again.");
+      handleError('Invalid email or password. Please try again.');
       setSubmitting(false);
     }
   };
 
   const handleResetPassword = async () => {
     if (!email) {
-      handleError("Enter your email first to receive a reset link.");
+      handleError('Enter your email first to receive a reset link.');
       return;
     }
 
     if (!isValidEmail(email)) {
-      handleError("Please enter a valid email address.");
+      handleError('Please enter a valid email address.');
       return;
     }
 
@@ -223,14 +218,14 @@ const LoginForm = () => {
       await sendPasswordResetEmail(auth, email);
       // SECURITY: Always show success to prevent email enumeration
       setNotification({
-        type: "success",
-        message: "If an account exists with this email, a reset link will be sent.",
+        type: 'success',
+        message: 'If an account exists with this email, a reset link will be sent.',
       });
     } catch (err) {
       // SECURITY: Still show success message to prevent enumeration
       setNotification({
-        type: "success",
-        message: "If an account exists with this email, a reset link will be sent.",
+        type: 'success',
+        message: 'If an account exists with this email, a reset link will be sent.',
       });
     } finally {
       setSubmitting(false);
@@ -244,16 +239,16 @@ const LoginForm = () => {
       // Auth listener will handle the rest
     } catch (err) {
       // Handle specific error cases
-      if (err.code === "auth/popup-closed-by-user") {
+      if (err.code === 'auth/popup-closed-by-user') {
         // User closed popup - don't show error
-      } else if (err.code === "auth/popup-blocked") {
-        handleError("Popup was blocked. Please allow popups and try again.");
-      } else if (err.code === "auth/unauthorized-domain") {
-        handleError("Authentication is not available on this domain.");
-      } else if (err.code === "auth/cancelled-popup-request") {
+      } else if (err.code === 'auth/popup-blocked') {
+        handleError('Popup was blocked. Please allow popups and try again.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        handleError('Authentication is not available on this domain.');
+      } else if (err.code === 'auth/cancelled-popup-request') {
         // Another popup was opened - ignore
       } else {
-        handleError("Unable to sign in with Google. Please try again.");
+        handleError('Unable to sign in with Google. Please try again.');
       }
       setSubmitting(false);
     }
@@ -261,12 +256,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <Card
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        variants={formVariant}
-      >
+      <Card initial="hidden" animate="visible" exit="exit" variants={formVariant}>
         <FormSection>
           <Header>
             <h2>{content.heading}</h2>
@@ -274,11 +264,7 @@ const LoginForm = () => {
           </Header>
 
           {/* Google Sign-In Button */}
-          <GoogleButton
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={submitting}
-          >
+          <GoogleButton type="button" onClick={handleGoogleLogin} disabled={submitting}>
             <svg className="google-icon" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
@@ -297,7 +283,7 @@ const LoginForm = () => {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            {submitting ? "Signing in..." : "Sign in with Google"}
+            {submitting ? 'Signing in...' : 'Sign in with Google'}
           </GoogleButton>
 
           <Divider>
@@ -326,7 +312,7 @@ const LoginForm = () => {
             />
 
             <ButtonPrimary type="submit" disabled={submitting} style={{ width: '100%' }}>
-              {submitting ? "Signing in..." : "Sign in"}
+              {submitting ? 'Signing in...' : 'Sign in'}
             </ButtonPrimary>
 
             <div style={{ textAlign: 'center', marginTop: 4 }}>
@@ -342,24 +328,23 @@ const LoginForm = () => {
           </Form>
 
           <FooterRow>
-            Need an account?{" "}
-            <ButtonLink
-              type="button"
-              onClick={() => navigate("/?mode=register")}
-            >
+            Need an account?{' '}
+            <ButtonLink type="button" onClick={() => navigate('/?mode=register')}>
               Create one here.
             </ButtonLink>
           </FooterRow>
 
           {!isCloud && (
-            <div style={{
-              marginTop: '24px',
-              paddingTop: '16px',
-              borderTop: '1px solid #e5e7eb',
-              textAlign: 'center',
-              fontSize: '12px',
-              color: '#6b7280'
-            }}>
+            <div
+              style={{
+                marginTop: '24px',
+                paddingTop: '16px',
+                borderTop: '1px solid #e5e7eb',
+                textAlign: 'center',
+                fontSize: '12px',
+                color: '#6b7280',
+              }}
+            >
               Hardware by{' '}
               <a
                 href="https://bluesignal.xyz?source=wqt-login"
@@ -372,14 +357,16 @@ const LoginForm = () => {
             </div>
           )}
           {isCloud && (
-            <div style={{
-              marginTop: '24px',
-              paddingTop: '16px',
-              borderTop: '1px solid #e5e7eb',
-              textAlign: 'center',
-              fontSize: '12px',
-              color: '#6b7280'
-            }}>
+            <div
+              style={{
+                marginTop: '24px',
+                paddingTop: '16px',
+                borderTop: '1px solid #e5e7eb',
+                textAlign: 'center',
+                fontSize: '12px',
+                color: '#6b7280',
+              }}
+            >
               <a
                 href="https://waterquality.trading"
                 target="_blank"
@@ -387,8 +374,8 @@ const LoginForm = () => {
                 style={{ color: '#1D7072', textDecoration: 'none', fontWeight: 500 }}
               >
                 WaterQuality.Trading
-              </a>
-              {' '}- Credit Marketplace
+              </a>{' '}
+              - Credit Marketplace
             </div>
           )}
         </FormSection>

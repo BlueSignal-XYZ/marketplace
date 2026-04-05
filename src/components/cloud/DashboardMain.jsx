@@ -1,6 +1,5 @@
 // /src/components/cloud/DashboardMain.jsx
-import React from "react";
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Page = styled.main`
   width: 100%;
@@ -11,7 +10,7 @@ const Page = styled.main`
   display: flex;
   justify-content: center;
 
-  background: ${({ theme }) => theme.colors?.bg || "#fafafa"};
+  background: ${({ theme }) => theme.colors?.bg || '#fafafa'};
 
   @media (max-width: 600px) {
     padding: 20px 16px calc(40px + env(safe-area-inset-bottom, 0px));
@@ -25,7 +24,9 @@ const Shell = styled.div`
 
   background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.06),
+    0 1px 3px rgba(15, 23, 42, 0.08);
   padding: 32px;
   box-sizing: border-box;
 
@@ -50,7 +51,7 @@ const Title = styled.h1`
   font-size: 24px;
   line-height: 1.3;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   letter-spacing: -0.02em;
 `;
 
@@ -58,7 +59,7 @@ const Subtitle = styled.p`
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const ViewsStrip = styled.div`
@@ -71,20 +72,15 @@ const ViewChip = styled.button`
   border-radius: 999px;
   border: 1px solid
     ${({ active, theme }) =>
-      active
-        ? theme.colors?.primary300 || "#7dd3fc"
-        : theme.colors?.ui200 || "#e5e7eb"};
+      active ? theme.colors?.primary300 || '#7dd3fc' : theme.colors?.ui200 || '#e5e7eb'};
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 500;
   cursor: default;
 
-  background: ${({ active, theme }) =>
-    active ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+  background: ${({ active, theme }) => (active ? theme.colors?.primary50 || '#e0f2ff' : '#ffffff')};
   color: ${({ active, theme }) =>
-    active
-      ? theme.colors?.primary700 || "#0369a1"
-      : theme.colors?.ui800 || "#111827"};
+    active ? theme.colors?.primary700 || '#0369a1' : theme.colors?.ui800 || '#111827'};
 `;
 
 const DevicesHeader = styled.div`
@@ -104,13 +100,13 @@ const DevicesTitle = styled.div`
     margin: 0;
     font-size: 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   p {
     margin: 4px 0 0;
     font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -122,11 +118,11 @@ const AddDeviceButton = styled.button`
   font-weight: 600;
   cursor: pointer;
 
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  background: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   color: #ffffff;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    background: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
   }
 `;
 
@@ -146,7 +142,7 @@ const DevicesGrid = styled.div`
 
 const DeviceCard = styled.div`
   border-radius: 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   padding: 16px 18px;
   background: #ffffff;
   display: flex;
@@ -155,7 +151,7 @@ const DeviceCard = styled.div`
   transition: all 0.15s ease-out;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+    border-color: ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
   }
 `;
@@ -169,7 +165,7 @@ const DeviceHeader = styled.div`
 const DeviceName = styled.div`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const StatusPill = styled.span`
@@ -179,11 +175,7 @@ const StatusPill = styled.span`
   font-weight: 600;
   color: #ffffff;
   background: ${({ variant }) =>
-    variant === "warning"
-      ? "#f97316"
-      : variant === "offline"
-      ? "#dc2626"
-      : "#16a34a"};
+    variant === 'warning' ? '#f97316' : variant === 'offline' ? '#dc2626' : '#16a34a'};
 `;
 
 const DeviceMeta = styled.div`
@@ -191,13 +183,13 @@ const DeviceMeta = styled.div`
   flex-direction: column;
   gap: 2px;
   font-size: 12px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const FooterStrip = styled.div`
   margin-top: 4px;
   font-size: 11px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   display: flex;
   align-items: center;
   gap: 6px;
@@ -210,8 +202,8 @@ const StatusTooltip = styled.span`
   justify-content: center;
   width: 14px;
   height: 14px;
-  background: ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  background: ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   border-radius: 50%;
   font-size: 9px;
   font-weight: 600;
@@ -223,7 +215,7 @@ const StatusTooltip = styled.span`
     bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
-    background: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+    background: ${({ theme }) => theme.colors?.ui900 || '#111827'};
     color: #ffffff;
     padding: 8px 12px;
     border-radius: 6px;
@@ -235,13 +227,13 @@ const StatusTooltip = styled.span`
   }
 
   &:hover::before {
-    content: "";
+    content: '';
     position: absolute;
     bottom: calc(100% + 2px);
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-top-color: ${({ theme }) => theme.colors?.ui900 || "#111827"};
+    border-top-color: ${({ theme }) => theme.colors?.ui900 || '#111827'};
   }
 `;
 
@@ -252,8 +244,8 @@ export default function DashboardMain() {
         <HeaderBlock>
           <Title>BlueSignal Cloud Monitoring</Title>
           <Subtitle>
-            Your devices, signals, and water quality in one view. Add a gateway
-            or probe to start streaming real-time data into the cloud.
+            Your devices, signals, and water quality in one view. Add a gateway or probe to start
+            streaming real-time data into the cloud.
           </Subtitle>
         </HeaderBlock>
 

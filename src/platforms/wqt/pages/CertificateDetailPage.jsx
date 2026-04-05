@@ -4,7 +4,7 @@
  * html2canvas lazy-loaded on "Export as Image" click.
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Badge } from '../../../design-system/primitives/Badge';
@@ -29,12 +29,14 @@ const Back = styled(Link)`
   align-items: center;
   gap: 4px;
   margin-bottom: 20px;
-  &:hover { color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const VerifiedBanner = styled.div`
-  background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(0,82,204,0.06));
-  border: 1px solid rgba(139,92,246,0.15);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(0, 82, 204, 0.06));
+  border: 1px solid rgba(139, 92, 246, 0.15);
   border-radius: ${({ theme }) => theme.radius.lg}px;
   padding: 32px;
   text-align: center;
@@ -88,7 +90,9 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Row = styled.div`
@@ -118,7 +122,9 @@ const ExtLink = styled.a`
   font-weight: 500;
   color: ${({ theme }) => theme.colors.primary};
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const StatsRow = styled.div`
@@ -167,14 +173,18 @@ function CertSkeleton() {
       </div>
       <div style={{ height: 32 }} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-        {[1,2,3,4].map(i => <Skeleton key={i} height={70} />)}
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} height={70} />
+        ))}
       </div>
     </Page>
   );
 }
 
 export function CertificateDetailPage() {
-  useEffect(() => { document.title = 'Certificate — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Certificate — WaterQuality.Trading';
+  }, []);
   const { id } = useParams();
   const { toast } = useToastContext();
   const certRef = useRef(null);
@@ -193,13 +203,16 @@ export function CertificateDetailPage() {
         const data = await getCertificate(id);
         if (!cancelled) setCert(data);
       } catch (err) {
-        if (!cancelled) setError(err instanceof ApiError ? err.message : 'Failed to load certificate.');
+        if (!cancelled)
+          setError(err instanceof ApiError ? err.message : 'Failed to load certificate.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   const handleExportImage = useCallback(async () => {
@@ -229,7 +242,9 @@ export function CertificateDetailPage() {
         <ErrorBox>
           <ErrorTitle>Certificate not found</ErrorTitle>
           <ErrorDesc>{error || 'This certificate may not exist or has been removed.'}</ErrorDesc>
-          <Button variant="outline" as={Link} to="/marketplace">Back to Marketplace</Button>
+          <Button variant="outline" as={Link} to="/marketplace">
+            Back to Marketplace
+          </Button>
         </ErrorBox>
       </Page>
     );
@@ -237,7 +252,12 @@ export function CertificateDetailPage() {
 
   const credit = cert.credit || {};
   const hasMint = !!(cert.transactionHash && cert.tokenId);
-  const nutrientLabel = credit.nutrientType === 'nitrogen' ? 'Nitrogen (N)' : credit.nutrientType === 'phosphorus' ? 'Phosphorus (P)' : 'Combined';
+  const nutrientLabel =
+    credit.nutrientType === 'nitrogen'
+      ? 'Nitrogen (N)'
+      : credit.nutrientType === 'phosphorus'
+        ? 'Phosphorus (P)'
+        : 'Combined';
 
   return (
     <Page>
@@ -249,41 +269,77 @@ export function CertificateDetailPage() {
             <CheckIcon>{'\uD83D\uDEE1'}</CheckIcon>
             <BannerTitle>Verified Environmental Credit</BannerTitle>
             <BannerSub>
-              This certificate has been verified on the {cert.network === 'polygon' ? 'Polygon' : 'Polygon Amoy'} blockchain.
+              This certificate has been verified on the{' '}
+              {cert.network === 'polygon' ? 'Polygon' : 'Polygon Amoy'} blockchain.
               <br />
-              Certificate #{cert.tokenId} &middot; Minted {cert.mintedAt ? new Date(cert.mintedAt).toLocaleDateString() : '\u2014'}
+              Certificate #{cert.tokenId} &middot; Minted{' '}
+              {cert.mintedAt ? new Date(cert.mintedAt).toLocaleDateString() : '\u2014'}
             </BannerSub>
             <div style={{ marginTop: 12 }}>
-              <Badge variant="verified" dot>Blockchain Verified</Badge>
+              <Badge variant="verified" dot>
+                Blockchain Verified
+              </Badge>
             </div>
           </VerifiedBanner>
         ) : (
           <PendingBanner>
             <CheckIcon>{'\u23F3'}</CheckIcon>
             <BannerTitle>Pending Verification</BannerTitle>
-            <BannerSub>This certificate has not yet been minted on-chain. On-chain verification is in progress.</BannerSub>
+            <BannerSub>
+              This certificate has not yet been minted on-chain. On-chain verification is in
+              progress.
+            </BannerSub>
             <div style={{ marginTop: 12 }}>
-              <Badge variant="warning" dot>Pending Mint</Badge>
+              <Badge variant="warning" dot>
+                Pending Mint
+              </Badge>
             </div>
           </PendingBanner>
         )}
 
         <StatsRow>
           <DataCard label="Nutrient Type" value={nutrientLabel} compact />
-          <DataCard label="Quantity Removed" value={(credit.quantity || 0).toLocaleString()} unit="kg" compact />
+          <DataCard
+            label="Quantity Removed"
+            value={(credit.quantity || 0).toLocaleString()}
+            unit="kg"
+            compact
+          />
           <DataCard label="Region" value={credit.region || '\u2014'} compact />
-          <DataCard label="Status" value={credit.status === 'retired' ? 'Retired' : 'Active'} compact />
+          <DataCard
+            label="Status"
+            value={credit.status === 'retired' ? 'Retired' : 'Active'}
+            compact
+          />
         </StatsRow>
 
         <Section>
           <SectionTitle>Credit Details</SectionTitle>
           <Grid>
-            <Row><Label>Credit ID</Label><Value>{cert.creditId || '\u2014'}</Value></Row>
-            <Row><Label>Nutrient Type</Label><Value>{credit.nutrientType || '\u2014'}</Value></Row>
-            <Row><Label>Quantity</Label><Value>{credit.quantity || 0} kg</Value></Row>
-            <Row><Label>Region</Label><Value>{credit.region || '\u2014'}</Value></Row>
-            <Row><Label>Vintage</Label><Value>{credit.vintage || '\u2014'}</Value></Row>
-            <Row><Label>Verification</Label><Value>{credit.verificationLevel || '\u2014'}</Value></Row>
+            <Row>
+              <Label>Credit ID</Label>
+              <Value>{cert.creditId || '\u2014'}</Value>
+            </Row>
+            <Row>
+              <Label>Nutrient Type</Label>
+              <Value>{credit.nutrientType || '\u2014'}</Value>
+            </Row>
+            <Row>
+              <Label>Quantity</Label>
+              <Value>{credit.quantity || 0} kg</Value>
+            </Row>
+            <Row>
+              <Label>Region</Label>
+              <Value>{credit.region || '\u2014'}</Value>
+            </Row>
+            <Row>
+              <Label>Vintage</Label>
+              <Value>{credit.vintage || '\u2014'}</Value>
+            </Row>
+            <Row>
+              <Label>Verification</Label>
+              <Value>{credit.verificationLevel || '\u2014'}</Value>
+            </Row>
           </Grid>
         </Section>
 
@@ -292,12 +348,34 @@ export function CertificateDetailPage() {
           {hasMint ? (
             <>
               <Grid>
-                <Row><Label>Token ID</Label><Value>#{cert.tokenId}</Value></Row>
-                <Row><Label>Contract</Label><Value>{cert.contractAddress || '\u2014'}</Value></Row>
-                <Row><Label>Tx Hash</Label><Value>{cert.transactionHash || '\u2014'}</Value></Row>
-                <Row><Label>Block</Label><Value>{(cert.blockNumber || 0).toLocaleString()}</Value></Row>
-                <Row><Label>Network</Label><Value>{cert.network === 'polygon' ? 'Polygon Mainnet' : 'Polygon Amoy (Testnet)'}</Value></Row>
-                <Row><Label>Minted</Label><Value>{cert.mintedAt ? new Date(cert.mintedAt).toLocaleDateString() : '\u2014'}</Value></Row>
+                <Row>
+                  <Label>Token ID</Label>
+                  <Value>#{cert.tokenId}</Value>
+                </Row>
+                <Row>
+                  <Label>Contract</Label>
+                  <Value>{cert.contractAddress || '\u2014'}</Value>
+                </Row>
+                <Row>
+                  <Label>Tx Hash</Label>
+                  <Value>{cert.transactionHash || '\u2014'}</Value>
+                </Row>
+                <Row>
+                  <Label>Block</Label>
+                  <Value>{(cert.blockNumber || 0).toLocaleString()}</Value>
+                </Row>
+                <Row>
+                  <Label>Network</Label>
+                  <Value>
+                    {cert.network === 'polygon' ? 'Polygon Mainnet' : 'Polygon Amoy (Testnet)'}
+                  </Value>
+                </Row>
+                <Row>
+                  <Label>Minted</Label>
+                  <Value>
+                    {cert.mintedAt ? new Date(cert.mintedAt).toLocaleDateString() : '\u2014'}
+                  </Value>
+                </Row>
               </Grid>
               {cert.explorerUrl && (
                 <div style={{ marginTop: 12 }}>
@@ -321,7 +399,10 @@ export function CertificateDetailPage() {
             <Value>{cert.owner?.address || '\u2014'}</Value>
           </Row>
           {cert.owner?.displayName && (
-            <Row><Label>Display Name</Label><Value>{cert.owner.displayName}</Value></Row>
+            <Row>
+              <Label>Display Name</Label>
+              <Value>{cert.owner.displayName}</Value>
+            </Row>
           )}
         </Section>
 
@@ -329,10 +410,30 @@ export function CertificateDetailPage() {
           <Section>
             <SectionTitle>Retirement</SectionTitle>
             <Grid>
-              <Row><Label>Reason</Label><Value>{cert.retirement.reason || '\u2014'}</Value></Row>
-              <Row><Label>Retired At</Label><Value>{cert.retirement.retiredAt ? new Date(cert.retirement.retiredAt).toLocaleDateString() : '\u2014'}</Value></Row>
-              {cert.retirement.beneficiary && <Row><Label>Beneficiary</Label><Value>{cert.retirement.beneficiary}</Value></Row>}
-              {cert.retirement.burnTxHash && <Row><Label>Burn Tx</Label><Value>{cert.retirement.burnTxHash}</Value></Row>}
+              <Row>
+                <Label>Reason</Label>
+                <Value>{cert.retirement.reason || '\u2014'}</Value>
+              </Row>
+              <Row>
+                <Label>Retired At</Label>
+                <Value>
+                  {cert.retirement.retiredAt
+                    ? new Date(cert.retirement.retiredAt).toLocaleDateString()
+                    : '\u2014'}
+                </Value>
+              </Row>
+              {cert.retirement.beneficiary && (
+                <Row>
+                  <Label>Beneficiary</Label>
+                  <Value>{cert.retirement.beneficiary}</Value>
+                </Row>
+              )}
+              {cert.retirement.burnTxHash && (
+                <Row>
+                  <Label>Burn Tx</Label>
+                  <Value>{cert.retirement.burnTxHash}</Value>
+                </Row>
+              )}
             </Grid>
           </Section>
         )}

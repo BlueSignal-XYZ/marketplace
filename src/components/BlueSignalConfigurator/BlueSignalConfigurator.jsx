@@ -1,16 +1,17 @@
 // BlueSignal Product Configurator - Main Component
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { PRODUCTS, BUNDLES, calculateBundlePrice } from "./data";
-import bluesignalLogo from "../../assets/bluesignal-logo.png";
-import { generateQuotePDF, generateSpecsPDF } from "./utils";
-import SEOHead from "../seo/SEOHead";
-import { BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, createProductSchema } from "../seo/schemas";
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { PRODUCTS, BUNDLES, calculateBundlePrice } from './data';
+import bluesignalLogo from '../../assets/bluesignal-logo.png';
+import { generateQuotePDF, generateSpecsPDF } from './utils';
+import SEOHead from '../seo/SEOHead';
+import {
+  BLUESIGNAL_ORGANIZATION_SCHEMA,
+  SALES_WEBSITE_SCHEMA,
+  createProductSchema,
+} from '../seo/schemas';
 import {
   ConfiguratorWrapper,
   Container,
-  Header,
-  Logo,
-  Tagline,
   NavTabs,
   NavTab,
   FilterBar,
@@ -45,17 +46,12 @@ import {
   ComparisonSelectedProducts,
   ComparisonChip,
   CompareNowButton,
-} from "./styles";
+} from './styles';
 import {
   OverviewTab,
   LayoutTab,
   WiringTab,
   PowerTab,
-  GpioTab,
-  CalibrationTab,
-  InstallationTab,
-  MaintenanceTab,
-  BomTab,
   // Enhanced tabs
   SpecsTab,
   EnhancedBomTab,
@@ -76,26 +72,30 @@ import {
   BlueSignalCTA,
   // Landing
   SalesLandingHero,
-} from "./components";
+} from './components';
 
 // Tab configuration - Consolidated for cleaner UX (per UI audit)
 // Previous 9 tabs consolidated to 4 main categories
 const TABS = [
-  { id: "overview", label: "Overview", description: "Product summary, features, and key specs" },
-  { id: "technical", label: "Technical", description: "Specs, wiring, layout, and enclosure details" },
-  { id: "install", label: "Install", description: "Installation guides and operational setup" },
-  { id: "pricing", label: "Pricing", description: "BOM, pricing breakdown, and quote options" },
+  { id: 'overview', label: 'Overview', description: 'Product summary, features, and key specs' },
+  {
+    id: 'technical',
+    label: 'Technical',
+    description: 'Specs, wiring, layout, and enclosure details',
+  },
+  { id: 'install', label: 'Install', description: 'Installation guides and operational setup' },
+  { id: 'pricing', label: 'Pricing', description: 'BOM, pricing breakdown, and quote options' },
 ];
 
 export default function BlueSignalConfigurator() {
-  const [view, setView] = useState("products");
-  const [selectedProduct, setSelectedProduct] = useState("wqm-1");
-  const [activeTab, setActiveTab] = useState("overview");
+  const [view, setView] = useState('products');
+  const [selectedProduct, setSelectedProduct] = useState('wqm-1');
+  const [activeTab, setActiveTab] = useState('overview');
 
   // Filter and comparison state
-  const [searchQuery, setSearchQuery] = useState("");
-  const [deploymentFilter, setDeploymentFilter] = useState("all");
-  const [priceFilter, setPriceFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [deploymentFilter, setDeploymentFilter] = useState('all');
+  const [priceFilter, setPriceFilter] = useState('all');
   const [compareMode, setCompareMode] = useState(false);
   const [compareProducts, setCompareProducts] = useState([]);
   const [showComparison, setShowComparison] = useState(false);
@@ -113,9 +113,9 @@ export default function BlueSignalConfigurator() {
   // Landing page state - show landing for new visitors
   const [showLanding, setShowLanding] = useState(() => {
     // Check if user has seen the configurator before
-    const hasVisited = localStorage.getItem("sales_configurator_visited");
+    const hasVisited = localStorage.getItem('sales_configurator_visited');
     // Also check URL - if there's a hash or quote params, go straight to configurator
-    const hasDeepLink = window.location.hash || window.location.search.includes("quote=");
+    const hasDeepLink = window.location.hash || window.location.search.includes('quote=');
     return !hasVisited && !hasDeepLink;
   });
 
@@ -133,7 +133,7 @@ export default function BlueSignalConfigurator() {
       const [productPart, tabPart] = hash.split('/');
       if (productPart && PRODUCTS[productPart]) {
         setSelectedProduct(productPart);
-        if (tabPart && TABS.find(t => t.id === tabPart)) {
+        if (tabPart && TABS.find((t) => t.id === tabPart)) {
           setActiveTab(tabPart);
         }
       }
@@ -143,13 +143,16 @@ export default function BlueSignalConfigurator() {
     const quoteParam = searchParams.get('quote');
     if (quoteParam) {
       try {
-        const items = quoteParam.split(',').map(item => {
-          const [productId, qty] = item.split(':');
-          if (PRODUCTS[productId]) {
-            return { productId, quantity: parseInt(qty, 10) || 1 };
-          }
-          return null;
-        }).filter(Boolean);
+        const items = quoteParam
+          .split(',')
+          .map((item) => {
+            const [productId, qty] = item.split(':');
+            if (PRODUCTS[productId]) {
+              return { productId, quantity: parseInt(qty, 10) || 1 };
+            }
+            return null;
+          })
+          .filter(Boolean);
         if (items.length > 0) {
           setQuoteItems(items);
         }
@@ -161,7 +164,7 @@ export default function BlueSignalConfigurator() {
 
   // Update URL hash when product/tab changes
   useEffect(() => {
-    if (view === "products") {
+    if (view === 'products') {
       window.location.hash = `${selectedProduct}/${activeTab}`;
     }
   }, [selectedProduct, activeTab, view]);
@@ -175,7 +178,7 @@ export default function BlueSignalConfigurator() {
 
     // Add quote items if any
     if (quoteItems.length > 0) {
-      const quoteString = quoteItems.map(item => `${item.productId}:${item.quantity}`).join(',');
+      const quoteString = quoteItems.map((item) => `${item.productId}:${item.quantity}`).join(',');
       params.set('quote', quoteString);
     }
 
@@ -205,21 +208,21 @@ export default function BlueSignalConfigurator() {
             p.name.toLowerCase().includes(query) ||
             p.subtitle.toLowerCase().includes(query) ||
             p.tagline.toLowerCase().includes(query) ||
-            p.features.some(f => f.toLowerCase().includes(query)) ||
-            p.sensorList.some(s => s.toLowerCase().includes(query));
+            p.features.some((f) => f.toLowerCase().includes(query)) ||
+            p.sensorList.some((s) => s.toLowerCase().includes(query));
           if (!matchesSearch) return false;
         }
 
         // Deployment filter
-        if (deploymentFilter !== "all" && p.deployment.toLowerCase() !== deploymentFilter) {
+        if (deploymentFilter !== 'all' && p.deployment.toLowerCase() !== deploymentFilter) {
           return false;
         }
 
         // Price filter
-        if (priceFilter !== "all") {
-          if (priceFilter === "under1000" && p.price >= 1000) return false;
-          if (priceFilter === "1000to3000" && (p.price < 1000 || p.price > 3000)) return false;
-          if (priceFilter === "over3000" && p.price <= 3000) return false;
+        if (priceFilter !== 'all') {
+          if (priceFilter === 'under1000' && p.price >= 1000) return false;
+          if (priceFilter === '1000to3000' && (p.price < 1000 || p.price > 3000)) return false;
+          if (priceFilter === 'over3000' && p.price <= 3000) return false;
         }
 
         return true;
@@ -233,7 +236,7 @@ export default function BlueSignalConfigurator() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Escape closes comparison modal
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         if (showComparison) {
           setShowComparison(false);
           return;
@@ -246,24 +249,24 @@ export default function BlueSignalConfigurator() {
       }
 
       // Don't handle if typing in input
-      if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
       const currentIndex = productIds.indexOf(selectedProduct);
-      const currentTabIndex = TABS.findIndex(t => t.id === activeTab);
+      const currentTabIndex = TABS.findIndex((t) => t.id === activeTab);
 
       // Arrow keys for product navigation
-      if (e.key === "ArrowLeft" && currentIndex > 0) {
+      if (e.key === 'ArrowLeft' && currentIndex > 0) {
         setSelectedProduct(productIds[currentIndex - 1]);
-        setActiveTab("overview");
-      } else if (e.key === "ArrowRight" && currentIndex < productIds.length - 1) {
+        setActiveTab('overview');
+      } else if (e.key === 'ArrowRight' && currentIndex < productIds.length - 1) {
         setSelectedProduct(productIds[currentIndex + 1]);
-        setActiveTab("overview");
+        setActiveTab('overview');
       }
 
       // Tab navigation with [ and ]
-      if (e.key === "[" && currentTabIndex > 0) {
+      if (e.key === '[' && currentTabIndex > 0) {
         setActiveTab(TABS[currentTabIndex - 1].id);
-      } else if (e.key === "]" && currentTabIndex < TABS.length - 1) {
+      } else if (e.key === ']' && currentTabIndex < TABS.length - 1) {
         setActiveTab(TABS[currentTabIndex + 1].id);
       }
 
@@ -274,14 +277,14 @@ export default function BlueSignalConfigurator() {
       }
 
       // 'c' to toggle compare mode
-      if (e.key === "c" && !e.ctrlKey && !e.metaKey) {
+      if (e.key === 'c' && !e.ctrlKey && !e.metaKey) {
         setCompareMode(!compareMode);
         if (compareMode) setCompareProducts([]);
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedProduct, activeTab, compareMode, showComparison, productIds]);
 
   // Toggle product in comparison
@@ -299,20 +302,15 @@ export default function BlueSignalConfigurator() {
 
   // Export BOM as CSV
   const exportBomAsCsv = () => {
-    const headers = ["Category", "Item", "Quantity", "Cost"];
-    const rows = product.bom.map(item => [
-      item.category,
-      item.item,
-      item.qty,
-      item.cost
-    ]);
+    const headers = ['Category', 'Item', 'Quantity', 'Cost'];
+    const rows = product.bom.map((item) => [item.category, item.item, item.qty, item.cost]);
     const total = product.bom.reduce((sum, item) => sum + item.cost, 0);
-    rows.push(["", "TOTAL", "", total]);
+    rows.push(['', 'TOTAL', '', total]);
 
-    const csv = [headers, ...rows].map(row => row.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
+    const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `${product.name}-BOM.csv`;
     a.click();
@@ -348,9 +346,9 @@ export default function BlueSignalConfigurator() {
   };
 
   const clearFilters = () => {
-    setSearchQuery("");
-    setDeploymentFilter("all");
-    setPriceFilter("all");
+    setSearchQuery('');
+    setDeploymentFilter('all');
+    setPriceFilter('all');
   };
 
   // Quote builder handlers
@@ -359,9 +357,7 @@ export default function BlueSignalConfigurator() {
       const existing = prev.find((item) => item.productId === productId);
       if (existing) {
         return prev.map((item) =>
-          item.productId === productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
       return [...prev, { productId, quantity: 1 }];
@@ -371,9 +367,7 @@ export default function BlueSignalConfigurator() {
   const updateQuoteQuantity = (productId, quantity) => {
     if (quantity < 1) return;
     setQuoteItems((prev) =>
-      prev.map((item) =>
-        item.productId === productId ? { ...item, quantity } : item
-      )
+      prev.map((item) => (item.productId === productId ? { ...item, quantity } : item))
     );
   };
 
@@ -393,16 +387,16 @@ export default function BlueSignalConfigurator() {
 
   // Landing page handlers
   const handleGetStarted = () => {
-    localStorage.setItem("sales_configurator_visited", "true");
+    localStorage.setItem('sales_configurator_visited', 'true');
     setShowLanding(false);
   };
 
   const handleWatchDemo = () => {
     // Could open a video modal or link to demo
     // For now, go to benchmark view which shows capabilities
-    localStorage.setItem("sales_configurator_visited", "true");
+    localStorage.setItem('sales_configurator_visited', 'true');
     setShowLanding(false);
-    setView("benchmark");
+    setView('benchmark');
   };
 
   const isInQuote = (productId) => {
@@ -416,7 +410,7 @@ export default function BlueSignalConfigurator() {
     setQuoteItems((prev) => {
       const newItems = [...prev];
       bundle.products.forEach(({ productId, quantity }) => {
-        const existingIndex = newItems.findIndex(item => item.productId === productId);
+        const existingIndex = newItems.findIndex((item) => item.productId === productId);
         if (existingIndex >= 0) {
           newItems[existingIndex] = {
             ...newItems[existingIndex],
@@ -437,38 +431,68 @@ export default function BlueSignalConfigurator() {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "overview":
+      case 'overview':
         return <OverviewTab product={product} />;
-      case "technical":
+      case 'technical':
         // Consolidated technical tab: Specs + Wiring + Layout + Power + Enclosure
         return (
           <>
             <SpecsTab product={product} />
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <WiringTab product={product} />
             </div>
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <LayoutTab product={product} />
             </div>
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <PowerTab product={product} />
             </div>
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <EnclosureTab product={product} />
             </div>
           </>
         );
-      case "install":
+      case 'install':
         // Consolidated install tab: Installation + Operations
         return (
           <>
             <EnhancedInstallationTab product={product} />
-            <div style={{ marginTop: 32, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <div
+              style={{
+                marginTop: 32,
+                paddingTop: 32,
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+              }}
+            >
               <OperationsTab product={product} />
             </div>
           </>
         );
-      case "pricing":
+      case 'pricing':
         // Pricing tab with enhanced BOM
         return <EnhancedBomTab product={product} />;
       default:
@@ -477,17 +501,19 @@ export default function BlueSignalConfigurator() {
   };
 
   // Generate product schema for current product
-  const productSchema = product ? createProductSchema({
-    name: product.name,
-    description: product.tagline || `${product.name} water quality monitoring system`,
-    image: `https://bluesignal.xyz/products/${selectedProduct}.png`,
-    brand: 'BlueSignal',
-    sku: selectedProduct.toUpperCase(),
-    price: product.price,
-    currency: 'USD',
-    availability: 'PreOrder',
-    url: `https://bluesignal.xyz?product=${selectedProduct}`,
-  }) : null;
+  const productSchema = product
+    ? createProductSchema({
+        name: product.name,
+        description: product.tagline || `${product.name} water quality monitoring system`,
+        image: `https://bluesignal.xyz/products/${selectedProduct}.png`,
+        brand: 'BlueSignal',
+        sku: selectedProduct.toUpperCase(),
+        price: product.price,
+        currency: 'USD',
+        availability: 'PreOrder',
+        url: `https://bluesignal.xyz?product=${selectedProduct}`,
+      })
+    : null;
 
   return (
     <ConfiguratorWrapper ref={containerRef}>
@@ -496,27 +522,30 @@ export default function BlueSignalConfigurator() {
         description="WQM-1: 6-channel water quality monitoring HAT for Raspberry Pi. pH, TDS, Turbidity, ORP, Temperature, GPS. LoRaWAN connectivity. $999 dev kit."
         canonical="/configurator"
         keywords="WQM-1, water quality monitor, Raspberry Pi HAT, pH sensor, TDS, turbidity, ORP, LoRaWAN, water monitoring hardware"
-        jsonLd={[BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, ...(productSchema ? [productSchema] : [])]}
+        jsonLd={[
+          BLUESIGNAL_ORGANIZATION_SCHEMA,
+          SALES_WEBSITE_SCHEMA,
+          ...(productSchema ? [productSchema] : []),
+        ]}
       />
 
       {/* Landing Hero for new visitors */}
       {showLanding && (
-        <SalesLandingHero
-          onGetStarted={handleGetStarted}
-          onWatchDemo={handleWatchDemo}
-        />
+        <SalesLandingHero onGetStarted={handleGetStarted} onWatchDemo={handleWatchDemo} />
       )}
 
       <Container>
         {/* Compact header for sales mode */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 16,
-          paddingBottom: 12,
-          borderBottom: '1px solid #e5e7eb'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+            paddingBottom: 12,
+            borderBottom: '1px solid #e5e7eb',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <a
               href="https://bluesignal.xyz"
@@ -524,37 +553,31 @@ export default function BlueSignalConfigurator() {
               rel="noopener noreferrer"
               style={{ display: 'flex', alignItems: 'center' }}
             >
-              <img
-                src={bluesignalLogo}
-                alt="BlueSignal"
-                style={{ height: 32, width: 'auto' }}
-              />
+              <img src={bluesignalLogo} alt="BlueSignal" style={{ height: 32, width: 'auto' }} />
             </a>
             <NavTabs role="tablist" aria-label="Main navigation" style={{ marginBottom: 0 }}>
               <NavTab
                 role="tab"
-                aria-selected={view === "products"}
-                active={view === "products"}
-                onClick={() => setView("products")}
+                aria-selected={view === 'products'}
+                active={view === 'products'}
+                onClick={() => setView('products')}
               >
                 Products
               </NavTab>
               <NavTab
                 role="tab"
-                aria-selected={view === "benchmark"}
-                active={view === "benchmark"}
-                onClick={() => setView("benchmark")}
+                aria-selected={view === 'benchmark'}
+                active={view === 'benchmark'}
+                onClick={() => setView('benchmark')}
               >
                 Benchmark
               </NavTab>
             </NavTabs>
           </div>
-          <div style={{ fontSize: 12, color: '#6b7280' }}>
-            Sales Configurator
-          </div>
+          <div style={{ fontSize: 12, color: '#6b7280' }}>Sales Configurator</div>
         </div>
 
-        {view === "products" ? (
+        {view === 'products' ? (
           <>
             {/* Filter Bar */}
             <FilterBar>
@@ -607,13 +630,11 @@ export default function BlueSignalConfigurator() {
                 }}
                 aria-pressed={compareMode}
               >
-                {compareMode ? "Exit Compare" : "Compare Products"}
+                {compareMode ? 'Exit Compare' : 'Compare Products'}
               </CompareButton>
 
-              {(searchQuery || deploymentFilter !== "all" || priceFilter !== "all") && (
-                <ActionButton onClick={clearFilters}>
-                  Clear Filters
-                </ActionButton>
+              {(searchQuery || deploymentFilter !== 'all' || priceFilter !== 'all') && (
+                <ActionButton onClick={clearFilters}>Clear Filters</ActionButton>
               )}
             </FilterBar>
 
@@ -654,18 +675,18 @@ export default function BlueSignalConfigurator() {
                           toggleCompareProduct(p.id);
                         } else {
                           setSelectedProduct(p.id);
-                          setActiveTab("overview");
+                          setActiveTab('overview');
                         }
                       }}
                       tabIndex={0}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
+                        if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
                           if (compareMode) {
                             toggleCompareProduct(p.id);
                           } else {
                             setSelectedProduct(p.id);
-                            setActiveTab("overview");
+                            setActiveTab('overview');
                           }
                         }
                       }}
@@ -682,10 +703,7 @@ export default function BlueSignalConfigurator() {
                         <Badge variant="sensors">{p.sensors} Sensors</Badge>
                       </ProductBadges>
                       <div style={{ marginTop: 12 }} onClick={(e) => e.stopPropagation()}>
-                        <AddToQuoteBtn
-                          onClick={() => addToQuote(p.id)}
-                          inQuote={isInQuote(p.id)}
-                        />
+                        <AddToQuoteBtn onClick={() => addToQuote(p.id)} inQuote={isInQuote(p.id)} />
                       </div>
                     </ProductCard>
                   </ProductCardWrapper>
@@ -720,45 +738,47 @@ export default function BlueSignalConfigurator() {
                   <CurrentProductName>
                     {product.name}
                     <span>{product.subtitle}</span>
-                    <span style={{
-                      marginLeft: 16,
-                      color: '#4ade80',
-                      fontWeight: 700,
-                      fontSize: 18
-                    }}>
+                    <span
+                      style={{
+                        marginLeft: 16,
+                        color: '#4ade80',
+                        fontWeight: 700,
+                        fontSize: 18,
+                      }}
+                    >
                       ${product.price.toLocaleString()}
                     </span>
                   </CurrentProductName>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <BlueSignalCTA productSlug={product.id} />
                     <TabNavigation>
-                    <MiniNavButton
-                      disabled={!canGoPrev}
-                      onClick={() => {
-                        if (canGoPrev) {
-                          setSelectedProduct(productIds[currentProductIndex - 1]);
-                          setActiveTab("overview");
-                        }
-                      }}
-                      aria-label="Previous product"
-                      title="Previous product (Left Arrow)"
-                    >
-                      ←
-                    </MiniNavButton>
-                    <MiniNavButton
-                      disabled={!canGoNext}
-                      onClick={() => {
-                        if (canGoNext) {
-                          setSelectedProduct(productIds[currentProductIndex + 1]);
-                          setActiveTab("overview");
-                        }
-                      }}
-                      aria-label="Next product"
-                      title="Next product (Right Arrow)"
-                    >
-                      →
-                    </MiniNavButton>
-                  </TabNavigation>
+                      <MiniNavButton
+                        disabled={!canGoPrev}
+                        onClick={() => {
+                          if (canGoPrev) {
+                            setSelectedProduct(productIds[currentProductIndex - 1]);
+                            setActiveTab('overview');
+                          }
+                        }}
+                        aria-label="Previous product"
+                        title="Previous product (Left Arrow)"
+                      >
+                        ←
+                      </MiniNavButton>
+                      <MiniNavButton
+                        disabled={!canGoNext}
+                        onClick={() => {
+                          if (canGoNext) {
+                            setSelectedProduct(productIds[currentProductIndex + 1]);
+                            setActiveTab('overview');
+                          }
+                        }}
+                        aria-label="Next product"
+                        title="Next product (Right Arrow)"
+                      >
+                        →
+                      </MiniNavButton>
+                    </TabNavigation>
                   </div>
                 </StickyProductInfo>
 
@@ -766,7 +786,10 @@ export default function BlueSignalConfigurator() {
 
                 {/* Quick Actions */}
                 <QuickActions>
-                  <ActionButton onClick={exportSpecsPDF} title="Export product specifications as PDF">
+                  <ActionButton
+                    onClick={exportSpecsPDF}
+                    title="Export product specifications as PDF"
+                  >
                     Export PDF
                   </ActionButton>
                   <ActionButton onClick={exportBomAsCsv} title="Export BOM as CSV file">
@@ -785,10 +808,9 @@ export default function BlueSignalConfigurator() {
             </DetailPanel>
 
             <KeyboardHint>
-              <kbd>←</kbd><kbd>→</kbd> Navigate products |
-              <kbd>1</kbd>-<kbd>4</kbd> Switch tabs |
-              <kbd>C</kbd> Compare mode |
-              <kbd>Esc</kbd> Exit
+              <kbd>←</kbd>
+              <kbd>→</kbd> Navigate products |<kbd>1</kbd>-<kbd>4</kbd> Switch tabs |<kbd>C</kbd>{' '}
+              Compare mode |<kbd>Esc</kbd> Exit
             </KeyboardHint>
           </>
         ) : (
@@ -804,13 +826,16 @@ export default function BlueSignalConfigurator() {
       {compareMode && compareProducts.length > 0 && (
         <ComparisonPanel>
           <ComparisonSelectedProducts>
-            <span style={{ color: "#94a3b8", fontSize: 13 }}>
+            <span style={{ color: '#94a3b8', fontSize: 13 }}>
               Comparing ({compareProducts.length}/4):
             </span>
             {compareProducts.map((id) => (
               <ComparisonChip key={id}>
                 {PRODUCTS[id].name}
-                <button onClick={() => toggleCompareProduct(id)} aria-label={`Remove ${PRODUCTS[id].name} from comparison`}>
+                <button
+                  onClick={() => toggleCompareProduct(id)}
+                  aria-label={`Remove ${PRODUCTS[id].name} from comparison`}
+                >
                   ×
                 </button>
               </ComparisonChip>
@@ -858,10 +883,7 @@ export default function BlueSignalConfigurator() {
 
       {/* Floating Quote Button */}
       {!showQuoteBuilder && (
-        <QuoteFloatingButton
-          itemCount={quoteItemCount}
-          onClick={() => setShowQuoteBuilder(true)}
-        />
+        <QuoteFloatingButton itemCount={quoteItemCount} onClick={() => setShowQuoteBuilder(true)} />
       )}
     </ConfiguratorWrapper>
   );

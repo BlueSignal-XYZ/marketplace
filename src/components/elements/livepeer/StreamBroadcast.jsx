@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Broadcast } from '@livepeer/react';
@@ -43,23 +42,11 @@ export const StreamBroadcast = ({ streamKey, webBroadcast }) => {
   return (
     <AnimatePresence>
       {webBroadcast && (
-        <Overlay
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <CloseButton
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={closeOverlay}
-          >
+        <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <CloseButton whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={closeOverlay}>
             X
           </CloseButton>
-          <BroadcastContainer
-            initial={{ y: '-100vh' }}
-            animate={{ y: 0 }}
-            exit={{ y: '-100vh' }}
-          >
+          <BroadcastContainer initial={{ y: '-100vh' }} animate={{ y: 0 }} exit={{ y: '-100vh' }}>
             <Broadcast
               streamKey={streamKey}
               controls={{ autohide: 3000 }}

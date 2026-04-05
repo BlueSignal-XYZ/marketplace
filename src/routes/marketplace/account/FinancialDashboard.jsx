@@ -1,13 +1,13 @@
 // /src/routes/FinancialDashboard.jsx
-import React, { useState, useEffect, useCallback } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { Line, Doughnut } from "react-chartjs-2";
-import { useAppContext } from "../../../context/AppContext";
-import { getPortfolio } from "../../../services/v2/client";
-import { Skeleton } from "../../../design-system/primitives/Skeleton";
-import { Button } from "../../../design-system/primitives/Button";
-import { EmptyState } from "../../../design-system/primitives/EmptyState";
+import { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Line, Doughnut } from 'react-chartjs-2';
+import { useAppContext } from '../../../context/AppContext';
+import { getPortfolio } from '../../../services/v2/client';
+import { Skeleton } from '../../../design-system/primitives/Skeleton';
+import { Button } from '../../../design-system/primitives/Button';
+import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,7 +19,7 @@ import {
   Tooltip,
   Legend,
   Filler,
-} from "chart.js";
+} from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
@@ -90,19 +90,14 @@ const ActionButton = styled.button`
   gap: 8px;
 
   background: ${({ variant }) =>
-    variant === "secondary"
-      ? "#ffffff"
-      : "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)"};
-  color: ${({ variant }) => (variant === "secondary" ? "#0284c7" : "#ffffff")};
-  border: ${({ variant }) =>
-    variant === "secondary" ? "1px solid #0284c7" : "none"};
+    variant === 'secondary' ? '#ffffff' : 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'};
+  color: ${({ variant }) => (variant === 'secondary' ? '#0284c7' : '#ffffff')};
+  border: ${({ variant }) => (variant === 'secondary' ? '1px solid #0284c7' : 'none')};
 
   &:hover {
     transform: translateY(-2px);
     background: ${({ variant }) =>
-      variant === "secondary"
-        ? "#e0f2ff"
-        : "linear-gradient(135deg, #0369a1 0%, #075985 100%)"};
+      variant === 'secondary' ? '#e0f2ff' : 'linear-gradient(135deg, #0369a1 0%, #075985 100%)'};
   }
 `;
 
@@ -139,7 +134,7 @@ const StatIcon = styled.div`
   justify-content: center;
   font-size: 18px;
   margin-bottom: 12px;
-  background: ${({ color }) => color || "#e0f2ff"};
+  background: ${({ color }) => color || '#e0f2ff'};
 `;
 
 const StatLabel = styled.div`
@@ -162,7 +157,7 @@ const StatValue = styled.div`
 const StatChange = styled.div`
   font-size: 13px;
   margin-top: 4px;
-  color: ${({ positive }) => (positive ? "#10b981" : "#ef4444")};
+  color: ${({ positive }) => (positive ? '#10b981' : '#ef4444')};
   display: flex;
   align-items: center;
   gap: 4px;
@@ -274,34 +269,34 @@ const TypeBadge = styled.span`
 
   background: ${({ type }) => {
     switch (type) {
-      case "sale":
-        return "#d1fae5";
-      case "payout":
-        return "#dbeafe";
-      case "fee":
-        return "#fef3c7";
+      case 'sale':
+        return '#d1fae5';
+      case 'payout':
+        return '#dbeafe';
+      case 'fee':
+        return '#fef3c7';
       default:
-        return "#f3f4f6";
+        return '#f3f4f6';
     }
   }};
 
   color: ${({ type }) => {
     switch (type) {
-      case "sale":
-        return "#065f46";
-      case "payout":
-        return "#1e40af";
-      case "fee":
-        return "#92400e";
+      case 'sale':
+        return '#065f46';
+      case 'payout':
+        return '#1e40af';
+      case 'fee':
+        return '#92400e';
       default:
-        return "#374151";
+        return '#374151';
     }
   }};
 `;
 
 const AmountCell = styled.span`
   font-weight: 600;
-  color: ${({ positive }) => (positive ? "#10b981" : "#ef4444")};
+  color: ${({ positive }) => (positive ? '#10b981' : '#ef4444')};
 `;
 
 const LegendContainer = styled.div`
@@ -379,11 +374,13 @@ const ErrorText = styled.span`
 `;
 
 const FinancialDashboard = () => {
-  useEffect(() => { document.title = 'Financial Dashboard — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Financial Dashboard — WaterQuality.Trading';
+  }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();
-  const [period, setPeriod] = useState("30d");
+  const [period, setPeriod] = useState('30d');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [portfolio, setPortfolio] = useState(null);
@@ -400,7 +397,7 @@ const FinancialDashboard = () => {
       const data = await getPortfolio(user.uid);
       setPortfolio(data);
     } catch (err) {
-      setError(err?.message || "Failed to load financial data.");
+      setError(err?.message || 'Failed to load financial data.');
       setPortfolio(null);
     } finally {
       setLoading(false);
@@ -414,15 +411,17 @@ const FinancialDashboard = () => {
   // Derive transactions for table
   const transactions = (portfolio?.transactions || []).map((t) => ({
     id: t.id,
-    date: t.timestamp ? new Date(t.timestamp).toISOString().split("T")[0] : "",
+    date: t.timestamp ? new Date(t.timestamp).toISOString().split('T')[0] : '',
     type: t.type,
-    description: `${t.nutrientType || "Credit"} - ${t.counterparty || "Transaction"}`,
-    amount: t.type === "sale" ? (t.price || 0) : t.type === "purchase" ? -(t.price || 0) : 0,
+    description: `${t.nutrientType || 'Credit'} - ${t.counterparty || 'Transaction'}`,
+    amount: t.type === 'sale' ? t.price || 0 : t.type === 'purchase' ? -(t.price || 0) : 0,
   }));
 
   // Derive stats from portfolio
   const summary = portfolio?.summary || {};
-  const saleTotal = transactions.filter((t) => t.type === "sale").reduce((s, t) => s + (t.amount > 0 ? t.amount : 0), 0);
+  const saleTotal = transactions
+    .filter((t) => t.type === 'sale')
+    .reduce((s, t) => s + (t.amount > 0 ? t.amount : 0), 0);
   const stats = {
     totalRevenue: saleTotal,
     pendingPayouts: 0,
@@ -433,15 +432,19 @@ const FinancialDashboard = () => {
   // Revenue chart: bucket transactions by date (period)
   const getBucketKey = (d) => {
     const date = new Date(d);
-    if (period === "7d") return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    if (period === "30d" || period === "90d") return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    return date.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
+    if (period === '7d')
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (period === '30d' || period === '90d')
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
   };
   const now = Date.now();
-  const periodMs = { "7d": 7 * 864e5, "30d": 30 * 864e5, "90d": 90 * 864e5, "1y": 365 * 864e5 }[period] || 30 * 864e5;
+  const periodMs =
+    { '7d': 7 * 864e5, '30d': 30 * 864e5, '90d': 90 * 864e5, '1y': 365 * 864e5 }[period] ||
+    30 * 864e5;
   const cutoff = now - periodMs;
   const saleTxns = (portfolio?.transactions || [])
-    .filter((t) => t.type === "sale" && new Date(t.timestamp).getTime() >= cutoff)
+    .filter((t) => t.type === 'sale' && new Date(t.timestamp).getTime() >= cutoff)
     .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   const revenueByBucket = {};
   saleTxns.forEach((t) => {
@@ -450,17 +453,17 @@ const FinancialDashboard = () => {
   });
   const sortedBuckets = [...new Set(saleTxns.map((t) => getBucketKey(t.timestamp)))];
   const revenueChartData = {
-    labels: sortedBuckets.length > 0 ? sortedBuckets : ["—"],
+    labels: sortedBuckets.length > 0 ? sortedBuckets : ['—'],
     datasets: [
       {
-        label: "Revenue",
+        label: 'Revenue',
         data: sortedBuckets.length > 0 ? sortedBuckets.map((k) => revenueByBucket[k]) : [0],
         fill: true,
-        borderColor: "#0284c7",
-        backgroundColor: "rgba(2, 132, 199, 0.1)",
+        borderColor: '#0284c7',
+        backgroundColor: 'rgba(2, 132, 199, 0.1)',
         tension: 0.4,
         pointRadius: 4,
-        pointBackgroundColor: "#0284c7",
+        pointBackgroundColor: '#0284c7',
       },
     ],
   };
@@ -482,10 +485,10 @@ const FinancialDashboard = () => {
       y: {
         beginAtZero: true,
         grid: {
-          color: "#f1f5f9",
+          color: '#f1f5f9',
         },
         ticks: {
-          callback: (value) => "$" + (value / 1000) + "k",
+          callback: (value) => '$' + value / 1000 + 'k',
         },
       },
       x: {
@@ -497,20 +500,27 @@ const FinancialDashboard = () => {
   };
 
   // Credit type distribution: derive from transactions
-  const typeColors = { nitrogen: "#3b82f6", phosphorus: "#10b981", thermal: "#f97316", stormwater: "#06b6d4" };
+  const typeColors = {
+    nitrogen: '#3b82f6',
+    phosphorus: '#10b981',
+    thermal: '#f97316',
+    stormwater: '#06b6d4',
+  };
   const typeTotals = {};
-  (portfolio?.transactions || []).filter((t) => t.type === "sale").forEach((t) => {
-    const k = (t.nutrientType || "nitrogen").toLowerCase();
-    typeTotals[k] = (typeTotals[k] || 0) + (t.price || 0);
-  });
-  const typeLabels = Object.keys(typeTotals).length > 0 ? Object.keys(typeTotals) : ["—"];
-  const typeValues = typeLabels[0] === "—" ? [0] : typeLabels.map((k) => typeTotals[k]);
+  (portfolio?.transactions || [])
+    .filter((t) => t.type === 'sale')
+    .forEach((t) => {
+      const k = (t.nutrientType || 'nitrogen').toLowerCase();
+      typeTotals[k] = (typeTotals[k] || 0) + (t.price || 0);
+    });
+  const typeLabels = Object.keys(typeTotals).length > 0 ? Object.keys(typeTotals) : ['—'];
+  const typeValues = typeLabels[0] === '—' ? [0] : typeLabels.map((k) => typeTotals[k]);
   const creditTypeData = {
     labels: typeLabels.map((k) => k.charAt(0).toUpperCase() + k.slice(1)),
     datasets: [
       {
         data: typeValues,
-        backgroundColor: typeLabels.map((k) => typeColors[k] || "#94a3b8"),
+        backgroundColor: typeLabels.map((k) => typeColors[k] || '#94a3b8'),
         borderWidth: 0,
       },
     ],
@@ -524,7 +534,7 @@ const FinancialDashboard = () => {
         display: false,
       },
     },
-    cutout: "70%",
+    cutout: '70%',
   };
 
   if (loading) {
@@ -561,12 +571,10 @@ const FinancialDashboard = () => {
         )}
 
         <HeaderActions>
-          <ActionButton onClick={() => navigate("/dashboard/seller")}>
+          <ActionButton onClick={() => navigate('/dashboard/seller')}>
             View Seller Dashboard
           </ActionButton>
-          <ActionButton variant="secondary">
-            Export Report
-          </ActionButton>
+          <ActionButton variant="secondary">Export Report</ActionButton>
         </HeaderActions>
 
         <StatsGrid>
@@ -574,7 +582,7 @@ const FinancialDashboard = () => {
             <StatIcon color="#d1fae5">$</StatIcon>
             <StatLabel>Total Revenue</StatLabel>
             <StatValue>${(stats.totalRevenue / 1000).toFixed(1)}k</StatValue>
-            <StatChange positive>{stats.totalRevenue > 0 ? "From sales" : "—"}</StatChange>
+            <StatChange positive>{stats.totalRevenue > 0 ? 'From sales' : '—'}</StatChange>
           </StatCard>
 
           <StatCard>
@@ -616,7 +624,7 @@ const FinancialDashboard = () => {
               </ChartContainer>
             </Section>
 
-            <Section style={{ marginTop: "24px" }}>
+            <Section style={{ marginTop: '24px' }}>
               <SectionHeader>
                 <h2>Recent Transactions</h2>
               </SectionHeader>
@@ -626,7 +634,10 @@ const FinancialDashboard = () => {
                     compact
                     title="No transactions yet"
                     description="Your sales and purchases will appear here."
-                    action={{ label: "Browse Marketplace", onClick: () => navigate("/marketplace") }}
+                    action={{
+                      label: 'Browse Marketplace',
+                      onClick: () => navigate('/marketplace'),
+                    }}
                   />
                 ) : (
                   <Table>
@@ -650,7 +661,7 @@ const FinancialDashboard = () => {
                           <td>{tx.description}</td>
                           <td>
                             <AmountCell positive={tx.amount > 0}>
-                              {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toLocaleString()}
+                              {tx.amount > 0 ? '+' : ''}${Math.abs(tx.amount).toLocaleString()}
                             </AmountCell>
                           </td>
                         </tr>
@@ -673,7 +684,8 @@ const FinancialDashboard = () => {
               <LegendContainer>
                 {creditTypeData.labels?.map((label, i) => {
                   const total = creditTypeData.datasets?.[0]?.data?.reduce((a, b) => a + b, 0) || 0;
-                  const pct = total > 0 ? Math.round((creditTypeData.datasets[0].data[i] / total) * 100) : 0;
+                  const pct =
+                    total > 0 ? Math.round((creditTypeData.datasets[0].data[i] / total) * 100) : 0;
                   return (
                     <LegendItem key={label}>
                       <LegendDot color={creditTypeData.datasets?.[0]?.backgroundColor?.[i]} />
@@ -684,7 +696,7 @@ const FinancialDashboard = () => {
               </LegendContainer>
             </Section>
 
-            <Section style={{ marginTop: "24px" }}>
+            <Section style={{ marginTop: '24px' }}>
               <SectionHeader>
                 <h2>Payout Summary</h2>
               </SectionHeader>

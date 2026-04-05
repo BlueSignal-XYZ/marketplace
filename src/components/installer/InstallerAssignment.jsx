@@ -1,10 +1,10 @@
 // Installer Assignment Component - Assign installers to devices/orders
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { DeviceAPI, OrderAPI, UserAPI } from "../../scripts/back_door";
-import commissionService from "../../services/commissionService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { DeviceAPI, OrderAPI, UserAPI } from '../../scripts/back_door';
+import commissionService from '../../services/commissionService';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 900px;
@@ -107,14 +107,14 @@ const InstallerOption = styled.div`
   display: flex;
   align-items: center;
   padding: 16px;
-  border: 2px solid ${(props) => (props.selected ? "#3b82f6" : "#e5e7eb")};
+  border: 2px solid ${(props) => (props.selected ? '#3b82f6' : '#e5e7eb')};
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
-  background: ${(props) => (props.selected ? "#eff6ff" : "#ffffff")};
+  background: ${(props) => (props.selected ? '#eff6ff' : '#ffffff')};
 
   &:hover {
-    border-color: ${(props) => (props.selected ? "#3b82f6" : "#9ca3af")};
+    border-color: ${(props) => (props.selected ? '#3b82f6' : '#9ca3af')};
   }
 `;
 
@@ -122,18 +122,18 @@ const RadioCircle = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid ${(props) => (props.selected ? "#3b82f6" : "#d1d5db")};
+  border: 2px solid ${(props) => (props.selected ? '#3b82f6' : '#d1d5db')};
   margin-right: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &::after {
-    content: "";
+    content: '';
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: ${(props) => (props.selected ? "#3b82f6" : "transparent")};
+    background: ${(props) => (props.selected ? '#3b82f6' : 'transparent')};
   }
 `;
 
@@ -195,7 +195,7 @@ const StatusBadge = styled.span`
   margin-left: 12px;
 
   ${(props) =>
-    props.status === "busy"
+    props.status === 'busy'
       ? `
     background: #fef3c7;
     color: #92400e;
@@ -251,7 +251,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -317,7 +317,7 @@ const InstallerAssignment = () => {
   const [installers, setInstallers] = useState([]);
   const [installerStats, setInstallerStats] = useState({});
   const [selectedInstaller, setSelectedInstaller] = useState(null);
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState('');
 
   useEffect(() => {
     loadData();
@@ -337,29 +337,29 @@ const InstallerAssignment = () => {
       setOrder(orderData);
 
       // Load installers
-      const users = await UserAPI.database.listByRole("installer");
+      const users = await UserAPI.database.listByRole('installer');
       setInstallers(users || []);
 
       // Load stats for each installer
       const stats = {};
       for (const installer of users || []) {
         try {
-          const { CommissionAPI } = await import("../../scripts/back_door");
+          const { CommissionAPI } = await import('../../scripts/back_door');
           const commissions = await CommissionAPI.getByInstaller(installer.uid);
-          const pendingJobs = commissions?.filter(c =>
-            ["pending", "in_progress", "awaiting_tests"].includes(c.status)
-          ).length || 0;
-          const completedJobs = commissions?.filter(c =>
-            ["passed", "failed"].includes(c.status)
-          ).length || 0;
+          const pendingJobs =
+            commissions?.filter((c) =>
+              ['pending', 'in_progress', 'awaiting_tests'].includes(c.status)
+            ).length || 0;
+          const completedJobs =
+            commissions?.filter((c) => ['passed', 'failed'].includes(c.status)).length || 0;
 
           stats[installer.uid] = {
             pending: pendingJobs,
             completed: completedJobs,
-            status: pendingJobs > 2 ? "busy" : "available",
+            status: pendingJobs > 2 ? 'busy' : 'available',
           };
         } catch (e) {
-          stats[installer.uid] = { pending: 0, completed: 0, status: "available" };
+          stats[installer.uid] = { pending: 0, completed: 0, status: 'available' };
         }
       }
       setInstallerStats(stats);
@@ -369,8 +369,8 @@ const InstallerAssignment = () => {
         setSelectedInstaller(deviceData.assignedInstallerId);
       }
     } catch (err) {
-      console.error("Failed to load data:", err);
-      setError("Failed to load data");
+      console.error('Failed to load data:', err);
+      setError('Failed to load data');
     } finally {
       setLoading(false);
     }
@@ -378,7 +378,7 @@ const InstallerAssignment = () => {
 
   const handleAssign = async () => {
     if (!selectedInstaller) {
-      setError("Please select an installer");
+      setError('Please select an installer');
       return;
     }
 
@@ -387,28 +387,29 @@ const InstallerAssignment = () => {
 
     try {
       // Initialize commission workflow
-      await commissionService.initializeCommission(
-        deviceId,
-        orderId,
-        selectedInstaller
-      );
+      await commissionService.initializeCommission(deviceId, orderId, selectedInstaller);
 
       // Update device with installer assignment
       await DeviceAPI.assignInstaller(deviceId, selectedInstaller, notes);
 
-      ACTIONS?.logNotification?.("success", "Installer assigned successfully");
+      ACTIONS?.logNotification?.('success', 'Installer assigned successfully');
       navigate(`/orders/${orderId}`);
     } catch (err) {
-      console.error("Failed to assign installer:", err);
-      setError(err.message || "Failed to assign installer");
+      console.error('Failed to assign installer:', err);
+      setError(err.message || 'Failed to assign installer');
     } finally {
       setSaving(false);
     }
   };
 
   const getInitials = (name) => {
-    if (!name) return "?";
-    return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    if (!name) return '?';
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   if (loading) {
@@ -424,9 +425,7 @@ const InstallerAssignment = () => {
       <PageHeader>
         <BackLink onClick={() => navigate(-1)}>← Back</BackLink>
         <PageTitle>Assign Installer</PageTitle>
-        <PageSubtitle>
-          Select an installer for device commissioning
-        </PageSubtitle>
+        <PageSubtitle>Select an installer for device commissioning</PageSubtitle>
       </PageHeader>
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -444,15 +443,15 @@ const InstallerAssignment = () => {
               </InfoItem>
               <InfoItem>
                 <InfoLabel>Model</InfoLabel>
-                <InfoValue>{device.deviceType || device.model || "BlueSignal"}</InfoValue>
+                <InfoValue>{device.deviceType || device.model || 'BlueSignal'}</InfoValue>
               </InfoItem>
               <InfoItem>
                 <InfoLabel>Order</InfoLabel>
-                <InfoValue>{order?.id || "N/A"}</InfoValue>
+                <InfoValue>{order?.id || 'N/A'}</InfoValue>
               </InfoItem>
               <InfoItem>
                 <InfoLabel>Site</InfoLabel>
-                <InfoValue>{order?.siteName || device.siteName || "Not assigned"}</InfoValue>
+                <InfoValue>{order?.siteName || device.siteName || 'Not assigned'}</InfoValue>
               </InfoItem>
             </DeviceInfo>
           </CardBody>
@@ -482,9 +481,9 @@ const InstallerAssignment = () => {
                     <Avatar>{getInitials(installer.displayName)}</Avatar>
                     <InstallerInfo>
                       <InstallerName>
-                        {installer.displayName || "Unnamed"}
+                        {installer.displayName || 'Unnamed'}
                         <StatusBadge status={stats.status}>
-                          {stats.status === "busy" ? "Busy" : "Available"}
+                          {stats.status === 'busy' ? 'Busy' : 'Available'}
                         </StatusBadge>
                       </InstallerName>
                       <InstallerMeta>
@@ -521,12 +520,8 @@ const InstallerAssignment = () => {
 
       <ButtonGroup>
         <Button onClick={() => navigate(-1)}>Cancel</Button>
-        <Button
-          variant="primary"
-          onClick={handleAssign}
-          disabled={saving || !selectedInstaller}
-        >
-          {saving ? "Assigning..." : "Assign Installer"}
+        <Button variant="primary" onClick={handleAssign} disabled={saving || !selectedInstaller}>
+          {saving ? 'Assigning...' : 'Assign Installer'}
         </Button>
       </ButtonGroup>
     </PageContainer>

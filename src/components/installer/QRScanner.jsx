@@ -3,12 +3,12 @@
  * Scans BlueSignal device QR codes for commissioning
  */
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import styled from "styled-components";
-import { Html5Qrcode } from "html5-qrcode";
-import axios from "axios";
-import { auth } from "../../apis/firebase";
-import configs from "../../../configs";
+import { useState, useRef, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+import { Html5Qrcode } from 'html5-qrcode';
+import axios from 'axios';
+import { auth } from '../../apis/firebase';
+import configs from '../../../configs';
 
 const ScannerContainer = styled.div`
   display: flex;
@@ -92,9 +92,9 @@ const Input = styled.input`
 
 const Button = styled.button`
   padding: 0.875rem 1.5rem;
-  background: ${(props) => (props.primary ? "#00d4ff" : "transparent")};
-  color: ${(props) => (props.primary ? "#000" : "#fff")};
-  border: ${(props) => (props.primary ? "none" : "1px solid rgba(255, 255, 255, 0.2)")};
+  background: ${(props) => (props.primary ? '#00d4ff' : 'transparent')};
+  color: ${(props) => (props.primary ? '#000' : '#fff')};
+  border: ${(props) => (props.primary ? 'none' : '1px solid rgba(255, 255, 255, 0.2)')};
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
@@ -102,7 +102,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background: ${(props) => (props.primary ? "#00b8e0" : "rgba(255, 255, 255, 0.1)")};
+    background: ${(props) => (props.primary ? '#00b8e0' : 'rgba(255, 255, 255, 0.1)')};
     transform: translateY(-1px);
   }
 
@@ -115,21 +115,21 @@ const Button = styled.button`
 const StatusMessage = styled.div`
   padding: 1rem;
   background: ${(props) =>
-    props.type === "success"
-      ? "rgba(34, 197, 94, 0.1)"
-      : props.type === "error"
-      ? "rgba(239, 68, 68, 0.1)"
-      : "rgba(59, 130, 246, 0.1)"};
+    props.type === 'success'
+      ? 'rgba(34, 197, 94, 0.1)'
+      : props.type === 'error'
+        ? 'rgba(239, 68, 68, 0.1)'
+        : 'rgba(59, 130, 246, 0.1)'};
   border: 1px solid
     ${(props) =>
-      props.type === "success"
-        ? "rgba(34, 197, 94, 0.3)"
-        : props.type === "error"
-        ? "rgba(239, 68, 68, 0.3)"
-        : "rgba(59, 130, 246, 0.3)"};
+      props.type === 'success'
+        ? 'rgba(34, 197, 94, 0.3)'
+        : props.type === 'error'
+          ? 'rgba(239, 68, 68, 0.3)'
+          : 'rgba(59, 130, 246, 0.3)'};
   border-radius: 8px;
   color: ${(props) =>
-    props.type === "success" ? "#22c55e" : props.type === "error" ? "#ef4444" : "#3b82f6"};
+    props.type === 'success' ? '#22c55e' : props.type === 'error' ? '#ef4444' : '#3b82f6'};
 `;
 
 const DeviceInfo = styled.div`
@@ -168,7 +168,7 @@ const Divider = styled.div`
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     flex: 1;
     height: 1px;
     background: rgba(255, 255, 255, 0.1);
@@ -180,8 +180,8 @@ const Divider = styled.div`
  */
 export function QRScanner({ onScan, onError, onDeviceValidated }) {
   const [scanning, setScanning] = useState(false);
-  const [manualSerial, setManualSerial] = useState("");
-  const [status, setStatus] = useState({ type: null, message: "" });
+  const [manualSerial, setManualSerial] = useState('');
+  const [status, setStatus] = useState({ type: null, message: '' });
   const [validatedDevice, setValidatedDevice] = useState(null);
   const [validating, setValidating] = useState(false);
   const scannerRef = useRef(null);
@@ -194,11 +194,11 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
     if (html5QrCodeRef.current?.isScanning) return;
 
     try {
-      const html5QrCode = new Html5Qrcode("qr-scanner");
+      const html5QrCode = new Html5Qrcode('qr-scanner');
       html5QrCodeRef.current = html5QrCode;
 
       await html5QrCode.start(
-        { facingMode: "environment" },
+        { facingMode: 'environment' },
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
@@ -209,10 +209,10 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
       );
 
       setScanning(true);
-      setStatus({ type: "info", message: "Position the QR code within the frame" });
+      setStatus({ type: 'info', message: 'Position the QR code within the frame' });
     } catch (err) {
-      console.error("Failed to start scanner:", err);
-      setStatus({ type: "error", message: "Failed to access camera. Please allow camera access." });
+      console.error('Failed to start scanner:', err);
+      setStatus({ type: 'error', message: 'Failed to access camera. Please allow camera access.' });
       onError?.(err.message);
     }
   }, []);
@@ -225,7 +225,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
       try {
         await html5QrCodeRef.current.stop();
       } catch (err) {
-        console.error("Error stopping scanner:", err);
+        console.error('Error stopping scanner:', err);
       }
     }
     setScanning(false);
@@ -242,23 +242,23 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
    */
   const handleScan = async (decodedText) => {
     await stopScanner();
-    setStatus({ type: "info", message: "Processing QR code..." });
+    setStatus({ type: 'info', message: 'Processing QR code...' });
 
     try {
       // Extract QR data from URL if present
       let qrData = decodedText;
-      if (decodedText.includes("?d=")) {
+      if (decodedText.includes('?d=')) {
         try {
           const url = new URL(decodedText);
-          qrData = url.searchParams.get("d") || decodedText;
+          qrData = url.searchParams.get('d') || decodedText;
         } catch (e) {
           // Not a URL, use as-is
         }
       }
 
-      await validateQRCode(qrData, "qr_scan");
+      await validateQRCode(qrData, 'qr_scan');
     } catch (err) {
-      setStatus({ type: "error", message: err.message });
+      setStatus({ type: 'error', message: err.message });
       onError?.(err.message);
       // Restart scanner after error
       setTimeout(() => startScanner(), 2000);
@@ -271,21 +271,21 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
   const handleManualSubmit = async () => {
     if (!manualSerial.trim()) return;
 
-    setStatus({ type: "info", message: "Validating serial number..." });
+    setStatus({ type: 'info', message: 'Validating serial number...' });
 
     try {
       // Create a manual entry payload
       const payload = {
         serialNumber: manualSerial.trim().toUpperCase(),
-        type: "manual",
-        signature: "manual",
+        type: 'manual',
+        signature: 'manual',
         timestamp: Date.now(),
       };
       const qrData = btoa(JSON.stringify(payload));
 
-      await validateQRCode(qrData, "serial_manual");
+      await validateQRCode(qrData, 'serial_manual');
     } catch (err) {
-      setStatus({ type: "error", message: err.message });
+      setStatus({ type: 'error', message: err.message });
       onError?.(err.message);
     }
   };
@@ -300,7 +300,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
       // Get auth token
       const token = await auth?.currentUser?.getIdToken();
       if (!token) {
-        throw new Error("Please sign in to scan devices");
+        throw new Error('Please sign in to scan devices');
       }
 
       const response = await axios.post(
@@ -312,11 +312,11 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
       const { valid, device, error: validationError } = response.data;
 
       if (!valid) {
-        throw new Error(validationError || "Invalid QR code");
+        throw new Error(validationError || 'Invalid QR code');
       }
 
       setValidatedDevice(device);
-      setStatus({ type: "success", message: "Device validated successfully!" });
+      setStatus({ type: 'success', message: 'Device validated successfully!' });
 
       // Notify parent components
       onScan?.(qrData);
@@ -326,8 +326,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
         method,
       });
     } catch (err) {
-      const message =
-        err.response?.data?.error || err.message || "Failed to validate device";
+      const message = err.response?.data?.error || err.message || 'Failed to validate device';
       throw new Error(message);
     } finally {
       setValidating(false);
@@ -339,8 +338,8 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
    */
   const handleReset = () => {
     setValidatedDevice(null);
-    setManualSerial("");
-    setStatus({ type: null, message: "" });
+    setManualSerial('');
+    setStatus({ type: null, message: '' });
     startScanner();
   };
 
@@ -350,7 +349,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
         <>
           {/* Scanner View */}
           <ScannerView ref={scannerRef}>
-            <div id="qr-scanner" style={{ width: "100%", height: "100%" }} />
+            <div id="qr-scanner" style={{ width: '100%', height: '100%' }} />
             {scanning && (
               <ScannerOverlay>
                 <ScanFrame />
@@ -359,9 +358,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
           </ScannerView>
 
           {/* Status Message */}
-          {status.message && (
-            <StatusMessage type={status.type}>{status.message}</StatusMessage>
-          )}
+          {status.message && <StatusMessage type={status.type}>{status.message}</StatusMessage>}
 
           {/* Divider */}
           <Divider>or enter manually</Divider>
@@ -380,7 +377,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
               onClick={handleManualSubmit}
               disabled={!manualSerial.trim() || validating}
             >
-              {validating ? "Validating..." : "Submit Serial Number"}
+              {validating ? 'Validating...' : 'Submit Serial Number'}
             </Button>
           </ManualEntry>
         </>

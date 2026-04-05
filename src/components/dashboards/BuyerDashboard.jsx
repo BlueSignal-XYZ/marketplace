@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -183,7 +183,7 @@ const SectionHeader = styled.div`
 
 const ViewAllLink = styled.span`
   font-size: 14px;
-  color: #1D7072;
+  color: #1d7072;
   cursor: pointer;
   font-weight: 500;
 
@@ -231,22 +231,15 @@ const ActionButton = styled.button`
   transition: all 0.2s;
 
   background: ${({ variant }) =>
-    variant === 'secondary'
-      ? '#ffffff'
-      : 'linear-gradient(135deg, #1D7072 0%, #155e5f 100%)'};
+    variant === 'secondary' ? '#ffffff' : 'linear-gradient(135deg, #1D7072 0%, #155e5f 100%)'};
   color: ${({ variant }) => (variant === 'secondary' ? '#1D7072' : '#ffffff')};
-  border: ${({ variant }) =>
-    variant === 'secondary' ? '1px solid #1D7072' : 'none'};
+  border: ${({ variant }) => (variant === 'secondary' ? '1px solid #1D7072' : 'none')};
   box-shadow: ${({ variant }) =>
-    variant === 'secondary'
-      ? 'none'
-      : '0 4px 12px rgba(29, 112, 114, 0.3)'};
+    variant === 'secondary' ? 'none' : '0 4px 12px rgba(29, 112, 114, 0.3)'};
 
   &:hover {
     background: ${({ variant }) =>
-      variant === 'secondary'
-        ? '#e0f2ff'
-        : 'linear-gradient(135deg, #155e5f 0%, #0f4344 100%)'};
+      variant === 'secondary' ? '#e0f2ff' : 'linear-gradient(135deg, #155e5f 0%, #0f4344 100%)'};
     transform: translateY(-2px);
   }
 
@@ -270,7 +263,7 @@ const CreditCard = styled.div`
   cursor: pointer;
 
   &:hover {
-    border-color: #1D7072;
+    border-color: #1d7072;
     background: #f8fafc;
   }
 
@@ -395,7 +388,7 @@ const PurchaseAmount = styled.div`
   .price {
     font-size: 16px;
     font-weight: 600;
-    color: #1D7072;
+    color: #1d7072;
   }
 
   .date {
@@ -461,7 +454,7 @@ const LoadingSpinner = styled.div`
     width: 40px;
     height: 40px;
     border: 3px solid #e5e7eb;
-    border-top-color: #1D7072;
+    border-top-color: #1d7072;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -475,7 +468,7 @@ const LoadingSpinner = styled.div`
 
 const GettingStartedCard = styled.div`
   background: linear-gradient(135deg, #e0f7f8 0%, #c5e8e9 100%);
-  border: 1px solid #1D7072;
+  border: 1px solid #1d7072;
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
@@ -493,7 +486,7 @@ const GettingStartedIcon = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: #1D7072;
+  background: #1d7072;
   color: white;
   display: flex;
   align-items: center;
@@ -535,12 +528,12 @@ const Step = styled.div`
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
-  color: #1D7072;
+  color: #1d7072;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: #1D7072;
+    background: #1d7072;
     color: white;
   }
 
@@ -548,7 +541,7 @@ const Step = styled.div`
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: ${({ $completed }) => $completed ? '#10b981' : '#1D7072'};
+    background: ${({ $completed }) => ($completed ? '#10b981' : '#1D7072')};
     color: white;
     font-size: 11px;
     display: flex;
@@ -590,7 +583,9 @@ const StatusBadge = styled.span`
 `;
 
 const BuyerDashboard = () => {
-  useEffect(() => { document.title = 'Buyer Dashboard — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Buyer Dashboard — WaterQuality.Trading';
+  }, []);
   const { STATES } = useAppContext();
   const { user } = STATES || {};
   const navigate = useNavigate();
@@ -624,32 +619,35 @@ const BuyerDashboard = () => {
       ]);
 
       if (realCredits.length > 0) {
-        setCredits(realCredits.map(c => ({
-          id: c.id,
-          type: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1) : 'Nutrient Reduction',
-          amount: c.quantity || 0,
-          unit: c.unit || 'lbs',
-          price: 0,
-          location: c.location || 'Unknown',
-          seller: c.verifier || 'Unknown',
-        })));
+        setCredits(
+          realCredits.map((c) => ({
+            id: c.id,
+            type: c.type ? c.type.charAt(0).toUpperCase() + c.type.slice(1) : 'Nutrient Reduction',
+            amount: c.quantity || 0,
+            unit: c.unit || 'lbs',
+            price: 0,
+            location: c.location || 'Unknown',
+            seller: c.verifier || 'Unknown',
+          }))
+        );
       } else {
         // Fallback mock data for empty state
         setCredits([]);
       }
 
       if (realOrders.length > 0) {
-        setPurchases(realOrders
-          .filter(o => o.buyerId === user?.uid)
-          .map(o => ({
-            id: o.id,
-            date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
-            type: o.type === 'credit_purchase' ? 'Credit Purchase' : o.type,
-            amount: 0,
-            unit: '',
-            price: o.amount || 0,
-            status: o.status === 'completed' ? 'Completed' : 'Pending Verification',
-          }))
+        setPurchases(
+          realOrders
+            .filter((o) => o.buyerId === user?.uid)
+            .map((o) => ({
+              id: o.id,
+              date: o.createdAt ? new Date(o.createdAt).toISOString().split('T')[0] : '',
+              type: o.type === 'credit_purchase' ? 'Credit Purchase' : o.type,
+              amount: 0,
+              unit: '',
+              price: o.amount || 0,
+              status: o.status === 'completed' ? 'Completed' : 'Pending Verification',
+            }))
         );
       } else {
         setPurchases([]);
@@ -691,16 +689,17 @@ const BuyerDashboard = () => {
     <Page>
       <Shell>
         <Header>
-          <h1>
-            {user?.username ? `Welcome back, ${user.username}` : 'Buyer Dashboard'}
-          </h1>
+          <h1>{user?.username ? `Welcome back, ${user.username}` : 'Buyer Dashboard'}</h1>
           <p>Browse available credits, track purchases, and manage compliance requirements.</p>
         </Header>
 
         {isDemoMode() && (
           <DemoBanner data-testid="sample-data-banner">
             <span className="icon">ℹ️</span>
-            <span><strong>Sample Data:</strong> This dashboard shows example credits and purchases for demonstration purposes. Your actual data will appear here once you make purchases.</span>
+            <span>
+              <strong>Sample Data:</strong> This dashboard shows example credits and purchases for
+              demonstration purposes. Your actual data will appear here once you make purchases.
+            </span>
           </DemoBanner>
         )}
 
@@ -710,8 +709,8 @@ const BuyerDashboard = () => {
             <GettingStartedContent>
               <h3>Get Started with Water Credits</h3>
               <p>
-                Welcome to WaterQuality.Trading! Here's how to make your first credit purchase
-                and start meeting your environmental compliance goals.
+                Welcome to WaterQuality.Trading! Here's how to make your first credit purchase and
+                start meeting your environmental compliance goals.
               </p>
               <StepList>
                 <Step onClick={handleBrowseMarketplace}>
@@ -733,9 +732,7 @@ const BuyerDashboard = () => {
 
         <HeaderActions>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <ActionButton onClick={handleBrowseMarketplace}>
-              Browse Marketplace
-            </ActionButton>
+            <ActionButton onClick={handleBrowseMarketplace}>Browse Marketplace</ActionButton>
             <ActionButton variant="secondary" onClick={() => navigate('/registry')}>
               View Registry
             </ActionButton>
@@ -780,9 +777,7 @@ const BuyerDashboard = () => {
                   <div className="icon">Credits</div>
                   <h3>No credits available</h3>
                   <p>Check back soon or contact sellers directly.</p>
-                  <ActionButton onClick={handleBrowseMarketplace}>
-                    Browse Marketplace
-                  </ActionButton>
+                  <ActionButton onClick={handleBrowseMarketplace}>Browse Marketplace</ActionButton>
                 </EmptyState>
               ) : (
                 credits.map((credit) => (
@@ -799,7 +794,9 @@ const BuyerDashboard = () => {
                     <CreditStats>
                       <CreditStat>
                         <div className="label">Amount</div>
-                        <div className="value">{credit.amount.toLocaleString()} {credit.unit}</div>
+                        <div className="value">
+                          {credit.amount.toLocaleString()} {credit.unit}
+                        </div>
                       </CreditStat>
                       <CreditStat highlight>
                         <div className="label">Price</div>
@@ -885,7 +882,9 @@ const BuyerDashboard = () => {
           <Section style={{ marginTop: '24px' }}>
             <SectionHeader>
               <h2>My Devices</h2>
-              <ViewAllLink onClick={() => window.open('https://cloud.bluesignal.xyz/cloud/devices', '_blank')}>
+              <ViewAllLink
+                onClick={() => window.open('https://cloud.bluesignal.xyz/cloud/devices', '_blank')}
+              >
                 Manage in Cloud
               </ViewAllLink>
             </SectionHeader>
@@ -896,7 +895,11 @@ const BuyerDashboard = () => {
                   <CardValue style={{ fontSize: '16px' }}>
                     {device.type || device.deviceType || 'WQM-1'}
                   </CardValue>
-                  <CardSubtext positive={device.installation?.status === 'active' || device.lifecycle === 'active'}>
+                  <CardSubtext
+                    positive={
+                      device.installation?.status === 'active' || device.lifecycle === 'active'
+                    }
+                  >
                     {device.installation?.status || device.lifecycle || 'Unknown'}
                   </CardSubtext>
                 </StatusCard>

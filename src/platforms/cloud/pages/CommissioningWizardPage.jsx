@@ -4,20 +4,14 @@
  * Wired to /v2/devices/check, /v2/devices/test-connection, /v2/devices/commission
  */
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
-import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { useAppContext } from '../../../context/AppContext';
 import { useToastContext } from '../../../shared/providers/ToastProvider';
-import {
-  checkDevice,
-  testDeviceConnection,
-  getSites,
-  ApiError,
-} from '../../../services/v2/api';
+import { checkDevice, testDeviceConnection, ApiError } from '../../../services/v2/api';
 import { useCommissionDeviceMutation } from '../../../shared/hooks/useApiQueries';
 import { trackEvent } from '../../../utils/analytics';
 
@@ -234,7 +228,9 @@ export function CommissioningWizardPage() {
       setDeviceCheck(result);
 
       if (result.isCommissioned) {
-        setStepError(`Device ${form.serialNumber} is already commissioned (status: ${result.status}).`);
+        setStepError(
+          `Device ${form.serialNumber} is already commissioned (status: ${result.status}).`
+        );
         setProcessing(false);
         return;
       }
@@ -289,18 +285,24 @@ export function CommissioningWizardPage() {
       {
         onSuccess: (result) => {
           trackEvent('device_commissioned', { deviceId: form.serialNumber, siteId: result.siteId });
-          toast({ type: 'success', message: `Device ${form.serialNumber} commissioned successfully!` });
+          toast({
+            type: 'success',
+            message: `Device ${form.serialNumber} commissioned successfully!`,
+          });
           navigate(`/device/${result.deviceId}`);
         },
         onError: (err) => {
-          const msg = err instanceof ApiError ? err.message : 'Failed to commission device. Please try again.';
+          const msg =
+            err instanceof ApiError
+              ? err.message
+              : 'Failed to commission device. Please try again.';
           setStepError(msg);
           toast({ type: 'error', message: msg });
         },
         onSettled: () => {
           setProcessing(false);
         },
-      },
+      }
     );
   }, [form, user?.uid, toast, navigate, commissionMutation]);
 
@@ -329,7 +331,9 @@ export function CommissioningWizardPage() {
               />
             </FormArea>
             <ButtonRow>
-              <Button variant="outline" onClick={() => navigate('/v2/dashboard')}>Cancel</Button>
+              <Button variant="outline" onClick={() => navigate('/v2/dashboard')}>
+                Cancel
+              </Button>
               <Button onClick={handleScanNext} disabled={!form.serialNumber.trim() || processing}>
                 {processing ? 'Checking…' : 'Next'}
               </Button>
@@ -343,15 +347,23 @@ export function CommissioningWizardPage() {
             <StatusDot $connected={connectionResult?.connected} />
             <Title>Connecting…</Title>
             <Desc>
-              Establishing connection to {form.serialNumber}.
-              Make sure the device is powered on and in range.
+              Establishing connection to {form.serialNumber}. Make sure the device is powered on and
+              in range.
             </Desc>
             {stepError && <ErrorMsg>{stepError}</ErrorMsg>}
             <StatusText>
               {processing ? 'Testing device connection…' : 'Ready to connect'}
             </StatusText>
             <ButtonRow>
-              <Button variant="outline" onClick={() => { setStep(0); setStepError(null); }}>Back</Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setStep(0);
+                  setStepError(null);
+                }}
+              >
+                Back
+              </Button>
               <Button onClick={handleConnect} disabled={processing}>
                 {processing ? 'Connecting…' : 'Test Connection'}
               </Button>
@@ -365,30 +377,48 @@ export function CommissioningWizardPage() {
             <StepIcon>🔧</StepIcon>
             <Title>Calibrate Sensors</Title>
             <Desc>
-              {connectionResult?.simulated
-                ? <>Calibration in simulation mode. <SimBadge>Simulation Mode (no device connected)</SimBadge></>
-                : 'Follow the on-screen instructions to calibrate each sensor.'
-              }
+              {connectionResult?.simulated ? (
+                <>
+                  Calibration in simulation mode.{' '}
+                  <SimBadge>Simulation Mode (no device connected)</SimBadge>
+                </>
+              ) : (
+                'Follow the on-screen instructions to calibrate each sensor.'
+              )}
             </Desc>
             <div style={{ padding: '20px 0' }}>
-              {['pH Sensor', 'TDS Sensor', 'Turbidity Sensor', 'Temperature Sensor'].map((sensor, i) => (
-                <SensorRow key={sensor}>
-                  <span style={{ color: '#666' }}>{sensor}</span>
-                  <span style={{
-                    fontWeight: 600,
-                    color: calibrationDone ? '#00C48C' :
-                      (calibrating && i === 2) ? '#0066FF' :
-                      (calibrating && i < 2) ? '#00C48C' : '#999'
-                  }}>
-                    {calibrationDone ? '✓ Calibrated' :
-                      (calibrating && i === 2) ? 'Calibrating…' :
-                      (calibrating && i < 2) ? '✓ Calibrated' : 'Waiting'}
-                  </span>
-                </SensorRow>
-              ))}
+              {['pH Sensor', 'TDS Sensor', 'Turbidity Sensor', 'Temperature Sensor'].map(
+                (sensor, i) => (
+                  <SensorRow key={sensor}>
+                    <span style={{ color: '#666' }}>{sensor}</span>
+                    <span
+                      style={{
+                        fontWeight: 600,
+                        color: calibrationDone
+                          ? '#00C48C'
+                          : calibrating && i === 2
+                            ? '#0066FF'
+                            : calibrating && i < 2
+                              ? '#00C48C'
+                              : '#999',
+                      }}
+                    >
+                      {calibrationDone
+                        ? '✓ Calibrated'
+                        : calibrating && i === 2
+                          ? 'Calibrating…'
+                          : calibrating && i < 2
+                            ? '✓ Calibrated'
+                            : 'Waiting'}
+                    </span>
+                  </SensorRow>
+                )
+              )}
             </div>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(1)}>Back</Button>
+              <Button variant="outline" onClick={() => setStep(1)}>
+                Back
+              </Button>
               {!calibrationDone ? (
                 <Button onClick={handleCalibrate} disabled={calibrating}>
                   {calibrating ? 'Calibrating…' : 'Start Calibration'}
@@ -435,8 +465,17 @@ export function CommissioningWizardPage() {
               </div>
             </FormArea>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(2)}>Back</Button>
-              <Button onClick={() => { setStepError(null); setStep(4); }}>Continue</Button>
+              <Button variant="outline" onClick={() => setStep(2)}>
+                Back
+              </Button>
+              <Button
+                onClick={() => {
+                  setStepError(null);
+                  setStep(4);
+                }}
+              >
+                Continue
+              </Button>
             </ButtonRow>
           </>
         )}
@@ -447,11 +486,18 @@ export function CommissioningWizardPage() {
             <StepIcon>💰</StepIcon>
             <Title>Generate Water Quality Credits?</Title>
             <Desc>
-              Your device can do more than monitor. If your site improves water quality
-              beyond regulatory baselines, you can generate tradeable credits on
-              WaterQuality.Trading.
+              Your device can do more than monitor. If your site improves water quality beyond
+              regulatory baselines, you can generate tradeable credits on WaterQuality.Trading.
             </Desc>
-            <div style={{ textAlign: 'left', marginBottom: 24, fontSize: 14, color: '#666', lineHeight: 1.7 }}>
+            <div
+              style={{
+                textAlign: 'left',
+                marginBottom: 24,
+                fontSize: 14,
+                color: '#666',
+                lineHeight: 1.7,
+              }}
+            >
               This requires:
               <ul style={{ marginTop: 8, paddingLeft: 20 }}>
                 <li>Calibrated probes with documented standards</li>
@@ -461,15 +507,23 @@ export function CommissioningWizardPage() {
               </ul>
             </div>
             <ButtonRow>
-              <Button variant="outline" onClick={() => { setStepError(null); setStep(5); }}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setStepError(null);
+                  setStep(5);
+                }}
+              >
                 Skip — Just Monitor
               </Button>
-              <Button onClick={() => {
-                // Store intent to enable revenue grade after commission
-                update('enableRevenueGrade', true);
-                setStepError(null);
-                setStep(5);
-              }}>
+              <Button
+                onClick={() => {
+                  // Store intent to enable revenue grade after commission
+                  update('enableRevenueGrade', true);
+                  setStepError(null);
+                  setStep(5);
+                }}
+              >
                 Enable Revenue Grade
               </Button>
             </ButtonRow>
@@ -491,9 +545,17 @@ export function CommissioningWizardPage() {
                 ['Serial', form.serialNumber],
                 ['Name', form.deviceName || '—'],
                 ['Site', form.siteName || '—'],
-                ['Location', form.latitude && form.longitude ? `${form.latitude}, ${form.longitude}` : '—'],
+                [
+                  'Location',
+                  form.latitude && form.longitude ? `${form.latitude}, ${form.longitude}` : '—',
+                ],
                 ['Sensors', calibrationDone ? '4 calibrated' : 'Not calibrated'],
-                ['Connection', connectionResult?.connected ? `Connected (${connectionResult.signal})` : `Simulation mode`],
+                [
+                  'Connection',
+                  connectionResult?.connected
+                    ? `Connected (${connectionResult.signal})`
+                    : `Simulation mode`,
+                ],
               ].map(([label, value]) => (
                 <ReviewRow key={label}>
                   <span style={{ color: '#888' }}>{label}</span>
@@ -502,7 +564,9 @@ export function CommissioningWizardPage() {
               ))}
             </div>
             <ButtonRow>
-              <Button variant="outline" onClick={() => setStep(4)} disabled={processing}>Back</Button>
+              <Button variant="outline" onClick={() => setStep(4)} disabled={processing}>
+                Back
+              </Button>
               <Button onClick={handleCommission} disabled={processing}>
                 {processing ? 'Activating…' : 'Activate Device'}
               </Button>

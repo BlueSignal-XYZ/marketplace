@@ -1,16 +1,16 @@
 // src/routes/marketplace/ListingDetail.jsx
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { getCreditById } from "../../apis/creditsApi";
-import { ButtonPrimary, ButtonSecondary } from "../../components/shared/button/Button";
-import { RequestQuoteModal } from "../../components/elements/marketplace/RequestQuoteModal";
-import PurchaseFlow from "../../components/elements/marketplace/PurchaseFlow";
-import { PropertyMap } from "../../components/shared/PropertyMap";
-import { useAppContext } from "../../context/AppContext";
-import { media } from "../../styles/breakpoints";
-import { creditTypeColors } from "../../styles/colors";
+import { getCreditById } from '../../apis/creditsApi';
+import { ButtonPrimary, ButtonSecondary } from '../../components/shared/button/Button';
+import { RequestQuoteModal } from '../../components/elements/marketplace/RequestQuoteModal';
+import PurchaseFlow from '../../components/elements/marketplace/PurchaseFlow';
+import { PropertyMap } from '../../components/shared/PropertyMap';
+import { useAppContext } from '../../context/AppContext';
+import { media } from '../../styles/breakpoints';
+import { creditTypeColors } from '../../styles/colors';
 
 const Page = styled.div`
   max-width: 960px;
@@ -26,7 +26,7 @@ const BackLink = styled.button`
   font-size: 0.9rem;
   text-decoration: underline;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const Header = styled.div`
@@ -50,13 +50,13 @@ const TitleBlock = styled.div`
 const Title = styled.h1`
   font-size: clamp(1.4rem, 4vw, 1.8rem);
   margin: 0 0 8px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   font-weight: 700;
 `;
 
 const Subtitle = styled.p`
   margin: 0;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   font-size: 0.9rem;
 `;
 
@@ -80,9 +80,9 @@ const CreditTypeBadge = styled.span`
   padding: 4px 10px;
   border-radius: 999px;
   font-weight: 600;
-  background: ${({ $creditType }) => creditTypeColors[$creditType]?.bg || "#f3f4f6"};
-  color: ${({ $creditType }) => creditTypeColors[$creditType]?.text || "#374151"};
-  border: 1px solid ${({ $creditType }) => creditTypeColors[$creditType]?.border || "#d1d5db"};
+  background: ${({ $creditType }) => creditTypeColors[$creditType]?.bg || '#f3f4f6'};
+  color: ${({ $creditType }) => creditTypeColors[$creditType]?.text || '#374151'};
+  border: 1px solid ${({ $creditType }) => creditTypeColors[$creditType]?.border || '#d1d5db'};
 `;
 
 const PriceBlock = styled.div`
@@ -97,14 +97,14 @@ const PriceBlock = styled.div`
 
 const PriceLabel = styled.div`
   font-size: 0.8rem;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
 `;
 
 const PriceValue = styled.div`
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 12px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const CTARow = styled.div`
@@ -127,20 +127,20 @@ const StatGrid = styled.div`
 const StatCard = styled.div`
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
 `;
 
 const StatLabel = styled.div`
   font-size: 0.8rem;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   margin-bottom: 2px;
 `;
 
 const StatValue = styled.div`
   font-size: 1.1rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const Section = styled.section`
@@ -150,13 +150,13 @@ const Section = styled.section`
 const SectionTitle = styled.h2`
   font-size: 1.1rem;
   margin-bottom: 8px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const SectionBody = styled.p`
   margin: 0;
   line-height: 1.5;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const MapSection = styled.section`
@@ -170,13 +170,13 @@ const MapTitle = styled.h2`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const MapSubtitle = styled.span`
   font-size: 0.85rem;
   font-weight: 400;
-  color: ${({ theme }) => theme.colors?.ui500 || "#64748b"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#64748b'};
 `;
 
 export default function ListingDetail() {
@@ -209,7 +209,7 @@ export default function ListingDetail() {
           setCredit(data);
         }
       } catch (err) {
-        console.error("Failed to load credit", err);
+        console.error('Failed to load credit', err);
         if (!cancelled) {
           setNotFound(true);
         }
@@ -231,7 +231,7 @@ export default function ListingDetail() {
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate("/marketplace");
+      navigate('/marketplace');
     }
   };
 
@@ -301,13 +301,9 @@ export default function ListingDetail() {
           </PriceValue>
           <CTARow>
             {user?.uid && (
-              <ButtonPrimary onClick={() => setPurchaseOpen(true)}>
-                Buy Now
-              </ButtonPrimary>
+              <ButtonPrimary onClick={() => setPurchaseOpen(true)}>Buy Now</ButtonPrimary>
             )}
-            <ButtonSecondary onClick={() => setQuoteOpen(true)}>
-              Request Quote
-            </ButtonSecondary>
+            <ButtonSecondary onClick={() => setQuoteOpen(true)}>Request Quote</ButtonSecondary>
           </CTARow>
         </PriceBlock>
       </Header>
@@ -330,9 +326,7 @@ export default function ListingDetail() {
         <StatCard>
           <StatLabel>Tags</StatLabel>
           <StatValue>
-            {credit.tags && credit.tags.length
-              ? credit.tags.join(" \u00b7 ")
-              : "None"}
+            {credit.tags && credit.tags.length ? credit.tags.join(' \u00b7 ') : 'None'}
           </StatValue>
         </StatCard>
       </StatGrid>
@@ -341,9 +335,7 @@ export default function ListingDetail() {
         <MapSection>
           <MapTitle>
             Property Location
-            {credit.acreage && (
-              <MapSubtitle>{credit.acreage} acres</MapSubtitle>
-            )}
+            {credit.acreage && <MapSubtitle>{credit.acreage} acres</MapSubtitle>}
           </MapTitle>
           <PropertyMap
             lat={credit.lat}
@@ -368,11 +360,7 @@ export default function ListingDetail() {
         </Section>
       )}
 
-      <RequestQuoteModal
-        open={quoteOpen}
-        onClose={() => setQuoteOpen(false)}
-        credit={credit}
-      />
+      <RequestQuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} credit={credit} />
 
       {purchaseOpen && (
         <PurchaseFlow

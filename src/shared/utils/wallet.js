@@ -5,7 +5,8 @@
 
 import { BrowserProvider } from 'ethers';
 
-const SIGN_MESSAGE = 'Sign this message to link your wallet to BlueSignal.\n\nThis request will not trigger a blockchain transaction or cost any gas fees.';
+const SIGN_MESSAGE =
+  'Sign this message to link your wallet to BlueSignal.\n\nThis request will not trigger a blockchain transaction or cost any gas fees.';
 
 /**
  * Check if MetaMask (or compatible provider) is available.

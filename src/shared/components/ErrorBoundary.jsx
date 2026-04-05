@@ -64,7 +64,9 @@ const Btn = styled.button`
   cursor: pointer;
   transition: all 0.15s ease;
 
-  &:hover { opacity: 0.85; }
+  &:hover {
+    opacity: 0.85;
+  }
 `;
 
 const PrimaryBtn = styled(Btn)`
@@ -115,17 +117,18 @@ function ErrorFallback({ error, resetError, platform }) {
         <Icon>⚠️</Icon>
         <Title>Something went wrong</Title>
         <Message>
-          {brandName} encountered an unexpected error.
-          This has been logged and our team will investigate.
-          You can try again or return to the home page.
+          {brandName} encountered an unexpected error. This has been logged and our team will
+          investigate. You can try again or return to the home page.
         </Message>
         <ButtonRow>
-          <SecondaryBtn onClick={() => { window.location.href = '/'; }}>
+          <SecondaryBtn
+            onClick={() => {
+              window.location.href = '/';
+            }}
+          >
             Return to Home
           </SecondaryBtn>
-          <PrimaryBtn onClick={resetError}>
-            Try Again
-          </PrimaryBtn>
+          <PrimaryBtn onClick={resetError}>Try Again</PrimaryBtn>
         </ButtonRow>
         {error && (
           <Details>

@@ -177,7 +177,9 @@ describe('v2 API response shape contracts', () => {
 
     it('should have role for routing decisions', () => {
       // getDefaultDashboardRoute reads user.role
-      expect(['buyer', 'seller', 'installer', 'admin', 'farmer', 'operator']).toContain(profile.role);
+      expect(['buyer', 'seller', 'installer', 'admin', 'farmer', 'operator']).toContain(
+        profile.role
+      );
     });
 
     it('should have onboardingComplete flag', () => {

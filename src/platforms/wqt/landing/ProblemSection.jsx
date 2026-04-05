@@ -3,7 +3,6 @@
  * water quantity (drought, infrastructure) and water quality (compliance, costs).
  */
 
-import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -15,8 +14,8 @@ const ripple = keyframes`
 
 const Section = styled.section`
   padding: 48px clamp(16px, 5vw, 48px);
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.md}px) {
     padding: 64px clamp(20px, 5vw, 48px);
@@ -48,7 +47,7 @@ const SectionTitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin: 0 0 16px;
   letter-spacing: -0.03em;
@@ -131,7 +130,7 @@ const CardTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(20px, 2.5vw, 24px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 12px;
   letter-spacing: -0.02em;
 `;
@@ -183,7 +182,7 @@ const BridgeText = styled.p`
 `;
 
 const BridgeHighlight = styled.span`
-  color: #06B6D4;
+  color: #06b6d4;
 `;
 
 export function ProblemSection() {
@@ -194,9 +193,9 @@ export function ProblemSection() {
           <SectionLabel>The Problem</SectionLabel>
           <SectionTitle>Municipal Water Is Getting Worse — and More Expensive</SectionTitle>
           <SectionSub>
-            Aging pipes. Rising rates. Contaminants making headlines. Whether you're a
-            homeowner tired of boil notices or a utility struggling with infrastructure —
-            the system is overdue for an upgrade.
+            Aging pipes. Rising rates. Contaminants making headlines. Whether you&apos;re a
+            homeowner tired of boil notices or a utility struggling with infrastructure — the system
+            is overdue for an upgrade.
           </SectionSub>
         </RevealOnScroll>
 
@@ -205,15 +204,24 @@ export function ProblemSection() {
             <Card>
               <CardRipple $color="rgba(6, 182, 212, 0.06)" $delay="0s" />
               <CardIcon $bg="rgba(6, 182, 212, 0.12)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#06B6D4"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" />
                 </svg>
               </CardIcon>
               <CardTitle>For Homeowners</CardTitle>
               <CardDesc>
-                Rising water bills, drought restrictions, and aging pipes mean you're
-                paying more for water you can't always trust. What if you could make
-                your own — and get paid for it?
+                Rising water bills, drought restrictions, and aging pipes mean you&apos;re paying
+                more for water you can&apos;t always trust. What if you could make your own — and
+                get paid for it?
               </CardDesc>
               <StatRow>
                 <Stat>
@@ -232,15 +240,24 @@ export function ProblemSection() {
             <Card>
               <CardRipple $color="rgba(16, 185, 129, 0.06)" $delay="3s" />
               <CardIcon $bg="rgba(16, 185, 129, 0.12)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </CardIcon>
               <CardTitle>For Utilities</CardTitle>
               <CardDesc>
-                NPDES compliance costs are rising. Nutrient loading drives expensive
-                treatment upgrades. Distributed water generation could offset demand
-                and improve quality at a fraction of the cost.
+                NPDES compliance costs are rising. Nutrient loading drives expensive treatment
+                upgrades. Distributed water generation could offset demand and improve quality at a
+                fraction of the cost.
               </CardDesc>
               <StatRow>
                 <Stat>

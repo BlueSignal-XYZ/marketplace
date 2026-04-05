@@ -3,11 +3,12 @@
  * Submits to the same Google Sheets endpoint used by BlueSignal.xyz landing.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
+const GOOGLE_SHEETS_URL =
+  'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
 
 const SUBJECT_OPTIONS = [
   { value: '', label: 'Select a subject...' },
@@ -26,8 +27,8 @@ const Page = styled.div`
 
 const Hero = styled.section`
   padding: 64px 24px 64px;
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 96px 24px 80px;
@@ -46,7 +47,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 16px;
 `;
 
@@ -121,8 +122,8 @@ const Input = styled.input`
   font-size: 15px;
   color: ${({ theme }) => theme.colors.text};
   background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ $hasError, theme }) =>
-    $hasError ? theme.colors.negative : theme.colors.border};
+  border: 1px solid
+    ${({ $hasError, theme }) => ($hasError ? theme.colors.negative : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.md}px;
   padding: 12px 14px;
   outline: none;
@@ -135,8 +136,8 @@ const Input = styled.input`
   &:focus {
     border-color: ${({ $hasError, theme }) =>
       $hasError ? theme.colors.negative : theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ $hasError, theme }) =>
-      $hasError ? 'rgba(239, 68, 68, 0.1)' : theme.colors.focus};
+    box-shadow: 0 0 0 3px
+      ${({ $hasError, theme }) => ($hasError ? 'rgba(239, 68, 68, 0.1)' : theme.colors.focus)};
   }
 
   &:disabled {
@@ -178,8 +179,8 @@ const TextArea = styled.textarea`
   font-size: 15px;
   color: ${({ theme }) => theme.colors.text};
   background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ $hasError, theme }) =>
-    $hasError ? theme.colors.negative : theme.colors.border};
+  border: 1px solid
+    ${({ $hasError, theme }) => ($hasError ? theme.colors.negative : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.md}px;
   padding: 12px 14px;
   outline: none;
@@ -195,8 +196,8 @@ const TextArea = styled.textarea`
   &:focus {
     border-color: ${({ $hasError, theme }) =>
       $hasError ? theme.colors.negative : theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ $hasError, theme }) =>
-      $hasError ? 'rgba(239, 68, 68, 0.1)' : theme.colors.focus};
+    box-shadow: 0 0 0 3px
+      ${({ $hasError, theme }) => ($hasError ? 'rgba(239, 68, 68, 0.1)' : theme.colors.focus)};
   }
 
   &:disabled {
@@ -221,8 +222,8 @@ const SubmitButton = styled.button`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  color: #ffffff;
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -255,12 +256,14 @@ const Spinner = styled.span`
   width: 18px;
   height: 18px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #FFFFFF;
+  border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -334,7 +337,7 @@ const RetryButton = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary};
-    color: #FFFFFF;
+    color: #ffffff;
   }
 `;
 
@@ -356,7 +359,9 @@ const InfoText = styled.p`
     color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
     font-weight: 500;
-    &:hover { text-decoration: underline; }
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -370,7 +375,9 @@ const PoweredBy = styled.p`
 // ── Component ────────────────────────────────────────────────
 
 export default function ContactPage() {
-  useEffect(() => { document.title = 'Contact Us — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Contact Us — WaterQuality.Trading';
+  }, []);
 
   const [form, setForm] = useState({
     name: '',
@@ -501,14 +508,21 @@ export default function ContactPage() {
       return (
         <SuccessCard>
           <SuccessIcon>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </SuccessIcon>
           <SuccessTitle>Message sent!</SuccessTitle>
-          <SuccessDesc>
-            Thanks &mdash; we'll be in touch within 24&nbsp;hours.
-          </SuccessDesc>
+          <SuccessDesc>Thanks &mdash; we'll be in touch within 24&nbsp;hours.</SuccessDesc>
         </SuccessCard>
       );
     }
@@ -517,7 +531,16 @@ export default function ContactPage() {
       return (
         <SuccessCard>
           <SuccessIcon style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444' }}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <circle cx="12" cy="12" r="10" />
               <line x1="15" y1="9" x2="9" y2="15" />
               <line x1="9" y1="9" x2="15" y2="15" />
@@ -525,13 +548,17 @@ export default function ContactPage() {
           </SuccessIcon>
           <SuccessTitle>Something went wrong</SuccessTitle>
           <SuccessDesc>
-            {errorMsg || 'We could not submit your message.'}{' '}
-            You can email us directly at{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#0052CC', fontWeight: 600 }}>{CONTACT_EMAIL}</a>
+            {errorMsg || 'We could not submit your message.'} You can email us directly at{' '}
+            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#0052CC', fontWeight: 600 }}>
+              {CONTACT_EMAIL}
+            </a>
           </SuccessDesc>
           <RetryButton
             type="button"
-            onClick={() => { setStatus('idle'); setErrorMsg(''); }}
+            onClick={() => {
+              setStatus('idle');
+              setErrorMsg('');
+            }}
           >
             Try Again
           </RetryButton>
@@ -543,7 +570,9 @@ export default function ContactPage() {
       <Form onSubmit={handleSubmit} noValidate>
         <FieldRow>
           <FieldGroup>
-            <Label htmlFor="wqt-name">Name<RequiredStar>*</RequiredStar></Label>
+            <Label htmlFor="wqt-name">
+              Name<RequiredStar>*</RequiredStar>
+            </Label>
             <Input
               id="wqt-name"
               name="name"
@@ -559,7 +588,9 @@ export default function ContactPage() {
           </FieldGroup>
 
           <FieldGroup>
-            <Label htmlFor="wqt-email">Email<RequiredStar>*</RequiredStar></Label>
+            <Label htmlFor="wqt-email">
+              Email<RequiredStar>*</RequiredStar>
+            </Label>
             <Input
               id="wqt-email"
               name="email"
@@ -600,14 +631,18 @@ export default function ContactPage() {
               disabled={status === 'submitting'}
             >
               {SUBJECT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </Select>
           </FieldGroup>
         </FieldRow>
 
         <FieldGroup>
-          <Label htmlFor="wqt-message">Message<RequiredStar>*</RequiredStar></Label>
+          <Label htmlFor="wqt-message">
+            Message<RequiredStar>*</RequiredStar>
+          </Label>
           <TextArea
             id="wqt-message"
             name="message"
@@ -623,8 +658,7 @@ export default function ContactPage() {
 
         {errorMsg && (
           <ErrorBanner>
-            {errorMsg}{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            {errorMsg} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           </ErrorBanner>
         )}
 
@@ -647,21 +681,18 @@ export default function ContactPage() {
         <HeroInner>
           <HeroTitle>Contact Us</HeroTitle>
           <HeroSub>
-            Questions about the marketplace, credit programs, or partnerships?
-            We'd love to hear from you.
+            Questions about the marketplace, credit programs, or partnerships? We'd love to hear
+            from you.
           </HeroSub>
         </HeroInner>
       </Hero>
 
       <FormSection>
-        <FormCard>
-          {renderForm()}
-        </FormCard>
+        <FormCard>{renderForm()}</FormCard>
 
         <InfoSection>
           <InfoText>
-            Or email us directly at{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            Or email us directly at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           </InfoText>
         </InfoSection>
       </FormSection>

@@ -1,11 +1,11 @@
 // /src/components/cloud/DeviceOnboardingWizard.jsx
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import { DeviceAPI, SiteAPI } from "../../scripts/back_door";
-import { useAppContext } from "../../context/AppContext";
-import QRScanner from "./QRScanner";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import { DeviceAPI, SiteAPI } from '../../scripts/back_door';
+import { useAppContext } from '../../context/AppContext';
+import QRScanner from './QRScanner';
 
 /* -------------------------------------------------------------------------- */
 /*                              STYLED COMPONENTS                             */
@@ -13,7 +13,7 @@ import QRScanner from "./QRScanner";
 
 const WizardContainer = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 16px;
   overflow: hidden;
   max-width: 720px;
@@ -22,8 +22,8 @@ const WizardContainer = styled.div`
 
 const ProgressBar = styled.div`
   display: flex;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 `;
 
 const ProgressStep = styled.div`
@@ -34,19 +34,18 @@ const ProgressStep = styled.div`
   font-weight: 600;
   color: ${({ $active, $completed, theme }) =>
     $active
-      ? theme.colors?.primary700 || "#0369a1"
+      ? theme.colors?.primary700 || '#0369a1'
       : $completed
-      ? theme.colors?.primary600 || "#0284c7"
-      : theme.colors?.ui400 || "#9ca3af"};
-  background: ${({ $active, theme }) =>
-    $active ? "#ffffff" : "transparent"};
+        ? theme.colors?.primary600 || '#0284c7'
+        : theme.colors?.ui400 || '#9ca3af'};
+  background: ${({ $active, theme }) => ($active ? '#ffffff' : 'transparent')};
   border-bottom: 2px solid
     ${({ $active, $completed, theme }) =>
       $active
-        ? theme.colors?.primary600 || "#0284c7"
+        ? theme.colors?.primary600 || '#0284c7'
         : $completed
-        ? theme.colors?.primary400 || "#22d3ee"
-        : "transparent"};
+          ? theme.colors?.primary400 || '#22d3ee'
+          : 'transparent'};
   transition: all 0.2s ease-out;
 
   @media (max-width: 600px) {
@@ -67,13 +66,13 @@ const StepTitle = styled.h2`
   margin: 0 0 8px;
   font-size: 20px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 `;
 
 const StepDescription = styled.p`
   margin: 0 0 24px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const DeviceTypeGrid = styled.div`
@@ -94,19 +93,17 @@ const DeviceTypeCard = styled.button`
   padding: 24px 16px;
   border: 2px solid
     ${({ $selected, theme }) =>
-      $selected
-        ? theme.colors?.primary500 || "#06b6d4"
-        : theme.colors?.ui200 || "#e5e7eb"};
+      $selected ? theme.colors?.primary500 || '#06b6d4' : theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   background: ${({ $selected, theme }) =>
-    $selected ? theme.colors?.primary50 || "#e0f2ff" : "#ffffff"};
+    $selected ? theme.colors?.primary50 || '#e0f2ff' : '#ffffff'};
   cursor: pointer;
   transition: all 0.15s ease-out;
   text-align: center;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary400 || "#22d3ee"};
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+    border-color: ${({ theme }) => theme.colors?.primary400 || '#22d3ee'};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
   }
 
   .icon {
@@ -116,12 +113,12 @@ const DeviceTypeCard = styled.button`
   .name {
     font-size: 15px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   .description {
     font-size: 12px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -133,13 +130,13 @@ const FormGroup = styled.div`
     margin-bottom: 6px;
     font-size: 13px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
   }
 
   .hint {
     margin-top: 4px;
     font-size: 12px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   }
 
   .error {
@@ -153,25 +150,24 @@ const Input = styled.input`
   width: 100%;
   padding: 12px 16px;
   border: 1px solid
-    ${({ $error, theme }) =>
-      $error ? "#dc2626" : theme.colors?.ui300 || "#d1d5db"};
+    ${({ $error, theme }) => ($error ? '#dc2626' : theme.colors?.ui300 || '#d1d5db')};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   transition: all 0.15s ease-out;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#06b6d4'};
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 
   &:disabled {
-    background: ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
+    background: ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
     cursor: not-allowed;
   }
 `;
@@ -179,17 +175,17 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   background: #ffffff;
   cursor: pointer;
   transition: all 0.15s ease-out;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#06b6d4'};
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
   }
 `;
@@ -197,22 +193,22 @@ const Select = styled.select`
 const Textarea = styled.textarea`
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   font-size: 14px;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   resize: vertical;
   min-height: 80px;
   transition: all 0.15s ease-out;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || "#06b6d4"};
+    border-color: ${({ theme }) => theme.colors?.primary500 || '#06b6d4'};
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 `;
 
@@ -280,8 +276,8 @@ const ScanSuccessBadge = styled.div`
 `;
 
 const SummaryCard = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 20px;
 `;
@@ -291,7 +287,7 @@ const SummaryRow = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   padding: 12px 0;
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border-bottom: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 
   &:last-child {
     border-bottom: none;
@@ -300,13 +296,13 @@ const SummaryRow = styled.div`
   .label {
     font-size: 13px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 
   .value {
     font-size: 14px;
     font-weight: 500;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
     text-align: right;
     max-width: 60%;
     word-break: break-word;
@@ -318,8 +314,8 @@ const Footer = styled.div`
   justify-content: space-between;
   gap: 12px;
   padding: 24px 32px;
-  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  border-top: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
 
   @media (max-width: 600px) {
     flex-direction: column-reverse;
@@ -337,25 +333,25 @@ const Button = styled.button`
   min-height: 48px;
 
   ${({ $variant, theme }) =>
-    $variant === "primary"
+    $variant === 'primary'
       ? `
-    background: ${theme.colors?.primary600 || "#0284c7"};
+    background: ${theme.colors?.primary600 || '#0284c7'};
     color: #ffffff;
     border: none;
 
     &:hover {
-      background: ${theme.colors?.primary700 || "#0369a1"};
+      background: ${theme.colors?.primary700 || '#0369a1'};
       transform: translateY(-1px);
     }
   `
       : `
     background: #ffffff;
-    color: ${theme.colors?.ui700 || "#374151"};
-    border: 1px solid ${theme.colors?.ui300 || "#d1d5db"};
+    color: ${theme.colors?.ui700 || '#374151'};
+    border: 1px solid ${theme.colors?.ui300 || '#d1d5db'};
 
     &:hover {
-      background: ${theme.colors?.ui50 || "#f9fafb"};
-      border-color: ${theme.colors?.ui400 || "#9ca3af"};
+      background: ${theme.colors?.ui50 || '#f9fafb'};
+      border-color: ${theme.colors?.ui400 || '#9ca3af'};
     }
   `}
 
@@ -383,13 +379,13 @@ const SuccessMessage = styled.div`
     margin: 0 0 8px;
     font-size: 24px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   p {
     margin: 0 0 24px;
     font-size: 14px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -399,28 +395,28 @@ const SuccessMessage = styled.div`
 
 const DEVICE_TYPES = [
   {
-    id: "buoy",
-    name: "Water Quality Buoy",
-    icon: "Blue",
-    description: "Monitors water quality parameters",
+    id: 'buoy',
+    name: 'Water Quality Buoy',
+    icon: 'Blue',
+    description: 'Monitors water quality parameters',
   },
   {
-    id: "soil_sensor",
-    name: "Soil NPK Probe",
-    icon: "Brown",
-    description: "Measures soil nutrient levels",
+    id: 'soil_sensor',
+    name: 'Soil NPK Probe',
+    icon: 'Brown',
+    description: 'Measures soil nutrient levels',
   },
   {
-    id: "emitter",
-    name: "Ultrasonic Emitter",
-    icon: "Purple",
-    description: "Algae control device",
+    id: 'emitter',
+    name: 'Ultrasonic Emitter',
+    icon: 'Purple',
+    description: 'Algae control device',
   },
   {
-    id: "gateway",
-    name: "LoRaWAN Gateway",
-    icon: "Gray",
-    description: "Network connectivity hub",
+    id: 'gateway',
+    name: 'LoRaWAN Gateway',
+    icon: 'Gray',
+    description: 'Network connectivity hub',
   },
 ];
 
@@ -443,14 +439,14 @@ export default function DeviceOnboardingWizard() {
 
   // Form state
   const [formData, setFormData] = useState({
-    deviceType: "",
-    name: "",
-    serialNumber: "",
-    hardwareId: "",
-    siteId: "",
-    latitude: "",
-    longitude: "",
-    notes: "",
+    deviceType: '',
+    name: '',
+    serialNumber: '',
+    hardwareId: '',
+    siteId: '',
+    latitude: '',
+    longitude: '',
+    notes: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -463,17 +459,17 @@ export default function DeviceOnboardingWizard() {
         const result = await SiteAPI.list();
         setSites(result?.sites || result || []);
       } catch (error) {
-        console.error("Error loading sites:", error);
+        console.error('Error loading sites:', error);
       }
     };
     loadSites();
   }, []);
 
   const steps = [
-    { number: 1, label: "Device Type" },
-    { number: 2, label: "Identity" },
-    { number: 3, label: "Location" },
-    { number: 4, label: "Confirm" },
+    { number: 1, label: 'Device Type' },
+    { number: 2, label: 'Identity' },
+    { number: 3, label: 'Location' },
+    { number: 4, label: 'Confirm' },
   ];
 
   const validateStep = (step) => {
@@ -481,33 +477,33 @@ export default function DeviceOnboardingWizard() {
 
     if (step === 1) {
       if (!formData.deviceType) {
-        newErrors.deviceType = "Please select a device type";
+        newErrors.deviceType = 'Please select a device type';
       }
     }
 
     if (step === 2) {
       if (!formData.name || formData.name.length < 3) {
-        newErrors.name = "Device name must be at least 3 characters";
+        newErrors.name = 'Device name must be at least 3 characters';
       }
       if (!formData.serialNumber) {
-        newErrors.serialNumber = "Serial number is required";
+        newErrors.serialNumber = 'Serial number is required';
       }
     }
 
     if (step === 3) {
       if (!formData.siteId) {
-        newErrors.siteId = "Please select a site";
+        newErrors.siteId = 'Please select a site';
       }
       if (formData.latitude) {
         const lat = parseFloat(formData.latitude);
         if (isNaN(lat) || lat < -90 || lat > 90) {
-          newErrors.latitude = "Latitude must be between -90 and 90";
+          newErrors.latitude = 'Latitude must be between -90 and 90';
         }
       }
       if (formData.longitude) {
         const lng = parseFloat(formData.longitude);
         if (isNaN(lng) || lng < -180 || lng > 180) {
-          newErrors.longitude = "Longitude must be between -180 and 180";
+          newErrors.longitude = 'Longitude must be between -180 and 180';
         }
       }
     }
@@ -550,12 +546,12 @@ export default function DeviceOnboardingWizard() {
 
       setSuccess(true);
       if (logNotification) {
-        logNotification("success", "Device added successfully!");
+        logNotification('success', 'Device added successfully!');
       }
     } catch (error) {
-      console.error("Error creating device:", error);
+      console.error('Error creating device:', error);
       if (logNotification) {
-        logNotification("error", error?.message || "Failed to add device. Please try again.");
+        logNotification('error', error?.message || 'Failed to add device. Please try again.');
       }
     } finally {
       setSubmitting(false);
@@ -600,36 +596,33 @@ export default function DeviceOnboardingWizard() {
     }));
 
     if (logNotification) {
-      logNotification("success", "Device QR code scanned successfully!");
+      logNotification('success', 'Device QR code scanned successfully!');
     }
   };
 
   // Render success state
   if (success) {
     return (
-      <CloudPageLayout
-        title="Add Device"
-        subtitle="Register a new device in your fleet"
-      >
+      <CloudPageLayout title="Add Device" subtitle="Register a new device in your fleet">
         <WizardContainer>
           <StepContent>
             <SuccessMessage>
               <div className="icon">Done</div>
               <h2>Device Added Successfully</h2>
               <p>
-                Your device <strong>{formData.name}</strong> has been registered
-                with ID <strong>{newDeviceId}</strong>
+                Your device <strong>{formData.name}</strong> has been registered with ID{' '}
+                <strong>{newDeviceId}</strong>
               </p>
-              <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+              <div
+                style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}
+              >
                 <Button
                   $variant="primary"
                   onClick={() => navigate(`/cloud/devices/${newDeviceId}`)}
                 >
                   View Device
                 </Button>
-                <Button onClick={() => navigate("/cloud/commissioning")}>
-                  Commission Device
-                </Button>
+                <Button onClick={() => navigate('/cloud/commissioning')}>Commission Device</Button>
               </div>
             </SuccessMessage>
           </StepContent>
@@ -639,10 +632,7 @@ export default function DeviceOnboardingWizard() {
   }
 
   return (
-    <CloudPageLayout
-      title="Add Device"
-      subtitle="Register a new device in your fleet"
-    >
+    <CloudPageLayout title="Add Device" subtitle="Register a new device in your fleet">
       <WizardContainer>
         {/* Progress Bar */}
         <ProgressBar>
@@ -672,7 +662,7 @@ export default function DeviceOnboardingWizard() {
                   <DeviceTypeCard
                     key={type.id}
                     $selected={formData.deviceType === type.id}
-                    onClick={() => handleInputChange("deviceType", type.id)}
+                    onClick={() => handleInputChange('deviceType', type.id)}
                   >
                     <div className="icon">{type.icon}</div>
                     <div className="name">{type.name}</div>
@@ -681,7 +671,7 @@ export default function DeviceOnboardingWizard() {
                 ))}
               </DeviceTypeGrid>
               {errors.deviceType && (
-                <div style={{ color: "#dc2626", fontSize: "13px", marginTop: "12px" }}>
+                <div style={{ color: '#dc2626', fontSize: '13px', marginTop: '12px' }}>
                   {errors.deviceType}
                 </div>
               )}
@@ -702,7 +692,7 @@ export default function DeviceOnboardingWizard() {
                   type="text"
                   placeholder="e.g., Lakefront Buoy #1"
                   value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
                   $error={errors.name}
                 />
                 {errors.name && <div className="error">{errors.name}</div>}
@@ -717,7 +707,7 @@ export default function DeviceOnboardingWizard() {
                     placeholder="e.g., SN-2024-001234"
                     value={formData.serialNumber}
                     onChange={(e) => {
-                      handleInputChange("serialNumber", e.target.value);
+                      handleInputChange('serialNumber', e.target.value);
                       setScannedFromQR(false);
                     }}
                     $error={errors.serialNumber}
@@ -730,13 +720,9 @@ export default function DeviceOnboardingWizard() {
                     Scan QR
                   </ScanButton>
                 </InputWithButton>
-                {errors.serialNumber && (
-                  <div className="error">{errors.serialNumber}</div>
-                )}
+                {errors.serialNumber && <div className="error">{errors.serialNumber}</div>}
                 {scannedFromQR && formData.serialNumber && (
-                  <ScanSuccessBadge>
-                    Scanned from QR code
-                  </ScanSuccessBadge>
+                  <ScanSuccessBadge>Scanned from QR code</ScanSuccessBadge>
                 )}
                 <div className="hint">Found on the device label or scan the QR code</div>
               </FormGroup>
@@ -747,7 +733,7 @@ export default function DeviceOnboardingWizard() {
                   type="text"
                   placeholder="Auto-generated if left blank"
                   value={formData.hardwareId}
-                  onChange={(e) => handleInputChange("hardwareId", e.target.value)}
+                  onChange={(e) => handleInputChange('hardwareId', e.target.value)}
                 />
                 <div className="hint">UUID format, auto-generated if not provided</div>
               </FormGroup>
@@ -758,15 +744,13 @@ export default function DeviceOnboardingWizard() {
           {currentStep === 3 && (
             <>
               <StepTitle>Location Assignment</StepTitle>
-              <StepDescription>
-                Assign this device to a monitoring site.
-              </StepDescription>
+              <StepDescription>Assign this device to a monitoring site.</StepDescription>
 
               <FormGroup>
                 <label>Site *</label>
                 <Select
                   value={formData.siteId}
-                  onChange={(e) => handleInputChange("siteId", e.target.value)}
+                  onChange={(e) => handleInputChange('siteId', e.target.value)}
                 >
                   <option value="">Select a site...</option>
                   {sites.map((site) => (
@@ -786,12 +770,10 @@ export default function DeviceOnboardingWizard() {
                     step="0.000001"
                     placeholder="e.g., 39.5"
                     value={formData.latitude}
-                    onChange={(e) => handleInputChange("latitude", e.target.value)}
+                    onChange={(e) => handleInputChange('latitude', e.target.value)}
                     $error={errors.latitude}
                   />
-                  {errors.latitude && (
-                    <div className="error">{errors.latitude}</div>
-                  )}
+                  {errors.latitude && <div className="error">{errors.latitude}</div>}
                 </FormGroup>
 
                 <FormGroup>
@@ -801,12 +783,10 @@ export default function DeviceOnboardingWizard() {
                     step="0.000001"
                     placeholder="e.g., -79.3"
                     value={formData.longitude}
-                    onChange={(e) => handleInputChange("longitude", e.target.value)}
+                    onChange={(e) => handleInputChange('longitude', e.target.value)}
                     $error={errors.longitude}
                   />
-                  {errors.longitude && (
-                    <div className="error">{errors.longitude}</div>
-                  )}
+                  {errors.longitude && <div className="error">{errors.longitude}</div>}
                 </FormGroup>
               </CoordinatesRow>
 
@@ -815,10 +795,10 @@ export default function DeviceOnboardingWizard() {
                 <Textarea
                   placeholder="Any additional notes about this device..."
                   value={formData.notes}
-                  onChange={(e) => handleInputChange("notes", e.target.value)}
+                  onChange={(e) => handleInputChange('notes', e.target.value)}
                   maxLength={500}
                 />
-                <div className="hint">{(formData.notes || "").length}/500 characters</div>
+                <div className="hint">{(formData.notes || '').length}/500 characters</div>
               </FormGroup>
             </>
           )}
@@ -827,9 +807,7 @@ export default function DeviceOnboardingWizard() {
           {currentStep === 4 && (
             <>
               <StepTitle>Confirm Device Details</StepTitle>
-              <StepDescription>
-                Review the information before adding this device.
-              </StepDescription>
+              <StepDescription>Review the information before adding this device.</StepDescription>
 
               <SummaryCard>
                 <SummaryRow>
@@ -858,7 +836,7 @@ export default function DeviceOnboardingWizard() {
                   <SummaryRow>
                     <span className="label">Coordinates</span>
                     <span className="value">
-                      {formData.latitude || "—"}, {formData.longitude || "—"}
+                      {formData.latitude || '—'}, {formData.longitude || '—'}
                     </span>
                   </SummaryRow>
                 )}
@@ -879,7 +857,7 @@ export default function DeviceOnboardingWizard() {
             onClick={currentStep === 1 ? () => navigate(-1) : handleBack}
             disabled={submitting}
           >
-            {currentStep === 1 ? "Cancel" : "Back"}
+            {currentStep === 1 ? 'Cancel' : 'Back'}
           </Button>
 
           {currentStep < 4 ? (
@@ -888,7 +866,7 @@ export default function DeviceOnboardingWizard() {
             </Button>
           ) : (
             <Button $variant="primary" onClick={handleSubmit} disabled={submitting}>
-              {submitting ? "Adding Device..." : "Add Device"}
+              {submitting ? 'Adding Device...' : 'Add Device'}
             </Button>
           )}
         </Footer>

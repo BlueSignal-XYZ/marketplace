@@ -1,7 +1,7 @@
 // Commission entity for the commercial pipeline
 // Represents the commissioning workflow for BlueSignal devices
 
-import { CommissionResult, CommissionTest, CommissionTestId, CommissionTestStatus } from './device';
+import { CommissionResult, CommissionTest, CommissionTestId } from './device';
 
 export interface Commission {
   id: string;
@@ -41,12 +41,12 @@ export interface Commission {
 }
 
 export type CommissionWorkflowStatus =
-  | 'pending'     // Created but not started
+  | 'pending' // Created but not started
   | 'in_progress' // Installer actively working
   | 'awaiting_tests' // Checklists done, tests pending
-  | 'passed'      // All checks and tests passed
-  | 'failed'      // One or more failures
-  | 'cancelled';  // Workflow cancelled
+  | 'passed' // All checks and tests passed
+  | 'failed' // One or more failures
+  | 'cancelled'; // Workflow cancelled
 
 export type CommissionChecklistType = 'shore' | 'buoy';
 

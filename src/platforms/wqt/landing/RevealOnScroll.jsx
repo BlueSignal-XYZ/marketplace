@@ -11,8 +11,9 @@ const SPRING_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const Wrapper = styled.div`
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.7s ${SPRING_EASE},
-              transform 0.7s ${SPRING_EASE};
+  transition:
+    opacity 0.7s ${SPRING_EASE},
+    transform 0.7s ${SPRING_EASE};
   transition-delay: ${({ $delay }) => $delay || 0}s;
   min-width: 0;
   max-width: 100%;
@@ -29,7 +30,13 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function RevealOnScroll({ children, delay = 0, threshold = 0.08, rootMargin = '0px 0px -40px 0px', className }) {
+export default function RevealOnScroll({
+  children,
+  delay = 0,
+  threshold = 0.08,
+  rootMargin = '0px 0px -40px 0px',
+  className,
+}) {
   const ref = useRef(null);
 
   useEffect(() => {

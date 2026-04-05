@@ -2,49 +2,43 @@
 // Pre-configured packages for common deployment scenarios
 
 export const BUNDLES = {
-  "single-monitor": {
-    id: "single-monitor",
-    name: "Single Monitor",
-    description: "Single WQM-1 for one monitoring site",
-    products: [
-      { productId: "wqm-1", quantity: 1 },
-    ],
+  'single-monitor': {
+    id: 'single-monitor',
+    name: 'Single Monitor',
+    description: 'Single WQM-1 for one monitoring site',
+    products: [{ productId: 'wqm-1', quantity: 1 }],
     discount: 0,
     features: [
-      "1× WQM-1 6-channel monitor",
-      "6 water quality parameters",
-      "LoRaWAN connectivity (15 km)",
-      "Cloud dashboard ($9.99/mo)",
+      '1× WQM-1 6-channel monitor',
+      '6 water quality parameters',
+      'LoRaWAN connectivity (15 km)',
+      'Cloud dashboard ($9.99/mo)',
     ],
   },
-  "multi-site": {
-    id: "multi-site",
-    name: "Multi-Site Package",
-    description: "3 WQM-1 units for distributed monitoring across a property",
-    products: [
-      { productId: "wqm-1", quantity: 3 },
-    ],
+  'multi-site': {
+    id: 'multi-site',
+    name: 'Multi-Site Package',
+    description: '3 WQM-1 units for distributed monitoring across a property',
+    products: [{ productId: 'wqm-1', quantity: 3 }],
     discount: 10,
     features: [
-      "3× WQM-1 6-channel monitors",
-      "Multi-point water quality coverage",
-      "Shared LoRaWAN gateway",
-      "Unified cloud dashboard",
+      '3× WQM-1 6-channel monitors',
+      'Multi-point water quality coverage',
+      'Shared LoRaWAN gateway',
+      'Unified cloud dashboard',
     ],
   },
-  "fleet": {
-    id: "fleet",
-    name: "Fleet Deployment",
-    description: "5 WQM-1 units for comprehensive site coverage",
-    products: [
-      { productId: "wqm-1", quantity: 5 },
-    ],
+  fleet: {
+    id: 'fleet',
+    name: 'Fleet Deployment',
+    description: '5 WQM-1 units for comprehensive site coverage',
+    products: [{ productId: 'wqm-1', quantity: 5 }],
     discount: 15,
     features: [
-      "5× WQM-1 6-channel monitors",
-      "Full-site coverage",
-      "Volume discount",
-      "Priority support",
+      '5× WQM-1 6-channel monitors',
+      'Full-site coverage',
+      'Volume discount',
+      'Priority support',
     ],
   },
 };

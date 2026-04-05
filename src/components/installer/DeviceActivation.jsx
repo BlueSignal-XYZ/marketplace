@@ -1,10 +1,10 @@
 // Device Activation Component - Activate device after successful commission
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { DeviceAPI, CustomerAPI, CommissionAPI } from "../../scripts/back_door";
-import commissionService from "../../services/commissionService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { DeviceAPI, CustomerAPI } from '../../scripts/back_door';
+import commissionService from '../../services/commissionService';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 700px;
@@ -110,7 +110,7 @@ const TestRow = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
-  background: ${(props) => (props.passed ? "#f0fdf4" : "#fef2f2")};
+  background: ${(props) => (props.passed ? '#f0fdf4' : '#fef2f2')};
   border-radius: 6px;
 `;
 
@@ -122,7 +122,7 @@ const TestName = styled.span`
 const TestStatus = styled.span`
   font-size: 12px;
   font-weight: 600;
-  color: ${(props) => (props.passed ? "#16a34a" : "#dc2626")};
+  color: ${(props) => (props.passed ? '#16a34a' : '#dc2626')};
 `;
 
 const ScoreCircle = styled.div`
@@ -131,10 +131,10 @@ const ScoreCircle = styled.div`
   border-radius: 50%;
   background: ${(props) =>
     props.score >= 90
-      ? "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)"
+      ? 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)'
       : props.score >= 70
-      ? "linear-gradient(135deg, #eab308 0%, #ca8a04 100%)"
-      : "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"};
+        ? 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)'
+        : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -198,7 +198,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -209,8 +209,8 @@ const Button = styled.button`
       transform: translateY(-1px);
     }
   `
-      : props.variant === "success"
-      ? `
+      : props.variant === 'success'
+        ? `
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
     border: none;
     color: #ffffff;
@@ -220,7 +220,7 @@ const Button = styled.button`
       transform: translateY(-1px);
     }
   `
-      : `
+        : `
     background: #ffffff;
     border: 1px solid #d1d5db;
     color: #374151;
@@ -292,7 +292,7 @@ const DeviceActivation = () => {
   const [commission, setCommission] = useState(null);
   const [device, setDevice] = useState(null);
   const [customers, setCustomers] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState("");
+  const [selectedCustomer, setSelectedCustomer] = useState('');
   const [activated, setActivated] = useState(false);
 
   useEffect(() => {
@@ -313,7 +313,7 @@ const DeviceActivation = () => {
         setDevice(deviceData);
 
         // Check if already activated
-        if (deviceData?.lifecycle === "active") {
+        if (deviceData?.lifecycle === 'active') {
           setActivated(true);
         }
       }
@@ -327,8 +327,8 @@ const DeviceActivation = () => {
       const customerList = await CustomerAPI.list({ limit: 100 });
       setCustomers(customerList || []);
     } catch (err) {
-      console.error("Failed to load data:", err);
-      setError("Failed to load commission data");
+      console.error('Failed to load data:', err);
+      setError('Failed to load commission data');
     } finally {
       setLoading(false);
     }
@@ -336,7 +336,7 @@ const DeviceActivation = () => {
 
   const handleActivate = async () => {
     if (!selectedCustomer) {
-      setError("Please select a customer");
+      setError('Please select a customer');
       return;
     }
 
@@ -346,10 +346,10 @@ const DeviceActivation = () => {
     try {
       await commissionService.activateDevice(device.id, selectedCustomer);
       setActivated(true);
-      ACTIONS?.logNotification?.("success", "Device activated successfully!");
+      ACTIONS?.logNotification?.('success', 'Device activated successfully!');
     } catch (err) {
-      console.error("Failed to activate device:", err);
-      setError(err.message || "Failed to activate device");
+      console.error('Failed to activate device:', err);
+      setError(err.message || 'Failed to activate device');
     } finally {
       setActivating(false);
     }
@@ -371,18 +371,16 @@ const DeviceActivation = () => {
     );
   }
 
-  const isPassed = commission.status === "passed";
+  const isPassed = commission.status === 'passed';
   const score = commission.result?.overallScore || 0;
 
   return (
     <PageContainer>
       <SuccessHeader>
-        <SuccessIcon>{isPassed ? "check" : "!"}</SuccessIcon>
-        <SuccessTitle>
-          {isPassed ? "Commission Passed!" : "Commission Complete"}
-        </SuccessTitle>
+        <SuccessIcon>{isPassed ? 'check' : '!'}</SuccessIcon>
+        <SuccessTitle>{isPassed ? 'Commission Passed!' : 'Commission Complete'}</SuccessTitle>
         <SuccessSubtitle>
-          Device {device?.id} has {isPassed ? "passed" : "completed"} all checks
+          Device {device?.id} has {isPassed ? 'passed' : 'completed'} all checks
         </SuccessSubtitle>
       </SuccessHeader>
 
@@ -393,7 +391,7 @@ const DeviceActivation = () => {
           <CardTitle>Commission Summary</CardTitle>
         </CardHeader>
         <CardBody>
-          <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
             <ScoreCircle score={score}>
               <ScoreValue>{score}%</ScoreValue>
               <ScoreLabel>Score</ScoreLabel>
@@ -407,21 +405,20 @@ const DeviceActivation = () => {
             </SummaryItem>
             <SummaryItem>
               <SummaryLabel>Model</SummaryLabel>
-              <SummaryValue>{device?.deviceType || "BlueSignal"}</SummaryValue>
+              <SummaryValue>{device?.deviceType || 'BlueSignal'}</SummaryValue>
             </SummaryItem>
             <SummaryItem>
               <SummaryLabel>Site</SummaryLabel>
-              <SummaryValue>{commission.site?.name || "N/A"}</SummaryValue>
+              <SummaryValue>{commission.site?.name || 'N/A'}</SummaryValue>
             </SummaryItem>
             <SummaryItem>
               <SummaryLabel>Duration</SummaryLabel>
               <SummaryValue>
                 {commission.startedAt && commission.completedAt
                   ? `${Math.round(
-                      (new Date(commission.completedAt) - new Date(commission.startedAt)) /
-                        60000
+                      (new Date(commission.completedAt) - new Date(commission.startedAt)) / 60000
                     )} min`
-                  : "N/A"}
+                  : 'N/A'}
               </SummaryValue>
             </SummaryItem>
           </SummaryGrid>
@@ -435,10 +432,10 @@ const DeviceActivation = () => {
         <CardBody>
           <TestResults>
             {commission.result?.tests?.map((test) => (
-              <TestRow key={test.id} passed={test.status === "passed"}>
+              <TestRow key={test.id} passed={test.status === 'passed'}>
                 <TestName>{test.name}</TestName>
-                <TestStatus passed={test.status === "passed"}>
-                  {test.status === "passed" ? "PASS" : "FAIL"}
+                <TestStatus passed={test.status === 'passed'}>
+                  {test.status === 'passed' ? 'PASS' : 'FAIL'}
                 </TestStatus>
               </TestRow>
             ))}
@@ -466,9 +463,9 @@ const DeviceActivation = () => {
                 ))}
               </Select>
             </CustomerSelect>
-            <p style={{ fontSize: 13, color: "#6b7280", margin: 0 }}>
-              Activating the device will bind it to the selected customer and enable
-              dashboard access. This action cannot be undone.
+            <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+              Activating the device will bind it to the selected customer and enable dashboard
+              access. This action cannot be undone.
             </p>
           </CardBody>
         </Card>
@@ -487,36 +484,26 @@ const DeviceActivation = () => {
       <ButtonGroup>
         {activated ? (
           <>
-            <Button onClick={() => navigate("/commissions")}>
-              Back to Commissions
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => navigate(`/cloud/devices/${device?.id}`)}
-            >
+            <Button onClick={() => navigate('/commissions')}>Back to Commissions</Button>
+            <Button variant="primary" onClick={() => navigate(`/cloud/devices/${device?.id}`)}>
               View Device
             </Button>
           </>
         ) : isPassed ? (
           <>
-            <Button onClick={() => navigate("/commissions")}>Later</Button>
+            <Button onClick={() => navigate('/commissions')}>Later</Button>
             <Button
               variant="success"
               onClick={handleActivate}
               disabled={activating || !selectedCustomer}
             >
-              {activating ? "Activating..." : "Activate Device"}
+              {activating ? 'Activating...' : 'Activate Device'}
             </Button>
           </>
         ) : (
           <>
-            <Button onClick={() => navigate("/commissions")}>
-              Back to Commissions
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => navigate(`/commissions/${commissionId}`)}
-            >
+            <Button onClick={() => navigate('/commissions')}>Back to Commissions</Button>
+            <Button variant="primary" onClick={() => navigate(`/commissions/${commissionId}`)}>
               Review & Retry
             </Button>
           </>

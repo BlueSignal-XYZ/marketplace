@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { pushLocalNotification } from "../scripts/notifications";
-import {useAppContext} from "../context/AppContext";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { pushLocalNotification } from '../scripts/notifications';
+import { useAppContext } from '../context/AppContext';
 
 /**
  * NotificationBar Component to render application notifications from storage
@@ -18,32 +18,27 @@ const NotificationBar = () => {
 
   useEffect(() => {
     // Fetch stored notifications
-    const _notifications =
-      JSON.parse(localStorage.getItem("notifications")) || [];
+    const _notifications = JSON.parse(localStorage.getItem('notifications')) || [];
     if (_notifications) {
       setNotifications(_notifications);
     }
   }, [STATES]);
 
   const handleSmapleNotification = (type) => {
-    const _notification = pushLocalNotification(
-      type,
-      `This is a sample ${type} notification`
-    );
+    const _notification = pushLocalNotification(type, `This is a sample ${type} notification`);
     logNotification(_notification.type, _notification.message);
   };
 
-  if(!user){
+  if (!user) {
     return;
   }
 
   // Framer Motion variants
   const notificationVariants = {
     open: { opacity: 1, x: 0 },
-    closed: { opacity: 0, x: "100%" },
+    closed: { opacity: 0, x: '100%' },
   };
 
-  
   return (
     <>
       <AnimatePresence>
@@ -59,13 +54,13 @@ const NotificationBar = () => {
             >
               {/* Create Sample notifications */}
               <h5>**For Testing Only**</h5>
-              <button onClick={() => handleSmapleNotification("")}>
+              <button onClick={() => handleSmapleNotification('')}>
                 Send Sample Message Notification
               </button>
-              <button onClick={() => handleSmapleNotification("alert")}>
+              <button onClick={() => handleSmapleNotification('alert')}>
                 Send Sample Alert Notification
               </button>
-              <button onClick={() => handleSmapleNotification("error")}>
+              <button onClick={() => handleSmapleNotification('error')}>
                 Send Sample Error Notification
               </button>
               <h5>********************</h5>
@@ -122,11 +117,7 @@ const NotificationItem = styled.div`
   border-bottom: 1px solid #ccc;
   //background-color: #fff;
   background-color: ${(props) =>
-    props.type === "error"
-      ? "#ffebee"
-      : props.type === "alert"
-      ? "#e8f5e9"
-      : "#A5F8D3"};
+    props.type === 'error' ? '#ffebee' : props.type === 'alert' ? '#e8f5e9' : '#A5F8D3'};
 `;
 
 const NotificationIcon = styled(FontAwesomeIcon)`

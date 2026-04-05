@@ -5,27 +5,59 @@
  * Nav items: Marketplace · How It Works · Solutions ▾ · Credit Registry · [Get Started]
  */
 
-import React, { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { APP_NAME } from "../../constants/constants";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { APP_NAME } from '../../constants/constants';
+import { useAppContext } from '../../context/AppContext';
 
 // Inline SVG logo component for crisp rendering at all sizes
 const WQTLogo = ({ height = 36 }) => {
   const scale = height / 48;
   const width = 320 * scale;
   return (
-    <svg width={width} height={height} viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 320 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g>
-        <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#0F4C81"/>
-        <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-        <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        <path
+          d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z"
+          fill="#0F4C81"
+        />
+        <path
+          d="M16 30L20 26L24 32L28 24L32 28"
+          stroke="#0EA5E9"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <path
+          d="M20 34L23 37L29 31"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
       </g>
-      <text x="50" y="32" fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fontSize="22" fill="#0F4C81">
-        <tspan fontWeight="700">WaterQuality</tspan><tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+      <text
+        x="50"
+        y="32"
+        fontFamily="'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        fontSize="22"
+        fill="#0F4C81"
+      >
+        <tspan fontWeight="700">WaterQuality</tspan>
+        <tspan fontWeight="400" fill="#0EA5E9">
+          .Trading
+        </tspan>
       </text>
     </svg>
   );
@@ -111,12 +143,14 @@ const NavLink = styled.a`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 500;
-  color: ${({ $active, theme }) => $active ? (theme.colors?.primary || '#0052CC') : (theme.colors?.textSecondary || '#64748B')};
+  color: ${({ $active, theme }) =>
+    $active ? theme.colors?.primary || '#0052CC' : theme.colors?.textSecondary || '#64748B'};
   text-decoration: none;
   border-radius: 8px;
   transition: all 150ms;
   white-space: nowrap;
-  ${({ $active, theme }) => $active ? `border-bottom: 2px solid ${theme.colors?.primary || '#0052CC'};` : ''}
+  ${({ $active, theme }) =>
+    $active ? `border-bottom: 2px solid ${theme.colors?.primary || '#0052CC'};` : ''}
 
   &:hover {
     color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
@@ -152,7 +186,7 @@ const DropdownTrigger = styled.button`
   gap: 6px;
 
   &:hover,
-  &[aria-expanded="true"] {
+  &[aria-expanded='true'] {
     color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
     background: ${({ theme }) => theme.colors?.hover || 'rgba(0,82,204,0.04)'};
   }
@@ -161,7 +195,7 @@ const DropdownTrigger = styled.button`
 const ChevronIcon = styled(FontAwesomeIcon)`
   font-size: 10px;
   transition: transform 200ms;
-  transform: ${({ $open }) => ($open ? "rotate(180deg)" : "rotate(0)")};
+  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0)')};
 `;
 
 const DropdownPanel = styled.div`
@@ -170,7 +204,7 @@ const DropdownPanel = styled.div`
   left: 50%;
   transform: translateX(-50%);
   min-width: 200px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   border-radius: 12px;
   padding: 6px;
@@ -198,10 +232,10 @@ const DropdownItem = styled.a`
 `;
 
 const SOLUTIONS_ITEMS = [
-  { label: "For Utilities", href: "/for-utilities" },
-  { label: "For Homeowners", href: "/for-homeowners" },
-  { label: "For Aggregators", href: "/for-aggregators" },
-  { label: "For Credit Generators", href: "/generate-credits" },
+  { label: 'For Utilities', href: '/for-utilities' },
+  { label: 'For Homeowners', href: '/for-homeowners' },
+  { label: 'For Aggregators', href: '/for-aggregators' },
+  { label: 'For Credit Generators', href: '/generate-credits' },
 ];
 
 function SolutionsDropdownLight() {
@@ -215,8 +249,8 @@ function SolutionsDropdownLight() {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleMouseEnter = () => {
@@ -246,11 +280,7 @@ function SolutionsDropdownLight() {
       {open && (
         <DropdownPanel>
           {SOLUTIONS_ITEMS.map((item) => (
-            <DropdownItem
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-            >
+            <DropdownItem key={item.href} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </DropdownItem>
           ))}
@@ -267,7 +297,7 @@ const SignUpButton = styled.a`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   background: ${({ theme }) => theme.colors?.primary || '#0052CC'};
   border-radius: 8px;
   text-decoration: none;
@@ -302,19 +332,19 @@ const MenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   font-size: 20px;
   line-height: 1;
   transition: all 0.2s ease-out;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.primary || "#0052CC"};
-    background: ${({ theme }) => theme.colors?.hover || "rgba(0,82,204,0.04)"};
-    border-color: ${({ theme }) => theme.colors?.border || "#E2E4E9"};
+    color: ${({ theme }) => theme.colors?.primary || '#0052CC'};
+    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,82,204,0.04)'};
+    border-color: ${({ theme }) => theme.colors?.border || '#E2E4E9'};
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary || "#0052CC"};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary || '#0052CC'};
     outline-offset: 2px;
   }
 
@@ -327,12 +357,11 @@ const MenuButton = styled.button`
   }
 `;
 
-
 export function MarketplaceHeader({ onMenuClick }) {
   const { STATES } = useAppContext();
   const location = useLocation();
   const isSignedIn = !!STATES?.user?.uid;
-  const ctaHref = isSignedIn ? "/marketplace" : "/login";
+  const ctaHref = isSignedIn ? '/marketplace' : '/login';
   const pathname = location.pathname;
 
   const handleClick = () => {
@@ -342,17 +371,28 @@ export function MarketplaceHeader({ onMenuClick }) {
   return (
     <HeaderOuter>
       <HeaderInner>
-        <LogoWrapper href="/" aria-label={APP_NAME || "WaterQuality.Trading"}>
+        <LogoWrapper href="/" aria-label={APP_NAME || 'WaterQuality.Trading'}>
           <LogoSvgWrapper>
             <WQTLogo height={36} />
           </LogoSvgWrapper>
         </LogoWrapper>
 
         <NavLinks aria-label="Main navigation">
-          <NavLink href="/marketplace" $active={pathname === '/marketplace'}>Marketplace</NavLink>
-          <NavLink href="/registry" $active={pathname === '/registry'}>Credit Registry</NavLink>
-          <NavLink href="/map" $active={pathname === '/map'}>Project Map</NavLink>
-          <NavLink href="/programs" $active={pathname === '/programs' || pathname.startsWith('/programs/')}>Programs</NavLink>
+          <NavLink href="/marketplace" $active={pathname === '/marketplace'}>
+            Marketplace
+          </NavLink>
+          <NavLink href="/registry" $active={pathname === '/registry'}>
+            Credit Registry
+          </NavLink>
+          <NavLink href="/map" $active={pathname === '/map'}>
+            Project Map
+          </NavLink>
+          <NavLink
+            href="/programs"
+            $active={pathname === '/programs' || pathname.startsWith('/programs/')}
+          >
+            Programs
+          </NavLink>
         </NavLinks>
 
         <RightGroup>

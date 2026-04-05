@@ -1,10 +1,10 @@
 // Device Allocation Component - Allocate inventory devices to orders
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { DeviceAPI, OrderAPI } from "../../scripts/back_door";
-import orderService from "../../services/orderService";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { DeviceAPI, OrderAPI } from '../../scripts/back_door';
+import orderService from '../../services/orderService';
+import { useAppContext } from '../../context/AppContext';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -157,17 +157,17 @@ const StatusBadge = styled.span`
   border-radius: 4px;
 
   ${(props) =>
-    props.status === "complete"
+    props.status === 'complete'
       ? `
     background: #dcfce7;
     color: #166534;
   `
-      : props.status === "partial"
-      ? `
+      : props.status === 'partial'
+        ? `
     background: #fef3c7;
     color: #92400e;
   `
-      : `
+        : `
     background: #f3f4f6;
     color: #6b7280;
   `}
@@ -313,7 +313,7 @@ const Button = styled.button`
   transition: all 0.2s;
 
   ${(props) =>
-    props.variant === "primary"
+    props.variant === 'primary'
       ? `
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
@@ -395,7 +395,7 @@ const DeviceAllocation = () => {
   const [order, setOrder] = useState(null);
   const [inventory, setInventory] = useState([]);
   const [allocations, setAllocations] = useState({}); // lineItemIndex -> deviceIds[]
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     loadData();
@@ -408,7 +408,7 @@ const DeviceAllocation = () => {
       // Load order
       const orderData = await OrderAPI.get(orderId);
       if (!orderData) {
-        setError("Order not found");
+        setError('Order not found');
         return;
       }
       setOrder(orderData);
@@ -424,8 +424,8 @@ const DeviceAllocation = () => {
       const inventoryData = await DeviceAPI.getInventory();
       setInventory(inventoryData || []);
     } catch (err) {
-      console.error("Failed to load data:", err);
-      setError("Failed to load order data");
+      console.error('Failed to load data:', err);
+      setError('Failed to load order data');
     } finally {
       setLoading(false);
     }
@@ -437,14 +437,14 @@ const DeviceAllocation = () => {
 
   const getLineItemAllocationStatus = (index) => {
     const item = order?.lineItems?.[index];
-    if (!item) return "none";
+    if (!item) return 'none';
 
     const allocated = allocations[index]?.length || 0;
     const required = item.quantity || 1;
 
-    if (allocated >= required) return "complete";
-    if (allocated > 0) return "partial";
-    return "none";
+    if (allocated >= required) return 'complete';
+    if (allocated > 0) return 'partial';
+    return 'none';
   };
 
   const handleAllocate = (lineItemIndex, deviceId) => {
@@ -480,11 +480,11 @@ const DeviceAllocation = () => {
         lineItemAllocations: allocations,
       });
 
-      ACTIONS?.logNotification?.("success", "Devices allocated successfully");
+      ACTIONS?.logNotification?.('success', 'Devices allocated successfully');
       navigate(`/orders/${orderId}`);
     } catch (err) {
-      console.error("Failed to save allocations:", err);
-      setError(err.message || "Failed to save allocations");
+      console.error('Failed to save allocations:', err);
+      setError(err.message || 'Failed to save allocations');
     } finally {
       setSaving(false);
     }
@@ -525,12 +525,10 @@ const DeviceAllocation = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <BackLink onClick={() => navigate(`/orders/${orderId}`)}>
-          ← Back to Order
-        </BackLink>
+        <BackLink onClick={() => navigate(`/orders/${orderId}`)}>← Back to Order</BackLink>
         <PageTitle>Allocate Devices</PageTitle>
         <PageSubtitle>
-          Order {order.id} - {order.customerName || "Customer"}
+          Order {order.id} - {order.customerName || 'Customer'}
         </PageSubtitle>
       </PageHeader>
 
@@ -563,11 +561,11 @@ const DeviceAllocation = () => {
                       </div>
                       <AllocationStatus>
                         <StatusBadge status={status}>
-                          {status === "complete"
-                            ? "Complete"
-                            : status === "partial"
-                            ? "Partial"
-                            : "Pending"}
+                          {status === 'complete'
+                            ? 'Complete'
+                            : status === 'partial'
+                              ? 'Partial'
+                              : 'Pending'}
                         </StatusBadge>
                         <AllocationProgress>
                           {allocated.length} / {required}
@@ -592,7 +590,7 @@ const DeviceAllocation = () => {
                     )}
 
                     {allocated.length < required && (
-                      <div style={{ marginTop: 12, fontSize: 12, color: "#6b7280" }}>
+                      <div style={{ marginTop: 12, fontSize: 12, color: '#6b7280' }}>
                         Select {required - allocated.length} more device(s) from inventory →
                       </div>
                     )}
@@ -605,7 +603,7 @@ const DeviceAllocation = () => {
           <ActionBar>
             <Button onClick={() => navigate(`/orders/${orderId}`)}>Cancel</Button>
             <Button variant="primary" onClick={handleSave} disabled={saving}>
-              {saving ? "Saving..." : "Save Allocations"}
+              {saving ? 'Saving...' : 'Save Allocations'}
             </Button>
           </ActionBar>
         </MainContent>
@@ -625,24 +623,17 @@ const DeviceAllocation = () => {
             </FilterBar>
             <InventoryList>
               {filteredInventory.length === 0 ? (
-                <EmptyState>
-                  {filter ? "No matching devices" : "No inventory available"}
-                </EmptyState>
+                <EmptyState>{filter ? 'No matching devices' : 'No inventory available'}</EmptyState>
               ) : (
                 filteredInventory.map((device) => {
                   const isAllocated = allocatedIds.includes(device.id);
 
                   return (
-                    <InventoryItem
-                      key={device.id}
-                      selected={isAllocated}
-                      disabled={isAllocated}
-                    >
+                    <InventoryItem key={device.id} selected={isAllocated} disabled={isAllocated}>
                       <DeviceInfo>
                         <DeviceId>{device.id}</DeviceId>
                         <DeviceMeta>
-                          {device.model || "BlueSignal"} •{" "}
-                          {device.serialNumber || "No S/N"}
+                          {device.model || 'BlueSignal'} • {device.serialNumber || 'No S/N'}
                         </DeviceMeta>
                       </DeviceInfo>
                       {order.lineItems?.map((item, index) => {

@@ -5,7 +5,7 @@ const spinnerVariants = {
     rotate: 360,
     transition: {
       loop: Infinity,
-      ease: "linear",
+      ease: 'linear',
       duration: 1,
     },
   },
@@ -39,7 +39,7 @@ const Spinner = () => (
       }}
       transition={{
         loop: Infinity,
-        ease: "linear",
+        ease: 'linear',
         times: [0, 0.25, 0.75, 1],
         duration: 1.5,
       }}

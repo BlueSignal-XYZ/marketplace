@@ -9,20 +9,20 @@ import type { NutrientType, VerificationLevel } from './market';
 // ── Credit Status ─────────────────────────────────────────
 
 export type CreditStatus =
-  | 'pending-review'   // Submitted by non-BS seller, awaiting admin
-  | 'approved'         // Admin approved, ready to mint
-  | 'minted'           // On-chain, not yet listed
-  | 'listed'           // Active marketplace listing
-  | 'sold'             // Purchased by buyer
-  | 'retired'          // Burned on-chain
-  | 'rejected';        // Admin rejected with reason
+  | 'pending-review' // Submitted by non-BS seller, awaiting admin
+  | 'approved' // Admin approved, ready to mint
+  | 'minted' // On-chain, not yet listed
+  | 'listed' // Active marketplace listing
+  | 'sold' // Purchased by buyer
+  | 'retired' // Burned on-chain
+  | 'rejected'; // Admin rejected with reason
 
 // ── Credit ────────────────────────────────────────────────
 
 export interface Credit extends Timestamped {
   id: string;
   nutrientType: NutrientType;
-  quantity: number;          // kg removed
+  quantity: number; // kg removed
   status: CreditStatus;
   verificationLevel: VerificationLevel;
   region: string;
@@ -34,7 +34,7 @@ export interface Credit extends Timestamped {
   /** Source device (if sensor-verified) */
   deviceId?: string;
   /** On-chain data */
-  tokenId?: string;          // ERC-1155 token ID
+  tokenId?: string; // ERC-1155 token ID
   contractAddress?: string;
   transactionHash?: string;
   blockNumber?: number;
@@ -207,7 +207,7 @@ export interface PortfolioResponse {
   userId: string;
   holdings: PortfolioHolding[];
   totalValue: number;
-  totalNitrogenRemoved: number;   // kg
+  totalNitrogenRemoved: number; // kg
   totalPhosphorusRemoved: number; // kg
   summary: PortfolioSummary;
   transactions: PortfolioTransaction[];

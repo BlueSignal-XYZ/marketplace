@@ -60,7 +60,15 @@ export interface Coordinates {
   lng: number;
 }
 
-export type SiteType = 'pond' | 'lake' | 'reservoir' | 'farm' | 'marina' | 'municipal' | 'industrial' | 'other';
+export type SiteType =
+  | 'pond'
+  | 'lake'
+  | 'reservoir'
+  | 'farm'
+  | 'marina'
+  | 'municipal'
+  | 'industrial'
+  | 'other';
 
 export type WaterBodyType = 'freshwater' | 'brackish' | 'saltwater' | 'wastewater';
 
@@ -144,42 +152,42 @@ export interface Device {
   name?: string;
   alias?: string;
   deviceType: DeviceType;
-  
+
   // Relationships
   orderId?: string;
   customerId?: string;
   siteId?: string;
   assignedInstallerId?: string;
-  
+
   // Lifecycle
   lifecycle: DeviceLifecycle;
   commissionStatus: CommissionStatus;
   commissionedAt?: string;
   commissionedBy?: string; // installer uid
   lastCommissionId?: string;
-  
+
   // Shipping
   shippedAt?: string;
   deliveredAt?: string;
   trackingNumber?: string;
-  
+
   // Installation
   installedAt?: string;
   activatedAt?: string;
-  
+
   // Device Info
   firmwareVersion?: string;
   coordinates?: Coordinates;
-  
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
-  
+
   // Metadata
   notes?: string;
 }
 
-export type DeviceType = 
+export type DeviceType =
   | 'Water Quality Buoy'
   | 'Soil NPK Probe'
   | 'Ultrasonic Algae Control'
@@ -190,15 +198,15 @@ export type DeviceType =
   | 'Smart Buoy'
   | 'Smart Buoy XL';
 
-export type DeviceLifecycle = 
-  | 'inventory'      // In warehouse
-  | 'allocated'      // Assigned to order
-  | 'shipped'        // In transit
-  | 'delivered'      // On-site, awaiting install
-  | 'installed'      // Physically installed, not tested
-  | 'commissioned'   // Tests passed, pending activation
-  | 'active'         // Operational, sending data
-  | 'maintenance'    // Temporarily offline for service
+export type DeviceLifecycle =
+  | 'inventory' // In warehouse
+  | 'allocated' // Assigned to order
+  | 'shipped' // In transit
+  | 'delivered' // On-site, awaiting install
+  | 'installed' // Physically installed, not tested
+  | 'commissioned' // Tests passed, pending activation
+  | 'active' // Operational, sending data
+  | 'maintenance' // Temporarily offline for service
   | 'decommissioned'; // Retired
 
 export type CommissionStatus = 'pending' | 'in_progress' | 'passed' | 'failed';
@@ -234,28 +242,28 @@ export interface Commission {
   siteId: string;
   installerId: string;
   installerName: string;
-  
+
   // Status
   status: CommissionStatus;
   startedAt?: string;
   completedAt?: string;
-  
+
   // Checklist
   checklistType: ChecklistType;
   preDeploymentChecks: ChecklistItem[];
   commissioningChecks: ChecklistItem[];
-  
+
   // Test Results
   testResults: CommissionTest[];
-  
+
   // Documentation
   photos: CommissionPhoto[];
   signature?: CommissionSignature;
-  
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
-  
+
   notes?: string;
 }
 
@@ -277,7 +285,7 @@ export interface CommissionTest {
   details?: string;
 }
 
-export type CommissionTestId = 
+export type CommissionTestId =
   | 'power_os'
   | 'ads1115'
   | 'ds18b20'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { DeviceAPI } from '../../scripts/back_door';
 import { useAppContext } from '../../context/AppContext';
@@ -8,7 +8,11 @@ const spin = keyframes`
 `;
 
 const SimulatorCard = styled.div`
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.ui800} 0%, ${({ theme }) => theme.colors.ui700} 100%);
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.ui800} 0%,
+    ${({ theme }) => theme.colors.ui700} 100%
+  );
   border-radius: ${({ theme }) => theme.borderRadius.default};
   padding: ${({ theme }) => `${theme.spacing.xl} ${theme.spacing.card}`};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
@@ -55,18 +59,17 @@ const ButtonRow = styled.div`
 
 const SimButton = styled.button`
   padding: 10px 20px;
-  background: ${({ theme, $variant }) => $variant === 'primary'
-    ? theme.gradients.primary
-    : 'rgba(255, 255, 255, 0.1)'};
+  background: ${({ theme, $variant }) =>
+    $variant === 'primary' ? theme.gradients.primary : 'rgba(255, 255, 255, 0.1)'};
   color: #fff;
-  border: 1px solid ${({ theme, $variant }) => $variant === 'primary'
-    ? theme.colors.primary500
-    : 'rgba(255, 255, 255, 0.2)'};
+  border: 1px solid
+    ${({ theme, $variant }) =>
+      $variant === 'primary' ? theme.colors.primary500 : 'rgba(255, 255, 255, 0.2)'};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   font-size: 13px;
   font-weight: 600;
-  cursor: ${({ disabled }) => disabled ? 'not-allowed' : 'pointer'};
-  opacity: ${({ disabled }) => disabled ? 0.6 : 1};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   transition: ${({ theme }) => theme.transitions.default};
   display: inline-flex;
   align-items: center;
@@ -90,9 +93,11 @@ const MiniSpinner = styled.div`
 const StatusText = styled.div`
   font-size: 13px;
   color: ${({ theme, $type }) =>
-    $type === 'success' ? theme.colors.success300 :
-    $type === 'error'   ? theme.colors.red300 :
-                          theme.colors.ui400};
+    $type === 'success'
+      ? theme.colors.success300
+      : $type === 'error'
+        ? theme.colors.red300
+        : theme.colors.ui400};
   margin-top: ${({ theme }) => theme.spacing.md};
 `;
 
@@ -131,7 +136,9 @@ export default function VirtualDeviceSimulator() {
         type: 'buoy',
       });
 
-      setStatus(`Virtual device ${SIM_DEVICE_SERIAL} created. It should appear in your devices list.`);
+      setStatus(
+        `Virtual device ${SIM_DEVICE_SERIAL} created. It should appear in your devices list.`
+      );
       setStatusType('success');
       ACTIONS?.logNotification?.('success', `Virtual device ${SIM_DEVICE_SERIAL} created`);
     } catch (error) {
@@ -155,7 +162,9 @@ export default function VirtualDeviceSimulator() {
 
     try {
       await DeviceAPI.emulateDevice(SIM_DEVICE_SERIAL, 60);
-      setStatus('Emulation started. The device will send readings every 60 seconds. Check Live Data tab on the device detail page.');
+      setStatus(
+        'Emulation started. The device will send readings every 60 seconds. Check Live Data tab on the device detail page.'
+      );
       setStatusType('success');
       ACTIONS?.logNotification?.('success', 'Device emulation started');
     } catch (error) {
@@ -178,18 +187,11 @@ export default function VirtualDeviceSimulator() {
         for testing the dashboard without physical hardware.
       </SimDescription>
       <ButtonRow>
-        <SimButton
-          $variant="primary"
-          onClick={handleCreateSimDevice}
-          disabled={creating}
-        >
+        <SimButton $variant="primary" onClick={handleCreateSimDevice} disabled={creating}>
           {creating && <MiniSpinner />}
           {creating ? 'Creating...' : 'Create Virtual Device'}
         </SimButton>
-        <SimButton
-          onClick={handleEmulate}
-          disabled={emulating}
-        >
+        <SimButton onClick={handleEmulate} disabled={emulating}>
           {emulating && <MiniSpinner />}
           {emulating ? 'Starting...' : 'Start Emulation'}
         </SimButton>

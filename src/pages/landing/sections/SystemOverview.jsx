@@ -16,8 +16,8 @@ const SystemOverview = () => (
         <SectionLabel>System Overview</SectionLabel>
         <SectionTitle>How it all connects.</SectionTitle>
         <SectionDesc>
-          Sensors, radio, relay output, and expansion — see how each
-          subsystem wires into the WQM-1&nbsp;board.
+          Sensors, radio, relay output, and expansion — see how each subsystem wires into the
+          WQM-1&nbsp;board.
         </SectionDesc>
       </RevealOnScroll>
       <RevealOnScroll>

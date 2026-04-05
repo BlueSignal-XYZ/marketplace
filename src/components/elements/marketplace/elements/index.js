@@ -1,5 +1,3 @@
-import NFTCard from "./NFTCard";
+import NFTCard from './NFTCard';
 
-export {
-    NFTCard
-}
+export { NFTCard };

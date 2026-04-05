@@ -1,18 +1,18 @@
 // /src/routes/Welcome.jsx
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { AnimatePresence } from "framer-motion";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import LoginForm from "./components/welcome/LoginForm";
-import RegisterForm from "./components/welcome/RegisterForm";
-import { WelcomeHome } from "./components/welcome";
+import LoginForm from './components/welcome/LoginForm';
+import RegisterForm from './components/welcome/RegisterForm';
+import { WelcomeHome } from './components/welcome';
 
-import { useAppContext } from "../context/AppContext";
-import { getDefaultDashboardRoute } from "../utils/roleRouting";
-import { getAppMode } from "../utils/modeDetection";
-import SEOHead from "../components/seo/SEOHead";
-import { WQT_ORGANIZATION_SCHEMA, BLUESIGNAL_ORGANIZATION_SCHEMA } from "../components/seo/schemas";
+import { useAppContext } from '../context/AppContext';
+import { getDefaultDashboardRoute } from '../utils/roleRouting';
+import { getAppMode } from '../utils/modeDetection';
+import SEOHead from '../components/seo/SEOHead';
+import { WQT_ORGANIZATION_SCHEMA, BLUESIGNAL_ORGANIZATION_SCHEMA } from '../components/seo/schemas';
 
 // ------------------------------ layout ------------------------------------
 
@@ -75,7 +75,7 @@ const Welcome = ({ redirectTo: redirectToProp }) => {
 
   const redirectTo = redirectToProp ?? location.state?.redirectTo;
 
-  const [cardState, setCardState] = useState("");
+  const [cardState, setCardState] = useState('');
   const [googleData, setGoogleData] = useState({});
   const { user } = STATES || {};
   const { updateUser } = ACTIONS || {};
@@ -102,12 +102,14 @@ const Welcome = ({ redirectTo: redirectToProp }) => {
   const seoContent = isCloud
     ? {
         title: 'BlueSignal Cloud - Water Quality Monitoring Platform',
-        description: 'Real-time water quality monitoring and device management. Monitor your sensors, track data, and manage alerts from anywhere.',
+        description:
+          'Real-time water quality monitoring and device management. Monitor your sensors, track data, and manage alerts from anywhere.',
         schema: BLUESIGNAL_ORGANIZATION_SCHEMA,
       }
     : {
         title: 'WaterQuality.Trading - Water Credit Marketplace',
-        description: 'B2B marketplace for water quality credit trading. Buy and sell nutrient, stormwater, and thermal credits. Connect with verified sellers.',
+        description:
+          'B2B marketplace for water quality credit trading. Buy and sell nutrient, stormwater, and thermal credits. Connect with verified sellers.',
         schema: WQT_ORGANIZATION_SCHEMA,
       };
 
@@ -131,22 +133,22 @@ const Welcome = ({ redirectTo: redirectToProp }) => {
           <div className="form-elements-wrap">
             <div className="form-content">
               <AnimatePresence mode="wait">
-                {cardState !== "register" && (
+                {cardState !== 'register' && (
                   <LoginForm
                     key="login"
                     onSuccess={enterDash}
                     updateUser={updateUser}
-                    onSwitchToRegister={() => setCardState("register")}
+                    onSwitchToRegister={() => setCardState('register')}
                   />
                 )}
               </AnimatePresence>
 
-              {cardState === "register" && (
+              {cardState === 'register' && (
                 <RegisterForm
                   key="register"
                   onSuccess={enterDash}
                   updateUser={updateUser}
-                  onSwitchToLogin={() => setCardState("login")}
+                  onSwitchToLogin={() => setCardState('login')}
                   googleData={googleData}
                 />
               )}

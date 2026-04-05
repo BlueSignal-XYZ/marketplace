@@ -14,13 +14,22 @@
  *   </AuthGate>
  */
 
-import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 import { Welcome } from '../../routes';
 
 const LoadingFallback = () => (
-  <div style={{ padding: 48, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+  <div
+    style={{
+      padding: 48,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '60vh',
+    }}
+  >
     <Skeleton width={200} height={24} />
     <Skeleton width={140} height={16} />
   </div>

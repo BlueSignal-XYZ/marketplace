@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  formatCertificateID,
-  handleViewCertificate,
-} from "../../scripts/helpers";
-import {NPCCreditsAPI} from "../../scripts/back_door";
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { formatCertificateID, handleViewCertificate } from '../../scripts/helpers';
+import { NPCCreditsAPI } from '../../scripts/back_door';
 
 const contractABI = [
-  "function getAccountTotalBalance(string accountID) view returns (int256 _accountTotalBalance)",
-  "function getAccountCertificates(string accountID) view returns (int256[] _accountCertificates)",
+  'function getAccountTotalBalance(string accountID) view returns (int256 _accountTotalBalance)',
+  'function getAccountCertificates(string accountID) view returns (int256[] _accountCertificates)',
 ];
 
 const entranceAnimation = keyframes`
@@ -77,7 +74,9 @@ const Result = styled.div`
   p {
     color: white;
     background: #01090d;
-    box-shadow: 2.5px 2.5px 5px #223844, -2.5px -2.5px 5px #223844;
+    box-shadow:
+      2.5px 2.5px 5px #223844,
+      -2.5px -2.5px 5px #223844;
     border-radius: 5px;
     padding: 7px 10px;
     margin: auto;
@@ -110,7 +109,9 @@ const Card = styled.div`
   background-color: #0d5b84;
   color: white;
   background: #0d5b84;
-  box-shadow: 2px 2px 2px #052637, -2px -2px 2px #052637;
+  box-shadow:
+    2px 2px 2px #052637,
+    -2px -2px 2px #052637;
   &:hover {
     scale: 1.1;
   }
@@ -152,35 +153,40 @@ const Form = styled(motion.form)`
 `;
 
 const AccountSearch = ({ isOpen, setIsOpen }) => {
-  const [accountID, setAccountID] = useState("");
-  const [currAccount, setCurrAccount] = useState("");
+  const [accountID, setAccountID] = useState('');
+  const [currAccount, setCurrAccount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [balance, setBalance] = useState("");
+  const [error, setError] = useState('');
+  const [balance, setBalance] = useState('');
   const [certificates, setCertificates] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-    setCurrAccount("");
-    setBalance("");
+    setError('');
+    setCurrAccount('');
+    setBalance('');
     setCertificates([]);
 
     try {
       setCurrAccount(accountID);
-      const accountBalance = await NPCCreditsAPI.getAccountCreditBalance({accountID, producer: '' , verifier: '', creditType: ''});
+      const accountBalance = await NPCCreditsAPI.getAccountCreditBalance({
+        accountID,
+        producer: '',
+        verifier: '',
+        creditType: '',
+      });
       setBalance(accountBalance.toString());
       const accountCertificates = await NPCCreditsAPI.getAccountCertificates(accountID);
       setCertificates(accountCertificates);
     } catch (err) {
-      setError("Error retrieving data");
+      setError('Error retrieving data');
     } finally {
       setLoading(false);
     }
   };
   const closePopup = (e) => {
-    if (e.target.id === "backdrop") {
+    if (e.target.id === 'backdrop') {
       setIsOpen(false);
     }
   };
@@ -213,14 +219,11 @@ const AccountSearch = ({ isOpen, setIsOpen }) => {
             {balance && (
               <Result>
                 <h3>{currAccount.toUpperCase()}</h3>
-                <p>Balance: {balance + " NPCs"}</p>
+                <p>Balance: {balance + ' NPCs'}</p>
                 <h2>Owned Certificates</h2>
                 <List>
                   {certificates.map((certificate, index) => (
-                    <Card
-                      key={index}
-                      onClick={() => handleViewCertificate(certificate)}
-                    >
+                    <Card key={index} onClick={() => handleViewCertificate(certificate)}>
                       {formatCertificateID(certificate.toNumber())}
                     </Card>
                   ))}

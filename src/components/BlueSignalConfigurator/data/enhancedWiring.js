@@ -143,7 +143,12 @@ export const WIRING_DIAGRAMS = {
       { id: 'lora-sma', type: 'SMA Female', pins: 1, location: 'LoRa antenna' },
       { id: 'ph-bnc', type: 'BNC Female', pins: 1, location: 'pH probe' },
       { id: 'orp-bnc', type: 'BNC Female', pins: 1, location: 'ORP probe' },
-      { id: 'i2c-exp', type: '4-pin Header', pins: 4, location: 'I²C expansion (3.3V, SDA, SCL, GND)' },
+      {
+        id: 'i2c-exp',
+        type: '4-pin Header',
+        pins: 4,
+        location: 'I²C expansion (3.3V, SDA, SCL, GND)',
+      },
       { id: 'relay-out', type: 'Screw Terminal', pins: 3, location: 'Relay output (COM/NO/NC)' },
     ],
 
@@ -152,7 +157,12 @@ export const WIRING_DIAGRAMS = {
       { id: 'tp2', location: 'Pi 3.3V Rail', expected: '3.3V ± 0.1V', probe: 'Pin 1 to Pin 6' },
       { id: 'tp3', location: 'ADC A0 (pH)', expected: '0-3.3V analog', probe: 'A0 to GND' },
       { id: 'tp4', location: 'LoRa SPI CS', expected: '3.3V idle', probe: 'GPIO8 to GND' },
-      { id: 'tp5', location: 'GPS UART', expected: 'NMEA text', probe: 'GPIO15 with logic analyzer' },
+      {
+        id: 'tp5',
+        location: 'GPS UART',
+        expected: 'NMEA text',
+        probe: 'GPIO15 with logic analyzer',
+      },
     ],
   },
 };

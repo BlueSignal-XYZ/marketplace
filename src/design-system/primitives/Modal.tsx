@@ -122,13 +122,15 @@ const Btn = styled.button<{ $variant: 'cancel' | 'confirm' | 'destructive' }>`
   border: 1px solid;
 
   ${({ $variant, theme }) => {
-    if ($variant === 'cancel') return `
+    if ($variant === 'cancel')
+      return `
       background: transparent;
       color: ${theme.colors.textSecondary};
       border-color: ${theme.colors.border};
       &:hover { background: ${theme.colors.background}; }
     `;
-    if ($variant === 'destructive') return `
+    if ($variant === 'destructive')
+      return `
       background: #EF4444;
       color: #FFFFFF;
       border-color: transparent;
@@ -142,7 +144,10 @@ const Btn = styled.button<{ $variant: 'cancel' | 'confirm' | 'destructive' }>`
     `;
   }}
 
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 // ── Component ─────────────────────────────────────────────
@@ -186,8 +191,10 @@ export const Modal: React.FC<ModalProps> = ({
   const isVisible = open ?? isOpen ?? false;
 
   const handleKey = useCallback(
-    (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); },
-    [onClose],
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    },
+    [onClose]
   );
 
   useEffect(() => {
@@ -201,8 +208,15 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <Overlay onClick={onClose}>
-      <Dialog onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" style={{ position: 'relative', maxWidth: onConfirm ? 440 : 560 }}>
-        <CloseBtn onClick={onClose} aria-label="Close">×</CloseBtn>
+      <Dialog
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        style={{ position: 'relative', maxWidth: onConfirm ? 440 : 560 }}
+      >
+        <CloseBtn onClick={onClose} aria-label="Close">
+          ×
+        </CloseBtn>
         <Header>
           <Title>{title}</Title>
           {description && <Description>{description}</Description>}
@@ -210,7 +224,9 @@ export const Modal: React.FC<ModalProps> = ({
         {children && <Body>{children}</Body>}
         {onConfirm && (
           <Footer>
-            <Btn $variant="cancel" onClick={onClose}>{cancelLabel}</Btn>
+            <Btn $variant="cancel" onClick={onClose}>
+              {cancelLabel}
+            </Btn>
             <Btn
               $variant={destructive ? 'destructive' : 'confirm'}
               onClick={onConfirm}

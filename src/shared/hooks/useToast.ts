@@ -106,7 +106,7 @@ export function useToast(): UseToastResult {
 
       return id;
     },
-    [dismiss],
+    [dismiss]
   );
 
   return { toasts, toast, dismiss, dismissAll };

@@ -40,8 +40,8 @@ export interface ApiError {
 // ── Timestamps ────────────────────────────────────────────
 
 export interface Timestamped {
-  createdAt: string;  // ISO 8601
-  updatedAt: string;  // ISO 8601
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
 }
 
 // ── Geolocation ───────────────────────────────────────────

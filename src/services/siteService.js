@@ -93,7 +93,7 @@ export const getSiteWithDevices = async (siteId) => {
       customer,
       devices: devices || [],
       deviceCount: devices?.length || 0,
-      activeDevices: devices?.filter(d => d.status === 'online').length || 0,
+      activeDevices: devices?.filter((d) => d.status === 'online').length || 0,
     };
   } catch (error) {
     console.error('Error fetching site with devices:', error);
@@ -146,7 +146,7 @@ export const removeDeviceFromSite = async (siteId, deviceId) => {
     if (!site) throw new Error('Site not found');
 
     // Update site's device list
-    const deviceIds = (site.deviceIds || []).filter(id => id !== deviceId);
+    const deviceIds = (site.deviceIds || []).filter((id) => id !== deviceId);
 
     await SiteAPI.update(siteId, {
       deviceIds,
@@ -180,7 +180,7 @@ export const getCustomerSites = async (customerId) => {
         return {
           ...site,
           deviceCount: devices?.length || 0,
-          activeDevices: devices?.filter(d => d.status === 'online').length || 0,
+          activeDevices: devices?.filter((d) => d.status === 'online').length || 0,
         };
       })
     );
@@ -232,17 +232,12 @@ export const getSitesNearLocation = async (lat, lng, radiusKm = 50) => {
     };
 
     const nearbySites = allSites
-      .filter(site => site.coordinates?.lat && site.coordinates?.lng)
-      .map(site => ({
+      .filter((site) => site.coordinates?.lat && site.coordinates?.lng)
+      .map((site) => ({
         ...site,
-        distanceKm: getDistanceKm(
-          lat,
-          lng,
-          site.coordinates.lat,
-          site.coordinates.lng
-        ),
+        distanceKm: getDistanceKm(lat, lng, site.coordinates.lat, site.coordinates.lng),
       }))
-      .filter(site => site.distanceKm <= radiusKm)
+      .filter((site) => site.distanceKm <= radiusKm)
       .sort((a, b) => a.distanceKm - b.distanceKm);
 
     return nearbySites;
@@ -331,9 +326,9 @@ export const getSiteStatus = async (siteId) => {
       };
     }
 
-    const onlineDevices = devices.filter(d => d.status === 'online');
-    const warningDevices = devices.filter(d => d.status === 'warning');
-    const offlineDevices = devices.filter(d => d.status === 'offline');
+    const onlineDevices = devices.filter((d) => d.status === 'online');
+    const warningDevices = devices.filter((d) => d.status === 'warning');
+    const offlineDevices = devices.filter((d) => d.status === 'offline');
 
     // Determine overall site status
     let status = 'online';
@@ -345,8 +340,8 @@ export const getSiteStatus = async (siteId) => {
 
     // Find most recent contact
     const lastContact = devices
-      .filter(d => d.lastContact)
-      .map(d => new Date(d.lastContact))
+      .filter((d) => d.lastContact)
+      .map((d) => new Date(d.lastContact))
       .sort((a, b) => b - a)[0];
 
     return {

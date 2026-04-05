@@ -1,6 +1,5 @@
-import React from "react";
-import { GoogleStoreLocator } from "../elements";
-import storeData from "../../data/companyData_Florida.json";
+import { GoogleStoreLocator } from '../elements';
+import storeData from '../../data/companyData_Florida.json';
 
 // const LoadingSpinner = styled(motion.div)`
 //   display: inline-block;

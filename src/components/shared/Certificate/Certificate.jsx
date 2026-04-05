@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "styled-components";
-import Logo from "../../../assets/icon.png";
+import styled from 'styled-components';
+import Logo from '../../../assets/icon.png';
 
 const StyledCertificate = styled.div`
   text-align: center;
@@ -57,7 +56,7 @@ const StyledCertificate = styled.div`
     margin-bottom: 4px;
   }
   .certificate-signature {
-    font-family: "Brush Script MT", cursive;
+    font-family: 'Brush Script MT', cursive;
     font-size: 32px;
     border-bottom: 1px solid ${({ theme }) => theme.colors.ui200};
   }
@@ -77,24 +76,18 @@ function Certificate() {
     <StyledCertificate>
       <img className="certificate-icon" src={Logo} />
       <div className="certificate-domain">WaterQuality.Trading</div>
-      <div className="certificate-description">
-        Nutrient Pollution Removal Certificate
-      </div>
+      <div className="certificate-description">Nutrient Pollution Removal Certificate</div>
       <div className="certificate-nprc">
         <span className="certificate-nprc-unit">1</span>NPRCs
       </div>
       <div className="certificate-long-description">
-        This certifies that the buyer,{" "}
-        <span className="certificate-long-description--highlighted">
-          Jack J
-        </span>{" "}
-        paid the producer{" "}
+        This certifies that the buyer,{' '}
+        <span className="certificate-long-description--highlighted">Jack J</span> paid the producer{' '}
         <span className="certificate-long-description--highlighted">Don</span>
-        for the ownership of{" "}
-        <span className="certificate-long-description--highlighted">
+        for the ownership of <span className="certificate-long-description--highlighted">
           1
-        </span>{" "}
-        Phosphorus credits on 2024-01-01. at the price of{" "}
+        </span>{' '}
+        Phosphorus credits on 2024-01-01. at the price of{' '}
         <span className="certificate-long-description--highlighted">$60</span>
         /credit.
       </div>

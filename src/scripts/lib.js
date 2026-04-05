@@ -1,3 +1,3 @@
-export const handleError = (msg, err={}) => {
-  console.error({message: msg, error: err})
-}
+export const handleError = (msg, err = {}) => {
+  console.error({ message: msg, error: err });
+};

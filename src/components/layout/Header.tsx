@@ -1,2 +1,2 @@
-"WaterQuality.trading"
-"Water-quality marketplace dashboard"
+'WaterQuality.trading';
+'Water-quality marketplace dashboard';

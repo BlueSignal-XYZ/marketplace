@@ -1,33 +1,32 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useMutation } from "@tanstack/react-query";
-import styled from "styled-components";
-import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { STRING, logDev } from "../../../scripts/helpers";
-import { AssetAPI, UserAPI } from "../../../scripts/back_door";
-import AssetCard from "./AssetCard";
-import { ButtonPrimary } from "../../shared/button/Button";
-import { Badge } from "../../shared/Badge/Badge";
-import { useAppContext } from "../../../context/AppContext";
-import { useToastContext } from "../../../shared/providers/ToastProvider";
-import { Button as DesignButton } from "../../../design-system/primitives/Button";
-import { Skeleton } from "../../../design-system/primitives/Skeleton";
+import { useState, useEffect, useCallback } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { STRING, logDev } from '../../../scripts/helpers';
+import { AssetAPI, UserAPI } from '../../../scripts/back_door';
+import AssetCard from './AssetCard';
+import { ButtonPrimary } from '../../shared/button/Button';
+import { useAppContext } from '../../../context/AppContext';
+import { useToastContext } from '../../../shared/providers/ToastProvider';
+import { Button as DesignButton } from '../../../design-system/primitives/Button';
+import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import {
   NoUploadsState,
   NoSubmissionsState,
   NoDisputesState,
   NoApprovalsState,
-} from "../../shared/EmptyState/EmptyState";
-import { useNavigate } from "react-router-dom";
-import { isCloudMode } from "../../../utils/modeDetection";
+} from '../../shared/EmptyState/EmptyState';
+import { useNavigate } from 'react-router-dom';
+import { isCloudMode } from '../../../utils/modeDetection';
 
 const neptuneColorPalette = {
-  lightBlue: "#8abbd0",
-  darkBlue: "#005f73",
-  green: "#0a9396",
-  white: "#e9ecef",
-  navy: "#003459",
+  lightBlue: '#8abbd0',
+  darkBlue: '#005f73',
+  green: '#0a9396',
+  white: '#e9ecef',
+  navy: '#003459',
 };
 
 const ModalOverlay = styled(motion.div)`
@@ -114,8 +113,8 @@ const Tab = styled(motion.button)`
   font-weight: ${(props) => (props.active ? 600 : 400)};
   color: ${(props) =>
     props.active
-      ? (props.theme?.colors?.primary || '#0066FF')
-      : (props.theme?.colors?.textSecondary || '#6B7280')};
+      ? props.theme?.colors?.primary || '#0066FF'
+      : props.theme?.colors?.textSecondary || '#6B7280'};
   cursor: pointer;
   white-space: nowrap;
   transition: color 0.15s;
@@ -128,7 +127,7 @@ const Tab = styled(motion.button)`
     right: 0;
     height: 2px;
     background: ${(props) =>
-      props.active ? (props.theme?.colors?.primary || '#0066FF') : 'transparent'};
+      props.active ? props.theme?.colors?.primary || '#0066FF' : 'transparent'};
     border-radius: 1px 1px 0 0;
     transition: background 0.15s;
   }
@@ -227,8 +226,8 @@ const WelcomeText = styled.p`
 const Button = styled.button`
   padding: 10px 20px;
   border-radius: 8px;
-  border: 1px solid #1D7072;
-  background: #1D7072;
+  border: 1px solid #1d7072;
+  background: #1d7072;
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
@@ -246,7 +245,7 @@ const UploadCTAButton = styled.button`
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: #1D7072;
+  background: #1d7072;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -297,7 +296,7 @@ const ErrorText = styled.span`
 // Framer Motion variants for animations
 const tabVariants = {
   initial: { x: -10, opacity: 0 },
-  animate: { x: 0, opacity: 1, transition: { type: "spring", stiffness: 300 } },
+  animate: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 300 } },
   exit: { x: 10, opacity: 0 },
 };
 
@@ -306,7 +305,7 @@ function VerificationUI() {
   const navigate = useNavigate();
   const toast = useToastContext();
   const [accessibleTabs, setAccessibleTabs] = useState([]);
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
   const [loadErrors, setLoadErrors] = useState([]);
@@ -318,9 +317,7 @@ function VerificationUI() {
 
   // Navigate to upload page based on mode
   const handleUploadMedia = () => {
-    const uploadPath = isCloudMode()
-      ? "/cloud/tools/upload-media"
-      : "/features/upload-media";
+    const uploadPath = isCloudMode() ? '/cloud/tools/upload-media' : '/features/upload-media';
     navigate(uploadPath);
   };
 
@@ -343,16 +340,16 @@ function VerificationUI() {
     ]);
 
     const setters = [setUploads, setSubmissions, setDisputes, setApprovals];
-    const labels = ["uploads", "submissions", "disputes", "approvals"];
+    const labels = ['uploads', 'submissions', 'disputes', 'approvals'];
     const errors = [];
 
     results.forEach((result, i) => {
-      if (result.status === "fulfilled") {
+      if (result.status === 'fulfilled') {
         const data = Array.isArray(result.value) ? result.value : [];
         setters[i](data);
       } else {
         setters[i]([]);
-        errors.push({ label: labels[i], message: result.reason?.message || "Failed to load" });
+        errors.push({ label: labels[i], message: result.reason?.message || 'Failed to load' });
       }
     });
 
@@ -362,9 +359,9 @@ function VerificationUI() {
 
   useEffect(() => {
     if (user?.uid) {
-      const role = user?.role || "farmer";
+      const role = user?.role || 'farmer';
       const accessible = getAccessibleTabs(role);
-      const finalTabs = accessible.length > 0 ? accessible : ["uploads", "submissions"];
+      const finalTabs = accessible.length > 0 ? accessible : ['uploads', 'submissions'];
       setAccessibleTabs(finalTabs);
       setActiveTab(finalTabs[0]);
       loadData();
@@ -394,20 +391,20 @@ function VerificationUI() {
       setTxPopupVisible(true);
       if (_receipt?.hash) {
         setResult?.({
-          title: "Confirmed",
-          message: "",
+          title: 'Confirmed',
+          message: '',
           txHash: _receipt.hash,
         });
       } else {
         setResult?.({
-          title: "Failed",
-          message: mutation?.error?.reason || "Could not transact.",
+          title: 'Failed',
+          message: mutation?.error?.reason || 'Could not transact.',
         });
       }
     } catch (error) {
       //handle error
       setResult?.({
-        title: "Error",
+        title: 'Error',
         message: error?.reason || error?.message,
       });
     } finally {
@@ -417,19 +414,14 @@ function VerificationUI() {
 
   const handleSubmission = async () => {
     //Handle Submission
-    logDev("Verification: Handle Submission", { assetID });
+    logDev('Verification: Handle Submission', { assetID });
   };
 
-  const tabs = [
-    "uploads",
-    "submissions",
-    "disputes",
-    "approvals",
-  ];
+  const tabs = ['uploads', 'submissions', 'disputes', 'approvals'];
 
   const tabAccess = {
     farmer: tabs,
-    verifier: ["submissions", "disputes", "approvals"],
+    verifier: ['submissions', 'disputes', 'approvals'],
     admin: tabs,
   };
 
@@ -438,7 +430,7 @@ function VerificationUI() {
   const getAccessibleTabs = (userRole) => tabAccess[userRole] || [];
 
   const modalSpring = {
-    type: "spring",
+    type: 'spring',
     stiffness: 300,
     damping: 30,
   };
@@ -450,8 +442,8 @@ function VerificationUI() {
         <WelcomeState>
           <WelcomeTitle>Verification Portal</WelcomeTitle>
           <WelcomeText>
-            Sign in to access the verification system. Upload media, submit data
-            for verification, and track your submissions.
+            Sign in to access the verification system. Upload media, submit data for verification,
+            and track your submissions.
           </WelcomeText>
         </WelcomeState>
       </Page>
@@ -463,19 +455,25 @@ function VerificationUI() {
       <HeaderRow>
         <TabBar>
           {accessibleTabs.map((tab) => (
-            <Tab
-              key={tab}
-              active={activeTab === tab}
-              onClick={() => setActiveTab(tab)}
-            >
+            <Tab key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)}>
               {STRING.toTitleCase(tab)}
             </Tab>
           ))}
         </TabBar>
-        {activeTab === "uploads" && (
+        {activeTab === 'uploads' && (
           <UploadCTAButton onClick={handleUploadMedia}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+              />
             </svg>
             Upload Media
           </UploadCTAButton>
@@ -484,7 +482,7 @@ function VerificationUI() {
       {loadErrors.length > 0 && (
         <ErrorBanner>
           <ErrorText>
-            Failed to load: {loadErrors.map((e) => e.label).join(", ")}. {loadErrors[0]?.message}
+            Failed to load: {loadErrors.map((e) => e.label).join(', ')}. {loadErrors[0]?.message}
           </ErrorText>
           <DesignButton variant="outline" size="sm" onClick={loadData}>
             Retry
@@ -492,7 +490,7 @@ function VerificationUI() {
         </ErrorBanner>
       )}
       {dataLoading ? (
-        <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <Skeleton width="100%" height={120} />
           <Skeleton width="100%" height={120} />
           <Skeleton width="100%" height={120} />
@@ -503,7 +501,7 @@ function VerificationUI() {
         </Loading>
       ) : (
         <TabContent>
-          {activeTab === "uploads" && (
+          {activeTab === 'uploads' && (
             <InputGroup>
               {uploads?.length < 1 ? (
                 <NoUploadsState />
@@ -512,15 +510,13 @@ function VerificationUI() {
                   <AssetCard
                     key={index}
                     metadata={upload?.metadata}
-                    onClick={() =>
-                      handleMutation(submitMutation, upload.assetID)
-                    }
+                    onClick={() => handleMutation(submitMutation, upload.assetID)}
                   />
                 ))
               )}
             </InputGroup>
           )}
-          {activeTab === "submissions" && (
+          {activeTab === 'submissions' && (
             <InputGroup>
               {submissions?.length < 1 ? (
                 <NoSubmissionsState />
@@ -532,21 +528,19 @@ function VerificationUI() {
                     <Button
                       onClick={() =>
                         handleMutation(
-                          user?.role === "verifier"
-                            ? approveMutation
-                            : disputeMutation,
+                          user?.role === 'verifier' ? approveMutation : disputeMutation,
                           submission?.assetID
                         )
                       }
                     >
-                      {user?.role === "verifier" ? "Approve" : "Dispute"}
+                      {user?.role === 'verifier' ? 'Approve' : 'Dispute'}
                     </Button>
                   </div>
                 ))
               )}
             </InputGroup>
           )}
-          {activeTab === "disputes" && (
+          {activeTab === 'disputes' && (
             <InputGroup>
               {disputes?.length < 1 ? (
                 <NoDisputesState />
@@ -556,9 +550,7 @@ function VerificationUI() {
                     <label>{dispute?.assetID}</label>
                     <label>{dispute?.txHash}</label>
                     <ButtonPrimary
-                      onClick={() =>
-                        handleMutation(resolveMutation, dispute?.assetID)
-                      }
+                      onClick={() => handleMutation(resolveMutation, dispute?.assetID)}
                     >
                       Resolve Dispute
                     </ButtonPrimary>
@@ -567,7 +559,7 @@ function VerificationUI() {
               )}
             </InputGroup>
           )}
-          {activeTab === "approvals" && (
+          {activeTab === 'approvals' && (
             <InputGroup>
               {approvals?.length < 1 ? (
                 <NoApprovalsState />
@@ -576,9 +568,7 @@ function VerificationUI() {
                   <div key={index}>
                     <label>{approval?.assetID}</label>
                     <label>{approval?.txHash}</label>
-                    <Button
-                      onClick={() => handleApprovalDetails(approval?.assetID)}
-                    >
+                    <Button onClick={() => handleApprovalDetails(approval?.assetID)}>
                       Approval Details
                     </Button>
                   </div>
@@ -589,11 +579,7 @@ function VerificationUI() {
         </TabContent>
       )}
 
-      {assetID && (
-        <Button onClick={handleSubmission}>
-          Submit for Verification
-        </Button>
-      )}
+      {assetID && <Button onClick={handleSubmission}>Submit for Verification</Button>}
     </Page>
   );
 }

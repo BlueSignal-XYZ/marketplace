@@ -1,9 +1,8 @@
 // Customer List Component - Displays and manages customers
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { CustomerAPI } from "../../scripts/back_door";
-import customerService from "../../services/customerService";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { CustomerAPI } from '../../scripts/back_door';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -139,16 +138,16 @@ const Badge = styled.span`
 
   ${(props) => {
     switch (props.type) {
-      case "residential":
-        return "background: #dbeafe; color: #1d4ed8;";
-      case "commercial":
-        return "background: #dcfce7; color: #166534;";
-      case "municipal":
-        return "background: #fef3c7; color: #92400e;";
-      case "agricultural":
-        return "background: #d1fae5; color: #047857;";
+      case 'residential':
+        return 'background: #dbeafe; color: #1d4ed8;';
+      case 'commercial':
+        return 'background: #dcfce7; color: #166534;';
+      case 'municipal':
+        return 'background: #fef3c7; color: #92400e;';
+      case 'agricultural':
+        return 'background: #d1fae5; color: #047857;';
       default:
-        return "background: #f3f4f6; color: #6b7280;";
+        return 'background: #f3f4f6; color: #6b7280;';
     }
   }}
 `;
@@ -208,21 +207,21 @@ const StatLabel = styled.div`
 `;
 
 const CUSTOMER_TYPES = [
-  { value: "", label: "All Types" },
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-  { value: "municipal", label: "Municipal" },
-  { value: "agricultural", label: "Agricultural" },
-  { value: "educational", label: "Educational" },
-  { value: "research", label: "Research" },
+  { value: '', label: 'All Types' },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'municipal', label: 'Municipal' },
+  { value: 'agricultural', label: 'Agricultural' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'research', label: 'Research' },
 ];
 
 const CustomerList = () => {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
+  const [search, setSearch] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   useEffect(() => {
     loadCustomers();
@@ -234,7 +233,7 @@ const CustomerList = () => {
       const data = await CustomerAPI.list({ limit: 100 });
       setCustomers(data || []);
     } catch (err) {
-      console.error("Failed to load customers:", err);
+      console.error('Failed to load customers:', err);
     } finally {
       setLoading(false);
     }
@@ -254,11 +253,9 @@ const CustomerList = () => {
 
   const stats = {
     total: customers.length,
-    residential: customers.filter((c) => c.type === "residential").length,
-    commercial: customers.filter((c) => c.type === "commercial").length,
-    other: customers.filter(
-      (c) => !["residential", "commercial"].includes(c.type)
-    ).length,
+    residential: customers.filter((c) => c.type === 'residential').length,
+    commercial: customers.filter((c) => c.type === 'commercial').length,
+    other: customers.filter((c) => !['residential', 'commercial'].includes(c.type)).length,
   };
 
   const handleRowClick = (customerId) => {
@@ -266,7 +263,7 @@ const CustomerList = () => {
   };
 
   const handleNewCustomer = () => {
-    navigate("/customers/new");
+    navigate('/customers/new');
   };
 
   return (
@@ -302,10 +299,7 @@ const CustomerList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <FilterSelect
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-        >
+        <FilterSelect value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
           {CUSTOMER_TYPES.map((t) => (
             <option key={t.value} value={t.value}>
               {t.label}
@@ -321,13 +315,11 @@ const CustomerList = () => {
           <h3>No customers found</h3>
           <p>
             {search || typeFilter
-              ? "Try adjusting your search or filters"
-              : "Create your first customer to get started"}
+              ? 'Try adjusting your search or filters'
+              : 'Create your first customer to get started'}
           </p>
           {!search && !typeFilter && (
-            <ActionButton onClick={handleNewCustomer}>
-              + New Customer
-            </ActionButton>
+            <ActionButton onClick={handleNewCustomer}>+ New Customer</ActionButton>
           )}
         </EmptyState>
       ) : (
@@ -348,15 +340,13 @@ const CustomerList = () => {
                   <CustomerName>{customer.name}</CustomerName>
                   <CustomerEmail>{customer.email}</CustomerEmail>
                 </Td>
-                <Td>{customer.company || "-"}</Td>
+                <Td>{customer.company || '-'}</Td>
                 <Td>
                   <Badge type={customer.type}>{customer.type}</Badge>
                 </Td>
-                <Td>{customer.phone || "-"}</Td>
+                <Td>{customer.phone || '-'}</Td>
                 <Td>
-                  {customer.createdAt
-                    ? new Date(customer.createdAt).toLocaleDateString()
-                    : "-"}
+                  {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : '-'}
                 </Td>
               </Tr>
             ))}

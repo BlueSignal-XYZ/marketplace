@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const ReceiptModal = styled.div`
@@ -99,10 +99,10 @@ const ExpandButton = styled.button`
 const TransactionReceipt = ({ receipt, onClose }) => {
   const [openLogs, setOpenLogs] = useState({});
 
-  const toggleLogDetail = index => {
-    setOpenLogs(prevState => ({
+  const toggleLogDetail = (index) => {
+    setOpenLogs((prevState) => ({
       ...prevState,
-      [index]: !prevState[index]
+      [index]: !prevState[index],
     }));
   };
 
@@ -112,12 +112,14 @@ const TransactionReceipt = ({ receipt, onClose }) => {
     <ReceiptModal>
       <CloseButton onClick={onClose}>×</CloseButton>
       <Title>Transaction Receipt</Title>
-      {Object.entries(receipt).filter(([key]) => key !== 'logs').map(([key, value], index) => (
-        <KeyValue key={index}>
-          <Key>{key}:</Key>
-          <Value>{value?.toString()}</Value>
-        </KeyValue>
-      ))}
+      {Object.entries(receipt)
+        .filter(([key]) => key !== 'logs')
+        .map(([key, value], index) => (
+          <KeyValue key={index}>
+            <Key>{key}:</Key>
+            <Value>{value?.toString()}</Value>
+          </KeyValue>
+        ))}
     </ReceiptModal>
   );
 };

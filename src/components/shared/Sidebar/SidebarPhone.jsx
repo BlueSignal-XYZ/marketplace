@@ -1,9 +1,9 @@
-import * as Dialog from "@radix-ui/react-dialog";
-import React, { useEffect } from "react";
-import { FaBars, FaCross, FaX } from "react-icons/fa6";
-import styled, { keyframes } from "styled-components";
-import LogoWhite from "../../../assets/logo.png";
-import SidebarContent from "./SidebarContent";
+import * as Dialog from '@radix-ui/react-dialog';
+import React from 'react';
+import { FaBars, FaX } from 'react-icons/fa6';
+import styled, { keyframes } from 'styled-components';
+import LogoWhite from '../../../assets/logo.png';
+import SidebarContent from './SidebarContent';
 
 const fadeIn = keyframes`
   from {
@@ -63,7 +63,8 @@ const StyledDialogOverlay = styled(Dialog.Overlay)`
 const StyledDialogContent = styled(Dialog.Content)`
   background-color: white;
   border-radius: 6px;
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+  box-shadow:
+    hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   position: fixed;
   top: 50%;

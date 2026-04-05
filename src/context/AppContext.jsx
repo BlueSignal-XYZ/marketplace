@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, isFirebaseConfigured } from "../apis/firebase";
-import { UserProfileAPI } from "../scripts/back_door";
-import { clearDeviceCache } from "../hooks/useUserDevices";
+import { createContext, useContext, useState, useEffect } from 'react';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth, isFirebaseConfigured } from '../apis/firebase';
+import { UserProfileAPI } from '../scripts/back_door';
+import { clearDeviceCache } from '../hooks/useUserDevices';
 
 const AppContext = createContext();
 
@@ -12,17 +12,17 @@ export const AppProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
-  const [routePath, setRoutePath] = useState("");
+  const [routePath, setRoutePath] = useState('');
   const [showSubItems, setShowSubItems] = useState(false);
   const [notificationBarOpen, setNotificationBarOpen] = useState(false);
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
   const [verificationUIOpen, setVerificationUIOpen] = useState(false);
   const [verificationData, setVerificationData] = useState({});
   const [calculatorOpen, setCalculatorOpen] = useState(false);
-  const [settingsTab, setSettingsTab] = useState("Profile Settings");
+  const [settingsTab, setSettingsTab] = useState('Profile Settings');
   const [confirmation, setConfirmation] = useState(null);
   const [result, setResult] = useState(null);
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState('');
   const [txPopupVisible, setTxPopupVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,8 +31,8 @@ export const AppProvider = ({ children }) => {
     const isMobileScreen = () => window.innerWidth <= 768;
     setIsMobile(isMobileScreen());
     const handler = () => setIsMobile(isMobileScreen());
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
   }, []);
 
   // Firebase Auth State Listener
@@ -59,7 +59,7 @@ export const AppProvider = ({ children }) => {
               ...profileData,
               emailVerified: firebaseUser.emailVerified,
             };
-            sessionStorage.setItem("user", JSON.stringify(userdata));
+            sessionStorage.setItem('user', JSON.stringify(userdata));
             setUser(userdata);
           } else {
             // Firebase user exists but not in backend — use Firebase data
@@ -70,7 +70,7 @@ export const AppProvider = ({ children }) => {
               displayName: firebaseUser.displayName,
               emailVerified: firebaseUser.emailVerified,
             };
-            sessionStorage.setItem("user", JSON.stringify(fallbackUser));
+            sessionStorage.setItem('user', JSON.stringify(fallbackUser));
             setUser(fallbackUser);
           }
         } catch (error) {
@@ -82,12 +82,12 @@ export const AppProvider = ({ children }) => {
             displayName: firebaseUser.displayName,
             emailVerified: firebaseUser.emailVerified,
           };
-          sessionStorage.setItem("user", JSON.stringify(fallbackUser));
+          sessionStorage.setItem('user', JSON.stringify(fallbackUser));
           setUser(fallbackUser);
         }
       } else {
         // User signed out
-        sessionStorage.removeItem("user");
+        sessionStorage.removeItem('user');
         setUser(null);
       }
 
@@ -111,19 +111,18 @@ export const AppProvider = ({ children }) => {
         userdata = await UserProfileAPI.get(uid);
       }
       if (userdata?.uid) {
-        sessionStorage.setItem("user", JSON.stringify(userdata));
+        sessionStorage.setItem('user', JSON.stringify(userdata));
         setUser(userdata);
         return true;
       }
     } catch (error) {
-      logNotification("error", "Failed to update user data. Please try again.");
+      logNotification('error', 'Failed to update user data. Please try again.');
     }
     return null;
   };
 
   const handleSidebar = () => setSidebarOpen(!sidebarOpen);
-  const handleNotificationsBar = () =>
-    setNotificationBarOpen(!notificationBarOpen);
+  const handleNotificationsBar = () => setNotificationBarOpen(!notificationBarOpen);
   const handleVerificationUI = () => setVerificationUIOpen(!verificationUIOpen);
   const handleSettingsMenu = () => setSettingsMenuOpen(!settingsMenuOpen);
   const handleSettingsTab = (tab) => {
@@ -131,14 +130,12 @@ export const AppProvider = ({ children }) => {
     setSettingsMenuOpen(true);
   };
   const toggleCalculator = () => setCalculatorOpen(!calculatorOpen);
-  const logConfirmation = (message, action) =>
-    setConfirmation({ msg: message, action });
+  const logConfirmation = (message, action) => setConfirmation({ msg: message, action });
   const cancelConfirmation = (accepted) => {
     setConfirmation(null);
-    if (!accepted) logNotification("error", "Action Denied");
+    if (!accepted) logNotification('error', 'Action Denied');
   };
-  const logNotification = (type, message) =>
-    setNotification({ [type]: message });
+  const logNotification = (type, message) => setNotification({ [type]: message });
   const clearNotification = () => setNotification({});
 
   // Universal logout function - signs out from Firebase and clears state
@@ -148,19 +145,19 @@ export const AppProvider = ({ children }) => {
         await signOut(auth);
       }
       // Clear all cached user data
-      sessionStorage.removeItem("user");
+      sessionStorage.removeItem('user');
       clearDeviceCache(); // Clear device detection cache
-      localStorage.removeItem("cloud_welcome_dismissed"); // Reset welcome banner
+      localStorage.removeItem('cloud_welcome_dismissed'); // Reset welcome banner
       setUser(null);
-      window.location.href = "/";
+      window.location.href = '/';
     } catch (error) {
-      logNotification("error", "Logout failed. Please try again.");
+      logNotification('error', 'Logout failed. Please try again.');
     }
   };
 
   // Legacy handleLogOut with confirmation dialog
   const handleLogOut = () => {
-    logConfirmation("Are you sure you want to log out?", logout);
+    logConfirmation('Are you sure you want to log out?', logout);
   };
 
   const toggleEnvironmentSubItems = () => setShowSubItems(!showSubItems);

@@ -5,27 +5,27 @@ export const salesTheme = {
   // Primary color palette
   colors: {
     // Background colors
-    bgPrimary: '#0f1729',       // Deep navy - hero, header, footer
-    bgSecondary: '#1a2537',     // Slightly lighter navy - cards on dark
-    bgSurface: '#f8fafc',       // Light gray - content sections
-    bgCard: '#ffffff',          // White - product cards
+    bgPrimary: '#0f1729', // Deep navy - hero, header, footer
+    bgSecondary: '#1a2537', // Slightly lighter navy - cards on dark
+    bgSurface: '#f8fafc', // Light gray - content sections
+    bgCard: '#ffffff', // White - product cards
     bgOverlay: 'rgba(15, 23, 42, 0.95)',
 
     // Accent colors
-    accentPrimary: '#10b981',   // Green - CTAs, prices, highlights
+    accentPrimary: '#10b981', // Green - CTAs, prices, highlights
     accentPrimaryHover: '#059669',
     accentSecondary: '#3b82f6', // Blue - links, tags
     accentSecondaryHover: '#2563eb',
 
     // Text colors
-    textPrimary: '#ffffff',     // On dark backgrounds
-    textSecondary: '#94a3b8',   // Muted text
-    textDark: '#1e293b',        // On light backgrounds
-    textMuted: '#64748b',       // Subtle text
+    textPrimary: '#ffffff', // On dark backgrounds
+    textSecondary: '#94a3b8', // Muted text
+    textDark: '#1e293b', // On light backgrounds
+    textMuted: '#64748b', // Subtle text
 
     // Border colors
-    border: '#e2e8f0',          // Card borders on light
-    borderDark: '#334155',      // Card borders on dark
+    border: '#e2e8f0', // Card borders on light
+    borderDark: '#334155', // Card borders on dark
     borderLight: 'rgba(255, 255, 255, 0.1)',
 
     // Status colors
@@ -60,7 +60,13 @@ export const salesTheme = {
     sectionH2: { size: '32px', lineHeight: '40px', weight: 600 },
     cardTitle: { size: '18px', lineHeight: '24px', weight: 600 },
     body: { size: '16px', lineHeight: '24px', weight: 400 },
-    label: { size: '12px', lineHeight: '16px', weight: 500, transform: 'uppercase', tracking: '0.05em' },
+    label: {
+      size: '12px',
+      lineHeight: '16px',
+      weight: 500,
+      transform: 'uppercase',
+      tracking: '0.05em',
+    },
     small: { size: '14px', lineHeight: '20px', weight: 400 },
   },
 

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Player } from "@livepeer/react";
-import styled from "styled-components";
-import { motion } from "framer-motion";
+import { useState, useEffect } from 'react';
+import { Player } from '@livepeer/react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-import StreamInformation from "./StreamInformation";
-import { StreamBroadcast } from "../StreamBroadcast";
+import StreamInformation from './StreamInformation';
+import { StreamBroadcast } from '../StreamBroadcast';
 
 // #BACK-END
-import { MediaAPI } from "../../../../scripts/back_door";
+import { MediaAPI } from '../../../../scripts/back_door';
 
 // Main container for the stream player
 const Container = styled(motion.div)`
@@ -63,12 +63,7 @@ const StreamPlayer = ({ stream }) => {
     <Container>
       <PlayerContainer>
         {stream?.playbackId && (
-          <Player
-            title={stream?.name}
-            playbackId={stream?.playbackId}
-            autoPlay
-            muted
-          />
+          <Player title={stream?.name} playbackId={stream?.playbackId} autoPlay muted />
         )}
       </PlayerContainer>
 
@@ -79,10 +74,7 @@ const StreamPlayer = ({ stream }) => {
         </BroadcastButton>
       )}
       {isWebBroadcast && stream?.streamKey && (
-        <StreamBroadcast
-          streamKey={stream.streamKey}
-          webBroadcast={webBroadcast}
-        />
+        <StreamBroadcast streamKey={stream.streamKey} webBroadcast={webBroadcast} />
       )}
     </Container>
   );
@@ -112,7 +104,7 @@ const BasicStreamPlayer = ({ playbackId }) => {
       {stream ? (
         <StreamPlayer stream={stream} />
       ) : (
-        <Player title={"Stream"} playbackId={playbackId} autoPlay muted />
+        <Player title={'Stream'} playbackId={playbackId} autoPlay muted />
       )}
     </>
   );

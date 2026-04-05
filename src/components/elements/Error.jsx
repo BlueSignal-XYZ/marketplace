@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components';
 
 const ErrorComponent = styled.div`
@@ -6,9 +5,7 @@ const ErrorComponent = styled.div`
 `;
 
 const Error = ({ error }) => {
-  return (
-    <ErrorComponent>{error}</ErrorComponent>
-  )
-}
+  return <ErrorComponent>{error}</ErrorComponent>;
+};
 
-export default Error
+export default Error;

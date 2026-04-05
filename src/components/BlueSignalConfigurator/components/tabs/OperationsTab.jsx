@@ -1,8 +1,8 @@
 // Operations Tab - Maintenance, Calibration, Troubleshooting, LED Codes
-import React, { useState } from "react";
-import styled from "styled-components";
-import { SectionTitle, Table, Th, Td } from "../../styles";
-import { ExpandableSection, TroubleshootingCard } from "../shared";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { SectionTitle, Table, Th, Td } from '../../styles';
+import { ExpandableSection, TroubleshootingCard } from '../shared';
 import {
   MAINTENANCE,
   LED_CODES,
@@ -10,8 +10,8 @@ import {
   CALIBRATION,
   TROUBLESHOOTING,
   LED_STATUS_CODES,
-  LED_COLORS_HEX
-} from "../../data";
+  LED_COLORS_HEX,
+} from '../../data';
 
 const SubNav = styled.div`
   display: flex;
@@ -27,10 +27,10 @@ const SubNavButton = styled.button`
   padding: 10px 20px;
   font-size: 13px;
   font-weight: 600;
-  background: ${({ active }) => active ? 'rgba(59, 130, 246, 0.2)' : 'transparent'};
+  background: ${({ active }) => (active ? 'rgba(59, 130, 246, 0.2)' : 'transparent')};
   border: none;
   border-radius: 6px;
-  color: ${({ active }) => active ? '#60a5fa' : '#94a3b8'};
+  color: ${({ active }) => (active ? '#60a5fa' : '#94a3b8')};
   cursor: pointer;
   transition: all 0.2s;
 
@@ -76,20 +76,18 @@ const IntervalBadge = styled.span`
   font-weight: 600;
   border-radius: 6px;
   background: ${({ interval }) =>
-    interval.includes('day') ? 'rgba(74, 222, 128, 0.15)' :
-    interval.includes('month') ? 'rgba(251, 191, 36, 0.15)' :
-    'rgba(251, 146, 60, 0.15)'
-  };
+    interval.includes('day')
+      ? 'rgba(74, 222, 128, 0.15)'
+      : interval.includes('month')
+        ? 'rgba(251, 191, 36, 0.15)'
+        : 'rgba(251, 146, 60, 0.15)'};
   color: ${({ interval }) =>
-    interval.includes('day') ? '#4ade80' :
-    interval.includes('month') ? '#fbbf24' :
-    '#fb923c'
-  };
+    interval.includes('day') ? '#4ade80' : interval.includes('month') ? '#fbbf24' : '#fb923c'};
 `;
 
 const CostBadge = styled.span`
   font-size: 12px;
-  color: ${({ hasCost }) => hasCost ? '#f87171' : '#4ade80'};
+  color: ${({ hasCost }) => (hasCost ? '#f87171' : '#4ade80')};
   margin-left: 12px;
 `;
 
@@ -119,7 +117,7 @@ const FormulaBox = styled.div`
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 12px 16px;
-  font-family: "SF Mono", Monaco, monospace;
+  font-family: 'SF Mono', Monaco, monospace;
   font-size: 12px;
   color: #4ade80;
   margin-bottom: 12px;
@@ -200,7 +198,7 @@ const LEDContent = styled.div`
 
 const LEDPattern = styled.div`
   font-size: 12px;
-  font-family: "SF Mono", Monaco, monospace;
+  font-family: 'SF Mono', Monaco, monospace;
   color: #94a3b8;
   margin-bottom: 4px;
 `;
@@ -214,21 +212,21 @@ const LEDMeaning = styled.div`
 
 const LEDAction = styled.div`
   font-size: 12px;
-  color: ${({ hasAction }) => hasAction ? '#fbbf24' : '#64748b'};
+  color: ${({ hasAction }) => (hasAction ? '#fbbf24' : '#64748b')};
 `;
 
 const OperationsTab = ({ product }) => {
   const [activeSection, setActiveSection] = useState('maintenance');
 
-  const hasDO = product.sensorList.some(s => s.includes("Dissolved") || s.includes("DO"));
-  const isBuoy = product.deployment === "Floating";
+  const hasDO = product.sensorList.some((s) => s.includes('Dissolved') || s.includes('DO'));
+  const isBuoy = product.deployment === 'Floating';
 
   // Filter maintenance items by product capabilities
-  const relevantMaintenance = MAINTENANCE.filter(m => {
-    if (m.component.includes("DO") && !hasDO) return false;
-    if (m.component.includes("Buoy") && !isBuoy) return false;
-    if (m.component.includes("Mooring") && !isBuoy) return false;
-    if (m.component.includes("Solar") && !product.solar) return false;
+  const relevantMaintenance = MAINTENANCE.filter((m) => {
+    if (m.component.includes('DO') && !hasDO) return false;
+    if (m.component.includes('Buoy') && !isBuoy) return false;
+    if (m.component.includes('Mooring') && !isBuoy) return false;
+    if (m.component.includes('Solar') && !product.solar) return false;
     return true;
   });
 
@@ -273,14 +271,17 @@ const OperationsTab = ({ product }) => {
                   )}
                 </CalibrationHeader>
 
-                {sensor.formula && (
-                  <FormulaBox>{sensor.formula}</FormulaBox>
-                )}
+                {sensor.formula && <FormulaBox>{sensor.formula}</FormulaBox>}
 
                 {sensor.voltageRange && (
                   <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 8 }}>
                     <strong>Voltage Range:</strong> {sensor.voltageRange}
-                    {sensor.outputRange && <span> → <strong>Output:</strong> {sensor.outputRange}</span>}
+                    {sensor.outputRange && (
+                      <span>
+                        {' '}
+                        → <strong>Output:</strong> {sensor.outputRange}
+                      </span>
+                    )}
                   </div>
                 )}
 
@@ -296,7 +297,14 @@ const OperationsTab = ({ product }) => {
 
                 {sensor.calibrationPoints && (
                   <CalibrationPoints>
-                    <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: '#64748b',
+                        textTransform: 'uppercase',
+                        marginBottom: 8,
+                      }}
+                    >
                       Calibration Points
                     </div>
                     {sensor.calibrationPoints.map((point, i) => (
@@ -313,11 +321,7 @@ const OperationsTab = ({ product }) => {
                 )}
 
                 {sensor.saturationTable && (
-                  <ExpandableSection
-                    id={`sat-table-${key}`}
-                    title="Saturation Table"
-                    icon="📊"
-                  >
+                  <ExpandableSection id={`sat-table-${key}`} title="Saturation Table" icon="📊">
                     <Table>
                       <thead>
                         <tr>
@@ -338,7 +342,9 @@ const OperationsTab = ({ product }) => {
                 )}
 
                 {sensor.notes && (
-                  <div style={{ fontSize: 12, color: '#64748b', marginTop: 12, fontStyle: 'italic' }}>
+                  <div
+                    style={{ fontSize: 12, color: '#64748b', marginTop: 12, fontStyle: 'italic' }}
+                  >
                     Note: {sensor.notes}
                   </div>
                 )}
@@ -370,7 +376,9 @@ const OperationsTab = ({ product }) => {
             <LEDGrid>
               {(LED_STATUS_CODES || LED_CODES).map((led, i) => (
                 <LEDCard key={i}>
-                  <LEDIndicator color={LED_COLORS_HEX?.[led.color] || LED_COLORS?.[led.color] || '#64748b'} />
+                  <LEDIndicator
+                    color={LED_COLORS_HEX?.[led.color] || LED_COLORS?.[led.color] || '#64748b'}
+                  />
                   <LEDContent>
                     <LEDPattern>{led.pattern}</LEDPattern>
                     <LEDMeaning>{led.meaning}</LEDMeaning>
@@ -410,10 +418,7 @@ const OperationsTab = ({ product }) => {
         >
           Troubleshooting
         </SubNavButton>
-        <SubNavButton
-          active={activeSection === 'led'}
-          onClick={() => setActiveSection('led')}
-        >
+        <SubNavButton active={activeSection === 'led'} onClick={() => setActiveSection('led')}>
           LED Codes
         </SubNavButton>
       </SubNav>

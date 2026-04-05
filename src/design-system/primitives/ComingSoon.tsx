@@ -95,8 +95,6 @@ export const ComingSoon: React.FC<ComingSoonProps> = ({
     {icon && <IconWrap>{icon}</IconWrap>}
     <Title>{title}</Title>
     <Desc>{description}</Desc>
-    {action && (
-      <ActionLink onClick={action.onClick}>{action.label}</ActionLink>
-    )}
+    {action && <ActionLink onClick={action.onClick}>{action.label}</ActionLink>}
   </Container>
 );

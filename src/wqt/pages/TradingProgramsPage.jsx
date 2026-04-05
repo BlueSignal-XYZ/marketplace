@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { TradingProgramAPI } from '../../scripts/back_door';
@@ -120,7 +120,9 @@ const MetaItem = styled.div`
 /* ---- component ---- */
 
 export function TradingProgramsPage() {
-  useEffect(() => { document.title = 'Trading Programs — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Trading Programs — WaterQuality.Trading';
+  }, []);
   const navigate = useNavigate();
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -167,7 +169,7 @@ export function TradingProgramsPage() {
     }
   };
 
-  const filteredPrograms = programs.filter(p => {
+  const filteredPrograms = programs.filter((p) => {
     if (filter === 'all') return true;
     return p.status === filter;
   });
@@ -184,7 +186,8 @@ export function TradingProgramsPage() {
         <Header>
           <PageTitle>Trading Programs</PageTitle>
           <PageSubtitle>
-            Browse available water quality trading programs. Enroll your monitoring devices to generate credits.
+            Browse available water quality trading programs. Enroll your monitoring devices to
+            generate credits.
           </PageSubtitle>
         </Header>
 
@@ -206,7 +209,9 @@ export function TradingProgramsPage() {
         {error && <ErrorBanner>{error}</ErrorBanner>}
 
         {loading ? (
-          <LoadingContainer><Spinner /></LoadingContainer>
+          <LoadingContainer>
+            <Spinner />
+          </LoadingContainer>
         ) : filteredPrograms.length === 0 ? (
           <EmptyStateContainer>
             <EmptyStateTitle>No Trading Programs Available</EmptyStateTitle>
@@ -218,7 +223,7 @@ export function TradingProgramsPage() {
           </EmptyStateContainer>
         ) : (
           <ProgramGrid>
-            {filteredPrograms.map(program => (
+            {filteredPrograms.map((program) => (
               <ProgramCard
                 key={program.id}
                 $hoverable
@@ -229,9 +234,7 @@ export function TradingProgramsPage() {
                     <ProgramName>{program.name}</ProgramName>
                     <ProgramType>{program.type} trading</ProgramType>
                   </div>
-                  <StatusBadge $status={program.status}>
-                    {program.status}
-                  </StatusBadge>
+                  <StatusBadge $status={program.status}>{program.status}</StatusBadge>
                 </ProgramHeader>
 
                 {program.incentives?.description && (

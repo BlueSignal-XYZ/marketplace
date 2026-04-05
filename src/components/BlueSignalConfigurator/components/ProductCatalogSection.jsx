@@ -1,10 +1,10 @@
 // ProductCatalogSection - Unified product catalog for the sales portal
-import React, { useState, useMemo } from "react";
-import styled, { keyframes } from "styled-components";
-import { salesTheme } from "../styles/theme";
-import { PRODUCTS, BUNDLES, calculateBundlePrice } from "../data";
-import BundlesSection from "./BundlesSection";
-import { AddToQuoteBtn } from "./QuoteBuilder";
+import { useState, useMemo } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { salesTheme } from '../styles/theme';
+import { PRODUCTS, BUNDLES, calculateBundlePrice } from '../data';
+import BundlesSection from './BundlesSection';
+import { AddToQuoteBtn } from './QuoteBuilder';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(10px); }
@@ -154,7 +154,9 @@ const SearchInput = styled.input`
   font-size: 15px;
   font-weight: 500;
   color: ${salesTheme.colors.textDark};
-  background: #fafbfc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 14px center;
+  background: #fafbfc
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E")
+    no-repeat 14px center;
   background-size: 18px;
   transition: all 0.2s ease;
 
@@ -217,14 +219,10 @@ const CompareButton = styled.button`
   padding: 14px 24px;
   font-size: 14px;
   font-weight: 600;
-  background: ${props => props.$active
-    ? salesTheme.colors.accentSecondary
-    : 'transparent'};
+  background: ${(props) => (props.$active ? salesTheme.colors.accentSecondary : 'transparent')};
   border: 2px solid ${salesTheme.colors.accentSecondary};
   border-radius: 12px;
-  color: ${props => props.$active
-    ? '#ffffff'
-    : salesTheme.colors.accentSecondary};
+  color: ${(props) => (props.$active ? '#ffffff' : salesTheme.colors.accentSecondary)};
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -238,9 +236,8 @@ const CompareButton = styled.button`
   }
 
   &:hover {
-    background: ${props => props.$active
-      ? salesTheme.colors.accentSecondaryHover
-      : 'rgba(59, 130, 246, 0.08)'};
+    background: ${(props) =>
+      props.$active ? salesTheme.colors.accentSecondaryHover : 'rgba(59, 130, 246, 0.08)'};
     transform: translateY(-1px);
   }
 
@@ -352,38 +349,59 @@ const ProductGrid = styled.div`
 
 const ProductCard = styled.div`
   background: ${salesTheme.colors.bgCard};
-  border: 2px solid ${props => props.$selected
-    ? salesTheme.colors.accentSecondary
-    : 'transparent'};
+  border: 2px solid
+    ${(props) => (props.$selected ? salesTheme.colors.accentSecondary : 'transparent')};
   border-radius: 24px;
   padding: 0;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.04);
   animation: ${fadeIn} 0.4s ease-out;
   animation-fill-mode: both;
   display: flex;
   flex-direction: column;
   height: 100%;
 
-  &:nth-child(1) { animation-delay: 0s; }
-  &:nth-child(2) { animation-delay: 0.05s; }
-  &:nth-child(3) { animation-delay: 0.1s; }
-  &:nth-child(4) { animation-delay: 0.15s; }
-  &:nth-child(5) { animation-delay: 0.2s; }
-  &:nth-child(6) { animation-delay: 0.25s; }
-  &:nth-child(7) { animation-delay: 0.3s; }
-  &:nth-child(8) { animation-delay: 0.35s; }
+  &:nth-child(1) {
+    animation-delay: 0s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.1s;
+  }
+  &:nth-child(4) {
+    animation-delay: 0.15s;
+  }
+  &:nth-child(5) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(6) {
+    animation-delay: 0.25s;
+  }
+  &:nth-child(7) {
+    animation-delay: 0.3s;
+  }
+  &:nth-child(8) {
+    animation-delay: 0.35s;
+  }
 
   &:hover {
     border-color: ${salesTheme.colors.accentSecondary};
     transform: translateY(-6px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(59, 130, 246, 0.08);
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.1),
+      0 4px 12px rgba(59, 130, 246, 0.08);
   }
 
-  ${props => props.$selected && `
+  ${(props) =>
+    props.$selected &&
+    `
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 12px 32px rgba(0, 0, 0, 0.1);
   `}
 `;
@@ -425,12 +443,12 @@ const DeploymentBadge = styled.span`
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-radius: 100px;
-  background: ${props => props.$type === 'floating'
-    ? 'rgba(59, 130, 246, 0.15)'
-    : 'rgba(16, 185, 129, 0.15)'};
-  color: ${props => props.$type === 'floating'
-    ? salesTheme.colors.accentSecondary
-    : salesTheme.colors.accentPrimary};
+  background: ${(props) =>
+    props.$type === 'floating' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)'};
+  color: ${(props) =>
+    props.$type === 'floating'
+      ? salesTheme.colors.accentSecondary
+      : salesTheme.colors.accentPrimary};
 `;
 
 const CompareCheckbox = styled.div`
@@ -440,13 +458,11 @@ const CompareCheckbox = styled.div`
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: ${props => props.$checked
-    ? salesTheme.colors.accentSecondary
-    : 'rgba(255, 255, 255, 0.9)'};
-  border: 2px solid ${props => props.$checked
-    ? salesTheme.colors.accentSecondary
-    : 'rgba(0, 0, 0, 0.1)'};
-  display: ${props => props.$show ? 'flex' : 'none'};
+  background: ${(props) =>
+    props.$checked ? salesTheme.colors.accentSecondary : 'rgba(255, 255, 255, 0.9)'};
+  border: 2px solid
+    ${(props) => (props.$checked ? salesTheme.colors.accentSecondary : 'rgba(0, 0, 0, 0.1)')};
+  display: ${(props) => (props.$show ? 'flex' : 'none')};
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -457,7 +473,7 @@ const CompareCheckbox = styled.div`
     width: 16px;
     height: 16px;
     color: #ffffff;
-    opacity: ${props => props.$checked ? 1 : 0};
+    opacity: ${(props) => (props.$checked ? 1 : 0)};
   }
 
   &:hover {
@@ -541,20 +557,28 @@ const SpecBadge = styled.span`
   font-size: 12px;
   font-weight: 600;
   border-radius: 8px;
-  background: ${props => {
-    switch(props.$variant) {
-      case 'ultrasonic': return 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
-      case 'solar': return 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)';
-      case 'sensors': return 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)';
-      default: return '#f3f4f6';
+  background: ${(props) => {
+    switch (props.$variant) {
+      case 'ultrasonic':
+        return 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
+      case 'solar':
+        return 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)';
+      case 'sensors':
+        return 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)';
+      default:
+        return '#f3f4f6';
     }
   }};
-  color: ${props => {
-    switch(props.$variant) {
-      case 'ultrasonic': return '#b45309';
-      case 'solar': return '#15803d';
-      case 'sensors': return '#1d4ed8';
-      default: return '#6b7280';
+  color: ${(props) => {
+    switch (props.$variant) {
+      case 'ultrasonic':
+        return '#b45309';
+      case 'solar':
+        return '#15803d';
+      case 'sensors':
+        return '#1d4ed8';
+      default:
+        return '#6b7280';
     }
   }};
 
@@ -693,50 +717,49 @@ export default function ProductCatalogSection({
   isQuoteMode = false,
   onExitQuoteMode,
 }) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [deploymentFilter, setDeploymentFilter] = useState("all");
-  const [priceFilter, setPriceFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("price-asc");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [deploymentFilter, setDeploymentFilter] = useState('all');
+  const [priceFilter, setPriceFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('price-asc');
 
   const filteredProducts = useMemo(() => {
-    let products = Object.values(PRODUCTS)
-      .filter((p) => {
-        // Search filter
-        if (searchQuery) {
-          const query = searchQuery.toLowerCase();
-          const matchesSearch =
-            p.name.toLowerCase().includes(query) ||
-            p.subtitle.toLowerCase().includes(query) ||
-            p.tagline.toLowerCase().includes(query) ||
-            p.features.some(f => f.toLowerCase().includes(query)) ||
-            p.sensorList.some(s => s.toLowerCase().includes(query));
-          if (!matchesSearch) return false;
-        }
+    let products = Object.values(PRODUCTS).filter((p) => {
+      // Search filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesSearch =
+          p.name.toLowerCase().includes(query) ||
+          p.subtitle.toLowerCase().includes(query) ||
+          p.tagline.toLowerCase().includes(query) ||
+          p.features.some((f) => f.toLowerCase().includes(query)) ||
+          p.sensorList.some((s) => s.toLowerCase().includes(query));
+        if (!matchesSearch) return false;
+      }
 
-        // Deployment filter
-        if (deploymentFilter !== "all" && p.deployment.toLowerCase() !== deploymentFilter) {
-          return false;
-        }
+      // Deployment filter
+      if (deploymentFilter !== 'all' && p.deployment.toLowerCase() !== deploymentFilter) {
+        return false;
+      }
 
-        // Price filter
-        if (priceFilter !== "all") {
-          if (priceFilter === "under1000" && p.price >= 1000) return false;
-          if (priceFilter === "1000to3000" && (p.price < 1000 || p.price > 3000)) return false;
-          if (priceFilter === "over3000" && p.price <= 3000) return false;
-        }
+      // Price filter
+      if (priceFilter !== 'all') {
+        if (priceFilter === 'under1000' && p.price >= 1000) return false;
+        if (priceFilter === '1000to3000' && (p.price < 1000 || p.price > 3000)) return false;
+        if (priceFilter === 'over3000' && p.price <= 3000) return false;
+      }
 
-        return true;
-      });
+      return true;
+    });
 
     // Sort products
     switch (sortBy) {
-      case "price-asc":
+      case 'price-asc':
         products.sort((a, b) => a.price - b.price);
         break;
-      case "price-desc":
+      case 'price-desc':
         products.sort((a, b) => b.price - a.price);
         break;
-      case "name-asc":
+      case 'name-asc':
         products.sort((a, b) => a.name.localeCompare(b.name));
         break;
       default:
@@ -747,16 +770,16 @@ export default function ProductCatalogSection({
   }, [searchQuery, deploymentFilter, priceFilter, sortBy]);
 
   const clearFilters = () => {
-    setSearchQuery("");
-    setDeploymentFilter("all");
-    setPriceFilter("all");
+    setSearchQuery('');
+    setDeploymentFilter('all');
+    setPriceFilter('all');
   };
 
   const isInQuote = (productId) => {
     return quoteItems?.some((item) => item.productId === productId);
   };
 
-  const hasActiveFilters = searchQuery || deploymentFilter !== "all" || priceFilter !== "all";
+  const hasActiveFilters = searchQuery || deploymentFilter !== 'all' || priceFilter !== 'all';
 
   return (
     <CatalogSection id="products">
@@ -764,10 +787,10 @@ export default function ProductCatalogSection({
         <SectionHeader>
           <SectionLabel>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="7" height="7" rx="1"/>
-              <rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/>
-              <rect x="14" y="14" width="7" height="7" rx="1"/>
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
             Product Catalog
           </SectionLabel>
@@ -783,16 +806,14 @@ export default function ProductCatalogSection({
           <QuoteModeBar>
             <QuoteModeText>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
               Quote Mode Active — Select products to add to your quote
             </QuoteModeText>
             {onExitQuoteMode && (
-              <ExitQuoteModeButton onClick={onExitQuoteMode}>
-                Exit Quote Mode
-              </ExitQuoteModeButton>
+              <ExitQuoteModeButton onClick={onExitQuoteMode}>Exit Quote Mode</ExitQuoteModeButton>
             )}
           </QuoteModeBar>
         )}
@@ -839,20 +860,17 @@ export default function ProductCatalogSection({
           <FilterActionsWrapper>
             <FilterActionsLabel>Actions</FilterActionsLabel>
             <FilterActions>
-              <CompareButton
-                $active={compareMode}
-                onClick={onToggleCompareMode}
-              >
+              <CompareButton $active={compareMode} onClick={onToggleCompareMode}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+                  <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
                 </svg>
-                {compareMode ? "Exit Compare" : "Compare"}
+                {compareMode ? 'Exit Compare' : 'Compare'}
               </CompareButton>
 
               {hasActiveFilters && (
                 <ClearButton onClick={clearFilters}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M18 6L6 18M6 6l12 12"/>
+                    <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                   Clear
                 </ClearButton>
@@ -873,15 +891,15 @@ export default function ProductCatalogSection({
         {filteredProducts.length === 0 ? (
           <NoResults>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-              <path d="M8 11h6"/>
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+              <path d="M8 11h6" />
             </svg>
             <h4>No products match your filters</h4>
-            <p>Try adjusting your search or filter criteria to find what you're looking for</p>
+            <p>Try adjusting your search or filter criteria to find what you&apos;re looking for</p>
             <ClearButton onClick={clearFilters}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
+                <path d="M18 6L6 18M6 6l12 12" />
               </svg>
               Clear All Filters
             </ClearButton>
@@ -890,13 +908,11 @@ export default function ProductCatalogSection({
           <>
             <ResultsInfo>
               <ResultsCount>
-                Showing <strong>{filteredProducts.length}</strong> product{filteredProducts.length !== 1 ? 's' : ''}
+                Showing <strong>{filteredProducts.length}</strong> product
+                {filteredProducts.length !== 1 ? 's' : ''}
                 {hasActiveFilters && ' matching your criteria'}
               </ResultsCount>
-              <SortSelect
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
+              <SortSelect value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
                 <option value="name-asc">Name: A to Z</option>
@@ -929,7 +945,7 @@ export default function ProductCatalogSection({
                       }}
                     >
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                        <polyline points="20 6 9 17 4 12"/>
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </CompareCheckbox>
                     {/*
@@ -967,9 +983,9 @@ export default function ProductCatalogSection({
                       stroke="currentColor"
                       strokeWidth="1.5"
                     >
-                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                      <path d="M2 17l10 5 10-5"/>
-                      <path d="M2 12l10 5 10-5"/>
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                      <path d="M2 17l10 5 10-5" />
+                      <path d="M2 12l10 5 10-5" />
                     </svg>
                   </CardImageArea>
 
@@ -985,26 +1001,36 @@ export default function ProductCatalogSection({
                     <ProductSpecs>
                       {product.ultrasonic?.enabled && (
                         <SpecBadge $variant="ultrasonic">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M5.5 8.5L9 12l-3.5 3.5M9 12H2"/>
-                            <path d="M14.5 8.5L18 12l-3.5 3.5M18 12h-7"/>
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M5.5 8.5L9 12l-3.5 3.5M9 12H2" />
+                            <path d="M14.5 8.5L18 12l-3.5 3.5M18 12h-7" />
                           </svg>
                           {product.ultrasonic.watts}W Ultrasonic
                         </SpecBadge>
                       )}
                       {product.solar && (
                         <SpecBadge $variant="solar">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <circle cx="12" cy="12" r="4" />
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
                           </svg>
                           {product.solar.watts}W Solar
                         </SpecBadge>
                       )}
                       <SpecBadge $variant="sensors">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="12" r="3"/>
-                          <path d="M12 5V3M12 21v-2M5 12H3M21 12h-2"/>
+                          <circle cx="12" cy="12" r="3" />
+                          <path d="M12 5V3M12 21v-2M5 12H3M21 12h-2" />
                         </svg>
                         {product.sensors} Sensors
                       </SpecBadge>

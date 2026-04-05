@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Player } from "@livepeer/react";
-import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from 'react';
+import { Player } from '@livepeer/react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import ObjectViewer from "../../display/DisplayObject";
+import ObjectViewer from '../../display/DisplayObject';
 
 // #BACKEND
-import { LivepeerAPI, MediaAPI } from "../../../../scripts/back_door";
+import { LivepeerAPI, MediaAPI } from '../../../../scripts/back_door';
 
 const Container = styled(motion.div)`
   width: 100%;
@@ -82,11 +82,7 @@ const MediaPlayer = ({ playbackID }) => {
 
   return (
     <Container>
-      <Player
-        style={{ width: "100%", height: "auto" }}
-        title="Title"
-        playbackId={playbackID}
-      />
+      <Player style={{ width: '100%', height: 'auto' }} title="Title" playbackId={playbackID} />
       <MetricsContainer>
         {metrics && (
           <>
@@ -96,15 +92,11 @@ const MediaPlayer = ({ playbackID }) => {
         )}
       </MetricsContainer>
       <Button onClick={() => setIsExtendedData(!isExtendedData)}>
-        {`${!isExtendedData ? "View" : "Hide"} Extended Data`}
+        {`${!isExtendedData ? 'View' : 'Hide'} Extended Data`}
       </Button>
       <AnimatePresence>
         {isExtendedData && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {video && <ObjectViewer data={video} />}
           </motion.div>
         )}

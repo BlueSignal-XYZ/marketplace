@@ -1,5 +1,3 @@
-import ProfileDropMenu from "./ProfileDropMenu";
+import ProfileDropMenu from './ProfileDropMenu';
 
-export {
-    ProfileDropMenu
-}
+export { ProfileDropMenu };

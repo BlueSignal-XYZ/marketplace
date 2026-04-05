@@ -4,7 +4,7 @@
  * Supports dual-audience toggle (Homeowner / Utility).
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { AUDIENCE_CONTENT } from './audienceContent';
 import { HeroSection } from './HeroSection';
@@ -44,7 +44,9 @@ export function WQTLandingPage() {
 
   const content = AUDIENCE_CONTENT[audience];
 
-  useEffect(() => { document.title = 'WaterQuality.Trading — Nutrient Credit Marketplace'; }, []);
+  useEffect(() => {
+    document.title = 'WaterQuality.Trading — Nutrient Credit Marketplace';
+  }, []);
 
   // Set html/body background to dark so iOS overscroll areas match
   useEffect(() => {
