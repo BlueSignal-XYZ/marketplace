@@ -19,14 +19,14 @@ import { useToastContext } from '../../../shared/providers/ToastProvider';
 const Page = styled.div`
   max-width: 680px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 0;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 32px 24px;
+    padding: 32px 0;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 48px 24px;
+    padding: 48px 0;
   }
 `;
 

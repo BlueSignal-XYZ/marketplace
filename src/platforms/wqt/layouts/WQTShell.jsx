@@ -54,21 +54,22 @@ const MainContent = styled.main`
   ${({ $appRoute }) =>
     $appRoute &&
     `
-    /* Mobile: offset by bottom tabs height + safe area */
+    /* Mobile: horizontal padding + bottom tabs */
     @media (max-width: 767px) {
+      padding: 0 16px;
       padding-bottom: calc(${TAB_BAR_HEIGHT}px + env(safe-area-inset-bottom, 0px));
     }
 
-    /* Tablet: offset by narrow sidebar */
+    /* Tablet: sidebar offset + symmetric horizontal padding */
     @media (min-width: 768px) {
       margin-left: ${SIDEBAR_WIDTH_TABLET}px;
-      padding-right: clamp(24px, 3vw, 48px);
+      padding: 0 clamp(24px, 3vw, 48px);
     }
 
-    /* Desktop: offset by full sidebar */
+    /* Desktop: full sidebar + symmetric horizontal padding */
     @media (min-width: 1024px) {
       margin-left: ${SIDEBAR_WIDTH}px;
-      padding-right: clamp(32px, 4vw, 64px);
+      padding: 0 clamp(32px, 4vw, 64px);
     }
   `}
 `;

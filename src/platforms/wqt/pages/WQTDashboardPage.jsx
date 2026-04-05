@@ -20,10 +20,10 @@ import { useAppContext } from '../../../context/AppContext';
 const Page = styled.div`
   max-width: 1280px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 32px 0;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}px) {
-    padding: 24px 16px;
+    padding: 24px 0;
   }
 `;
 

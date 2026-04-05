@@ -21,15 +21,15 @@ if (HAS_VALID_TOKEN) {
 const BOUNDARY_LAYER_PREFIX = 'project-boundary';
 
 const PageContainer = styled.div`
-  padding: 24px 16px;
+  padding: 24px 0;
   background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
-    padding: 28px 24px;
+    padding: 28px 0;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
-    padding: 32px 48px;
+    padding: 32px 0;
   }
 `;
 
