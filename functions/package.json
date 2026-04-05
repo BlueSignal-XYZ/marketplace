@@ -17,7 +17,7 @@
     "cors": "^2.8.5",
     "express": "^5.2.1",
     "firebase-admin": "^12.6.0",
-    "firebase-functions": "^5.1.0",
+    "firebase-functions": "^7.2.3",
     "qrcode": "^1.5.3",
     "@googlemaps/google-maps-services-js": "^3.4.0",
     "@sendgrid/mail": "^8.1.0",
