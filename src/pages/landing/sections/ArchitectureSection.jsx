@@ -2,7 +2,6 @@ import styled, { keyframes } from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
 import WiringDiagram from '../components/WiringDiagram';
-import SystemDiagram from '../components/SystemDiagram';
 
 /* ── Section layout ─────────────────────────────────────── */
 
@@ -374,12 +373,6 @@ const ArchitectureSection = () => (
         <RevealOnScroll>
           <DiagramWrapper>
             <WiringDiagram />
-          </DiagramWrapper>
-        </RevealOnScroll>
-
-        <RevealOnScroll>
-          <DiagramWrapper>
-            <SystemDiagram />
           </DiagramWrapper>
         </RevealOnScroll>
 
