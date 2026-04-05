@@ -15,7 +15,11 @@ const getQRCode = () => {
 };
 
 // QR Secret from Firebase config
-const getQRSecret = () => process.env.QR_SECRET || functions.config().qr?.secret || "bluesignal-dev-secret";
+const getQRSecret = () => {
+  const secret = process.env.QR_SECRET || functions.config().qr?.secret;
+  if (!secret) throw new Error("QR_SECRET is not configured. Set it via environment variables or Firebase config.");
+  return secret;
+};
 
 /**
  * Generate a signed QR code payload for a device
