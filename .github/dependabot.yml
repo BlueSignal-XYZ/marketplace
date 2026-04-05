@@ -23,6 +23,10 @@ updates:
     ignore:
       - dependency-name: 'eslint'
         versions: ['>=10']
+      - dependency-name: 'node-fetch'
+        versions: ['>=3']
+      - dependency-name: 'firebase-functions'
+        versions: ['>=7']
     labels:
       - 'dependencies'
       - 'functions'
