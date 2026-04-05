@@ -56,20 +56,20 @@ const MainContent = styled.main`
     `
     /* Mobile: horizontal padding + bottom tabs */
     @media (max-width: 767px) {
-      padding: 0 16px;
+      padding: 0 20px;
       padding-bottom: calc(${TAB_BAR_HEIGHT}px + env(safe-area-inset-bottom, 0px));
     }
 
-    /* Tablet: sidebar offset + symmetric horizontal padding */
+    /* Tablet: sidebar offset + generous horizontal padding */
     @media (min-width: 768px) {
       margin-left: ${SIDEBAR_WIDTH_TABLET}px;
-      padding: 0 clamp(24px, 3vw, 48px);
+      padding: 0 clamp(40px, 6vw, 72px);
     }
 
-    /* Desktop: full sidebar + symmetric horizontal padding */
+    /* Desktop: full sidebar + generous horizontal padding */
     @media (min-width: 1024px) {
       margin-left: ${SIDEBAR_WIDTH}px;
-      padding: 0 clamp(32px, 4vw, 64px);
+      padding: 0 clamp(48px, 5vw, 80px);
     }
   `}
 `;
