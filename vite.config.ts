@@ -96,7 +96,7 @@ export default defineConfig(({ mode }) => {
     define,
     build: {
       sourcemap: false,
-      minify: 'esbuild',
+      minify: 'oxc',
       rollupOptions: {
         input: input,
         output: {
