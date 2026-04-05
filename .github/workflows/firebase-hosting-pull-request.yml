@@ -11,7 +11,7 @@ jobs:
       contents: read  # Allows the Action to read the repository contents
       checks: write   # Allows the Action to create and update check runs
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - run: npm ci --force
       - name: Build all sites
         env:
