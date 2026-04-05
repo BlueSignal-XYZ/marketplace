@@ -6,6 +6,23 @@ import { clearDeviceCache } from '../hooks/useUserDevices';
 
 const AppContext = createContext();
 
+/**
+ * Strip user object to non-sensitive fields for sessionStorage.
+ * Avoids storing email/PII in plain text (CodeQL: clear-text-storage).
+ */
+const toSessionUser = (user) => {
+  if (!user) return null;
+  return {
+    uid: user.uid,
+    displayName: user.displayName,
+    emailVerified: user.emailVerified,
+    role: user.role,
+    username: user.username,
+    company: user.company,
+    onboardingComplete: user.onboardingComplete,
+  };
+};
+
 export const AppProvider = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [user, setUser] = useState(null);
@@ -59,7 +76,7 @@ export const AppProvider = ({ children }) => {
               ...profileData,
               emailVerified: firebaseUser.emailVerified,
             };
-            sessionStorage.setItem('user', JSON.stringify(userdata));
+            sessionStorage.setItem('user', JSON.stringify(toSessionUser(userdata)));
             setUser(userdata);
           } else {
             // Firebase user exists but not in backend — use Firebase data
@@ -70,7 +87,7 @@ export const AppProvider = ({ children }) => {
               displayName: firebaseUser.displayName,
               emailVerified: firebaseUser.emailVerified,
             };
-            sessionStorage.setItem('user', JSON.stringify(fallbackUser));
+            sessionStorage.setItem('user', JSON.stringify(toSessionUser(fallbackUser)));
             setUser(fallbackUser);
           }
         } catch (error) {
@@ -82,7 +99,7 @@ export const AppProvider = ({ children }) => {
             displayName: firebaseUser.displayName,
             emailVerified: firebaseUser.emailVerified,
           };
-          sessionStorage.setItem('user', JSON.stringify(fallbackUser));
+          sessionStorage.setItem('user', JSON.stringify(toSessionUser(fallbackUser)));
           setUser(fallbackUser);
         }
       } else {
@@ -111,7 +128,7 @@ export const AppProvider = ({ children }) => {
         userdata = await UserProfileAPI.get(uid);
       }
       if (userdata?.uid) {
-        sessionStorage.setItem('user', JSON.stringify(userdata));
+        sessionStorage.setItem('user', JSON.stringify(toSessionUser(userdata)));
         setUser(userdata);
         return true;
       }

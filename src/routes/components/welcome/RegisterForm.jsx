@@ -152,7 +152,12 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
       }
       if (!updatedOK) {
         try {
-          sessionStorage.setItem('user', JSON.stringify(newUser));
+          // Store only non-sensitive public user data in sessionStorage
+          const publicUser = {
+            uid: newUser.uid,
+            username: newUser.username,
+          };
+          sessionStorage.setItem('user', JSON.stringify(publicUser));
         } catch (e) {
           // Silent fail
         }
