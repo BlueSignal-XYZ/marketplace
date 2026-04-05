@@ -1,5 +1,4 @@
 // UploadProgress.js
-import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import {logoColors} from '../../../styles/colors';

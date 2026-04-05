@@ -3,7 +3,6 @@
  * water quantity (drought, infrastructure) and water quality (compliance, costs).
  */
 
-import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 

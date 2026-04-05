@@ -1,5 +1,4 @@
 // BOM Tab Component
-import React from "react";
 import { SectionTitle, Table, Th, Td, TotalRow, MarginBadge } from "../../styles";
 
 const BomTab = ({ product }) => {

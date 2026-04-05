@@ -5,7 +5,7 @@
  * URL: /how-it-works
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { GlossaryTooltip } from '../components/GlossaryTooltip';

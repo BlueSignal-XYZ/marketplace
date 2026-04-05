@@ -1,5 +1,5 @@
 // Enhanced BOM Tab with Summary/Full Toggle and Supplier Links
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { SectionTitle, Table, Th, Td, TotalRow, MarginBadge } from "../../styles";
 import { ENHANCED_BOM, calculateBOMTotals } from "../../data";

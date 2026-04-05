@@ -1,7 +1,7 @@
 // /src/components/cloud/AddDeviceModal.jsx
 // Modal for adding new devices to inventory (admin only)
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import DeviceService from "../../services/deviceService";
 import { useAppContext } from "../../context/AppContext";

@@ -1,5 +1,4 @@
 // HeroSection - Main hero section for the sales portal
-import React from "react";
 import styled, { keyframes } from "styled-components";
 import { salesTheme } from "../styles/theme";
 

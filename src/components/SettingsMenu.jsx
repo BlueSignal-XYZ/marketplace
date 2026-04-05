@@ -1,27 +1,17 @@
-import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faChevronDown,
   faChevronUp,
   faClose,
-  faDatabase,
-  faMaskFace,
-  faPalette,
-  faPerson,
-  faUpload,
   faUser,
   faUserGear,
-  faUserLock,
 } from "@fortawesome/free-solid-svg-icons";
 import ProfileSettingsTab from "./elements/setting-tabs/ProfileSettings";
 import {
   AccountSettingsTab,
   DataSettingsTab,
-  PersonalizationTab,
   PrivacySettingsTab,
-  UploadsTab,
 } from "./elements/setting-tabs";
 import {useAppContext} from "../context/AppContext";
 

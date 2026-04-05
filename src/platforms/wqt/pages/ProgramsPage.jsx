@@ -3,13 +3,11 @@
  * Shows registered programs, calculator, and program-specific rules.
  */
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { Badge } from '../../../design-system/primitives/Badge';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Input } from '../../../design-system/primitives/Input';
-import { Button } from '../../../design-system/primitives/Button';
 import { Tabs } from '../../../design-system/primitives/Tabs';
 
 const Page = styled.div`

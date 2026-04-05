@@ -1,5 +1,5 @@
 // HubSpot Sync Status Admin Component
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import HubSpotAPI from "../../apis/hubspot";
 import { CustomerAPI, OrderAPI } from "../../scripts/back_door";

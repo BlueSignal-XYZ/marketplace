@@ -3,7 +3,6 @@
  * Focused on the Demand Response Program value proposition.
  */
 
-import React from 'react';
 import styled from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 

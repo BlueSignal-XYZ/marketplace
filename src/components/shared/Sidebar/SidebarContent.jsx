@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { Sidebar_MenuItem } from "../../elements";
 import { FaChevronDown } from "react-icons/fa6";
@@ -107,7 +107,7 @@ function SidebarContent() {
                 <FaChevronDown className="AccordionChevron" aria-hidden />
               </StyledAccordionTrigger>
               <StyledAccordionContent className="content">
-                {environmentRoutes.map((subData, subIndex) => {
+                {environmentRoutes.map((subData, _subIndex) => {
                   const { route, cta, icon, onclick } = subData || {};
                   return (
                     <Link to={route} className="cta" key={cta}>

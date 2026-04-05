@@ -8,7 +8,7 @@
  */
 
 import { db } from '../apis/firebase';
-import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { CreditsMarketplaceAPI, DeviceAPI } from '../scripts/back_door';
 import { getSites } from './v2/api';
 
@@ -107,7 +107,7 @@ export const fetchListings = async () => {
       if (response?.listings && response.listings.length > 0) {
         return response.listings.map(transformListingToCard);
       }
-    } catch (e) {
+    } catch (_e) {
       // Fall through to RTDB
     }
 
@@ -191,7 +191,7 @@ export const fetchMapProjects = async () => {
       if (sites && sites.length > 0) {
         return sites.map(transformSiteToMapProject);
       }
-    } catch (e) {
+    } catch (_e) {
       // Fall through to RTDB
     }
 

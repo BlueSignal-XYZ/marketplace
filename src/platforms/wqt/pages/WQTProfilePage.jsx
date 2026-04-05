@@ -3,7 +3,7 @@
  * Tabbed layout: Profile, Wallet, Transactions, Devices, Settings.
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import {

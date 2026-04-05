@@ -3,7 +3,7 @@
  * Wired to /v2/credits/portfolio.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tabs } from '../../../design-system/primitives/Tabs';
@@ -13,7 +13,6 @@ import { Badge } from '../../../design-system/primitives/Badge';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { Button } from '../../../design-system/primitives/Button';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
-import { Pagination } from '../../../design-system/primitives/Pagination';
 import { usePortfolioQuery } from '../../../shared/hooks/useApiQueries';
 import { useAppContext } from '../../../context/AppContext';
 

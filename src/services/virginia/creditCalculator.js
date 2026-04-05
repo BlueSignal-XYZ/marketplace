@@ -14,7 +14,6 @@
  */
 
 import {
-  VIRGINIA_BASINS,
   UNCERTAINTY_RATIOS,
   OFFSET_FUND_PRICES,
   getBasinByCode,

@@ -3,12 +3,9 @@
  * Captures device installation location via GPS, map, or address
  */
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import axios from "axios";
-import { auth } from "../../apis/firebase";
-import configs from "../../../configs";
 
 const Container = styled.div`
   display: flex;

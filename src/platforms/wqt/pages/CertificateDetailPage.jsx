@@ -4,7 +4,7 @@
  * html2canvas lazy-loaded on "Export as Image" click.
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Badge } from '../../../design-system/primitives/Badge';

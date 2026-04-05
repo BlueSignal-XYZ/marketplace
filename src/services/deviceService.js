@@ -4,7 +4,7 @@
 // Provides device CRUD operations with Firebase Realtime Database
 // Used for device registration, inventory management, and lifecycle updates
 
-import { ref, get, set, query, orderByChild, limitToLast, push, update } from "firebase/database";
+import { ref, get, set, update } from "firebase/database";
 import { db } from "../apis/firebase";
 import PRODUCTS from "../components/BlueSignalConfigurator/data/products";
 

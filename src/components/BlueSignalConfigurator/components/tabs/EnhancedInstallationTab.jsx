@@ -1,5 +1,5 @@
 // Enhanced Installation Tab with Interactive Checklists
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { SectionTitle, Table, Th, Td } from "../../styles";
 import { ExpandableSection, ChecklistCard } from "../shared";

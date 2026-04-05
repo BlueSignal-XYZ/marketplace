@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { WelcomeHome } from "./components/welcome";
 import Footer from "../components/shared/Footer/Footer";

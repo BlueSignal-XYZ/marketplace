@@ -11,8 +11,6 @@
  * but intentionally renders nothing so we don't get a second header.
  */
 
-import React from "react";
-
 export default function Navbar() {
   return null;
 }

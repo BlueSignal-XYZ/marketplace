@@ -8,7 +8,6 @@
  */
 import { useState, useEffect } from "react";
 import { colors } from "../../data/styles";
-import { logoColors } from "../../styles/colors";
 import styled from 'styled-components';
 import configs from "../../../configs";
 import { ButtonPrimary } from "../shared/button/Button";

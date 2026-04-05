@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import React, { useEffect } from "react";
-import { FaBars, FaCross, FaX } from "react-icons/fa6";
+import React from "react";
+import { FaBars, FaX } from "react-icons/fa6";
 import styled, { keyframes } from "styled-components";
 import LogoWhite from "../../../assets/logo.png";
 import SidebarContent from "./SidebarContent";

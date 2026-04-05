@@ -3,7 +3,7 @@
  * Sensor-Verified. Utility-Controlled. Fully Automated.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -320,7 +320,7 @@ function GenericIcon({ color }) {
   );
 }
 
-export function HowItWorksSection({ audience, content, trust }) {
+export function HowItWorksSection({ audience: _audience, content, trust }) {
   // Use audience-specific value props when provided, otherwise default features
   const features = content || FEATURES;
   const isAudienceContent = !!content;

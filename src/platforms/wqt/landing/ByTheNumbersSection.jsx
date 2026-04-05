@@ -3,7 +3,7 @@
  * Count-up fade-in effect on scroll intersection.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 

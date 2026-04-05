@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { Input } from "../../shared/input/Input";
@@ -19,54 +18,6 @@ const AccountContainer = styled.div`
   box-sizing: border-box;
   max-width: 320px;
   margin: 0 auto;
-`;
-
-const OptionGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-
-const OptionLabel = styled.label`
-  font-weight: bold;
-  color: #333;
-`;
-
-const ToggleButton = styled(motion.div)`
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: ${({ isActive }) => (isActive ? "#63c3d1" : "#aaa")};
-  color: #fff;
-
-  &:hover {
-    opacity: 0.9;
-  }
-`;
-
-const ActionButton = styled(motion.button)`
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-  background-color: ${({ danger }) => (danger ? "#e74c3c" : "#63c3d1")};
-
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-
-  ${({ active }) =>
-    active &&
-    `
-       padding: 10px;
-       border-radius: 0;
-    background: #333;
-    color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 2px #000;
-    `}
-  &:hover {
-    background-color: ${({ danger }) => (danger ? "#c0392b" : "#508a99")};
-  }
 `;
 
 const ProfileForm = styled.form`

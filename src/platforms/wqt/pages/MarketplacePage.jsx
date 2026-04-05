@@ -204,7 +204,7 @@ const OrderToggleBtn = styled.button`
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
-  color: ${({ $active, $isBuy, theme }) =>
+  color: ${({ $active, $isBuy: _$isBuy, theme }) =>
     $active ? '#fff' : theme.colors.text};
   background: ${({ $active, $isBuy, theme }) =>
     $active
@@ -388,28 +388,6 @@ const ResultCount = styled.span`
   color: ${({ theme }) => theme.colors.textMuted};
 `;
 
-const PaginationRow = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 24px;
-`;
-
-const PageBtn = styled.button`
-  padding: 6px 14px;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
-  font-weight: 500;
-  color: ${({ $active, theme }) => ($active ? theme.colors.textOnPrimary : theme.colors.text)};
-  background: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.surface)};
-  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
-  border-radius: ${({ theme }) => theme.radius.sm}px;
-  cursor: pointer;
-  &:hover { opacity: 0.85; }
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
-`;
-
 const ErrorBanner = styled.div`
   padding: 20px 24px;
   background: rgba(255, 77, 77, 0.06);
@@ -463,7 +441,7 @@ function VerificationBadge({ level }) {
   return <Badge variant={cfg.variant} size="sm" dot>{cfg.label}</Badge>;
 }
 
-function NutrientBadge({ type }) {
+function NutrientBadge({ type: _type }) {
   const label = 'AWG Credit';
   return (
     <Badge variant="info" size="sm" aria-label={label}>

@@ -1,5 +1,5 @@
 // Operations Tab - Maintenance, Calibration, Troubleshooting, LED Codes
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { SectionTitle, Table, Th, Td } from "../../styles";
 import { ExpandableSection, TroubleshootingCard } from "../shared";

@@ -5,8 +5,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import {
   mockPresaleProjects,
   PresaleProject,
-  getPresalesByStatus,
-  getPresalesByCreditType,
   getCreditTypeColor,
   getStatusColor,
   formatStatus

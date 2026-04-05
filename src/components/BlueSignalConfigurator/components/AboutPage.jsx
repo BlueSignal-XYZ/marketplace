@@ -1,5 +1,4 @@
 // AboutPage - Company story and values for BlueSignal
-import React from "react";
 import styled from "styled-components";
 import { salesTheme } from "../styles/theme";
 import SalesHeader from "./SalesHeader";

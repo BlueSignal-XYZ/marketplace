@@ -1,5 +1,5 @@
 // /src/components/cloud/DeviceOnboardingWizard.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
@@ -38,7 +38,7 @@ const ProgressStep = styled.div`
       : $completed
       ? theme.colors?.primary600 || "#0284c7"
       : theme.colors?.ui400 || "#9ca3af"};
-  background: ${({ $active, theme }) =>
+  background: ${({ $active, theme: _theme }) =>
     $active ? "#ffffff" : "transparent"};
   border-bottom: 2px solid
     ${({ $active, $completed, theme }) =>

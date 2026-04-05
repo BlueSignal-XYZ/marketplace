@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import styled, { keyframes } from "styled-components";
 import { Loading, Error } from "../elements";
 import { NUMBERS, formatCertificate } from "../../scripts/helpers";

@@ -1,5 +1,5 @@
 // Customer Name Modal - Collect customer info before PDF export
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Overlay = styled.div`

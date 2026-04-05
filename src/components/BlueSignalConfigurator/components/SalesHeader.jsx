@@ -1,5 +1,5 @@
 // SalesHeader - Simplified sticky header for the sales portal (no nav menu)
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { salesTheme } from "../styles/theme";

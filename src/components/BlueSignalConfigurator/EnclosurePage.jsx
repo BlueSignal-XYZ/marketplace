@@ -1,12 +1,12 @@
 // Standalone Enclosure View Page for /sales/enclosure route
-import React, { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { PRODUCTS } from "./data";
 import { EnclosureView } from "./components/diagrams";
 import EnclosureComparisonView from "./components/EnclosureComparisonView";
 import SEOHead from "../seo/SEOHead";
-import { createBreadcrumbSchema, createProductSchema } from "../seo/schemas";
+import { createBreadcrumbSchema } from "../seo/schemas";
 import { media, safeAreaInsets } from "../../styles/breakpoints";
 
 const PageWrapper = styled.div`

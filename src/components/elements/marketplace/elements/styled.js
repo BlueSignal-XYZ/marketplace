@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors, logoColors } from "../../../../styles/colors";
+import { logoColors } from "../../../../styles/colors";
 
 export const MARKETPLACE_HEADER = styled.header`
 position: fixed;

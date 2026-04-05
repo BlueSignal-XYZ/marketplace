@@ -3,7 +3,7 @@
  * Public route, no auth required.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
 const Page = styled.div`

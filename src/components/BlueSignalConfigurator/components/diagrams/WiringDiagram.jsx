@@ -1,6 +1,4 @@
 // Wiring Diagram SVG Component
-import React from "react";
-
 const WiringDiagram = ({ product }) => {
   const voltage = product.battery?.voltage || (product.power.type === "AC" ? 24 : 12);
   const hasSolar = product.solar !== null;

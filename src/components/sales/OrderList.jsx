@@ -1,5 +1,5 @@
 // Order List Component - Displays and manages orders/quotes
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { OrderAPI } from "../../scripts/back_door";

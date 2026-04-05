@@ -1,5 +1,4 @@
 // Benchmark View Component - Market Comparison
-import React from "react";
 import styled from "styled-components";
 import { PRODUCTS } from "../data";
 import { COMPETITORS } from "../data";

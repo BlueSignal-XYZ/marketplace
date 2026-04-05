@@ -1,5 +1,4 @@
 // Installation Tab Component
-import React from "react";
 import { SectionTitle, SpecGrid, SpecCard, SpecLabel, SpecValue, FeatureList, FeatureItem, Table, Th, Td } from "../../styles";
 import { INSTALLATION, TEST_POINTS } from "../../data";
 

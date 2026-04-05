@@ -5,7 +5,7 @@ import styled from "styled-components";
 import CloudPageLayout from "./CloudPageLayout";
 import NutrientCalculator from "../NutrientCalculator";
 import { VerificationUI } from "../elements/contractUI";
-import { Stream, MediaUpload, MediaPlayer, BasicStreamPlayer } from "../elements/livepeer";
+import { MediaPlayer, BasicStreamPlayer } from "../elements/livepeer";
 import { LivepeerConfig, createReactClient, studioProvider } from "@livepeer/react";
 import { LivepeerAPI } from "../../scripts/back_door";
 

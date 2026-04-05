@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import LogoWhite from "../../../assets/logo.png";
 import SidebarPhone from "./SidebarPhone";

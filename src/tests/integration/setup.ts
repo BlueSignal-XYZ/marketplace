@@ -8,10 +8,10 @@
  * until emulator startup is automated in the pipeline.
  */
 
-import { initializeApp, cert, getApps, deleteApp, type App } from 'firebase-admin/app';
+import { initializeApp, getApps, type App } from 'firebase-admin/app';
 import { getAuth, type Auth } from 'firebase-admin/auth';
 import { getDatabase, type Database } from 'firebase-admin/database';
-import { beforeAll, afterAll, afterEach } from 'vitest';
+import { beforeAll, afterAll } from 'vitest';
 import axios from 'axios';
 
 // ── Emulator configuration ──────────────────────────────

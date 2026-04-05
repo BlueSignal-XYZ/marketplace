@@ -2,11 +2,10 @@
  * WQT Watershed Dashboard — aggregated water quality data per watershed.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
-import { Tabs } from '../../../design-system/primitives/Tabs';
 
 const Page = styled.div`
   max-width: 1280px;

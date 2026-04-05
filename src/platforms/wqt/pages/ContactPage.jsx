@@ -3,7 +3,7 @@
  * Submits to the same Google Sheets endpoint used by BlueSignal.xyz landing.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const CONTACT_EMAIL = 'hello@bluesignal.xyz';
@@ -440,7 +440,7 @@ export default function ContactPage() {
       setStatus('success');
       resetForm();
       return;
-    } catch (err) {
+    } catch (_err) {
       // fetch failed, try sendBeacon
     }
 

@@ -6,7 +6,7 @@ import { GlobalStyle } from "./styles/global.js";
 import App from "./App.jsx";
 import "./index.css";
 import { ThemeProvider } from "styled-components";
-import { colors, theme } from "./styles/colors.js";
+import { theme } from "./styles/colors.js";
 import {AppProvider} from "./context/AppContext.jsx";
 
 const queryClient = new QueryClient();

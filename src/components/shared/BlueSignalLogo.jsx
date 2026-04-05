@@ -1,5 +1,3 @@
-import React from "react";
-
 // Inline SVG logo — the blue curved lines mark from bluesignal.xyz
 const BlueSignalLogo = ({ size = 32 }) => (
   <svg

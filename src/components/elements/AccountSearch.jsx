@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -173,7 +173,7 @@ const AccountSearch = ({ isOpen, setIsOpen }) => {
       setBalance(accountBalance.toString());
       const accountCertificates = await NPCCreditsAPI.getAccountCertificates(accountID);
       setCertificates(accountCertificates);
-    } catch (err) {
+    } catch (_err) {
       setError("Error retrieving data");
     } finally {
       setLoading(false);

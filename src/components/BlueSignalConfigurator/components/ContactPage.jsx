@@ -1,5 +1,5 @@
 // ContactPage - Contact form with Austin location map
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { salesTheme } from "../styles/theme";
 import SalesHeader from "./SalesHeader";

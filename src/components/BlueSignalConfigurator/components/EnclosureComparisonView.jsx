@@ -1,5 +1,5 @@
 // Enclosure Comparison View - Side-by-side enclosure layouts
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { EnclosureView } from "./diagrams";
 
@@ -214,7 +214,7 @@ const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
       </ProductSelector>
 
       <ComparisonBody>
-        {selectedProductData.map((product, index) => {
+        {selectedProductData.map((product, _index) => {
           if (!product) return null;
 
           const bomTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);

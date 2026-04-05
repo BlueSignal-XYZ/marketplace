@@ -3,7 +3,6 @@
  * 5 tabs matching sidebar items, stacked icon + label layout.
  */
 
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Home, TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';

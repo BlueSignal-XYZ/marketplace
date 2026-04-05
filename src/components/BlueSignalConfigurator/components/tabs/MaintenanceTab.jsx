@@ -1,5 +1,4 @@
 // Maintenance Tab Component
-import React from "react";
 import { SectionTitle, Table, Th, Td } from "../../styles";
 import { MAINTENANCE, LED_CODES, LED_COLORS } from "../../data";
 

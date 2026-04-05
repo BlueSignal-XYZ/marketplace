@@ -1,5 +1,5 @@
 // /src/routes/components/welcome/LoginForm.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import {
   sendPasswordResetEmail,
@@ -19,7 +19,6 @@ import {
   ButtonPrimary,
   ButtonSecondary,
 } from "../../../components/shared/button/Button";
-import { useAppContext } from "../../../context/AppContext";
 import { getAppMode } from "../../../utils/modeDetection";
 
 /* -------------------------------------------------------------------------- */
@@ -51,21 +50,6 @@ const Header = styled.div`
     margin: 4px 0 0;
     font-size: 13px;
     color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
-  }
-`;
-
-const ActionsRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 8px;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-
-    ${ButtonPrimary}, ${ButtonSecondary} {
-      width: 100%;
-    }
   }
 `;
 
@@ -200,7 +184,7 @@ const LoginForm = () => {
       setSubmitting(true);
       await signInWithEmailAndPassword(auth, email, password);
       // Auth listener will handle the rest
-    } catch (err) {
+    } catch (_err) {
       // SECURITY: Use generic error message to prevent user enumeration
       handleError("Invalid email or password. Please try again.");
       setSubmitting(false);
@@ -226,7 +210,7 @@ const LoginForm = () => {
         type: "success",
         message: "If an account exists with this email, a reset link will be sent.",
       });
-    } catch (err) {
+    } catch (_err) {
       // SECURITY: Still show success message to prevent enumeration
       setNotification({
         type: "success",

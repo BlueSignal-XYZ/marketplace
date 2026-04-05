@@ -1,5 +1,5 @@
 // /src/components/elements/marketplace/RequestQuoteModal.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { requestQuote } from "../../../apis/purchasesApi";
 import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";

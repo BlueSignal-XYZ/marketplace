@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ButtonIcon, ButtonLink, ButtonSecondary } from "../button/Button";
+import { ButtonIcon } from "../button/Button";
 import { FaChevronLeft } from "react-icons/fa6";
 
 const Dashboard = styled.main`

@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { logoColors } from "../styles/colors";
 
 export const ACTION_BUTTON = styled(motion.button)`
   padding: 10px 15px;

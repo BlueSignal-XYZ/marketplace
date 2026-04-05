@@ -3,7 +3,7 @@
  * Content: Property-level credit generation from water quality improvements.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 

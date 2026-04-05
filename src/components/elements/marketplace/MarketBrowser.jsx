@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ethers } from "ethers";
 import { NFTCard } from "./elements";
 import { useNavigate } from "react-router-dom";
 import { MarketplaceAPI } from "../../../scripts/back_door";

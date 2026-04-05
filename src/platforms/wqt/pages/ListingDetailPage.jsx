@@ -3,7 +3,7 @@
  * Loading skeleton, error state, tab layout.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Badge } from '../../../design-system/primitives/Badge';

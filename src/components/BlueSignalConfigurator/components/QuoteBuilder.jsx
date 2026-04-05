@@ -1,5 +1,5 @@
 // Quote Builder Component for Sales Configurator
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const QuotePanel = styled.div`

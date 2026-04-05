@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "../../context/AppContext";
@@ -17,21 +17,22 @@ const Notification = () => {
   const type= Object.keys(STATES.notification)?.[0];
   const clearNotification= ACTIONS.clearNotification;
 
-  if (!message) return null;
-
-  // Auto close the notification after 4 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleClose();
-    }, 4000);
-    
-    return () => clearTimeout(timer);
-  }, [type, clearNotification]);
-
   // Close the notification
   const handleClose = () => {
     clearNotification();
   };
+
+  // Auto close the notification after 4 seconds
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      handleClose();
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [type, clearNotification]);
+
+  if (!message) return null;
 
   return (
     <AnimatePresence>

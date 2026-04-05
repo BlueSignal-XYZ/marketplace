@@ -1,5 +1,5 @@
 // Installer Assignment Component - Assign installers to devices/orders
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { DeviceAPI, OrderAPI, UserAPI } from "../../scripts/back_door";
@@ -358,7 +358,7 @@ const InstallerAssignment = () => {
             completed: completedJobs,
             status: pendingJobs > 2 ? "busy" : "available",
           };
-        } catch (e) {
+        } catch (_e) {
           stats[installer.uid] = { pending: 0, completed: 0, status: "available" };
         }
       }

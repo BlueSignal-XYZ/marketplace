@@ -3,7 +3,7 @@
  * Wraps all marketplace routes with the WQT design system theme.
  */
 
-import React, { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -71,7 +71,7 @@ const LoadingFallback = () => (
 
 // ── Landing redirect ──────────────────────────────────────
 
-function MarketplaceLanding({ user, authLoading }) {
+function MarketplaceLanding({ user: _user, authLoading }) {
   if (authLoading) return <LoadingFallback />;
 
   // Always show landing page — authenticated users can navigate away via nav/CTA

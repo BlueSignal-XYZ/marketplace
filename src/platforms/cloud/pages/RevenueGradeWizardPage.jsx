@@ -12,17 +12,15 @@
  * Route: /cloud/devices/:deviceId/revenue-grade/setup
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
-import { Badge } from '../../../design-system/primitives/Badge';
 import { useAppContext } from '../../../context/AppContext';
 import { useToastContext } from '../../../shared/providers/ToastProvider';
 import {
-  useRevenueGradeQuery,
   useEnableRevenueGradeMutation,
   useLogCalibrationMutation,
   useHUCLookupQuery,
@@ -225,7 +223,7 @@ export function RevenueGradeWizardPage() {
   const { deviceId } = useParams();
   const navigate = useNavigate();
   const { STATES } = useAppContext();
-  const user = STATES?.user;
+  const _user = STATES?.user;
   const toast = useToastContext();
 
   const [step, setStep] = useState(0);
@@ -258,7 +256,7 @@ export function RevenueGradeWizardPage() {
 
   // Queries
   const enableMutation = useEnableRevenueGradeMutation();
-  const calMutation = useLogCalibrationMutation();
+  const _calMutation = useLogCalibrationMutation();
   const linkMutation = useLinkWQTMutation();
   const registerMutation = useRegisterProjectMutation();
 

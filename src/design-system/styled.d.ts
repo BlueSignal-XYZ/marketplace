@@ -14,5 +14,6 @@ import 'styled-components';
 import type { WQTTheme } from './themes/wqtTheme';
 
 declare module 'styled-components' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   export interface DefaultTheme extends WQTTheme {}
 }

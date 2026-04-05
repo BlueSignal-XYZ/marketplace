@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import NeptuneIcon from '../../../assets/icon.png';
 import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
@@ -66,42 +66,6 @@ const ProfileForm = styled.form`
 
 
 
-const PasswordButton = styled(motion.div)`
-  background: none;
-  border: none;
-  color: #63c3d1;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 25%;
-  margin-bottom: 10px;
-  transition: all 0.3s ease-in-out;
-
-      ${({ active }) => active && `
-       padding: 10px;
-       border-radius: 0;
-    background: #333;
-    color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 2px #000;
-    `}
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const SaveButton = styled(motion.div)`
-  padding: 10px 20px;
-  background-color: #63c3d1;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  &:hover {
-    background-color: #508a99;
-  }
-`;
-
 const ProfileSettingsTab = () => {
   const { STATES } = useAppContext();
 
@@ -110,7 +74,7 @@ const ProfileSettingsTab = () => {
 
   const { user } = STATES || {};
 
-  const togglePasswordFields = () => {
+  const _togglePasswordFields = () => {
     setShowPasswordFields(!showPasswordFields);
   };
 

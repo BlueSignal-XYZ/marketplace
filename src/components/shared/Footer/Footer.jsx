@@ -1,7 +1,5 @@
 // /workspaces/Marketplace/src/components/shared/Footer/Footer.jsx
-import React from "react";
 import styled from "styled-components";
-import { APP_NAME } from "../../../constants/constants";
 import { isSalesMode, isCloudMode } from "../../../utils/modeDetection";
 
 const StyledFooter = styled.footer`

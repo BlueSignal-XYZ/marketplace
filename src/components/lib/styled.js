@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { style_template } from "./style_templates";
 
 export const WELCOME_LOGO = styled.img``;
 

@@ -3,7 +3,7 @@
  * Fetches real device data + time-series metrics from /v2/ APIs.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { DataCard } from '../../../design-system/primitives/DataCard';
@@ -570,7 +570,7 @@ function RelayControlSection({ deviceId, device }) {
 
 /* ── Revenue Grade Section ─────────────────────────────── */
 
-function RevenueGradeSection({ deviceId, device }) {
+function RevenueGradeSection({ deviceId, device: _device }) {
   const navigate = useNavigate();
   const { data: rgStatus, isLoading } = useRevenueGradeQuery(deviceId);
 

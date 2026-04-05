@@ -4,7 +4,7 @@
  * otherwise falls back to the default 5-step lifecycle.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -267,7 +267,7 @@ const STEPS = [
   },
 ];
 
-export function SolutionSection({ audience, content }) {
+export function SolutionSection({ audience: _audience, content }) {
   // Use audience-specific steps when provided, otherwise default 5-step
   const steps = content?.steps || STEPS;
   const colCount = steps.length;

@@ -1,6 +1,4 @@
 // Layout Diagram SVG Component
-import React from "react";
-
 const LayoutDiagram = ({ product }) => {
   const isFloating = product.deployment === "Floating";
   const hasUltrasonic = product.ultrasonic?.enabled;

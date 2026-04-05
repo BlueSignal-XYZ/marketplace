@@ -1,11 +1,11 @@
 // /src/components/cloud/ProfilePage.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import CloudPageLayout from "./CloudPageLayout";
 import { useAppContext } from "../../context/AppContext";
 import { UserProfileAPI } from "../../scripts/back_door";
-import { ButtonPrimary, ButtonSecondary, ButtonDanger } from "../shared/button/Button";
+import { ButtonPrimary, ButtonSecondary } from "../shared/button/Button";
 import { Input } from "../shared/input/Input";
 import { isDemoMode, setDemoMode } from "../../utils/demoMode";
 

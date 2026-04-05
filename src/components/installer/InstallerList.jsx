@@ -1,5 +1,5 @@
 // Installer List Component - List and manage installers
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserAPI } from "../../scripts/back_door";
@@ -274,7 +274,7 @@ const InstallerList = () => {
             passRate,
             status: pendingJobs > 2 ? "busy" : pendingJobs > 0 ? "active" : "active",
           };
-        } catch (e) {
+        } catch (_e) {
           stats[installer.uid] = { pending: 0, completed: 0, passRate: 0, status: "active" };
         }
       }

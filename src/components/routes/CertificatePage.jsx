@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Loading, Error, Certificate } from "../elements/index";
-import { NUMBERS, formatCertificate } from "../../scripts/helpers";
+import { formatCertificate } from "../../scripts/helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,

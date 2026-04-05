@@ -1,5 +1,4 @@
 // Enclosure Tab Component - Interactive enclosure view with component details
-import React from "react";
 import styled from "styled-components";
 import { EnclosureView } from "../diagrams";
 

@@ -1,5 +1,5 @@
 // Save Quote Modal - Collects customer and site info to persist quote
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CustomerAPI, SiteAPI } from "../../scripts/back_door";
 import orderService from "../../services/orderService";

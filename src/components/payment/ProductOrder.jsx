@@ -3,7 +3,6 @@
  * 
  * Purpose: Provides order details about credits and allows users to enter quantity for purchase given the supply is available.
  */
-import React from "react";
 import {Description, FormInfo, FormInputs, FormWrapper, InputBox, Title} from "./styled";
 import {Button} from "react-bootstrap";
 

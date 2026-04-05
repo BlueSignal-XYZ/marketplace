@@ -1,5 +1,4 @@
 // GPIO Tab Component
-import React from "react";
 import { SectionTitle, GpioSection, GpioTitle, GpioList, Table, Th, Td } from "../../styles";
 import { GPIO_PINOUT, GPIO_TYPE_COLORS } from "../../data";
 

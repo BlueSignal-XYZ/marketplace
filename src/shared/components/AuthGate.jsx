@@ -14,7 +14,6 @@
  *   </AuthGate>
  */
 
-import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 import { Welcome } from '../../routes';

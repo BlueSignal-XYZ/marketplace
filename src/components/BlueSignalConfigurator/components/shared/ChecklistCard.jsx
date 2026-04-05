@@ -1,5 +1,5 @@
 // Interactive Checklist Card Component
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const CardWrapper = styled.div`
@@ -176,7 +176,7 @@ const ChecklistCard = ({
       if (stored) {
         try {
           return JSON.parse(stored);
-        } catch (e) {
+        } catch (_e) {
           return {};
         }
       }

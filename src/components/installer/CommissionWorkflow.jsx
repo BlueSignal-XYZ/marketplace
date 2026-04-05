@@ -1,5 +1,5 @@
 // Commission Workflow Component - Full commissioning workflow for installers
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import commissionService from "../../services/commissionService";

@@ -1,5 +1,4 @@
 // Layout Tab Component
-import React from "react";
 import { SectionTitle, SvgContainer } from "../../styles";
 import { LayoutDiagram } from "../diagrams";
 

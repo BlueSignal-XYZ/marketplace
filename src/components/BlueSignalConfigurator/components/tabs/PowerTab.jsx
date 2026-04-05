@@ -1,5 +1,4 @@
 // Power Tab Component
-import React from "react";
 import { SectionTitle, SpecGrid, SpecCard, SpecLabel, SpecValue, Table, Th, Td, TotalRow } from "../../styles";
 
 const PowerTab = ({ product }) => {

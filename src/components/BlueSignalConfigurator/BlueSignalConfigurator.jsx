@@ -1,5 +1,5 @@
 // BlueSignal Product Configurator - Main Component
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { PRODUCTS, BUNDLES, calculateBundlePrice } from "./data";
 import bluesignalLogo from "../../assets/bluesignal-logo.png";
 import { generateQuotePDF, generateSpecsPDF } from "./utils";
@@ -8,9 +8,6 @@ import { BLUESIGNAL_ORGANIZATION_SCHEMA, SALES_WEBSITE_SCHEMA, createProductSche
 import {
   ConfiguratorWrapper,
   Container,
-  Header,
-  Logo,
-  Tagline,
   NavTabs,
   NavTab,
   FilterBar,
@@ -51,11 +48,6 @@ import {
   LayoutTab,
   WiringTab,
   PowerTab,
-  GpioTab,
-  CalibrationTab,
-  InstallationTab,
-  MaintenanceTab,
-  BomTab,
   // Enhanced tabs
   SpecsTab,
   EnhancedBomTab,

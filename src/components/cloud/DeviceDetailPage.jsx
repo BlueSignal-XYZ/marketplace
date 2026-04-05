@@ -1,5 +1,5 @@
 // /src/components/cloud/DeviceDetailPage.jsx
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { Line } from "react-chartjs-2";
@@ -895,7 +895,7 @@ export default function DeviceDetailPage() {
                   </h3>
                   <InfoGrid>
                     {Object.entries(readings)
-                      .filter(([key, value]) => value !== null) // Filter out null values (sensor not applicable)
+                      .filter(([_key, value]) => value !== null) // Filter out null values (sensor not applicable)
                       .map(([key, value]) => (
                         <InfoCard key={key}>
                           <div className="label">{formatSensorLabel(key)}</div>
@@ -1117,7 +1117,7 @@ export default function DeviceDetailPage() {
                   {readings && (
                     <InfoGrid>
                       {Object.entries(readings)
-                        .filter(([key, value]) => value !== null)
+                        .filter(([_key, value]) => value !== null)
                         .map(([key, value]) => (
                           <InfoCard key={key}>
                             <div className="label">{formatSensorLabel(key)}</div>

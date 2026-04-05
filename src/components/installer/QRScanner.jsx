@@ -3,7 +3,7 @@
  * Scans BlueSignal device QR codes for commissioning
  */
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Html5Qrcode } from "html5-qrcode";
 import axios from "axios";
@@ -251,7 +251,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
         try {
           const url = new URL(decodedText);
           qrData = url.searchParams.get("d") || decodedText;
-        } catch (e) {
+        } catch (_e) {
           // Not a URL, use as-is
         }
       }

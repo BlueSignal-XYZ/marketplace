@@ -3,7 +3,6 @@
  * Wraps children in QueryClientProvider with sensible defaults.
  */
 
-import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({

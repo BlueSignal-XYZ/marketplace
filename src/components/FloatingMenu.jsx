@@ -1,7 +1,6 @@
 import { faCalculator, faHome, faShop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
-import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { logoColors } from '../styles/colors';

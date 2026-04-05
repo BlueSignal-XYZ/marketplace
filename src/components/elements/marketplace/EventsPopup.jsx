@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { colors } from "../../../styles/colors";
 import { Badge } from "../../shared/Badge/Badge";
 import { FaChevronDown } from "react-icons/fa";
 import Spinner from "../../shared/Spinner/Spinner";
 import { MarketplaceAPI } from "../../../scripts/back_door";
-import {Button} from "react-bootstrap";
 import {FaX} from "react-icons/fa6";
 
 const FullScreenWrapper = styled.div`
@@ -151,7 +149,7 @@ const EventDetail = ({ event, filterType }) => {
         initial="initial"
         animate={isOpen ? "open" : "collapsed"}
       >
-        {Object.entries(mainInfo).map(([key, value], idx) => (
+        {Object.entries(mainInfo).map(([_key, value], idx) => (
           <Event key={idx}>
             <p key={idx}>{value}</p>
             <FaChevronDown />

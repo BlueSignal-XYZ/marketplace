@@ -5,7 +5,7 @@
  * Explains the complete on-ramp from monitoring device to tradeable credits.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 

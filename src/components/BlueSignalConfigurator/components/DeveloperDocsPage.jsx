@@ -1,5 +1,5 @@
 // DeveloperDocsPage - Technical documentation for developers
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { salesTheme } from "../styles/theme";
 import SalesHeader from "./SalesHeader";

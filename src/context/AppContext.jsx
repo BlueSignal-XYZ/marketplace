@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, isFirebaseConfigured } from "../apis/firebase";
 import { UserProfileAPI } from "../scripts/back_door";
@@ -73,7 +73,7 @@ export const AppProvider = ({ children }) => {
             sessionStorage.setItem("user", JSON.stringify(fallbackUser));
             setUser(fallbackUser);
           }
-        } catch (error) {
+        } catch (_error) {
           // Still set Firebase user so they're not stuck
           // SECURITY: Do not assign default role client-side
           const fallbackUser = {
@@ -115,7 +115,7 @@ export const AppProvider = ({ children }) => {
         setUser(userdata);
         return true;
       }
-    } catch (error) {
+    } catch (_error) {
       logNotification("error", "Failed to update user data. Please try again.");
     }
     return null;
@@ -153,7 +153,7 @@ export const AppProvider = ({ children }) => {
       localStorage.removeItem("cloud_welcome_dismissed"); // Reset welcome banner
       setUser(null);
       window.location.href = "/";
-    } catch (error) {
+    } catch (_error) {
       logNotification("error", "Logout failed. Please try again.");
     }
   };

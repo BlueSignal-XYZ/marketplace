@@ -1,8 +1,8 @@
 // Order Detail Component - View and manage individual order
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { OrderAPI, CustomerAPI, SiteAPI, DeviceAPI } from "../../scripts/back_door";
+import { OrderAPI, CustomerAPI, SiteAPI } from "../../scripts/back_door";
 import orderService from "../../services/orderService";
 import { useAppContext } from "../../context/AppContext";
 

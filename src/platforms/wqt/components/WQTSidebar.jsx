@@ -3,7 +3,6 @@
  * 5 nav items with active state via NavLink. Shows only on desktop.
  */
 
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Home, TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
 import { motion } from "framer-motion";
@@ -8,7 +8,6 @@ import { STRING, logDev } from "../../../scripts/helpers";
 import { AssetAPI, UserAPI } from "../../../scripts/back_door";
 import AssetCard from "./AssetCard";
 import { ButtonPrimary } from "../../shared/button/Button";
-import { Badge } from "../../shared/Badge/Badge";
 import { useAppContext } from "../../../context/AppContext";
 import { useToastContext } from "../../../shared/providers/ToastProvider";
 import { Button as DesignButton } from "../../../design-system/primitives/Button";
@@ -29,53 +28,6 @@ const neptuneColorPalette = {
   white: "#e9ecef",
   navy: "#003459",
 };
-
-const ModalOverlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 65, 93, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-`;
-
-const ModalContainer = styled(motion.div)`
-  background-color: white;
-  padding: 50px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 1000px;
-  position: relative;
-  background-color: white;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); // Soft glow effect
-  backdrop-filter: blur(8px);
-  border: 1px solid ${neptuneColorPalette.lightBlue};
-  box-sizing: border-box;
-
-  @media (min-width: 768px) {
-    width: 80%;
-  }
-`;
-
-const CloseButton = styled(motion.button)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #222;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.3s;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
 
 const TabContainer = styled.div`
   display: flex;
@@ -163,33 +115,6 @@ const Loading = styled.div`
     }
     100% {
       transform: rotate(360deg);
-    }
-  }
-`;
-
-const ErrorMsg = styled.div`
-  margin-top: 20px;
-  font-size: 18px;
-  color: red;
-  animation: shake 0.5s;
-
-  @keyframes shake {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    10%,
-    30%,
-    50%,
-    70%,
-    90% {
-      transform: translateX(-10px);
-    }
-    20%,
-    40%,
-    60%,
-    80% {
-      transform: translateX(10px);
     }
   }
 `;
@@ -294,13 +219,6 @@ const ErrorText = styled.span`
   color: ${({ theme }) => theme.colors?.text ?? '#1e293b'};
 `;
 
-// Framer Motion variants for animations
-const tabVariants = {
-  initial: { x: -10, opacity: 0 },
-  animate: { x: 0, opacity: 1, transition: { type: "spring", stiffness: 300 } },
-  exit: { x: 10, opacity: 0 },
-};
-
 function VerificationUI() {
   const { STATES, ACTIONS } = useAppContext();
   const navigate = useNavigate();
@@ -324,8 +242,8 @@ function VerificationUI() {
     navigate(uploadPath);
   };
 
-  const { user, verificationUIOpen, verificationData } = STATES || {};
-  const { setTxPopupVisible, setResult, setVerificationData } = ACTIONS || {};
+  const { user, verificationUIOpen: _verificationUIOpen, verificationData } = STATES || {};
+  const { setTxPopupVisible, setResult, setVerificationData: _setVerificationData } = ACTIONS || {};
 
   const { assetID } = verificationData || {};
 

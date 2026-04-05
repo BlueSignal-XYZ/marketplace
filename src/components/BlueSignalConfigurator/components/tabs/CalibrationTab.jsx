@@ -1,5 +1,4 @@
 // Calibration Tab Component
-import React from "react";
 import { SectionTitle } from "../../styles";
 import { CALIBRATION } from "../../data";
 

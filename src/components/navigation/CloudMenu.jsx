@@ -1,5 +1,4 @@
 // /src/components/navigation/CloudMenu.jsx
-import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";

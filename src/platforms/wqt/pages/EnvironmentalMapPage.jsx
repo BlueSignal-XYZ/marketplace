@@ -3,7 +3,7 @@
  * Plots sensor stations with color-coded markers by status.
  */
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';

@@ -1,5 +1,5 @@
 // Site List Component - Displays and manages sites
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { SiteAPI, CustomerAPI } from "../../scripts/back_door";
@@ -247,7 +247,7 @@ const SiteList = () => {
           if (customer) {
             customerData[id] = customer;
           }
-        } catch (e) {
+        } catch (_e) {
           // Ignore
         }
       }

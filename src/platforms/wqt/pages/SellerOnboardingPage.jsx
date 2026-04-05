@@ -3,7 +3,7 @@
  * Steps: Welcome → Organization → Verification → Devices → Review
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';

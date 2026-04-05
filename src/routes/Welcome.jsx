@@ -1,5 +1,5 @@
 // /src/routes/Welcome.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const ReceiptModal = styled.div`
@@ -59,48 +59,11 @@ const Value = styled.span`
   font-weight: 300;
 `;
 
-const Logs = styled.div`
-  margin-top: 2rem;
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
-`;
-
-const LogItem = styled.div`
-  margin-bottom: 1rem;
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const LogDetails = styled.div`
-  background-color: #f8f9fa;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  border-radius: 8px;
-  display: none;
-  &.open {
-    display: block;
-  }
-`;
-
-const ExpandButton = styled.button`
-  background: #007bff;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    background: #0056b3;
-  }
-`;
-
 const TransactionReceipt = ({ receipt, onClose }) => {
-  const [openLogs, setOpenLogs] = useState({});
+  const [_openLogs, _setOpenLogs] = useState({});
 
-  const toggleLogDetail = index => {
-    setOpenLogs(prevState => ({
+  const _toggleLogDetail = index => {
+    _setOpenLogs(prevState => ({
       ...prevState,
       [index]: !prevState[index]
     }));

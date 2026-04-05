@@ -1,5 +1,5 @@
 // Device Allocation Component - Allocate inventory devices to orders
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { DeviceAPI, OrderAPI } from "../../scripts/back_door";

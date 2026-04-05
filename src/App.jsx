@@ -5,7 +5,7 @@
  * ~90 lines. All routing and layout logic lives in src/platforms/.
  */
 import "./App.css";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
@@ -19,7 +19,6 @@ import { WQTApp } from "./platforms/wqt/WQTApp";
 import { CloudApp } from "./platforms/cloud/CloudApp";
 
 // Legacy sales/landing (backward compat when accessed via ?app=landing)
-import BlueSignalConfigurator from "./components/BlueSignalConfigurator";
 import { SalesPage, AboutPage, FAQPage, ContactPage, LegalPage, DeveloperDocsPage } from "./components/BlueSignalConfigurator/components";
 
 // ── Build version (debug only) ────────────────────────────
@@ -77,16 +76,16 @@ function PageTracker() {
 
 // ── App root ──────────────────────────────────────────────
 function App() {
+  const { STATES } = useAppContext();
+  const { user, authLoading } = STATES || {};
+  const mode = getAppMode();
+
   if (!isFirebaseConfigured) {
     return <ConfigurationError error={firebaseConfigError} />;
   }
 
   // Initialize GA4 once (no-ops if env var is empty)
   initGA(import.meta.env.VITE_GA4_MEASUREMENT_ID);
-
-  const { STATES } = useAppContext();
-  const { user, authLoading } = STATES || {};
-  const mode = getAppMode();
 
   const isDev = import.meta.env.DEV || import.meta.env.VITE_DEBUG === "true";
   if (isDev) console.log("BUILD:", BUILD_VERSION, "| MODE:", mode);

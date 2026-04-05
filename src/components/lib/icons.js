@@ -1,4 +1,4 @@
-import { faBroadcastTower, faChartSimple, faCircleCheck, faDollarSign, faHome, faHourglassHalf, faLeaf, faMoneyBill1, faPhotoFilm, faQuestion, faSackDollar, faShop, faStream, faUpload, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faBroadcastTower, faChartSimple, faCircleCheck, faDollarSign, faHome, faHourglassHalf, faLeaf, faMoneyBill1, faPhotoFilm, faQuestion, faSackDollar, faShop, faUpload, faWallet } from '@fortawesome/free-solid-svg-icons';
 
 const getIcon = (icon) => {
   switch (icon) {

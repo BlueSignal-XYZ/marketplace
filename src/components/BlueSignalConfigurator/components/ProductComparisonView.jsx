@@ -1,5 +1,4 @@
 // Product Comparison Modal Component
-import React from "react";
 import {
   ComparisonModal,
   ComparisonContent,

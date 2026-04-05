@@ -7,7 +7,7 @@
  * - Device binding to orders/sites/customers
  */
 
-import { DeviceAPI, OrderAPI, SiteAPI, CustomerAPI } from '../scripts/back_door';
+import { DeviceAPI, OrderAPI } from '../scripts/back_door';
 import HubSpotAPI from '../apis/hubspot';
 
 // Valid lifecycle state transitions

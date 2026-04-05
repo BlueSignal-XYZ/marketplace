@@ -3,17 +3,16 @@
  * Wired to /v2/market/stats, /v2/credits/portfolio.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ShoppingCart, Cpu, Search, TrendingUp, ArrowRight } from 'lucide-react';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Badge } from '../../../design-system/primitives/Badge';
-import { Button } from '../../../design-system/primitives/Button';
 import { Table } from '../../../design-system/primitives/Table';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
-import { getMarketStats, getPortfolio, ApiError } from '../../../services/v2/client';
+import { getMarketStats, getPortfolio } from '../../../services/v2/client';
 import { useAppContext } from '../../../context/AppContext';
 
 /* ── Layout ─────────────────────────────────────────────── */

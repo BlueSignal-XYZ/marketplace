@@ -1,5 +1,4 @@
 // LegalPage - Simple legal information pages for the sales portal
-import React from "react";
 import styled from "styled-components";
 import { useLocation, Link } from "react-router-dom";
 import { salesTheme } from "../styles/theme";

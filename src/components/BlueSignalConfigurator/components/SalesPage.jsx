@@ -1,9 +1,9 @@
 // SalesPage - Unified single-page layout for the sales portal
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { salesTheme } from "../styles/theme";
-import { PRODUCTS, BUNDLES, calculateBundlePrice } from "../data";
+import { PRODUCTS } from "../data";
 import useFormSubmit from "../hooks/useFormSubmit";
 
 // Components

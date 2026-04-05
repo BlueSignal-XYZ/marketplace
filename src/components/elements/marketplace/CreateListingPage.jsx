@@ -2,7 +2,7 @@
 /**
  * Create Listing Page - Allow sellers to list nutrient credits for sale
  */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../context/AppContext";

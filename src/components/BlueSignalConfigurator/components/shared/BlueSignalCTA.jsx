@@ -1,5 +1,4 @@
 // BlueSignal CTA Component - Cross-linking to BlueSignal.xyz
-import React from 'react';
 import styled from 'styled-components';
 
 const CTAButton = styled.a`

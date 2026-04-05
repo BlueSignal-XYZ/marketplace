@@ -3,7 +3,7 @@
  * Uses same Google Sheets backend as BlueSignal, with source field to distinguish leads.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
 
@@ -239,7 +239,7 @@ const INQUIRY_OPTIONS = [
   'General Inquiry',
 ];
 
-export function CTASection({ audience, content }) {
+export function CTASection({ audience: _audience, content }) {
   const [form, setForm] = useState({
     name: '',
     email: '',

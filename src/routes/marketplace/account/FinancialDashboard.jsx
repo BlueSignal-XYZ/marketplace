@@ -1,5 +1,5 @@
 // /src/routes/FinancialDashboard.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Line, Doughnut } from "react-chartjs-2";

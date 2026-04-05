@@ -1,5 +1,5 @@
 // ProductCatalogSection - Unified product catalog for the sales portal
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import styled, { keyframes } from "styled-components";
 import { salesTheme } from "../styles/theme";
 import { PRODUCTS, BUNDLES, calculateBundlePrice } from "../data";

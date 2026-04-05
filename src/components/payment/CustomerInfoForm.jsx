@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import styled from 'styled-components';
-import {InputBox} from './styled';
 import { Input } from '../shared/input/Input';
 import FormSection from '../shared/FormSection/FormSection';
 import { ButtonPrimary } from '../shared/button/Button';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -156,7 +156,7 @@ const RegisterForm = ({
       // Best-effort backend account creation
       try {
         await AccountAPI.create(newUser);
-      } catch (err) {
+      } catch (_err) {
         // Non-fatal - account may already exist
       }
 
@@ -168,7 +168,7 @@ const RegisterForm = ({
       if (!updatedOK) {
         try {
           sessionStorage.setItem("user", JSON.stringify(newUser));
-        } catch (e) {
+        } catch (_e) {
           // Silent fail
         }
       }
@@ -264,7 +264,7 @@ const RegisterForm = ({
       // Best-effort backend account creation
       try {
         await AccountAPI.create(newUser);
-      } catch (err) {
+      } catch (_err) {
         // Non-fatal - account may already exist
       }
 
@@ -276,7 +276,7 @@ const RegisterForm = ({
       if (!updatedOK) {
         try {
           sessionStorage.setItem("user", JSON.stringify(newUser));
-        } catch (e) {
+        } catch (_e) {
           // Silent fail
         }
       }

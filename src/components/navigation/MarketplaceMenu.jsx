@@ -3,7 +3,6 @@
  * Updated for new site architecture: How It Works, Audiences, Registry, Ecosystem.
  */
 
-import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";

@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
-import { AnimatePresence } from 'framer-motion';
 import { RegistryCredit, mockRegistryCredits } from '../../data/mockRegistryData';
 import { fetchRegistryCredits } from '../../services/wqtDataService';
 import { isDemoMode } from '../../utils/demoMode';

@@ -3,7 +3,7 @@
  * Fetches real device fleet + alerts from /v2/ APIs.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Activity, BellRing, TrendingUp, Plus, ChevronRight } from 'lucide-react';

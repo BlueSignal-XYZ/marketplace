@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -13,7 +13,6 @@ import {
   PageSubtitle,
   SectionHeading,
   Card,
-  FiltersRow,
   FilterChip,
   StatusBadge,
   PrimaryButton,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const EnclosureLayout = ({ product }) => {
   const [hoveredComponent, setHoveredComponent] = useState(null);

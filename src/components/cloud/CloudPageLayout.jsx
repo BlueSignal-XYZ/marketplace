@@ -1,5 +1,4 @@
 // /src/components/cloud/CloudPageLayout.jsx
-import React from "react";
 import styled from "styled-components";
 
 const Page = styled.main`

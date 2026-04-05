@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';

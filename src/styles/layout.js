@@ -146,7 +146,7 @@ export const Grid = styled.div`
   );
   gap: ${({ $gap }) => $gap || "16px"};
 
-  ${({ $cols, $responsive }) =>
+  ${({ $cols: _$cols, $responsive }) =>
     $responsive &&
     css`
       ${media.mobileOnly} {

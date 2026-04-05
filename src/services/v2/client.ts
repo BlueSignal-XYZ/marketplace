@@ -11,12 +11,10 @@ import { getAuth } from 'firebase/auth';
 import configs from '../../../configs';
 import type {
   ApiResponse,
-  PaginatedResponse,
   MarketStats,
   MarketTicker,
   MarketSearchParams,
   MarketSearchResponse,
-  ListingSummary,
   Listing,
   PublicSensor,
   Watershed,

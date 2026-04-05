@@ -1,5 +1,5 @@
 // SalesLandingHero - Landing section for sales.bluesignal.xyz
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const HeroWrapper = styled.div`

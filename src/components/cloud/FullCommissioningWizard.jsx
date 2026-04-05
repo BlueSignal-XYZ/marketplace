@@ -3,7 +3,7 @@
  * Full 7-Step Commissioning Wizard
  * Uses the real backend API via useCommission hook
  */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";

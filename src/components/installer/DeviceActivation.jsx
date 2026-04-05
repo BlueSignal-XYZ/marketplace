@@ -1,8 +1,8 @@
 // Device Activation Component - Activate device after successful commission
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { DeviceAPI, CustomerAPI, CommissionAPI } from "../../scripts/back_door";
+import { DeviceAPI, CustomerAPI } from "../../scripts/back_door";
 import commissionService from "../../services/commissionService";
 import { useAppContext } from "../../context/AppContext";
 

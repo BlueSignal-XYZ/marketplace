@@ -72,14 +72,14 @@ const SEOHead = ({
   title,
   description,
   canonical,
-  ogImage,
+  ogImage = '',
   ogType = 'website',
   jsonLd,
   noindex = false,
   keywords,
-  author,
-  publishedTime,
-  modifiedTime,
+  author = '',
+  publishedTime = '',
+  modifiedTime = '',
 }) => {
   const currentSite = getCurrentSite();
   const config = SITE_CONFIG[currentSite] || SITE_CONFIG['waterquality.trading'];

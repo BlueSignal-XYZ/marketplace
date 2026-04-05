@@ -1,5 +1,5 @@
 // src/components/shared/PropertyMap.jsx
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";

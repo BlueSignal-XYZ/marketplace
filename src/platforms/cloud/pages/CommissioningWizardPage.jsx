@@ -4,18 +4,16 @@
  * Wired to /v2/devices/check, /v2/devices/test-connection, /v2/devices/commission
  */
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';
-import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { useAppContext } from '../../../context/AppContext';
 import { useToastContext } from '../../../shared/providers/ToastProvider';
 import {
   checkDevice,
   testDeviceConnection,
-  getSites,
   ApiError,
 } from '../../../services/v2/api';
 import { useCommissionDeviceMutation } from '../../../shared/hooks/useApiQueries';

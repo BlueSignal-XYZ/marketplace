@@ -1,5 +1,4 @@
 // Bundles Section Component - Quick-add pre-configured packages
-import React from "react";
 import styled from "styled-components";
 
 const BundlesWrapper = styled.div`

@@ -3,7 +3,6 @@
  * Matches the hero section Eyebrow aesthetic.
  */
 
-import React from 'react';
 import styled from 'styled-components';
 
 const SPRING = 'cubic-bezier(0.16, 1, 0.3, 1)';

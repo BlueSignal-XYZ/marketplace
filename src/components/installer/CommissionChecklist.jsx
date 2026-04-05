@@ -1,5 +1,5 @@
 // Commission Checklist Component - Interactive checklist for installers
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const ChecklistContainer = styled.div`

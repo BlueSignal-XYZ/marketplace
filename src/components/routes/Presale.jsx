@@ -6,7 +6,7 @@
  * Creates a lineItems with the featured producer's item/priceID and quantity
  * Load checkout process if isPaying.
  */
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTransition } from "react-spring";
 import Payment from "../payment/Payment";
 

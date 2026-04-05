@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../../design-system/primitives/Button';
 import { Input } from '../../../design-system/primitives/Input';

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapProject, getProjectsByType, getCreditTypeColor, mockMapProjects } from '../../data/mockMapData';
+import { MapProject, getCreditTypeColor, mockMapProjects } from '../../data/mockMapData';
 import { fetchMapProjects } from '../../services/wqtDataService';
 import { isDemoMode } from '../../utils/demoMode';
 import SEOHead from '../../components/seo/SEOHead';

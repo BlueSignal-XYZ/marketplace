@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { DeviceAPI } from '../../scripts/back_door';
 import { useAppContext } from '../../context/AppContext';

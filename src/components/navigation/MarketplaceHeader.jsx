@@ -5,7 +5,7 @@
  * Nav items: Marketplace · How It Works · Solutions ▾ · Credit Registry · [Get Started]
  */
 
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

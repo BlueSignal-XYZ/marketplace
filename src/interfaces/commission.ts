@@ -1,7 +1,7 @@
 // Commission entity for the commercial pipeline
 // Represents the commissioning workflow for BlueSignal devices
 
-import { CommissionResult, CommissionTest, CommissionTestId, CommissionTestStatus } from './device';
+import { CommissionResult, CommissionTest, CommissionTestId } from './device';
 
 export interface Commission {
   id: string;

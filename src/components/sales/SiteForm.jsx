@@ -1,5 +1,5 @@
 // Site Form Component - Create/Edit site
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { SiteAPI, CustomerAPI } from "../../scripts/back_door";

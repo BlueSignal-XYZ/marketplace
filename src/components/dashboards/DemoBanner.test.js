@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 /**
  * Tests that Sample Data banners in BuyerDashboard and SellerDashboard

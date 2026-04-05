@@ -1,5 +1,5 @@
 // /src/components/cloud/SiteDetailPage.jsx
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { GoogleMap, LoadScript, Marker, Polygon } from "@react-google-maps/api";

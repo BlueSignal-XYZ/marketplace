@@ -2,7 +2,7 @@
 
 import { ethers } from "ethers";
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, Tab, TabList, TabPanel } from "react-tabs";
 import styled from "styled-components";

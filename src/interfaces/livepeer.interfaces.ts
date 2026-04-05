@@ -119,8 +119,8 @@ export interface RequestUpload {
     profiles?: TranscodeProfile[]; // Array of transcode profiles
     targetSegmentSizeSecs?: number; // Duration of each output segment in seconds
   }, 
-  options?: {}, //Used to set various options for making HTTP requests.
-  fetchOptions?:{} // Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All Request options, except method and body, are allowed.
+  options?: Record<string, unknown>, //Used to set various options for making HTTP requests.
+  fetchOptions?: Record<string, unknown> // Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All Request options, except method and body, are allowed.
 }
 
 export interface RequestUploadResponse {

@@ -1,5 +1,4 @@
 // Overview Tab Component
-import React from "react";
 import { SectionTitle, FeatureList, FeatureItem, SpecGrid, SpecCard, SpecLabel, SpecValue } from "../../styles";
 
 const OverviewTab = ({ product }) => (

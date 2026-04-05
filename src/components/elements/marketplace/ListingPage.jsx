@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { ethers } from "ethers";
@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import PoSPopup from "./elements/PoSPopup";
-import { formatLongString } from "../../../scripts/utils";
 import placeholder from "../../../assets/icon.png";
 import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
 import { DashboardPage } from "../../shared/DashboardPage/DashboardPage";

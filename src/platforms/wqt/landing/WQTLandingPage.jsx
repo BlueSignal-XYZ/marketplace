@@ -4,7 +4,7 @@
  * Supports dual-audience toggle (Homeowner / Utility).
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { AUDIENCE_CONTENT } from './audienceContent';
 import { HeroSection } from './HeroSection';

@@ -7,7 +7,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ButtonPrimary } from "./shared/button/Button";
 import { DashboardPage } from "./shared/DashboardPage/DashboardPage";
@@ -309,7 +309,7 @@ const nutrientData = {
   },
 };
 
-const NutrientCalculator = ({ isOpen, onClose }) => {
+const NutrientCalculator = ({ isOpen: _isOpen, onClose: _onClose }) => {
   const [crop, setCrop] = useState("Corn Grain");
   const [yieldPerAcre, setYieldPerAcre] = useState("");
   const [isLoading, setIsLoading] = useState(false);

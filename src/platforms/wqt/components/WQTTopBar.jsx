@@ -3,7 +3,7 @@
  * Left: WQT logo, Center (desktop >=1024px): search placeholder, Right: notification bell + user avatar dropdown.
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { Search, User, ChevronDown, LogOut } from 'lucide-react';

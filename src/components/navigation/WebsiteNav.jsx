@@ -6,7 +6,7 @@
  * Solutions dropdown contains: For Utilities, For Homeowners, For Aggregators, For Generators
  */
 
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -470,7 +470,7 @@ function SolutionsDropdown() {
 
 // ── Component ───────────────────────────────────────────
 
-export function WebsiteNav({ onMenuClick }) {
+export function WebsiteNav({ onMenuClick: _onMenuClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const { STATES } = useAppContext();

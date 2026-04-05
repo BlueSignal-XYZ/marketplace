@@ -1,5 +1,5 @@
 // EnhancedWiringDiagram - Realistic wiring diagram with wire runs and test points
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { WIRING_DIAGRAMS, WIRE_LEGEND } from "../../data";
 
@@ -282,7 +282,7 @@ const getWireColor = (type, color) => {
 };
 
 const EnhancedWiringDiagram = ({ product }) => {
-  const [hoveredWire, setHoveredWire] = useState(null);
+  const [_hoveredWire, _setHoveredWire] = useState(null);
   const diagram = WIRING_DIAGRAMS[product.id];
 
   if (!diagram) {

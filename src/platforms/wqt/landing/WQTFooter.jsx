@@ -3,7 +3,6 @@
  * Updated navigation, ecosystem links, and legal.
  */
 
-import React from 'react';
 import styled from 'styled-components';
 
 const FooterWrapper = styled.div`

@@ -4,11 +4,10 @@
  * Renders as a centered modal overlay.
  */
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Button } from '../../design-system/primitives/Button';
 import { Input } from '../../design-system/primitives/Input';
-import { useAppContext } from '../../context/AppContext';
 
 // Firebase
 import {
