@@ -2,7 +2,6 @@ import styled, { keyframes } from 'styled-components';
 import { Container, Section, SectionLabel, SectionTitle, SectionDesc } from '../styles/typography';
 import RevealOnScroll from '../components/RevealOnScroll';
 import WiringDiagram from '../components/WiringDiagram';
-import SystemDiagram from '../components/SystemDiagram';
 
 /* ── Section layout ─────────────────────────────────────── */
 
@@ -372,30 +371,8 @@ const ArchitectureSection = () => (
 
       <Grid>
         <RevealOnScroll>
-          <DiagramHeader>
-            <DiagramLabel>Board Layout</DiagramLabel>
-            <DiagramTitle>Inside the WQM-1.</DiagramTitle>
-            <DiagramDesc>
-              Component placement and signal routing on the
-              WQM-1 Rev&nbsp;2.1&nbsp;PCB.
-            </DiagramDesc>
-          </DiagramHeader>
           <DiagramWrapper>
             <WiringDiagram />
-          </DiagramWrapper>
-        </RevealOnScroll>
-
-        <RevealOnScroll>
-          <DiagramHeader>
-            <DiagramLabel>System Overview</DiagramLabel>
-            <DiagramTitle>How it all connects.</DiagramTitle>
-            <DiagramDesc>
-              Sensors, radio, relay output, and expansion — see how each
-              subsystem wires into the WQM-1&nbsp;board.
-            </DiagramDesc>
-          </DiagramHeader>
-          <DiagramWrapper>
-            <SystemDiagram />
           </DiagramWrapper>
         </RevealOnScroll>
 
