@@ -1,0 +1,65 @@
+# CI Quality Gates
+# Runs lint, type check, and tests on every pull request
+
+name: CI Quality Gates
+'on':
+  pull_request:
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci --force
+
+      - name: ESLint
+        # TODO: Remove continue-on-error once existing lint issues are resolved
+        continue-on-error: true
+        run: npm run lint
+
+      - name: Prettier check
+        # TODO: Remove continue-on-error once existing formatting is standardized
+        continue-on-error: true
+        run: npm run format:check
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci --force
+
+      - name: TypeScript
+        run: npm run typecheck
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci --force
+
+      - name: Run tests with coverage
+        run: npm run test:coverage

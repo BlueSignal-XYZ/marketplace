@@ -13,7 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - run: npm ci --force
-      - run: npm run test:ci
       - name: Build all sites
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}

@@ -49,8 +49,23 @@
     "test:ci": "vitest run --reporter=verbose",
     "test:integration": "firebase emulators:exec --only auth,database,functions 'npx vitest run --config vitest.integration.config.ts'",
     "emulators:start": "firebase emulators:start --only auth,database,functions",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "typecheck": "tsc --noEmit",
     "seed": "node scripts/seed-data.js",
-    "seed:clear": "node scripts/seed-data.js --clear"
+    "seed:clear": "node scripts/seed-data.js --clear",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --max-warnings 0",
+      "prettier --write"
+    ],
+    "src/**/*.{json,css}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -113,6 +128,8 @@
     "@types/mapbox-gl": "^3.4.1",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-react": "^4.0.3",
     "@vitest/coverage-v8": "^4.0.14",
     "@vitest/ui": "^4.0.14",
@@ -123,7 +140,10 @@
     "firebase-admin": "^13.6.1",
     "firebase-tools": "^15.7.0",
     "happy-dom": "^20.0.11",
+    "husky": "^9.1.7",
     "jsdom": "^27.2.0",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
     "sharp": "^0.34.5",
     "typescript": "^5.9.3",
     "vite": "^4.4.5",

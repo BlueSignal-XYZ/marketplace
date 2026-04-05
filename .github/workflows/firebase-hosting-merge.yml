@@ -29,8 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm ci --force
 
+      - name: Lint
+        # TODO: Remove continue-on-error once existing lint issues are resolved
+        continue-on-error: true
+        run: npm run lint
+
       - name: Type check
-        run: npx tsc --noEmit || true
+        run: npm run typecheck
 
       - name: Run tests
         run: npm run test:ci
