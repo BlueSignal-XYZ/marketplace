@@ -167,7 +167,7 @@ export const createProjectFromSite = async (siteId, projectDetails, organization
 /**
  * Link a device to a project
  */
-export const linkDeviceToProject = async (project, deviceId, role = 'primary') => {
+export const linkDeviceToProject = async (project, deviceId, _role = 'primary') => {
   // Verify device exists
   const device = await DeviceAPI.getDeviceDetails(deviceId);
   if (!device) {

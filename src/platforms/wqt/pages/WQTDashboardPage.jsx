@@ -180,14 +180,6 @@ const GettingStartedWrap = styled.div`
   margin-bottom: 32px;
 `;
 
-const GettingStartedTitle = styled.h2`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 22px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 4px;
-`;
-
 const GettingStartedSub = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 14px;
@@ -409,9 +401,6 @@ export function WQTDashboardPage() {
   // Break down holdings by type
   const qcCredits = holdings
     .filter((h) => h.nutrientType === 'quality' || h.nutrientType === 'phosphorus')
-    .reduce((s, h) => s + (h.quantity || 0), 0);
-  const kcCredits = holdings
-    .filter((h) => h.nutrientType === 'nitrogen')
     .reduce((s, h) => s + (h.quantity || 0), 0);
   const pendingCredits = holdings
     .filter((h) => h.status === 'pending')

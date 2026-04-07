@@ -358,7 +358,7 @@ const InstallerAssignment = () => {
             completed: completedJobs,
             status: pendingJobs > 2 ? 'busy' : 'available',
           };
-        } catch (e) {
+        } catch {
           stats[installer.uid] = { pending: 0, completed: 0, status: 'available' };
         }
       }

@@ -94,7 +94,7 @@ export class VirginiaCreditCalculator {
    * @param {Object} options - Calculation options
    * @returns {Object} - Calculation results for nitrogen and phosphorus
    */
-  async calculateForComplianceYear(complianceYear, options = {}) {
+  async calculateForComplianceYear(complianceYear, _options = {}) {
     const yearData = generateComplianceYear(complianceYear);
 
     // Get monitoring data for the period

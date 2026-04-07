@@ -1,12 +1,9 @@
 // ROICalculatorSection - Interactive ROI calculator for the sales portal
 import { useState, useMemo } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { salesTheme } from '../styles/theme';
 
-const pulse = keyframes`
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-`;
+/* Kept for potential future use */
 
 const CalculatorSection = styled.section`
   background: ${salesTheme.colors.bgSurface};

@@ -280,7 +280,7 @@ const getWireColor = (type, color) => {
 };
 
 const EnhancedWiringDiagram = ({ product }) => {
-  const [hoveredWire, setHoveredWire] = useState(null);
+  const [_hoveredWire, _setHoveredWire] = useState(null);
   const diagram = WIRING_DIAGRAMS[product.id];
 
   if (!diagram) {

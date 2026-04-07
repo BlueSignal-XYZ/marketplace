@@ -5,12 +5,10 @@
  * Nav items: Marketplace · How It Works · Solutions ▾ · Credit Registry · [Get Started]
  */
 
-import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { APP_NAME } from '../../constants/constants';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { useAppContext } from '../../context/AppContext';
 
 // Inline SVG logo component for crisp rendering at all sizes
@@ -157,138 +155,6 @@ const NavLink = styled.a`
     background: ${({ theme }) => theme.colors?.hover || 'rgba(0,82,204,0.04)'};
   }
 `;
-
-// ── Desktop Solutions dropdown (light theme) ────────────
-
-const dropdownFadeIn = keyframes`
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const DropdownWrapper = styled.div`
-  position: relative;
-`;
-
-const DropdownTrigger = styled.button`
-  padding: 8px 14px;
-  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors?.textSecondary || '#64748B'};
-  background: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 150ms;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  &:hover,
-  &[aria-expanded='true'] {
-    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
-    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,82,204,0.04)'};
-  }
-`;
-
-const ChevronIcon = styled(FontAwesomeIcon)`
-  font-size: 10px;
-  transition: transform 200ms;
-  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0)')};
-`;
-
-const DropdownPanel = styled.div`
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 200px;
-  background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.border || '#E2E4E9'};
-  border-radius: 12px;
-  padding: 6px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  animation: ${dropdownFadeIn} 150ms ease-out;
-  z-index: 100;
-`;
-
-const DropdownItem = styled.a`
-  display: block;
-  padding: 10px 14px;
-  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors?.textSecondary || '#64748B'};
-  text-decoration: none;
-  border-radius: 8px;
-  transition: all 150ms;
-  white-space: nowrap;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
-    background: ${({ theme }) => theme.colors?.hover || 'rgba(0,82,204,0.04)'};
-  }
-`;
-
-const SOLUTIONS_ITEMS = [
-  { label: 'For Utilities', href: '/for-utilities' },
-  { label: 'For Homeowners', href: '/for-homeowners' },
-  { label: 'For Aggregators', href: '/for-aggregators' },
-  { label: 'For Credit Generators', href: '/generate-credits' },
-];
-
-function SolutionsDropdownLight() {
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef(null);
-  const closeTimer = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleMouseEnter = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    closeTimer.current = setTimeout(() => setOpen(false), 150);
-  };
-
-  return (
-    <DropdownWrapper
-      ref={wrapperRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <DropdownTrigger
-        type="button"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen((p) => !p)}
-      >
-        Solutions
-        <ChevronIcon icon={faChevronDown} $open={open} />
-      </DropdownTrigger>
-      {open && (
-        <DropdownPanel>
-          {SOLUTIONS_ITEMS.map((item) => (
-            <DropdownItem key={item.href} href={item.href} onClick={() => setOpen(false)}>
-              {item.label}
-            </DropdownItem>
-          ))}
-        </DropdownPanel>
-      )}
-    </DropdownWrapper>
-  );
-}
 
 const SignUpButton = styled.a`
   display: none;

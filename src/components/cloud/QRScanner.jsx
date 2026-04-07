@@ -260,7 +260,7 @@ const parseQRContent = (content) => {
         deviceType: parsed.deviceType || parsed.type || '',
         raw: trimmed,
       };
-    } catch (e) {
+    } catch {
       // Not valid JSON, continue to other formats
     }
   }
@@ -292,7 +292,6 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
   const [error, setError] = useState(null);
   const [manualEntry, setManualEntry] = useState('');
   const [cameraPermission, setCameraPermission] = useState('prompt'); // prompt, granted, denied
-  const scannerRef = useRef(null);
   const html5QrCodeRef = useRef(null);
 
   useEffect(() => {
@@ -344,7 +343,7 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
             onScan(parsed);
             handleClose();
           },
-          (errorMessage) => {
+          (_errorMessage) => {
             // Ignore continuous scanning errors (no QR in frame)
           }
         );
@@ -381,7 +380,7 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
     if (html5QrCodeRef.current) {
       try {
         await html5QrCodeRef.current.stop();
-      } catch (e) {
+      } catch {
         // Ignore stop errors
       }
       html5QrCodeRef.current = null;
@@ -432,7 +431,7 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
           </CameraPermissionRequest>
         ) : (
           <ScannerContainer>
-            <div id="qr-reader" ref={scannerRef}></div>
+            <div id="qr-reader"></div>
             {status === 'scanning' && <ScanOverlay />}
           </ScannerContainer>
         )}

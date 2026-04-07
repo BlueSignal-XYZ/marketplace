@@ -21,7 +21,7 @@ import { CARD_SECTION, CARD_WRAPPER, FULL_PAGE_CONTAINER } from '../payment/styl
 const Presale = () => {
   const [amount, setAmount] = useState(1);
 
-  const [loading, setLoading] = useState(false);
+  const [_loading, _setLoading] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
 
   //#Animation

@@ -301,7 +301,7 @@ const MediaUpload = () => {
       }
 
       if (tusEndpoint) {
-        const endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(tusEndpoint)}`;
+        const _endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(tusEndpoint)}`;
         //https://github.com/tus/tus-js-client/blob/main/docs/api.md
         const upload = new Upload(activeFile, {
           endpoint: tusEndpoint,
@@ -403,7 +403,7 @@ const MediaUpload = () => {
           console.error(error);
         }
 
-        const { result } = await AssetAPI.addMetadata(asset.id, {
+        const { result: _metadataResult } = await AssetAPI.addMetadata(asset.id, {
           name: uploadName,
           description: uploadDescription,
           tags: ['NPC'],

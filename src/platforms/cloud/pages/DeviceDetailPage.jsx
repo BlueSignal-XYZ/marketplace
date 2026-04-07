@@ -601,7 +601,6 @@ export function DeviceDetailPage() {
 /* ── Relay Control Section ──────────────────────────────── */
 
 function RelayControlSection({ deviceId, device }) {
-  const navigate = useNavigate();
   const commandMutation = useSendCommandMutation();
   const [duration, setDuration] = useState('');
   const relayOn = device?.relayState || false;

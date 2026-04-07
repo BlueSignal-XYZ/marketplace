@@ -5,13 +5,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
-
-const flowPulse = keyframes`
-  0%, 100% { opacity: 0.3; }
-  50%      { opacity: 0.7; }
-`;
 
 const Section = styled.section`
   padding: 48px clamp(16px, 5vw, 48px);
