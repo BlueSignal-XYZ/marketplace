@@ -1,13 +1,13 @@
 // Standalone Enclosure View Page for /sales/enclosure route
-import React, { useState, useMemo, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { PRODUCTS } from "./data";
-import { EnclosureView } from "./components/diagrams";
-import EnclosureComparisonView from "./components/EnclosureComparisonView";
-import SEOHead from "../seo/SEOHead";
-import { createBreadcrumbSchema, createProductSchema } from "../seo/schemas";
-import { media, safeAreaInsets } from "../../styles/breakpoints";
+import { useState, useMemo, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { PRODUCTS } from './data';
+import { EnclosureView } from './components/diagrams';
+import EnclosureComparisonView from './components/EnclosureComparisonView';
+import SEOHead from '../seo/SEOHead';
+import { createBreadcrumbSchema } from '../seo/schemas';
+import { media, safeAreaInsets } from '../../styles/breakpoints';
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -55,7 +55,7 @@ const ProductSelector = styled.div`
 `;
 
 const SelectorLabel = styled.label`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 12px;
   color: #00ff88;
   letter-spacing: 1px;
@@ -71,7 +71,7 @@ const ProductSelect = styled.select`
   border: 1px solid #00ff88;
   border-radius: 8px;
   padding: 12px 16px;
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 16px; /* Prevents iOS zoom */
   color: #00ff88;
   cursor: pointer;
@@ -139,7 +139,7 @@ const PriceBadge = styled.div`
 `;
 
 const PriceLabel = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 11px;
   color: #00cc77;
   letter-spacing: 1px;
@@ -154,7 +154,7 @@ const PriceLabel = styled.div`
 `;
 
 const PriceValue = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 16px;
   font-weight: 700;
   color: #00ff88;
@@ -204,7 +204,7 @@ const BomHeader = styled.div`
 `;
 
 const BomTitle = styled.h3`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 13px;
   color: #00ff88;
   margin: 0;
@@ -216,7 +216,7 @@ const BomTitle = styled.h3`
 `;
 
 const BomTotal = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 16px;
   font-weight: 700;
   color: #00ff88;
@@ -249,7 +249,7 @@ const BomCategory = styled.div`
 `;
 
 const CategoryName = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 11px;
   color: #00cc77;
   text-transform: uppercase;
@@ -263,7 +263,7 @@ const CategoryName = styled.div`
 `;
 
 const CategoryTotal = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 14px;
   font-weight: 600;
   color: #00ff88;
@@ -274,7 +274,7 @@ const CategoryTotal = styled.div`
 `;
 
 const CategoryItems = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 11px;
   color: #888;
   margin-top: 4px;
@@ -296,7 +296,7 @@ const QuickLinks = styled.div`
 `;
 
 const QuickLink = styled.a`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 12px;
   color: #00cc77;
   text-decoration: none;
@@ -349,7 +349,7 @@ const OpenInConfiguratorButton = styled.button`
   border: none;
   border-radius: 8px;
   padding: 14px 20px;
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 14px;
   font-weight: 600;
   color: white;
@@ -387,7 +387,7 @@ const CompareButton = styled.button`
   border: 1px solid #8b5cf6;
   border-radius: 8px;
   padding: 14px 20px;
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 14px;
   font-weight: 600;
   color: #8b5cf6;
@@ -423,7 +423,7 @@ const CompareButton = styled.button`
 
 const EnclosurePage = () => {
   const navigate = useNavigate();
-  const [selectedProduct, setSelectedProduct] = useState("wqm-1");
+  const [selectedProduct, setSelectedProduct] = useState('wqm-1');
   const [showComparison, setShowComparison] = useState(false);
   const product = PRODUCTS[selectedProduct];
 
@@ -448,7 +448,7 @@ const EnclosurePage = () => {
     const categories = {};
     let total = 0;
 
-    product.bom.forEach(item => {
+    product.bom.forEach((item) => {
       if (!categories[item.category]) {
         categories[item.category] = { total: 0, count: 0 };
       }
@@ -504,7 +504,9 @@ const EnclosurePage = () => {
           </PriceBadge>
           <PriceBadge style={{ borderColor: '#0ea5e9', background: 'rgba(14, 165, 233, 0.1)' }}>
             <PriceLabel style={{ color: '#0ea5e9' }}>BOM Cost</PriceLabel>
-            <PriceValue style={{ color: '#0ea5e9' }}>${bomByCategory.total.toLocaleString()}</PriceValue>
+            <PriceValue style={{ color: '#0ea5e9' }}>
+              ${bomByCategory.total.toLocaleString()}
+            </PriceValue>
           </PriceBadge>
           <PriceBadge style={{ borderColor: '#22c55e', background: 'rgba(34, 197, 94, 0.1)' }}>
             <PriceLabel style={{ color: '#22c55e' }}>Margin</PriceLabel>
@@ -515,9 +517,7 @@ const EnclosurePage = () => {
         </PriceDisplay>
 
         <ActionButtonsRow>
-          <CompareButton onClick={() => setShowComparison(true)}>
-            Compare Enclosures
-          </CompareButton>
+          <CompareButton onClick={() => setShowComparison(true)}>Compare Enclosures</CompareButton>
 
           <OpenInConfiguratorButton onClick={openInConfigurator}>
             Open in Configurator
@@ -551,9 +551,7 @@ const EnclosurePage = () => {
             <QuickLink href={`/sales/configurator#${selectedProduct}/specs`}>
               → Specifications
             </QuickLink>
-            <QuickLink onClick={copyLink}>
-              → Copy Link
-            </QuickLink>
+            <QuickLink onClick={copyLink}>→ Copy Link</QuickLink>
           </QuickLinks>
         </BomCard>
       </BomSummary>

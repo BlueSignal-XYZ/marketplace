@@ -1,6 +1,6 @@
 // /src/components/cloud/CloudPageLayout.jsx
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Page = styled.main`
   width: 100%;
@@ -20,7 +20,7 @@ const Page = styled.main`
 
 const Shell = styled.div`
   width: 100%;
-  max-width: ${({ $maxWidth }) => $maxWidth || "1200px"};
+  max-width: ${({ $maxWidth }) => $maxWidth || '1200px'};
   margin: 0 auto;
 `;
 
@@ -57,7 +57,7 @@ const Title = styled.h1`
   font-size: 28px;
   line-height: 1.2;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.text || "#1A1A1A"};
+  color: ${({ theme }) => theme.colors?.text || '#1A1A1A'};
   letter-spacing: -0.02em;
 
   @media (max-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
@@ -70,7 +70,7 @@ const Subtitle = styled.p`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   line-height: 1.6;
-  color: ${({ theme }) => theme.colors?.textSecondary || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.textSecondary || '#6B7280'};
   max-width: 600px;
 `;
 
@@ -80,28 +80,28 @@ const Breadcrumbs = styled.nav`
   flex-wrap: wrap;
   gap: 8px;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6B7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6B7280'};
   margin-bottom: 16px;
 
   a {
-    color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
+    color: ${({ theme }) => theme.colors?.primary600 || '#196061'};
     text-decoration: none;
     font-weight: 500;
     transition: color 0.15s ease-out;
 
     &:hover {
-      color: ${({ theme }) => theme.colors?.primary700 || "#0F393A"};
+      color: ${({ theme }) => theme.colors?.primary700 || '#0F393A'};
       text-decoration: underline;
     }
   }
 
   span.separator {
-    color: ${({ theme }) => theme.colors?.ui300 || "#D1D5DB"};
+    color: ${({ theme }) => theme.colors?.ui300 || '#D1D5DB'};
     font-size: 11px;
   }
 
   span.current {
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
     font-weight: 500;
   }
 `;
@@ -137,14 +137,7 @@ const Content = styled.div`
  * @param {React.ReactNode} children - Page content
  * @param {string} maxWidth - Optional max-width override (default: 1200px)
  */
-export function CloudPageLayout({
-  title,
-  subtitle,
-  breadcrumbs,
-  actions,
-  children,
-  maxWidth,
-}) {
+export function CloudPageLayout({ title, subtitle, breadcrumbs, actions, children, maxWidth }) {
   return (
     <Page>
       <Shell $maxWidth={maxWidth}>

@@ -60,8 +60,7 @@ export const AUDIENCE_CONTENT = {
       eyebrow: 'Built for Utilities',
       headline: 'Add Supply Without',
       headlineAccent: 'Breaking Ground.',
-      subhead:
-        'Distributed local water production — metered, verified, and priced on your terms.',
+      subhead: 'Distributed local water production — metered, verified, and priced on your terms.',
       cta: { label: 'See How It Works', href: '#demand-response' },
     },
     howItWorks: {

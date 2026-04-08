@@ -63,13 +63,19 @@ export class VirginiaNceProgram implements ProgramService {
 
     const notes: string[] = [];
     if (input.removalKg < baseline) {
-      notes.push(`Removal (${input.removalKg} kg) is below baseline (${baseline} kg). No credits generated.`);
+      notes.push(
+        `Removal (${input.removalKg} kg) is below baseline (${baseline} kg). No credits generated.`
+      );
     }
     if (input.verificationLevel === 'self-reported') {
-      notes.push('Self-reported submissions receive reduced trading ratio. Consider sensor verification.');
+      notes.push(
+        'Self-reported submissions receive reduced trading ratio. Consider sensor verification.'
+      );
     }
     if (input.verificationLevel === 'sensor-verified' && input.deviceId) {
-      notes.push(`Credits backed by device ${input.deviceId} — premium sensor-verified rate applied.`);
+      notes.push(
+        `Credits backed by device ${input.deviceId} — premium sensor-verified rate applied.`
+      );
     }
 
     return {

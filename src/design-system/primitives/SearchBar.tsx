@@ -3,7 +3,7 @@
  * Used in marketplace, registry, sensor feeds.
  */
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 // ── Types ─────────────────────────────────────────────────
@@ -79,7 +79,9 @@ const StyledInput = styled.input<{ $hasIcon: boolean }>`
   outline: none;
   transition: border-color ${({ theme }) => theme.animation.fast};
 
-  &::placeholder { color: ${({ theme }) => theme.components.inputPlaceholder}; }
+  &::placeholder {
+    color: ${({ theme }) => theme.components.inputPlaceholder};
+  }
   &:focus {
     border-color: ${({ theme }) => theme.components.inputFocusBorder};
     box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.focus};
@@ -115,7 +117,16 @@ const Select = styled.select`
 // ── Component ─────────────────────────────────────────────
 
 const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="11" cy="11" r="8" />
     <path d="m21 21-4.3-4.3" />
   </svg>
@@ -146,14 +157,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       if (value === undefined) setInternal(v);
       onChange?.(v);
     },
-    [value, onChange],
+    [value, onChange]
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') onSearch?.(val);
     },
-    [onSearch, val],
+    [onSearch, val]
   );
 
   return (
@@ -177,7 +188,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         >
           <option value="">{f.label}</option>
           {f.options.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
       ))}

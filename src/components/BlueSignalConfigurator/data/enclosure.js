@@ -10,7 +10,8 @@ export const ENCLOSURE_COMPONENTS = {
       position: { x: 10, y: 15, width: 20, height: 14 },
       details: {
         partNumber: 'SC0510',
-        function: 'Main controller - runs sensor polling, data logging, LoRaWAN upload, relay scheduling',
+        function:
+          'Main controller - runs sensor polling, data logging, LoRaWAN upload, relay scheduling',
         voltage: '5V DC',
         current: '350mA typical, 500mA peak',
         connections: [
@@ -23,7 +24,8 @@ export const ENCLOSURE_COMPONENTS = {
           'GPIO25 → SX1262 DIO1 (interrupt)',
         ],
         notes: 'Pre-soldered headers required. Runs Raspberry Pi OS Lite with BlueSignal daemon.',
-        datasheet: 'https://datasheets.raspberrypi.com/rpizero2/raspberry-pi-zero-2-w-product-brief.pdf',
+        datasheet:
+          'https://datasheets.raspberrypi.com/rpizero2/raspberry-pi-zero-2-w-product-brief.pdf',
       },
       color: '#15803d',
     },
@@ -35,7 +37,8 @@ export const ENCLOSURE_COMPONENTS = {
       position: { x: 10, y: 31, width: 20, height: 14 },
       details: {
         partNumber: 'WQM-1-HAT-R1',
-        function: 'Custom HAT with ADC, LoRa transceiver, relay driver, power regulation, and sensor connectors',
+        function:
+          'Custom HAT with ADC, LoRa transceiver, relay driver, power regulation, and sensor connectors',
         voltage: '9-24V DC input, 5V regulated output',
         current: 'Varies by load',
         connections: [
@@ -82,10 +85,7 @@ export const ENCLOSURE_COMPONENTS = {
         function: 'GPS + GLONASS positioning for geo-tagged readings',
         voltage: '3.3V',
         current: '30mA',
-        connections: [
-          'TX → Pi GPIO15 (RXD)',
-          'PPS → available for sync',
-        ],
+        connections: ['TX → Pi GPIO15 (RXD)', 'PPS → available for sync'],
         notes: '2.5m CEP accuracy. NMEA output.',
       },
       color: '#1d4ed8',
@@ -123,10 +123,7 @@ export const ENCLOSURE_COMPONENTS = {
         function: 'Switched output for automation (pumps, valves, ultrasonics, alerts)',
         voltage: '5V coil, 250VAC/30VDC contact',
         current: '10A max contact rating',
-        connections: [
-          'IN ← GPIO17',
-          'COM/NO/NC → Screw terminal output',
-        ],
+        connections: ['IN ← GPIO17', 'COM/NO/NC → Screw terminal output'],
         notes: 'Active-LOW. Triggered by threshold rules or cloud commands.',
       },
       color: '#dc2626',

@@ -3,26 +3,24 @@
  * Shows registered programs, calculator, and program-specific rules.
  */
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { Badge } from '../../../design-system/primitives/Badge';
 import { DataCard } from '../../../design-system/primitives/DataCard';
 import { Input } from '../../../design-system/primitives/Input';
-import { Button } from '../../../design-system/primitives/Button';
 import { Tabs } from '../../../design-system/primitives/Tabs';
 
 const Page = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 0;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 28px 24px;
+    padding: 28px 0;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 32px 48px;
+    padding: 32px 0;
   }
 `;
 
@@ -43,13 +41,16 @@ const Subtitle = styled.p`
 
 const ProgramCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
+  border: 1px solid
+    ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radius.lg}px;
   padding: 24px;
   margin-bottom: 16px;
   cursor: pointer;
   transition: all 0.15s;
-  &:hover { border-color: ${({ theme }) => theme.colors.primary}; }
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const ProgramHeader = styled.div`
@@ -110,7 +111,9 @@ const FormGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 24px;
-  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const ResultBox = styled.div`
@@ -192,7 +195,8 @@ const PROGRAMS = [
     shortName: 'VA NCE',
     state: 'Virginia',
     region: 'Chesapeake Bay Watershed',
-    description: 'Buy and sell nutrient reduction credits to meet Chesapeake Bay TMDL requirements.',
+    description:
+      'Buy and sell nutrient reduction credits to meet Chesapeake Bay TMDL requirements.',
     regulatoryBody: 'Virginia DEQ',
     nutrients: ['nitrogen', 'phosphorus'],
     active: true,
@@ -200,16 +204,26 @@ const PROGRAMS = [
     totalCredits: 5900,
     avgPrice: 8.42,
     baselines: { nitrogen: 5.0, phosphorus: 1.0 },
-    ratios: { nitrogen: { 'sensor-verified': 1.0, 'third-party': 0.85, 'self-reported': 0.6 }, phosphorus: { 'sensor-verified': 1.0, 'third-party': 0.9, 'self-reported': 0.65 } },
+    ratios: {
+      nitrogen: { 'sensor-verified': 1.0, 'third-party': 0.85, 'self-reported': 0.6 },
+      phosphorus: { 'sensor-verified': 1.0, 'third-party': 0.9, 'self-reported': 0.65 },
+    },
     feePct: 0.05,
   },
 ];
 
 export function ProgramsPage() {
-  useEffect(() => { document.title = 'Trading Programs — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Trading Programs — WaterQuality.Trading';
+  }, []);
   const [selectedProgram, setSelectedProgram] = useState(PROGRAMS[0]);
   const [tab, setTab] = useState('overview');
-  const [calcForm, setCalcForm] = useState({ nutrientType: 'nitrogen', removalKg: 100, verificationLevel: 'sensor-verified', vintage: '2025' });
+  const [calcForm, setCalcForm] = useState({
+    nutrientType: 'nitrogen',
+    removalKg: 100,
+    verificationLevel: 'sensor-verified',
+    vintage: '2025',
+  });
 
   const calcResult = useMemo(() => {
     const p = selectedProgram;
@@ -219,7 +233,13 @@ export function ProgramsPage() {
     const net = Math.max(0, calcForm.removalKg - baseline);
     const raw = net * ratio;
     const fee = raw * p.feePct;
-    return { credits: Math.round((raw - fee) * 100) / 100, ratio, baseline, net, fee: Math.round(fee * 100) / 100 };
+    return {
+      credits: Math.round((raw - fee) * 100) / 100,
+      ratio,
+      baseline,
+      net,
+      fee: Math.round(fee * 100) / 100,
+    };
   }, [selectedProgram, calcForm]);
 
   const tabs = [
@@ -241,7 +261,9 @@ export function ProgramsPage() {
           <ProgramHeader>
             <ProgramName>{program.name}</ProgramName>
             <div style={{ display: 'flex', gap: 8 }}>
-              <Badge variant="positive" size="sm" dot>{program.active ? 'Active' : 'Inactive'}</Badge>
+              <Badge variant="positive" size="sm" dot>
+                {program.active ? 'Active' : 'Inactive'}
+              </Badge>
               {program.nutrients.map((n) => (
                 <Badge key={n} variant={n === 'nitrogen' ? 'info' : 'positive'} size="sm">
                   {n === 'nitrogen' ? 'N' : 'P'}
@@ -249,11 +271,23 @@ export function ProgramsPage() {
               ))}
             </div>
           </ProgramHeader>
-          <ProgramMeta>{program.description} · {program.regulatoryBody} · {program.region}</ProgramMeta>
+          <ProgramMeta>
+            {program.description} · {program.regulatoryBody} · {program.region}
+          </ProgramMeta>
           <StatsRow>
             <DataCard label="Active Listings" value={program.totalListings.toString()} compact />
-            <DataCard label="Total Credits" value={program.totalCredits.toLocaleString()} unit="kg" compact />
-            <DataCard label="Avg Price" value={`$${program.avgPrice.toFixed(2)}`} unit="/kg" compact />
+            <DataCard
+              label="Total Credits"
+              value={program.totalCredits.toLocaleString()}
+              unit="kg"
+              compact
+            />
+            <DataCard
+              label="Avg Price"
+              value={`$${program.avgPrice.toFixed(2)}`}
+              unit="/kg"
+              compact
+            />
           </StatsRow>
         </ProgramCard>
       ))}
@@ -262,10 +296,11 @@ export function ProgramsPage() {
         <DisclaimerBanner>
           <DisclaimerIcon>ℹ️</DisclaimerIcon>
           <div>
-            This program is operated by the Commonwealth of Virginia through a state-managed registry.
-            It is shown here as a reference example of an active nutrient trading program.
+            This program is operated by the Commonwealth of Virginia through a state-managed
+            registry. It is shown here as a reference example of an active nutrient trading program.
             WaterQuality.Trading is not affiliated with this program. Our platform offers an
-            alternative, technology-driven approach to water quality credit registration and trading.
+            alternative, technology-driven approach to water quality credit registration and
+            trading.
           </div>
         </DisclaimerBanner>
       )}
@@ -279,13 +314,30 @@ export function ProgramsPage() {
               <CalcTitle>Program Details — {selectedProgram.shortName}</CalcTitle>
               <CalcDesc>
                 {selectedProgram.description}
-                <br />Regulatory body: {selectedProgram.regulatoryBody}
+                <br />
+                Regulatory body: {selectedProgram.regulatoryBody}
               </CalcDesc>
               <FormGrid>
-                <DataCard label="Nitrogen Baseline" value={`${selectedProgram.baselines.nitrogen} kg`} compact />
-                <DataCard label="Phosphorus Baseline" value={`${selectedProgram.baselines.phosphorus} kg`} compact />
-                <DataCard label="Program Fee" value={`${(selectedProgram.feePct * 100).toFixed(0)}%`} compact />
-                <DataCard label="Supported Nutrients" value={selectedProgram.nutrients.join(', ')} compact />
+                <DataCard
+                  label="Nitrogen Baseline"
+                  value={`${selectedProgram.baselines.nitrogen} kg`}
+                  compact
+                />
+                <DataCard
+                  label="Phosphorus Baseline"
+                  value={`${selectedProgram.baselines.phosphorus} kg`}
+                  compact
+                />
+                <DataCard
+                  label="Program Fee"
+                  value={`${(selectedProgram.feePct * 100).toFixed(0)}%`}
+                  compact
+                />
+                <DataCard
+                  label="Supported Nutrients"
+                  value={selectedProgram.nutrients.join(', ')}
+                  compact
+                />
               </FormGrid>
             </CalculatorSection>
           )}
@@ -293,12 +345,18 @@ export function ProgramsPage() {
           {tab === 'calculator' && (
             <CalculatorSection>
               <CalcTitle>Credit Calculator</CalcTitle>
-              <CalcDesc>Estimate how many credits your nutrient removal would generate under {selectedProgram.shortName}.</CalcDesc>
+              <CalcDesc>
+                Estimate how many credits your nutrient removal would generate under{' '}
+                {selectedProgram.shortName}.
+              </CalcDesc>
 
               <FormGrid>
                 <div>
                   <Label>Nutrient Type</Label>
-                  <SelectWrap value={calcForm.nutrientType} onChange={(e) => setCalcForm((f) => ({ ...f, nutrientType: e.target.value }))}>
+                  <SelectWrap
+                    value={calcForm.nutrientType}
+                    onChange={(e) => setCalcForm((f) => ({ ...f, nutrientType: e.target.value }))}
+                  >
                     <option value="nitrogen">Nitrogen (N)</option>
                     <option value="phosphorus">Phosphorus (P)</option>
                   </SelectWrap>
@@ -307,11 +365,18 @@ export function ProgramsPage() {
                   label="Removal Amount (kg)"
                   type="number"
                   value={calcForm.removalKg}
-                  onChange={(e) => setCalcForm((f) => ({ ...f, removalKg: parseFloat(e.target.value) || 0 }))}
+                  onChange={(e) =>
+                    setCalcForm((f) => ({ ...f, removalKg: parseFloat(e.target.value) || 0 }))
+                  }
                 />
                 <div>
                   <Label>Verification Level</Label>
-                  <SelectWrap value={calcForm.verificationLevel} onChange={(e) => setCalcForm((f) => ({ ...f, verificationLevel: e.target.value }))}>
+                  <SelectWrap
+                    value={calcForm.verificationLevel}
+                    onChange={(e) =>
+                      setCalcForm((f) => ({ ...f, verificationLevel: e.target.value }))
+                    }
+                  >
                     <option value="sensor-verified">Sensor Verified</option>
                     <option value="third-party">Third-Party</option>
                     <option value="self-reported">Self-Reported</option>
@@ -329,8 +394,8 @@ export function ProgramsPage() {
                   <ResultLabel>Estimated Credits</ResultLabel>
                   <ResultValue>{calcResult.credits} kg</ResultValue>
                   <ResultNotes>
-                    Trading ratio: {calcResult.ratio} · Baseline: {calcResult.baseline} kg ·
-                    Net removal: {calcResult.net} kg · Program fee: {calcResult.fee} kg
+                    Trading ratio: {calcResult.ratio} · Baseline: {calcResult.baseline} kg · Net
+                    removal: {calcResult.net} kg · Program fee: {calcResult.fee} kg
                   </ResultNotes>
                 </ResultBox>
               )}

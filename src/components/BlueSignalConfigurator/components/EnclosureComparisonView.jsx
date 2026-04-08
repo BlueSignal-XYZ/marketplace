@@ -1,7 +1,7 @@
 // Enclosure Comparison View - Side-by-side enclosure layouts
-import React, { useState } from "react";
-import styled from "styled-components";
-import { EnclosureView } from "./diagrams";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { EnclosureView } from './diagrams';
 
 const ComparisonModal = styled.div`
   position: fixed;
@@ -16,8 +16,12 @@ const ComparisonModal = styled.div`
   animation: fadeIn 0.3s ease;
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;
 
@@ -31,7 +35,7 @@ const ComparisonHeader = styled.div`
 `;
 
 const Title = styled.h2`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 16px;
   color: #00ff88;
   margin: 0;
@@ -68,7 +72,7 @@ const SelectorGroup = styled.div`
 `;
 
 const SelectorLabel = styled.label`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 11px;
   color: #00aa66;
   text-transform: uppercase;
@@ -80,7 +84,7 @@ const ProductSelect = styled.select`
   border: 1px solid #00ff88;
   border-radius: 4px;
   padding: 6px 12px;
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 12px;
   color: #00ff88;
   cursor: pointer;
@@ -127,14 +131,14 @@ const PaneHeader = styled.div`
 `;
 
 const PaneTitle = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 14px;
   font-weight: 600;
   color: #00ff88;
 `;
 
 const PanePrice = styled.div`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 16px;
   font-weight: 700;
   color: #22c55e;
@@ -158,7 +162,7 @@ const ComparisonStats = styled.div`
 const StatItem = styled.div`
   display: flex;
   justify-content: space-between;
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: 'SF Mono', Consolas, monospace;
   font-size: 11px;
 `;
 
@@ -174,7 +178,7 @@ const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
   const [selectedProducts, setSelectedProducts] = useState(
     products.length >= 2
       ? [products[0].id, products[1]?.id || products[0].id]
-      : [products[0]?.id || "wqm-1", "wqm-1"]
+      : [products[0]?.id || 'wqm-1', 'wqm-1']
   );
 
   const handleProductChange = (index, productId) => {
@@ -214,7 +218,7 @@ const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
       </ProductSelector>
 
       <ComparisonBody>
-        {selectedProductData.map((product, index) => {
+        {selectedProductData.map((product, _index) => {
           if (!product) return null;
 
           const bomTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);
@@ -225,7 +229,7 @@ const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
               <PaneHeader>
                 <div>
                   <PaneTitle>{product.name}</PaneTitle>
-                  <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
+                  <div style={{ fontSize: 11, color: '#666', marginTop: 2 }}>
                     {product.subtitle}
                   </div>
                 </div>
@@ -248,9 +252,7 @@ const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
                 <StatItem>
                   <StatLabel>Ultrasonic:</StatLabel>
                   <StatValue>
-                    {product.ultrasonic?.enabled
-                      ? `${product.ultrasonic.watts}W`
-                      : "None"}
+                    {product.ultrasonic?.enabled ? `${product.ultrasonic.watts}W` : 'None'}
                   </StatValue>
                 </StatItem>
                 <StatItem>

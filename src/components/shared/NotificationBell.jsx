@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -27,14 +27,14 @@ const BellButton = styled.button`
   justify-content: center;
   border-radius: 10px;
   transition: all 0.15s ease-out;
-  color: ${({ $light }) => $light ? 'rgba(255,255,255,0.7)' : '#6B7280'};
+  color: ${({ $light }) => ($light ? 'rgba(255,255,255,0.7)' : '#6B7280')};
   font-size: 20px;
   min-height: 44px;
   min-width: 44px;
 
   &:hover {
-    background: ${({ $light }) => $light ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)'};
-    color: ${({ $light }) => $light ? '#FFFFFF' : '#1A1A1A'};
+    background: ${({ $light }) => ($light ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)')};
+    color: ${({ $light }) => ($light ? '#FFFFFF' : '#1A1A1A')};
   }
 `;
 
@@ -42,8 +42,8 @@ const Badge = styled.span`
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #EF4444;
-  color: #FFFFFF;
+  background: #ef4444;
+  color: #ffffff;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 10px;
   font-weight: 700;
@@ -68,9 +68,11 @@ const Dropdown = styled.div`
   max-height: 480px;
   display: flex;
   flex-direction: column;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
   z-index: 1000;
   overflow: hidden;
@@ -90,7 +92,7 @@ const DropdownHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid #f3f4f6;
   flex-shrink: 0;
 `;
 
@@ -98,7 +100,7 @@ const DropdownTitle = styled.h3`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 16px;
   font-weight: 700;
-  color: #1A1A1A;
+  color: #1a1a1a;
   margin: 0;
   letter-spacing: -0.01em;
 `;
@@ -133,7 +135,7 @@ const NotificationList = styled.div`
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: #E5E7EB;
+    background: #e5e7eb;
     border-radius: 2px;
   }
 `;
@@ -142,14 +144,14 @@ const NotificationItem = styled.div`
   padding: 14px 20px;
   cursor: pointer;
   transition: background 0.1s ease-out;
-  background: ${({ $unread }) => $unread ? '#F8FAFF' : '#FFFFFF'};
-  border-bottom: 1px solid #F9FAFB;
+  background: ${({ $unread }) => ($unread ? '#F8FAFF' : '#FFFFFF')};
+  border-bottom: 1px solid #f9fafb;
   display: flex;
   gap: 12px;
   align-items: flex-start;
 
   &:hover {
-    background: #F3F4F6;
+    background: #f3f4f6;
   }
 
   &:last-child {
@@ -165,11 +167,16 @@ const TypeDot = styled.span`
   margin-top: 6px;
   background: ${({ $type }) => {
     switch ($type) {
-      case 'alert': return '#EF4444';
-      case 'credit-generated': return '#0066FF';
-      case 'trading-program-available': return '#10B981';
-      case 'enrollment-update': return '#F59E0B';
-      default: return '#9CA3AF';
+      case 'alert':
+        return '#EF4444';
+      case 'credit-generated':
+        return '#0066FF';
+      case 'trading-program-available':
+        return '#10B981';
+      case 'enrollment-update':
+        return '#F59E0B';
+      default:
+        return '#9CA3AF';
     }
   }};
 `;
@@ -182,8 +189,8 @@ const NotificationContent = styled.div`
 const NotificationTitle = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
-  font-weight: ${({ $unread }) => $unread ? '600' : '400'};
-  color: #1A1A1A;
+  font-weight: ${({ $unread }) => ($unread ? '600' : '400')};
+  color: #1a1a1a;
   margin-bottom: 2px;
   line-height: 1.4;
 `;
@@ -191,7 +198,7 @@ const NotificationTitle = styled.div`
 const NotificationBody = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: #6B7280;
+  color: #6b7280;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -202,7 +209,7 @@ const NotificationBody = styled.div`
 const NotificationTime = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 11px;
-  color: #9CA3AF;
+  color: #9ca3af;
   margin-top: 4px;
 `;
 
@@ -216,7 +223,7 @@ const EmptyNotifications = styled.div`
 `;
 
 const EmptyIcon = styled.div`
-  color: #D1D5DB;
+  color: #d1d5db;
   margin-bottom: 4px;
 `;
 
@@ -224,19 +231,19 @@ const EmptyTitle = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
   font-weight: 600;
-  color: #6B7280;
+  color: #6b7280;
 `;
 
 const EmptyText = styled.div`
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 13px;
-  color: #9CA3AF;
+  color: #9ca3af;
 `;
 
 const MiniSpinner = styled.div`
   width: 20px;
   height: 20px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid #e5e7eb;
   border-top-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   border-radius: 50%;
   animation: ${spin} 0.8s linear infinite;
@@ -285,7 +292,7 @@ const NotificationBell = ({ light = false }) => {
         const response = await NotificationsAPI.list(user.uid);
         if (response?.notifications) {
           setNotifications(response.notifications);
-          setUnreadCount(response.notifications.filter(n => !n.read).length);
+          setUnreadCount(response.notifications.filter((n) => !n.read).length);
           return;
         }
       } catch {
@@ -301,15 +308,15 @@ const NotificationBell = ({ light = false }) => {
           const data = snapshot.val();
           const userNotifications = Object.entries(data)
             .map(([id, n]) => ({ id, ...n }))
-            .filter(n => n.userId === user.uid && !n.dismissed)
+            .filter((n) => n.userId === user.uid && !n.dismissed)
             .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
             .slice(0, 20);
 
           setNotifications(userNotifications);
-          setUnreadCount(userNotifications.filter(n => !n.read).length);
+          setUnreadCount(userNotifications.filter((n) => !n.read).length);
         }
       }
-    } catch (error) {
+    } catch {
       // Silently handle notification load failures
     } finally {
       setLoading(false);
@@ -329,26 +336,28 @@ const NotificationBell = ({ light = false }) => {
         // Silently handle
       }
     }
-    setNotifications(prev => prev.map(n =>
-      n.id === notificationId ? { ...n, read: true } : n
-    ));
-    setUnreadCount(prev => Math.max(0, prev - 1));
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n))
+    );
+    setUnreadCount((prev) => Math.max(0, prev - 1));
   };
 
   const handleMarkAllRead = async () => {
     try {
       await NotificationsAPI.markAllRead(user.uid);
     } catch {
-      for (const n of notifications.filter(n => !n.read)) {
+      for (const n of notifications.filter((n) => !n.read)) {
         try {
           if (db) {
             const notifRef = ref(db, `notifications/${n.id}`);
             await update(notifRef, { read: true });
           }
-        } catch { /* skip */ }
+        } catch {
+          /* skip */
+        }
       }
     }
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     setUnreadCount(0);
   };
 
@@ -378,7 +387,16 @@ const NotificationBell = ({ light = false }) => {
   return (
     <BellContainer ref={dropdownRef}>
       <BellButton $light={light} onClick={() => setOpen(!open)} aria-label="Notifications">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
@@ -390,9 +408,7 @@ const NotificationBell = ({ light = false }) => {
           <DropdownHeader>
             <DropdownTitle>Notifications</DropdownTitle>
             {unreadCount > 0 && (
-              <MarkAllButton onClick={handleMarkAllRead}>
-                Mark all read
-              </MarkAllButton>
+              <MarkAllButton onClick={handleMarkAllRead}>Mark all read</MarkAllButton>
             )}
           </DropdownHeader>
 
@@ -402,16 +418,25 @@ const NotificationBell = ({ light = false }) => {
             ) : notifications.length === 0 ? (
               <EmptyNotifications>
                 <EmptyIcon>
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                   </svg>
                 </EmptyIcon>
                 <EmptyTitle>No new notifications</EmptyTitle>
-                <EmptyText>You're all caught up</EmptyText>
+                <EmptyText>You&apos;re all caught up</EmptyText>
               </EmptyNotifications>
             ) : (
-              notifications.map(notification => (
+              notifications.map((notification) => (
                 <NotificationItem
                   key={notification.id}
                   $unread={!notification.read}
@@ -422,9 +447,7 @@ const NotificationBell = ({ light = false }) => {
                     <NotificationTitle $unread={!notification.read}>
                       {notification.title}
                     </NotificationTitle>
-                    {notification.body && (
-                      <NotificationBody>{notification.body}</NotificationBody>
-                    )}
+                    {notification.body && <NotificationBody>{notification.body}</NotificationBody>}
                     <NotificationTime>{formatTime(notification.createdAt)}</NotificationTime>
                   </NotificationContent>
                 </NotificationItem>

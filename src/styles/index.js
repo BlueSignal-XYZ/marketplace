@@ -2,7 +2,7 @@
 // Central export for all styling utilities
 
 // Theme and colors
-export { colors, logoColors, theme } from "./colors";
+export { colors, logoColors, theme } from './colors';
 
 // Breakpoints and media queries
 export {
@@ -16,7 +16,7 @@ export {
   mobile,
   tablet,
   laptop,
-} from "./breakpoints";
+} from './breakpoints';
 
 // Layout utilities
 export {
@@ -38,7 +38,7 @@ export {
   ShowMobile,
   HideDesktop,
   ShowDesktop,
-} from "./layout";
+} from './layout';
 
 // Animation utilities
 export {
@@ -75,7 +75,7 @@ export {
   listItemEntrance,
   // Accessibility
   respectReducedMotion,
-} from "./animations";
+} from './animations';
 
 // Global styles (usually imported separately in main.jsx)
-export { GlobalStyle } from "./global";
+export { GlobalStyle } from './global';

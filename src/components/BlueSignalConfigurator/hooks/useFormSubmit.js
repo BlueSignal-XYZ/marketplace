@@ -28,7 +28,9 @@ const useFormSubmit = (collectionName) => {
       const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
       const db = await getFirestoreInstance();
       if (!db) {
-        throw new Error('Firestore is not available — Firebase may not be configured. Check VITE_FIREBASE_* env vars.');
+        throw new Error(
+          'Firestore is not available — Firebase may not be configured. Check VITE_FIREBASE_* env vars.'
+        );
       }
       await addDoc(collection(db, collectionName), {
         ...data,
@@ -41,7 +43,11 @@ const useFormSubmit = (collectionName) => {
       return true;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Submission failed';
-      console.error(`[useFormSubmit] Error writing to Firestore collection "${collectionName}":`, err.code || '', message);
+      console.error(
+        `[useFormSubmit] Error writing to Firestore collection "${collectionName}":`,
+        err.code || '',
+        message
+      );
       setFormState({ status: 'error', error: message });
       return false;
     }

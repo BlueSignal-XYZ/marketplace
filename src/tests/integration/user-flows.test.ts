@@ -47,14 +47,19 @@ describe('User Signup → Onboarding → Dashboard (integration)', () => {
     });
 
     // 3. Call onboarding completion endpoint
-    const onboardingRes = await apiRequest('POST', '/user/onboarding/complete', {
-      uid,
-      onboardingData: {
-        company: 'Test Install Co',
-        phone: '555-0100',
-        timezone: 'America/Chicago',
+    const onboardingRes = await apiRequest(
+      'POST',
+      '/user/onboarding/complete',
+      {
+        uid,
+        onboardingData: {
+          company: 'Test Install Co',
+          phone: '555-0100',
+          timezone: 'America/Chicago',
+        },
       },
-    }, token);
+      token
+    );
 
     expect(onboardingRes.status).toBe(200);
     expect(onboardingRes.data.success).toBe(true);
@@ -70,10 +75,7 @@ describe('User Signup → Onboarding → Dashboard (integration)', () => {
     expect(profile.phone).toBe('555-0100');
 
     // 5. Verify role-based routing resolves to installer dashboard
-    const route = getDefaultDashboardRoute(
-      { role: 'installer' },
-      'marketplace'
-    );
+    const route = getDefaultDashboardRoute({ role: 'installer' }, 'marketplace');
     expect(route).toBe('/dashboard/installer');
   });
 
@@ -82,7 +84,9 @@ describe('User Signup → Onboarding → Dashboard (integration)', () => {
     // that the integration flow relies on
     expect(getDefaultDashboardRoute({ role: 'buyer' }, 'marketplace')).toBe('/dashboard/buyer');
     expect(getDefaultDashboardRoute({ role: 'seller' }, 'marketplace')).toBe('/dashboard/seller');
-    expect(getDefaultDashboardRoute({ role: 'installer' }, 'marketplace')).toBe('/dashboard/installer');
+    expect(getDefaultDashboardRoute({ role: 'installer' }, 'marketplace')).toBe(
+      '/dashboard/installer'
+    );
     expect(getDefaultDashboardRoute({ role: 'admin' }, 'marketplace')).toBe('/marketplace');
     expect(getDefaultDashboardRoute(null, 'marketplace')).toBe('/');
 

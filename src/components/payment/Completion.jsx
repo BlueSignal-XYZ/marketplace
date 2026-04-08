@@ -1,4 +1,4 @@
-function Completion(props) {
+function Completion(_props) {
   return <h1>Thank you! 🎉</h1>;
 }
 

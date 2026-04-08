@@ -3,7 +3,7 @@
  * Plots sensor stations with color-coded markers by status.
  */
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -104,7 +104,9 @@ const SensorCard = styled.div`
   border-radius: ${({ theme }) => theme.radius.md}px;
   padding: 20px;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);
@@ -162,12 +164,78 @@ const StatValue = styled.div`
 // ── Placeholder data ──────────────────────────────────────
 
 const SENSORS = [
-  { id: 'BS-WQM-1042', name: 'James River Station A', region: 'Virginia - James River', lat: 37.54, lng: -77.43, status: 'online', ph: 7.2, tds: 342, turbidity: 4.1, temp: 18.3 },
-  { id: 'BS-WQM-1043', name: 'Potomac Intake B', region: 'Virginia - Potomac', lat: 38.89, lng: -77.05, status: 'online', ph: 7.5, tds: 298, turbidity: 3.8, temp: 17.1 },
-  { id: 'BS-WQM-1044', name: 'York River Monitor', region: 'Virginia - York', lat: 37.25, lng: -76.50, status: 'online', ph: 7.0, tds: 410, turbidity: 5.2, temp: 19.0 },
-  { id: 'BS-WQM-1045', name: 'Chesapeake Bay Buoy 1', region: 'Chesapeake Bay', lat: 37.00, lng: -76.30, status: 'maintenance', ph: 7.8, tds: 520, turbidity: 6.1, temp: 16.5 },
-  { id: 'BS-WQM-1046', name: 'Rappahannock Station', region: 'Virginia - Rappahannock', lat: 38.30, lng: -77.46, status: 'online', ph: 6.9, tds: 275, turbidity: 3.4, temp: 18.7 },
-  { id: 'BS-WQM-1047', name: 'Shenandoah Valley Outflow', region: 'Virginia - Shenandoah', lat: 38.45, lng: -78.87, status: 'offline', ph: null, tds: null, turbidity: null, temp: null },
+  {
+    id: 'BS-WQM-1042',
+    name: 'James River Station A',
+    region: 'Virginia - James River',
+    lat: 37.54,
+    lng: -77.43,
+    status: 'online',
+    ph: 7.2,
+    tds: 342,
+    turbidity: 4.1,
+    temp: 18.3,
+  },
+  {
+    id: 'BS-WQM-1043',
+    name: 'Potomac Intake B',
+    region: 'Virginia - Potomac',
+    lat: 38.89,
+    lng: -77.05,
+    status: 'online',
+    ph: 7.5,
+    tds: 298,
+    turbidity: 3.8,
+    temp: 17.1,
+  },
+  {
+    id: 'BS-WQM-1044',
+    name: 'York River Monitor',
+    region: 'Virginia - York',
+    lat: 37.25,
+    lng: -76.5,
+    status: 'online',
+    ph: 7.0,
+    tds: 410,
+    turbidity: 5.2,
+    temp: 19.0,
+  },
+  {
+    id: 'BS-WQM-1045',
+    name: 'Chesapeake Bay Buoy 1',
+    region: 'Chesapeake Bay',
+    lat: 37.0,
+    lng: -76.3,
+    status: 'maintenance',
+    ph: 7.8,
+    tds: 520,
+    turbidity: 6.1,
+    temp: 16.5,
+  },
+  {
+    id: 'BS-WQM-1046',
+    name: 'Rappahannock Station',
+    region: 'Virginia - Rappahannock',
+    lat: 38.3,
+    lng: -77.46,
+    status: 'online',
+    ph: 6.9,
+    tds: 275,
+    turbidity: 3.4,
+    temp: 18.7,
+  },
+  {
+    id: 'BS-WQM-1047',
+    name: 'Shenandoah Valley Outflow',
+    region: 'Virginia - Shenandoah',
+    lat: 38.45,
+    lng: -78.87,
+    status: 'offline',
+    ph: null,
+    tds: null,
+    turbidity: null,
+    temp: null,
+  },
 ];
 
 const STATUS_COLORS = {
@@ -177,7 +245,9 @@ const STATUS_COLORS = {
 };
 
 export function EnvironmentalMapPage() {
-  useEffect(() => { document.title = 'Environmental Data — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Environmental Data — WaterQuality.Trading';
+  }, []);
   const [search, setSearch] = useState('');
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -186,10 +256,11 @@ export function EnvironmentalMapPage() {
   const filtered = useMemo(() => {
     if (!search) return SENSORS;
     const q = search.toLowerCase();
-    return SENSORS.filter((s) =>
-      s.name.toLowerCase().includes(q) ||
-      s.region.toLowerCase().includes(q) ||
-      s.id.toLowerCase().includes(q)
+    return SENSORS.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) ||
+        s.region.toLowerCase().includes(q) ||
+        s.id.toLowerCase().includes(q)
     );
   }, [search]);
 
@@ -249,17 +320,22 @@ export function EnvironmentalMapPage() {
       el.style.boxShadow = '0 2px 6px rgba(0,0,0,0.25)';
       el.style.cursor = 'pointer';
       el.style.transition = 'transform 0.15s';
-      el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.4)'; });
-      el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+      el.addEventListener('mouseenter', () => {
+        el.style.transform = 'scale(1.4)';
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'scale(1)';
+      });
 
-      const readings = sensor.status !== 'offline'
-        ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;font-size:11px;color:#475569;">
+      const readings =
+        sensor.status !== 'offline'
+          ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;font-size:11px;color:#475569;">
             <span>pH: <strong>${sensor.ph}</strong></span>
             <span>TDS: <strong>${sensor.tds} ppm</strong></span>
             <span>Turb: <strong>${sensor.turbidity} NTU</strong></span>
             <span>Temp: <strong>${sensor.temp}°C</strong></span>
           </div>`
-        : '<div style="margin-top:8px;font-size:12px;color:#999;">Device offline</div>';
+          : '<div style="margin-top:8px;font-size:12px;color:#999;">Device offline</div>';
 
       const popup = new mapboxgl.Popup({ offset: 15 }).setHTML(`
         <div style="padding:4px;min-width:160px;">
@@ -287,7 +363,12 @@ export function EnvironmentalMapPage() {
       </Header>
 
       <StatsRow>
-        <DataCard label="Active Sensors" value={online.toString()} unit={`of ${SENSORS.length}`} compact />
+        <DataCard
+          label="Active Sensors"
+          value={online.toString()}
+          unit={`of ${SENSORS.length}`}
+          compact
+        />
         <DataCard label="Avg pH" value="7.3" compact />
         <DataCard label="Avg TDS" value="369" unit="ppm" compact />
         <DataCard label="Data Coverage" value="96.2" unit="%" compact />
@@ -323,10 +404,18 @@ export function EnvironmentalMapPage() {
             <SensorHeader>
               <div>
                 <SensorName>{sensor.name}</SensorName>
-                <SensorLocation>{sensor.region} · {sensor.id}</SensorLocation>
+                <SensorLocation>
+                  {sensor.region} · {sensor.id}
+                </SensorLocation>
               </div>
               <Badge
-                variant={sensor.status === 'online' ? 'positive' : sensor.status === 'maintenance' ? 'warning' : 'negative'}
+                variant={
+                  sensor.status === 'online'
+                    ? 'positive'
+                    : sensor.status === 'maintenance'
+                      ? 'warning'
+                      : 'negative'
+                }
                 size="sm"
                 dot
               >
@@ -335,10 +424,22 @@ export function EnvironmentalMapPage() {
             </SensorHeader>
             {sensor.status !== 'offline' ? (
               <SensorStats>
-                <Stat><StatLabel>pH</StatLabel><StatValue>{sensor.ph}</StatValue></Stat>
-                <Stat><StatLabel>TDS</StatLabel><StatValue>{sensor.tds} ppm</StatValue></Stat>
-                <Stat><StatLabel>Turbidity</StatLabel><StatValue>{sensor.turbidity} NTU</StatValue></Stat>
-                <Stat><StatLabel>Temp</StatLabel><StatValue>{sensor.temp}°C</StatValue></Stat>
+                <Stat>
+                  <StatLabel>pH</StatLabel>
+                  <StatValue>{sensor.ph}</StatValue>
+                </Stat>
+                <Stat>
+                  <StatLabel>TDS</StatLabel>
+                  <StatValue>{sensor.tds} ppm</StatValue>
+                </Stat>
+                <Stat>
+                  <StatLabel>Turbidity</StatLabel>
+                  <StatValue>{sensor.turbidity} NTU</StatValue>
+                </Stat>
+                <Stat>
+                  <StatLabel>Temp</StatLabel>
+                  <StatValue>{sensor.temp}°C</StatValue>
+                </Stat>
               </SensorStats>
             ) : (
               <div style={{ padding: '16px 0', textAlign: 'center', color: '#999', fontSize: 13 }}>

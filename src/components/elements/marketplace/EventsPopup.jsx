@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { colors } from "../../../styles/colors";
-import { Badge } from "../../shared/Badge/Badge";
-import { FaChevronDown } from "react-icons/fa";
-import Spinner from "../../shared/Spinner/Spinner";
-import { MarketplaceAPI } from "../../../scripts/back_door";
-import {Button} from "react-bootstrap";
-import {FaX} from "react-icons/fa6";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Badge } from '../../shared/Badge/Badge';
+import { FaChevronDown } from 'react-icons/fa';
+import Spinner from '../../shared/Spinner/Spinner';
+import { MarketplaceAPI } from '../../../scripts/back_door';
+import { FaX } from 'react-icons/fa6';
 
 const FullScreenWrapper = styled.div`
   position: fixed;
@@ -60,7 +58,9 @@ const CloseButton = styled.button`
   background: none;
   font-size: 24px;
   color: ${({ theme }) => theme.colors.ui400};
-  transition: color 0.2s, transform 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
   font-size: 16px;
   &:hover {
     color: ${({ theme }) => theme.colors.ui800};
@@ -131,7 +131,7 @@ const Event = styled.div`
 `;
 
 const variants = {
-  open: { opacity: 1, height: "auto" },
+  open: { opacity: 1, height: 'auto' },
   collapsed: { opacity: 0, height: 0 },
 };
 
@@ -140,18 +140,14 @@ const EventDetail = ({ event, filterType }) => {
   const toggleOpen = () => setIsOpen(!isOpen);
 
   const mainInfo =
-    filterType === "all"
-      ? { "": event.type || "unnamed" }
-      : { "Listing #": event.listingId || "Not Available" };
+    filterType === 'all'
+      ? { '': event.type || 'unnamed' }
+      : { 'Listing #': event.listingId || 'Not Available' };
 
   return (
     <EventDetailWrapper>
-      <EventSummary
-        onClick={toggleOpen}
-        initial="initial"
-        animate={isOpen ? "open" : "collapsed"}
-      >
-        {Object.entries(mainInfo).map(([key, value], idx) => (
+      <EventSummary onClick={toggleOpen} initial="initial" animate={isOpen ? 'open' : 'collapsed'}>
+        {Object.entries(mainInfo).map(([_key, value], idx) => (
           <Event key={idx}>
             <p key={idx}>{value}</p>
             <FaChevronDown />
@@ -161,19 +157,14 @@ const EventDetail = ({ event, filterType }) => {
 
       <AnimatePresence>
         {isOpen && (
-          <EventTable
-            variants={variants}
-            initial="initial"
-            animate="open"
-            exit="collapsed"
-          >
+          <EventTable variants={variants} initial="initial" animate="open" exit="collapsed">
             <tbody>
               {Object.entries(event).map(([key, value], idx) => (
                 <tr key={idx}>
                   <td>{key}</td>
                   <td>
-                    {typeof value === "string" ? value : JSON.stringify(value)}{" "}
-                    {(key === "price" || key === "amount") && "$"}
+                    {typeof value === 'string' ? value : JSON.stringify(value)}{' '}
+                    {(key === 'price' || key === 'amount') && '$'}
                   </td>
                 </tr>
               ))}
@@ -187,7 +178,7 @@ const EventDetail = ({ event, filterType }) => {
 
 const EventsPopup = ({ onClose }) => {
   const [events, setEvents] = useState([]);
-  const [filterType, setFilterType] = useState("all");
+  const [filterType, setFilterType] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -201,15 +192,10 @@ const EventsPopup = ({ onClose }) => {
     setFilterType(type);
   };
 
-  const fetchEvents = async (
-    filterType,
-    rangeFilter = 500,
-    toBlock = "latest"
-  ) => {
+  const fetchEvents = async (filterType, rangeFilter = 500, toBlock = 'latest') => {
     let _events;
     if (filterType in marketEvents.filtered) {
-      _events = (await marketEvents.filtered[filterType](rangeFilter, toBlock))
-        ?.events;
+      _events = (await marketEvents.filtered[filterType](rangeFilter, toBlock))?.events;
     } else {
       _events = (await marketEvents.getAllEvents(rangeFilter, toBlock))?.events;
     }
@@ -235,26 +221,23 @@ const EventsPopup = ({ onClose }) => {
       <PopupWrapper>
         <CloseButton onClick={onClose}>✖ </CloseButton>
         <FilterSection>
-          <Badge onClick={() => handleFilterChange("all")}>All Events</Badge>
-          {Object.keys(marketEvents?.filtered ?? {}).map(
-            (eventFunction, index) => (
-              <Badge
-                key={index}
-                onClick={() => handleFilterChange(eventFunction)}
-              >
-                {eventFunction.replace(/([A-Z])/g, " $1").trim()} Events
-              </Badge>
-            )
-          )}
+          <Badge onClick={() => handleFilterChange('all')}>All Events</Badge>
+          {Object.keys(marketEvents?.filtered ?? {}).map((eventFunction, index) => (
+            <Badge key={index} onClick={() => handleFilterChange(eventFunction)}>
+              {eventFunction.replace(/([A-Z])/g, ' $1').trim()} Events
+            </Badge>
+          ))}
         </FilterSection>
 
         <ScrollableEventContainer>
           {error && (
             <>
-              <NoEventsMessage style={{ color: "red", display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <FaX onClick={() => setError(null)} />{error}
+              <NoEventsMessage
+                style={{ color: 'red', display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+              >
+                <FaX onClick={() => setError(null)} />
+                {error}
               </NoEventsMessage>
-              
             </>
           )}
           {isLoading ? (

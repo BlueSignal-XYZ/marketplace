@@ -1,12 +1,9 @@
 // ROICalculatorSection - Interactive ROI calculator for the sales portal
-import React, { useState, useMemo } from "react";
-import styled, { keyframes } from "styled-components";
-import { salesTheme } from "../styles/theme";
+import { useState, useMemo } from 'react';
+import styled from 'styled-components';
+import { salesTheme } from '../styles/theme';
 
-const pulse = keyframes`
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-`;
+/* Kept for potential future use */
 
 const CalculatorSection = styled.section`
   background: ${salesTheme.colors.bgSurface};
@@ -80,7 +77,9 @@ const SectionDescription = styled.p`
 const CalculatorCard = styled.div`
   background: ${salesTheme.colors.bgCard};
   border-radius: 28px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 12px 40px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.02),
+    0 12px 40px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.04);
 `;
@@ -382,13 +381,13 @@ const CTAButton = styled.button`
 
 export default function ROICalculatorSection({ onGetQuote }) {
   const [waterVolume, setWaterVolume] = useState(50000);
-  const [siteType, setSiteType] = useState("pond");
+  const [siteType, setSiteType] = useState('pond');
   const [currentCost, setCurrentCost] = useState(500);
 
   const results = useMemo(() => {
     const estimatedCredits = Math.round(waterVolume * 0.02);
     const annualCredits = estimatedCredits * 12;
-    const systemCost = siteType === "pond" ? 1500 : siteType === "lake" ? 3000 : 5000;
+    const systemCost = siteType === 'pond' ? 1500 : siteType === 'lake' ? 3000 : 5000;
     const monthlySavings = estimatedCredits + currentCost * 0.3;
     const paybackMonths = Math.round(systemCost / monthlySavings);
     const fiveYearValue = annualCredits * 5 + currentCost * 0.3 * 12 * 5;
@@ -406,15 +405,15 @@ export default function ROICalculatorSection({ onGetQuote }) {
         <SectionHeader>
           <SectionLabel>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="1" x2="12" y2="23"/>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
             ROI Calculator
           </SectionLabel>
           <SectionTitle>Calculate Your Return on Investment</SectionTitle>
           <SectionDescription>
-            Estimate potential returns from water quality credits and monitoring savings.
-            Credit values vary based on market conditions and regional programs.
+            Estimate potential returns from water quality credits and monitoring savings. Credit
+            values vary based on market conditions and regional programs.
           </SectionDescription>
         </SectionHeader>
 
@@ -424,8 +423,8 @@ export default function ROICalculatorSection({ onGetQuote }) {
               <PanelHeader>
                 <PanelIcon>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
                 </PanelIcon>
                 <PanelTitle>Your Site Details</PanelTitle>
@@ -483,8 +482,14 @@ export default function ROICalculatorSection({ onGetQuote }) {
             <ResultsPanel>
               <PanelHeader>
                 <PanelIcon style={{ background: 'rgba(16, 185, 129, 0.15)' }}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: salesTheme.colors.accentPrimary }}>
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    style={{ color: salesTheme.colors.accentPrimary }}
+                  >
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                   </svg>
                 </PanelIcon>
                 <PanelTitle>Projected Results</PanelTitle>
@@ -492,9 +497,7 @@ export default function ROICalculatorSection({ onGetQuote }) {
               <ResultsGrid>
                 <ResultItem>
                   <ResultLabel>Estimated Monthly Credits*</ResultLabel>
-                  <ResultValue>
-                    ${results.estimatedCredits.toLocaleString()}
-                  </ResultValue>
+                  <ResultValue>${results.estimatedCredits.toLocaleString()}</ResultValue>
                   <ResultSubtext>Based on illustrative market rates</ResultSubtext>
                 </ResultItem>
 
@@ -506,22 +509,20 @@ export default function ROICalculatorSection({ onGetQuote }) {
 
                 <ResultItem>
                   <ResultLabel>5-Year Total Value</ResultLabel>
-                  <ResultValue>
-                    ${results.fiveYearValue.toLocaleString()}
-                  </ResultValue>
+                  <ResultValue>${results.fiveYearValue.toLocaleString()}</ResultValue>
                   <ResultSubtext>Combined credits and monitoring savings</ResultSubtext>
                 </ResultItem>
               </ResultsGrid>
               <MarketDisclaimer>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="12"/>
-                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
                 <p>
-                  *Credit values are estimates only. Actual revenue depends on market supply and demand,
-                  regional credit programs, and verification requirements. Contact us for a detailed
-                  assessment of credit potential in your area.
+                  *Credit values are estimates only. Actual revenue depends on market supply and
+                  demand, regional credit programs, and verification requirements. Contact us for a
+                  detailed assessment of credit potential in your area.
                 </p>
               </MarketDisclaimer>
             </ResultsPanel>

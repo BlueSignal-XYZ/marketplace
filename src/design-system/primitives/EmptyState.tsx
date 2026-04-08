@@ -71,7 +71,9 @@ const ActionBtn = styled.button`
   border-radius: ${({ theme }) => theme.radius.sm}px;
   cursor: pointer;
   transition: opacity ${({ theme }) => theme.animation.fast};
-  &:hover { opacity: 0.9; }
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 // ── Component ─────────────────────────────────────────────

@@ -181,7 +181,7 @@ export function useSendCommandMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ deviceId, command }) => sendDeviceCommand(deviceId, command),
-    onSuccess: (_, { deviceId }) => {
+    onSuccess: (_, { deviceId: _deviceId }) => {
       qc.invalidateQueries({ queryKey: ['devices'] });
     },
   });

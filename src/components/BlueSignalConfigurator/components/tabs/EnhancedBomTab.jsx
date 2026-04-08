@@ -1,9 +1,9 @@
 // Enhanced BOM Tab with Summary/Full Toggle and Supplier Links
-import React, { useState } from "react";
-import styled from "styled-components";
-import { SectionTitle, Table, Th, Td, TotalRow, MarginBadge } from "../../styles";
-import { ENHANCED_BOM, calculateBOMTotals } from "../../data";
-import { BlueSignalCTA } from "../shared";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { SectionTitle, Table, Th, Td, TotalRow, MarginBadge } from '../../styles';
+import { ENHANCED_BOM, calculateBOMTotals } from '../../data';
+import { BlueSignalCTA } from '../shared';
 
 const ToggleBar = styled.div`
   display: flex;
@@ -27,10 +27,10 @@ const ToggleButton = styled.button`
   padding: 6px 16px;
   font-size: 12px;
   font-weight: 600;
-  background: ${({ active }) => active ? '#3b82f6' : 'transparent'};
+  background: ${({ active }) => (active ? '#3b82f6' : 'transparent')};
   border: none;
   border-radius: 4px;
-  color: ${({ active }) => active ? '#ffffff' : '#94a3b8'};
+  color: ${({ active }) => (active ? '#ffffff' : '#94a3b8')};
   cursor: pointer;
   transition: all 0.2s;
 
@@ -84,11 +84,13 @@ const SummaryValue = styled.div`
   font-size: 24px;
   font-weight: 700;
   color: ${({ variant }) =>
-    variant === 'cost' ? '#f87171' :
-    variant === 'price' ? '#4ade80' :
-    variant === 'margin' ? '#60a5fa' :
-    '#e2e8f0'
-  };
+    variant === 'cost'
+      ? '#f87171'
+      : variant === 'price'
+        ? '#4ade80'
+        : variant === 'margin'
+          ? '#60a5fa'
+          : '#e2e8f0'};
 `;
 
 const SummarySubtext = styled.div`
@@ -189,15 +191,12 @@ const LeadTimeBadge = styled.span`
   font-size: 10px;
   padding: 2px 6px;
   background: ${({ days }) =>
-    days > 10 ? 'rgba(239, 68, 68, 0.2)' :
-    days > 5 ? 'rgba(251, 191, 36, 0.2)' :
-    'rgba(74, 222, 128, 0.2)'
-  };
-  color: ${({ days }) =>
-    days > 10 ? '#f87171' :
-    days > 5 ? '#fbbf24' :
-    '#4ade80'
-  };
+    days > 10
+      ? 'rgba(239, 68, 68, 0.2)'
+      : days > 5
+        ? 'rgba(251, 191, 36, 0.2)'
+        : 'rgba(74, 222, 128, 0.2)'};
+  color: ${({ days }) => (days > 10 ? '#f87171' : days > 5 ? '#fbbf24' : '#4ade80')};
   border-radius: 4px;
   font-weight: 600;
 `;
@@ -208,19 +207,20 @@ const EnhancedBomTab = ({ product }) => {
 
   // Calculate totals from original BOM for backwards compatibility
   const originalTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);
-  const margin = ((product.price - originalTotal) / product.price * 100).toFixed(1);
+  const margin = (((product.price - originalTotal) / product.price) * 100).toFixed(1);
   const marginGood = parseFloat(margin) >= 30;
 
   // Calculate category totals
   const categoryTotals = {};
   if (enhancedBom) {
-    enhancedBom.sections.forEach(section => {
+    enhancedBom.sections.forEach((section) => {
       categoryTotals[section.category] = section.items.reduce(
-        (sum, item) => sum + (item.unit * item.qty), 0
+        (sum, item) => sum + item.unit * item.qty,
+        0
       );
     });
   } else {
-    product.bom.forEach(item => {
+    product.bom.forEach((item) => {
       if (!categoryTotals[item.category]) categoryTotals[item.category] = 0;
       categoryTotals[item.category] += item.cost;
     });
@@ -234,14 +234,24 @@ const EnhancedBomTab = ({ product }) => {
   // Export CSV function
   const exportCSV = () => {
     const headers = enhancedBom
-      ? ['Category', 'Item', 'Part Number', 'Qty', 'Unit Cost', 'Total', 'Supplier', 'Lead Days', 'Critical']
+      ? [
+          'Category',
+          'Item',
+          'Part Number',
+          'Qty',
+          'Unit Cost',
+          'Total',
+          'Supplier',
+          'Lead Days',
+          'Critical',
+        ]
       : ['Category', 'Item', 'Qty', 'Cost'];
 
     let rows = [];
 
     if (enhancedBom) {
-      enhancedBom.sections.forEach(section => {
-        section.items.forEach(item => {
+      enhancedBom.sections.forEach((section) => {
+        section.items.forEach((item) => {
           rows.push([
             section.category,
             item.name,
@@ -251,12 +261,12 @@ const EnhancedBomTab = ({ product }) => {
             (item.unit * item.qty).toFixed(2),
             item.supplier || '',
             item.leadDays || '',
-            item.critical ? 'Yes' : ''
+            item.critical ? 'Yes' : '',
           ]);
         });
       });
     } else {
-      product.bom.forEach(item => {
+      product.bom.forEach((item) => {
         rows.push([item.category, item.item, item.qty, item.cost]);
       });
     }
@@ -266,7 +276,7 @@ const EnhancedBomTab = ({ product }) => {
     rows.push(['', '', '', '', 'PRICE', product.price]);
     rows.push(['', '', '', '', 'MARGIN', `${margin}%`]);
 
-    const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+    const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -285,16 +295,10 @@ const EnhancedBomTab = ({ product }) => {
 
       <ToggleBar>
         <ToggleButtons>
-          <ToggleButton
-            active={viewMode === 'summary'}
-            onClick={() => setViewMode('summary')}
-          >
+          <ToggleButton active={viewMode === 'summary'} onClick={() => setViewMode('summary')}>
             Summary
           </ToggleButton>
-          <ToggleButton
-            active={viewMode === 'full'}
-            onClick={() => setViewMode('full')}
-          >
+          <ToggleButton active={viewMode === 'full'} onClick={() => setViewMode('full')}>
             Full Details
           </ToggleButton>
         </ToggleButtons>
@@ -319,7 +323,9 @@ const EnhancedBomTab = ({ product }) => {
         <SummaryCard>
           <SummaryLabel>Gross Margin</SummaryLabel>
           <SummaryValue variant="margin">{margin}%</SummaryValue>
-          <SummarySubtext>${(product.price - originalTotal).toLocaleString()} profit</SummarySubtext>
+          <SummarySubtext>
+            ${(product.price - originalTotal).toLocaleString()} profit
+          </SummarySubtext>
         </SummaryCard>
         {enhancedStats && (
           <SummaryCard>
@@ -350,107 +356,119 @@ const EnhancedBomTab = ({ product }) => {
       ) : (
         /* Full BOM View */
         <div>
-          {enhancedBom ? (
-            // Enhanced BOM with supplier links
-            enhancedBom.sections.map(section => (
-              <FullBomSection key={section.category}>
-                <SectionHeader>
-                  <SectionName>{section.category}</SectionName>
-                  <ItemCount>{section.items.length} items</ItemCount>
-                </SectionHeader>
-                <Table>
-                  <thead>
-                    <tr>
-                      <Th style={{ width: '40%' }}>Item</Th>
-                      <Th>Qty</Th>
-                      <Th>Unit</Th>
-                      <Th>Total</Th>
-                      <Th>Supplier</Th>
-                      <Th>Lead</Th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {section.items.map((item, i) => (
-                      <tr key={i}>
-                        <Td style={{ textAlign: 'left' }}>
-                          {item.name}
-                          {item.critical && <CriticalBadge>Critical</CriticalBadge>}
-                          {item.part && (
-                            <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>
-                              {item.part}
-                            </div>
-                          )}
-                        </Td>
-                        <Td>{item.qty}</Td>
-                        <Td>${item.unit.toFixed(2)}</Td>
-                        <Td>${(item.unit * item.qty).toFixed(2)}</Td>
-                        <Td>
-                          {item.url ? (
-                            <SupplierLink href={item.url} target="_blank" rel="noopener noreferrer">
-                              {item.supplier}
-                            </SupplierLink>
-                          ) : (
-                            <span style={{ color: '#64748b', fontSize: 11 }}>{item.supplier}</span>
-                          )}
-                        </Td>
-                        <Td>
-                          {item.leadDays && (
-                            <LeadTimeBadge days={item.leadDays}>{item.leadDays}d</LeadTimeBadge>
-                          )}
-                        </Td>
+          {enhancedBom
+            ? // Enhanced BOM with supplier links
+              enhancedBom.sections.map((section) => (
+                <FullBomSection key={section.category}>
+                  <SectionHeader>
+                    <SectionName>{section.category}</SectionName>
+                    <ItemCount>{section.items.length} items</ItemCount>
+                  </SectionHeader>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <Th style={{ width: '40%' }}>Item</Th>
+                        <Th>Qty</Th>
+                        <Th>Unit</Th>
+                        <Th>Total</Th>
+                        <Th>Supplier</Th>
+                        <Th>Lead</Th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </FullBomSection>
-            ))
-          ) : (
-            // Fallback to original BOM format
-            Object.entries(categoryTotals).map(([category]) => (
-              <FullBomSection key={category}>
-                <SectionHeader>
-                  <SectionName>{category}</SectionName>
-                </SectionHeader>
-                <Table>
-                  <thead>
-                    <tr>
-                      <Th>Item</Th>
-                      <Th>Qty</Th>
-                      <Th>Cost</Th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {product.bom
-                      .filter(item => item.category === category)
-                      .map((item, i) => (
+                    </thead>
+                    <tbody>
+                      {section.items.map((item, i) => (
                         <tr key={i}>
-                          <Td style={{ textAlign: 'left' }}>{item.item}</Td>
+                          <Td style={{ textAlign: 'left' }}>
+                            {item.name}
+                            {item.critical && <CriticalBadge>Critical</CriticalBadge>}
+                            {item.part && (
+                              <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>
+                                {item.part}
+                              </div>
+                            )}
+                          </Td>
                           <Td>{item.qty}</Td>
-                          <Td>${item.cost.toLocaleString()}</Td>
+                          <Td>${item.unit.toFixed(2)}</Td>
+                          <Td>${(item.unit * item.qty).toFixed(2)}</Td>
+                          <Td>
+                            {item.url ? (
+                              <SupplierLink
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {item.supplier}
+                              </SupplierLink>
+                            ) : (
+                              <span style={{ color: '#64748b', fontSize: 11 }}>
+                                {item.supplier}
+                              </span>
+                            )}
+                          </Td>
+                          <Td>
+                            {item.leadDays && (
+                              <LeadTimeBadge days={item.leadDays}>{item.leadDays}d</LeadTimeBadge>
+                            )}
+                          </Td>
                         </tr>
                       ))}
-                  </tbody>
-                </Table>
-              </FullBomSection>
-            ))
-          )}
+                    </tbody>
+                  </Table>
+                </FullBomSection>
+              ))
+            : // Fallback to original BOM format
+              Object.entries(categoryTotals).map(([category]) => (
+                <FullBomSection key={category}>
+                  <SectionHeader>
+                    <SectionName>{category}</SectionName>
+                  </SectionHeader>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <Th>Item</Th>
+                        <Th>Qty</Th>
+                        <Th>Cost</Th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.bom
+                        .filter((item) => item.category === category)
+                        .map((item, i) => (
+                          <tr key={i}>
+                            <Td style={{ textAlign: 'left' }}>{item.item}</Td>
+                            <Td>{item.qty}</Td>
+                            <Td>${item.cost.toLocaleString()}</Td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </Table>
+                </FullBomSection>
+              ))}
 
           {/* Total Row */}
           <Table style={{ marginTop: 16 }}>
             <tbody>
               <tr style={{ background: 'rgba(0,0,0,0.3)' }}>
-                <Td><strong>BOM Total</strong></Td>
+                <Td>
+                  <strong>BOM Total</strong>
+                </Td>
                 <Td></Td>
                 <Td></Td>
-                <Td><strong>${originalTotal.toLocaleString()}</strong></Td>
+                <Td>
+                  <strong>${originalTotal.toLocaleString()}</strong>
+                </Td>
                 <Td></Td>
                 <Td></Td>
               </tr>
               <TotalRow>
-                <Td><strong>Retail Price</strong></Td>
+                <Td>
+                  <strong>Retail Price</strong>
+                </Td>
                 <Td></Td>
                 <Td></Td>
-                <Td><strong>${product.price.toLocaleString()}</strong></Td>
+                <Td>
+                  <strong>${product.price.toLocaleString()}</strong>
+                </Td>
                 <Td></Td>
                 <Td></Td>
               </TotalRow>

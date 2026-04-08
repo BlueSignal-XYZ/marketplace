@@ -1,9 +1,5 @@
-import WelcomeHome from "./WelcomeHome";
-import RegisterForm from "./RegisterForm";
-import LoginForm from "./LoginForm";
+import WelcomeHome from './WelcomeHome';
+import RegisterForm from './RegisterForm';
+import LoginForm from './LoginForm';
 
-export {
-    WelcomeHome,
-    RegisterForm,
-    LoginForm
-}
+export { WelcomeHome, RegisterForm, LoginForm };

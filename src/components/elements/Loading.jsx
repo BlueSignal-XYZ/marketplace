@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components';
 
 const LoadingAnimation = styled.div`
@@ -6,9 +5,7 @@ const LoadingAnimation = styled.div`
 `;
 
 const Loading = () => {
-  return (
-    <LoadingAnimation>Loading...</LoadingAnimation>
-  )
-}
+  return <LoadingAnimation>Loading...</LoadingAnimation>;
+};
 
 export default Loading;

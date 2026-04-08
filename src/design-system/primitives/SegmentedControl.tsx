@@ -47,8 +47,7 @@ const Segment = styled.button<{ $active: boolean; $size: 'sm' | 'md' }>`
   cursor: pointer;
   border: none;
   transition: all ${({ theme }) => theme.animation.fast};
-  background: ${({ $active, theme }) =>
-    $active ? theme.colors.primary : 'transparent'};
+  background: ${({ $active, theme }) => ($active ? theme.colors.primary : 'transparent')};
   color: ${({ $active, theme }) =>
     $active ? theme.colors.textOnPrimary : theme.colors.textSecondary};
 

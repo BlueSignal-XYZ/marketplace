@@ -3,7 +3,7 @@
  * Wired to /v2/credits/portfolio.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Tabs } from '../../../design-system/primitives/Tabs';
@@ -13,21 +13,20 @@ import { Badge } from '../../../design-system/primitives/Badge';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { Button } from '../../../design-system/primitives/Button';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
-import { Pagination } from '../../../design-system/primitives/Pagination';
 import { usePortfolioQuery } from '../../../shared/hooks/useApiQueries';
 import { useAppContext } from '../../../context/AppContext';
 
 const Page = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 0;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 28px 24px;
+    padding: 28px 0;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 32px 48px;
+    padding: 32px 0;
   }
 `;
 
@@ -101,49 +100,127 @@ const SkeletonGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 32px;
-  @media (max-width: 640px) { grid-template-columns: 1fr 1fr; }
-  @media (max-width: 380px) { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 380px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 function PortfolioSkeleton() {
   return (
     <>
       <SkeletonGrid>
-        {[1,2,3,4].map(i => <Skeleton key={i} height={80} />)}
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} height={80} />
+        ))}
       </SkeletonGrid>
       <Skeleton width={200} height={32} />
       <div style={{ height: 16 }} />
-      {[1,2,3].map(i => <Skeleton key={i} height={48} style={{ marginBottom: 8 }} />)}
+      {[1, 2, 3].map((i) => (
+        <Skeleton key={i} height={48} style={{ marginBottom: 8 }} />
+      ))}
     </>
   );
 }
 
 const HOLDINGS_COLUMNS = [
-  { key: 'creditId', header: 'Credit ID', mono: true, width: '120px', render: (r) => (r.creditId || '').slice(0, 12) },
-  { key: 'nutrientType', header: 'Type', render: (r) => <Badge variant={r.nutrientType === 'nitrogen' ? 'info' : 'positive'} size="sm">{r.nutrientType === 'nitrogen' ? 'N' : 'P'}</Badge> },
-  { key: 'quantity', header: 'Qty (kg)', align: 'right', mono: true, render: (r) => (r.quantity || 0).toLocaleString() },
-  { key: 'currentValue', header: 'Value', align: 'right', mono: true, render: (r) => `$${(r.currentValue || 0).toLocaleString()}` },
+  {
+    key: 'creditId',
+    header: 'Credit ID',
+    mono: true,
+    width: '120px',
+    render: (r) => (r.creditId || '').slice(0, 12),
+  },
+  {
+    key: 'nutrientType',
+    header: 'Type',
+    render: (r) => (
+      <Badge variant={r.nutrientType === 'nitrogen' ? 'info' : 'positive'} size="sm">
+        {r.nutrientType === 'nitrogen' ? 'N' : 'P'}
+      </Badge>
+    ),
+  },
+  {
+    key: 'quantity',
+    header: 'Qty (kg)',
+    align: 'right',
+    mono: true,
+    render: (r) => (r.quantity || 0).toLocaleString(),
+  },
+  {
+    key: 'currentValue',
+    header: 'Value',
+    align: 'right',
+    mono: true,
+    render: (r) => `$${(r.currentValue || 0).toLocaleString()}`,
+  },
   { key: 'region', header: 'Region', render: (r) => r.region || '\u2014' },
-  { key: 'status', header: 'Status', render: (r) => <Badge variant={r.status === 'retired' ? 'neutral' : 'positive'} size="sm">{r.status}</Badge> },
+  {
+    key: 'status',
+    header: 'Status',
+    render: (r) => (
+      <Badge variant={r.status === 'retired' ? 'neutral' : 'positive'} size="sm">
+        {r.status}
+      </Badge>
+    ),
+  },
 ];
 
 const TX_COLUMNS = [
-  { key: 'timestamp', header: 'Date', mono: true, width: '110px', render: (r) => r.timestamp ? new Date(r.timestamp).toLocaleDateString() : '\u2014' },
-  { key: 'type', header: 'Type', render: (r) => <Badge variant={r.type === 'purchase' ? 'info' : r.type === 'sale' ? 'positive' : 'warning'} size="sm">{r.type}</Badge> },
-  { key: 'quantity', header: 'Credits', align: 'right', mono: true, render: (r) => `${(r.quantity || 0).toLocaleString()} kg` },
-  { key: 'price', header: 'Amount', align: 'right', mono: true, render: (r) => r.price ? `$${(r.price || 0).toLocaleString()}` : '\u2014' },
+  {
+    key: 'timestamp',
+    header: 'Date',
+    mono: true,
+    width: '110px',
+    render: (r) => (r.timestamp ? new Date(r.timestamp).toLocaleDateString() : '\u2014'),
+  },
+  {
+    key: 'type',
+    header: 'Type',
+    render: (r) => (
+      <Badge
+        variant={r.type === 'purchase' ? 'info' : r.type === 'sale' ? 'positive' : 'warning'}
+        size="sm"
+      >
+        {r.type}
+      </Badge>
+    ),
+  },
+  {
+    key: 'quantity',
+    header: 'Credits',
+    align: 'right',
+    mono: true,
+    render: (r) => `${(r.quantity || 0).toLocaleString()} kg`,
+  },
+  {
+    key: 'price',
+    header: 'Amount',
+    align: 'right',
+    mono: true,
+    render: (r) => (r.price ? `$${(r.price || 0).toLocaleString()}` : '\u2014'),
+  },
   { key: 'counterparty', header: 'Counterparty', render: (r) => r.counterparty || '\u2014' },
 ];
 
 export function PortfolioPage() {
-  useEffect(() => { document.title = 'Portfolio — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Portfolio — WaterQuality.Trading';
+  }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const user = STATES?.user;
 
   const [tab, setTab] = useState('holdings');
 
-  const { data: portfolio, isLoading: loading, error: queryError, refetch } = usePortfolioQuery(user?.uid);
+  const {
+    data: portfolio,
+    isLoading: loading,
+    error: queryError,
+    refetch,
+  } = usePortfolioQuery(user?.uid);
 
   const error = queryError?.message || null;
 
@@ -153,9 +230,11 @@ export function PortfolioPage() {
   const totalValue = portfolio?.totalValue || 0;
   const totalN = portfolio?.totalNitrogenRemoved || 0;
   const totalP = portfolio?.totalPhosphorusRemoved || 0;
-  const activeCredits = holdings.filter(h => h.status !== 'retired');
+  const activeCredits = holdings.filter((h) => h.status !== 'retired');
   const totalActiveKg = activeCredits.reduce((s, h) => s + (h.quantity || 0), 0);
-  const retiredKg = holdings.filter(h => h.status === 'retired').reduce((s, h) => s + (h.quantity || 0), 0);
+  const retiredKg = holdings
+    .filter((h) => h.status === 'retired')
+    .reduce((s, h) => s + (h.quantity || 0), 0);
 
   const tabs = [
     { id: 'holdings', label: 'Holdings' },
@@ -175,7 +254,9 @@ export function PortfolioPage() {
       {error && (
         <ErrorBanner>
           <ErrorText>{error}</ErrorText>
-          <Button variant="outline" size="sm" onClick={() => refetch()}>Retry</Button>
+          <Button variant="outline" size="sm" onClick={() => refetch()}>
+            Retry
+          </Button>
         </ErrorBanner>
       )}
 
@@ -190,10 +271,24 @@ export function PortfolioPage() {
       ) : (
         <>
           <StatsGrid>
-            <DataCard label="Total Holdings" value={totalActiveKg.toLocaleString()} unit="kg" compact />
+            <DataCard
+              label="Total Holdings"
+              value={totalActiveKg.toLocaleString()}
+              unit="kg"
+              compact
+            />
             <DataCard label="Portfolio Value" value={`$${totalValue.toLocaleString()}`} compact />
-            <DataCard label="Credits Retired" value={retiredKg.toLocaleString()} unit="kg" compact />
-            <DataCard label="Certificates" value={(summary.activeCredits || 0).toString()} compact />
+            <DataCard
+              label="Credits Retired"
+              value={retiredKg.toLocaleString()}
+              unit="kg"
+              compact
+            />
+            <DataCard
+              label="Certificates"
+              value={(summary.activeCredits || 0).toString()}
+              compact
+            />
           </StatsGrid>
 
           <Tabs tabs={tabs} activeTab={tab} onTabChange={setTab} />
@@ -234,8 +329,18 @@ export function PortfolioPage() {
           {tab === 'impact' && (
             <Section>
               <StatsGrid>
-                <DataCard label="Nitrogen Removed" value={totalN.toLocaleString()} unit="kg" compact />
-                <DataCard label="Phosphorus Removed" value={totalP.toLocaleString()} unit="kg" compact />
+                <DataCard
+                  label="Nitrogen Removed"
+                  value={totalN.toLocaleString()}
+                  unit="kg"
+                  compact
+                />
+                <DataCard
+                  label="Phosphorus Removed"
+                  value={totalP.toLocaleString()}
+                  unit="kg"
+                  compact
+                />
                 <DataCard
                   label="Water Restored (est.)"
                   value={`~${((totalN + totalP) * 10000).toLocaleString()}`}
@@ -257,8 +362,18 @@ export function PortfolioPage() {
                     { key: 'amount', header: 'Amount Removed', align: 'right', mono: true },
                   ]}
                   data={[
-                    ...(totalN > 0 ? [{ id: 'n', nutrient: 'Nitrogen', amount: `${totalN.toLocaleString()} kg` }] : []),
-                    ...(totalP > 0 ? [{ id: 'p', nutrient: 'Phosphorus', amount: `${totalP.toLocaleString()} kg` }] : []),
+                    ...(totalN > 0
+                      ? [{ id: 'n', nutrient: 'Nitrogen', amount: `${totalN.toLocaleString()} kg` }]
+                      : []),
+                    ...(totalP > 0
+                      ? [
+                          {
+                            id: 'p',
+                            nutrient: 'Phosphorus',
+                            amount: `${totalP.toLocaleString()} kg`,
+                          },
+                        ]
+                      : []),
                   ]}
                   rowKey={(r) => r.id}
                   compact

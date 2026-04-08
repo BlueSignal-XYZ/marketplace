@@ -3,7 +3,7 @@
  * Used on How It Works and Solutions pages for first-time visitors.
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Term = styled.span`

@@ -1,8 +1,8 @@
 // Site List Component - Displays and manages sites
-import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-import { SiteAPI, CustomerAPI } from "../../scripts/back_door";
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { SiteAPI, CustomerAPI } from '../../scripts/back_door';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -127,14 +127,14 @@ const Badge = styled.span`
   color: #6b7280;
 
   ${(props) =>
-    props.variant === "devices" &&
+    props.variant === 'devices' &&
     `
     background: #dbeafe;
     color: #1d4ed8;
   `}
 
   ${(props) =>
-    props.variant === "type" &&
+    props.variant === 'type' &&
     `
     background: #dcfce7;
     color: #166534;
@@ -203,25 +203,25 @@ const StatLabel = styled.div`
 `;
 
 const SITE_TYPES = [
-  { value: "", label: "All Types" },
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-  { value: "municipal", label: "Municipal" },
-  { value: "agricultural", label: "Agricultural" },
-  { value: "educational", label: "Educational" },
-  { value: "research", label: "Research" },
+  { value: '', label: 'All Types' },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'municipal', label: 'Municipal' },
+  { value: 'agricultural', label: 'Agricultural' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'research', label: 'Research' },
 ];
 
 const SiteList = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const customerId = searchParams.get("customer");
+  const customerId = searchParams.get('customer');
 
   const [sites, setSites] = useState([]);
   const [customers, setCustomers] = useState({});
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
+  const [search, setSearch] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   useEffect(() => {
     loadSites();
@@ -247,13 +247,13 @@ const SiteList = () => {
           if (customer) {
             customerData[id] = customer;
           }
-        } catch (e) {
+        } catch {
           // Ignore
         }
       }
       setCustomers(customerData);
     } catch (err) {
-      console.error("Failed to load sites:", err);
+      console.error('Failed to load sites:', err);
     } finally {
       setLoading(false);
     }
@@ -282,14 +282,14 @@ const SiteList = () => {
   };
 
   const handleNewSite = () => {
-    navigate(customerId ? `/sites/new?customer=${customerId}` : "/sites/new");
+    navigate(customerId ? `/sites/new?customer=${customerId}` : '/sites/new');
   };
 
   return (
     <PageContainer>
       <PageHeader>
         <PageTitle>
-          {customerId ? `Sites for ${customers[customerId]?.name || "Customer"}` : "Sites"}
+          {customerId ? `Sites for ${customers[customerId]?.name || 'Customer'}` : 'Sites'}
         </PageTitle>
         <ActionButton onClick={handleNewSite}>+ New Site</ActionButton>
       </PageHeader>
@@ -320,10 +320,7 @@ const SiteList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <FilterSelect
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-        >
+        <FilterSelect value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
           {SITE_TYPES.map((t) => (
             <option key={t.value} value={t.value}>
               {t.label}
@@ -339,8 +336,8 @@ const SiteList = () => {
           <h3>No sites found</h3>
           <p>
             {search || typeFilter
-              ? "Try adjusting your search or filters"
-              : "Create your first site to get started"}
+              ? 'Try adjusting your search or filters'
+              : 'Create your first site to get started'}
           </p>
           {!search && !typeFilter && (
             <ActionButton onClick={handleNewSite}>+ New Site</ActionButton>
@@ -354,9 +351,7 @@ const SiteList = () => {
               <SiteAddress>{site.address}</SiteAddress>
               <SiteMeta>
                 <Badge variant="type">{site.type}</Badge>
-                <Badge variant="devices">
-                  {site.deviceIds?.length || 0} devices
-                </Badge>
+                <Badge variant="devices">{site.deviceIds?.length || 0} devices</Badge>
                 {site.waterBodyName && <Badge>{site.waterBodyName}</Badge>}
               </SiteMeta>
               {customers[site.customerId] && (

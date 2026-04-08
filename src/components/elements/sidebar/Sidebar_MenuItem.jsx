@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * Sidebar_MenuItem Component
@@ -14,20 +14,12 @@ import { motion, AnimatePresence } from "framer-motion";
  * @param {string} props.itemName - The label for the menu item
  * @param {string} props.route - The route to navigate to when clicked
  */
-const Sidebar_MenuItem = ({
-  icon,
-  itemName,
-  route,
-  handleSidebar,
-  onClick,
-}) => {
+const Sidebar_MenuItem = ({ icon, itemName, route, handleSidebar, onClick }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isRoute, setIsRoute] = useState(false);
 
-  const normalizedRoute = route?.startsWith("/")
-    ? route
-    : `/dashboard/${route}`;
+  const normalizedRoute = route?.startsWith('/') ? route : `/dashboard/${route}`;
 
   // Effect to check if the current route matches the given route
   useEffect(() => {
@@ -40,7 +32,7 @@ const Sidebar_MenuItem = ({
    * Handles the click event for navigation.
    */
   const handleClick = () => {
-    if (route && typeof route === "string" && !isRoute) {
+    if (route && typeof route === 'string' && !isRoute) {
       navigate(normalizedRoute);
     } else if (onClick) {
       onClick();
@@ -59,9 +51,7 @@ const Sidebar_MenuItem = ({
       isRoute={isRoute}
     >
       <AnimatePresence>
-        {isRoute && (
-          <ActiveIndicator initial={{ scale: 0 }} animate={{ scale: 1 }} />
-        )}
+        {isRoute && <ActiveIndicator initial={{ scale: 0 }} animate={{ scale: 1 }} />}
       </AnimatePresence>
       <StyledIconWrap>
         <Icon icon={icon} color="#000" />

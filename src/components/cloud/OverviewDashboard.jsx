@@ -1,32 +1,32 @@
 // /src/components/cloud/OverviewDashboard.jsx
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import { getDevices, getAlerts, getSites } from "../../services/v2/api";
-import { CommissionAPI } from "../../scripts/back_door";
-import { useAppContext } from "../../context/AppContext";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import { getDevices, getAlerts, getSites } from '../../services/v2/api';
+import { CommissionAPI } from '../../scripts/back_door';
+import { useAppContext } from '../../context/AppContext';
 
 /** Format a timestamp into a human-readable relative string. */
 const getRelativeTime = (timestamp) => {
-  if (!timestamp) return "—";
+  if (!timestamp) return '—';
   const now = Date.now();
   const then = new Date(timestamp).getTime();
-  if (Number.isNaN(then)) return "—";
+  if (Number.isNaN(then)) return '—';
   const diff = now - then;
 
   const minute = 60 * 1000;
   const hour = 60 * minute;
   const day = 24 * hour;
 
-  if (diff < minute) return "just now";
+  if (diff < minute) return 'just now';
   if (diff < hour) return `${Math.floor(diff / minute)} min ago`;
   if (diff < day) return `${Math.floor(diff / hour)} hr ago`;
   return `${Math.floor(diff / day)} days ago`;
 };
-import { DemoHint } from "../DemoHint";
-import SEOHead from "../seo/SEOHead";
-import VirtualDeviceSimulator from "./VirtualDeviceSimulator";
+import { DemoHint } from '../DemoHint';
+import SEOHead from '../seo/SEOHead';
+import VirtualDeviceSimulator from './VirtualDeviceSimulator';
 
 const Grid = styled.div`
   display: grid;
@@ -46,7 +46,7 @@ const Grid = styled.div`
 const MetricCard = styled(Link)`
   display: block;
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 14px;
   padding: 22px;
   text-decoration: none;
@@ -62,7 +62,7 @@ const MetricCard = styled(Link)`
 
   /* Decorative gradient accent on top */
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -70,15 +70,15 @@ const MetricCard = styled(Link)`
     height: 3px;
     background: linear-gradient(
       90deg,
-      ${({ theme }) => theme.colors?.primary400 || "#38BDBE"} 0%,
-      ${({ theme }) => theme.colors?.primary600 || "#196061"} 100%
+      ${({ theme }) => theme.colors?.primary400 || '#38BDBE'} 0%,
+      ${({ theme }) => theme.colors?.primary600 || '#196061'} 100%
     );
     opacity: 0;
     transition: opacity 0.25s ease-out;
   }
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary300 || "#5DC9CC"};
+    border-color: ${({ theme }) => theme.colors?.primary300 || '#5DC9CC'};
     box-shadow:
       0 8px 24px rgba(29, 112, 114, 0.12),
       0 4px 8px rgba(0, 0, 0, 0.04);
@@ -99,14 +99,14 @@ const MetricCard = styled(Link)`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     margin-bottom: 10px;
   }
 
   .value {
     font-size: clamp(26px, 5vw, 34px);
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.primary600 || "#196061"};
+    color: ${({ theme }) => theme.colors?.primary600 || '#196061'};
     margin-bottom: 6px;
     letter-spacing: -0.02em;
     line-height: 1.1;
@@ -114,7 +114,7 @@ const MetricCard = styled(Link)`
 
   .subtext {
     font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
     display: flex;
     align-items: center;
     gap: 6px;
@@ -138,7 +138,7 @@ const TwoColumnGrid = styled.div`
 
 const Section = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 14px;
   padding: 24px;
   position: relative;
@@ -150,19 +150,19 @@ const Section = styled.div`
     margin: 0 0 20px;
     font-size: 17px;
     font-weight: 700;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
     display: flex;
     justify-content: space-between;
     align-items: center;
     letter-spacing: -0.01em;
     padding-bottom: 16px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f4f5f7"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f4f5f7'};
   }
 
   .view-all {
     font-size: 13px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+    color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
     text-decoration: none;
 
     &:hover {
@@ -183,13 +183,13 @@ const SiteRow = styled(Link)`
   align-items: center;
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   text-decoration: none;
   transition: all 0.15s ease-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-color: ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-color: ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   }
 
   .site-info {
@@ -200,12 +200,12 @@ const SiteRow = styled(Link)`
     .site-name {
       font-size: 14px;
       font-weight: 600;
-      color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+      color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
     }
 
     .site-meta {
       font-size: 12px;
-      color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+      color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
     }
   }
 
@@ -224,11 +224,7 @@ const StatusPill = styled.span`
   font-weight: 600;
   color: #ffffff;
   background: ${({ $variant }) =>
-    $variant === "warning"
-      ? "#f97316"
-      : $variant === "offline"
-      ? "#dc2626"
-      : "#16a34a"};
+    $variant === 'warning' ? '#f97316' : $variant === 'offline' ? '#dc2626' : '#16a34a'};
 `;
 
 const CommissioningList = styled.div`
@@ -243,7 +239,7 @@ const CommissioningRow = styled.div`
   align-items: flex-start;
   padding: 10px 12px;
   border-radius: 8px;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
   font-size: 13px;
 
   .event-info {
@@ -253,12 +249,12 @@ const CommissioningRow = styled.div`
 
     .device-name {
       font-weight: 600;
-      color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+      color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
     }
 
     .site-name {
       font-size: 12px;
-      color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+      color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
     }
   }
 
@@ -270,7 +266,7 @@ const CommissioningRow = styled.div`
 
     .time {
       font-size: 11px;
-      color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+      color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     }
   }
 `;
@@ -289,17 +285,9 @@ const TaskRow = styled.div`
   border-radius: 8px;
   border: 1px solid
     ${({ $priority }) =>
-      $priority === "critical"
-        ? "#fca5a5"
-        : $priority === "high"
-        ? "#fdba74"
-        : "#e5e7eb"};
+      $priority === 'critical' ? '#fca5a5' : $priority === 'high' ? '#fdba74' : '#e5e7eb'};
   background: ${({ $priority }) =>
-    $priority === "critical"
-      ? "#fef2f2"
-      : $priority === "high"
-      ? "#fff7ed"
-      : "#ffffff"};
+    $priority === 'critical' ? '#fef2f2' : $priority === 'high' ? '#fff7ed' : '#ffffff'};
   font-size: 13px;
 
   .task-info {
@@ -309,14 +297,14 @@ const TaskRow = styled.div`
 
     .task-title {
       font-weight: 600;
-      color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+      color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
     }
 
     .task-type {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+      color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     }
   }
 
@@ -324,11 +312,7 @@ const TaskRow = styled.div`
     font-size: 12px;
     font-weight: 600;
     color: ${({ $priority }) =>
-      $priority === "critical"
-        ? "#dc2626"
-        : $priority === "high"
-        ? "#f97316"
-        : "#6b7280"};
+      $priority === 'critical' ? '#dc2626' : $priority === 'high' ? '#f97316' : '#6b7280'};
     white-space: nowrap;
   }
 `;
@@ -336,7 +320,7 @@ const TaskRow = styled.div`
 const EmptyState = styled.div`
   text-align: center;
   padding: 32px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   font-size: 14px;
 `;
 
@@ -436,7 +420,7 @@ const DismissButton = styled.button`
 
 const HealthSummary = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 24px;
@@ -460,11 +444,7 @@ const HealthSummary = styled.div`
       justify-content: center;
       font-size: 24px;
       background: ${({ $status }) =>
-        $status === "excellent"
-          ? "#dcfce7"
-          : $status === "good"
-          ? "#fef9c3"
-          : "#fee2e2"};
+        $status === 'excellent' ? '#dcfce7' : $status === 'good' ? '#fef9c3' : '#fee2e2'};
     }
 
     .health-text {
@@ -472,13 +452,13 @@ const HealthSummary = styled.div`
         font-size: 16px;
         font-weight: 700;
         margin: 0 0 4px;
-        color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+        color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
       }
 
       p {
         font-size: 13px;
         margin: 0;
-        color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+        color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
       }
     }
   }
@@ -495,12 +475,12 @@ const HealthSummary = styled.div`
       .value {
         font-size: 24px;
         font-weight: 700;
-        color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+        color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
       }
 
       .label {
         font-size: 12px;
-        color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+        color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -513,10 +493,8 @@ const HealthCTA = styled(Link)`
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: ${({ $variant }) =>
-    $variant === "warning" ? "#fef3c7" : "#fee2e2"};
-  color: ${({ $variant }) =>
-    $variant === "warning" ? "#92400e" : "#991b1b"};
+  background: ${({ $variant }) => ($variant === 'warning' ? '#fef3c7' : '#fee2e2')};
+  color: ${({ $variant }) => ($variant === 'warning' ? '#92400e' : '#991b1b')};
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
@@ -525,8 +503,7 @@ const HealthCTA = styled(Link)`
   white-space: nowrap;
 
   &:hover {
-    background: ${({ $variant }) =>
-      $variant === "warning" ? "#fde68a" : "#fecaca"};
+    background: ${({ $variant }) => ($variant === 'warning' ? '#fde68a' : '#fecaca')};
     transform: translateY(-1px);
   }
 `;
@@ -588,7 +565,7 @@ const CTAButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  background: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -600,7 +577,7 @@ const CTAButton = styled(Link)`
   transition: all 0.15s ease-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
+    background: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
   }
@@ -611,8 +588,8 @@ const SecondaryButton = styled(Link)`
   align-items: center;
   gap: 8px;
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.primary700 || "#0369a1"};
-  border: 1px solid ${({ theme }) => theme.colors?.primary300 || "#7dd3fc"};
+  color: ${({ theme }) => theme.colors?.primary700 || '#0369a1'};
+  border: 1px solid ${({ theme }) => theme.colors?.primary300 || '#7dd3fc'};
   border-radius: 8px;
   padding: 12px 24px;
   font-size: 14px;
@@ -622,22 +599,17 @@ const SecondaryButton = styled(Link)`
   transition: all 0.15s ease-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2fe"};
+    background: ${({ theme }) => theme.colors?.primary50 || '#e0f2fe'};
     transform: translateY(-1px);
   }
 `;
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
-  height: ${({ $height }) => $height || "60px"};
+  height: ${({ $height }) => $height || '60px'};
 
   @keyframes loading {
     0% {
@@ -659,7 +631,7 @@ export default function OverviewDashboard() {
   const [loading, setLoading] = useState(true);
   const [showWelcome, setShowWelcome] = useState(() => {
     // Show welcome banner if user hasn't dismissed it
-    return !localStorage.getItem("cloud_welcome_dismissed");
+    return !localStorage.getItem('cloud_welcome_dismissed');
   });
 
   useEffect(() => {
@@ -667,14 +639,14 @@ export default function OverviewDashboard() {
   }, [user?.uid]);
 
   const dismissWelcome = () => {
-    localStorage.setItem("cloud_welcome_dismissed", "true");
+    localStorage.setItem('cloud_welcome_dismissed', 'true');
     setShowWelcome(false);
   };
 
   // Calculate fleet health status
   const getFleetHealth = () => {
     if (!stats || stats.totalDevices === 0) {
-      return { status: "none", message: "No devices configured", icon: "📡" };
+      return { status: 'none', message: 'No devices configured', icon: '📡' };
     }
 
     const onlinePercent = (stats.onlineDevices / stats.totalDevices) * 100;
@@ -682,23 +654,23 @@ export default function OverviewDashboard() {
 
     if (onlinePercent >= 95 && !hasAlerts) {
       return {
-        status: "excellent",
-        message: "All systems operational",
-        icon: "✓",
+        status: 'excellent',
+        message: 'All systems operational',
+        icon: '✓',
       };
     } else if (onlinePercent >= 80) {
       return {
-        status: "good",
+        status: 'good',
         message: hasAlerts
-          ? `${stats.openAlerts} alert${stats.openAlerts > 1 ? "s" : ""} need attention`
-          : "Most devices online",
-        icon: "●",
+          ? `${stats.openAlerts} alert${stats.openAlerts > 1 ? 's' : ''} need attention`
+          : 'Most devices online',
+        icon: '●',
       };
     } else {
       return {
-        status: "warning",
-        message: "Multiple devices need attention",
-        icon: "!",
+        status: 'warning',
+        message: 'Multiple devices need attention',
+        icon: '!',
       };
     }
   };
@@ -708,20 +680,19 @@ export default function OverviewDashboard() {
     try {
       // v2 API calls — routed through api.js which auto-switches
       // between real backend and demo interceptor based on isDemoMode().
-      const [devices, alerts, sitesData, commissioningData] =
-        await Promise.all([
-          getDevices(user.uid).catch(() => []),
-          getAlerts(user.uid).catch(() => []),
-          getSites(user.uid).catch(() => []),
-          CommissionAPI.list().then((r) => (r?.commissions || []).slice(0, 5)).catch(() => []),
-        ]);
+      const [devices, alerts, sitesData, commissioningData] = await Promise.all([
+        getDevices(user.uid).catch(() => []),
+        getAlerts(user.uid).catch(() => []),
+        getSites(user.uid).catch(() => []),
+        CommissionAPI.list()
+          .then((r) => (r?.commissions || []).slice(0, 5))
+          .catch(() => []),
+      ]);
       // No dedicated tasks API — show empty state until implemented
       const tasksData = [];
 
       // v2 returns flat arrays directly (DeviceSummary[], Alert[], Site[])
-      const onlineDevices = (devices || []).filter(
-        (d) => d.onlineStatus === "online"
-      );
+      const onlineDevices = (devices || []).filter((d) => d.onlineStatus === 'online');
 
       setStats({
         totalDevices: (devices || []).length,
@@ -735,36 +706,39 @@ export default function OverviewDashboard() {
       setRecentCommissioning(commissioningData);
       setTodayTasks(tasksData);
     } catch (error) {
-      console.error("Error loading overview dashboard:", error);
+      console.error('Error loading overview dashboard:', error);
       // Set empty stats so the page still renders
-      setStats({ totalDevices: 0, onlineDevices: 0, offlineDevices: 0, openAlerts: 0, totalSites: 0 });
+      setStats({
+        totalDevices: 0,
+        onlineDevices: 0,
+        offlineDevices: 0,
+        openAlerts: 0,
+        totalSites: 0,
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const getStatusVariant = (status) => {
-    if (status === "offline") return "offline";
-    if (status === "warning") return "warning";
-    return "online";
+    if (status === 'offline') return 'offline';
+    if (status === 'warning') return 'warning';
+    return 'online';
   };
 
   const getCommissioningStatusPill = (status) => {
     const variants = {
-      completed: "online",
-      in_progress: "warning",
-      pending: "warning",
-      failed: "offline",
+      completed: 'online',
+      in_progress: 'warning',
+      pending: 'warning',
+      failed: 'offline',
     };
-    return variants[status] || "warning";
+    return variants[status] || 'warning';
   };
 
   if (loading) {
     return (
-      <CloudPageLayout
-        title="Overview"
-        subtitle="Monitor your BlueSignal fleet at a glance"
-      >
+      <CloudPageLayout title="Overview" subtitle="Monitor your BlueSignal fleet at a glance">
         <Grid>
           <Skeleton $height="100px" />
           <Skeleton $height="100px" />
@@ -798,15 +772,13 @@ export default function OverviewDashboard() {
         <WelcomeBanner>
           <div className="welcome-content">
             <span className="welcome-icon">👋</span>
-            <p>Welcome to BlueSignal Cloud — monitor devices, manage sites, and track performance.</p>
+            <p>
+              Welcome to BlueSignal Cloud — monitor devices, manage sites, and track performance.
+            </p>
           </div>
           <div className="welcome-actions">
-            <WelcomePrimaryButton to="/cloud/onboarding">
-              Get Started
-            </WelcomePrimaryButton>
-            <DismissButton onClick={dismissWelcome}>
-              Dismiss
-            </DismissButton>
+            <WelcomePrimaryButton to="/cloud/onboarding">Get Started</WelcomePrimaryButton>
+            <DismissButton onClick={dismissWelcome}>Dismiss</DismissButton>
           </div>
         </WelcomeBanner>
       )}
@@ -842,7 +814,7 @@ export default function OverviewDashboard() {
             {(stats.openAlerts > 0 || stats.devicesNeedingAttention > 0) && (
               <HealthCTA
                 to="/cloud/alerts?status=open"
-                $variant={getFleetHealth().status === "good" ? "warning" : "error"}
+                $variant={getFleetHealth().status === 'good' ? 'warning' : 'error'}
               >
                 View issues →
               </HealthCTA>
@@ -874,27 +846,17 @@ export default function OverviewDashboard() {
 
       {/* Quick Action Buttons */}
       <QuickActions>
-        <CTAButton to="/cloud/commissioning/new">
-          + Commission Device
-        </CTAButton>
-        <SecondaryButton to="/cloud/devices/add">
-          + Add Device
-        </SecondaryButton>
-        <SecondaryButton to="/cloud/sites/new">
-          + Add Site
-        </SecondaryButton>
-        <SecondaryButton to="/cloud/devices">
-          View All Devices
-        </SecondaryButton>
+        <CTAButton to="/cloud/commissioning/new">+ Commission Device</CTAButton>
+        <SecondaryButton to="/cloud/devices/add">+ Add Device</SecondaryButton>
+        <SecondaryButton to="/cloud/sites/new">+ Add Site</SecondaryButton>
+        <SecondaryButton to="/cloud/devices">View All Devices</SecondaryButton>
       </QuickActions>
 
       {/* Top Metrics Row */}
       <Grid>
         <MetricCard to="/cloud/devices?status=online">
           <div className="label">Devices Online</div>
-          <div className="value">
-            {stats?.onlineDevices || 0}
-          </div>
+          <div className="value">{stats?.onlineDevices || 0}</div>
           <div className="subtext">{stats?.totalDevices || 0} total</div>
         </MetricCard>
 
@@ -940,11 +902,11 @@ export default function OverviewDashboard() {
                   </div>
                   <div className="site-status">
                     <StatusPill $variant={getStatusVariant(site.status)}>
-                      {site.status === "online"
-                        ? "Online"
-                        : site.status === "warning"
-                        ? "Warning"
-                        : "Offline"}
+                      {site.status === 'online'
+                        ? 'Online'
+                        : site.status === 'warning'
+                          ? 'Warning'
+                          : 'Offline'}
                     </StatusPill>
                   </div>
                 </SiteRow>
@@ -971,14 +933,10 @@ export default function OverviewDashboard() {
                     <div className="site-name">{event.siteName}</div>
                   </div>
                   <div className="event-status">
-                    <StatusPill
-                      $variant={getCommissioningStatusPill(event.status)}
-                    >
-                      {event.status.replace("_", " ")}
+                    <StatusPill $variant={getCommissioningStatusPill(event.status)}>
+                      {event.status.replace('_', ' ')}
                     </StatusPill>
-                    <div className="time">
-                      {getRelativeTime(event.lastUpdated)}
-                    </div>
+                    <div className="time">{getRelativeTime(event.lastUpdated)}</div>
                   </div>
                 </CommissioningRow>
               ))}
@@ -989,11 +947,9 @@ export default function OverviewDashboard() {
 
       {/* Bottom Row: Today's Tasks */}
       <Section>
-        <h2>Today's Tasks</h2>
+        <h2>Today&apos;s Tasks</h2>
         {todayTasks.length === 0 ? (
-          <EmptyState>
-            No tasks scheduled for today. You're all caught up!
-          </EmptyState>
+          <EmptyState>No tasks scheduled for today. You&apos;re all caught up!</EmptyState>
         ) : (
           <TasksList>
             {todayTasks.map((task) => (

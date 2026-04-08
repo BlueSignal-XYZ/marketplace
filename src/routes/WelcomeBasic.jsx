@@ -1,12 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import { WelcomeHome } from "./components/welcome";
-import Footer from "../components/shared/Footer/Footer";
+import styled from 'styled-components';
+import { WelcomeHome } from './components/welcome';
+import Footer from '../components/shared/Footer/Footer';
 
-const backgroundImage = new URL(
-  "../assets/wallpapers/welcome_wallpaper.jpg",
-  import.meta.url
-).href;
+const backgroundImage = new URL('../assets/wallpapers/welcome_wallpaper.jpg', import.meta.url).href;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -56,7 +52,7 @@ const WelcomeBasic = () => {
         </div>
 
         {/* RIGHT SIDE (WelcomeHome) */}
-        <div style={{ padding: "40px", maxWidth: "500px" }}>
+        <div style={{ padding: '40px', maxWidth: '500px' }}>
           <WelcomeHome
             key="welcome-basic"
             user={null}

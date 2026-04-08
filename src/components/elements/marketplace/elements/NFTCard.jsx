@@ -1,17 +1,16 @@
-import React from "react";
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { formatLongString } from "../../../../scripts/utils";
-import placeholderIMG from "../../../../assets/icon.png";
-import { ButtonPrimary } from "../../../shared/button/Button";
-import { hoverLift } from "../../../../styles/animations";
+import { formatLongString } from '../../../../scripts/utils';
+import placeholderIMG from '../../../../assets/icon.png';
+import { ButtonPrimary } from '../../../shared/button/Button';
+import { hoverLift } from '../../../../styles/animations';
 
 const Card = styled.div`
   background: white;
   border: 1px solid ${({ theme }) => theme.colors.ui200};
-  border-radius: ${({ theme }) => theme.borderRadius.md || "16px"};
+  border-radius: ${({ theme }) => theme.borderRadius.md || '16px'};
   /* Standardized card padding from UI audit */
-  padding: ${({ theme }) => theme.spacing?.card || "24px"};
+  padding: ${({ theme }) => theme.spacing?.card || '24px'};
   box-sizing: border-box;
   cursor: pointer;
 
@@ -23,12 +22,12 @@ const Card = styled.div`
   ${hoverLift}
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.primary300 || "#5DC9CC"};
+    border-color: ${({ theme }) => theme.colors.primary300 || '#5DC9CC'};
     box-shadow: 0 4px 12px rgba(29, 112, 114, 0.1);
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.primary400 || "#38BDBE"};
+    outline: 2px solid ${({ theme }) => theme.colors.primary400 || '#38BDBE'};
     outline-offset: 2px;
   }
 
@@ -112,9 +111,7 @@ const NFTCard = ({ nft, navigate }) => (
       <Seller>Available: {nft.available || Math.round(Math.random() * 100)}</Seller>
     </NFTInfo>
 
-    <ButtonPrimary onClick={() => navigate(`listing/${nft.listingId}`)}>
-      Buy Now
-    </ButtonPrimary>
+    <ButtonPrimary onClick={() => navigate(`listing/${nft.listingId}`)}>Buy Now</ButtonPrimary>
   </Card>
 );
 

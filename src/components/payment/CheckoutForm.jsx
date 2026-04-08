@@ -1,29 +1,26 @@
 /**
  * Checkout component
- * 
+ *
  * Purpose:
  * Handle and process transactions
  * Only triggered when a checkoutItem is set
- * 
+ *
  */
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { PaymentElement } from "@stripe/react-stripe-js";
-import { useState, useEffect } from "react";
-import { useStripe, useElements } from "@stripe/react-stripe-js";
-import { motion } from "framer-motion";
-import Spinner from "./Spinner";
-import configs from "../../../configs";
-import { unitToString } from "./OrderConfirmation";
-import {presaleProducer} from "./data";
-import { ButtonPrimary } from "../shared/button/Button";
-import styled from "styled-components";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { useState, useEffect } from 'react';
+import { useStripe, useElements } from '@stripe/react-stripe-js';
+import { motion } from 'framer-motion';
+import Spinner from './Spinner';
+import configs from '../../../configs';
+import { unitToString } from './OrderConfirmation';
+import { presaleProducer } from './data';
+import { ButtonPrimary } from '../shared/button/Button';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import {NPCCreditsAPI} from "../../scripts/back_door";
-import { useAppContext } from "../../context/AppContext";
-
-
-
+import { NPCCreditsAPI } from '../../scripts/back_door';
+import { useAppContext } from '../../context/AppContext';
 
 const Form = ({ item }) => {
   const stripe = useStripe();
@@ -51,7 +48,7 @@ const Form = ({ item }) => {
       const { producer, verifier, type } = presaleProducer;
 
       if (!user?.uid) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
 
       const data = await NPCCreditsAPI.buyCredits({
@@ -62,20 +59,17 @@ const Form = ({ item }) => {
         amount,
         price: payAmount,
       });
-  
+
       const { certID } = data.response;
       if (certID > 0) {
         certReturn = certID;
       }
-
     } catch (error) {
       throw error; // Re-throw the error after handling it
     }
-  
+
     return certReturn;
   };
-  
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,27 +78,27 @@ const Form = ({ item }) => {
     setIsProcessing(true);
     setMessage(null); // Clear previous messages
 
-      const { error } = await stripe.confirmPayment({
-        elements,
-        redirect: 'if_required'
-      });
+    const { error } = await stripe.confirmPayment({
+      elements,
+      redirect: 'if_required',
+    });
 
-      if (error) {
-        const message =
-          error.type === "card_error" || error.type === "validation_error"
-            ? error.message
-            : "An unexpected error occurred.";
-        setMessage(message);
+    if (error) {
+      const message =
+        error.type === 'card_error' || error.type === 'validation_error'
+          ? error.message
+          : 'An unexpected error occurred.';
+      setMessage(message);
+    } else {
+      // Successful Payment
+      setMessage('Payment Successful');
+      const newCert = await onSuccess();
+      if (newCert > 0) {
+        naviagte(`/certificate/${newCert}`);
       } else {
-        // Successful Payment
-        setMessage("Payment Successful");
-        const newCert = await onSuccess();
-        if (newCert > 0) {
-          naviagte(`/certificate/${newCert}`);
-        } else {
-          setMessage("Certificate Error");
-        }
+        setMessage('Certificate Error');
       }
+    }
 
     setIsProcessing(false);
   };
@@ -117,67 +111,63 @@ const Form = ({ item }) => {
 
   return (
     <StyledPayment>
-
-    <form
-      id="payment-form"
-      onSubmit={handleSubmit}
-      style={{ maxWidth: "400px", margin: "0 auto", position: "relative" }}
+      <form
+        id="payment-form"
+        onSubmit={handleSubmit}
+        style={{ maxWidth: '400px', margin: '0 auto', position: 'relative' }}
       >
-      <p className="stripe-title">Payments are handled by Stripe</p>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        id="payment-element-container"
-        >
-        <PaymentElement id="payment-element" />
-      </motion.div>
-
-      <ButtonPrimary
-        variants={buttonVariants}
-        
-        animate={isProcessing ? "disabled" : ""}
-        disabled={!canSubmit}
-        id="submit"
-        >
-        {isProcessing ? (
-          <Spinner />
-        ) : (
-          `Pay ${item?.item?.currency?.toUpperCase?.()} ${unitToString(
-            payAmount
-          )}`
-        )}
-      </ButtonPrimary>
-
-      {message && (
+        <p className="stripe-title">Payments are handled by Stripe</p>
         <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        id="payment-message"
-        style={{ marginTop: "20px", color: "red", textAlign: "center" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          id="payment-element-container"
         >
-          {message}
+          <PaymentElement id="payment-element" />
         </motion.div>
-      )}
-    </form>
-</StyledPayment>
+
+        <ButtonPrimary
+          variants={buttonVariants}
+          animate={isProcessing ? 'disabled' : ''}
+          disabled={!canSubmit}
+          id="submit"
+        >
+          {isProcessing ? (
+            <Spinner />
+          ) : (
+            `Pay ${item?.item?.currency?.toUpperCase?.()} ${unitToString(payAmount)}`
+          )}
+        </ButtonPrimary>
+
+        {message && (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            id="payment-message"
+            style={{ marginTop: '20px', color: 'red', textAlign: 'center' }}
+          >
+            {message}
+          </motion.div>
+        )}
+      </form>
+    </StyledPayment>
   );
 };
 
 const CheckoutForm = ({ item }) => {
   const [stripePromise, setStripePromise] = useState(null);
-  const [clientSecret, setClientSecret] = useState("");
-  
+  const [clientSecret, setClientSecret] = useState('');
+
   const serverUrl = configs.server_url;
-  const stripe_config = { stripePromise, clientSecret };
-  
+  const _stripe_config = { stripePromise, clientSecret };
+
   const { payAmount } = item || {};
 
   useEffect(() => {
     fetch(`${serverUrl}/stripe/config`, {
-      method: "POST",
+      method: 'POST',
     }).then(async (r) => {
       const { publishableKey } = await r.json();
       setStripePromise(loadStripe(publishableKey));
@@ -188,12 +178,12 @@ const CheckoutForm = ({ item }) => {
   useEffect(() => {
     if (serverUrl && stripePromise && payAmount >= 50) {
       fetch(`${serverUrl}/stripe/create/payment_intent`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          currency: "USD",
+          currency: 'USD',
           amount: payAmount,
         }),
       }).then(async (result) => {
@@ -217,13 +207,10 @@ const CheckoutForm = ({ item }) => {
 
 export default CheckoutForm;
 
-
 const StyledPayment = styled.div`
-  
-.stripe-title {
-  font-size: 16px;
-  margin-bottom: 16px;
-  color: ${({theme}) => theme.colors.ui800};
-}
-  
-`
+  .stripe-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: ${({ theme }) => theme.colors.ui800};
+  }
+`;

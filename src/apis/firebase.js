@@ -6,11 +6,9 @@
 // signInWithRedirect to fail because Firebase can't determine which
 // auth instance should receive the redirect result.
 
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import { getAppMode } from '../utils/modeDetection';
-
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
 // Firebase configuration for waterquality-trading project
 // Used by both Cloud and Marketplace modes
 // SECURITY: All config values MUST come from environment variables
@@ -27,11 +25,12 @@ const firebaseConfig = {
 // Validate required Firebase config - fail gracefully instead of throwing
 // This prevents white screen when env vars are missing
 const requiredKeys = ['apiKey', 'authDomain', 'projectId'];
-const missingKeys = requiredKeys.filter(key => !firebaseConfig[key]);
+const missingKeys = requiredKeys.filter((key) => !firebaseConfig[key]);
 export const isFirebaseConfigured = missingKeys.length === 0;
-export const firebaseConfigError = missingKeys.length > 0
-  ? `Missing required Firebase config: ${missingKeys.join(', ')}. Check environment variables.`
-  : null;
+export const firebaseConfigError =
+  missingKeys.length > 0
+    ? `Missing required Firebase config: ${missingKeys.join(', ')}. Check environment variables.`
+    : null;
 
 // Initialize Firebase only if configured (single default app)
 // If not configured, create null placeholders to prevent import errors
@@ -47,15 +46,15 @@ if (isFirebaseConfigured) {
   googleProvider = new GoogleAuthProvider();
 }
 
-const mode = getAppMode();
-
 // Lazy-load Firestore — only import firebase/firestore when actually needed.
 // This avoids pulling ~180KB into the main bundle for features that rarely use it.
 let _firestore = null;
 export async function getFirestoreInstance() {
   if (_firestore) return _firestore;
   if (!app) {
-    console.error('[Firebase] Cannot initialise Firestore — Firebase app is not configured. Check VITE_FIREBASE_* env vars.');
+    console.error(
+      '[Firebase] Cannot initialise Firestore — Firebase app is not configured. Check VITE_FIREBASE_* env vars.'
+    );
     return null;
   }
   const { getFirestore } = await import('firebase/firestore');

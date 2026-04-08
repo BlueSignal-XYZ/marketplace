@@ -9,7 +9,12 @@
  */
 
 import { useMemo } from 'react';
-import { getAppMode, isCloudMode, isMarketplaceMode, isLandingMode } from '../../utils/modeDetection';
+import {
+  getAppMode,
+  isCloudMode,
+  isMarketplaceMode,
+  isLandingMode,
+} from '../../utils/modeDetection';
 
 export type AppMode = 'cloud' | 'marketplace' | 'landing';
 

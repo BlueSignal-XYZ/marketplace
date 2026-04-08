@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import { ethers } from "ethers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { motion } from "framer-motion";
-import PoSPopup from "./elements/PoSPopup";
-import { formatLongString } from "../../../scripts/utils";
-import placeholder from "../../../assets/icon.png";
-import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
-import { DashboardPage } from "../../shared/DashboardPage/DashboardPage";
-import { MarketplaceAPI } from "../../../scripts/back_door";
-import { useAppContext } from "../../../context/AppContext";
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import { ethers } from 'ethers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import PoSPopup from './elements/PoSPopup';
+import placeholder from '../../../assets/icon.png';
+import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
+import { DashboardPage } from '../../shared/DashboardPage/DashboardPage';
+import { MarketplaceAPI } from '../../../scripts/back_door';
+import { useAppContext } from '../../../context/AppContext';
 
 const logoColors = {
-  primary: "#005A87",
-  secondary: "#003F5E",
-  accent: "#007BB5",
+  primary: '#005A87',
+  secondary: '#003F5E',
+  accent: '#007BB5',
 };
 
 const fadeIn = keyframes`
@@ -159,11 +157,11 @@ const ListingPage = () => {
   const { id } = useParams();
   const { STATES } = useAppContext();
   const { user } = STATES || {};
-  const navigate = useNavigate();
+
   const [listingDetails, setListingDetails] = useState({});
   const [bidHistory, setBidHistory] = useState([]);
   const [saleHistory, setSaleHistory] = useState([]);
-  const [actionType, setActionType] = useState("");
+  const [actionType, setActionType] = useState('');
   const [showPoSPopup, setShowPoSPopup] = useState(false);
   const [userBidHistory, setUserBidHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -183,23 +181,18 @@ const ListingPage = () => {
       try {
         const allEvents = (await marketEvents.getAllEvents())?.events;
         if (!allEvents) return;
-        const listingEvents = allEvents.filter(
-          (event) => event.listingId?.toString() === id
-        );
+        const listingEvents = allEvents.filter((event) => event.listingId?.toString() === id);
 
         // Set the state based on the processed data
-        setListingDetails(
-          listingEvents.find((event) => event.type === "Listing") || {}
-        );
+        setListingDetails(listingEvents.find((event) => event.type === 'Listing') || {});
         setBidHistory(
           listingEvents.filter(
-            (event) =>
-              event.type === "Bid Placed" || event.type === "Bid Accepted"
+            (event) => event.type === 'Bid Placed' || event.type === 'Bid Accepted'
           )
         );
-        setSaleHistory(listingEvents.filter((event) => event.type === "Sale"));
+        setSaleHistory(listingEvents.filter((event) => event.type === 'Sale'));
       } catch (error) {
-        console.error("Error fetching listing data:", error);
+        console.error('Error fetching listing data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -218,9 +211,7 @@ const ListingPage = () => {
     const bidEvents = (await marketEvents.filtered.bidded())?.events;
     if (!bidEvents) return;
     //setUserBidHistory(bidEvents.filter(event => event.bidder === user.address && event.listingId === Number(id)));
-    setUserBidHistory(
-      bidEvents.filter((event) => event.listingId === Number(id))
-    );
+    setUserBidHistory(bidEvents.filter((event) => event.listingId === Number(id)));
   };
 
   const openPoSPopup = (type) => {
@@ -234,30 +225,20 @@ const ListingPage = () => {
 
   const buyNFT = async (listingId, value) => {
     try {
-      return await MarketplaceAPI.Buyer.buyNFT(
-        listingId,
-        ethers.parseUnits(value, "ether")
-      );
+      return await MarketplaceAPI.Buyer.buyNFT(listingId, ethers.parseUnits(value, 'ether'));
     } catch (error) {
-      console.error("Error buying NFT:", error);
+      console.error('Error buying NFT:', error);
       throw error; // Rethrow the error to handle it in the component
     }
   };
 
   const placeBid = async (listingId, value) => {
     try {
-      return await MarketplaceAPI.Buyer.placeBid(
-        listingId,
-        ethers.parseUnits(value, "ether")
-      );
+      return await MarketplaceAPI.Buyer.placeBid(listingId, ethers.parseUnits(value, 'ether'));
     } catch (error) {
-      console.error("Error placing bid:", error);
+      console.error('Error placing bid:', error);
       throw error;
     }
-  };
-
-  const navigateBack = () => {
-    navigate(-1);
   };
 
   if (!listingDetails) {
@@ -265,7 +246,7 @@ const ListingPage = () => {
   }
 
   return (
-    <DashboardPage backHref={"/marketplace"} title={"Listing"}>
+    <DashboardPage backHref={'/marketplace'} title={'Listing'}>
       <ListingPageWrapper>
         {isLoading ? (
           <Spinner />
@@ -285,7 +266,7 @@ const ListingPage = () => {
                 <ButtonPrimary
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => openPoSPopup("buy")}
+                  onClick={() => openPoSPopup('buy')}
                   disabled={isLoading}
                 >
                   Buy Now
@@ -293,7 +274,7 @@ const ListingPage = () => {
                 <ButtonSecondary
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => openPoSPopup("bid")}
+                  onClick={() => openPoSPopup('bid')}
                   disabled={isLoading}
                 >
                   Make a Bid
@@ -371,11 +352,7 @@ const ListingPage = () => {
         <Section></Section>
 
         {showPoSPopup && (
-          <BlurredBack
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          <BlurredBack initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <PoSPopup
               closePopup={closePoSPopup}
               actionType={actionType}

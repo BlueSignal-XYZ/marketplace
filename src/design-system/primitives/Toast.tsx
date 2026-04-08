@@ -24,20 +24,28 @@ export interface ToastItemProps {
 
 function getIcon(type: ToastType): string {
   switch (type) {
-    case 'success': return '✓';
-    case 'error':   return '✕';
-    case 'warning': return '⚠';
-    case 'info':    return 'ℹ';
+    case 'success':
+      return '✓';
+    case 'error':
+      return '✕';
+    case 'warning':
+      return '⚠';
+    case 'info':
+      return 'ℹ';
   }
 }
 
-function getSemanticColors(type: ToastType, theme: any) {
-  const c = theme.components;
+function getSemanticColors(type: ToastType, theme: import('styled-components').DefaultTheme) {
+  const c = theme.components as Record<string, string>;
   switch (type) {
-    case 'success': return { bg: c.toastSuccessBg, border: c.toastSuccessBorder };
-    case 'error':   return { bg: c.toastErrorBg,   border: c.toastErrorBorder };
-    case 'warning': return { bg: c.toastWarningBg, border: c.toastWarningBorder };
-    case 'info':    return { bg: c.toastInfoBg,    border: c.toastInfoBorder };
+    case 'success':
+      return { bg: c.toastSuccessBg, border: c.toastSuccessBorder };
+    case 'error':
+      return { bg: c.toastErrorBg, border: c.toastErrorBorder };
+    case 'warning':
+      return { bg: c.toastWarningBg, border: c.toastWarningBorder };
+    case 'info':
+      return { bg: c.toastInfoBg, border: c.toastInfoBorder };
   }
 }
 
@@ -48,7 +56,7 @@ const slideIn = keyframes`
   to   { transform: translateX(0);    opacity: 1; }
 `;
 
-const slideOut = keyframes`
+const _slideOut = keyframes`
   from { transform: translateX(0);    opacity: 1; }
   to   { transform: translateX(100%); opacity: 0; }
 `;
@@ -129,7 +137,9 @@ const CloseBtn = styled.button`
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 16px;
   line-height: 1;
-  &:hover { color: ${({ theme }) => theme.colors.text}; }
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+  }
 `;
 
 // ── Toast Item ────────────────────────────────────────────
@@ -144,7 +154,9 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
         {toast.title && <Title>{toast.title}</Title>}
         <Message>{toast.message}</Message>
       </Content>
-      <CloseBtn onClick={handleDismiss} aria-label="Dismiss">×</CloseBtn>
+      <CloseBtn onClick={handleDismiss} aria-label="Dismiss">
+        ×
+      </CloseBtn>
     </ToastCard>
   );
 };

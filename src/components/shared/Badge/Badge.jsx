@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { creditTypeColors } from "../../../styles/colors";
+import styled from 'styled-components';
+import { creditTypeColors } from '../../../styles/colors';
 
 export const Badge = styled.button`
   height: 32px;
@@ -15,12 +15,14 @@ export const Badge = styled.button`
 // Credit type badge for WaterQuality.Trading marketplace
 // Types: nitrogen, phosphorus, thermal, stormwater
 const getCreditTypeColors = (type) => {
-  const normalizedType = type?.toLowerCase() || "";
-  return creditTypeColors[normalizedType] || {
-    bg: "#f3f4f6",
-    text: "#6b7280",
-    border: "#e5e7eb",
-  };
+  const normalizedType = type?.toLowerCase() || '';
+  return (
+    creditTypeColors[normalizedType] || {
+      bg: '#f3f4f6',
+      text: '#6b7280',
+      border: '#e5e7eb',
+    }
+  );
 };
 
 export const CreditTypeBadge = styled.span`
@@ -48,10 +50,10 @@ export const CreditTypeBadge = styled.span`
 // Credit type icon component
 export const CreditTypeIcon = ({ type }) => {
   const icons = {
-    nitrogen: "🧪",
-    phosphorus: "🌿",
-    thermal: "🌡️",
-    stormwater: "💧",
+    nitrogen: '🧪',
+    phosphorus: '🌿',
+    thermal: '🌡️',
+    stormwater: '💧',
   };
-  return icons[type?.toLowerCase()] || "📊";
+  return icons[type?.toLowerCase()] || '📊';
 };

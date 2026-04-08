@@ -5,21 +5,21 @@
  * @returns {boolean} - Whether the value or object contains the search query.
  */
 const containsQuery = (obj, query) => {
-    if (typeof obj !== 'object' || obj === null) {
-        return String(obj).toLowerCase().includes(query.toLowerCase());
-    }
+  if (typeof obj !== 'object' || obj === null) {
+    return String(obj).toLowerCase().includes(query.toLowerCase());
+  }
 
-    if (Array.isArray(obj)) {
-        return obj.some(item => containsQuery(item, query));
-    }
+  if (Array.isArray(obj)) {
+    return obj.some((item) => containsQuery(item, query));
+  }
 
-    for (let key in obj) {
-        if (containsQuery(obj[key], query)) {
-            return true;
-        }
+  for (let key in obj) {
+    if (containsQuery(obj[key], query)) {
+      return true;
     }
+  }
 
-    return false;
+  return false;
 };
 
 /**
@@ -29,21 +29,21 @@ const containsQuery = (obj, query) => {
  * @returns {Object|Array} - The filtered object or array.
  */
 export const filterObjectByQuery = (obj, query) => {
-    if (typeof obj !== 'object' || obj === null) {
-        return obj; 
-    }
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
 
-    if (Array.isArray(obj)) {
-        return obj
-            .filter(item => containsQuery(item, query))
-            .map(item => filterObjectByQuery(item, query));
-    }
+  if (Array.isArray(obj)) {
+    return obj
+      .filter((item) => containsQuery(item, query))
+      .map((item) => filterObjectByQuery(item, query));
+  }
 
-    const filteredObj = {};
+  const filteredObj = {};
 
-    for (let key in obj) {
-        filteredObj[key] = filterObjectByQuery(obj[key], query);
-    }
+  for (let key in obj) {
+    filteredObj[key] = filterObjectByQuery(obj[key], query);
+  }
 
-    return filteredObj;
+  return filteredObj;
 };

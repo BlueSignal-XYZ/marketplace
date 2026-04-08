@@ -1,7 +1,7 @@
 // QR Code Scanner Component for Device Commissioning
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { Html5Qrcode } from "html5-qrcode";
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { Html5Qrcode } from 'html5-qrcode';
 
 const Overlay = styled.div`
   position: fixed;
@@ -124,14 +124,14 @@ const ScanOverlay = styled.div`
 
 const StatusBar = styled.div`
   padding: 16px 20px;
-  background: ${({ $error }) => ($error ? "#fef2f2" : "#f9fafb")};
-  border-top: 1px solid ${({ $error }) => ($error ? "#fecaca" : "#e5e7eb")};
+  background: ${({ $error }) => ($error ? '#fef2f2' : '#f9fafb')};
+  border-top: 1px solid ${({ $error }) => ($error ? '#fecaca' : '#e5e7eb')};
 `;
 
 const StatusMessage = styled.p`
   margin: 0;
   font-size: 14px;
-  color: ${({ $error }) => ($error ? "#dc2626" : "#4b5563")};
+  color: ${({ $error }) => ($error ? '#dc2626' : '#4b5563')};
   text-align: center;
 `;
 
@@ -153,7 +153,7 @@ const Button = styled.button`
   transition: all 0.15s;
 
   ${({ $variant }) =>
-    $variant === "primary"
+    $variant === 'primary'
       ? `
     background: #0284c7;
     color: #ffffff;
@@ -250,87 +250,84 @@ const parseQRContent = (content) => {
   const trimmed = content.trim();
 
   // Try JSON first
-  if (trimmed.startsWith("{")) {
+  if (trimmed.startsWith('{')) {
     try {
       const parsed = JSON.parse(trimmed);
       return {
-        deviceId: parsed.id || parsed.deviceId || "",
-        serialNumber: parsed.serialNumber || parsed.serial || "",
-        hardwareId: parsed.hardwareId || parsed.hwId || "",
-        deviceType: parsed.deviceType || parsed.type || "",
+        deviceId: parsed.id || parsed.deviceId || '',
+        serialNumber: parsed.serialNumber || parsed.serial || '',
+        hardwareId: parsed.hardwareId || parsed.hwId || '',
+        deviceType: parsed.deviceType || parsed.type || '',
         raw: trimmed,
       };
-    } catch (e) {
+    } catch {
       // Not valid JSON, continue to other formats
     }
   }
 
   // Try pipe-delimited format: id|serial|hwId|type
-  if (trimmed.includes("|")) {
-    const parts = trimmed.split("|");
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|');
     return {
-      deviceId: parts[0] || "",
-      serialNumber: parts[1] || "",
-      hardwareId: parts[2] || "",
-      deviceType: parts[3] || "",
+      deviceId: parts[0] || '',
+      serialNumber: parts[1] || '',
+      hardwareId: parts[2] || '',
+      deviceType: parts[3] || '',
       raw: trimmed,
     };
   }
 
   // Plain serial number
   return {
-    deviceId: "",
+    deviceId: '',
     serialNumber: trimmed,
-    hardwareId: "",
-    deviceType: "",
+    hardwareId: '',
+    deviceType: '',
     raw: trimmed,
   };
 };
 
 export default function QRScanner({ isOpen, onClose, onScan }) {
-  const [status, setStatus] = useState("initializing");
+  const [status, setStatus] = useState('initializing');
   const [error, setError] = useState(null);
-  const [manualEntry, setManualEntry] = useState("");
-  const [cameraPermission, setCameraPermission] = useState("prompt"); // prompt, granted, denied
-  const scannerRef = useRef(null);
+  const [manualEntry, setManualEntry] = useState('');
+  const [cameraPermission, setCameraPermission] = useState('prompt'); // prompt, granted, denied
   const html5QrCodeRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return;
 
     let mounted = true;
-    setStatus("initializing");
+    setStatus('initializing');
     setError(null);
 
     const initScanner = async () => {
       try {
         // Check for camera support
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          throw new Error("Camera not supported on this device");
+          throw new Error('Camera not supported on this device');
         }
 
         // Create scanner instance
-        const html5QrCode = new Html5Qrcode("qr-reader");
+        const html5QrCode = new Html5Qrcode('qr-reader');
         html5QrCodeRef.current = html5QrCode;
 
         // Get available cameras
         const cameras = await Html5Qrcode.getCameras();
         if (cameras.length === 0) {
-          throw new Error("No cameras found on this device");
+          throw new Error('No cameras found on this device');
         }
 
         // Prefer back camera on mobile
         const backCamera = cameras.find(
-          (c) =>
-            c.label.toLowerCase().includes("back") ||
-            c.label.toLowerCase().includes("rear")
+          (c) => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('rear')
         );
         const cameraId = backCamera?.id || cameras[0].id;
 
         if (!mounted) return;
 
-        setCameraPermission("granted");
-        setStatus("scanning");
+        setCameraPermission('granted');
+        setStatus('scanning');
 
         // Start scanning
         await html5QrCode.start(
@@ -346,23 +343,23 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
             onScan(parsed);
             handleClose();
           },
-          (errorMessage) => {
+          (_errorMessage) => {
             // Ignore continuous scanning errors (no QR in frame)
           }
         );
       } catch (err) {
-        console.error("QR Scanner error:", err);
+        console.error('QR Scanner error:', err);
         if (!mounted) return;
 
-        if (err.name === "NotAllowedError") {
-          setCameraPermission("denied");
-          setError("Camera access denied. Please allow camera access in your browser settings.");
-        } else if (err.name === "NotFoundError") {
-          setError("No camera found on this device.");
+        if (err.name === 'NotAllowedError') {
+          setCameraPermission('denied');
+          setError('Camera access denied. Please allow camera access in your browser settings.');
+        } else if (err.name === 'NotFoundError') {
+          setError('No camera found on this device.');
         } else {
-          setError(err.message || "Failed to start camera");
+          setError(err.message || 'Failed to start camera');
         }
-        setStatus("error");
+        setStatus('error');
       }
     };
 
@@ -383,7 +380,7 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
     if (html5QrCodeRef.current) {
       try {
         await html5QrCodeRef.current.stop();
-      } catch (e) {
+      } catch {
         // Ignore stop errors
       }
       html5QrCodeRef.current = null;
@@ -400,9 +397,9 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
   };
 
   const handleRetryCamera = () => {
-    setCameraPermission("prompt");
+    setCameraPermission('prompt');
     setError(null);
-    setStatus("initializing");
+    setStatus('initializing');
     // Force re-init by closing and re-opening
     onClose();
     setTimeout(() => {
@@ -420,12 +417,13 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
           <CloseButton onClick={handleClose}>&times;</CloseButton>
         </Header>
 
-        {cameraPermission === "denied" ? (
+        {cameraPermission === 'denied' ? (
           <CameraPermissionRequest>
             <div className="icon">No camera</div>
             <h4>Camera Access Required</h4>
             <p>
-              Please enable camera access in your browser settings to scan QR codes, or use manual entry below.
+              Please enable camera access in your browser settings to scan QR codes, or use manual
+              entry below.
             </p>
             <Button $variant="primary" onClick={handleRetryCamera}>
               Try Again
@@ -433,8 +431,8 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
           </CameraPermissionRequest>
         ) : (
           <ScannerContainer>
-            <div id="qr-reader" ref={scannerRef}></div>
-            {status === "scanning" && <ScanOverlay />}
+            <div id="qr-reader"></div>
+            {status === 'scanning' && <ScanOverlay />}
           </ScannerContainer>
         )}
 
@@ -442,18 +440,16 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
           <StatusMessage $error={!!error}>
             {error
               ? error
-              : status === "initializing"
-              ? "Starting camera..."
-              : status === "scanning"
-              ? "Point camera at device QR code"
-              : "Ready to scan"}
+              : status === 'initializing'
+                ? 'Starting camera...'
+                : status === 'scanning'
+                  ? 'Point camera at device QR code'
+                  : 'Ready to scan'}
           </StatusMessage>
         </StatusBar>
 
         <ManualInput>
-          <ManualInputLabel>
-            Or enter serial number manually:
-          </ManualInputLabel>
+          <ManualInputLabel>Or enter serial number manually:</ManualInputLabel>
           <InputRow>
             <Input
               type="text"
@@ -461,14 +457,10 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
               value={manualEntry}
               onChange={(e) => setManualEntry(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") handleManualSubmit();
+                if (e.key === 'Enter') handleManualSubmit();
               }}
             />
-            <Button
-              $variant="primary"
-              onClick={handleManualSubmit}
-              disabled={!manualEntry.trim()}
-            >
+            <Button $variant="primary" onClick={handleManualSubmit} disabled={!manualEntry.trim()}>
               Submit
             </Button>
           </InputRow>

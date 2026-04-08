@@ -6,21 +6,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink, useLocation } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  Cpu,
-  MapPin,
-  BellRing,
-  Wrench,
-  Settings,
-  X,
-} from 'lucide-react';
+import { LayoutDashboard, Cpu, MapPin, BellRing, Wrench, Settings, X } from 'lucide-react';
 
 /* ── Constants ────────────────────────────────────────── */
 
 const SIDEBAR_WIDTH = 240;
 const DRAWER_WIDTH = 280;
-const TOPBAR_HEIGHT_MOBILE = 56;
 const TOPBAR_HEIGHT_DESKTOP = 64;
 
 const NAV_ITEMS = [
@@ -215,11 +206,7 @@ export function CloudSidebar({ open, onClose }) {
   return (
     <>
       <Backdrop $open={open} onClick={handleBackdropClick} aria-hidden="true" />
-      <SidebarPanel
-        $open={open}
-        aria-label="Cloud navigation"
-        role="navigation"
-      >
+      <SidebarPanel $open={open} aria-label="Cloud navigation" role="navigation">
         {/* Mobile-only drawer header with close button */}
         <DrawerHeader>
           <DrawerTitle>BlueSignal Cloud</DrawerTitle>

@@ -130,7 +130,9 @@ const PrimaryBtn = styled.a`
   padding: 12px 24px;
   border-radius: 100px;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: scale(1.03);
@@ -156,7 +158,9 @@ const SecondaryBtn = styled.a`
   padding: 11px 24px;
   border-radius: 100px;
   text-decoration: none;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.w30};
@@ -255,7 +259,9 @@ const DocLink = styled.a`
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.w08};
   border-radius: 8px;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.w15};
@@ -338,15 +344,39 @@ const ReqDot = styled.span`
 
 const DownloadIcon = () => (
   <svg viewBox="0 0 16 16" fill="none">
-    <path d="M8 2v8M4 7l4 4 4-4M2 13h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M8 2v8M4 7l4 4 4-4M2 13h12"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 const DocIcon = () => (
   <svg viewBox="0 0 18 18" fill="none">
-    <path d="M10.5 1.5H4.5a1.5 1.5 0 00-1.5 1.5v12a1.5 1.5 0 001.5 1.5h9a1.5 1.5 0 001.5-1.5V6l-4.5-4.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M10.5 1.5V6H15" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 9.75H6M12 12.75H6M7.5 6.75H6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M10.5 1.5H4.5a1.5 1.5 0 00-1.5 1.5v12a1.5 1.5 0 001.5 1.5h9a1.5 1.5 0 001.5-1.5V6l-4.5-4.5z"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.5 1.5V6H15"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 9.75H6M12 12.75H6M7.5 6.75H6"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -367,27 +397,21 @@ const DownloadPage = () => (
             <CardBadge>Recommended</CardBadge>
           </CardHeader>
           <CardDesc>
-            Pre-built Raspberry Pi OS image with firmware pre-installed.
-            Flash to a microSD card and boot — no manual setup required.
+            Pre-built Raspberry Pi OS image with firmware pre-installed. Flash to a microSD card and
+            boot — no manual setup required.
           </CardDesc>
           <FileMeta>
-            <span>{IMAGE_FILENAME}&ensp;({IMAGE_SIZE})</span>
+            <span>
+              {IMAGE_FILENAME}&ensp;({IMAGE_SIZE})
+            </span>
             <span>SHA256: {IMAGE_SHA256}</span>
           </FileMeta>
           <ButtonRow>
-            <PrimaryBtn
-              href={`${RELEASE_URL}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <PrimaryBtn href={`${RELEASE_URL}`} target="_blank" rel="noopener noreferrer">
               <DownloadIcon />
               Download Image
             </PrimaryBtn>
-            <SecondaryBtn
-              href={`${RELEASE_URL}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <SecondaryBtn href={`${RELEASE_URL}`} target="_blank" rel="noopener noreferrer">
               Verify Checksum
             </SecondaryBtn>
           </ButtonRow>
@@ -402,19 +426,16 @@ const DownloadPage = () => (
             <CardBadge>Advanced</CardBadge>
           </CardHeader>
           <CardDesc>
-            Python source code for manual installation on an existing
-            Raspberry Pi OS. Includes all sensor drivers, LoRaWAN stack,
-            and systemd services.
+            Python source code for manual installation on an existing Raspberry Pi OS. Includes all
+            sensor drivers, LoRaWAN stack, and systemd services.
           </CardDesc>
           <FileMeta>
-            <span>{SOURCE_FILENAME}&ensp;({SOURCE_SIZE})</span>
+            <span>
+              {SOURCE_FILENAME}&ensp;({SOURCE_SIZE})
+            </span>
           </FileMeta>
           <ButtonRow>
-            <PrimaryBtn
-              href={`${RELEASE_URL}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <PrimaryBtn href={`${RELEASE_URL}`} target="_blank" rel="noopener noreferrer">
               <DownloadIcon />
               Download Source
             </PrimaryBtn>
@@ -436,19 +457,35 @@ const DownloadPage = () => (
             <CardTitle>Documentation</CardTitle>
           </CardHeader>
           <DocList>
-            <DocLink href={`${GITHUB_REPO}/blob/master/firmware/README.md`} target="_blank" rel="noopener noreferrer">
+            <DocLink
+              href={`${GITHUB_REPO}/blob/master/firmware/README.md`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <DocIcon />
               Quick Start Guide
             </DocLink>
-            <DocLink href={`${GITHUB_REPO}/blob/master/firmware/README.md#calibration`} target="_blank" rel="noopener noreferrer">
+            <DocLink
+              href={`${GITHUB_REPO}/blob/master/firmware/README.md#calibration`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <DocIcon />
               Calibration Guide
             </DocLink>
-            <DocLink href={`${GITHUB_REPO}/blob/master/firmware/README.md#troubleshooting`} target="_blank" rel="noopener noreferrer">
+            <DocLink
+              href={`${GITHUB_REPO}/blob/master/firmware/README.md#troubleshooting`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <DocIcon />
               Troubleshooting FAQ
             </DocLink>
-            <DocLink href={`${GITHUB_REPO}/blob/master/firmware/CHANGELOG.md`} target="_blank" rel="noopener noreferrer">
+            <DocLink
+              href={`${GITHUB_REPO}/blob/master/firmware/CHANGELOG.md`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <DocIcon />
               Changelog
             </DocLink>
@@ -466,7 +503,8 @@ const DownloadPage = () => (
           </Step>
           <Step>
             <StepContent>
-              Flash to a 16 GB+ microSD card using Raspberry Pi Imager, or:<br />
+              Flash to a 16 GB+ microSD card using Raspberry Pi Imager, or:
+              <br />
               <code>gunzip -c {IMAGE_FILENAME} | sudo dd of=/dev/sdX bs=4M status=progress</code>
             </StepContent>
           </Step>
@@ -480,16 +518,25 @@ const DownloadPage = () => (
             <StepContent>Connect 9&ndash;24 V DC power supply (2 A recommended)</StepContent>
           </Step>
           <Step>
-            <StepContent>SSH in: <code>ssh pi@wqm-XXXX.local</code></StepContent>
+            <StepContent>
+              SSH in: <code>ssh pi@wqm-XXXX.local</code>
+            </StepContent>
           </Step>
           <Step>
-            <StepContent>Edit config: <code>sudo nano /etc/bluesignal/config.yaml</code></StepContent>
+            <StepContent>
+              Edit config: <code>sudo nano /etc/bluesignal/config.yaml</code>
+            </StepContent>
           </Step>
           <Step>
-            <StepContent>Set your LoRaWAN keys from the TTN console (<code>dev_eui</code>, <code>app_eui</code>, <code>app_key</code>)</StepContent>
+            <StepContent>
+              Set your LoRaWAN keys from the TTN console (<code>dev_eui</code>, <code>app_eui</code>
+              , <code>app_key</code>)
+            </StepContent>
           </Step>
           <Step>
-            <StepContent>Reboot: <code>sudo reboot</code></StepContent>
+            <StepContent>
+              Reboot: <code>sudo reboot</code>
+            </StepContent>
           </Step>
         </Steps>
       </RevealOnScroll>
@@ -504,8 +551,8 @@ const DownloadPage = () => (
             <ReleaseDate>February 2026</ReleaseDate>
             <ReleaseDesc>
               Initial release &mdash; 6 sensor channels (pH, TDS, turbidity, ORP, temperature, GPS),
-              LoRaWAN uplink via SX1262, SQLite WAL buffer with store-and-forward,
-              relay control with threshold automation, GPS geo-tagging.
+              LoRaWAN uplink via SX1262, SQLite WAL buffer with store-and-forward, relay control
+              with threshold automation, GPS geo-tagging.
             </ReleaseDesc>
           </Release>
         </ReleaseHistory>
@@ -516,12 +563,30 @@ const DownloadPage = () => (
       <RevealOnScroll>
         <SectionHeading>System Requirements</SectionHeading>
         <ReqGrid>
-          <ReqItem><ReqDot />Raspberry Pi Zero 2W</ReqItem>
-          <ReqItem><ReqDot />BlueSignal WQM-1 HAT</ReqItem>
-          <ReqItem><ReqDot />16 GB+ microSD (Class 10 / A1)</ReqItem>
-          <ReqItem><ReqDot />9&ndash;24 V DC power (2 A)</ReqItem>
-          <ReqItem><ReqDot />LoRa antenna (915 MHz SMA)</ReqItem>
-          <ReqItem><ReqDot />The Things Network account</ReqItem>
+          <ReqItem>
+            <ReqDot />
+            Raspberry Pi Zero 2W
+          </ReqItem>
+          <ReqItem>
+            <ReqDot />
+            BlueSignal WQM-1 HAT
+          </ReqItem>
+          <ReqItem>
+            <ReqDot />
+            16 GB+ microSD (Class 10 / A1)
+          </ReqItem>
+          <ReqItem>
+            <ReqDot />
+            9&ndash;24 V DC power (2 A)
+          </ReqItem>
+          <ReqItem>
+            <ReqDot />
+            LoRa antenna (915 MHz SMA)
+          </ReqItem>
+          <ReqItem>
+            <ReqDot />
+            The Things Network account
+          </ReqItem>
         </ReqGrid>
       </RevealOnScroll>
     </Main>

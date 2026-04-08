@@ -58,7 +58,11 @@ describe('demoInterceptor marketplace', () => {
   });
 
   it('searchListings filters by verificationLevel', async () => {
-    const result = await searchListings({ page: 1, limit: 20, verificationLevel: 'sensor-verified' });
+    const result = await searchListings({
+      page: 1,
+      limit: 20,
+      verificationLevel: 'sensor-verified',
+    });
     expect(result.data.every((l) => l.verificationLevel === 'sensor-verified')).toBe(true);
   });
 

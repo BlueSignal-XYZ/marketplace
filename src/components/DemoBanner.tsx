@@ -119,7 +119,9 @@ export function DemoBanner() {
     <BannerContainer>
       <BannerText>
         <DemoIcon>🔬</DemoIcon>
-        <span><strong>Demo Mode</strong> — Showing sample data</span>
+        <span>
+          <strong>Demo Mode</strong> — Showing sample data
+        </span>
       </BannerText>
       <SettingsLink to={linkPath}>{linkLabel}</SettingsLink>
       <CloseButton onClick={handleDismiss} aria-label="Dismiss demo banner">

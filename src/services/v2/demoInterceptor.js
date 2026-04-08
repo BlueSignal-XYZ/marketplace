@@ -23,14 +23,6 @@ const metricFieldMap = {
 
 // ── Unit map for SensorReading conversion ────────────────────────────────
 
-const sensorUnits = {
-  pH: '',
-  TDS: 'ppm',
-  turbidity: 'NTU',
-  temperature: '°C',
-  ORP: 'mV',
-};
-
 // ── Helpers ──────────────────────────────────────────────────────────────
 
 /** Map CloudMockAPI device.status to v2 DeviceStatus */
@@ -63,11 +55,11 @@ function mapLatestReadingsToSensorReadings(readings, timestamp) {
   if (!readings) return [];
 
   const fieldToReading = {
-    ph:      { type: 'pH',          unit: '' },
-    tds_ppm: { type: 'TDS',         unit: 'ppm' },
-    ntu:     { type: 'turbidity',   unit: 'NTU' },
-    temp_c:  { type: 'temperature', unit: '°C' },
-    orp_mv:  { type: 'ORP',         unit: 'mV' },
+    ph: { type: 'pH', unit: '' },
+    tds_ppm: { type: 'TDS', unit: 'ppm' },
+    ntu: { type: 'turbidity', unit: 'NTU' },
+    temp_c: { type: 'temperature', unit: '°C' },
+    orp_mv: { type: 'ORP', unit: 'mV' },
   };
 
   const result = [];
@@ -142,15 +134,12 @@ function toDevice(device) {
           lastCalibrated: device.lastCommissioned,
           calibratedBy: 'Field Installer',
           nextCalibrationDue: new Date(
-            new Date(device.lastCommissioned).getTime() + 90 * 24 * 60 * 60 * 1000,
+            new Date(device.lastCommissioned).getTime() + 90 * 24 * 60 * 60 * 1000
           ).toISOString(),
           offsets: {},
         }
       : undefined,
-    latestReadings: mapLatestReadingsToSensorReadings(
-      device.latestReadings,
-      device.lastContact,
-    ),
+    latestReadings: mapLatestReadingsToSensorReadings(device.latestReadings, device.lastContact),
     createdAt: device.lastCommissioned || now,
     updatedAt: device.lastContact || now,
   };
@@ -173,9 +162,7 @@ function toAlert(alert) {
 
 /** CloudMockAPI site → v2 Site (with legacy shape for SiteCard/SiteDetailPage compatibility) */
 function toSite(site, allDevices) {
-  const siteDeviceIds = allDevices
-    .filter((d) => d.siteId === site.id)
-    .map((d) => d.id);
+  const siteDeviceIds = allDevices.filter((d) => d.siteId === site.id).map((d) => d.id);
 
   const loc = {
     latitude: site.coordinates?.lat ?? 0,
@@ -209,7 +196,7 @@ function toSite(site, allDevices) {
  * Get all devices for a user.
  * @returns {Promise<DeviceSummary[]>}
  */
-export async function getDevices(userId) {
+export async function getDevices(_userId) {
   const devices = await CloudMockAPI.devices.getAll();
   return (devices || []).map(toDeviceSummary);
 }
@@ -265,7 +252,7 @@ export async function getDeviceAlerts(deviceId) {
  * Get all alerts for a user.
  * @returns {Promise<Alert[]>}
  */
-export async function getAlerts(userId) {
+export async function getAlerts(_userId) {
   const alerts = await CloudMockAPI.alerts.getAll();
   return (alerts || []).map(toAlert);
 }
@@ -274,7 +261,7 @@ export async function getAlerts(userId) {
  * Get all sites for a user.
  * @returns {Promise<Site[]>}
  */
-export async function getSites(userId) {
+export async function getSites(_userId) {
   const [sites, devices] = await Promise.all([
     CloudMockAPI.sites.getAll(),
     CloudMockAPI.devices.getAll(),
@@ -396,7 +383,7 @@ export async function enableRevenueGrade(deviceId, params) {
   return { enabled: true, enabledAt: new Date().toISOString(), ...params };
 }
 
-export async function disableRevenueGrade(deviceId) {
+export async function disableRevenueGrade(_deviceId) {
   await new Promise((r) => setTimeout(r, 300));
 }
 
@@ -407,17 +394,30 @@ export async function getCalibrations(deviceId) {
   const now = Date.now();
   return [
     {
-      id: 'cal-demo-1', deviceId, probeType: 'ph',
-      calibratedAt: now - 30 * 86400000, calibratedBy: 'demo-user',
+      id: 'cal-demo-1',
+      deviceId,
+      probeType: 'ph',
+      calibratedAt: now - 30 * 86400000,
+      calibratedBy: 'demo-user',
       standardsUsed: ['pH 4.0 buffer', 'pH 7.0 buffer', 'pH 10.0 buffer'],
-      offsetValue: 0.02, slopeValue: 0.998, photoUrls: [],
-      expiresAt: now + 60 * 86400000, status: 'valid',
+      offsetValue: 0.02,
+      slopeValue: 0.998,
+      photoUrls: [],
+      expiresAt: now + 60 * 86400000,
+      status: 'valid',
     },
     {
-      id: 'cal-demo-2', deviceId, probeType: 'tds',
-      calibratedAt: now - 30 * 86400000, calibratedBy: 'demo-user',
-      standardsUsed: ['500 ppm'], offsetValue: 0, slopeValue: null, photoUrls: [],
-      expiresAt: now + 60 * 86400000, status: 'valid',
+      id: 'cal-demo-2',
+      deviceId,
+      probeType: 'tds',
+      calibratedAt: now - 30 * 86400000,
+      calibratedBy: 'demo-user',
+      standardsUsed: ['500 ppm'],
+      offsetValue: 0,
+      slopeValue: null,
+      photoUrls: [],
+      expiresAt: now + 60 * 86400000,
+      status: 'valid',
     },
   ];
 }
@@ -425,28 +425,34 @@ export async function getCalibrations(deviceId) {
 export async function logCalibration(deviceId, calibration) {
   await new Promise((r) => setTimeout(r, 500));
   return {
-    id: `cal-demo-${Date.now()}`, deviceId, probeType: calibration.probe_type,
-    calibratedAt: Date.now(), calibratedBy: 'demo-user',
+    id: `cal-demo-${Date.now()}`,
+    deviceId,
+    probeType: calibration.probe_type,
+    calibratedAt: Date.now(),
+    calibratedBy: 'demo-user',
     standardsUsed: calibration.standards_used || [],
-    offsetValue: calibration.offset_value || 0, slopeValue: calibration.slope_value || null,
-    photoUrls: [], expiresAt: Date.now() + 90 * 86400000, status: 'valid',
+    offsetValue: calibration.offset_value || 0,
+    slopeValue: calibration.slope_value || null,
+    photoUrls: [],
+    expiresAt: Date.now() + 90 * 86400000,
+    status: 'valid',
   };
 }
 
 // ── Device Commands (demo stubs) ─────────────────────────────────────────
 
-export async function sendDeviceCommand(deviceId, command) {
+export async function sendDeviceCommand(_deviceId, _command) {
   await new Promise((r) => setTimeout(r, 400));
   return {
     commandId: `cmd-demo-${Date.now()}`,
     status: 'queued',
-    message: 'Command queued — will be delivered on the device\'s next uplink (demo mode).',
+    message: "Command queued — will be delivered on the device's next uplink (demo mode).",
   };
 }
 
 // ── HUC Lookup (demo stub) ───────────────────────────────────────────────
 
-export async function lookupHUC(lat, lng) {
+export async function lookupHUC(_lat, _lng) {
   await new Promise((r) => setTimeout(r, 300));
   return {
     huc12: '020700100101',
@@ -463,10 +469,15 @@ export async function lookupHUC(lat, lng) {
 
 export async function getWQTLinkStatus() {
   await new Promise((r) => setTimeout(r, 200));
-  return { linked: true, linkedAt: '2026-01-10T00:00:00Z', consentedDevices: ['pgw-demo-001'], revokedAt: null };
+  return {
+    linked: true,
+    linkedAt: '2026-01-10T00:00:00Z',
+    consentedDevices: ['pgw-demo-001'],
+    revokedAt: null,
+  };
 }
 
-export async function linkWQTAccount(deviceIds) {
+export async function linkWQTAccount(_deviceIds) {
   await new Promise((r) => setTimeout(r, 500));
   return { linked: true, linkedAt: new Date().toISOString() };
 }
@@ -511,15 +522,31 @@ export async function getCreditAccruals(projectId) {
   await new Promise((r) => setTimeout(r, 300));
   return [
     {
-      id: 'accrual-demo-1', projectId, periodStart: Date.now() - 30 * 86400000,
-      periodEnd: Date.now(), creditType: 'nitrogen', amount: 1.2, unit: 'lbs',
-      baselineValue: 5.0, measuredValue: 2.1, uptimePct: 98.2, calibrationValid: true,
+      id: 'accrual-demo-1',
+      projectId,
+      periodStart: Date.now() - 30 * 86400000,
+      periodEnd: Date.now(),
+      creditType: 'nitrogen',
+      amount: 1.2,
+      unit: 'lbs',
+      baselineValue: 5.0,
+      measuredValue: 2.1,
+      uptimePct: 98.2,
+      calibrationValid: true,
       status: 'verified',
     },
     {
-      id: 'accrual-demo-2', projectId, periodStart: Date.now() - 30 * 86400000,
-      periodEnd: Date.now(), creditType: 'phosphorus', amount: 0.4, unit: 'lbs',
-      baselineValue: 1.0, measuredValue: 0.6, uptimePct: 98.2, calibrationValid: true,
+      id: 'accrual-demo-2',
+      projectId,
+      periodStart: Date.now() - 30 * 86400000,
+      periodEnd: Date.now(),
+      creditType: 'phosphorus',
+      amount: 0.4,
+      unit: 'lbs',
+      baselineValue: 1.0,
+      measuredValue: 0.6,
+      uptimePct: 98.2,
+      calibrationValid: true,
       status: 'pending_verification',
     },
   ];
@@ -533,7 +560,7 @@ const DEMO_LISTINGS = [
     creditId: 'CR-N-2025-001',
     nutrientType: 'nitrogen',
     quantity: 450,
-    pricePerCredit: 12.50,
+    pricePerCredit: 12.5,
     region: 'Chesapeake Bay, VA',
     verificationLevel: 'sensor-verified',
     sellerName: 'BlueSignal Demo Farm',
@@ -559,7 +586,7 @@ const DEMO_LISTINGS = [
     creditId: 'CR-N-2024-003',
     nutrientType: 'nitrogen',
     quantity: 320,
-    pricePerCredit: 10.00,
+    pricePerCredit: 10.0,
     region: 'Maryland Eastern Shore',
     verificationLevel: 'self-reported',
     sellerName: 'Eastern Shore Credits LLC',
@@ -572,7 +599,7 @@ const DEMO_LISTINGS = [
     creditId: 'CR-NP-2025-004',
     nutrientType: 'combined',
     quantity: 200,
-    pricePerCredit: 22.00,
+    pricePerCredit: 22.0,
     region: 'Potomac River Basin',
     verificationLevel: 'sensor-verified',
     sellerName: 'Potomac Water Quality Co.',
@@ -585,7 +612,7 @@ const DEMO_LISTINGS = [
     creditId: 'CR-P-2024-005',
     nutrientType: 'phosphorus',
     quantity: 95,
-    pricePerCredit: 15.50,
+    pricePerCredit: 15.5,
     region: 'Shenandoah Valley',
     verificationLevel: 'third-party',
     sellerName: 'Shenandoah Farm Credits',

@@ -1,11 +1,11 @@
 export const OBJECTS = {
-  sanitizeObject: function(obj, depth = 0, maxDepth = 32, cache = new WeakMap()) {
+  sanitizeObject: function (obj, depth = 0, maxDepth = 32, cache = new WeakMap()) {
     if (depth >= maxDepth) return null;
     if (cache.has(obj)) return null;
 
     if (Array.isArray(obj)) {
       cache.set(obj, true);
-      return obj.map(item => this.sanitizeObject(item, depth + 1, maxDepth, cache));
+      return obj.map((item) => this.sanitizeObject(item, depth + 1, maxDepth, cache));
     }
 
     if (obj !== null && typeof obj === 'object') {
@@ -19,26 +19,26 @@ export const OBJECTS = {
 
     return obj;
   },
-  findValueByKey: function(obj, keyName) {
+  findValueByKey: function (obj, keyName) {
     return obj.hasOwnProperty(keyName) ? obj[keyName] : undefined;
   },
-  ensureKeyFirst: function(obj, key) {
+  ensureKeyFirst: function (obj, key) {
     if (obj?.hasOwnProperty(key)) {
       return {
         [key]: obj[key],
-        ...obj
+        ...obj,
       };
     }
     return obj;
   },
   SEARCH: {
-    containsQuery: function(obj, query) {
+    containsQuery: function (obj, query) {
       if (typeof obj !== 'object' || obj === null) {
         return String(obj).toLowerCase().includes(query.toLowerCase());
       }
 
       if (Array.isArray(obj)) {
-        return obj.some(item => this.containsQuery(item, query));
+        return obj.some((item) => this.containsQuery(item, query));
       }
 
       for (let key in obj) {
@@ -49,15 +49,15 @@ export const OBJECTS = {
 
       return false;
     },
-    filterObjectByQuery: function(obj, query) {
+    filterObjectByQuery: function (obj, query) {
       if (typeof obj !== 'object' || obj === null) {
         return obj;
       }
 
       if (Array.isArray(obj)) {
         return obj
-          .filter(item => this.containsQuery(item, query))
-          .map(item => this.filterObjectByQuery(item, query));
+          .filter((item) => this.containsQuery(item, query))
+          .map((item) => this.filterObjectByQuery(item, query));
       }
 
       const filteredObj = {};
@@ -67,20 +67,20 @@ export const OBJECTS = {
       }
 
       return filteredObj;
-    }
-  }
+    },
+  },
 };
 
 export const STRING = {
   toTitleCase: (str) => {
-    if (!str) return "";
+    if (!str) return '';
     // Insert a space before all caps and trim the resulting string
     return String(str)
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, (str) => str.toUpperCase()) // Capitalize the first letter
       .trim();
-  }
-}
+  },
+};
 
 export const TIME = {
   /**
@@ -93,33 +93,34 @@ export const TIME = {
   timestampToLocalString: (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString();
-  }
-}
+  },
+};
 
 export const NUMBERS = {
   toNumber: (value) => {
     if (value == null) return 0;
     try {
       return value.toNumber();
-    } catch (e) {
-      if (typeof value === "number") {
-      return value;
-    } else {
-      // Handle other potential types (like string)
-      return parseInt(value, 10) || 0;
-    }}
+    } catch {
+      if (typeof value === 'number') {
+        return value;
+      } else {
+        // Handle other potential types (like string)
+        return parseInt(value, 10) || 0;
+      }
+    }
   },
   isValidAmount: (amount) => {
     return !isNaN(amount) && amount > 0;
-  }
-}
+  },
+};
 
 export const FORM_DATA = {
   isValidEmail: (email) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return regex.test(email);
-  }
-}
+  },
+};
 
 export const formatCertificate = (object) => {
   const result = {};
@@ -142,8 +143,7 @@ export const formatCertificate = (object) => {
   return result;
 };
 
-export const formatCertificateID = (number) =>
-  "NPRC-" + String(number).padStart(7, "0");
+export const formatCertificateID = (number) => 'NPRC-' + String(number).padStart(7, '0');
 
 export const createLookup = (arr) => {
   const lookup = {};
@@ -159,12 +159,12 @@ export const timestampToLocale = (timestamp) => {
 };
 
 export const handleViewCertificate = (id) => {
-    const numId = id?.toNumber?.() ?? id ?? 0;
-    const URL = `${window.location.origin}/certificate?id=${numId}`;
-    window.open(URL, "_blank");
-  };
+  const numId = id?.toNumber?.() ?? id ?? 0;
+  const URL = `${window.location.origin}/certificate?id=${numId}`;
+  window.open(URL, '_blank');
+};
 
-  /**
+/**
  * Capitalizes the first letter of a string.
  * @param {string} str - The input string.
  * @returns {string} The string with the first letter capitalized.
@@ -186,5 +186,4 @@ export const proxyLivepeerOriginEndpoint = (originalEndpoint) => {
   return `${proxyBasePath}${relativePath}`;
 };
 
-
-  export const logDev = (title, vars = {}) => console.warn("@DEV: ",title,vars);
+export const logDev = (title, vars = {}) => console.warn('@DEV: ', title, vars);

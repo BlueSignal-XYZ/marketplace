@@ -1,13 +1,12 @@
 // /src/components/cloud/AlertsPage.jsx
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import CloudPageLayout from "./CloudPageLayout";
-import { getRelativeTime } from "../../services/cloudMockAPI";
-import { AlertsAPI } from "../../scripts/back_door";
-import { EmptyState as DSEmptyState } from "../../design-system/primitives/EmptyState";
-import { isDemoMode } from "../../utils/demoMode";
-
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import CloudPageLayout from './CloudPageLayout';
+import { getRelativeTime } from '../../services/cloudMockAPI';
+import { AlertsAPI } from '../../scripts/back_door';
+import { EmptyState as DSEmptyState } from '../../design-system/primitives/EmptyState';
+import { isDemoMode } from '../../utils/demoMode';
 
 // Realistic demo alerts based on WQM-1 sensor specs
 const DEMO_ALERTS = [
@@ -73,7 +72,6 @@ const DEMO_ALERTS = [
   },
 ];
 
-
 const Controls = styled.div`
   display: flex;
   flex-direction: column;
@@ -109,9 +107,7 @@ const FilterChip = styled.button`
   border-radius: 999px;
   border: 1px solid
     ${({ $active, theme }) =>
-      $active
-        ? theme.colors?.primary || "#0066FF"
-        : theme.colors?.border || "#E5E7EB"};
+      $active ? theme.colors?.primary || '#0066FF' : theme.colors?.border || '#E5E7EB'};
   padding: 8px 16px;
   min-height: 36px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
@@ -121,14 +117,12 @@ const FilterChip = styled.button`
   transition: all 0.15s ease-out;
 
   background: ${({ $active, theme }) =>
-    $active ? theme.colors?.primary || "#0066FF" : theme.colors?.surface || "#FFFFFF"};
+    $active ? theme.colors?.primary || '#0066FF' : theme.colors?.surface || '#FFFFFF'};
   color: ${({ $active, theme }) =>
-    $active
-      ? theme.colors?.textOnPrimary || "#FFFFFF"
-      : theme.colors?.textSecondary || "#6B7280"};
+    $active ? theme.colors?.textOnPrimary || '#FFFFFF' : theme.colors?.textSecondary || '#6B7280'};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors?.primary || "#0066FF"};
+    border-color: ${({ theme }) => theme.colors?.primary || '#0066FF'};
   }
 
   &:active {
@@ -144,7 +138,7 @@ const FilterChip = styled.button`
 
 const TableContainer = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   overflow: hidden;
 
@@ -168,46 +162,74 @@ const Table = styled.table`
   }
 
   thead {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   }
 
   th {
     text-align: left;
     padding: 12px 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 
-    &:nth-child(1) { width: 90px; min-width: 90px; }   /* Severity */
-    &:nth-child(2) { width: 140px; min-width: 140px; }  /* Site/Device */
-    &:nth-child(3) { min-width: 0; }                    /* Message - flex */
-    &:nth-child(4) { width: 100px; min-width: 100px; } /* First Seen */
-    &:nth-child(5) { width: 100px; min-width: 100px; } /* Last Seen */
-    &:nth-child(6) { width: 100px; min-width: 100px; } /* Status */
-    &:nth-child(7) { width: 120px; min-width: 120px; }  /* Actions */
+    &:nth-child(1) {
+      width: 90px;
+      min-width: 90px;
+    } /* Severity */
+    &:nth-child(2) {
+      width: 140px;
+      min-width: 140px;
+    } /* Site/Device */
+    &:nth-child(3) {
+      min-width: 0;
+    } /* Message - flex */
+    &:nth-child(4) {
+      width: 100px;
+      min-width: 100px;
+    } /* First Seen */
+    &:nth-child(5) {
+      width: 100px;
+      min-width: 100px;
+    } /* Last Seen */
+    &:nth-child(6) {
+      width: 100px;
+      min-width: 100px;
+    } /* Status */
+    &:nth-child(7) {
+      width: 120px;
+      min-width: 120px;
+    } /* Actions */
   }
 
   td {
     padding: 12px 16px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
+    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
     vertical-align: middle;
 
-    &:nth-child(1) { width: 90px; }
-    &:nth-child(2) { width: 140px; }
-    &:nth-child(6) { width: 100px; }
-    &:nth-child(7) { width: 120px; }
+    &:nth-child(1) {
+      width: 90px;
+    }
+    &:nth-child(2) {
+      width: 140px;
+    }
+    &:nth-child(6) {
+      width: 100px;
+    }
+    &:nth-child(7) {
+      width: 120px;
+    }
   }
 
   tbody tr {
     transition: background 0.15s ease-out;
 
     &:hover {
-      background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+      background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
       cursor: pointer;
     }
 
@@ -229,8 +251,8 @@ const AlertCards = styled.div`
 `;
 
 const AlertCard = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 10px;
   padding: 16px;
   display: flex;
@@ -249,13 +271,13 @@ const AlertCardHeader = styled.div`
 const AlertCardMessage = styled.div`
   font-size: 14px;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   line-height: 1.6;
 `;
 
 const AlertCardMeta = styled.div`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+  color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
 `;
 
 const AlertCardActions = styled.div`
@@ -273,11 +295,7 @@ const SeverityPill = styled.span`
   font-weight: 600;
   color: #ffffff;
   background: ${({ $severity }) =>
-    $severity === "critical"
-      ? "#dc2626"
-      : $severity === "warning"
-      ? "#f97316"
-      : "#06b6d4"};
+    $severity === 'critical' ? '#dc2626' : $severity === 'warning' ? '#f97316' : '#06b6d4'};
 `;
 
 const StatusPill = styled.span`
@@ -287,17 +305,17 @@ const StatusPill = styled.span`
   font-size: 11px;
   font-weight: 600;
   color: ${({ $status }) =>
-    $status === "open" ? "#991b1b" : $status === "acknowledged" ? "#9a3412" : "#065f46"};
+    $status === 'open' ? '#991b1b' : $status === 'acknowledged' ? '#9a3412' : '#065f46'};
   background: ${({ $status }) =>
-    $status === "open" ? "#fef2f2" : $status === "acknowledged" ? "#fff7ed" : "#f0fdf4"};
+    $status === 'open' ? '#fef2f2' : $status === 'acknowledged' ? '#fff7ed' : '#f0fdf4'};
   border: 1px solid
     ${({ $status }) =>
-      $status === "open" ? "#fca5a5" : $status === "acknowledged" ? "#fdba74" : "#86efac"};
+      $status === 'open' ? '#fca5a5' : $status === 'acknowledged' ? '#fdba74' : '#86efac'};
 `;
 
 const DeviceLink = styled(Link)`
   font-weight: 500;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   text-decoration: none;
 
   &:hover {
@@ -309,7 +327,7 @@ const ActionButton = styled.button`
   border: none;
   background: none;
   padding: 4px 8px;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -318,7 +336,7 @@ const ActionButton = styled.button`
   transition: all 0.15s ease-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.primary50 || "#e0f2ff"};
+    background: ${({ theme }) => theme.colors?.primary50 || '#e0f2ff'};
   }
 
   &:disabled {
@@ -328,41 +346,18 @@ const ActionButton = styled.button`
 `;
 
 const AlertLink = styled(Link)`
-  color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+  color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   text-decoration: none;
   font-weight: 500;
 
   &:hover {
-    color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+    color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
     text-decoration: underline;
   }
 `;
 
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 48px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
-
-  h3 {
-    margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
-  }
-
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
-`;
-
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
@@ -379,12 +374,14 @@ const Skeleton = styled.div`
 `;
 
 export default function AlertsPage() {
-  useEffect(() => { document.title = 'Alerts — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Alerts — BlueSignal Cloud';
+  }, []);
   const [alerts, setAlerts] = useState([]);
   const [filteredAlerts, setFilteredAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [severityFilter, setSeverityFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [severityFilter, setSeverityFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [updatingAlerts, setUpdatingAlerts] = useState(new Set());
 
   useEffect(() => {
@@ -393,6 +390,7 @@ export default function AlertsPage() {
 
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [severityFilter, statusFilter, alerts]);
 
   const loadAlerts = async () => {
@@ -400,9 +398,9 @@ export default function AlertsPage() {
     try {
       // Fetch all alerts from the API
       const [activeResult, acknowledgedResult, resolvedResult] = await Promise.all([
-        AlertsAPI.getActive({ status: "active" }).catch(() => null),
-        AlertsAPI.getActive({ status: "acknowledged" }).catch(() => null),
-        AlertsAPI.getActive({ status: "resolved" }).catch(() => null),
+        AlertsAPI.getActive({ status: 'active' }).catch(() => null),
+        AlertsAPI.getActive({ status: 'acknowledged' }).catch(() => null),
+        AlertsAPI.getActive({ status: 'resolved' }).catch(() => null),
       ]);
 
       const all = [
@@ -418,7 +416,7 @@ export default function AlertsPage() {
         setAlerts(all);
       }
     } catch (error) {
-      console.error("Error loading alerts:", error);
+      console.error('Error loading alerts:', error);
       // Fall back to demo alerts in demo mode
       if (isDemoMode()) {
         setAlerts(DEMO_ALERTS);
@@ -433,11 +431,11 @@ export default function AlertsPage() {
   const applyFilters = () => {
     let filtered = [...alerts];
 
-    if (severityFilter !== "all") {
+    if (severityFilter !== 'all') {
       filtered = filtered.filter((a) => a.severity === severityFilter);
     }
 
-    if (statusFilter !== "all") {
+    if (statusFilter !== 'all') {
       filtered = filtered.filter((a) => a.status === statusFilter);
     }
 
@@ -446,18 +444,18 @@ export default function AlertsPage() {
 
   const getSeverityLabel = (severity) => {
     const labels = {
-      critical: "Critical",
-      warning: "Warning",
-      info: "Info",
+      critical: 'Critical',
+      warning: 'Warning',
+      info: 'Info',
     };
     return labels[severity] || severity;
   };
 
   const getStatusLabel = (status) => {
     const labels = {
-      open: "Open",
-      acknowledged: "Acknowledged",
-      resolved: "Resolved",
+      open: 'Open',
+      acknowledged: 'Acknowledged',
+      resolved: 'Resolved',
     };
     return labels[status] || status;
   };
@@ -467,12 +465,10 @@ export default function AlertsPage() {
     try {
       await AlertsAPI.acknowledge(alertId);
       setAlerts((prev) =>
-        prev.map((a) =>
-          a.id === alertId ? { ...a, status: "acknowledged" } : a
-        )
+        prev.map((a) => (a.id === alertId ? { ...a, status: 'acknowledged' } : a))
       );
     } catch (error) {
-      console.error("Error acknowledging alert:", error);
+      console.error('Error acknowledging alert:', error);
     } finally {
       setUpdatingAlerts((prev) => {
         const next = new Set(prev);
@@ -486,11 +482,9 @@ export default function AlertsPage() {
     setUpdatingAlerts((prev) => new Set(prev).add(alertId));
     try {
       await AlertsAPI.resolve(alertId);
-      setAlerts((prev) =>
-        prev.map((a) => (a.id === alertId ? { ...a, status: "resolved" } : a))
-      );
+      setAlerts((prev) => prev.map((a) => (a.id === alertId ? { ...a, status: 'resolved' } : a)));
     } catch (error) {
-      console.error("Error resolving alert:", error);
+      console.error('Error resolving alert:', error);
     } finally {
       setUpdatingAlerts((prev) => {
         const next = new Set(prev);
@@ -502,76 +496,54 @@ export default function AlertsPage() {
 
   if (loading) {
     return (
-      <CloudPageLayout
-        title="Alerts"
-        subtitle="Monitor and manage device alerts"
-      >
+      <CloudPageLayout title="Alerts" subtitle="Monitor and manage device alerts">
         <Skeleton />
       </CloudPageLayout>
     );
   }
 
   return (
-    <CloudPageLayout
-      title="Alerts"
-      subtitle="Monitor and manage device alerts"
-    >
+    <CloudPageLayout title="Alerts" subtitle="Monitor and manage device alerts">
       <Controls>
         <Filters>
-          <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
-            Severity:
-          </span>
-          <FilterChip
-            $active={severityFilter === "all"}
-            onClick={() => setSeverityFilter("all")}
-          >
+          <span style={{ fontSize: '13px', color: '#6b7280', marginRight: '8px' }}>Severity:</span>
+          <FilterChip $active={severityFilter === 'all'} onClick={() => setSeverityFilter('all')}>
             All
           </FilterChip>
           <FilterChip
-            $active={severityFilter === "critical"}
-            onClick={() => setSeverityFilter("critical")}
+            $active={severityFilter === 'critical'}
+            onClick={() => setSeverityFilter('critical')}
           >
             Critical
           </FilterChip>
           <FilterChip
-            $active={severityFilter === "warning"}
-            onClick={() => setSeverityFilter("warning")}
+            $active={severityFilter === 'warning'}
+            onClick={() => setSeverityFilter('warning')}
           >
             Warning
           </FilterChip>
-          <FilterChip
-            $active={severityFilter === "info"}
-            onClick={() => setSeverityFilter("info")}
-          >
+          <FilterChip $active={severityFilter === 'info'} onClick={() => setSeverityFilter('info')}>
             Info
           </FilterChip>
         </Filters>
 
         <Filters>
-          <span style={{ fontSize: "13px", color: "#6b7280", marginRight: "8px" }}>
-            Status:
-          </span>
-          <FilterChip
-            $active={statusFilter === "all"}
-            onClick={() => setStatusFilter("all")}
-          >
+          <span style={{ fontSize: '13px', color: '#6b7280', marginRight: '8px' }}>Status:</span>
+          <FilterChip $active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
             All
           </FilterChip>
-          <FilterChip
-            $active={statusFilter === "open"}
-            onClick={() => setStatusFilter("open")}
-          >
+          <FilterChip $active={statusFilter === 'open'} onClick={() => setStatusFilter('open')}>
             Open
           </FilterChip>
           <FilterChip
-            $active={statusFilter === "acknowledged"}
-            onClick={() => setStatusFilter("acknowledged")}
+            $active={statusFilter === 'acknowledged'}
+            onClick={() => setStatusFilter('acknowledged')}
           >
             Acknowledged
           </FilterChip>
           <FilterChip
-            $active={statusFilter === "resolved"}
-            onClick={() => setStatusFilter("resolved")}
+            $active={statusFilter === 'resolved'}
+            onClick={() => setStatusFilter('resolved')}
           >
             Resolved
           </FilterChip>
@@ -582,19 +554,39 @@ export default function AlertsPage() {
         {filteredAlerts.length === 0 ? (
           <DSEmptyState
             icon={
-              severityFilter !== "all" || statusFilter !== "all"
-                ? <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                : <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              severityFilter !== 'all' || statusFilter !== 'all' ? (
+                <svg
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+              ) : (
+                <svg
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#10B981"
+                  strokeWidth="2"
+                >
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <path d="m9 11 3 3L22 4" />
+                </svg>
+              )
             }
             title={
-              severityFilter !== "all" || statusFilter !== "all"
-                ? "No alerts found"
-                : "No Alerts"
+              severityFilter !== 'all' || statusFilter !== 'all' ? 'No alerts found' : 'No Alerts'
             }
             description={
-              severityFilter !== "all" || statusFilter !== "all"
-                ? "Try adjusting your filters."
-                : "No alerts. Alerts will appear here when your devices detect threshold events."
+              severityFilter !== 'all' || statusFilter !== 'all'
+                ? 'Try adjusting your filters.'
+                : 'No alerts. Alerts will appear here when your devices detect threshold events.'
             }
           />
         ) : (
@@ -620,50 +612,78 @@ export default function AlertsPage() {
                       </SeverityPill>
                     </td>
                     <td>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <span>{alert.siteName}</span>
-                        <DeviceLink to={`/cloud/devices/${alert.deviceId}`} onClick={(e) => e.stopPropagation()}>
+                        <DeviceLink
+                          to={`/cloud/devices/${alert.deviceId}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           {alert.deviceName}
                         </DeviceLink>
                       </div>
                     </td>
                     <td>
-                      <AlertLink to={`/cloud/alerts/${alert.id}`} onClick={(e) => e.stopPropagation()}>
+                      <AlertLink
+                        to={`/cloud/alerts/${alert.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         {alert.message}
                       </AlertLink>
                     </td>
                     <td>
                       <div>{getRelativeTime(alert.firstSeen)}</div>
-                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : "—"}>
-                        {alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : "—"}
+                      <div
+                        style={{ fontSize: '11px', color: '#9ca3af' }}
+                        title={alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : '—'}
+                      >
+                        {alert.firstSeen ? new Date(alert.firstSeen).toLocaleString() : '—'}
                       </div>
                     </td>
                     <td>
                       <div>{getRelativeTime(alert.lastSeen)}</div>
-                      <div style={{ fontSize: "11px", color: "#9ca3af" }} title={alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : "—"}>
-                        {alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : "—"}
+                      <div
+                        style={{ fontSize: '11px', color: '#9ca3af' }}
+                        title={alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : '—'}
+                      >
+                        {alert.lastSeen ? new Date(alert.lastSeen).toLocaleString() : '—'}
                       </div>
                     </td>
                     <td>
-                      <StatusPill $status={alert.status}>
-                        {getStatusLabel(alert.status)}
-                      </StatusPill>
+                      <StatusPill $status={alert.status}>{getStatusLabel(alert.status)}</StatusPill>
                     </td>
                     <td>
-                      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-                        {alert.status === "open" && (
+                      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                        {alert.status === 'open' && (
                           <>
-                            <ActionButton onClick={(e) => { e.stopPropagation(); handleAcknowledge(alert.id); }} disabled={updatingAlerts.has(alert.id)}>
-                              {updatingAlerts.has(alert.id) ? "..." : "Ack"}
+                            <ActionButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAcknowledge(alert.id);
+                              }}
+                              disabled={updatingAlerts.has(alert.id)}
+                            >
+                              {updatingAlerts.has(alert.id) ? '...' : 'Ack'}
                             </ActionButton>
-                            <ActionButton onClick={(e) => { e.stopPropagation(); handleResolve(alert.id); }} disabled={updatingAlerts.has(alert.id)}>
-                              {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                            <ActionButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleResolve(alert.id);
+                              }}
+                              disabled={updatingAlerts.has(alert.id)}
+                            >
+                              {updatingAlerts.has(alert.id) ? '...' : 'Resolve'}
                             </ActionButton>
                           </>
                         )}
-                        {alert.status === "acknowledged" && (
-                          <ActionButton onClick={(e) => { e.stopPropagation(); handleResolve(alert.id); }} disabled={updatingAlerts.has(alert.id)}>
-                            {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                        {alert.status === 'acknowledged' && (
+                          <ActionButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleResolve(alert.id);
+                            }}
+                            disabled={updatingAlerts.has(alert.id)}
+                          >
+                            {updatingAlerts.has(alert.id) ? '...' : 'Resolve'}
                           </ActionButton>
                         )}
                         <ActionButton as={Link} to={`/cloud/alerts/${alert.id}`}>
@@ -683,12 +703,13 @@ export default function AlertsPage() {
                     <SeverityPill $severity={alert.severity}>
                       {getSeverityLabel(alert.severity)}
                     </SeverityPill>
-                    <StatusPill $status={alert.status}>
-                      {getStatusLabel(alert.status)}
-                    </StatusPill>
+                    <StatusPill $status={alert.status}>{getStatusLabel(alert.status)}</StatusPill>
                   </AlertCardHeader>
                   <AlertCardMeta>
-                    {alert.siteName} · <DeviceLink to={`/cloud/devices/${alert.deviceId}`}>{alert.deviceName}</DeviceLink>
+                    {alert.siteName} ·{' '}
+                    <DeviceLink to={`/cloud/devices/${alert.deviceId}`}>
+                      {alert.deviceName}
+                    </DeviceLink>
                   </AlertCardMeta>
                   <AlertCardMessage>
                     <AlertLink to={`/cloud/alerts/${alert.id}`}>{alert.message}</AlertLink>
@@ -697,19 +718,28 @@ export default function AlertsPage() {
                     {getRelativeTime(alert.firstSeen)} — {getRelativeTime(alert.lastSeen)}
                   </AlertCardMeta>
                   <AlertCardActions>
-                    {alert.status === "open" && (
+                    {alert.status === 'open' && (
                       <>
-                        <ActionButton onClick={() => handleAcknowledge(alert.id)} disabled={updatingAlerts.has(alert.id)}>
-                          {updatingAlerts.has(alert.id) ? "..." : "Ack"}
+                        <ActionButton
+                          onClick={() => handleAcknowledge(alert.id)}
+                          disabled={updatingAlerts.has(alert.id)}
+                        >
+                          {updatingAlerts.has(alert.id) ? '...' : 'Ack'}
                         </ActionButton>
-                        <ActionButton onClick={() => handleResolve(alert.id)} disabled={updatingAlerts.has(alert.id)}>
-                          {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                        <ActionButton
+                          onClick={() => handleResolve(alert.id)}
+                          disabled={updatingAlerts.has(alert.id)}
+                        >
+                          {updatingAlerts.has(alert.id) ? '...' : 'Resolve'}
                         </ActionButton>
                       </>
                     )}
-                    {alert.status === "acknowledged" && (
-                      <ActionButton onClick={() => handleResolve(alert.id)} disabled={updatingAlerts.has(alert.id)}>
-                        {updatingAlerts.has(alert.id) ? "..." : "Resolve"}
+                    {alert.status === 'acknowledged' && (
+                      <ActionButton
+                        onClick={() => handleResolve(alert.id)}
+                        disabled={updatingAlerts.has(alert.id)}
+                      >
+                        {updatingAlerts.has(alert.id) ? '...' : 'Resolve'}
                       </ActionButton>
                     )}
                     <ActionButton as={Link} to={`/cloud/alerts/${alert.id}`}>

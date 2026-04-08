@@ -3,7 +3,7 @@
  * Tabbed layout: Profile, Wallet, Transactions, Devices, Settings.
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -413,7 +413,7 @@ const ToggleInput = styled.input`
 const ToggleSlider = styled.span`
   position: absolute;
   inset: 0;
-  background: #D1D5DB;
+  background: #d1d5db;
   border-radius: 12px;
   transition: background 0.25s ease;
 
@@ -442,18 +442,12 @@ const LoadingWrap = styled.div`
   padding: 24px 0;
 `;
 
-const ErrorText = styled.p`
-  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors?.negative || '#EF4444'};
-  text-align: center;
-  padding: 24px 0;
-`;
-
 // ── Component ────────────────────────────────────────────
 
 export function WQTProfilePage() {
-  useEffect(() => { document.title = 'Profile — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Profile — WaterQuality.Trading';
+  }, []);
   const { STATES, ACTIONS } = useAppContext();
   const { user } = STATES;
   const navigate = useNavigate();
@@ -472,13 +466,28 @@ export function WQTProfilePage() {
 
   // Notification prefs (persisted to localStorage)
   const [emailNotif, setEmailNotif] = useState(() => {
-    try { const v = localStorage.getItem('wqt_pref_emailNotif'); return v !== null ? JSON.parse(v) : true; } catch { return true; }
+    try {
+      const v = localStorage.getItem('wqt_pref_emailNotif');
+      return v !== null ? JSON.parse(v) : true;
+    } catch {
+      return true;
+    }
   });
   const [marketNotif, setMarketNotif] = useState(() => {
-    try { const v = localStorage.getItem('wqt_pref_marketNotif'); return v !== null ? JSON.parse(v) : true; } catch { return true; }
+    try {
+      const v = localStorage.getItem('wqt_pref_marketNotif');
+      return v !== null ? JSON.parse(v) : true;
+    } catch {
+      return true;
+    }
   });
   const [deviceNotif, setDeviceNotif] = useState(() => {
-    try { const v = localStorage.getItem('wqt_pref_deviceNotif'); return v !== null ? JSON.parse(v) : false; } catch { return false; }
+    try {
+      const v = localStorage.getItem('wqt_pref_deviceNotif');
+      return v !== null ? JSON.parse(v) : false;
+    } catch {
+      return false;
+    }
   });
 
   useEffect(() => {
@@ -486,7 +495,9 @@ export function WQTProfilePage() {
       localStorage.setItem('wqt_pref_emailNotif', JSON.stringify(emailNotif));
       localStorage.setItem('wqt_pref_marketNotif', JSON.stringify(marketNotif));
       localStorage.setItem('wqt_pref_deviceNotif', JSON.stringify(deviceNotif));
-    } catch { /* localStorage unavailable */ }
+    } catch {
+      /* localStorage unavailable */
+    }
   }, [emailNotif, marketNotif, deviceNotif]);
 
   // Fetch portfolio
@@ -512,10 +523,13 @@ export function WQTProfilePage() {
 
   // Copy to clipboard
   const copyToClipboard = useCallback((text, key) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(key);
-      setTimeout(() => setCopied(null), 2000);
-    }).catch(() => {});
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(key);
+        setTimeout(() => setCopied(null), 2000);
+      })
+      .catch(() => {});
   }, []);
 
   // Transaction pagination
@@ -557,70 +571,82 @@ export function WQTProfilePage() {
   };
 
   // Transaction table columns
-  const txColumns = useMemo(() => [
-    {
-      key: 'timestamp',
-      header: 'Date',
-      sortable: true,
-      render: (row) => formatDate(row.timestamp),
-    },
-    {
-      key: 'type',
-      header: 'Type',
-      render: (row) => (
-        <Badge
-          variant={row.type === 'purchase' ? 'info' : row.type === 'sale' ? 'positive' : 'warning'}
-          size="sm"
-        >
-          {row.type}
-        </Badge>
-      ),
-    },
-    {
-      key: 'nutrientType',
-      header: 'Credit Type',
-      render: (row) => row.nutrientType || '--',
-    },
-    {
-      key: 'quantity',
-      header: 'Quantity',
-      align: 'right',
-      mono: true,
-      render: (row) => `${row.quantity || 0} kg`,
-    },
-    {
-      key: 'price',
-      header: 'Price',
-      align: 'right',
-      mono: true,
-      render: (row) => formatCurrency(row.price),
-    },
-    {
-      key: 'txHash',
-      header: 'Status',
-      render: (row) => row.transactionHash ? (
-        <Badge variant="positive" size="sm" dot>Confirmed</Badge>
-      ) : (
-        <Badge variant="warning" size="sm" dot>Pending</Badge>
-      ),
-    },
-  ], []);
+  const txColumns = useMemo(
+    () => [
+      {
+        key: 'timestamp',
+        header: 'Date',
+        sortable: true,
+        render: (row) => formatDate(row.timestamp),
+      },
+      {
+        key: 'type',
+        header: 'Type',
+        render: (row) => (
+          <Badge
+            variant={
+              row.type === 'purchase' ? 'info' : row.type === 'sale' ? 'positive' : 'warning'
+            }
+            size="sm"
+          >
+            {row.type}
+          </Badge>
+        ),
+      },
+      {
+        key: 'nutrientType',
+        header: 'Credit Type',
+        render: (row) => row.nutrientType || '--',
+      },
+      {
+        key: 'quantity',
+        header: 'Quantity',
+        align: 'right',
+        mono: true,
+        render: (row) => `${row.quantity || 0} kg`,
+      },
+      {
+        key: 'price',
+        header: 'Price',
+        align: 'right',
+        mono: true,
+        render: (row) => formatCurrency(row.price),
+      },
+      {
+        key: 'txHash',
+        header: 'Status',
+        render: (row) =>
+          row.transactionHash ? (
+            <Badge variant="positive" size="sm" dot>
+              Confirmed
+            </Badge>
+          ) : (
+            <Badge variant="warning" size="sm" dot>
+              Pending
+            </Badge>
+          ),
+      },
+    ],
+    []
+  );
 
   // ── Render helpers ───────────────────────────────────────
 
   const renderProfile = () => (
     <ProfileCard>
       <ProfileTop>
-        <AvatarCircle>
-          {getInitials(user?.displayName || user?.email)}
-        </AvatarCircle>
+        <AvatarCircle>{getInitials(user?.displayName || user?.email)}</AvatarCircle>
         <ProfileInfo>
           <ProfileName>
             {user?.displayName || 'Anonymous User'}
             {user?.role === 'verified' || user?.emailVerified ? (
-              <Badge variant="positive" size="sm" icon={<ShieldCheck size={12} />}>Verified</Badge>
+              <Badge variant="positive" size="sm" icon={<ShieldCheck size={12} />}>
+                Verified
+              </Badge>
             ) : (
-              <Badge variant="warning" size="sm" icon={<ShieldAlert size={12} />}>Unverified</Badge>
+              <Badge variant="warning" size="sm" icon={<ShieldAlert size={12} />}>
+                Unverified
+              </Badge>
             )}
           </ProfileName>
           <ProfileEmail>{user?.email || 'No email on file'}</ProfileEmail>
@@ -633,10 +659,7 @@ export function WQTProfilePage() {
           <FieldValue>
             {truncate(user?.uid, 8, 6)}
             {user?.uid && (
-              <CopyBtn
-                onClick={() => copyToClipboard(user.uid, 'uid')}
-                title="Copy full ID"
-              >
+              <CopyBtn onClick={() => copyToClipboard(user.uid, 'uid')} title="Copy full ID">
                 {copied === 'uid' ? <Check size={14} /> : <Copy size={14} />}
               </CopyBtn>
             )}
@@ -645,9 +668,7 @@ export function WQTProfilePage() {
 
         <FieldGroup>
           <FieldLabel>Role</FieldLabel>
-          <FieldValue style={{ fontFamily: 'inherit' }}>
-            {user?.role || 'Member'}
-          </FieldValue>
+          <FieldValue style={{ fontFamily: 'inherit' }}>{user?.role || 'Member'}</FieldValue>
         </FieldGroup>
 
         <FieldGroup>
@@ -680,9 +701,7 @@ export function WQTProfilePage() {
 
         <FieldGroup>
           <FieldLabel>Company</FieldLabel>
-          <FieldValue style={{ fontFamily: 'inherit' }}>
-            {user?.company || '--'}
-          </FieldValue>
+          <FieldValue style={{ fontFamily: 'inherit' }}>{user?.company || '--'}</FieldValue>
         </FieldGroup>
       </FieldGrid>
     </ProfileCard>
@@ -802,11 +821,7 @@ export function WQTProfilePage() {
           compact
           emptyMessage="No transactions"
         />
-        <Pagination
-          page={txPage}
-          totalPages={totalTxPages}
-          onPageChange={setTxPage}
-        />
+        <Pagination page={txPage} totalPages={totalTxPages} onPageChange={setTxPage} />
       </>
     );
   };
@@ -840,11 +855,7 @@ export function WQTProfilePage() {
       <Section>
         <SectionTitle>Linked Devices</SectionTitle>
         <DeviceCount>{deviceCount}</DeviceCount>
-        <CloudLink
-          href="https://cloud.bluesignal.xyz"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <CloudLink href="https://cloud.bluesignal.xyz" target="_blank" rel="noopener noreferrer">
           Manage your devices on BlueSignal Cloud
           <ExternalLink size={14} />
         </CloudLink>
@@ -885,7 +896,11 @@ export function WQTProfilePage() {
             <ToggleDesc>Receive transaction confirmations and account alerts via email</ToggleDesc>
           </ToggleInfo>
           <ToggleTrack>
-            <ToggleInput type="checkbox" checked={emailNotif} onChange={() => setEmailNotif(!emailNotif)} />
+            <ToggleInput
+              type="checkbox"
+              checked={emailNotif}
+              onChange={() => setEmailNotif(!emailNotif)}
+            />
             <ToggleSlider />
           </ToggleTrack>
         </ToggleRow>
@@ -895,7 +910,11 @@ export function WQTProfilePage() {
             <ToggleDesc>Get notified about price changes and new listings</ToggleDesc>
           </ToggleInfo>
           <ToggleTrack>
-            <ToggleInput type="checkbox" checked={marketNotif} onChange={() => setMarketNotif(!marketNotif)} />
+            <ToggleInput
+              type="checkbox"
+              checked={marketNotif}
+              onChange={() => setMarketNotif(!marketNotif)}
+            />
             <ToggleSlider />
           </ToggleTrack>
         </ToggleRow>
@@ -905,7 +924,11 @@ export function WQTProfilePage() {
             <ToggleDesc>Alerts when linked devices go offline or need attention</ToggleDesc>
           </ToggleInfo>
           <ToggleTrack>
-            <ToggleInput type="checkbox" checked={deviceNotif} onChange={() => setDeviceNotif(!deviceNotif)} />
+            <ToggleInput
+              type="checkbox"
+              checked={deviceNotif}
+              onChange={() => setDeviceNotif(!deviceNotif)}
+            />
             <ToggleSlider />
           </ToggleTrack>
         </ToggleRow>
@@ -916,10 +939,13 @@ export function WQTProfilePage() {
         <SettingsSectionTitle>
           <Key size={16} />
           API Keys
-          <Badge variant="neutral" size="sm">Coming Soon</Badge>
+          <Badge variant="neutral" size="sm">
+            Coming Soon
+          </Badge>
         </SettingsSectionTitle>
         <ToggleDesc>
-          Programmatic access to your portfolio and transaction data will be available in a future update.
+          Programmatic access to your portfolio and transaction data will be available in a future
+          update.
         </ToggleDesc>
       </SettingsSection>
 

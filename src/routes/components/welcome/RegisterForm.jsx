@@ -1,35 +1,25 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { AnimatePresence } from "framer-motion";
-import { Player } from "@lottiefiles/react-lottie-player";
-import Notification from "../../../components/popups/NotificationPopup";
-import {
-  environmentalRotation,
-  successAnimation,
-} from "../../../assets/animations";
-import {
-  LOADING_ANIMATION,
-  PROMPT_CARD,
-  PROMPT_FORM,
-} from "../../../components/lib/styled";
-import { formVariant, loadingVariant } from "./motion_variants";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { AnimatePresence } from 'framer-motion';
+import { Player } from '@lottiefiles/react-lottie-player';
+import Notification from '../../../components/popups/NotificationPopup';
+import { environmentalRotation, successAnimation } from '../../../assets/animations';
+import { LOADING_ANIMATION, PROMPT_CARD, PROMPT_FORM } from '../../../components/lib/styled';
+import { formVariant, loadingVariant } from './motion_variants';
 
 /** #BACKEND */
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithPopup,
-} from "firebase/auth";
+} from 'firebase/auth';
 
 /** FIREBASE AUTH */
-import { auth, googleProvider } from "../../../apis/firebase";
-import { Input } from "../../../components/shared/input/Input";
-import FormSection from "../../../components/shared/FormSection/FormSection";
-import {
-  ButtonLink,
-  ButtonPrimary,
-} from "../../../components/shared/button/Button";
-import { AccountAPI } from "../../../scripts/back_door";
+import { auth, googleProvider } from '../../../apis/firebase';
+import { Input } from '../../../components/shared/input/Input';
+import FormSection from '../../../components/shared/FormSection/FormSection';
+import { ButtonLink, ButtonPrimary } from '../../../components/shared/button/Button';
+import { AccountAPI } from '../../../scripts/back_door';
 
 /* -------------------------------------------------------------------------- */
 /*                               STYLED COMPONENTS                             */
@@ -42,10 +32,10 @@ const GoogleButton = styled.button`
   justify-content: center;
   gap: 12px;
   padding: 12px 16px;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || "#d1d5db"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d1d5db'};
   border-radius: 8px;
   background: #ffffff;
-  color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+  color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -53,8 +43,8 @@ const GoogleButton = styled.button`
   min-height: 48px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-color: ${({ theme }) => theme.colors?.ui400 || "#9ca3af"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-color: ${({ theme }) => theme.colors?.ui400 || '#9ca3af'};
   }
 
   &:disabled {
@@ -76,15 +66,15 @@ const Divider = styled.div`
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     flex: 1;
     height: 1px;
-    background: ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    background: ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   }
 
   span {
     font-size: 12px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -97,28 +87,21 @@ const Header = styled.div`
     margin: 0;
     font-size: 20px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   p {
     margin: 4px 0 0;
     font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
-const RegisterForm = ({
-  onSuccess,
-  onSwitchToLogin,
-  updateUser,
-  googleData,
-}) => {
-  const [username, setUsername] = useState(googleData?.name || "");
-  const [email, setEmail] = useState(
-    (googleData?.gmail || googleData?.email || "").toLowerCase()
-  );
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) => {
+  const [username, setUsername] = useState(googleData?.name || '');
+  const [email, setEmail] = useState((googleData?.gmail || googleData?.email || '').toLowerCase());
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -136,7 +119,7 @@ const RegisterForm = ({
   }, [isSuccess, onSuccess]);
 
   const handleGoogleSignUp = async () => {
-    setError("");
+    setError('');
     setIsLoading(true);
 
     try {
@@ -148,7 +131,9 @@ const RegisterForm = ({
       // SECURITY: Role is assigned server-side, not client-side
       const newUser = {
         uid: user.uid,
-        username: (user.displayName || user.email?.split("@")[0] || "user").toLowerCase().replace(/\s+/g, "_"),
+        username: (user.displayName || user.email?.split('@')[0] || 'user')
+          .toLowerCase()
+          .replace(/\s+/g, '_'),
         email: user.email?.toLowerCase(),
         displayName: user.displayName,
       };
@@ -156,7 +141,7 @@ const RegisterForm = ({
       // Best-effort backend account creation
       try {
         await AccountAPI.create(newUser);
-      } catch (err) {
+      } catch {
         // Non-fatal - account may already exist
       }
 
@@ -167,24 +152,29 @@ const RegisterForm = ({
       }
       if (!updatedOK) {
         try {
-          sessionStorage.setItem("user", JSON.stringify(newUser));
-        } catch (e) {
+          // Store only non-sensitive public user data in sessionStorage
+          const publicUser = {
+            uid: newUser.uid,
+            username: newUser.username,
+          };
+          sessionStorage.setItem('user', JSON.stringify(publicUser));
+        } catch {
           // Silent fail
         }
       }
 
       setIsSuccess(true);
     } catch (err) {
-      if (err.code === "auth/popup-closed-by-user") {
+      if (err.code === 'auth/popup-closed-by-user') {
         // User closed popup - don't show error
-      } else if (err.code === "auth/popup-blocked") {
-        setError("Popup was blocked. Please allow popups and try again.");
-      } else if (err.code === "auth/account-exists-with-different-credential") {
-        setError("An account already exists with this email. Try signing in instead.");
-      } else if (err.code === "auth/unauthorized-domain") {
-        setError("Authentication is not available on this domain.");
+      } else if (err.code === 'auth/popup-blocked') {
+        setError('Popup was blocked. Please allow popups and try again.');
+      } else if (err.code === 'auth/account-exists-with-different-credential') {
+        setError('An account already exists with this email. Try signing in instead.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('Authentication is not available on this domain.');
       } else {
-        setError("Unable to sign up with Google. Please try again.");
+        setError('Unable to sign up with Google. Please try again.');
       }
       setIsLoading(false);
     }
@@ -202,26 +192,26 @@ const RegisterForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
-    const trimmedUsername = (username || "").trim();
-    const trimmedEmail = (email || "").trim().toLowerCase();
+    const trimmedUsername = (username || '').trim();
+    const trimmedEmail = (email || '').trim().toLowerCase();
 
     if (!trimmedUsername) {
-      setError("Please choose a username.");
+      setError('Please choose a username.');
       return;
     }
     if (!trimmedEmail) {
-      setError("Please enter an email address.");
+      setError('Please enter an email address.');
       return;
     }
     if (!password || password.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError('Password must be at least 8 characters long.');
       return;
     }
     // SECURITY: Enforce stronger password policy
     if (!isStrongPassword(password)) {
-      setError("Password must include uppercase, lowercase, and a number.");
+      setError('Password must include uppercase, lowercase, and a number.');
       return;
     }
 
@@ -232,25 +222,20 @@ const RegisterForm = ({
 
       // SECURITY: Role is assigned server-side, not client-side
       if (googleData?.gmail || googleData?.email) {
-        const googleEmail =
-          (googleData.gmail || googleData.email || "").toLowerCase();
+        const googleEmail = (googleData.gmail || googleData.email || '').toLowerCase();
         newUser = {
           uid: googleData.uid,
           username: trimmedUsername.toLowerCase(),
           email: googleEmail,
         };
       } else {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          trimmedEmail,
-          password
-        );
+        const userCredential = await createUserWithEmailAndPassword(auth, trimmedEmail, password);
         const userData = userCredential.user;
 
         // Send email verification (best-effort — don't block signup)
         try {
           await sendEmailVerification(userData);
-        } catch (_) {
+        } catch {
           // Silently continue — user can request verification later
         }
 
@@ -264,7 +249,7 @@ const RegisterForm = ({
       // Best-effort backend account creation
       try {
         await AccountAPI.create(newUser);
-      } catch (err) {
+      } catch {
         // Non-fatal - account may already exist
       }
 
@@ -275,22 +260,27 @@ const RegisterForm = ({
       }
       if (!updatedOK) {
         try {
-          sessionStorage.setItem("user", JSON.stringify(newUser));
-        } catch (e) {
+          // Store only non-sensitive public user data in sessionStorage
+          const publicUser = {
+            uid: newUser.uid,
+            username: newUser.username,
+          };
+          sessionStorage.setItem('user', JSON.stringify(publicUser));
+        } catch {
           // Silent fail
         }
       }
 
       setIsSuccess(true);
     } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        setError("An account with this email already exists.");
-      } else if (error.code === "auth/invalid-email") {
-        setError("Please enter a valid email address.");
-      } else if (error.code === "auth/weak-password") {
-        setError("Password is too weak. Use at least 8 characters with mixed case and numbers.");
+      if (error.code === 'auth/email-already-in-use') {
+        setError('An account with this email already exists.');
+      } else if (error.code === 'auth/invalid-email') {
+        setError('Please enter a valid email address.');
+      } else if (error.code === 'auth/weak-password') {
+        setError('Password is too weak. Use at least 8 characters with mixed case and numbers.');
       } else {
-        setError("Failed to create account. Please try again.");
+        setError('Failed to create account. Please try again.');
       }
     } finally {
       setIsLoading(false);
@@ -309,12 +299,7 @@ const RegisterForm = ({
             exit="exit"
             variants={loadingVariant}
           >
-            <Player
-              autoplay
-              loop
-              src={environmentalRotation}
-              style={{ height: 100, width: 100 }}
-            />
+            <Player autoplay loop src={environmentalRotation} style={{ height: 100, width: 100 }} />
           </LOADING_ANIMATION>
         ) : !isSuccess ? (
           <PROMPT_FORM
@@ -330,11 +315,7 @@ const RegisterForm = ({
             </Header>
 
             {/* Google Sign-Up Button */}
-            <GoogleButton
-              type="button"
-              onClick={handleGoogleSignUp}
-              disabled={isLoading}
-            >
+            <GoogleButton type="button" onClick={handleGoogleSignUp} disabled={isLoading}>
               <svg className="google-icon" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
@@ -353,7 +334,7 @@ const RegisterForm = ({
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              {isLoading ? "Creating account..." : "Sign up with Google"}
+              {isLoading ? 'Creating account...' : 'Sign up with Google'}
             </GoogleButton>
 
             <Divider>
@@ -407,12 +388,7 @@ const RegisterForm = ({
             exit="exit"
             variants={loadingVariant}
           >
-            <Player
-              autoplay
-              loop
-              src={successAnimation}
-              style={{ height: 100, width: 100 }}
-            />
+            <Player autoplay loop src={successAnimation} style={{ height: 100, width: 100 }} />
           </LOADING_ANIMATION>
         )}
       </PROMPT_CARD>

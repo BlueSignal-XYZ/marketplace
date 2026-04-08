@@ -6,7 +6,16 @@
  *   <ThemeProvider theme={wqtTheme}>...</ThemeProvider>
  */
 
-import { spacing, radius, elevation, animation, fonts, media, zIndex, breakpoints } from '../tokens/shared';
+import {
+  spacing,
+  radius,
+  elevation,
+  animation,
+  fonts,
+  media,
+  zIndex,
+  breakpoints,
+} from '../tokens/shared';
 import { wqtColors, wqtTypography } from '../tokens/wqt';
 
 export const wqtTheme = {
@@ -23,6 +32,11 @@ export const wqtTheme = {
   media,
   zIndex,
   breakpoints,
+
+  /** Gradient overrides so legacy ButtonPrimary picks up WQT brand blue */
+  gradients: {
+    primaryLight: `linear-gradient(135deg, ${wqtColors.primary} 0%, ${wqtColors.primaryDark} 100%)`,
+  },
 
   /** Component-level semantic tokens — mapped from color palette */
   components: {

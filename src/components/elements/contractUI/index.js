@@ -1,5 +1,3 @@
-import VerificationUI from "./VerificationUI";
+import VerificationUI from './VerificationUI';
 
-export {
-    VerificationUI
-}
+export { VerificationUI };

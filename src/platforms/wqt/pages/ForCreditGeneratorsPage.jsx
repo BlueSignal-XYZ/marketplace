@@ -5,7 +5,7 @@
  * Explains the complete on-ramp from monitoring device to tradeable credits.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -15,8 +15,8 @@ const Page = styled.div`
 
 const Hero = styled.section`
   padding: 80px 24px 64px;
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
     padding: 120px 24px 96px;
   }
@@ -34,7 +34,9 @@ const Breadcrumb = styled(Link)`
   text-decoration: none;
   margin-bottom: 24px;
   display: inline-block;
-  &:hover { color: rgba(255, 255, 255, 0.6); }
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -43,7 +45,7 @@ const HeroTitle = styled.h1`
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 20px;
 `;
 
@@ -58,8 +60,10 @@ const HeroSub = styled.p`
 
 const Section = styled.section`
   padding: 96px 24px;
-  background: ${({ $alt, theme }) => $alt ? theme.colors.surface : theme.colors.background};
-  @media (max-width: 640px) { padding: 64px 20px; }
+  background: ${({ $alt, theme }) => ($alt ? theme.colors.surface : theme.colors.background)};
+  @media (max-width: 640px) {
+    padding: 64px 20px;
+  }
 `;
 
 const SectionInner = styled.div`
@@ -82,9 +86,16 @@ const Prose = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.75;
   max-width: 680px;
-  p { margin: 0 0 24px; }
-  p:last-child { margin-bottom: 0; }
-  strong { color: ${({ theme }) => theme.colors.text}; font-weight: 600; }
+  p {
+    margin: 0 0 24px;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  strong {
+    color: ${({ theme }) => theme.colors.text};
+    font-weight: 600;
+  }
 `;
 
 const FlowList = styled.ol`
@@ -190,7 +201,9 @@ const CodeBlock = styled.pre`
 const FAQItem = styled.div`
   padding: 24px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const FAQQuestion = styled.h3`
@@ -211,7 +224,7 @@ const FAQAnswer = styled.p`
 
 const CTASection = styled.section`
   padding: 80px 24px;
-  background: linear-gradient(135deg, #0B1120 0%, #0F1B35 100%);
+  background: linear-gradient(135deg, #0b1120 0%, #0f1b35 100%);
   text-align: center;
 `;
 
@@ -219,7 +232,7 @@ const CTATitle = styled.h2`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: clamp(24px, 3.5vw, 36px);
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0 0 32px;
 `;
 
@@ -239,13 +252,16 @@ const CTAButton = styled(Link)`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #0052CC 0%, #0066FF 100%);
+  color: #ffffff;
+  background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
   box-shadow: 0 4px 24px rgba(0, 82, 204, 0.3);
-  &:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4); }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
+  }
 `;
 
 const CTAButtonOutline = styled.a`
@@ -263,11 +279,16 @@ const CTAButtonOutline = styled.a`
   border-radius: 10px;
   text-decoration: none;
   transition: all 200ms;
-  &:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 export default function ForCreditGeneratorsPage() {
-  useEffect(() => { document.title = 'Generate Credits — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Generate Credits — WaterQuality.Trading';
+  }, []);
   return (
     <Page>
       <Hero>
@@ -275,8 +296,8 @@ export default function ForCreditGeneratorsPage() {
           <Breadcrumb to="/">&larr; Back to Overview</Breadcrumb>
           <HeroTitle>For Credit Generators</HeroTitle>
           <HeroSub>
-            How to go from "I have a monitoring device" to "I'm generating tradeable
-            water quality credits." The complete on-ramp.
+            How to go from &quot;I have a monitoring device&quot; to &quot;I&apos;m generating
+            tradeable water quality credits.&quot; The complete on-ramp.
           </HeroSub>
         </HeroInner>
       </Hero>
@@ -292,8 +313,8 @@ export default function ForCreditGeneratorsPage() {
             </p>
             <p>
               <strong>A site with measurable water quality improvement</strong> — a rain garden,
-              bioretention system, advanced septic, stormwater retrofit, or any installation
-              that reduces nutrient runoff or improves water quality beyond your baseline.
+              bioretention system, advanced septic, stormwater retrofit, or any installation that
+              reduces nutrient runoff or improves water quality beyond your baseline.
             </p>
             <p>
               <strong>A WaterQuality.Trading account</strong> linked to your BlueSignal Cloud
@@ -312,8 +333,8 @@ export default function ForCreditGeneratorsPage() {
               <FlowContent>
                 <FlowTitle>Install & Commission Your Device</FlowTitle>
                 <FlowDesc>
-                  Deploy the WQM-1 at your discharge point. Commission it via the BlueSignal
-                  mobile app — scan, claim, assign to a site.
+                  Deploy the WQM-1 at your discharge point. Commission it via the BlueSignal mobile
+                  app — scan, claim, assign to a site.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -321,8 +342,8 @@ export default function ForCreditGeneratorsPage() {
               <FlowContent>
                 <FlowTitle>Enable Revenue Grade</FlowTitle>
                 <FlowDesc>
-                  In BlueSignal Cloud, navigate to your device settings and tap "Enable
-                  Revenue Grade." This starts the guided setup process.
+                  In BlueSignal Cloud, navigate to your device settings and tap &quot;Enable Revenue
+                  Grade.&quot; This starts the guided setup process.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -348,8 +369,8 @@ export default function ForCreditGeneratorsPage() {
               <FlowContent>
                 <FlowTitle>Link Accounts</FlowTitle>
                 <FlowDesc>
-                  Connect your BlueSignal Cloud account to WaterQuality.Trading. This
-                  authorizes verified sensor data sharing for credit verification.
+                  Connect your BlueSignal Cloud account to WaterQuality.Trading. This authorizes
+                  verified sensor data sharing for credit verification.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -357,9 +378,8 @@ export default function ForCreditGeneratorsPage() {
               <FlowContent>
                 <FlowTitle>Register Credit Project</FlowTitle>
                 <FlowDesc>
-                  Define your project: site, watershed, improvement method, eligible credit
-                  types. The system maps your GPS coordinates to a HUC-12 watershed
-                  automatically.
+                  Define your project: site, watershed, improvement method, eligible credit types.
+                  The system maps your GPS coordinates to a HUC-12 watershed automatically.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -367,9 +387,8 @@ export default function ForCreditGeneratorsPage() {
               <FlowContent>
                 <FlowTitle>Credits Start Accruing</FlowTitle>
                 <FlowDesc>
-                  Once your baseline completes, credits accrue automatically based on
-                  measured improvement vs. baseline. Submit for verification when ready
-                  to trade.
+                  Once your baseline completes, credits accrue automatically based on measured
+                  improvement vs. baseline. Submit for verification when ready to trade.
                 </FlowDesc>
               </FlowContent>
             </FlowItem>
@@ -383,37 +402,37 @@ export default function ForCreditGeneratorsPage() {
           <SectionTitle>Calibration Requirements</SectionTitle>
           <Prose>
             <p>
-              Revenue-grade data requires documented calibration against traceable standards.
-              All probes must be recalibrated every 90 days. If calibration lapses, credit
-              generation pauses until recalibration is completed.
+              Revenue-grade data requires documented calibration against traceable standards. All
+              probes must be recalibrated every 90 days. If calibration lapses, credit generation
+              pauses until recalibration is completed.
             </p>
           </Prose>
           <Card>
             <CardTitle>pH Probe</CardTitle>
             <CardDesc>
-              Three-point calibration: pH 4.0, pH 7.0, and pH 10.0 buffer solutions. The
-              system records the calibration offset and slope correction.
+              Three-point calibration: pH 4.0, pH 7.0, and pH 10.0 buffer solutions. The system
+              records the calibration offset and slope correction.
             </CardDesc>
           </Card>
           <Card>
             <CardTitle>TDS Probe</CardTitle>
             <CardDesc>
-              Calibrate against a known conductivity standard (500 ppm or 1000 ppm solution).
-              The scale factor is recorded and applied to all subsequent readings.
+              Calibrate against a known conductivity standard (500 ppm or 1000 ppm solution). The
+              scale factor is recorded and applied to all subsequent readings.
             </CardDesc>
           </Card>
           <Card>
             <CardTitle>Turbidity Probe</CardTitle>
             <CardDesc>
-              Two-point calibration: 0 NTU (deionized water) and a formazin standard (typically
-              100 NTU). Establishes the sensor's response curve.
+              Two-point calibration: 0 NTU (deionized water) and a formazin standard (typically 100
+              NTU). Establishes the sensor&apos;s response curve.
             </CardDesc>
           </Card>
           <Card>
             <CardTitle>ORP Probe</CardTitle>
             <CardDesc>
-              Calibrate with quinhydrone solution at pH 4 (+220mV) or pH 7 (+86mV), or a
-              commercial ORP standard solution. Records the voltage offset.
+              Calibrate with quinhydrone solution at pH 4 (+220mV) or pH 7 (+86mV), or a commercial
+              ORP standard solution. Records the voltage offset.
             </CardDesc>
           </Card>
         </SectionInner>
@@ -426,25 +445,25 @@ export default function ForCreditGeneratorsPage() {
           <Card>
             <CardTitle>Monitoring Baseline (30-90 days)</CardTitle>
             <CardDesc>
-              Your device collects data for a defined period before credit generation begins.
-              The system computes statistical baselines (mean, standard deviation) from this
-              period. Recommended for new installations where no prior data exists.
+              Your device collects data for a defined period before credit generation begins. The
+              system computes statistical baselines (mean, standard deviation) from this period.
+              Recommended for new installations where no prior data exists.
             </CardDesc>
           </Card>
           <Card>
             <CardTitle>Regulatory Baseline</CardTitle>
             <CardDesc>
-              Use your facility's NPDES (National Pollutant Discharge Elimination System)
-              permit limits as the baseline. Credits equal the improvement beyond your
-              permitted discharge. Available immediately — no waiting period.
+              Use your facility&apos;s NPDES (National Pollutant Discharge Elimination System)
+              permit limits as the baseline. Credits equal the improvement beyond your permitted
+              discharge. Available immediately — no waiting period.
             </CardDesc>
           </Card>
           <Card>
             <CardTitle>Historical Baseline</CardTitle>
             <CardDesc>
-              Upload pre-project measurement data (CSV) from before your improvement was
-              installed. The system validates the data and computes statistical baselines.
-              Credits begin accruing immediately after validation.
+              Upload pre-project measurement data (CSV) from before your improvement was installed.
+              The system validates the data and computes statistical baselines. Credits begin
+              accruing immediately after validation.
             </CardDesc>
           </Card>
         </SectionInner>
@@ -455,9 +474,7 @@ export default function ForCreditGeneratorsPage() {
         <SectionInner>
           <SectionTitle>How Credits Are Calculated</SectionTitle>
           <Prose>
-            <p>
-              Credits are calculated daily using this formula:
-            </p>
+            <p>Credits are calculated daily using this formula:</p>
           </Prose>
           <CodeBlock>{`credit_amount (lbs) = (baseline_mg_L - measured_mg_L) × flow_m3 × 0.002205
 
@@ -470,9 +487,9 @@ Where:
           <Callout>
             <CardTitle>Worked Example</CardTitle>
             <CardDesc>
-              A homeowner with a 5-acre property in a Chesapeake Bay watershed has a
-              bioretention system. Regulatory baseline: 5.0 mg/L total phosphorus.
-              Average measured discharge: 2.0 mg/L. Estimated flow: 10 m³/day.
+              A homeowner with a 5-acre property in a Chesapeake Bay watershed has a bioretention
+              system. Regulatory baseline: 5.0 mg/L total phosphorus. Average measured discharge:
+              2.0 mg/L. Estimated flow: 10 m³/day.
             </CardDesc>
             <CodeBlock>{`Daily credit = (5.0 - 2.0) × 10 × 0.002205
              = 3.0 × 10 × 0.002205
@@ -488,28 +505,26 @@ Annual credit = 0.066 × 365 = ~24 lbs phosphorus/year`}</CodeBlock>
         <SectionInner>
           <SectionTitle>Verification</SectionTitle>
           <Prose>
-            <p>
-              When you submit credits for verification, the system runs automated checks:
-            </p>
+            <p>When you submit credits for verification, the system runs automated checks:</p>
             <p>
               <strong>Data continuity:</strong> Were readings received at ≥95% of expected
               intervals? Gaps reduce confidence in the measured improvement.
             </p>
             <p>
-              <strong>Calibration records:</strong> Were all probes within their 90-day
-              calibration window during the accrual period?
+              <strong>Calibration records:</strong> Were all probes within their 90-day calibration
+              window during the accrual period?
             </p>
             <p>
-              <strong>Statistical significance:</strong> Is the improvement beyond the
-              baseline statistically significant (p &lt; 0.05), or within measurement noise?
+              <strong>Statistical significance:</strong> Is the improvement beyond the baseline
+              statistically significant (p &lt; 0.05), or within measurement noise?
             </p>
             <p>
-              <strong>Baseline integrity:</strong> Has the baseline remained unchanged since
-              project registration? Baselines are locked after the first credit calculation.
+              <strong>Baseline integrity:</strong> Has the baseline remained unchanged since project
+              registration? Baselines are locked after the first credit calculation.
             </p>
             <p>
-              Submissions that pass all automated checks are queued for manual review
-              (target: 5 business days). Verified credits become tradeable on the marketplace.
+              Submissions that pass all automated checks are queued for manual review (target: 5
+              business days). Verified credits become tradeable on the marketplace.
             </p>
           </Prose>
         </SectionInner>
@@ -522,42 +537,41 @@ Annual credit = 0.066 × 365 = ~24 lbs phosphorus/year`}</CodeBlock>
           <FAQItem>
             <FAQQuestion>Can I trade credits from multiple sites?</FAQQuestion>
             <FAQAnswer>
-              Yes. Register each site as a separate credit project. Credits accrue
-              independently per site and can be listed individually or bundled.
+              Yes. Register each site as a separate credit project. Credits accrue independently per
+              site and can be listed individually or bundled.
             </FAQAnswer>
           </FAQItem>
           <FAQItem>
             <FAQQuestion>What if my calibration lapses?</FAQQuestion>
             <FAQAnswer>
-              Credit generation pauses automatically. Data continues to be collected and
-              stored, but readings during the lapsed period are flagged as "uncalibrated"
-              and excluded from credit calculations. Recalibrate to resume.
+              Credit generation pauses automatically. Data continues to be collected and stored, but
+              readings during the lapsed period are flagged as &quot;uncalibrated&quot; and excluded
+              from credit calculations. Recalibrate to resume.
             </FAQAnswer>
           </FAQItem>
           <FAQItem>
             <FAQQuestion>How long until I see my first credits?</FAQQuestion>
             <FAQAnswer>
-              With a regulatory or historical baseline, credits can begin accruing
-              immediately after setup. With a monitoring baseline, expect 30-90 days of
-              data collection before credits start. First verification review adds
-              approximately 5 business days.
+              With a regulatory or historical baseline, credits can begin accruing immediately after
+              setup. With a monitoring baseline, expect 30-90 days of data collection before credits
+              start. First verification review adds approximately 5 business days.
             </FAQAnswer>
           </FAQItem>
           <FAQItem>
-            <FAQQuestion>What if I don't have a flow meter?</FAQQuestion>
+            <FAQQuestion>What if I don&apos;t have a flow meter?</FAQQuestion>
             <FAQAnswer>
-              The first version supports manual flow estimates based on pump rates,
-              engineering calculations, or site drainage area. Enter your estimate in the
-              project settings. Future hardware revisions may add flow sensor support to
-              the WQM-1's I2C expansion port.
+              The first version supports manual flow estimates based on pump rates, engineering
+              calculations, or site drainage area. Enter your estimate in the project settings.
+              Future hardware revisions may add flow sensor support to the WQM-1&apos;s I2C
+              expansion port.
             </FAQAnswer>
           </FAQItem>
           <FAQItem>
             <FAQQuestion>What monitoring devices are compatible?</FAQQuestion>
             <FAQAnswer>
               The BlueSignal WQM-1 is the primary supported device. It provides continuous,
-              calibrated sensor data with GPS, LoRaWAN connectivity, and tamper-evident
-              data integrity. Contact us about integrating other monitoring platforms.
+              calibrated sensor data with GPS, LoRaWAN connectivity, and tamper-evident data
+              integrity. Contact us about integrating other monitoring platforms.
             </FAQAnswer>
           </FAQItem>
         </SectionInner>

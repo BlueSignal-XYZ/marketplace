@@ -3,7 +3,7 @@
  * Fetches real device fleet + alerts from /v2/ APIs.
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Activity, BellRing, TrendingUp, Plus, ChevronRight } from 'lucide-react';
@@ -197,13 +197,18 @@ const MetricUnit = styled.span`
 const AlertBanner = styled.div`
   padding: 16px 20px;
   background: ${({ $severity }) =>
-    $severity === 'critical' ? 'rgba(255,77,77,0.08)' :
-    $severity === 'warning' ? 'rgba(255,176,32,0.08)' :
-    'rgba(0,196,140,0.08)'};
-  border: 1px solid ${({ $severity }) =>
-    $severity === 'critical' ? 'rgba(255,77,77,0.2)' :
-    $severity === 'warning' ? 'rgba(255,176,32,0.2)' :
-    'rgba(0,196,140,0.2)'};
+    $severity === 'critical'
+      ? 'rgba(255,77,77,0.08)'
+      : $severity === 'warning'
+        ? 'rgba(255,176,32,0.08)'
+        : 'rgba(0,196,140,0.08)'};
+  border: 1px solid
+    ${({ $severity }) =>
+      $severity === 'critical'
+        ? 'rgba(255,77,77,0.2)'
+        : $severity === 'warning'
+          ? 'rgba(255,176,32,0.2)'
+          : 'rgba(0,196,140,0.2)'};
   border-radius: ${({ theme }) => theme.radius.md}px;
   display: flex;
   align-items: center;
@@ -215,7 +220,9 @@ const AlertBanner = styled.div`
   cursor: pointer;
   word-break: break-word;
   min-height: 44px;
-  &:hover { opacity: 0.9; }
+  &:hover {
+    opacity: 0.9;
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding: 12px 14px;
@@ -224,7 +231,7 @@ const AlertBanner = styled.div`
   }
 `;
 
-const ErrorBox = styled.div`
+const _ErrorBox = styled.div`
   background: rgba(255, 77, 77, 0.06);
   border: 1px solid rgba(255, 77, 77, 0.15);
   border-radius: ${({ theme }) => theme.radius.md}px;
@@ -233,7 +240,7 @@ const ErrorBox = styled.div`
   margin-bottom: 24px;
 `;
 
-const ErrorText = styled.p`
+const _ErrorText = styled.p`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 12px;
@@ -433,13 +440,19 @@ function DashboardSkeleton() {
     <Page>
       <Header>
         <Skeleton width={180} height={32} />
-        <div style={{ marginTop: 8 }}><Skeleton width={280} height={14} /></div>
+        <div style={{ marginTop: 8 }}>
+          <Skeleton width={280} height={14} />
+        </div>
       </Header>
       <StatusRow>
-        {[1, 2, 3, 4].map((i) => <Skeleton key={i} height={80} />)}
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} height={80} />
+        ))}
       </StatusRow>
       <DeviceGrid>
-        {[1, 2, 3].map((i) => <Skeleton key={i} height={200} />)}
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} height={200} />
+        ))}
       </DeviceGrid>
     </Page>
   );
@@ -462,19 +475,72 @@ function severityIcon(severity) {
 /* ── Icons ─────────────────────────────────────────────── */
 
 const DeviceEmptyIcon = () => (
-  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <rect x="12" y="20" width="40" height="28" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
+  <svg
+    width="64"
+    height="64"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <rect
+      x="12"
+      y="20"
+      width="40"
+      height="28"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      opacity="0.6"
+    />
     <circle cx="32" cy="34" r="6" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.6" />
-    <path d="M32 28v-4M32 42v4M26 34h-4M38 34h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+    <path
+      d="M32 28v-4M32 42v4M26 34h-4M38 34h4"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      opacity="0.5"
+    />
   </svg>
 );
 
 const DeviceErrorIcon = () => (
-  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-    <rect x="14" y="22" width="36" height="24" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
+  <svg
+    width="64"
+    height="64"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+  >
+    <rect
+      x="14"
+      y="22"
+      width="36"
+      height="24"
+      rx="4"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      opacity="0.4"
+    />
     <circle cx="32" cy="34" r="5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
-    <path d="M32 26v-3M32 44v2M24 34h-3M42 34h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
-    <path d="M32 16l-4 6h8l-4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+    <path
+      d="M32 26v-3M32 44v2M24 34h-3M42 34h2"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      opacity="0.4"
+    />
+    <path
+      d="M32 16l-4 6h8l-4 6"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.5"
+    />
   </svg>
 );
 
@@ -503,12 +569,19 @@ function getSensorReadings(device) {
 /* ── Component ──────────────────────────────────────────── */
 
 export function CloudDashboardPage() {
-  useEffect(() => { document.title = 'Dashboard — BlueSignal Cloud'; }, []);
+  useEffect(() => {
+    document.title = 'Dashboard — BlueSignal Cloud';
+  }, []);
   const navigate = useNavigate();
   const { STATES } = useAppContext();
   const user = STATES?.user;
 
-  const { data: devices = [], isLoading: devicesLoading, error: devicesError, refetch: refetchDevices } = useDevicesQuery(user?.uid);
+  const {
+    data: devices = [],
+    isLoading: devicesLoading,
+    error: devicesError,
+    refetch: refetchDevices,
+  } = useDevicesQuery(user?.uid);
   const { data: alerts = [], isLoading: alertsLoading } = useAlertsQuery(user?.uid);
 
   const loading = devicesLoading || alertsLoading;
@@ -563,21 +636,27 @@ export function CloudDashboardPage() {
           </EmptyActions>
           <FeatureCardsGrid>
             <FeatureCard>
-              <FeatureIconWrap><Activity size={20} /></FeatureIconWrap>
+              <FeatureIconWrap>
+                <Activity size={20} />
+              </FeatureIconWrap>
               <FeatureTitle>Real-time Monitoring</FeatureTitle>
               <FeatureDesc>
                 Monitor pH, TDS, turbidity, ORP &amp; temperature in real time
               </FeatureDesc>
             </FeatureCard>
             <FeatureCard>
-              <FeatureIconWrap><BellRing size={20} /></FeatureIconWrap>
+              <FeatureIconWrap>
+                <BellRing size={20} />
+              </FeatureIconWrap>
               <FeatureTitle>Threshold Alerts</FeatureTitle>
               <FeatureDesc>
                 Set custom thresholds and get instant alerts when readings exceed limits
               </FeatureDesc>
             </FeatureCard>
             <FeatureCard>
-              <FeatureIconWrap><TrendingUp size={20} /></FeatureIconWrap>
+              <FeatureIconWrap>
+                <TrendingUp size={20} />
+              </FeatureIconWrap>
               <FeatureTitle>Credit Generation</FeatureTitle>
               <FeatureDesc>
                 Your device generates verified AWG credits on WaterQuality.Trading
@@ -593,10 +672,16 @@ export function CloudDashboardPage() {
 
   const online = devices.filter((d) => d.onlineStatus === 'online').length;
   const offline = devices.filter((d) => d.onlineStatus === 'offline').length;
-  const warning = devices.filter((d) => d.status === 'maintenance' || d.onlineStatus === 'unknown').length;
-  const avgBattery = devices.filter((d) => d.battery > 0).length > 0
-    ? Math.round(devices.filter((d) => d.battery > 0).reduce((s, d) => s + d.battery, 0) / devices.filter((d) => d.battery > 0).length)
-    : 0;
+  const warning = devices.filter(
+    (d) => d.status === 'maintenance' || d.onlineStatus === 'unknown'
+  ).length;
+  const avgBattery =
+    devices.filter((d) => d.battery > 0).length > 0
+      ? Math.round(
+          devices.filter((d) => d.battery > 0).reduce((s, d) => s + d.battery, 0) /
+            devices.filter((d) => d.battery > 0).length
+        )
+      : 0;
   const activeAlerts = alerts.filter((a) => a.status === 'active');
 
   // Collect devices that have any sensor readings for the Latest Readings section
@@ -609,7 +694,9 @@ export function CloudDashboardPage() {
       <Header>
         <HeaderRow>
           <div>
-            <Title>Dashboard <DemoHint screenName="cloud-dashboard" /></Title>
+            <Title>
+              Dashboard <DemoHint screenName="cloud-dashboard" />
+            </Title>
             <Subtitle>Monitor your BlueSignal WQM-1 fleet in real time.</Subtitle>
           </div>
           <QuickActionsRow>
@@ -633,25 +720,67 @@ export function CloudDashboardPage() {
         })
         .slice(0, 5)
         .map((alert) => (
-        <AlertBanner
-          key={alert.id}
-          $severity={alert.severity}
-          onClick={() => navigate(`/device/${alert.deviceId}`)}
-          role="alert"
-          aria-live={alert.severity === 'critical' ? 'assertive' : 'polite'}
-        >
-          <span>{severityIcon(alert.severity)}</span>
-          <span>{alert.deviceName ? `${alert.deviceName} — ` : ''}{alert.message}</span>
-          <span style={{ marginLeft: 'auto', fontSize: 12, opacity: 0.6, whiteSpace: 'nowrap', flexShrink: 0 }}>View →</span>
-        </AlertBanner>
-      ))}
+          <AlertBanner
+            key={alert.id}
+            $severity={alert.severity}
+            onClick={() => navigate(`/device/${alert.deviceId}`)}
+            role="alert"
+            aria-live={alert.severity === 'critical' ? 'assertive' : 'polite'}
+          >
+            <span>{severityIcon(alert.severity)}</span>
+            <span>
+              {alert.deviceName ? `${alert.deviceName} — ` : ''}
+              {alert.message}
+            </span>
+            <span
+              style={{
+                marginLeft: 'auto',
+                fontSize: 12,
+                opacity: 0.6,
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}
+            >
+              View →
+            </span>
+          </AlertBanner>
+        ))}
 
       <StatusRow>
-        <DataCard label="Total Devices" value={`${devices.length}`} icon={<span style={{ fontSize: 16 }}>📊</span>} compact />
-        <DataCard label="Online" value={`${online}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#10B981', fontSize: 16 }}>●</span>} compact />
-        <DataCard label="Warning" value={`${warning}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#F59E0B', fontSize: 16 }}>●</span>} compact />
-        <DataCard label="Offline" value={`${offline}`} unit={`of ${devices.length}`} icon={<span style={{ color: '#EF4444', fontSize: 16 }}>●</span>} compact />
-        <DataCard label="Avg Battery" value={`${avgBattery}`} unit={`% (${devices.filter(d => d.battery > 0).length} devices)`} icon={<span style={{ fontSize: 16 }}>🔋</span>} compact />
+        <DataCard
+          label="Total Devices"
+          value={`${devices.length}`}
+          icon={<span style={{ fontSize: 16 }}>📊</span>}
+          compact
+        />
+        <DataCard
+          label="Online"
+          value={`${online}`}
+          unit={`of ${devices.length}`}
+          icon={<span style={{ color: '#10B981', fontSize: 16 }}>●</span>}
+          compact
+        />
+        <DataCard
+          label="Warning"
+          value={`${warning}`}
+          unit={`of ${devices.length}`}
+          icon={<span style={{ color: '#F59E0B', fontSize: 16 }}>●</span>}
+          compact
+        />
+        <DataCard
+          label="Offline"
+          value={`${offline}`}
+          unit={`of ${devices.length}`}
+          icon={<span style={{ color: '#EF4444', fontSize: 16 }}>●</span>}
+          compact
+        />
+        <DataCard
+          label="Avg Battery"
+          value={`${avgBattery}`}
+          unit={`% (${devices.filter((d) => d.battery > 0).length} devices)`}
+          icon={<span style={{ fontSize: 16 }}>🔋</span>}
+          compact
+        />
       </StatusRow>
 
       <Section>
@@ -669,34 +798,49 @@ export function CloudDashboardPage() {
               tabIndex={0}
               role="link"
               aria-label={`View device ${device.name}`}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/device/${device.id}`); } }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  navigate(`/device/${device.id}`);
+                }
+              }}
             >
               <DeviceHeader>
                 <div>
                   <DeviceName>{device.name}</DeviceName>
                   <DeviceIdText>{device.id}</DeviceIdText>
                 </div>
-                <Badge
-                  variant={statusVariant(device.onlineStatus)}
-                  size="sm"
-                  dot
-                >
+                <Badge variant={statusVariant(device.onlineStatus)} size="sm" dot>
                   {device.onlineStatus}
                 </Badge>
               </DeviceHeader>
               <MetricRow>
                 <Metric>
                   <MetricLabel>Battery</MetricLabel>
-                  <MetricValue>{device.onlineStatus !== 'offline' ? device.battery : '—'}<MetricUnit>{device.onlineStatus !== 'offline' ? '%' : ''}</MetricUnit></MetricValue>
+                  <MetricValue>
+                    {device.onlineStatus !== 'offline' ? device.battery : '—'}
+                    <MetricUnit>{device.onlineStatus !== 'offline' ? '%' : ''}</MetricUnit>
+                  </MetricValue>
                 </Metric>
                 <Metric>
                   <MetricLabel title="Nutrient credits (kg)">Credits</MetricLabel>
-                  <MetricValue>{device.onlineStatus !== 'offline' ? device.creditsGenerated : '—'}<MetricUnit>{device.onlineStatus !== 'offline' ? ' kg' : ''}</MetricUnit></MetricValue>
+                  <MetricValue>
+                    {device.onlineStatus !== 'offline' ? device.creditsGenerated : '—'}
+                    <MetricUnit>{device.onlineStatus !== 'offline' ? ' kg' : ''}</MetricUnit>
+                  </MetricValue>
                 </Metric>
               </MetricRow>
               {device.onlineStatus === 'offline' && device.lastReadingAt && (
                 <div style={{ marginTop: 8, fontSize: 12, color: '#6B7280', textAlign: 'center' }}>
-                  Last seen {new Date(device.lastReadingAt).toLocaleString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' })}
+                  Last seen{' '}
+                  {new Date(device.lastReadingAt).toLocaleString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    timeZoneName: 'short',
+                  })}
                 </div>
               )}
             </DeviceCard>
@@ -717,7 +861,10 @@ export function CloudDashboardPage() {
                   {readings.map((r) => (
                     <ReadingMetric key={r.label}>
                       <ReadingMetricLabel>{r.label}</ReadingMetricLabel>
-                      <ReadingMetricValue>{r.value}{r.unit}</ReadingMetricValue>
+                      <ReadingMetricValue>
+                        {r.value}
+                        {r.unit}
+                      </ReadingMetricValue>
                     </ReadingMetric>
                   ))}
                 </ReadingMetrics>

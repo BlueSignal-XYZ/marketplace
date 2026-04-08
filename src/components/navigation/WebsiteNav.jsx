@@ -6,12 +6,12 @@
  * Solutions dropdown contains: For Utilities, For Homeowners, For Aggregators, For Generators
  */
 
-import React, { useState, useRef, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTimes, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { useAppContext } from "../../context/AppContext";
-import { isDemoMode, setDemoMode } from "../../utils/demoMode";
+import { useState, useRef, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useAppContext } from '../../context/AppContext';
+import { isDemoMode, setDemoMode } from '../../utils/demoMode';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-4px); }
@@ -77,7 +77,7 @@ const NavLinks = styled.nav`
 
 const NavLink = styled.a`
   padding: 8px 14px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.6);
@@ -100,7 +100,7 @@ const DropdownWrapper = styled.div`
 
 const DropdownTrigger = styled.button`
   padding: 8px 14px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.6);
@@ -115,7 +115,7 @@ const DropdownTrigger = styled.button`
   gap: 6px;
 
   &:hover,
-  &[aria-expanded="true"] {
+  &[aria-expanded='true'] {
     color: rgba(255, 255, 255, 0.95);
     background: rgba(255, 255, 255, 0.06);
   }
@@ -124,7 +124,7 @@ const DropdownTrigger = styled.button`
 const ChevronIcon = styled(FontAwesomeIcon)`
   font-size: 10px;
   transition: transform 200ms;
-  transform: ${({ $open }) => ($open ? "rotate(180deg)" : "rotate(0)")};
+  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0)')};
 `;
 
 const DropdownPanel = styled.div`
@@ -147,7 +147,7 @@ const DropdownPanel = styled.div`
 const DropdownItem = styled.a`
   display: block;
   padding: 10px 14px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.65);
@@ -157,7 +157,7 @@ const DropdownItem = styled.a`
   white-space: nowrap;
 
   &:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.08);
   }
 `;
@@ -168,10 +168,10 @@ const CTALink = styled.a`
   display: none;
   align-items: center;
   padding: 8px 20px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   background: rgba(14, 165, 233, 0.15);
   border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: 8px;
@@ -207,7 +207,7 @@ const MobileMenuBtn = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.2);
   }
@@ -218,7 +218,7 @@ const MobileMenuBtn = styled.button`
 `;
 
 const MobileMenu = styled.div`
-  display: ${({ $open }) => ($open ? "flex" : "none")};
+  display: ${({ $open }) => ($open ? 'flex' : 'none')};
   flex-direction: column;
   gap: 4px;
   padding: 12px 24px 20px;
@@ -233,7 +233,7 @@ const MobileMenu = styled.div`
 const MobileNavLink = styled.a`
   display: block;
   padding: 12px 16px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
@@ -242,7 +242,7 @@ const MobileNavLink = styled.a`
   transition: all 150ms;
 
   &:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.06);
   }
 `;
@@ -253,7 +253,7 @@ const MobileSectionToggle = styled.button`
   justify-content: space-between;
   width: 100%;
   padding: 12px 16px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
@@ -264,13 +264,13 @@ const MobileSectionToggle = styled.button`
   transition: all 150ms;
 
   &:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.06);
   }
 `;
 
 const MobileSubLinks = styled.div`
-  display: ${({ $open }) => ($open ? "flex" : "none")};
+  display: ${({ $open }) => ($open ? 'flex' : 'none')};
   flex-direction: column;
   padding-left: 16px;
   gap: 2px;
@@ -279,7 +279,7 @@ const MobileSubLinks = styled.div`
 const MobileSubLink = styled.a`
   display: block;
   padding: 10px 16px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 14px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.55);
@@ -288,7 +288,7 @@ const MobileSubLink = styled.a`
   transition: all 150ms;
 
   &:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.06);
   }
 `;
@@ -297,10 +297,10 @@ const MobileCTA = styled.a`
   display: block;
   padding: 14px 16px;
   margin-top: 8px;
-  font-family: ${({ theme }) => theme.fonts?.sans || "inherit"};
+  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
   font-size: 15px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   background: rgba(14, 165, 233, 0.15);
   border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: 8px;
@@ -357,13 +357,7 @@ const RightGroup = styled.div`
 // ── Logo ────────────────────────────────────────────────
 
 const WQTLogoLight = () => (
-  <svg
-    width="200"
-    height="32"
-    viewBox="0 0 320 48"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="200" height="32" viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g>
       <path
         d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z"
@@ -404,10 +398,10 @@ const WQTLogoLight = () => (
 // ── Data ────────────────────────────────────────────────
 
 const SOLUTIONS_ITEMS = [
-  { label: "For Utilities", href: "/for-utilities" },
-  { label: "For Homeowners", href: "/for-homeowners" },
-  { label: "For Aggregators", href: "/for-aggregators" },
-  { label: "For Credit Generators", href: "/generate-credits" },
+  { label: 'For Utilities', href: '/for-utilities' },
+  { label: 'For Homeowners', href: '/for-homeowners' },
+  { label: 'For Aggregators', href: '/for-aggregators' },
+  { label: 'For Credit Generators', href: '/generate-credits' },
 ];
 
 // ── Desktop Dropdown Component ──────────────────────────
@@ -423,8 +417,8 @@ function SolutionsDropdown() {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleMouseEnter = () => {
@@ -454,11 +448,7 @@ function SolutionsDropdown() {
       {open && (
         <DropdownPanel>
           {SOLUTIONS_ITEMS.map((item) => (
-            <DropdownItem
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-            >
+            <DropdownItem key={item.href} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </DropdownItem>
           ))}
@@ -470,12 +460,12 @@ function SolutionsDropdown() {
 
 // ── Component ───────────────────────────────────────────
 
-export function WebsiteNav({ onMenuClick }) {
+export function WebsiteNav({ onMenuClick: _onMenuClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const { STATES } = useAppContext();
   const isSignedIn = !!STATES?.user?.uid;
-  const ctaHref = isSignedIn ? "/marketplace" : "/login";
+  const ctaHref = isSignedIn ? '/marketplace' : '/login';
   const demoActive = isDemoMode();
 
   const handleDemoToggle = () => {
@@ -511,7 +501,7 @@ export function WebsiteNav({ onMenuClick }) {
             <CTALink href={ctaHref}>{isSignedIn ? 'Dashboard' : 'Sign In'}</CTALink>
             <MobileMenuBtn
               onClick={() => setMobileOpen((p) => !p)}
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
               <FontAwesomeIcon icon={mobileOpen ? faTimes : faBars} />
             </MobileMenuBtn>
@@ -537,11 +527,7 @@ export function WebsiteNav({ onMenuClick }) {
         </MobileSectionToggle>
         <MobileSubLinks $open={solutionsOpen}>
           {SOLUTIONS_ITEMS.map((item) => (
-            <MobileSubLink
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-            >
+            <MobileSubLink key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>
               {item.label}
             </MobileSubLink>
           ))}

@@ -1,26 +1,26 @@
 //#TO-DO Client Error Reporting
 
-import { ethers } from "ethers";
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Tabs, Tab, TabList, TabPanel } from "react-tabs";
-import styled from "styled-components";
-import "react-tabs/style/react-tabs.css";
-import placeholderIMG from "../../../assets/icon.png";
-import { MarketplaceAPI, NFT_API } from "../../../scripts/back_door";
-import { isNotZeroAddress } from "../../../scripts/utils";
-import { DashboardPage } from "../../shared/DashboardPage/DashboardPage";
-import { NFTGrid } from "./MarketBrowser";
-import { NFTImage } from "./elements/NFTCard";
-import {useAppContext} from "../../../context/AppContext";
+import { ethers } from 'ethers';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import styled from 'styled-components';
+import 'react-tabs/style/react-tabs.css';
+import placeholderIMG from '../../../assets/icon.png';
+import { MarketplaceAPI, NFT_API } from '../../../scripts/back_door';
+import { isNotZeroAddress } from '../../../scripts/utils';
+import { DashboardPage } from '../../shared/DashboardPage/DashboardPage';
+import { NFTGrid } from './MarketBrowser';
+import { NFTImage } from './elements/NFTCard';
+import { useAppContext } from '../../../context/AppContext';
 
 // Neptune Color Palette
 const colors = {
-  deepBlue: "#0A2E36",
-  lightBlue: "#4FBDBA",
-  accentBlue: "#88CDDA",
-  white: "#FFF",
+  deepBlue: '#0A2E36',
+  lightBlue: '#4FBDBA',
+  accentBlue: '#88CDDA',
+  white: '#FFF',
 };
 
 const TabContainer = styled.div`
@@ -85,7 +85,7 @@ const Badge = styled(StyledTab)`
   align-items: center;
 `;
 
-StyledTab.tabsRole = "Tab";
+StyledTab.tabsRole = 'Tab';
 
 const StyledTabPanel = styled(TabPanel)`
   display: none;
@@ -100,7 +100,7 @@ const StyledTabPanel = styled(TabPanel)`
   }
 `;
 
-StyledTabPanel.tabsRole = "TabPanel";
+StyledTabPanel.tabsRole = 'TabPanel';
 
 const SectionTitle = styled.h2`
   margin-bottom: 15px;
@@ -152,8 +152,8 @@ const NFT = styled(motion.div)`
   }
 
   @media (max-width: 480px) {
-    align-items: flex-start;   /* don’t center everything on tiny screens */
-    padding: 16px 20px;        /* slightly tighter padding */
+    align-items: flex-start; /* don’t center everything on tiny screens */
+    padding: 16px 20px; /* slightly tighter padding */
   }
 
   &:hover {
@@ -195,7 +195,7 @@ const Spinner = styled.div`
 
 const hoverAnimation = {
   scale: 1.05,
-  boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
+  boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.2)',
 };
 
 export const signedUser = '0x94439f811328BAD743F68C26b5bF5B0A67b3b1df';
@@ -238,20 +238,20 @@ const QuickActionsBar = styled.div`
 `;
 
 const SellerDashboard = () => {
-  const { STATES, ACTIONS } = useAppContext();
+  const { ACTIONS } = useAppContext();
   const navigate = useNavigate();
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState('');
   const [userNFTs, setUserNFTs] = useState([]);
   const [userListedNFTs, setUserListedNFTs] = useState([]);
   const [highestBids, setHighestBids] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState("");
+  const [_isError, setIsError] = useState('');
 
   const { setResult } = ACTIONS || {};
 
   useEffect(() => {
-      fetchUserNFTs();
-      fetchListedNFTs();
+    fetchUserNFTs();
+    fetchListedNFTs();
   }, []);
 
   useEffect(() => {
@@ -263,7 +263,7 @@ const SellerDashboard = () => {
   const fetchUserNFTs = async () => {
     setIsLoading(true);
     try {
-      const {wallet_nfts} = await NFT_API.get.wallet_nfts(signedUser);
+      const { wallet_nfts } = await NFT_API.get.wallet_nfts(signedUser);
 
       if (wallet_nfts) {
         // wallet NFTs loaded
@@ -272,7 +272,7 @@ const SellerDashboard = () => {
       }
       return null;
     } catch (error) {
-      console.error("Error loading wallet NFTs:", error);
+      console.error('Error loading wallet NFTs:', error);
       setIsError(error.message);
     } finally {
       setIsLoading(false);
@@ -297,9 +297,7 @@ const SellerDashboard = () => {
     setIsLoading(true);
     try {
       const bidsPromises = userListedNFTs.map(async (nft) => {
-        const _bid = await MarketplaceAPI.Getters.getHighestBids(
-          nft.listingId
-        );
+        const _bid = await MarketplaceAPI.Getters.getHighestBids(nft.listingId);
         if (isNotZeroAddress(_bid.bidder)) {
           return {
             listingId: nft.listingId,
@@ -314,8 +312,8 @@ const SellerDashboard = () => {
       setHighestBids(validBids);
       return validBids;
     } catch (error) {
-      console.error("Error fetching highest bids:", error);
-      setIsError("Error fetching highest bids:");
+      console.error('Error fetching highest bids:', error);
+      setIsError('Error fetching highest bids:');
     } finally {
       setIsLoading(false);
     }
@@ -324,35 +322,33 @@ const SellerDashboard = () => {
   const handleListNFT = async (tokenAddress, tokenId) => {
     setIsLoading(true);
     try {
-      const listingFee =
-        await MarketplaceAPI.Getters.getListingFee();
+      const listingFee = await MarketplaceAPI.Getters.getListingFee();
 
-      const result =
-        await MarketplaceAPI.Seller.approveAndListNFT(
-          tokenAddress,
-          tokenId,
-          ethers.parseEther(price),
-          listingFee
-        );
+      const result = await MarketplaceAPI.Seller.approveAndListNFT(
+        tokenAddress,
+        tokenId,
+        ethers.parseEther(price),
+        listingFee
+      );
       if (result?.hash) {
         setResult({
-          title: "Confirm",
-          message: "Transaction Successful",
+          title: 'Confirm',
+          message: 'Transaction Successful',
           txHash: result?.hash,
         });
       } else {
         setResult({
-          title: "Failed",
-          message: "Cound not transact",
+          title: 'Failed',
+          message: 'Cound not transact',
         });
       }
     } catch (error) {
       setResult({
-        title: "Error",
+        title: 'Error',
         message: error?.message,
       });
-      console.error("Error listing NFT:", error);
-      setIsError("Error listing NFT");
+      console.error('Error listing NFT:', error);
+      setIsError('Error listing NFT');
     } finally {
       setIsLoading(false);
     }
@@ -361,29 +357,26 @@ const SellerDashboard = () => {
   const handleDelistNFT = async (listingId) => {
     setIsLoading(true);
     try {
-      const result =
-        await MarketplaceAPI.Seller.cancelListing(
-          listingId
-        );
+      const result = await MarketplaceAPI.Seller.cancelListing(listingId);
       if (result?.hash) {
         setResult({
-          title: "Confirm",
-          message: "Transaction Successful",
+          title: 'Confirm',
+          message: 'Transaction Successful',
           txHash: result?.hash,
         });
       } else {
         setResult({
-          title: "Failed",
-          message: "Cound not transact",
+          title: 'Failed',
+          message: 'Cound not transact',
         });
       }
     } catch (error) {
       setResult({
-        title: "Error",
+        title: 'Error',
         message: error?.message,
       });
-      console.error("Error delisting NFT:", error);
-      setIsError("Error delisting NFT");
+      console.error('Error delisting NFT:', error);
+      setIsError('Error delisting NFT');
     } finally {
       setIsLoading(false);
     }
@@ -392,28 +385,26 @@ const SellerDashboard = () => {
   const handleAcceptBid = async (listingId) => {
     setIsLoading(true);
     try {
-      const result = await MarketplaceAPI.Seller.acceptBid(
-        listingId
-      );
+      const result = await MarketplaceAPI.Seller.acceptBid(listingId);
       if (result?.hash) {
         setResult({
-          title: "Confirm",
-          message: "Transaction Successful",
+          title: 'Confirm',
+          message: 'Transaction Successful',
           txHash: result?.hash,
         });
       } else {
         setResult({
-          title: "Failed",
-          message: "Cound not transact",
+          title: 'Failed',
+          message: 'Cound not transact',
         });
       }
     } catch (error) {
       setResult({
-        title: "Error",
+        title: 'Error',
         message: error?.message,
       });
-      console.error("Error accepting bid:", error);
-      setIsError("Error accepting bid");
+      console.error('Error accepting bid:', error);
+      setIsError('Error accepting bid');
     } finally {
       setIsLoading(false);
     }
@@ -422,137 +413,121 @@ const SellerDashboard = () => {
   return (
     <DashboardPage>
       <QuickActionsBar>
-        <CreateListingButton onClick={() => navigate("/marketplace/create-listing")}>
+        <CreateListingButton onClick={() => navigate('/marketplace/create-listing')}>
           + Create New Listing
         </CreateListingButton>
       </QuickActionsBar>
       <Tabs>
-      <StyledTabList>
-        <Badge>Owned</Badge>
-        <Badge>Listed</Badge>
-        <Badge>Proposals</Badge>
-      </StyledTabList>
-      {/*       <Certificate />
-       */}{" "}
-      <TabContainer>
-        <StyledTabPanel>
-          <SectionTitle>Your Assets</SectionTitle>
-          {isLoading ? (
-            <Spinner />
-          ) : userNFTs.length > 0 ? (
-            <NFTGrid>
-              {userNFTs.map((nft) => (
-                <NFT
-                  key={nft.listingId}
-                  initial={{ scale: 1 }}
-                  whileHover={hoverAnimation}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <p>
-                    {nft?.contract?.name} #{nft?.tokenId}
-                  </p>
-                  <NFTImage
-                    src={nft?.image?.pngUrl || placeholderIMG}
-                    alt={nft?.contract?.name}
-                  />
-                  <Input
-                    type="text"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    placeholder="Price (MATIC)"
-                    required
-                  />
-                  <Button
-                    onClick={() =>
-                      handleListNFT(nft?.contract?.address, nft?.tokenId)
-                    }
+        <StyledTabList>
+          <Badge>Owned</Badge>
+          <Badge>Listed</Badge>
+          <Badge>Proposals</Badge>
+        </StyledTabList>
+        {/*       <Certificate />
+         */}{' '}
+        <TabContainer>
+          <StyledTabPanel>
+            <SectionTitle>Your Assets</SectionTitle>
+            {isLoading ? (
+              <Spinner />
+            ) : userNFTs.length > 0 ? (
+              <NFTGrid>
+                {userNFTs.map((nft) => (
+                  <NFT
+                    key={nft.listingId}
+                    initial={{ scale: 1 }}
+                    whileHover={hoverAnimation}
+                    transition={{ type: 'spring', stiffness: 300 }}
                   >
-                    List NFT
-                  </Button>
-                </NFT>
-              ))}
-            </NFTGrid>
-          ) : (
-            <p>No Owned Assets</p>
-          )}
-        </StyledTabPanel>
+                    <p>
+                      {nft?.contract?.name} #{nft?.tokenId}
+                    </p>
+                    <NFTImage
+                      src={nft?.image?.pngUrl || placeholderIMG}
+                      alt={nft?.contract?.name}
+                    />
+                    <Input
+                      type="text"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      placeholder="Price (MATIC)"
+                      required
+                    />
+                    <Button onClick={() => handleListNFT(nft?.contract?.address, nft?.tokenId)}>
+                      List NFT
+                    </Button>
+                  </NFT>
+                ))}
+              </NFTGrid>
+            ) : (
+              <p>No Owned Assets</p>
+            )}
+          </StyledTabPanel>
 
-        <StyledTabPanel>
-          <SectionTitle>Your Listings</SectionTitle>
-          {isLoading ? (
-            <Spinner />
-          ) : userListedNFTs.length > 0 ? (
-            <NFTGrid>
-              {userListedNFTs.map((nft) => (
-                <NFT
-                  key={nft.listingId}
-                  initial={{ scale: 1 }}
-                  whileHover={hoverAnimation}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <p>
-                    {nft?.name} #{nft?.tokenId}
-                  </p>
-                  <p>
-                    <span>Listing #{nft.listingId}</span>
-                  </p>
-                  <p>${nft.price}</p>
-                  <ButtonContainer>
-                    <Button
-                      onClick={() =>
-                        navigate(`/marketplace/listing/${nft.listingId}`)
-                      }
-                    >
-                      View Listing
-                    </Button>
-                    <Button onClick={() => handleDelistNFT(nft.listingId)}>
-                      Delist
-                    </Button>
-                  </ButtonContainer>
-                </NFT>
-              ))}
-            </NFTGrid>
-          ) : (
-            <p>No Listed Assets</p>
-          )}
-        </StyledTabPanel>
+          <StyledTabPanel>
+            <SectionTitle>Your Listings</SectionTitle>
+            {isLoading ? (
+              <Spinner />
+            ) : userListedNFTs.length > 0 ? (
+              <NFTGrid>
+                {userListedNFTs.map((nft) => (
+                  <NFT
+                    key={nft.listingId}
+                    initial={{ scale: 1 }}
+                    whileHover={hoverAnimation}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <p>
+                      {nft?.name} #{nft?.tokenId}
+                    </p>
+                    <p>
+                      <span>Listing #{nft.listingId}</span>
+                    </p>
+                    <p>${nft.price}</p>
+                    <ButtonContainer>
+                      <Button onClick={() => navigate(`/marketplace/listing/${nft.listingId}`)}>
+                        View Listing
+                      </Button>
+                      <Button onClick={() => handleDelistNFT(nft.listingId)}>Delist</Button>
+                    </ButtonContainer>
+                  </NFT>
+                ))}
+              </NFTGrid>
+            ) : (
+              <p>No Listed Assets</p>
+            )}
+          </StyledTabPanel>
 
-        <StyledTabPanel>
-          <SectionTitle>Highest Bid Proposals</SectionTitle>
-          {isLoading ? (
-            <Spinner />
-          ) : highestBids.length > 0 ? (
-            <NFTGrid>
-              {highestBids.map((nft) => (
-                <NFT
-                  key={nft.listingId}
-                  initial={{ scale: 1 }}
-                  whileHover={hoverAnimation}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <p>Listing #{nft.listingId}</p>
-                  <p>Bidder: {nft.bidder}</p>
-                  <p>Value: {nft.bidAmount} Matic</p>
-                  <ButtonContainer>
-                    <Button
-                      onClick={() =>
-                        navigate(`/marketplace/listing/${nft.listingId}`)
-                      }
-                    >
-                      View Listing
-                    </Button>
-                    <Button onClick={() => handleAcceptBid(nft.listingId)}>
-                      Accept Bid
-                    </Button>
-                  </ButtonContainer>
-                </NFT>
-              ))}
-            </NFTGrid>
-          ) : (
-            <p>No Bids</p>
-          )}
-        </StyledTabPanel>
-      </TabContainer>
+          <StyledTabPanel>
+            <SectionTitle>Highest Bid Proposals</SectionTitle>
+            {isLoading ? (
+              <Spinner />
+            ) : highestBids.length > 0 ? (
+              <NFTGrid>
+                {highestBids.map((nft) => (
+                  <NFT
+                    key={nft.listingId}
+                    initial={{ scale: 1 }}
+                    whileHover={hoverAnimation}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <p>Listing #{nft.listingId}</p>
+                    <p>Bidder: {nft.bidder}</p>
+                    <p>Value: {nft.bidAmount} Matic</p>
+                    <ButtonContainer>
+                      <Button onClick={() => navigate(`/marketplace/listing/${nft.listingId}`)}>
+                        View Listing
+                      </Button>
+                      <Button onClick={() => handleAcceptBid(nft.listingId)}>Accept Bid</Button>
+                    </ButtonContainer>
+                  </NFT>
+                ))}
+              </NFTGrid>
+            ) : (
+              <p>No Bids</p>
+            )}
+          </StyledTabPanel>
+        </TabContainer>
       </Tabs>
     </DashboardPage>
   );

@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from "react";
-import {
-  GoogleMap,
-  LoadScript,
-} from "@react-google-maps/api";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faBars } from "@fortawesome/free-solid-svg-icons";
-import {MapsAPI} from "../../scripts/back_door";
+import { useEffect, useState } from 'react';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faBars } from '@fortawesome/free-solid-svg-icons';
+import { MapsAPI } from '../../scripts/back_door';
 
 const colorScheme = {
-  background: "#FFFFFF",
-  accent: "#0C5B84",
-  secondaryAccent: "#90CAF9",
+  background: '#FFFFFF',
+  accent: '#0C5B84',
+  secondaryAccent: '#90CAF9',
 };
 
 const containerStyle = {
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 const StoreListContainer = styled.div`
-  width: ${(props) => (props.open ? "25%" : "0")};
+  width: ${(props) => (props.open ? '25%' : '0')};
   overflow-x: hidden;
-  padding: ${(props) => (props.open ? "15px" : "0")};
+  padding: ${(props) => (props.open ? '15px' : '0')};
   border-right: 1px solid ${colorScheme.secondaryAccent};
   display: flex;
   flex-direction: column;
@@ -31,7 +28,7 @@ const StoreListContainer = styled.div`
   transition: 0.3s;
 
   @media (max-width: 768px) {
-    width: ${(props) => (props.open ? "70%" : "0")};
+    width: ${(props) => (props.open ? '70%' : '0')};
   }
 `;
 
@@ -70,59 +67,31 @@ const ListItem = styled.li`
 `;
 
 const CompanyInfo = styled.div`
-display: flex;
-flex-direction: column;
-word-wrap: break-word;
-oveflow: hidden;
-max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+  oveflow: hidden;
+  max-width: 100%;
 
-& > p {
-  margin: 5px 0;
-}
+  & > p {
+    margin: 5px 0;
+  }
 
-span {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-  color: ${colorScheme.accent};
-}
+  span {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: ${colorScheme.accent};
+  }
 `;
 
 const MapContainer = styled.div`
   flex: 2;
 `;
 
-const InfoWindowContent = styled.div`
-  border-radius: 5px;
-  padding: 10px;
-  max-width: 200px;
-  overflow: hidden;
-  color: ${colorScheme.accent};
-
-  h4 {
-    margin: 0;
-    padding: 5px 0;
-    font-size: 1rem;
-    color: ${colorScheme.accent};
-  }
-
-  p {
-    color: black;
-    margin: 5px 0;
-    font-size: 0.8rem;
-  }
-
-  a {
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
 function GoogleStoreLocator({ storesData }) {
-  const [selectedStore, setSelectedStore] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [_selectedStore, setSelectedStore] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filteredStores, setFilteredStores] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [apiKey, setApiKey] = useState(null);
@@ -136,9 +105,9 @@ function GoogleStoreLocator({ storesData }) {
   useEffect(() => {
     getKey();
     checkViewpoint();
-    window.addEventListener("resize", checkViewpoint);
+    window.addEventListener('resize', checkViewpoint);
     return () => {
-      window.removeEventListener("resize", checkViewpoint);
+      window.removeEventListener('resize', checkViewpoint);
     };
   }, []);
 
@@ -156,36 +125,35 @@ function GoogleStoreLocator({ storesData }) {
     },
     website: store.Website,
     email: store.Email,
-    address: store["Address"],
-    city: store["City"],
-    states: store["States"],
-    zipCode: store["Zip Code"],
+    address: store['Address'],
+    city: store['City'],
+    states: store['States'],
+    zipCode: store['Zip Code'],
   }));
 
   //const center = { lat: 37.926868, lng: -78.024902 };
 
-  const center  = { lat: 27.6648, lng: -81.5158 };
+  const center = { lat: 27.6648, lng: -81.5158 };
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
+    if (searchTerm.trim() === '') {
       setFilteredStores(stores);
     } else {
-      const filtered =
-        stores.filter((store) =>
-          (store.name || "").toLowerCase().includes(searchTerm.toLowerCase().trim())
-        );
+      const filtered = stores.filter((store) =>
+        (store.name || '').toLowerCase().includes(searchTerm.toLowerCase().trim())
+      );
       setFilteredStores(filtered);
     }
   }, [searchTerm]);
 
-  const getKey = async () => setApiKey(await MapsAPI.getAPI() || null);
+  const getKey = async () => setApiKey((await MapsAPI.getAPI()) || null);
 
   const mapOptions = {
     styles: [
       {
-        featureType: "poi", // "poi" stands for points of interest
-        elementType: "labels",
-        stylers: [{ visibility: "off" }],
+        featureType: 'poi', // "poi" stands for points of interest
+        elementType: 'labels',
+        stylers: [{ visibility: 'off' }],
       },
     ],
   };
@@ -193,10 +161,10 @@ function GoogleStoreLocator({ storesData }) {
   return (
     <div
       style={{
-        display: "flex",
-        width: "100vw",
-        height: "100vh",
-        boxSizing: "border-box",
+        display: 'flex',
+        width: '100vw',
+        height: '100vh',
+        boxSizing: 'border-box',
         background: colorScheme.background,
       }}
     >
@@ -204,16 +172,15 @@ function GoogleStoreLocator({ storesData }) {
         onClick={() => setSidebarOpen(!sidebarOpen)}
         style={{
           backgroundColor: colorScheme.accent,
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          padding: "10px",
-          position: "fixed",
-          bottom: "15px",
-          left: "15px",
-          transform: "translateY(-50%)",
-          zIndex: "100",
-
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          padding: '10px',
+          position: 'fixed',
+          bottom: '15px',
+          left: '15px',
+          transform: 'translateY(-50%)',
+          zIndex: '100',
         }}
       >
         {sidebarOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
@@ -224,12 +191,12 @@ function GoogleStoreLocator({ storesData }) {
           placeholder="Search stores..."
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
-            width: "80%",
-            padding: "10px",
-            borderRadius: "5px",
+            width: '80%',
+            padding: '10px',
+            borderRadius: '5px',
             border: `2px solid ${colorScheme.accent}`,
-            outline: "none",
-            marginBottom: "20px",
+            outline: 'none',
+            marginBottom: '20px',
           }}
         />
         <StoreList>
@@ -238,9 +205,22 @@ function GoogleStoreLocator({ storesData }) {
               <ListItem key={index} onClick={() => setSelectedStore(store)}>
                 <CompanyInfo>
                   <h4>{store.name}</h4>
-                  {store.website && (<p><span>Website:</span> {store.website}</p>)}
-                  {store.address && (<p><span>Address:</span> {store.address}, {store.city}, {store.states} {store.zipCode}</p>)}
-                  {store.email && (<p><span>Email:</span> {store.email}</p>)}
+                  {store.website && (
+                    <p>
+                      <span>Website:</span> {store.website}
+                    </p>
+                  )}
+                  {store.address && (
+                    <p>
+                      <span>Address:</span> {store.address}, {store.city}, {store.states}{' '}
+                      {store.zipCode}
+                    </p>
+                  )}
+                  {store.email && (
+                    <p>
+                      <span>Email:</span> {store.email}
+                    </p>
+                  )}
                 </CompanyInfo>
               </ListItem>
             ))
@@ -251,14 +231,14 @@ function GoogleStoreLocator({ storesData }) {
       </StoreListContainer>
       {apiKey ? (
         <MapContainer>
-        <LoadScript googleMapsApiKey={apiKey}>
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={7}
-            options={mapOptions}
-          >
-            {/* {stores.map((store, index) => (
+          <LoadScript googleMapsApiKey={apiKey}>
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={7}
+              options={mapOptions}
+            >
+              {/* {stores.map((store, index) => (
               <Marker
                 key={index}
                 position={store.location}
@@ -280,9 +260,9 @@ function GoogleStoreLocator({ storesData }) {
                 </InfoWindowContent>
               </InfoWindow>
             )} */}
-          </GoogleMap>
-        </LoadScript>
-      </MapContainer>
+            </GoogleMap>
+          </LoadScript>
+        </MapContainer>
       ) : (
         <div>KEY INVALID</div>
       )}

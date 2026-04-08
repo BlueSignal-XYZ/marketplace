@@ -8,7 +8,12 @@ import type { SensorReading, ReadingType } from './sensors';
 
 // ── Device ────────────────────────────────────────────────
 
-export type DeviceStatus = 'active' | 'inactive' | 'commissioning' | 'maintenance' | 'decommissioned';
+export type DeviceStatus =
+  | 'active'
+  | 'inactive'
+  | 'commissioning'
+  | 'maintenance'
+  | 'decommissioned';
 
 export interface Device extends Timestamped {
   id: string;
@@ -69,7 +74,7 @@ export interface Site extends Timestamped {
   name: string;
   ownerId: string;
   location: GeoLocation;
-  devices: string[];         // device IDs
+  devices: string[]; // device IDs
   description?: string;
 }
 
@@ -90,7 +95,7 @@ export interface Alert extends Timestamped {
   deviceName: string;
   severity: AlertSeverity;
   status: AlertStatus;
-  type: string;              // e.g. "threshold_breach", "offline", "low_battery"
+  type: string; // e.g. "threshold_breach", "offline", "low_battery"
   message: string;
   readingType?: ReadingType;
   readingValue?: number;

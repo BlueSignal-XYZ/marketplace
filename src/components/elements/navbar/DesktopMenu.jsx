@@ -1,21 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faBellSlash,
-  faGear,
-  faGears,
-  faSignOutAlt,
-} from '@fortawesome/free-solid-svg-icons';
+
 import styled from 'styled-components';
 import { ProfileDropMenu } from './elements';
-import { motion } from 'framer-motion';
-
-const iconVariants = {
-  hover: { scale: 1.1 },
-  tap: { scale: 0.9 }
-};
 
 /**
  * Desktop Menu Component
@@ -23,20 +9,8 @@ const iconVariants = {
  * @param {Object} APP - Application state and actions
  */
 const DesktopMenu = ({ APP }) => {
-  const {
-    notificationBarOpen,
-    settingsMenuOpen,
-  } = APP ? APP.STATES : {};
-
-  const {
-    handleNotificationsBar,
-    handleSettingsMenu,
-    handleLogOut,
-  } = APP ? APP.ACTIONS : {};
-
   return (
     <DesktopMenuContainer>
-
       {/* Notification Icon */}
       {/* <IconContainer whileHover='hover' whileTap="tap">
         <FontAwesomeIcon
@@ -44,12 +18,9 @@ const DesktopMenu = ({ APP }) => {
           onClick={handleNotificationsBar}
         />
       </IconContainer> */}
-      
 
       {/* Profile DropMenu */}
       <ProfileDropMenu APP={APP} />
-
-
     </DesktopMenuContainer>
   );
 };
@@ -65,7 +36,7 @@ const DesktopMenuContainer = styled.div`
   // align-items: center;
   // justify-content: flex-end;
   // gap: 10px;
-  
+
   width: 100%;
   display: flex;
   align-items: center;
@@ -76,35 +47,6 @@ const DesktopMenuContainer = styled.div`
   // @media (max-width: 767px) {
   //   display: none;
   // }
-`;
-
-const IconContainer = styled(motion.div)`
-  cursor: pointer;
-  font-size: 1.5rem;
-  color: #333;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #007bff;
-  }
-`;
-
-const LogOutButton = styled(motion.button)`
-  color: black;
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-
-  &:hover {
-    color: #007bff;
-    background-color: #f8f9fa;
-  }
 `;
 
 export default DesktopMenu;

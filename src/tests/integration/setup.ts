@@ -8,10 +8,10 @@
  * until emulator startup is automated in the pipeline.
  */
 
-import { initializeApp, cert, getApps, deleteApp, type App } from 'firebase-admin/app';
+import { initializeApp, getApps, type App } from 'firebase-admin/app';
 import { getAuth, type Auth } from 'firebase-admin/auth';
 import { getDatabase, type Database } from 'firebase-admin/database';
-import { beforeAll, afterAll, afterEach } from 'vitest';
+import { beforeAll, afterAll } from 'vitest';
 import axios from 'axios';
 
 // ── Emulator configuration ──────────────────────────────
@@ -33,8 +33,8 @@ process.env.GCLOUD_PROJECT = PROJECT_ID;
 // ── Initialize Firebase Admin for tests ──────────────────
 
 let app: App;
-let auth: Auth;
-let db: Database;
+let _auth: Auth;
+let _db: Database;
 
 beforeAll(() => {
   // Clean up any existing apps
@@ -48,8 +48,8 @@ beforeAll(() => {
     });
   }
 
-  auth = getAuth(app);
-  db = getDatabase(app);
+  _auth = getAuth(app);
+  _db = getDatabase(app);
 });
 
 afterAll(async () => {
@@ -134,6 +134,7 @@ export async function apiRequest(
   path: string,
   data?: Record<string, unknown>,
   token?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ status: number; data: any }> {
   try {
     const headers: Record<string, string> = {
@@ -152,10 +153,11 @@ export async function apiRequest(
     });
 
     return { status: res.status, data: res.data };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const axiosErr = error as { response?: { status?: number; data?: unknown }; message?: string };
     return {
-      status: error.response?.status || 500,
-      data: error.response?.data || { error: error.message },
+      status: axiosErr.response?.status || 500,
+      data: (axiosErr.response?.data as Record<string, unknown>) || { error: axiosErr.message },
     };
   }
 }
@@ -174,9 +176,7 @@ export async function clearDatabase(): Promise<void> {
 export async function clearAuth(): Promise<void> {
   try {
     // Auth emulator exposes a REST endpoint for clearing
-    await axios.delete(
-      `http://${AUTH_EMULATOR}/emulator/v1/projects/${PROJECT_ID}/accounts`
-    );
+    await axios.delete(`http://${AUTH_EMULATOR}/emulator/v1/projects/${PROJECT_ID}/accounts`);
   } catch {
     // Ignore errors if emulator isn't running
   }

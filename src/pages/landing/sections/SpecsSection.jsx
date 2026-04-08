@@ -35,11 +35,13 @@ const CTAButton = styled.a`
   border-radius: 100px;
   text-decoration: none;
   margin-top: 32px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 24px rgba(255,255,255,0.15);
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
   }
 
   ${({ theme }) => theme.media.sm} {
@@ -168,14 +170,20 @@ const SpecsSection = () => (
             <SectionLabel>Specifications</SectionLabel>
             <SectionTitle>Every detail, documented.</SectionTitle>
             <SectionDesc>
-              The WQM-1 is designed for developers and integrators who need
-              full visibility into hardware capabilities before committing.
-              No marketing abstractions — just the&nbsp;datasheet.
+              The WQM-1 is designed for developers and integrators who need full visibility into
+              hardware capabilities before committing. No marketing abstractions — just
+              the&nbsp;datasheet.
             </SectionDesc>
             <CTAButton href="#order" onClick={() => trackCTA('order_devkit_specs', 'Specs CTA')}>
               Order Dev Kit — $999
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </CTAButton>
             <PricingNote>+ Cloud Monitoring $9.99/mo per&nbsp;device</PricingNote>

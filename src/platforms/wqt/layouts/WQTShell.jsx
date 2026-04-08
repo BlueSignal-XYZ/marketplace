@@ -4,7 +4,7 @@
  * Landing and login pages get no chrome.
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -39,34 +39,31 @@ const AppContainer = styled.div`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-const AppBody = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
-
 const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
 
-  ${({ $appRoute }) => $appRoute && `
-    /* Mobile: offset by bottom tabs height + safe area */
+  ${({ $appRoute }) =>
+    $appRoute &&
+    `
+    /* Mobile: horizontal padding + bottom tabs */
     @media (max-width: 767px) {
+      padding: 0 20px;
       padding-bottom: calc(${TAB_BAR_HEIGHT}px + env(safe-area-inset-bottom, 0px));
     }
 
-    /* Tablet: offset by narrow sidebar */
+    /* Tablet: sidebar offset + generous horizontal padding */
     @media (min-width: 768px) {
       margin-left: ${SIDEBAR_WIDTH_TABLET}px;
-      padding-right: clamp(24px, 3vw, 48px);
+      padding: 0 clamp(40px, 6vw, 72px);
     }
 
-    /* Desktop: offset by full sidebar */
+    /* Desktop: full sidebar + generous horizontal padding */
     @media (min-width: 1024px) {
       margin-left: ${SIDEBAR_WIDTH}px;
-      padding-right: clamp(32px, 4vw, 64px);
+      padding: 0 clamp(48px, 5vw, 80px);
     }
   `}
 `;
@@ -115,7 +112,9 @@ const FooterWrapper = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   margin-top: auto;
 
-  ${({ $appRoute }) => $appRoute && `
+  ${({ $appRoute }) =>
+    $appRoute &&
+    `
     @media (min-width: 768px) {
       margin-left: ${SIDEBAR_WIDTH_TABLET}px;
     }
@@ -158,8 +157,28 @@ export function WQTShell({ user, isAuthLanding, children }) {
           overflow: 'hidden',
           zIndex: 9999,
         }}
-        onFocus={(e) => { e.target.style.position = 'fixed'; e.target.style.left = '16px'; e.target.style.top = '16px'; e.target.style.width = 'auto'; e.target.style.height = 'auto'; e.target.style.overflow = 'visible'; e.target.style.background = '#0052CC'; e.target.style.color = '#fff'; e.target.style.padding = '8px 16px'; e.target.style.borderRadius = '4px'; e.target.style.textDecoration = 'none'; e.target.style.fontWeight = '600'; e.target.style.fontSize = '14px'; }}
-        onBlur={(e) => { e.target.style.position = 'absolute'; e.target.style.left = '-9999px'; e.target.style.width = '1px'; e.target.style.height = '1px'; e.target.style.overflow = 'hidden'; }}
+        onFocus={(e) => {
+          e.target.style.position = 'fixed';
+          e.target.style.left = '16px';
+          e.target.style.top = '16px';
+          e.target.style.width = 'auto';
+          e.target.style.height = 'auto';
+          e.target.style.overflow = 'visible';
+          e.target.style.background = '#0052CC';
+          e.target.style.color = '#fff';
+          e.target.style.padding = '8px 16px';
+          e.target.style.borderRadius = '4px';
+          e.target.style.textDecoration = 'none';
+          e.target.style.fontWeight = '600';
+          e.target.style.fontSize = '14px';
+        }}
+        onBlur={(e) => {
+          e.target.style.position = 'absolute';
+          e.target.style.left = '-9999px';
+          e.target.style.width = '1px';
+          e.target.style.height = '1px';
+          e.target.style.overflow = 'hidden';
+        }}
       >
         Skip to content
       </a>
@@ -168,16 +187,51 @@ export function WQTShell({ user, isAuthLanding, children }) {
       {!hideChrome && isLegalRoute && (
         <LegalNav>
           <LegalNavInner>
-            <a href="/" aria-label="WaterQuality.Trading" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-              <svg width="180" height="28" viewBox="0 0 320 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <a
+              href="/"
+              aria-label="WaterQuality.Trading"
+              style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
+            >
+              <svg
+                width="180"
+                height="28"
+                viewBox="0 0 320 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <g>
-                  <path d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z" fill="#3B82F6" />
-                  <path d="M16 30L20 26L24 32L28 24L32 28" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  <path d="M20 34L23 37L29 31" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  <path
+                    d="M24 4C24 4 10 20 10 30C10 37.732 16.268 44 24 44C31.732 44 38 37.732 38 30C38 20 24 4 24 4Z"
+                    fill="#3B82F6"
+                  />
+                  <path
+                    d="M16 30L20 26L24 32L28 24L32 28"
+                    stroke="#0EA5E9"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+                  <path
+                    d="M20 34L23 37L29 31"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
                 </g>
-                <text x="50" y="32" fontFamily="'Outfit', 'Inter', sans-serif" fontSize="22" fill="#F1F5F9">
+                <text
+                  x="50"
+                  y="32"
+                  fontFamily="'Outfit', 'Inter', sans-serif"
+                  fontSize="22"
+                  fill="#F1F5F9"
+                >
                   <tspan fontWeight="700">WaterQuality</tspan>
-                  <tspan fontWeight="400" fill="#0EA5E9">.Trading</tspan>
+                  <tspan fontWeight="400" fill="#0EA5E9">
+                    .Trading
+                  </tspan>
                 </text>
               </svg>
             </a>
@@ -185,19 +239,13 @@ export function WQTShell({ user, isAuthLanding, children }) {
           </LegalNavInner>
         </LegalNav>
       )}
-      {!hideChrome && isMarketingRoute && (
-        <WebsiteNav onMenuClick={() => setMenuOpen((p) => !p)} />
-      )}
+      {!hideChrome && isMarketingRoute && <WebsiteNav onMenuClick={() => setMenuOpen((p) => !p)} />}
       {isAppRoute && <WQTTopBar />}
       {isAppRoute && <WQTSidebar />}
 
       {/* Mobile menu for marketing routes */}
       {isMarketingRoute && (
-        <MarketplaceMenu
-          open={menuOpen}
-          onClose={() => setMenuOpen(false)}
-          user={user}
-        />
+        <MarketplaceMenu open={menuOpen} onClose={() => setMenuOpen(false)} user={user} />
       )}
 
       {/* Demo mode banner (same as Cloud) */}

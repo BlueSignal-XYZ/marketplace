@@ -1,8 +1,8 @@
-import { createGlobalStyle } from "styled-components";
-import SatoshiNormal from "../fonts/Satoshi-Regular.woff2";
-import SatoshiMedium from "../fonts/Satoshi-Medium.woff2";
-import SatoshiBold from "../fonts/Satoshi-Bold.woff2";
-import { media, safeAreaInsets } from "./breakpoints";
+import { createGlobalStyle } from 'styled-components';
+import SatoshiNormal from '../fonts/Satoshi-Regular.woff2';
+import SatoshiMedium from '../fonts/Satoshi-Medium.woff2';
+import SatoshiBold from '../fonts/Satoshi-Bold.woff2';
+import { media, safeAreaInsets } from './breakpoints';
 
 export const GlobalStyle = createGlobalStyle`
 

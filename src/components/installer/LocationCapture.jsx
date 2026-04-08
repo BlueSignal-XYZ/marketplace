@@ -3,12 +3,9 @@
  * Captures device installation location via GPS, map, or address
  */
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import axios from "axios";
-import { auth } from "../../apis/firebase";
-import configs from "../../../configs";
+import { useState, useCallback, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
 const Container = styled.div`
   display: flex;
@@ -28,8 +25,8 @@ const TabContainer = styled.div`
 const Tab = styled.button`
   flex: 1;
   padding: 0.75rem 1rem;
-  background: ${(props) => (props.active ? "rgba(0, 212, 255, 0.2)" : "transparent")};
-  color: ${(props) => (props.active ? "#00d4ff" : "rgba(255, 255, 255, 0.6)")};
+  background: ${(props) => (props.active ? 'rgba(0, 212, 255, 0.2)' : 'transparent')};
+  color: ${(props) => (props.active ? '#00d4ff' : 'rgba(255, 255, 255, 0.6)')};
   border: none;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -39,7 +36,7 @@ const Tab = styled.button`
 
   &:hover {
     background: ${(props) =>
-      props.active ? "rgba(0, 212, 255, 0.2)" : "rgba(255, 255, 255, 0.1)"};
+      props.active ? 'rgba(0, 212, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)'};
   }
 `;
 
@@ -73,9 +70,9 @@ const Input = styled.input`
 
 const Button = styled.button`
   padding: 0.875rem 1.5rem;
-  background: ${(props) => (props.primary ? "#00d4ff" : "transparent")};
-  color: ${(props) => (props.primary ? "#000" : "#fff")};
-  border: ${(props) => (props.primary ? "none" : "1px solid rgba(255, 255, 255, 0.2)")};
+  background: ${(props) => (props.primary ? '#00d4ff' : 'transparent')};
+  color: ${(props) => (props.primary ? '#000' : '#fff')};
+  border: ${(props) => (props.primary ? 'none' : '1px solid rgba(255, 255, 255, 0.2)')};
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
@@ -87,7 +84,7 @@ const Button = styled.button`
   gap: 0.5rem;
 
   &:hover:not(:disabled) {
-    background: ${(props) => (props.primary ? "#00b8e0" : "rgba(255, 255, 255, 0.1)")};
+    background: ${(props) => (props.primary ? '#00b8e0' : 'rgba(255, 255, 255, 0.1)')};
     transform: translateY(-1px);
   }
 
@@ -134,17 +131,13 @@ const LoadingOverlay = styled.div`
 const AccuracyIndicator = styled.span`
   font-size: 0.75rem;
   color: ${(props) =>
-    props.accuracy < 10
-      ? "#22c55e"
-      : props.accuracy < 50
-      ? "#f59e0b"
-      : "#ef4444"};
+    props.accuracy < 10 ? '#22c55e' : props.accuracy < 50 ? '#f59e0b' : '#ef4444'};
   margin-left: 0.5rem;
 `;
 
 const mapContainerStyle = {
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 const defaultCenter = {
@@ -153,16 +146,16 @@ const defaultCenter = {
 };
 
 // Google Maps libraries to load
-const libraries = ["places"];
+const libraries = ['places'];
 
 /**
  * Location Capture Component
  */
 export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiKey }) {
-  const [method, setMethod] = useState("gps");
+  const [method, setMethod] = useState('gps');
   const [coordinates, setCoordinates] = useState(initialLocation || null);
-  const [address, setAddress] = useState("");
-  const [formattedAddress, setFormattedAddress] = useState("");
+  const [address, setAddress] = useState('');
+  const [formattedAddress, setFormattedAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [accuracy, setAccuracy] = useState(null);
@@ -179,7 +172,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
    */
   const captureGPS = useCallback(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
+      setError('Geolocation is not supported by your browser');
       return;
     }
 
@@ -201,7 +194,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
         // Notify parent
         onLocationSet?.({
           coordinates: { ...coords, accuracy: acc },
-          method: "gps",
+          method: 'gps',
         });
 
         // Reverse geocode to get address
@@ -213,16 +206,16 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
         setLoading(false);
         switch (err.code) {
           case err.PERMISSION_DENIED:
-            setError("Location permission denied. Please allow location access.");
+            setError('Location permission denied. Please allow location access.');
             break;
           case err.POSITION_UNAVAILABLE:
-            setError("Location information unavailable.");
+            setError('Location information unavailable.');
             break;
           case err.TIMEOUT:
-            setError("Location request timed out. Please try again.");
+            setError('Location request timed out. Please try again.');
             break;
           default:
-            setError("Unable to get location.");
+            setError('Unable to get location.');
         }
       },
       {
@@ -238,7 +231,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
    */
   const handleMapClick = useCallback(
     (e) => {
-      if (method !== "map_pin") return;
+      if (method !== 'map_pin') return;
 
       const coords = {
         lat: e.latLng.lat(),
@@ -251,7 +244,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
       // Notify parent
       onLocationSet?.({
         coordinates: coords,
-        method: "map_pin",
+        method: 'map_pin',
       });
 
       // Reverse geocode
@@ -277,7 +270,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
       // Notify parent
       onLocationSet?.({
         coordinates: coords,
-        method: "map_pin",
+        method: 'map_pin',
       });
 
       // Reverse geocode
@@ -294,7 +287,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
   const geocodeAddress = useCallback(async () => {
     if (!address.trim()) return;
     if (!isLoaded || !window.google) {
-      setError("Google Maps not loaded");
+      setError('Google Maps not loaded');
       return;
     }
 
@@ -305,10 +298,10 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
       const geocoder = new window.google.maps.Geocoder();
       const result = await new Promise((resolve, reject) => {
         geocoder.geocode({ address }, (results, status) => {
-          if (status === "OK" && results.length > 0) {
+          if (status === 'OK' && results.length > 0) {
             resolve(results[0]);
           } else {
-            reject(new Error("Address not found"));
+            reject(new Error('Address not found'));
           }
         });
       });
@@ -327,10 +320,10 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
       onLocationSet?.({
         coordinates: coords,
         address: result.formatted_address,
-        method: "address",
+        method: 'address',
       });
     } catch (err) {
-      setError(err.message || "Failed to find address");
+      setError(err.message || 'Failed to find address');
     } finally {
       setLoading(false);
     }
@@ -347,17 +340,17 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
         const geocoder = new window.google.maps.Geocoder();
         const result = await new Promise((resolve, reject) => {
           geocoder.geocode({ location: coords }, (results, status) => {
-            if (status === "OK" && results.length > 0) {
+            if (status === 'OK' && results.length > 0) {
               resolve(results[0]);
             } else {
-              reject(new Error("Location not found"));
+              reject(new Error('Location not found'));
             }
           });
         });
 
         setFormattedAddress(result.formatted_address);
       } catch (err) {
-        console.error("Reverse geocoding failed:", err);
+        console.error('Reverse geocoding failed:', err);
       }
     },
     [isLoaded]
@@ -379,7 +372,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
 
   // Auto-capture GPS on mount if method is GPS
   useEffect(() => {
-    if (method === "gps" && !coordinates) {
+    if (method === 'gps' && !coordinates) {
       captureGPS();
     }
   }, []);
@@ -392,41 +385,41 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
     <Container>
       {/* Method Tabs */}
       <TabContainer>
-        <Tab active={method === "gps"} onClick={() => setMethod("gps")}>
+        <Tab active={method === 'gps'} onClick={() => setMethod('gps')}>
           GPS
         </Tab>
-        <Tab active={method === "map_pin"} onClick={() => setMethod("map_pin")}>
+        <Tab active={method === 'map_pin'} onClick={() => setMethod('map_pin')}>
           Map Pin
         </Tab>
-        <Tab active={method === "address"} onClick={() => setMethod("address")}>
+        <Tab active={method === 'address'} onClick={() => setMethod('address')}>
           Address
         </Tab>
       </TabContainer>
 
       {/* GPS Method */}
-      {method === "gps" && (
+      {method === 'gps' && (
         <Button primary onClick={captureGPS} disabled={loading}>
-          {loading ? "Getting Location..." : "Capture Current Location"}
+          {loading ? 'Getting Location...' : 'Capture Current Location'}
         </Button>
       )}
 
       {/* Address Method */}
-      {method === "address" && (
-        <div style={{ display: "flex", gap: "0.5rem" }}>
+      {method === 'address' && (
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
           <Input
             placeholder="Enter address..."
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && geocodeAddress()}
+            onKeyDown={(e) => e.key === 'Enter' && geocodeAddress()}
           />
           <Button primary onClick={geocodeAddress} disabled={loading || !address.trim()}>
-            {loading ? "..." : "Find"}
+            {loading ? '...' : 'Find'}
           </Button>
         </div>
       )}
 
       {/* Map Display */}
-      {(method === "map_pin" || coordinates) && (
+      {(method === 'map_pin' || coordinates) && (
         <MapContainer>
           {isLoaded ? (
             <GoogleMap
@@ -436,7 +429,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
               onClick={handleMapClick}
               onLoad={handleMapLoad}
               options={{
-                mapTypeId: "hybrid",
+                mapTypeId: 'hybrid',
                 streetViewControl: false,
                 mapTypeControl: true,
                 fullscreenControl: true,
@@ -445,7 +438,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
               {coordinates && (
                 <Marker
                   position={coordinates}
-                  draggable={method === "map_pin"}
+                  draggable={method === 'map_pin'}
                   onDragEnd={handleMarkerDrag}
                 />
               )}
@@ -475,9 +468,9 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
       {formattedAddress && <AddressDisplay>{formattedAddress}</AddressDisplay>}
 
       {/* Map Pin Instructions */}
-      {method === "map_pin" && !coordinates && (
+      {method === 'map_pin' && !coordinates && (
         <div
-          style={{ color: "rgba(255, 255, 255, 0.6)", textAlign: "center", fontSize: "0.875rem" }}
+          style={{ color: 'rgba(255, 255, 255, 0.6)', textAlign: 'center', fontSize: '0.875rem' }}
         >
           Click on the map to place a pin at the installation location
         </div>

@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Broadcast } from '@livepeer/react';
+import * as Broadcast from '@livepeer/react/broadcast';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -43,31 +42,21 @@ export const StreamBroadcast = ({ streamKey, webBroadcast }) => {
   return (
     <AnimatePresence>
       {webBroadcast && (
-        <Overlay
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <CloseButton
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={closeOverlay}
-          >
+        <Overlay initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <CloseButton whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={closeOverlay}>
             X
           </CloseButton>
-          <BroadcastContainer
-            initial={{ y: '-100vh' }}
-            animate={{ y: 0 }}
-            exit={{ y: '-100vh' }}
-          >
-            <Broadcast
-              streamKey={streamKey}
-              controls={{ autohide: 3000 }}
-              theme={{
-                borderStyles: { containerBorderStyle: 'hidden' },
-                radii: { containerBorderRadius: '10px' },
-              }}
-            />
+          <BroadcastContainer initial={{ y: '-100vh' }} animate={{ y: 0 }} exit={{ y: '-100vh' }}>
+            <Broadcast.Root ingestUrl={`rtmp://rtmp.livepeer.com/live/${streamKey}`}>
+              <Broadcast.Container style={{ borderRadius: '10px', overflow: 'hidden' }}>
+                <Broadcast.Video />
+                <Broadcast.Controls>
+                  <Broadcast.EnabledTrigger />
+                  <Broadcast.AudioEnabledTrigger />
+                  <Broadcast.VideoEnabledTrigger />
+                </Broadcast.Controls>
+              </Broadcast.Container>
+            </Broadcast.Root>
           </BroadcastContainer>
         </Overlay>
       )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapProject, getProjectsByType, getCreditTypeColor, mockMapProjects } from '../../data/mockMapData';
+import { MapProject, getCreditTypeColor, mockMapProjects } from '../../data/mockMapData';
 import { fetchMapProjects } from '../../services/wqtDataService';
 import { isDemoMode } from '../../utils/demoMode';
 import SEOHead from '../../components/seo/SEOHead';
@@ -10,7 +10,8 @@ import { createBreadcrumbSchema } from '../../components/seo/schemas';
 
 // Set Mapbox token - requires valid VITE_MAPBOX_TOKEN environment variable
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-const HAS_VALID_TOKEN = typeof MAPBOX_TOKEN === 'string' && MAPBOX_TOKEN.length > 3 && MAPBOX_TOKEN.startsWith('pk.');
+const HAS_VALID_TOKEN =
+  typeof MAPBOX_TOKEN === 'string' && MAPBOX_TOKEN.length > 3 && MAPBOX_TOKEN.startsWith('pk.');
 
 if (HAS_VALID_TOKEN) {
   mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -20,15 +21,15 @@ if (HAS_VALID_TOKEN) {
 const BOUNDARY_LAYER_PREFIX = 'project-boundary';
 
 const PageContainer = styled.div`
-  padding: 24px 16px;
+  padding: 24px 0;
   background: ${({ theme }) => theme.colors?.background || '#F7F8FA'};
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.sm || 640}px) {
-    padding: 28px 24px;
+    padding: 28px 0;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints?.lg || 1024}px) {
-    padding: 32px 48px;
+    padding: 32px 0;
   }
 `;
 
@@ -90,9 +91,16 @@ const FilterChipsContainer = styled.div`
 const FilterChip = styled.button<{ active: boolean }>`
   padding: 6px 14px;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  border: 1px solid ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : (props.theme.colors?.border || '#E2E4E9')};
-  background: ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : (props.theme.colors?.surface || 'white')};
-  color: ${props => props.active ? '#FFFFFF' : (props.theme.colors?.textSecondary || '#6B7280')};
+  border: 1px solid
+    ${(props) =>
+      props.active
+        ? props.theme.colors?.primary || '#0052CC'
+        : props.theme.colors?.border || '#E2E4E9'};
+  background: ${(props) =>
+    props.active
+      ? props.theme.colors?.primary || '#0052CC'
+      : props.theme.colors?.surface || 'white'};
+  color: ${(props) => (props.active ? '#FFFFFF' : props.theme.colors?.textSecondary || '#6B7280')};
   border-radius: 999px;
   font-size: 13px;
   font-weight: 500;
@@ -116,8 +124,9 @@ const ViewButton = styled.button<{ active: boolean }>`
   padding: 6px 16px;
   border: none;
   font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  background: ${props => props.active ? (props.theme.colors?.primary || '#0052CC') : 'transparent'};
-  color: ${props => props.active ? '#FFFFFF' : (props.theme.colors?.textSecondary || '#6B7280')};
+  background: ${(props) =>
+    props.active ? props.theme.colors?.primary || '#0052CC' : 'transparent'};
+  color: ${(props) => (props.active ? '#FFFFFF' : props.theme.colors?.textSecondary || '#6B7280')};
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -128,7 +137,10 @@ const ViewButton = styled.button<{ active: boolean }>`
   }
 
   &:hover {
-    background: ${props => props.active ? (props.theme.colors?.primaryDark || '#003D99') : (props.theme.colors?.hover || 'rgba(0,0,0,0.04)')};
+    background: ${(props) =>
+      props.active
+        ? props.theme.colors?.primaryDark || '#003D99'
+        : props.theme.colors?.hover || 'rgba(0,0,0,0.04)'};
   }
 `;
 
@@ -345,7 +357,7 @@ const CreditTypeBadge = styled.span<{ type: string }>`
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
-  background: ${props => {
+  background: ${(props) => {
     const colors: Record<string, string> = {
       qc: '#DBEAFE',
       kc: '#D1FAE5',
@@ -354,7 +366,7 @@ const CreditTypeBadge = styled.span<{ type: string }>`
     };
     return colors[props.type] || '#f3f4f6';
   }};
-  color: ${props => {
+  color: ${(props) => {
     const colors: Record<string, string> = {
       qc: '#1E40AF',
       kc: '#065F46',
@@ -385,12 +397,14 @@ const Spinner = styled.div`
   width: 40px;
   height: 40px;
   border: 4px solid #e2e8f0;
-  border-top-color: #1D7072;
+  border-top-color: #1d7072;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -457,11 +471,15 @@ export function MapPage() {
   const markers = useRef<mapboxgl.Marker[]>([]);
   const filteredProjectsRef = useRef<MapProject[]>([]);
 
-  useEffect(() => { document.title = 'Project Map — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Project Map — WaterQuality.Trading';
+  }, []);
 
   const [loading, setLoading] = useState(true);
   const [mapError, setMapError] = useState<string | null>(null);
-  const [filterType, setFilterType] = useState<'all' | 'qc' | 'kc' | 'nitrogen' | 'phosphorus'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'qc' | 'kc' | 'nitrogen' | 'phosphorus'>(
+    'all'
+  );
   // Default to list view if no valid token, map view if token is valid
   const [viewMode, setViewMode] = useState<ViewMode>(HAS_VALID_TOKEN ? 'map' : 'list');
   const [error, setError] = useState<string | null>(null);
@@ -471,9 +489,7 @@ export function MapPage() {
   const loadProjects = React.useCallback(async () => {
     setError(null);
     try {
-      const projects = isDemoMode()
-        ? mockMapProjects
-        : (await fetchMapProjects()) || [];
+      const projects = isDemoMode() ? mockMapProjects : (await fetchMapProjects()) || [];
       const list = Array.isArray(projects) ? (projects as MapProject[]) : [];
       setAllProjects(list);
       setFilteredProjects(list);
@@ -489,9 +505,10 @@ export function MapPage() {
   }, [loadProjects]);
 
   useEffect(() => {
-    const next = filterType === 'all'
-      ? allProjects
-      : allProjects.filter(p => p.creditTypes?.includes(filterType));
+    const next =
+      filterType === 'all'
+        ? allProjects
+        : allProjects.filter((p) => p.creditTypes?.includes(filterType));
     setFilteredProjects(next);
     filteredProjectsRef.current = next;
   }, [filterType, allProjects]);
@@ -512,7 +529,9 @@ export function MapPage() {
 
     // Check for valid Mapbox token
     if (!HAS_VALID_TOKEN) {
-      setMapError('Map service is currently unavailable. Please use the List View to browse projects.');
+      setMapError(
+        'Map service is currently unavailable. Please use the List View to browse projects.'
+      );
       setLoading(false);
       return;
     }
@@ -584,9 +603,8 @@ export function MapPage() {
       projects.forEach((project, idx) => {
         if (!project.boundary) return;
 
-        const color = project.creditTypes.length > 0
-          ? getCreditTypeColor(project.creditTypes[0])
-          : '#6b7280';
+        const color =
+          project.creditTypes.length > 0 ? getCreditTypeColor(project.creditTypes[0]) : '#6b7280';
 
         const sourceId = `${BOUNDARY_LAYER_PREFIX}-${idx}`;
         const layerFillId = `${BOUNDARY_LAYER_PREFIX}-fill-${idx}`;
@@ -624,13 +642,12 @@ export function MapPage() {
       });
     }
 
-    markers.current.forEach(marker => marker.remove());
+    markers.current.forEach((marker) => marker.remove());
     markers.current = [];
 
-    filteredProjectsRef.current.forEach(project => {
-      const markerColor = project.creditTypes.length > 0
-        ? getCreditTypeColor(project.creditTypes[0])
-        : '#6b7280';
+    filteredProjectsRef.current.forEach((project) => {
+      const markerColor =
+        project.creditTypes.length > 0 ? getCreditTypeColor(project.creditTypes[0]) : '#6b7280';
 
       const el = document.createElement('div');
       el.className = 'custom-marker';
@@ -664,7 +681,9 @@ export function MapPage() {
             ${project.description}
           </p>
           <div style="margin-bottom: 8px;">
-            ${project.creditTypes.map(type => `
+            ${project.creditTypes
+              .map(
+                (type) => `
               <span style="
                 display: inline-block;
                 padding: 3px 8px;
@@ -677,7 +696,9 @@ export function MapPage() {
               ">
                 ${type}
               </span>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
           <p style="margin: 0; font-size: 13px; color: #475569;">
             <strong>${project.totalCredits.toLocaleString()}</strong> total credits
@@ -701,7 +722,7 @@ export function MapPage() {
 
     if (filteredProjectsRef.current.length > 0 && map.current) {
       const bounds = new mapboxgl.LngLatBounds();
-      filteredProjectsRef.current.forEach(project => {
+      filteredProjectsRef.current.forEach((project) => {
         bounds.extend([project.lng, project.lat]);
       });
       map.current.fitBounds(bounds, { padding: 60, maxZoom: 10 });
@@ -738,10 +759,16 @@ export function MapPage() {
             <FilterChip active={filterType === 'qc'} onClick={() => setFilterType('qc')}>
               AWG Credits
             </FilterChip>
-            <FilterChip active={filterType === 'nitrogen'} onClick={() => setFilterType('nitrogen')}>
+            <FilterChip
+              active={filterType === 'nitrogen'}
+              onClick={() => setFilterType('nitrogen')}
+            >
               Nitrogen
             </FilterChip>
-            <FilterChip active={filterType === 'phosphorus'} onClick={() => setFilterType('phosphorus')}>
+            <FilterChip
+              active={filterType === 'phosphorus'}
+              onClick={() => setFilterType('phosphorus')}
+            >
               Phosphorus
             </FilterChip>
           </FilterChipsContainer>
@@ -763,9 +790,19 @@ export function MapPage() {
         </ControlsRow>
 
         {error && (
-          <MapUnavailableBanner style={{ marginBottom: 16, borderBottom: 'none', borderRadius: 8, border: `1px solid ${error ? 'rgba(239,68,68,0.15)' : '#E2E4E9'}`, background: 'rgba(239,68,68,0.06)' }}>
+          <MapUnavailableBanner
+            style={{
+              marginBottom: 16,
+              borderBottom: 'none',
+              borderRadius: 8,
+              border: `1px solid ${error ? 'rgba(239,68,68,0.15)' : '#E2E4E9'}`,
+              background: 'rgba(239,68,68,0.06)',
+            }}
+          >
             <span style={{ flex: 1, fontSize: 14 }}>{error}</span>
-            <RetryButton onClick={loadProjects} style={{ padding: '6px 14px', fontSize: 13 }}>Retry</RetryButton>
+            <RetryButton onClick={loadProjects} style={{ padding: '6px 14px', fontSize: 13 }}>
+              Retry
+            </RetryButton>
           </MapUnavailableBanner>
         )}
 
@@ -781,9 +818,7 @@ export function MapPage() {
                 <MapErrorIcon>🗺️</MapErrorIcon>
                 <MapErrorTitle>Unable to Load Map</MapErrorTitle>
                 <MapErrorText>{mapError}</MapErrorText>
-                <RetryButton onClick={retryMapInit}>
-                  Try Again
-                </RetryButton>
+                <RetryButton onClick={retryMapInit}>Try Again</RetryButton>
               </MapErrorOverlay>
             ) : filteredProjects.length === 0 ? (
               <EmptyMapOverlay>
@@ -804,35 +839,37 @@ export function MapPage() {
             )}
             <ListViewHeader>
               <ListViewTitle>
-                {filterType === 'all' ? 'All Projects' : `${filterType.charAt(0).toUpperCase() + filterType.slice(1)} Projects`}
+                {filterType === 'all'
+                  ? 'All Projects'
+                  : `${filterType.charAt(0).toUpperCase() + filterType.slice(1)} Projects`}
               </ListViewTitle>
-              <ProjectCount>{filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}</ProjectCount>
+              <ProjectCount>
+                {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
+              </ProjectCount>
             </ListViewHeader>
             {filteredProjects.length === 0 ? (
               <div style={{ padding: '40px 20px' }}>
                 <EmptyIcon style={{ textAlign: 'center' }}>📍</EmptyIcon>
                 <EmptyTitle style={{ textAlign: 'center' }}>No projects found</EmptyTitle>
-                <EmptyText style={{ textAlign: 'center' }}>Try adjusting your filter criteria</EmptyText>
+                <EmptyText style={{ textAlign: 'center' }}>
+                  Try adjusting your filter criteria
+                </EmptyText>
               </div>
             ) : (
-              filteredProjects.map(project => (
+              filteredProjects.map((project) => (
                 <ProjectCard key={project.id}>
                   <ProjectMainInfo>
                     <ProjectName>{project.name}</ProjectName>
                     <ProjectDescription>{project.description}</ProjectDescription>
                     <ProjectMeta>
-                      {project.creditTypes.map(type => (
+                      {project.creditTypes.map((type) => (
                         <CreditTypeBadge key={type} type={type}>
                           {type}
                         </CreditTypeBadge>
                       ))}
-                      <ProjectMetaItem>
-                        {project.owner}
-                      </ProjectMetaItem>
+                      <ProjectMetaItem>{project.owner}</ProjectMetaItem>
                       {project.acreage && (
-                        <ProjectLocation>
-                          {project.acreage} acres
-                        </ProjectLocation>
+                        <ProjectLocation>{project.acreage} acres</ProjectLocation>
                       )}
                     </ProjectMeta>
                   </ProjectMainInfo>

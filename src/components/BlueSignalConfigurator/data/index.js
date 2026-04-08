@@ -10,7 +10,7 @@ export {
   PRE_DEPLOYMENT_CHECKLISTS,
   COMMISSIONING_CHECKLISTS,
   REQUIRED_TOOLS,
-  DEPLOYMENT_STEPS
+  DEPLOYMENT_STEPS,
 } from './installation';
 export { MAINTENANCE, LED_CODES, LED_COLORS } from './maintenance';
 export { WIRE_COLORS, CONNECTORS, FUSES } from './wiring';

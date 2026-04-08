@@ -1,9 +1,8 @@
 // Installer List Component - List and manage installers
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { UserAPI } from "../../scripts/back_door";
-import { CommissionAPI } from "../../scripts/back_door";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { UserAPI, CommissionAPI } from '../../scripts/back_door';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -152,17 +151,17 @@ const StatusBadge = styled.span`
   border-radius: 4px;
 
   ${(props) =>
-    props.status === "active"
+    props.status === 'active'
       ? `
     background: #dcfce7;
     color: #166534;
   `
-      : props.status === "busy"
-      ? `
+      : props.status === 'busy'
+        ? `
     background: #fef3c7;
     color: #92400e;
   `
-      : `
+        : `
     background: #f3f4f6;
     color: #6b7280;
   `}
@@ -228,18 +227,18 @@ const LoadingState = styled.div`
 `;
 
 const STATUS_OPTIONS = [
-  { value: "", label: "All Status" },
-  { value: "active", label: "Active" },
-  { value: "busy", label: "Busy" },
-  { value: "inactive", label: "Inactive" },
+  { value: '', label: 'All Status' },
+  { value: 'active', label: 'Active' },
+  { value: 'busy', label: 'Busy' },
+  { value: 'inactive', label: 'Inactive' },
 ];
 
 const InstallerList = () => {
   const navigate = useNavigate();
   const [installers, setInstallers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [installerStats, setInstallerStats] = useState({});
 
   useEffect(() => {
@@ -250,7 +249,7 @@ const InstallerList = () => {
     setLoading(true);
     try {
       // Get users with installer role
-      const users = await UserAPI.database.listByRole("installer");
+      const users = await UserAPI.database.listByRole('installer');
       setInstallers(users || []);
 
       // Load stats for each installer
@@ -258,29 +257,34 @@ const InstallerList = () => {
       for (const installer of users || []) {
         try {
           const commissions = await CommissionAPI.getByInstaller(installer.uid);
-          const pendingJobs = commissions?.filter(c =>
-            ["pending", "in_progress", "awaiting_tests"].includes(c.status)
-          ).length || 0;
-          const completedJobs = commissions?.filter(c =>
-            ["passed", "failed"].includes(c.status)
-          ).length || 0;
-          const passRate = completedJobs > 0
-            ? Math.round((commissions?.filter(c => c.status === "passed").length || 0) / completedJobs * 100)
-            : 0;
+          const pendingJobs =
+            commissions?.filter((c) =>
+              ['pending', 'in_progress', 'awaiting_tests'].includes(c.status)
+            ).length || 0;
+          const completedJobs =
+            commissions?.filter((c) => ['passed', 'failed'].includes(c.status)).length || 0;
+          const passRate =
+            completedJobs > 0
+              ? Math.round(
+                  ((commissions?.filter((c) => c.status === 'passed').length || 0) /
+                    completedJobs) *
+                    100
+                )
+              : 0;
 
           stats[installer.uid] = {
             pending: pendingJobs,
             completed: completedJobs,
             passRate,
-            status: pendingJobs > 2 ? "busy" : pendingJobs > 0 ? "active" : "active",
+            status: pendingJobs > 2 ? 'busy' : pendingJobs > 0 ? 'active' : 'active',
           };
-        } catch (e) {
-          stats[installer.uid] = { pending: 0, completed: 0, passRate: 0, status: "active" };
+        } catch {
+          stats[installer.uid] = { pending: 0, completed: 0, passRate: 0, status: 'active' };
         }
       }
       setInstallerStats(stats);
     } catch (err) {
-      console.error("Failed to load installers:", err);
+      console.error('Failed to load installers:', err);
     } finally {
       setLoading(false);
     }
@@ -300,14 +304,19 @@ const InstallerList = () => {
 
   const overallStats = {
     total: installers.length,
-    active: Object.values(installerStats).filter(s => s.status === "active").length,
-    busy: Object.values(installerStats).filter(s => s.status === "busy").length,
+    active: Object.values(installerStats).filter((s) => s.status === 'active').length,
+    busy: Object.values(installerStats).filter((s) => s.status === 'busy').length,
     totalJobs: Object.values(installerStats).reduce((sum, s) => sum + s.completed, 0),
   };
 
   const getInitials = (name) => {
-    if (!name) return "?";
-    return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    if (!name) return '?';
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   const handleCardClick = (installerId) => {
@@ -346,10 +355,7 @@ const InstallerList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <FilterSelect
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
+        <FilterSelect value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           {STATUS_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
@@ -365,8 +371,8 @@ const InstallerList = () => {
           <h3>No installers found</h3>
           <p>
             {search || statusFilter
-              ? "Try adjusting your search or filters"
-              : "No installers registered yet"}
+              ? 'Try adjusting your search or filters'
+              : 'No installers registered yet'}
           </p>
         </EmptyState>
       ) : (
@@ -374,18 +380,15 @@ const InstallerList = () => {
           {filteredInstallers.map((installer) => {
             const stats = installerStats[installer.uid] || {};
             return (
-              <InstallerCard
-                key={installer.uid}
-                onClick={() => handleCardClick(installer.uid)}
-              >
+              <InstallerCard key={installer.uid} onClick={() => handleCardClick(installer.uid)}>
                 <InstallerHeader>
                   <Avatar>{getInitials(installer.displayName)}</Avatar>
                   <InstallerInfo>
-                    <InstallerName>{installer.displayName || "Unnamed"}</InstallerName>
+                    <InstallerName>{installer.displayName || 'Unnamed'}</InstallerName>
                     <InstallerEmail>{installer.email}</InstallerEmail>
                   </InstallerInfo>
                   <StatusBadge status={stats.status}>
-                    {stats.status === "busy" ? "Busy" : "Available"}
+                    {stats.status === 'busy' ? 'Busy' : 'Available'}
                   </StatusBadge>
                 </InstallerHeader>
 

@@ -1,8 +1,8 @@
 // Order List Component - Displays and manages orders/quotes
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { OrderAPI } from "../../scripts/back_door";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { OrderAPI } from '../../scripts/back_door';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -66,7 +66,7 @@ const StatCard = styled.div`
 const StatValue = styled.div`
   font-size: 28px;
   font-weight: 700;
-  color: ${(props) => props.color || "#1f2937"};
+  color: ${(props) => props.color || '#1f2937'};
 `;
 
 const StatLabel = styled.div`
@@ -169,24 +169,24 @@ const StatusBadge = styled.span`
 
   ${(props) => {
     switch (props.status) {
-      case "draft":
-        return "background: #f3f4f6; color: #6b7280;";
-      case "quoted":
-        return "background: #dbeafe; color: #1d4ed8;";
-      case "approved":
-        return "background: #fef3c7; color: #92400e;";
-      case "paid":
-        return "background: #dcfce7; color: #166534;";
-      case "processing":
-        return "background: #e0e7ff; color: #4338ca;";
-      case "shipped":
-        return "background: #cffafe; color: #0891b2;";
-      case "fulfilled":
-        return "background: #d1fae5; color: #047857;";
-      case "cancelled":
-        return "background: #fee2e2; color: #dc2626;";
+      case 'draft':
+        return 'background: #f3f4f6; color: #6b7280;';
+      case 'quoted':
+        return 'background: #dbeafe; color: #1d4ed8;';
+      case 'approved':
+        return 'background: #fef3c7; color: #92400e;';
+      case 'paid':
+        return 'background: #dcfce7; color: #166534;';
+      case 'processing':
+        return 'background: #e0e7ff; color: #4338ca;';
+      case 'shipped':
+        return 'background: #cffafe; color: #0891b2;';
+      case 'fulfilled':
+        return 'background: #d1fae5; color: #047857;';
+      case 'cancelled':
+        return 'background: #fee2e2; color: #dc2626;';
       default:
-        return "background: #f3f4f6; color: #6b7280;";
+        return 'background: #f3f4f6; color: #6b7280;';
     }
   }}
 `;
@@ -201,14 +201,14 @@ const PaymentBadge = styled.span`
 
   ${(props) => {
     switch (props.status) {
-      case "paid":
-        return "background: #dcfce7; color: #166534;";
-      case "pending":
-        return "background: #fef3c7; color: #92400e;";
-      case "failed":
-        return "background: #fee2e2; color: #dc2626;";
+      case 'paid':
+        return 'background: #dcfce7; color: #166534;';
+      case 'pending':
+        return 'background: #fef3c7; color: #92400e;';
+      case 'failed':
+        return 'background: #fee2e2; color: #dc2626;';
       default:
-        return "background: #f3f4f6; color: #6b7280;";
+        return 'background: #f3f4f6; color: #6b7280;';
     }
   }}
 `;
@@ -242,23 +242,23 @@ const LoadingState = styled.div`
 `;
 
 const ORDER_STATUSES = [
-  { value: "", label: "All Statuses" },
-  { value: "draft", label: "Draft" },
-  { value: "quoted", label: "Quoted" },
-  { value: "approved", label: "Approved" },
-  { value: "paid", label: "Paid" },
-  { value: "processing", label: "Processing" },
-  { value: "shipped", label: "Shipped" },
-  { value: "fulfilled", label: "Fulfilled" },
-  { value: "cancelled", label: "Cancelled" },
+  { value: '', label: 'All Statuses' },
+  { value: 'draft', label: 'Draft' },
+  { value: 'quoted', label: 'Quoted' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'paid', label: 'Paid' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'shipped', label: 'Shipped' },
+  { value: 'fulfilled', label: 'Fulfilled' },
+  { value: 'cancelled', label: 'Cancelled' },
 ];
 
 const OrderList = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     loadOrders();
@@ -270,16 +270,14 @@ const OrderList = () => {
       const data = await OrderAPI.list({ limit: 100 });
       setOrders(data || []);
     } catch (err) {
-      console.error("Failed to load orders:", err);
+      console.error('Failed to load orders:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const filteredOrders = orders.filter((order) => {
-    const matchesSearch =
-      !search ||
-      order.id?.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = !search || order.id?.toLowerCase().includes(search.toLowerCase());
 
     const matchesStatus = !statusFilter || order.status === statusFilter;
 
@@ -288,9 +286,10 @@ const OrderList = () => {
 
   const stats = {
     total: orders.length,
-    drafts: orders.filter((o) => o.status === "draft").length,
-    quoted: orders.filter((o) => o.status === "quoted").length,
-    paid: orders.filter((o) => ["paid", "processing", "shipped", "fulfilled"].includes(o.status)).length,
+    drafts: orders.filter((o) => o.status === 'draft').length,
+    quoted: orders.filter((o) => o.status === 'quoted').length,
+    paid: orders.filter((o) => ['paid', 'processing', 'shipped', 'fulfilled'].includes(o.status))
+      .length,
     totalValue: orders.reduce((sum, o) => sum + (o.total || 0), 0),
   };
 
@@ -299,7 +298,7 @@ const OrderList = () => {
   };
 
   const handleNewOrder = () => {
-    navigate("/configurator");
+    navigate('/configurator');
   };
 
   return (
@@ -339,10 +338,7 @@ const OrderList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <FilterSelect
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
+        <FilterSelect value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           {ORDER_STATUSES.map((s) => (
             <option key={s.value} value={s.value}>
               {s.label}
@@ -358,8 +354,8 @@ const OrderList = () => {
           <h3>No orders found</h3>
           <p>
             {search || statusFilter
-              ? "Try adjusting your search or filters"
-              : "Create your first quote to get started"}
+              ? 'Try adjusting your search or filters'
+              : 'Create your first quote to get started'}
           </p>
           {!search && !statusFilter && (
             <ActionButton onClick={handleNewOrder}>+ New Quote</ActionButton>
@@ -384,23 +380,15 @@ const OrderList = () => {
                 </Td>
                 <Td>
                   <StatusBadge status={order.status}>{order.status}</StatusBadge>
-                  {order.paymentStatus && order.paymentStatus !== "pending" && (
-                    <PaymentBadge status={order.paymentStatus}>
-                      {order.paymentStatus}
-                    </PaymentBadge>
+                  {order.paymentStatus && order.paymentStatus !== 'pending' && (
+                    <PaymentBadge status={order.paymentStatus}>{order.paymentStatus}</PaymentBadge>
                   )}
                 </Td>
-                <Td>
-                  {order.lineItems?.reduce((sum, item) => sum + item.quantity, 0) || 0} units
-                </Td>
+                <Td>{order.lineItems?.reduce((sum, item) => sum + item.quantity, 0) || 0} units</Td>
                 <Td>
                   <Amount>${(order.total || 0).toLocaleString()}</Amount>
                 </Td>
-                <Td>
-                  {order.createdAt
-                    ? new Date(order.createdAt).toLocaleDateString()
-                    : "-"}
-                </Td>
+                <Td>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : '-'}</Td>
               </Tr>
             ))}
           </tbody>

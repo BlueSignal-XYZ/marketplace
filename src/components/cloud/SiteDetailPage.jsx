@@ -1,13 +1,13 @@
 // /src/components/cloud/SiteDetailPage.jsx
-import React, { useState, useEffect, useMemo } from "react";
-import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
-import { GoogleMap, LoadScript, Marker, Polygon } from "@react-google-maps/api";
-import CloudPageLayout from "./CloudPageLayout";
-import { getRelativeTime } from "../../services/cloudMockAPI";
-import { getDevices, getAlerts, getSites } from "../../services/v2/api";
-import { useAppContext } from "../../context/AppContext";
-import { MapsAPI } from "../../scripts/back_door";
+import { useState, useEffect, useMemo } from 'react';
+import styled from 'styled-components';
+import { Link, useParams } from 'react-router-dom';
+import { GoogleMap, LoadScript, Marker, Polygon } from '@react-google-maps/api';
+import CloudPageLayout from './CloudPageLayout';
+import { getRelativeTime } from '../../services/cloudMockAPI';
+import { getDevices, getAlerts, getSites } from '../../services/v2/api';
+import { useAppContext } from '../../context/AppContext';
+import { MapsAPI } from '../../scripts/back_door';
 
 const ContentWrapper = styled.div`
   display: grid;
@@ -17,7 +17,7 @@ const ContentWrapper = styled.div`
 
 const Section = styled.div`
   background: #ffffff;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 12px;
   padding: 16px;
 
@@ -29,7 +29,7 @@ const Section = styled.div`
     margin: 0 0 16px;
     font-size: 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
 
     @media (min-width: 600px) {
       font-size: 18px;
@@ -61,18 +61,18 @@ const InfoCard = styled.div`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   }
 
   .value {
     font-size: 16px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui900 || "#0f172a"};
+    color: ${({ theme }) => theme.colors?.ui900 || '#0f172a'};
   }
 
   .subvalue {
     font-size: 13px;
-    color: ${({ theme }) => theme.colors?.ui600 || "#4b5563"};
+    color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
   }
 `;
 
@@ -84,11 +84,7 @@ const StatusPill = styled.span`
   font-weight: 600;
   color: #ffffff;
   background: ${({ $variant }) =>
-    $variant === "warning"
-      ? "#f97316"
-      : $variant === "offline"
-      ? "#dc2626"
-      : "#16a34a"};
+    $variant === 'warning' ? '#f97316' : $variant === 'offline' ? '#dc2626' : '#16a34a'};
 `;
 
 // Desktop table - hidden on mobile
@@ -103,8 +99,8 @@ const DevicesTable = styled.table`
   }
 
   thead {
-    background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+    background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+    border-bottom: 2px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
     position: sticky;
     top: 0;
     z-index: 10;
@@ -114,7 +110,7 @@ const DevicesTable = styled.table`
     text-align: left;
     padding: 12px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || "#374151"};
+    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -122,15 +118,15 @@ const DevicesTable = styled.table`
 
   td {
     padding: 12px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || "#f3f4f6"};
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    border-bottom: 1px solid ${({ theme }) => theme.colors?.ui100 || '#f3f4f6'};
+    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   }
 
   tbody tr {
     transition: background 0.15s ease-out;
 
     &:hover {
-      background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+      background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
     }
 
     &:last-child td {
@@ -151,8 +147,8 @@ const DeviceCardList = styled.div`
 `;
 
 const DeviceCard = styled.div`
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
   border-radius: 10px;
   padding: 14px;
 `;
@@ -167,7 +163,7 @@ const DeviceCardHeader = styled.div`
 const DeviceCardName = styled(Link)`
   font-size: 15px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   text-decoration: none;
 
   &:hover {
@@ -185,20 +181,20 @@ const DeviceCardMeta = styled.div`
 const DeviceCardMetaItem = styled.div`
   .label {
     font-size: 11px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
     text-transform: uppercase;
     margin-bottom: 2px;
   }
 
   .value {
     font-weight: 500;
-    color: ${({ theme }) => theme.colors?.ui800 || "#1f2937"};
+    color: ${({ theme }) => theme.colors?.ui800 || '#1f2937'};
   }
 `;
 
 const DeviceLink = styled(Link)`
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.primary600 || "#0284c7"};
+  color: ${({ theme }) => theme.colors?.primary600 || '#0284c7'};
   text-decoration: none;
 
   &:hover {
@@ -218,17 +214,9 @@ const AlertRow = styled.div`
   border-radius: 8px;
   border: 1px solid
     ${({ $severity }) =>
-      $severity === "critical"
-        ? "#fca5a5"
-        : $severity === "warning"
-        ? "#fdba74"
-        : "#e5e7eb"};
+      $severity === 'critical' ? '#fca5a5' : $severity === 'warning' ? '#fdba74' : '#e5e7eb'};
   background: ${({ $severity }) =>
-    $severity === "critical"
-      ? "#fef2f2"
-      : $severity === "warning"
-      ? "#fff7ed"
-      : "#f9fafb"};
+    $severity === 'critical' ? '#fef2f2' : $severity === 'warning' ? '#fff7ed' : '#f9fafb'};
   font-size: 13px;
 
   .alert-message {
@@ -238,7 +226,7 @@ const AlertRow = styled.div`
 
   .alert-meta {
     font-size: 11px;
-    color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+    color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   }
 `;
 
@@ -246,7 +234,7 @@ const MapContainer = styled.div`
   height: 250px;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid ${({ theme }) => theme.colors?.ui200 || "#e5e7eb"};
+  border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#e5e7eb'};
 
   @media (min-width: 600px) {
     height: 300px;
@@ -259,35 +247,29 @@ const MapContainer = styled.div`
 
 const MapLoading = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.colors?.ui50 || "#f9fafb"};
+  background: ${({ theme }) => theme.colors?.ui50 || '#f9fafb'};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   font-size: 14px;
   gap: 8px;
 `;
 
-
 const EmptyState = styled.div`
   text-align: center;
   padding: 40px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || "#6b7280"};
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
   font-size: 14px;
 `;
 
 const Skeleton = styled.div`
-  background: linear-gradient(
-    90deg,
-    #f3f4f6 25%,
-    #e5e7eb 50%,
-    #f3f4f6 75%
-  );
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
   animation: loading 1.5s ease-in-out infinite;
   border-radius: 8px;
-  height: ${({ $height }) => $height || "400px"};
+  height: ${({ $height }) => $height || '400px'};
 
   @keyframes loading {
     0% {
@@ -300,24 +282,28 @@ const Skeleton = styled.div`
 `;
 
 // Google Maps API key — prefer env var, fall back to backend
-const ENV_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
+const ENV_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 /** Normalize site from v2 or CloudMockAPI shape for display */
 function normalizeSiteForDisplay(site, deviceCount) {
   const loc = site.location;
-  const hasLegacyShape = site.customer != null && site.coordinates != null;
   return {
     id: site.id,
     name: site.name || site.id,
-    customer: site.customer ?? (site.description || "—"),
-    location: typeof site.location === "string"
-      ? site.location
-      : (loc?.address || loc?.city || loc?.state ? [loc.address, loc.city, loc.state].filter(Boolean).join(", ") : "—"),
-    coordinates: site.coordinates ?? (loc?.latitude != null && loc?.longitude != null
-      ? { lat: loc.latitude, lng: loc.longitude }
-      : null),
-    status: site.status ?? "online",
-    deviceCount: site.deviceCount ?? deviceCount ?? (site.devices?.length ?? 0),
+    customer: site.customer ?? (site.description || '—'),
+    location:
+      typeof site.location === 'string'
+        ? site.location
+        : loc?.address || loc?.city || loc?.state
+          ? [loc.address, loc.city, loc.state].filter(Boolean).join(', ')
+          : '—',
+    coordinates:
+      site.coordinates ??
+      (loc?.latitude != null && loc?.longitude != null
+        ? { lat: loc.latitude, lng: loc.longitude }
+        : null),
+    status: site.status ?? 'online',
+    deviceCount: site.deviceCount ?? deviceCount ?? site.devices?.length ?? 0,
     lastUpdate: site.lastUpdate ?? site.updatedAt ?? site.createdAt ?? new Date().toISOString(),
     boundary: site.boundary,
   };
@@ -325,19 +311,24 @@ function normalizeSiteForDisplay(site, deviceCount) {
 
 /** Normalize device from v2 DeviceSummary or full Device for display */
 function normalizeDeviceForDisplay(device) {
-  const status = device.status === "active" || device.status === "online" ? "online"
-    : device.status === "maintenance" || device.status === "warning" ? "warning"
-    : "offline";
+  const status =
+    device.status === 'active' || device.status === 'online'
+      ? 'online'
+      : device.status === 'maintenance' || device.status === 'warning'
+        ? 'warning'
+        : 'offline';
   return {
     id: device.id,
     name: device.name || device.id,
-    deviceType: device.deviceType ?? device.model ?? "Water Quality Monitor",
+    deviceType: device.deviceType ?? device.model ?? 'Water Quality Monitor',
     status,
     batteryLevel: device.batteryLevel ?? device.battery ?? 0,
-    lastContact: device.lastContact ?? device.lastReadingAt ?? device.updatedAt ?? "",
-    coordinates: device.coordinates ?? (device.location?.latitude != null
-      ? { lat: device.location.latitude, lng: device.location.longitude }
-      : null),
+    lastContact: device.lastContact ?? device.lastReadingAt ?? device.updatedAt ?? '',
+    coordinates:
+      device.coordinates ??
+      (device.location?.latitude != null
+        ? { lat: device.location.latitude, lng: device.location.longitude }
+        : null),
   };
 }
 
@@ -352,8 +343,8 @@ function normalizeAlertForDisplay(alert) {
 
 // Map styling
 const mapContainerStyle = {
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 const mapOptions = {
@@ -364,9 +355,9 @@ const mapOptions = {
   fullscreenControl: true,
   styles: [
     {
-      featureType: "water",
-      elementType: "geometry",
-      stylers: [{ color: "#a3ccff" }],
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{ color: '#a3ccff' }],
     },
   ],
 };
@@ -395,7 +386,9 @@ export default function SiteDetailPage() {
       .catch(() => {
         if (!cancelled) setMapKeyFailed(true);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Map center - memoized to prevent re-renders
@@ -428,13 +421,9 @@ export default function SiteDetailPage() {
       const siteDeviceIds = siteData?.devices?.length
         ? siteData.devices
         : (allDevices || []).filter((d) => d.siteId === siteId).map((d) => d.id);
-      const siteDevices = (allDevices || []).filter((d) =>
-        siteDeviceIds.includes(d.id)
-      );
+      const siteDevices = (allDevices || []).filter((d) => siteDeviceIds.includes(d.id));
       // Filter alerts for this site's devices
-      const siteAlerts = (allAlerts || []).filter((a) =>
-        siteDeviceIds.includes(a.deviceId)
-      );
+      const siteAlerts = (allAlerts || []).filter((a) => siteDeviceIds.includes(a.deviceId));
 
       if (siteData) {
         // Normalize site shape: v2 has location{}, devices[]; CloudMockAPI has customer, coordinates, deviceCount
@@ -443,20 +432,20 @@ export default function SiteDetailPage() {
         setDevices(siteDevices.map(normalizeDeviceForDisplay));
         setAlerts(siteAlerts.map(normalizeAlertForDisplay));
       } else {
-        setError("Site not found.");
+        setError('Site not found.');
       }
     } catch (err) {
-      console.error("Error loading site data:", err);
-      setError("Failed to load site data. Please try again.");
+      console.error('Error loading site data:', err);
+      setError('Failed to load site data. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const getStatusVariant = (status) => {
-    if (status === "offline") return "offline";
-    if (status === "warning") return "warning";
-    return "online";
+    if (status === 'offline') return 'offline';
+    if (status === 'warning') return 'warning';
+    return 'online';
   };
 
   if (loading) {
@@ -510,16 +499,14 @@ export default function SiteDetailPage() {
       >
         <EmptyState>
           <h3>Site not found</h3>
-          <p>
-            The site you're looking for doesn't exist or has been removed.
-          </p>
+          <p>The site you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         </EmptyState>
       </CloudPageLayout>
     );
   }
 
-  const onlineDevices = devices.filter((d) => d.status === "online").length;
-  const openAlerts = alerts.filter((a) => a.status === "open").length;
+  const onlineDevices = devices.filter((d) => d.status === 'online').length;
+  const openAlerts = alerts.filter((a) => a.status === 'open').length;
 
   return (
     <CloudPageLayout
@@ -547,8 +534,8 @@ export default function SiteDetailPage() {
               <div className="value">{site.location}</div>
               {site.coordinates && (
                 <div className="subvalue">
-                  {site.coordinates?.lat?.toFixed(4) ?? "—"},{" "}
-                  {site.coordinates?.lng?.toFixed(4) ?? "—"}
+                  {site.coordinates?.lat?.toFixed(4) ?? '—'},{' '}
+                  {site.coordinates?.lng?.toFixed(4) ?? '—'}
                 </div>
               )}
             </InfoCard>
@@ -557,11 +544,11 @@ export default function SiteDetailPage() {
               <div className="label">Status</div>
               <div className="value">
                 <StatusPill $variant={getStatusVariant(site.status)}>
-                  {site.status === "online"
-                    ? "Online"
-                    : site.status === "warning"
-                    ? "Warning"
-                    : "Offline"}
+                  {site.status === 'online'
+                    ? 'Online'
+                    : site.status === 'warning'
+                      ? 'Warning'
+                      : 'Offline'}
                 </StatusPill>
               </div>
             </InfoCard>
@@ -570,24 +557,21 @@ export default function SiteDetailPage() {
               <div className="label">Total Devices</div>
               <div className="value">{site.deviceCount}</div>
               <div className="subvalue">
-                {onlineDevices} online, {site.deviceCount - onlineDevices}{" "}
-                offline
+                {onlineDevices} online, {site.deviceCount - onlineDevices} offline
               </div>
             </InfoCard>
 
             <InfoCard>
               <div className="label">Open Alerts</div>
               <div className="value">{openAlerts}</div>
-              <div className="subvalue">
-                {openAlerts === 0 ? "All clear" : "Need attention"}
-              </div>
+              <div className="subvalue">{openAlerts === 0 ? 'All clear' : 'Need attention'}</div>
             </InfoCard>
 
             <InfoCard>
               <div className="label">Last Update</div>
               <div className="value">{getRelativeTime(site.lastUpdate)}</div>
               <div className="subvalue">
-                {site.lastUpdate ? new Date(site.lastUpdate).toLocaleString() : "—"}
+                {site.lastUpdate ? new Date(site.lastUpdate).toLocaleString() : '—'}
               </div>
             </InfoCard>
           </InfoGrid>
@@ -614,7 +598,14 @@ export default function SiteDetailPage() {
                 )}
               </MapLoading>
             ) : (
-              <LoadScript googleMapsApiKey={mapsApiKey} loadingElement={<MapLoading><div>Loading map...</div></MapLoading>}>
+              <LoadScript
+                googleMapsApiKey={mapsApiKey}
+                loadingElement={
+                  <MapLoading>
+                    <div>Loading map...</div>
+                  </MapLoading>
+                }
+              >
                 <GoogleMap
                   mapContainerStyle={mapContainerStyle}
                   center={mapCenter}
@@ -627,7 +618,9 @@ export default function SiteDetailPage() {
                       position={{ lat: site.coordinates.lat, lng: site.coordinates.lng }}
                       title={site.name}
                       icon={{
-                        url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                        url:
+                          'data:image/svg+xml;charset=UTF-8,' +
+                          encodeURIComponent(`
                           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#0284c7">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                           </svg>
@@ -644,9 +637,15 @@ export default function SiteDetailPage() {
                         position={{ lat: device.coordinates.lat, lng: device.coordinates.lng }}
                         title={device.name}
                         icon={{
-                          url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                          url:
+                            'data:image/svg+xml;charset=UTF-8,' +
+                            encodeURIComponent(`
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${
-                              device.status === "online" ? "#16a34a" : device.status === "warning" ? "#f97316" : "#dc2626"
+                              device.status === 'online'
+                                ? '#16a34a'
+                                : device.status === 'warning'
+                                  ? '#f97316'
+                                  : '#dc2626'
                             }">
                               <circle cx="12" cy="12" r="8"/>
                             </svg>
@@ -662,9 +661,9 @@ export default function SiteDetailPage() {
                     <Polygon
                       paths={site.boundary}
                       options={{
-                        fillColor: "#0284c7",
+                        fillColor: '#0284c7',
                         fillOpacity: 0.1,
-                        strokeColor: "#0284c7",
+                        strokeColor: '#0284c7',
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
                       }}
@@ -692,11 +691,11 @@ export default function SiteDetailPage() {
                         {device.name}
                       </DeviceCardName>
                       <StatusPill $variant={getStatusVariant(device.status)}>
-                        {device.status === "online"
-                          ? "Online"
-                          : device.status === "warning"
-                          ? "Warning"
-                          : "Offline"}
+                        {device.status === 'online'
+                          ? 'Online'
+                          : device.status === 'warning'
+                            ? 'Warning'
+                            : 'Offline'}
                       </StatusPill>
                     </DeviceCardHeader>
                     <DeviceCardMeta>
@@ -708,7 +707,7 @@ export default function SiteDetailPage() {
                         <div className="label">Battery</div>
                         <div className="value">{device.batteryLevel}%</div>
                       </DeviceCardMetaItem>
-                      <DeviceCardMetaItem style={{ gridColumn: "1 / -1" }}>
+                      <DeviceCardMetaItem style={{ gridColumn: '1 / -1' }}>
                         <div className="label">Last Contact</div>
                         <div className="value">{getRelativeTime(device.lastContact)}</div>
                       </DeviceCardMetaItem>
@@ -732,18 +731,16 @@ export default function SiteDetailPage() {
                   {devices.map((device) => (
                     <tr key={device.id}>
                       <td>
-                        <DeviceLink to={`/cloud/devices/${device.id}`}>
-                          {device.name}
-                        </DeviceLink>
+                        <DeviceLink to={`/cloud/devices/${device.id}`}>{device.name}</DeviceLink>
                       </td>
                       <td>{device.deviceType}</td>
                       <td>
                         <StatusPill $variant={getStatusVariant(device.status)}>
-                          {device.status === "online"
-                            ? "Online"
-                            : device.status === "warning"
-                            ? "Warning"
-                            : "Offline"}
+                          {device.status === 'online'
+                            ? 'Online'
+                            : device.status === 'warning'
+                              ? 'Warning'
+                              : 'Offline'}
                         </StatusPill>
                       </td>
                       <td>{getRelativeTime(device.lastContact)}</td>
@@ -771,14 +768,14 @@ export default function SiteDetailPage() {
               ))}
             </AlertsSection>
             {alerts.length > 5 && (
-              <div style={{ marginTop: "12px", textAlign: "center" }}>
+              <div style={{ marginTop: '12px', textAlign: 'center' }}>
                 <Link
                   to="/cloud/alerts"
                   style={{
-                    fontSize: "13px",
+                    fontSize: '13px',
                     fontWeight: 500,
-                    color: "#0284c7",
-                    textDecoration: "none",
+                    color: '#0284c7',
+                    textDecoration: 'none',
                   }}
                 >
                   View all alerts →

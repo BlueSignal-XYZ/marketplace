@@ -1,9 +1,8 @@
 // /workspaces/Marketplace/src/components/shared/Header/Header.jsx
-import React from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import logoImg from "../../../assets/logo.png";
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import logoImg from '../../../assets/logo.png';
 
 const HeaderOuter = styled.header`
   width: 100%;
@@ -49,7 +48,7 @@ const MenuButton = styled.button`
   cursor: pointer;
 
   display: flex;
-  align-items: center;   /* centers icon vertically */
+  align-items: center; /* centers icon vertically */
   justify-content: center;
 
   color: ${({ theme }) => theme.colors.ui900};
@@ -64,13 +63,12 @@ const MenuButton = styled.button`
 export default function Header({ onMenuClick }) {
   // Hide this legacy header on the WaterQuality.Trading domains.
   // We only want the new top header there.
-  const host =
-    typeof window !== "undefined" ? window.location.hostname : "";
+  const host = typeof window !== 'undefined' ? window.location.hostname : '';
 
   if (
-    host === "waterquality.trading" ||
-    host === "waterquality-trading.web.app" ||
-    host.endsWith(".waterquality.trading")
+    host === 'waterquality.trading' ||
+    host === 'waterquality-trading.web.app' ||
+    host.endsWith('.waterquality.trading')
   ) {
     return null;
   }

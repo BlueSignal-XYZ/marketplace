@@ -3,17 +3,15 @@
  * 5 tabs matching sidebar items, stacked icon + label layout.
  */
 
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { Home, TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';
+import { TrendingUp, ShieldCheck, Globe, Wallet } from 'lucide-react';
 
 /* ── Constants ─────────────────────────────────────────── */
 
 const TAB_BAR_HEIGHT = 56;
 
 const TAB_ITEMS = [
-  { label: 'Home', icon: Home, to: '/dashboard' },
   { label: 'Market', icon: TrendingUp, to: '/marketplace' },
   { label: 'Registry', icon: ShieldCheck, to: '/registry' },
   { label: 'Map', icon: Globe, to: '/map' },
@@ -63,7 +61,8 @@ const TabLink = styled(NavLink)`
     color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
 
     svg {
-      color: ${({ theme }) => theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
+      color: ${({ theme }) =>
+        theme.components?.navActiveText || theme.colors?.primary || '#0052CC'};
     }
   }
 `;
@@ -81,11 +80,7 @@ export function WQTBottomTabs() {
   return (
     <TabBarContainer aria-label="Main navigation">
       {TAB_ITEMS.map(({ label, icon: Icon, to }) => (
-        <TabLink
-          key={to}
-          to={to}
-          end={to === '/marketplace' || to === '/dashboard'}
-        >
+        <TabLink key={to} to={to} end={to === '/marketplace'}>
           <Icon size={20} />
           <TabLabel>{label}</TabLabel>
         </TabLink>

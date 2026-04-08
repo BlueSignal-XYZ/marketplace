@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { ethers } from "ethers";
-import { NFTCard } from "./elements";
-import { useNavigate } from "react-router-dom";
-import { MarketplaceAPI } from "../../../scripts/back_door";
-import { ListingCardSkeleton } from "../../shared/Skeleton/Skeleton";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { NFTCard } from './elements';
+import { useNavigate } from 'react-router-dom';
+import { MarketplaceAPI } from '../../../scripts/back_door';
+import { ListingCardSkeleton } from '../../shared/Skeleton/Skeleton';
 
 export const NFTGrid = styled.div`
   display: grid;
@@ -24,10 +23,10 @@ export const NFTGrid = styled.div`
 `;
 
 const ErrorMsg = styled.p`
-  color: ${({ theme }) => theme.colors?.red500 || "#EF4444"};
+  color: ${({ theme }) => theme.colors?.red500 || '#EF4444'};
   text-align: center;
   padding: 24px;
-  background: ${({ theme }) => theme.colors?.red50 || "#FEF2F2"};
+  background: ${({ theme }) => theme.colors?.red50 || '#FEF2F2'};
   border-radius: 12px;
   margin: 0 20px;
 `;
@@ -73,7 +72,7 @@ const MarketBrowser = () => {
       setNfts(res?.nfts || []);
     } catch (err) {
       console.error(err);
-      setError(err?.message || "Failed to load assets.");
+      setError(err?.message || 'Failed to load assets.');
     } finally {
       setLoading(false);
     }
@@ -85,13 +84,9 @@ const MarketBrowser = () => {
     <NFTGrid>
       {loading ? (
         // Show skeleton cards while loading
-        Array.from({ length: 6 }).map((_, i) => (
-          <ListingCardSkeleton key={i} />
-        ))
+        Array.from({ length: 6 }).map((_, i) => <ListingCardSkeleton key={i} />)
       ) : nfts?.length > 0 ? (
-        nfts.map((nft, index) => (
-          <NFTCard key={index} nft={nft} navigate={navigate} />
-        ))
+        nfts.map((nft, index) => <NFTCard key={index} nft={nft} navigate={navigate} />)
       ) : (
         <EmptyState>
           <h4>No listings available</h4>

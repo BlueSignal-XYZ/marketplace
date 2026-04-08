@@ -4,7 +4,13 @@
  */
 /// <reference types="geojson" />
 
-import type { GeoLocation, OnlineStatus, Timestamped, PaginationParams, PaginatedResponse } from './common';
+import type {
+  GeoLocation,
+  OnlineStatus,
+  Timestamped,
+  PaginationParams,
+  PaginatedResponse,
+} from './common';
 
 // ── Sensor Reading Types ──────────────────────────────────
 
@@ -85,7 +91,7 @@ export interface SensorTimeSeries {
     max: number;
     avg: number;
     count: number;
-    coverage: number;  // percentage of expected readings received
+    coverage: number; // percentage of expected readings received
   };
 }
 
@@ -108,7 +114,7 @@ export interface WatershedStats {
   avgWaterQualityIndex: number;
   qualityTrend: 'improving' | 'stable' | 'declining';
   nutrientLoading: {
-    nitrogen: number;   // kg/yr estimated
+    nitrogen: number; // kg/yr estimated
     phosphorus: number;
   };
   activeCredits: number;
@@ -131,11 +137,11 @@ export interface WatershedDetail extends Watershed {
 // ── Water Quality Index ───────────────────────────────────
 
 export type WaterQualityCategory =
-  | 'excellent'    // 90-100
-  | 'good'         // 70-89
-  | 'fair'         // 50-69
-  | 'poor'         // 25-49
-  | 'critical';    // 0-24
+  | 'excellent' // 90-100
+  | 'good' // 70-89
+  | 'fair' // 50-69
+  | 'poor' // 25-49
+  | 'critical'; // 0-24
 
 export function getWaterQualityCategory(index: number): WaterQualityCategory {
   if (index >= 90) return 'excellent';

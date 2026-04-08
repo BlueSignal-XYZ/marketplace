@@ -6,27 +6,20 @@ import {
   LinearScale,
   Title,
   Tooltip,
-} from "chart.js";
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { ButtonPrimary } from "./shared/button/Button";
-import { DashboardPage } from "./shared/DashboardPage/DashboardPage";
-import FormSection from "./shared/FormSection/FormSection";
-import { Input } from "./shared/input/Input";
-import { Label } from "./shared/Label/Label";
-import { Select } from "./shared/Select/Select";
+} from 'chart.js';
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { ButtonPrimary } from './shared/button/Button';
+import { DashboardPage } from './shared/DashboardPage/DashboardPage';
+import FormSection from './shared/FormSection/FormSection';
+import { Input } from './shared/input/Input';
+import { Label } from './shared/Label/Label';
+import { Select } from './shared/Select/Select';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const LoadingIndicator = styled.div`
-  display: ${({ loading }) => (loading ? "block" : "none")};
+  display: ${({ loading }) => (loading ? 'block' : 'none')};
   text-align: center;
   margin-top: 10px;
 `;
@@ -150,7 +143,8 @@ const StyledNutrientCalculator = styled.div`
     }
 
     /* Ensure touch targets are at least 44px */
-    input, select {
+    input,
+    select {
       min-height: 48px;
       font-size: 16px; /* Prevents iOS zoom on focus */
 
@@ -163,7 +157,7 @@ const StyledNutrientCalculator = styled.div`
 `;
 
 const nutrientData = {
-  "Corn Grain": {
+  'Corn Grain': {
     yields: {
       180: { N: 120.6, P2O5: 63, K2O: 45, S: 14.4, Mg: 14.4 },
       190: { N: 127.3, P2O5: 66.5, K2O: 47.5, S: 15.2, Mg: 15.2 },
@@ -179,7 +173,7 @@ const nutrientData = {
       290: { N: 194.3, P2O5: 101.5, K2O: 72.5, S: 23.2, Mg: 23.2 },
       300: { N: 201, P2O5: 105, K2O: 75, S: 24, Mg: 24 },
     },
-    unit: "bushels",
+    unit: 'bushels',
   },
   Alfalfa: {
     yields: {
@@ -197,9 +191,9 @@ const nutrientData = {
       7.5: { N: 382.5, P2O5: 90, K2O: 367.5, S: 40.5, Mg: 39 },
       8.0: { N: 408, P2O5: 96, K2O: 392, S: 43.2, Mg: 41.6 },
     },
-    unit: "tons",
+    unit: 'tons',
   },
-  "Corn Silage": {
+  'Corn Silage': {
     yields: {
       10: { N: 97, P2O5: 31, K2O: 73, S: 11, Mg: 23 },
       12: { N: 116.4, P2O5: 37.2, K2O: 87.6, S: 13.2, Mg: 27.6 },
@@ -215,7 +209,7 @@ const nutrientData = {
       32: { N: 310.4, P2O5: 99.2, K2O: 233.6, S: 35.2, Mg: 73.6 },
       34: { N: 329.8, P2O5: 105.4, K2O: 248.2, S: 37.4, Mg: 78.2 },
     },
-    unit: "tons",
+    unit: 'tons',
   },
   Soybean: {
     yields: {
@@ -233,7 +227,7 @@ const nutrientData = {
       95: { N: 308.8, P2O5: 69.4, K2O: 114, S: 17.1, Mg: 17.1 },
       100: { N: 325, P2O5: 73, K2O: 120, S: 18, Mg: 18 },
     },
-    unit: "bushels",
+    unit: 'bushels',
   },
   Canola: {
     yields: {
@@ -251,7 +245,7 @@ const nutrientData = {
       85: { N: 136, P2O5: 68, K2O: 34, S: 21.3, Mg: 25.5 },
       90: { N: 144, P2O5: 72, K2O: 36, S: 22.5, Mg: 27 },
     },
-    unit: "bushels",
+    unit: 'bushels',
   },
   Cotton: {
     yields: {
@@ -269,9 +263,9 @@ const nutrientData = {
       3.8: { N: 120, P2O5: 52.5, K2O: 71.3, S: 13.1, Mg: 0 },
       4.0: { N: 128, P2O5: 56, K2O: 76, S: 14, Mg: 0 },
     },
-    unit: "bales", // Sulfur not provided
+    unit: 'bales', // Sulfur not provided
   },
-  "Spring Wheat": {
+  'Spring Wheat': {
     yields: {
       40: { N: 59.6, P2O5: 22.8, K2O: 13.2, S: 4, Mg: 6 },
       45: { N: 67.1, P2O5: 25.7, K2O: 14.9, S: 4.5, Mg: 6.8 },
@@ -287,9 +281,9 @@ const nutrientData = {
       95: { N: 141.6, P2O5: 54.2, K2O: 31.4, S: 9.5, Mg: 14.3 },
       100: { N: 149, P2O5: 57, K2O: 33, S: 10, Mg: 15 },
     },
-    unit: "bushels",
+    unit: 'bushels',
   },
-  "Winter Wheat": {
+  'Winter Wheat': {
     yields: {
       40: { N: 46.4, P2O5: 19.2, K2O: 11.6, S: 4, Mg: 6 },
       45: { N: 52.2, P2O5: 21.6, K2O: 13.1, S: 4.5, Mg: 6.8 },
@@ -305,16 +299,16 @@ const nutrientData = {
       95: { N: 110.2, P2O5: 45.6, K2O: 27.6, S: 9.5, Mg: 14.3 },
       100: { N: 116, P2O5: 48, K2O: 29, S: 10, Mg: 15 },
     },
-    unit: "bushels",
+    unit: 'bushels',
   },
 };
 
-const NutrientCalculator = ({ isOpen, onClose }) => {
-  const [crop, setCrop] = useState("Corn Grain");
-  const [yieldPerAcre, setYieldPerAcre] = useState("");
+const NutrientCalculator = () => {
+  const [crop, setCrop] = useState('Corn Grain');
+  const [yieldPerAcre, setYieldPerAcre] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -349,35 +343,35 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
   const validateYield = (crop, yieldValue) => {
     let min, max;
     switch (crop) {
-      case "Alfalfa":
+      case 'Alfalfa':
         min = 2;
         max = 8;
         break;
-      case "Corn Grain":
+      case 'Corn Grain':
         min = 180;
         max = 300;
         break;
-      case "Corn Silage":
+      case 'Corn Silage':
         min = 10;
         max = 34;
         break;
-      case "Soybean":
+      case 'Soybean':
         min = 40;
         max = 100;
         break;
-      case "Canola":
+      case 'Canola':
         min = 30;
         max = 90;
         break;
-      case "Cotton":
+      case 'Cotton':
         min = 1;
         max = 4;
         break;
-      case "Spring Wheat":
+      case 'Spring Wheat':
         min = 40;
         max = 100;
         break;
-      case "Winter Wheat":
+      case 'Winter Wheat':
         min = 40;
         max = 100;
         break;
@@ -403,15 +397,12 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
     const yieldValidation = validateYield(crop, yieldAcre);
 
     if (!isNaN(yieldAcre) && yieldValidation.valid) {
-      setErrorMessage("");
+      setErrorMessage('');
       setIsLoading(true);
       try {
         // Simulate an asynchronous operation (e.g., data fetching)
         setTimeout(() => {
-          const nutrientRemovalResult = calculateNutrientRemoval(
-            crop,
-            yieldAcre
-          );
+          const nutrientRemovalResult = calculateNutrientRemoval(crop, yieldAcre);
           // nutrient removal result calculated
           setResult(nutrientRemovalResult);
         }, 500); // Adjust the timeout as needed
@@ -437,27 +428,27 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
       chartInstanceRef.current.destroy();
     }
 
-    const ctx = chartRef.current.getContext("2d");
+    const ctx = chartRef.current.getContext('2d');
 
     // BlueSignal brand-aligned color palette
     const brandColors = [
-      "#1D7072", // Primary teal
-      "#38BDBE", // Light teal
-      "#0284c7", // Sky blue
-      "#059669", // Emerald
-      "#6366f1", // Indigo
+      '#1D7072', // Primary teal
+      '#38BDBE', // Light teal
+      '#0284c7', // Sky blue
+      '#059669', // Emerald
+      '#6366f1', // Indigo
     ];
 
     chartInstanceRef.current = new ChartJS(ctx, {
-      type: "bar",
+      type: 'bar',
       data: {
         labels: Object.keys(nutrientValues),
         datasets: [
           {
-            label: "lbs/acre removed",
+            label: 'lbs/acre removed',
             data: Object.values(nutrientValues),
             backgroundColor: brandColors,
-            borderColor: brandColors.map(c => c + "dd"),
+            borderColor: brandColors.map((c) => c + 'dd'),
             borderWidth: 1,
             borderRadius: 4,
           },
@@ -472,25 +463,25 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
           },
           title: {
             display: true,
-            text: "Nutrient Removal by Harvest",
+            text: 'Nutrient Removal by Harvest',
             font: {
               size: 16,
-              weight: "600",
+              weight: '600',
             },
-            color: "#374151",
+            color: '#374151',
             padding: {
               bottom: 20,
             },
           },
           tooltip: {
-            backgroundColor: "#1f2937",
-            titleColor: "#ffffff",
-            bodyColor: "#ffffff",
+            backgroundColor: '#1f2937',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
             padding: 12,
             cornerRadius: 8,
             displayColors: false,
             callbacks: {
-              label: function(context) {
+              label: function (context) {
                 return `${context.parsed.y.toFixed(1)} lbs/acre`;
               },
             },
@@ -501,18 +492,18 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
             beginAtZero: true,
             title: {
               display: true,
-              text: "lbs/acre",
+              text: 'lbs/acre',
               font: {
                 size: 12,
-                weight: "500",
+                weight: '500',
               },
-              color: "#6b7280",
+              color: '#6b7280',
             },
             grid: {
-              color: "#e5e7eb",
+              color: '#e5e7eb',
             },
             ticks: {
-              color: "#6b7280",
+              color: '#6b7280',
             },
           },
           x: {
@@ -520,9 +511,9 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
               display: false,
             },
             ticks: {
-              color: "#374151",
+              color: '#374151',
               font: {
-                weight: "500",
+                weight: '500',
               },
             },
           },
@@ -535,7 +526,7 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
     <div>
       <StyledNutrientCalculator>
         <DashboardPage
-          title={"Nutrient Calculator"}
+          title={'Nutrient Calculator'}
           description={`Each harvest depletes soil nutrients, varying by crop and yield.
               Identify what's lost with our Nutrient Calculator by
               selecting your crop and yield.`}
@@ -545,11 +536,7 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
               <div className="form-section-inputs">
                 <FormSection>
                   <Label htmlFor="cropSelect">Crop type</Label>
-                  <Select
-                    id="cropSelect"
-                    value={crop}
-                    onChange={(e) => setCrop(e.target.value)}
-                  >
+                  <Select id="cropSelect" value={crop} onChange={(e) => setCrop(e.target.value)}>
                     {Object.keys(nutrientData).map((cropName, index) => (
                       <option key={index} value={cropName}>
                         {cropName}
@@ -585,8 +572,15 @@ const NutrientCalculator = ({ isOpen, onClose }) => {
               </Result>
               <Footer>
                 <p>
-                  Based on <a href="http://www.ipni.net/article/IPNI-3346" target="_blank" rel="noopener noreferrer">IPNI Nutrient Calculator</a>.
-                  Values may vary by region—consult local data for precise recommendations.
+                  Based on{' '}
+                  <a
+                    href="http://www.ipni.net/article/IPNI-3346"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    IPNI Nutrient Calculator
+                  </a>
+                  . Values may vary by region—consult local data for precise recommendations.
                 </p>
               </Footer>
             </ResultsWrapper>

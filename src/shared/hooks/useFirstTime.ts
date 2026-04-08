@@ -41,7 +41,7 @@ const STORAGE_PREFIX = 'bs_dismissed_';
 
 export function useFirstTime(
   featureKey: string,
-  options: UseFirstTimeOptions = {},
+  options: UseFirstTimeOptions = {}
 ): UseFirstTimeResult {
   const { user, onDismiss } = options;
   const [isFirstTime, setIsFirstTime] = useState(true);

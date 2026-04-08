@@ -133,18 +133,16 @@ export const getCustomerDevices = async (customerId) => {
     if (!orders || orders.length === 0) return [];
 
     // Collect all device IDs from orders
-    const deviceIds = orders.flatMap(order =>
-      order.lineItems?.flatMap(item => item.deviceIds || []) || []
+    const deviceIds = orders.flatMap(
+      (order) => order.lineItems?.flatMap((item) => item.deviceIds || []) || []
     );
 
     if (deviceIds.length === 0) return [];
 
     // Fetch device details
-    const devices = await Promise.all(
-      deviceIds.map(id => DeviceAPI.getDeviceDetails(id))
-    );
+    const devices = await Promise.all(deviceIds.map((id) => DeviceAPI.getDeviceDetails(id)));
 
-    return devices.filter(d => d !== null);
+    return devices.filter((d) => d !== null);
   } catch (error) {
     console.error('Error fetching customer devices:', error);
     throw error;
@@ -262,9 +260,7 @@ export const deleteCustomer = async (customerId) => {
   try {
     // Check for active orders
     const orders = await OrderAPI.getByCustomer(customerId);
-    const activeOrders = orders?.filter(o =>
-      !['cancelled', 'fulfilled'].includes(o.status)
-    );
+    const activeOrders = orders?.filter((o) => !['cancelled', 'fulfilled'].includes(o.status));
 
     if (activeOrders?.length > 0) {
       throw new Error('Cannot delete customer with active orders');
@@ -272,9 +268,7 @@ export const deleteCustomer = async (customerId) => {
 
     // Check for active devices
     const devices = await getCustomerDevices(customerId);
-    const activeDevices = devices?.filter(d =>
-      ['active', 'commissioned'].includes(d.lifecycle)
-    );
+    const activeDevices = devices?.filter((d) => ['active', 'commissioned'].includes(d.lifecycle));
 
     if (activeDevices?.length > 0) {
       throw new Error('Cannot delete customer with active devices');
@@ -321,10 +315,7 @@ export const mergeCustomers = async (primaryId, duplicateId) => {
     }
 
     // Merge notes
-    const mergedNotes = [
-      primary.notes,
-      `[Merged from ${duplicate.email}] ${duplicate.notes}`,
-    ]
+    const mergedNotes = [primary.notes, `[Merged from ${duplicate.email}] ${duplicate.notes}`]
       .filter(Boolean)
       .join('\n');
 

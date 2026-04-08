@@ -4,7 +4,7 @@ import type { RegistryCredit } from '../../data/mockRegistryData';
 import { fetchRetiredCredits } from '../../services/wqtDataService';
 import { FilterChips } from '../../design-system/primitives/FilterChips';
 import { Table } from '../../design-system/primitives/Table';
-import { Badge } from '../../design-system/primitives/Badge';
+import { Badge, type BadgeVariant } from '../../design-system/primitives/Badge';
 import { EmptyState } from '../../design-system/primitives/EmptyState';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 import { Modal } from '../../design-system/primitives/Modal';
@@ -15,14 +15,14 @@ import { createBreadcrumbSchema } from '../../components/seo/schemas';
 const Page = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 0;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    padding: 28px 24px;
+    padding: 28px 0;
   }
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
-    padding: 32px 48px;
+    padding: 32px 0;
   }
 `;
 
@@ -141,18 +141,24 @@ const TYPE_OPTIONS = [
 ];
 
 function creditTypeBadge(type: string) {
-  const variants: Record<string, any> = {
+  const variants: Record<string, BadgeVariant> = {
     nitrogen: 'info',
     phosphorus: 'positive',
     stormwater: 'neutral',
     thermal: 'warning',
   };
-  return <Badge variant={variants[type] || 'neutral'} size="sm">{type}</Badge>;
+  return (
+    <Badge variant={variants[type] || 'neutral'} size="sm">
+      {type}
+    </Badge>
+  );
 }
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   });
 }
 
@@ -167,11 +173,34 @@ function getDaysAgo(dateStr: string) {
 }
 
 const COLUMNS = [
-  { key: 'id', header: 'Credit ID', mono: true, width: '140px', render: (row: RegistryCredit) => row.id },
-  { key: 'type', header: 'Type', width: '100px', render: (row: RegistryCredit) => creditTypeBadge(row.type) },
-  { key: 'quantity', header: 'Quantity', align: 'right' as const, mono: true, render: (row: RegistryCredit) => `${row.quantity.toLocaleString()} ${row.unit}` },
+  {
+    key: 'id',
+    header: 'Credit ID',
+    mono: true,
+    width: '140px',
+    render: (row: RegistryCredit) => row.id,
+  },
+  {
+    key: 'type',
+    header: 'Type',
+    width: '100px',
+    render: (row: RegistryCredit) => creditTypeBadge(row.type),
+  },
+  {
+    key: 'quantity',
+    header: 'Quantity',
+    align: 'right' as const,
+    mono: true,
+    render: (row: RegistryCredit) => `${row.quantity.toLocaleString()} ${row.unit}`,
+  },
   { key: 'projectName', header: 'Project', render: (row: RegistryCredit) => row.projectName },
-  { key: 'retirementDate', header: 'Retired', mono: true, width: '120px', render: (row: RegistryCredit) => row.retirementDate ? formatDate(row.retirementDate) : '—' },
+  {
+    key: 'retirementDate',
+    header: 'Retired',
+    mono: true,
+    width: '120px',
+    render: (row: RegistryCredit) => (row.retirementDate ? formatDate(row.retirementDate) : '—'),
+  },
   { key: 'verifier', header: 'Retired By', render: (row: RegistryCredit) => row.verifier },
 ];
 
@@ -180,7 +209,9 @@ function TableSkeleton() {
     <SkeletonTable>
       {Array.from({ length: 6 }, (_, i) => (
         <SkeletonRow key={i}>
-          {Array.from({ length: 6 }, (_, j) => <Skeleton key={j} width="100%" height={16} />)}
+          {Array.from({ length: 6 }, (_, j) => (
+            <Skeleton key={j} width="100%" height={16} />
+          ))}
         </SkeletonRow>
       ))}
     </SkeletonTable>
@@ -188,7 +219,9 @@ function TableSkeleton() {
 }
 
 export function RecentRemovalsPage() {
-  useEffect(() => { document.title = 'Recent Removals — WaterQuality.Trading'; }, []);
+  useEffect(() => {
+    document.title = 'Recent Removals — WaterQuality.Trading';
+  }, []);
   const [loading, setLoading] = useState(true);
   const [allRetiredCredits, setAllRetiredCredits] = useState<RegistryCredit[]>([]);
   const [filterType, setFilterType] = useState('all');
@@ -217,13 +250,13 @@ export function RecentRemovalsPage() {
   const filteredCredits = useMemo(() => {
     let credits = allRetiredCredits;
     if (filterType !== 'all') {
-      credits = credits.filter(credit => credit.type === filterType);
+      credits = credits.filter((credit) => credit.type === filterType);
     }
     if (dateRange !== 'all') {
       const daysAgo = parseInt(dateRange);
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
-      credits = credits.filter(credit => {
+      credits = credits.filter((credit) => {
         if (!credit.retirementDate) return false;
         return new Date(credit.retirementDate) >= cutoffDate;
       });
@@ -264,22 +297,22 @@ export function RecentRemovalsPage() {
       </ChipsRow>
 
       <ChipsRow>
-        <FilterChips
-          options={TYPE_OPTIONS}
-          value={filterType}
-          onChange={setFilterType}
-        />
+        <FilterChips options={TYPE_OPTIONS} value={filterType} onChange={setFilterType} />
       </ChipsRow>
 
       {error && (
         <ErrorBanner>
           <ErrorText>{error}</ErrorText>
-          <Button variant="outline" size="sm" onClick={loadCredits}>Retry</Button>
+          <Button variant="outline" size="sm" onClick={loadCredits}>
+            Retry
+          </Button>
         </ErrorBanner>
       )}
 
       <ResultCount>
-        {loading ? 'Loading...' : `${filteredCredits.length} retirement${filteredCredits.length !== 1 ? 's' : ''} found`}
+        {loading
+          ? 'Loading...'
+          : `${filteredCredits.length} retirement${filteredCredits.length !== 1 ? 's' : ''} found`}
       </ResultCount>
 
       {loading ? (
@@ -321,7 +354,9 @@ export function RecentRemovalsPage() {
             </DetailRow>
             <DetailRow>
               <DetailLabel>Quantity</DetailLabel>
-              <DetailValue>{selectedCredit.quantity.toLocaleString()} {selectedCredit.unit}</DetailValue>
+              <DetailValue>
+                {selectedCredit.quantity.toLocaleString()} {selectedCredit.unit}
+              </DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailLabel>Project ID</DetailLabel>

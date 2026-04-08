@@ -52,8 +52,8 @@ const Section = styled.section`
   justify-content: center;
   text-align: center;
   padding: clamp(32px, 5vh, 56px) clamp(20px, 5vw, 48px) clamp(16px, 3vh, 32px);
-  background: #0B1120;
-  color: #FFFFFF;
+  background: #0b1120;
+  color: #ffffff;
   box-sizing: border-box;
 
   @media (max-height: 500px) {
@@ -62,7 +62,9 @@ const Section = styled.section`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    & * { animation-duration: 0.01ms !important; }
+    & * {
+      animation-duration: 0.01ms !important;
+    }
   }
 `;
 
@@ -87,8 +89,8 @@ const GridOverlay = styled.div`
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 80px 80px;
   pointer-events: none;
 `;
@@ -144,12 +146,16 @@ const Eyebrow = styled.span`
     $audience === 'utility' ? 'rgba(59, 130, 246, 0.9)' : 'rgba(6, 182, 212, 0.9)'};
   background: ${({ $audience }) =>
     $audience === 'utility' ? 'rgba(59, 130, 246, 0.08)' : 'rgba(6, 182, 212, 0.08)'};
-  border: 1px solid ${({ $audience }) =>
-    $audience === 'utility' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(6, 182, 212, 0.15)'};
+  border: 1px solid
+    ${({ $audience }) =>
+      $audience === 'utility' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(6, 182, 212, 0.15)'};
   border-radius: 100px;
   padding: 6px 16px;
   margin-bottom: clamp(14px, 2vh, 24px);
-  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+  transition:
+    color 200ms ease,
+    background 200ms ease,
+    border-color 200ms ease;
 `;
 
 const Headline = styled.h1`
@@ -160,7 +166,7 @@ const Headline = styled.h1`
   letter-spacing: -0.03em;
   margin: 0 0 clamp(14px, 2.5vh, 24px);
   max-width: 18ch;
-  color: #FFFFFF;
+  color: #ffffff;
   text-wrap: balance;
 `;
 
@@ -214,7 +220,7 @@ const PrimaryBtn = styled.a`
   font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 16px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   background: ${({ theme }) => theme.colors.primary};
   border-radius: 10px;
   text-decoration: none;
@@ -227,7 +233,9 @@ const PrimaryBtn = styled.a`
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0, 82, 204, 0.4);
   }
-  &:active { transform: translateY(0); }
+  &:active {
+    transform: translateY(0);
+  }
 
   @media (max-width: 480px) {
     width: 100%;
@@ -260,7 +268,9 @@ const Pill = styled.span`
 const PillDot = styled.span`
   color: rgba(255, 255, 255, 0.2);
   user-select: none;
-  @media (max-width: 480px) { display: none; }
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 /* ── Desktop SVG visual ────────────────────────────────── */
@@ -288,7 +298,9 @@ const FlowSvg = styled.svg`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .flow-line { animation: none; }
+    .flow-line {
+      animation: none;
+    }
   }
 `;
 
@@ -359,22 +371,26 @@ const ScrollIndicator = styled.div`
   animation: ${bounce} 2s ease infinite;
   pointer-events: none;
 
-  @media (max-height: 700px) { display: none; }
-  @media (prefers-reduced-motion: reduce) { animation: none; }
+  @media (max-height: 700px) {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
 /* ── Data ──────────────────────────────────────────────── */
 
-const PILLS = [
-  'Sensor-Verified',
-  'Rebates on Your Bill',
-  'No Municipal Water Needed',
-];
+const PILLS = ['Sensor-Verified', 'Rebates on Your Bill', 'No Municipal Water Needed'];
 
 const MOBILE_STEPS = [
   { icon: '\u{1F4A7}', bg: 'rgba(6, 182, 212, 0.15)', label: 'AWG Harvests Water' },
   { icon: '\u{1F4E1}', bg: 'rgba(59, 130, 246, 0.15)', label: 'Sensor Verifies Quality' },
-  { icon: '\u{1F4B5}', bg: 'rgba(16, 185, 129, 0.15)', label: 'Credits Earned \u2192 You Get Paid' },
+  {
+    icon: '\u{1F4B5}',
+    bg: 'rgba(16, 185, 129, 0.15)',
+    label: 'Credits Earned \u2192 You Get Paid',
+  },
 ];
 
 /* ── Desktop flow SVG component ────────────────────────── */
@@ -382,9 +398,27 @@ const MOBILE_STEPS = [
 function DemandResponseFlow() {
   const STEPS = [
     { x: 0, label: 'Harvest', sub: 'AWG Makes Water', color: '#06B6D4', detail: '12 gal/day' },
-    { x: 152, label: 'Verify', sub: 'Sensor Confirms', color: '#3B82F6', detail: 'pH \u00B7 TDS \u00B7 ORP' },
-    { x: 304, label: 'Report', sub: 'Data to Utility', color: '#8B5CF6', detail: 'Encrypted \u00B7 24/7' },
-    { x: 456, label: 'Earn', sub: 'Credits Generated', color: '#A855F7', detail: 'N/P \u00B7 Quantity' },
+    {
+      x: 152,
+      label: 'Verify',
+      sub: 'Sensor Confirms',
+      color: '#3B82F6',
+      detail: 'pH \u00B7 TDS \u00B7 ORP',
+    },
+    {
+      x: 304,
+      label: 'Report',
+      sub: 'Data to Utility',
+      color: '#8B5CF6',
+      detail: 'Encrypted \u00B7 24/7',
+    },
+    {
+      x: 456,
+      label: 'Earn',
+      sub: 'Credits Generated',
+      color: '#A855F7',
+      detail: 'N/P \u00B7 Quantity',
+    },
     { x: 608, label: 'Get Paid', sub: 'On Your Bill', color: '#10B981', detail: 'Automated' },
   ];
 
@@ -407,7 +441,7 @@ function DemandResponseFlow() {
       <rect width="760" height="200" fill="url(#heroGrid)" />
 
       {/* Connecting lines between circles (not through them) */}
-      {[0, 1, 2, 3].map(i => {
+      {[0, 1, 2, 3].map((i) => {
         const fromCx = STEPS[i].x + 76;
         const toCx = STEPS[i + 1].x + 76;
         const lineX1 = fromCx + 30;
@@ -415,11 +449,24 @@ function DemandResponseFlow() {
         const midX = (lineX1 + lineX2) / 2;
         return (
           <g key={`conn-${i}`}>
-            <line x1={lineX1} y1="56" x2={lineX2} y2="56"
-              stroke={STEPS[i + 1].color} strokeWidth="1.5" strokeOpacity="0.2" />
-            <path d={`M${midX + 3} 51 l6 5 -6 5`} fill="none"
-              stroke={STEPS[i + 1].color} strokeWidth="1" strokeOpacity="0.35"
-              strokeLinecap="round" strokeLinejoin="round" />
+            <line
+              x1={lineX1}
+              y1="56"
+              x2={lineX2}
+              y2="56"
+              stroke={STEPS[i + 1].color}
+              strokeWidth="1.5"
+              strokeOpacity="0.2"
+            />
+            <path
+              d={`M${midX + 3} 51 l6 5 -6 5`}
+              fill="none"
+              stroke={STEPS[i + 1].color}
+              strokeWidth="1"
+              strokeOpacity="0.35"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         );
       })}
@@ -428,33 +475,84 @@ function DemandResponseFlow() {
       {STEPS.map((step, i) => (
         <g key={i}>
           <circle cx={step.x + 76} cy="56" r="40" fill={step.color} fillOpacity="0.04" />
-          <circle cx={step.x + 76} cy="56" r="28" fill="#0B1120"
-            stroke={step.color} strokeWidth="1.5" strokeOpacity="0.3" />
+          <circle
+            cx={step.x + 76}
+            cy="56"
+            r="28"
+            fill="#0B1120"
+            stroke={step.color}
+            strokeWidth="1.5"
+            strokeOpacity="0.3"
+          />
           <circle cx={step.x + 76} cy="56" r="18" fill={step.color} fillOpacity="0.12" />
-          <text x={step.x + 76} y="61" textAnchor="middle"
-            fontFamily="'IBM Plex Mono', monospace" fontSize="13" fontWeight="700" fill={step.color}>
+          <text
+            x={step.x + 76}
+            y="61"
+            textAnchor="middle"
+            fontFamily="'IBM Plex Mono', monospace"
+            fontSize="13"
+            fontWeight="700"
+            fill={step.color}
+          >
             {String(i + 1).padStart(2, '0')}
           </text>
-          <text x={step.x + 76} y="104" textAnchor="middle"
-            fontFamily="'Outfit', sans-serif" fontSize="14" fontWeight="600" fill="#FFFFFF">
+          <text
+            x={step.x + 76}
+            y="104"
+            textAnchor="middle"
+            fontFamily="'Outfit', sans-serif"
+            fontSize="14"
+            fontWeight="600"
+            fill="#FFFFFF"
+          >
             {step.label}
           </text>
-          <text x={step.x + 76} y="120" textAnchor="middle"
-            fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.4)">
+          <text
+            x={step.x + 76}
+            y="120"
+            textAnchor="middle"
+            fontFamily="'IBM Plex Mono', monospace"
+            fontSize="10"
+            fill="rgba(255,255,255,0.4)"
+          >
             {step.sub}
           </text>
-          <rect x={step.x + 76 - 36} y="130" width="72" height="20" rx="10"
-            fill={step.color} fillOpacity="0.08" stroke={step.color} strokeWidth="0.5" strokeOpacity="0.2" />
-          <text x={step.x + 76} y="144" textAnchor="middle"
-            fontFamily="'IBM Plex Mono', monospace" fontSize="9" fontWeight="500" fill={step.color} fillOpacity="0.7">
+          <rect
+            x={step.x + 76 - 36}
+            y="130"
+            width="72"
+            height="20"
+            rx="10"
+            fill={step.color}
+            fillOpacity="0.08"
+            stroke={step.color}
+            strokeWidth="0.5"
+            strokeOpacity="0.2"
+          />
+          <text
+            x={step.x + 76}
+            y="144"
+            textAnchor="middle"
+            fontFamily="'IBM Plex Mono', monospace"
+            fontSize="9"
+            fontWeight="500"
+            fill={step.color}
+            fillOpacity="0.7"
+          >
             {step.detail}
           </text>
         </g>
       ))}
 
-      <text x="380" y="185" textAnchor="middle"
-        fontFamily="'IBM Plex Mono', monospace" fontSize="10" fill="rgba(255,255,255,0.15)"
-        letterSpacing="0.1em">
+      <text
+        x="380"
+        y="185"
+        textAnchor="middle"
+        fontFamily="'IBM Plex Mono', monospace"
+        fontSize="10"
+        fill="rgba(255,255,255,0.15)"
+        letterSpacing="0.1em"
+      >
         HARVEST &rarr; VERIFY &rarr; EARN &rarr; GET PAID
       </text>
     </FlowSvg>
@@ -484,15 +582,25 @@ export function HeroSection({ audience = 'homeowner', onToggle, content }) {
     <Section>
       <GradientMesh $audience={audience} />
       <GridOverlay />
-      <GlowOrb $d="8s" $del="0s"
+      <GlowOrb
+        $d="8s"
+        $del="0s"
         style={{
-          top: '10%', left: '5%', width: 300, height: 300,
+          top: '10%',
+          left: '5%',
+          width: 300,
+          height: 300,
           background: isUtility ? 'rgba(59,130,246,0.06)' : 'rgba(0,82,204,0.08)',
         }}
       />
-      <GlowOrb $d="10s" $del="2s"
+      <GlowOrb
+        $d="10s"
+        $del="2s"
         style={{
-          bottom: '10%', right: '5%', width: 250, height: 250,
+          bottom: '10%',
+          right: '5%',
+          width: 250,
+          height: 250,
           background: isUtility ? 'rgba(139,92,246,0.05)' : 'rgba(6,182,212,0.06)',
         }}
       />
@@ -512,9 +620,7 @@ export function HeroSection({ audience = 'homeowner', onToggle, content }) {
           </Headline>
           <Subheadline>{displayContent?.subhead}</Subheadline>
           <CTARow>
-            <PrimaryBtn href={displayContent?.cta?.href}>
-              {displayContent?.cta?.label}
-            </PrimaryBtn>
+            <PrimaryBtn href={displayContent?.cta?.href}>{displayContent?.cta?.label}</PrimaryBtn>
           </CTARow>
         </CrossfadeWrapper>
 
@@ -549,7 +655,16 @@ export function HeroSection({ audience = 'homeowner', onToggle, content }) {
       </Content>
 
       <ScrollIndicator>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </ScrollIndicator>

@@ -1,16 +1,16 @@
-import {motion} from "framer-motion";
-import {animated} from "react-spring";
-import styled from "styled-components";
-import {colors} from "../../data/styles";
+import { motion } from 'framer-motion';
+import { animated } from 'react-spring';
+import styled from 'styled-components';
+import { colors } from '../../data/styles';
 
 export const FULL_PAGE_CONTAINER = styled(motion.div)`
   height: 100%;
-margin: 0 auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
- 
+
   max-width: 800px;
   padding: 2rem 1rem;
   box-sizing: border-box;
@@ -19,14 +19,14 @@ margin: 0 auto;
   overflow-x: hidden;
 
   transition: 0.5s ease-in-out;
-  .features { 
+  .features {
     display: grid;
-    gap:32px;
+    gap: 32px;
     margin-top: 64px;
 
-    @media(min-width: 672px) { 
+    @media (min-width: 672px) {
       grid-template-columns: 1fr 1fr;
-    } 
+    }
   }
 
   .features-section {
@@ -53,11 +53,9 @@ margin: 0 auto;
 `;
 
 export const CARD_WRAPPER = styled.div`
-
-
   box-sizing: border-box;
 
-  ${({ popup }) => popup && "filter: blur(20px);"}
+  ${({ popup }) => popup && 'filter: blur(20px);'}
 
   overflow: hidden;
 
@@ -76,7 +74,6 @@ export const CARD_WRAPPER = styled.div`
 export const CARD_SECTION = styled(animated.div)`
   flex: 1;
 
-
   box-sizing: border-box;
 
   border-radius: 10px;
@@ -89,11 +86,11 @@ export const CARD_SECTION = styled(animated.div)`
 `;
 
 export const Flex = styled.div`
-  width: ${({ width }) => (width ? width : "50%")};
+  width: ${({ width }) => (width ? width : '50%')};
   display: flex;
-  flex-direction: ${({ direction }) => (direction ? direction : "row")};
-  align-items: ${({ align }) => (align ? align : "flex-start")};
-  justify-content: ${({ justify }) => (justify ? justify : "flex-start")};
+  flex-direction: ${({ direction }) => (direction ? direction : 'row')};
+  align-items: ${({ align }) => (align ? align : 'flex-start')};
+  justify-content: ${({ justify }) => (justify ? justify : 'flex-start')};
 `;
 
 export const InfoBox = styled.div`
@@ -107,7 +104,7 @@ export const InfoBox = styled.div`
   border-top-right-radius: 0;
   text-align: left;
 
-  .disclaimer { 
+  .disclaimer {
     margin-top: 12px;
   }
 
@@ -115,7 +112,7 @@ export const InfoBox = styled.div`
     margin: 0 0 10px;
     font-size: 20px;
     font-weight: bold;
-    color: ${({theme}) => theme.colors.ui800}
+    color: ${({ theme }) => theme.colors.ui800};
   }
 
   p {
@@ -124,28 +121,28 @@ export const InfoBox = styled.div`
 `;
 
 export const CardContent = styled.div`
-margin-top: 40px;
+  margin-top: 40px;
   font-size: 0.8rem;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
+  justify-content: center;
   width: 100%;
 
-  .card-stats { 
+  .card-stats {
     display: flex;
     margin-top: 8px;
-    gap:16px;
+    gap: 16px;
   }
-  .card-stat { 
-    display: flex; 
+  .card-stat {
+    display: flex;
     gap: 8px;
     align-items: center;
     font-size: 14px;
     font-weight: 500;
-    color: ${({theme}) => theme.colors.ui600};
+    color: ${({ theme }) => theme.colors.ui600};
     svg {
-       color: ${({theme}) => theme.colors.primary500};
+      color: ${({ theme }) => theme.colors.primary500};
     }
   }
 

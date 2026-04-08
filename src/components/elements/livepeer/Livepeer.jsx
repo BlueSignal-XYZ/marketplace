@@ -1,13 +1,8 @@
-import React,  { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
-import {
-  LivepeerConfig,
-  createReactClient,
-  studioProvider,
-} from '@livepeer/react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Stream } from './Stream';
 import { MediaPlayer, BasicStreamPlayer } from './elements';
-import {LivepeerAPI} from '../../../scripts/back_door';
+import { LivepeerAPI } from '../../../scripts/back_door';
 import MediaUpload from './MediaUpload';
 import {
   LoadingState,
@@ -19,33 +14,24 @@ import {
 
 function Livepeer() {
   const { serviceID, playbackID, liveID } = useParams();
-  const [livepeerClient, setLivepeerClient] = useState(null);
-  const [key, setKey] = useState();
+  const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
-  useEffect(() => {
-    fetchKey()
-  }, [])
 
   useEffect(() => {
-    if(key){
-      const client = createReactClient({
-        provider: studioProvider(key)
-      })
-      setLivepeerClient(client);
-    }
-  }, [key])
-  
+    checkLivepeerAvailability();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const fetchKey =  async () => {
-     try {
-      setKey(await LivepeerAPI.getKey());
-     } catch (error) {
-      throw error;
-     } finally {
+  const checkLivepeerAvailability = async () => {
+    try {
+      const key = await LivepeerAPI.getKey();
+      setIsReady(!!key);
+    } catch {
+      setIsReady(false);
+    } finally {
       setIsLoading(false);
-     }
-  }
+    }
+  };
 
   const handleRetry = () => {
     window.location.reload();
@@ -54,36 +40,24 @@ function Livepeer() {
   const renderService = (serviceID) => {
     switch (serviceID) {
       case 'stream':
-        return (
-          <Stream />
-        )
+        return <Stream />;
       case 'upload-media':
-        return (
-          <MediaUpload/>
-        )
+        return <MediaUpload />;
       default:
-        return (
-          <ServiceUnavailableState onRetry={handleRetry} />
-        )
+        return <ServiceUnavailableState onRetry={handleRetry} />;
     }
+  };
+
+  if (!isReady) {
+    return isLoading ? <LoadingState /> : <ClientUnavailableState onRetry={handleRetry} />;
   }
-
-  if(livepeerClient===null){
-    return isLoading ? (
-      <LoadingState />
-    ) : (
-      <ClientUnavailableState onRetry={handleRetry} />
-    );
-  }
-
-
 
   return (
-    <LivepeerConfig client={livepeerClient}>
+    <>
       {serviceID && renderService(serviceID)}
       {playbackID && <MediaPlayer playbackID={playbackID} />}
       {liveID && <BasicStreamPlayer playbackId={liveID} />}
-    </LivepeerConfig>
+    </>
   );
 }
 

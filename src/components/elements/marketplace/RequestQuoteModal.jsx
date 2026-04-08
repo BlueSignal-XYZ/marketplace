@@ -1,9 +1,9 @@
 // /src/components/elements/marketplace/RequestQuoteModal.jsx
-import React, { useState } from "react";
-import styled from "styled-components";
-import { requestQuote } from "../../../apis/purchasesApi";
-import { ButtonPrimary, ButtonSecondary } from "../../shared/button/Button";
-import { Input } from "../../shared/input/Input";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { requestQuote } from '../../../apis/purchasesApi';
+import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
+import { Input } from '../../shared/input/Input';
 
 const Overlay = styled.div`
   position: fixed;
@@ -69,15 +69,15 @@ const HelperText = styled.p`
 `;
 
 export function RequestQuoteModal({ open, onClose, credit }) {
-  const [quantity, setQuantity] = useState("");
-  const [note, setNote] = useState("");
+  const [quantity, setQuantity] = useState('');
+  const [note, setNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   if (!open) return null;
 
-  const parsedQuantity = Number((quantity || "").replace(/,/g, ""));
+  const parsedQuantity = Number((quantity || '').replace(/,/g, ''));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,7 +85,7 @@ export function RequestQuoteModal({ open, onClose, credit }) {
     setSuccessMessage(null);
 
     if (!parsedQuantity || parsedQuantity <= 0) {
-      setErrorMessage("Enter a valid quantity greater than 0.");
+      setErrorMessage('Enter a valid quantity greater than 0.');
       return;
     }
 
@@ -98,13 +98,11 @@ export function RequestQuoteModal({ open, onClose, credit }) {
       });
 
       setSuccessMessage(
-        "Your quote request has been submitted. A marketplace administrator or seller will follow up."
+        'Your quote request has been submitted. A marketplace administrator or seller will follow up.'
       );
     } catch (err) {
       console.error(err);
-      setErrorMessage(
-        "Something went wrong while submitting your request."
-      );
+      setErrorMessage('Something went wrong while submitting your request.');
     } finally {
       setSubmitting(false);
     }
@@ -112,8 +110,8 @@ export function RequestQuoteModal({ open, onClose, credit }) {
 
   const handleClose = () => {
     if (submitting) return;
-    setQuantity("");
-    setNote("");
+    setQuantity('');
+    setNote('');
     setSuccessMessage(null);
     setErrorMessage(null);
     onClose();
@@ -131,9 +129,7 @@ export function RequestQuoteModal({ open, onClose, credit }) {
           </Subtitle>
 
           <FieldGroup>
-            <Label htmlFor="quantity">
-              Requested quantity ({credit.unit})
-            </Label>
+            <Label htmlFor="quantity">Requested quantity ({credit.unit})</Label>
             <Input
               id="quantity"
               type="number"
@@ -144,8 +140,7 @@ export function RequestQuoteModal({ open, onClose, credit }) {
               placeholder={`Up to ${credit.quantityAvailable.toLocaleString()}`}
             />
             <HelperText>
-              Available: {credit.quantityAvailable.toLocaleString()}{" "}
-              {credit.unit}
+              Available: {credit.quantityAvailable.toLocaleString()} {credit.unit}
             </HelperText>
           </FieldGroup>
 
@@ -159,24 +154,16 @@ export function RequestQuoteModal({ open, onClose, credit }) {
             />
           </FieldGroup>
 
-          {errorMessage && (
-            <HelperText style={{ color: "#b91c1c" }}>
-              {errorMessage}
-            </HelperText>
-          )}
+          {errorMessage && <HelperText style={{ color: '#b91c1c' }}>{errorMessage}</HelperText>}
 
-          {successMessage && (
-            <HelperText style={{ color: "#16a34a" }}>
-              {successMessage}
-            </HelperText>
-          )}
+          {successMessage && <HelperText style={{ color: '#16a34a' }}>{successMessage}</HelperText>}
 
           <Actions>
             <ButtonSecondary type="button" onClick={handleClose}>
               Cancel
             </ButtonSecondary>
             <ButtonPrimary type="submit" disabled={submitting}>
-              {submitting ? "Submitting…" : "Submit request"}
+              {submitting ? 'Submitting…' : 'Submit request'}
             </ButtonPrimary>
           </Actions>
         </form>

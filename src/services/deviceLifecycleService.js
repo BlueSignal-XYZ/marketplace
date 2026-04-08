@@ -7,7 +7,7 @@
  * - Device binding to orders/sites/customers
  */
 
-import { DeviceAPI, OrderAPI, SiteAPI, CustomerAPI } from '../scripts/back_door';
+import { DeviceAPI, OrderAPI } from '../scripts/back_door';
 import HubSpotAPI from '../apis/hubspot';
 
 // Valid lifecycle state transitions
@@ -25,7 +25,9 @@ const LIFECYCLE_TRANSITIONS = {
 
 // Generate unique device ID
 const generateDeviceId = () => {
-  const num = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  const num = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, '0');
   return `pgw-${num}`;
 };
 
@@ -77,9 +79,7 @@ export const transitionLifecycle = async (deviceId, newState, metadata = {}) => 
     if (!device) throw new Error('Device not found');
 
     if (!validateTransition(device.lifecycle, newState)) {
-      throw new Error(
-        `Invalid transition from ${device.lifecycle} to ${newState}`
-      );
+      throw new Error(`Invalid transition from ${device.lifecycle} to ${newState}`);
     }
 
     const now = new Date().toISOString();
@@ -507,8 +507,8 @@ export const bulkTransition = async (deviceIds, newState, metadata = {}) => {
       }
     }
 
-    const successCount = results.filter(r => r.success).length;
-    const failureCount = results.filter(r => !r.success).length;
+    const successCount = results.filter((r) => r.success).length;
+    const failureCount = results.filter((r) => !r.success).length;
 
     return {
       results,
