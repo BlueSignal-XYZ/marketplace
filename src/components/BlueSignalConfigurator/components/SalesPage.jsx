@@ -1297,6 +1297,7 @@ export default function SalesPage() {
     if (quoteOpen === 'true' || quoteOpen === '1') {
       setShowQuoteBuilder(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update URL when state changes
@@ -1318,7 +1319,7 @@ export default function SalesPage() {
     if (newSearch === currentSearch) return;
 
     navigate(`?${newSearch}`, { replace: true });
-  }, [selectedProduct, activeTab, quoteItems]);
+  }, [selectedProduct, activeTab, quoteItems, location.search, navigate]);
 
   // Intersection Observer for active section tracking
   useEffect(() => {
@@ -1346,6 +1347,7 @@ export default function SalesPage() {
     return () => {
       observers.forEach((observer) => observer.disconnect());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Navigation handlers
@@ -1356,6 +1358,7 @@ export default function SalesPage() {
       const top = ref.current.offsetTop - headerHeight;
       window.scrollTo({ top, behavior: 'smooth' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNavigate = (sectionId) => {

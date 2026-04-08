@@ -1,5 +1,5 @@
 // /src/components/cloud/AlertDetailPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
@@ -194,11 +194,7 @@ export default function AlertDetailPage() {
   const [alert, setAlert] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAlertData();
-  }, [alertId]);
-
-  const loadAlertData = async () => {
+  const loadAlertData = useCallback(async () => {
     setLoading(true);
     try {
       const alerts = await AlertsAPI.getActive();
@@ -209,7 +205,11 @@ export default function AlertDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [alertId]);
+
+  useEffect(() => {
+    loadAlertData();
+  }, [loadAlertData]);
 
   const handleAcknowledge = async () => {
     try {
