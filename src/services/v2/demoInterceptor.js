@@ -23,14 +23,6 @@ const metricFieldMap = {
 
 // ── Unit map for SensorReading conversion ────────────────────────────────
 
-const sensorUnits = {
-  pH: '',
-  TDS: 'ppm',
-  turbidity: 'NTU',
-  temperature: '°C',
-  ORP: 'mV',
-};
-
 // ── Helpers ──────────────────────────────────────────────────────────────
 
 /** Map CloudMockAPI device.status to v2 DeviceStatus */

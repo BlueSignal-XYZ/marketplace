@@ -66,26 +66,6 @@ const Form = styled.form`
   gap: 1rem;
 `;
 
-const SubmitButton = styled.button`
-  padding: 0.8rem;
-  border-radius: 4px;
-  background-color: ${colors.accent};
-  color: ${colors.white};
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: ${colors.primary};
-  }
-
-  &:disabled {
-    background-color: ${colors.darkGrey};
-    cursor: not-allowed;
-  }
-`;
-
 const Receipt = styled.div`
   margin-top: 1.5rem;
   padding: 1rem;
@@ -94,22 +74,6 @@ const Receipt = styled.div`
   border-radius: 8px;
   width: 100%;
   text-align: center;
-`;
-
-const CloseButton = styled.button`
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: transparent;
-  color: ${colors.primary};
-  border: 1px solid ${colors.primary};
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: ${colors.primary};
-    color: ${colors.white};
-  }
 `;
 
 const formatHash = (address, first = 6, last = 4) => {

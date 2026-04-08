@@ -218,7 +218,7 @@ const EnclosureComparisonView = ({ products, onClose, allProducts }) => {
       </ProductSelector>
 
       <ComparisonBody>
-        {selectedProductData.map((product, index) => {
+        {selectedProductData.map((product, _index) => {
           if (!product) return null;
 
           const bomTotal = product.bom.reduce((sum, item) => sum + item.cost, 0);

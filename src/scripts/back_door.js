@@ -19,7 +19,7 @@ const getAuthHeaders = async () => {
       const token = await currentUser.getIdToken();
       return { Authorization: `Bearer ${token}` };
     }
-  } catch (error) {
+  } catch {
     // Silent fail - let request proceed without auth for public endpoints
   }
   return {};
@@ -307,7 +307,7 @@ const getLivepeerKey = async () => {
   try {
     const response = await authPost(`${configs.server_url}/livepeer/key`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch Livepeer configuration');
   }
 };
@@ -397,7 +397,7 @@ const getMapsKey = async () => {
   try {
     const response = await authPost(`${configs.server_url}/maps/get/key`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch Maps configuration');
   }
 };
@@ -406,7 +406,7 @@ const getMapsAPI = async () => {
   try {
     const response = await authPost(`${configs.server_url}/maps/get/api`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch Maps API');
   }
 };
@@ -463,7 +463,7 @@ const issueCredits = async (senderID, nftTokenId, producer, verifier, creditType
       amount,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to issue credits');
   }
 };
@@ -479,7 +479,7 @@ const buyCredits = async (accountID, producer, verifier, creditType, amount, pri
       price,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to buy credits');
   }
 };
@@ -504,7 +504,7 @@ const transferCredits = async (
       price,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to transfer credits');
   }
 };
@@ -519,7 +519,7 @@ const donateCredits = async (senderID, producer, verifier, creditType, amount) =
       amount,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to donate credits');
   }
 };
@@ -708,7 +708,7 @@ const getStripeConfig = async () => {
   try {
     const response = await authPost(`${configs.server_url}/stripe/config`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch payment configuration');
   }
 };
@@ -722,7 +722,7 @@ const createPaymentIntent = async (amount, currency, optional_params) => {
       optional_params,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create payment intent');
   }
 };
@@ -731,7 +731,7 @@ const getStripePrice = async (priceID) => {
   try {
     const response = await authPost(`${configs.server_url}/stripe/get/price`, { priceID });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch price information');
   }
 };
@@ -750,7 +750,7 @@ const getDevices = async () => {
   try {
     const response = await authPost(`${configs.server_url}/device/all`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch devices');
   }
 };
@@ -761,7 +761,7 @@ const addDevice = async (devicePayload) => {
       devicePayload,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to add device');
   }
 };
@@ -773,7 +773,7 @@ const editDevice = async (deviceID, updateData) => {
       updateData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to edit device');
   }
 };
@@ -784,7 +784,7 @@ const removeDevice = async (deviceID) => {
       deviceID,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to remove device');
   }
 };
@@ -795,7 +795,7 @@ const getDeviceDetails = async (deviceID) => {
       deviceID,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch device details');
   }
 };
@@ -934,7 +934,7 @@ const createCustomer = async (customerData) => {
   try {
     const response = await authPost(`${configs.server_url}/customer/create`, { customerData });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create customer');
   }
 };
@@ -943,7 +943,7 @@ const getCustomer = async (customerId) => {
   try {
     const response = await authPost(`${configs.server_url}/customer/get`, { customerId });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch customer');
   }
 };
@@ -955,7 +955,7 @@ const updateCustomer = async (customerId, updateData) => {
       updateData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update customer');
   }
 };
@@ -964,7 +964,7 @@ const getCustomerByEmail = async (email) => {
   try {
     const response = await authPost(`${configs.server_url}/customer/get-by-email`, { email });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch customer');
   }
 };
@@ -973,7 +973,7 @@ const listCustomers = async (filters = {}) => {
   try {
     const response = await authPost(`${configs.server_url}/customer/list`, { filters });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to list customers');
   }
 };
@@ -982,7 +982,7 @@ const deleteCustomer = async (customerId) => {
   try {
     const response = await authPost(`${configs.server_url}/customer/delete`, { customerId });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to delete customer');
   }
 };
@@ -1100,7 +1100,7 @@ const createOrder = async (orderData) => {
   try {
     const response = await authPost(`${configs.server_url}/order/create`, { orderData });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create order');
   }
 };
@@ -1109,7 +1109,7 @@ const getOrder = async (orderId) => {
   try {
     const response = await authPost(`${configs.server_url}/order/get`, { orderId });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch order');
   }
 };
@@ -1118,7 +1118,7 @@ const updateOrder = async (orderId, updateData) => {
   try {
     const response = await authPost(`${configs.server_url}/order/update`, { orderId, updateData });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update order');
   }
 };
@@ -1127,7 +1127,7 @@ const listOrders = async (filters = {}) => {
   try {
     const response = await authPost(`${configs.server_url}/order/list`, { filters });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to list orders');
   }
 };
@@ -1448,7 +1448,7 @@ const generateDeviceQR = async (serialNumber, deviceType) => {
       deviceType,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to generate QR code');
   }
 };
@@ -1459,7 +1459,7 @@ const batchGenerateQR = async (devices) => {
       devices,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to batch generate QR codes');
   }
 };
@@ -1470,7 +1470,7 @@ const validateDeviceQR = async (qrData) => {
       qrData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to validate QR code');
   }
 };
@@ -1482,7 +1482,7 @@ const registerDeviceFromQR = async (serialNumber, purchaseOrderId) => {
       purchaseOrderId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to register device');
   }
 };
@@ -1502,7 +1502,7 @@ const geocodeAddress = async (address) => {
       address,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to geocode address');
   }
 };
@@ -1514,7 +1514,7 @@ const reverseGeocode = async (lat, lng) => {
       lng,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to reverse geocode');
   }
 };
@@ -1535,7 +1535,7 @@ const getDeviceReadings = async (deviceId, limit = 100, startTime, endTime) => {
       endTime,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch readings');
   }
 };
@@ -1547,7 +1547,7 @@ const getDeviceStats = async (deviceId, period = 'day') => {
       period,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch device stats');
   }
 };
@@ -1565,7 +1565,7 @@ const getActiveAlerts = async (filters = {}) => {
       filters,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch alerts');
   }
 };
@@ -1576,7 +1576,7 @@ const acknowledgeAlert = async (alertId) => {
       alertId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to acknowledge alert');
   }
 };
@@ -1588,7 +1588,7 @@ const resolveAlert = async (alertId, resolution) => {
       resolution,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to resolve alert');
   }
 };
@@ -1600,7 +1600,7 @@ const updateAlertThresholds = async (deviceId, thresholds) => {
       thresholds,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update thresholds');
   }
 };
@@ -1611,7 +1611,7 @@ const reopenAlert = async (alertId) => {
       alertId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to reopen alert');
   }
 };
@@ -1642,7 +1642,7 @@ const createCreditListing = async (
       expiresInDays,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create listing');
   }
 };
@@ -1653,7 +1653,7 @@ const getCreditListing = async (listingId) => {
       listingId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch listing');
   }
 };
@@ -1666,7 +1666,7 @@ const searchCreditListings = async (filters = {}, sort = 'created', limit = 50) 
       limit,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to search listings');
   }
 };
@@ -1678,7 +1678,7 @@ const updateCreditListing = async (listingId, updateData) => {
       updateData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update listing');
   }
 };
@@ -1689,7 +1689,7 @@ const cancelCreditListing = async (listingId) => {
       listingId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to cancel listing');
   }
 };
@@ -1701,7 +1701,7 @@ const purchaseCredits = async (listingId, quantity) => {
       quantity,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to initiate purchase');
   }
 };
@@ -1713,7 +1713,7 @@ const completeCreditPurchase = async (orderId, paymentIntentId) => {
       paymentIntentId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to complete purchase');
   }
 };
@@ -1725,7 +1725,7 @@ const getMarketplaceOrders = async (role = 'buyer', status) => {
       status,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch orders');
   }
 };
@@ -1734,7 +1734,7 @@ const getMarketplaceStats = async () => {
   try {
     const response = await axios.post(`${configs.server_url}/marketplace/stats`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch marketplace stats');
   }
 };
@@ -1745,7 +1745,7 @@ const createCredit = async (creditData) => {
       creditData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create credit');
   }
 };
@@ -1756,7 +1756,7 @@ const getUserCredits = async (status) => {
       status,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch credits');
   }
 };
@@ -1784,7 +1784,7 @@ const getUserProfile = async (uid) => {
   try {
     const response = await authPost(`${configs.server_url}/user/profile/get`, { uid });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch user profile');
   }
 };
@@ -1813,7 +1813,7 @@ const updateUserRole = async (targetUid, role) => {
       role,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update role');
   }
 };
@@ -1825,7 +1825,7 @@ const completeUserOnboarding = async (uid, onboardingData) => {
       onboardingData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to complete onboarding');
   }
 };
@@ -1845,7 +1845,7 @@ const getVirginiaBasins = async () => {
   try {
     const response = await axios.post(`${configs.server_url}/virginia/basins`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch Virginia basins');
   }
 };
@@ -1856,7 +1856,7 @@ const getVirginiaBasin = async (basinCode) => {
       basinCode,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch basin');
   }
 };
@@ -1868,7 +1868,7 @@ const createVirginiaProject = async (projectData) => {
       projectData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create Virginia project');
   }
 };
@@ -1879,7 +1879,7 @@ const getVirginiaProject = async (projectId) => {
       projectId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch Virginia project');
   }
 };
@@ -1891,7 +1891,7 @@ const updateVirginiaProject = async (projectId, updateData) => {
       updateData,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update Virginia project');
   }
 };
@@ -1902,7 +1902,7 @@ const listVirginiaProjects = async (filters = {}) => {
       filters,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to list Virginia projects');
   }
 };
@@ -1914,7 +1914,7 @@ const linkDeviceToVirginiaProject = async (projectId, deviceId) => {
       deviceId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to link device to project');
   }
 };
@@ -1926,7 +1926,7 @@ const unlinkDeviceFromVirginiaProject = async (projectId, deviceId) => {
       deviceId,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to unlink device from project');
   }
 };
@@ -1939,7 +1939,7 @@ const calculateVirginiaCredits = async (projectId, complianceYear) => {
       complianceYear,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to calculate credits');
   }
 };
@@ -1951,7 +1951,7 @@ const generateVirginiaCredits = async (projectId, complianceYear) => {
       complianceYear,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to generate credits');
   }
 };
@@ -1962,7 +1962,7 @@ const getVirginiaCredits = async (filters = {}) => {
       filters,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch Virginia credits');
   }
 };
@@ -1975,7 +1975,7 @@ const validateVirginiaCreditTransfer = async (creditId, buyerBasinCode, quantity
       quantityLbs,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to validate credit transfer');
   }
 };
@@ -2030,7 +2030,7 @@ const createTradingProgram = async (programData) => {
   try {
     const response = await authPost(`${configs.server_url}/trading-programs`, programData);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create trading program');
   }
 };
@@ -2042,7 +2042,7 @@ const updateTradingProgram = async (programId, updates) => {
       updates
     );
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update trading program');
   }
 };
@@ -2073,7 +2073,7 @@ const createEnrollment = async (enrollmentData) => {
   try {
     const response = await authPost(`${configs.server_url}/enrollments`, enrollmentData);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to create enrollment');
   }
 };
@@ -2104,7 +2104,7 @@ const updateEnrollmentStatus = async (enrollmentId, status) => {
       status,
     });
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to update enrollment status');
   }
 };
@@ -2113,7 +2113,7 @@ const withdrawEnrollment = async (enrollmentId) => {
   try {
     const response = await authPost(`${configs.server_url}/enrollments/${enrollmentId}/withdraw`);
     return response?.data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to withdraw enrollment');
   }
 };

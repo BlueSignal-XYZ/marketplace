@@ -103,8 +103,8 @@ function SidebarContent() {
                 <FaChevronDown className="AccordionChevron" aria-hidden />
               </StyledAccordionTrigger>
               <StyledAccordionContent className="content">
-                {environmentRoutes.map((subData, subIndex) => {
-                  const { route, cta, icon, onclick } = subData || {};
+                {environmentRoutes.map((subData) => {
+                  const { route, cta } = subData || {};
                   return (
                     <Link to={route} className="cta" key={cta}>
                       {cta}

@@ -28,8 +28,8 @@ export interface BadgeProps {
 
 // ── Color resolver ────────────────────────────────────────
 
-function getColors(variant: BadgeVariant, theme: any) {
-  const c = theme.components;
+function getColors(variant: BadgeVariant, theme: import('styled-components').DefaultTheme) {
+  const c = theme.components as Record<string, string>;
   switch (variant) {
     case 'positive':
       return {

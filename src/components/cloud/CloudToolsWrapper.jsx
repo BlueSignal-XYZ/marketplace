@@ -6,7 +6,6 @@ import CloudPageLayout from './CloudPageLayout';
 import NutrientCalculator from '../NutrientCalculator';
 import { VerificationUI } from '../elements/contractUI';
 import { MediaPlayer, BasicStreamPlayer } from '../elements/livepeer';
-import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
 import { LivepeerAPI } from '../../scripts/back_door';
 
 /**
@@ -84,27 +83,25 @@ import { Modal } from '../../design-system/primitives/Modal';
 import { Button } from '../../design-system/primitives/Button';
 
 /**
- * LivepeerWrapper - Initializes Livepeer client and wraps child components
+ * LivepeerWrapper - Validates Livepeer availability and wraps child components
  */
 function LivepeerWrapper({ children }) {
-  const [livepeerClient, setLivepeerClient] = useState(null);
+  const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchKey();
+    checkAvailability();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchKey = async () => {
+  const checkAvailability = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const key = await LivepeerAPI.getKey();
       if (key) {
-        const client = createReactClient({
-          provider: studioProvider(key),
-        });
-        setLivepeerClient(client);
+        setIsReady(true);
       } else {
         setError('Unable to initialize streaming service');
       }
@@ -125,16 +122,16 @@ function LivepeerWrapper({ children }) {
     );
   }
 
-  if (error || !livepeerClient) {
+  if (error || !isReady) {
     return (
       <ErrorContainer>
         <ErrorText>{error || 'Streaming service unavailable'}</ErrorText>
-        <RetryButton onClick={fetchKey}>Retry Connection</RetryButton>
+        <RetryButton onClick={checkAvailability}>Retry Connection</RetryButton>
       </ErrorContainer>
     );
   }
 
-  return <LivepeerConfig client={livepeerClient}>{children}</LivepeerConfig>;
+  return <>{children}</>;
 }
 
 export function CloudNutrientCalculator() {

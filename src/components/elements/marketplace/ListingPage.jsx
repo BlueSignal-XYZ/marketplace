@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { ethers } from 'ethers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
 import PoSPopup from './elements/PoSPopup';
 import placeholder from '../../../assets/icon.png';
 import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
@@ -158,7 +157,7 @@ const ListingPage = () => {
   const { id } = useParams();
   const { STATES } = useAppContext();
   const { user } = STATES || {};
-  const navigate = useNavigate();
+
   const [listingDetails, setListingDetails] = useState({});
   const [bidHistory, setBidHistory] = useState([]);
   const [saleHistory, setSaleHistory] = useState([]);
@@ -240,10 +239,6 @@ const ListingPage = () => {
       console.error('Error placing bid:', error);
       throw error;
     }
-  };
-
-  const navigateBack = () => {
-    navigate(-1);
   };
 
   if (!listingDetails) {

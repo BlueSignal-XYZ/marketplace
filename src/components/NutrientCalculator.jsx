@@ -303,7 +303,7 @@ const nutrientData = {
   },
 };
 
-const NutrientCalculator = ({ isOpen, onClose }) => {
+const NutrientCalculator = () => {
   const [crop, setCrop] = useState('Corn Grain');
   const [yieldPerAcre, setYieldPerAcre] = useState('');
   const [isLoading, setIsLoading] = useState(false);

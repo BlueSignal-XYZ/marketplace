@@ -4,11 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { formatCertificateID, handleViewCertificate } from '../../scripts/helpers';
 import { NPCCreditsAPI } from '../../scripts/back_door';
 
-const contractABI = [
-  'function getAccountTotalBalance(string accountID) view returns (int256 _accountTotalBalance)',
-  'function getAccountCertificates(string accountID) view returns (int256[] _accountCertificates)',
-];
-
 const entranceAnimation = keyframes`
   from {
     opacity: 0;
@@ -179,7 +174,7 @@ const AccountSearch = ({ isOpen, setIsOpen }) => {
       setBalance(accountBalance.toString());
       const accountCertificates = await NPCCreditsAPI.getAccountCertificates(accountID);
       setCertificates(accountCertificates);
-    } catch (err) {
+    } catch {
       setError('Error retrieving data');
     } finally {
       setLoading(false);

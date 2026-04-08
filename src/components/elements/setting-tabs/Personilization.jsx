@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,7 +45,7 @@ const ToggleButton = styled(motion.div)`
   }
 `;
 
-const PersonalizationTab = ({ APP }) => {
+const PersonalizationTab = ({ APP: _APP }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [primaryColor, setPrimaryColor] = useState('#63c3d1');
   const [animationsEnabled, setAnimationsEnabled] = useState(true);

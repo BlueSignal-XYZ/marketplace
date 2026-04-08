@@ -287,7 +287,6 @@ const ENV_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 /** Normalize site from v2 or CloudMockAPI shape for display */
 function normalizeSiteForDisplay(site, deviceCount) {
   const loc = site.location;
-  const hasLegacyShape = site.customer != null && site.coordinates != null;
   return {
     id: site.id,
     name: site.name || site.id,

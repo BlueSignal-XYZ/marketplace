@@ -10,11 +10,7 @@ import { PROMPT_CARD, PROMPT_FORM } from '../../../components/lib/styled';
 import { formVariant } from './motion_variants';
 import FormSection from '../../../components/shared/FormSection/FormSection';
 import { Input } from '../../../components/shared/input/Input';
-import {
-  ButtonLink,
-  ButtonPrimary,
-  ButtonSecondary,
-} from '../../../components/shared/button/Button';
+import { ButtonLink, ButtonPrimary } from '../../../components/shared/button/Button';
 import { getAppMode } from '../../../utils/modeDetection';
 
 /* -------------------------------------------------------------------------- */
@@ -46,21 +42,6 @@ const Header = styled.div`
     margin: 4px 0 0;
     font-size: 13px;
     color: ${({ theme }) => theme.colors?.ui600 || '#4b5563'};
-  }
-`;
-
-const ActionsRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 8px;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-
-    ${ButtonPrimary}, ${ButtonSecondary} {
-      width: 100%;
-    }
   }
 `;
 
@@ -195,7 +176,7 @@ const LoginForm = () => {
       setSubmitting(true);
       await signInWithEmailAndPassword(auth, email, password);
       // Auth listener will handle the rest
-    } catch (err) {
+    } catch {
       // SECURITY: Use generic error message to prevent user enumeration
       handleError('Invalid email or password. Please try again.');
       setSubmitting(false);
@@ -221,7 +202,7 @@ const LoginForm = () => {
         type: 'success',
         message: 'If an account exists with this email, a reset link will be sent.',
       });
-    } catch (err) {
+    } catch {
       // SECURITY: Still show success message to prevent enumeration
       setNotification({
         type: 'success',
