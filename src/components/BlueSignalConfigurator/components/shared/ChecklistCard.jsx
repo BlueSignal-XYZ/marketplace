@@ -167,7 +167,7 @@ const ChecklistCard = ({
       if (stored) {
         try {
           return JSON.parse(stored);
-        } catch (e) {
+        } catch {
           return {};
         }
       }

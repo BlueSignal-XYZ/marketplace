@@ -316,7 +316,7 @@ const NotificationBell = ({ light = false }) => {
           setUnreadCount(userNotifications.filter((n) => !n.read).length);
         }
       }
-    } catch (error) {
+    } catch {
       // Silently handle notification load failures
     } finally {
       setLoading(false);

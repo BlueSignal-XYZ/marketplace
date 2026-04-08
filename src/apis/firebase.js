@@ -9,8 +9,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
-import { getAppMode } from '../utils/modeDetection';
-
 // Firebase configuration for waterquality-trading project
 // Used by both Cloud and Marketplace modes
 // SECURITY: All config values MUST come from environment variables
@@ -47,8 +45,6 @@ if (isFirebaseConfigured) {
   db = getDatabase(app);
   googleProvider = new GoogleAuthProvider();
 }
-
-const mode = getAppMode();
 
 // Lazy-load Firestore — only import firebase/firestore when actually needed.
 // This avoids pulling ~180KB into the main bundle for features that rarely use it.

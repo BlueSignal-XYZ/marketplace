@@ -12,7 +12,6 @@ import { LayoutDashboard, Cpu, MapPin, BellRing, Wrench, Settings, X } from 'luc
 
 const SIDEBAR_WIDTH = 240;
 const DRAWER_WIDTH = 280;
-const TOPBAR_HEIGHT_MOBILE = 56;
 const TOPBAR_HEIGHT_DESKTOP = 64;
 
 const NAV_ITEMS = [

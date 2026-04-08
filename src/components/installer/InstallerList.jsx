@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { UserAPI } from '../../scripts/back_door';
-import { CommissionAPI } from '../../scripts/back_door';
+import { UserAPI, CommissionAPI } from '../../scripts/back_door';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -279,7 +278,7 @@ const InstallerList = () => {
             passRate,
             status: pendingJobs > 2 ? 'busy' : pendingJobs > 0 ? 'active' : 'active',
           };
-        } catch (e) {
+        } catch {
           stats[installer.uid] = { pending: 0, completed: 0, passRate: 0, status: 'active' };
         }
       }

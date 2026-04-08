@@ -162,7 +162,7 @@ const MODE_CONTENT = {
   },
 };
 
-const WelcomeHome = ({ user, setCardState, enterDash }) => {
+const WelcomeHome = ({ user, setCardState: _setCardState, enterDash: _enterDash }) => {
   const { username } = user || {};
   const mode = getAppMode();
   const isCloud = mode === 'cloud';

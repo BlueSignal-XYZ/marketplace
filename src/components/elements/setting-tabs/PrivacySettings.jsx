@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 import FormSection from '../../shared/FormSection/FormSection';
@@ -23,40 +22,6 @@ const PrivacyContainer = styled.div`
   }
 `;
 
-const OptionGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-
-const OptionLabel = styled.label`
-  font-weight: bold;
-  color: #333;
-`;
-
-const Dropdown = styled.select`
-  padding: 8px 10px;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-`;
-
-const ToggleButton = styled(motion.div)`
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: ${({ isActive }) => (isActive ? '#63c3d1' : '#aaa')};
-  color: #fff;
-
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-
-  &:hover {
-    opacity: 0.9;
-  }
-`;
-
 const PrivacySettingsTab = () => {
   const { STATES } = useAppContext();
   const [profileVisibility, setProfileVisibility] = useState('Everyone');
@@ -64,10 +29,7 @@ const PrivacySettingsTab = () => {
   const [transactionPrivacy, setTransactionPrivacy] = useState(true);
   const [dataUploadPrivacy, setDataUploadPrivacy] = useState(true);
 
-  const { user } = STATES || {};
-  const accountType = user?.role;
-  // account type loaded
-
+  const { user: _user } = STATES || {};
   return (
     <PrivacyContainer>
       <FormSection>

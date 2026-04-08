@@ -146,16 +146,6 @@ const ErrorMessage = styled.div`
   margin-bottom: 20px;
 `;
 
-const SuccessMessage = styled.div`
-  background: #d1fae5;
-  border: 1px solid #86efac;
-  color: #065f46;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-bottom: 20px;
-`;
-
 /* -------------------------------------------------------------------------- */
 /*                              MAIN COMPONENT                                */
 /* -------------------------------------------------------------------------- */

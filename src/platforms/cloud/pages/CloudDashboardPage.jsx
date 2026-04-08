@@ -231,7 +231,7 @@ const AlertBanner = styled.div`
   }
 `;
 
-const ErrorBox = styled.div`
+const _ErrorBox = styled.div`
   background: rgba(255, 77, 77, 0.06);
   border: 1px solid rgba(255, 77, 77, 0.15);
   border-radius: ${({ theme }) => theme.radius.md}px;
@@ -240,7 +240,7 @@ const ErrorBox = styled.div`
   margin-bottom: 24px;
 `;
 
-const ErrorText = styled.p`
+const _ErrorText = styled.p`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text};
   margin: 0 0 12px;

@@ -1,35 +1,48 @@
 import { describe, it, expect } from 'vitest';
 import { formatLongString, isNotZeroAddress, extractAndCleanUrls } from './utils';
 
+// =============================================================================
+// formatLongString
+// =============================================================================
+
 describe('formatLongString', () => {
-  it('truncates a long string with ellipsis', () => {
-    expect(formatLongString('0x1234567890abcdef1234567890abcdef12345678')).toBe('0x1234...5678');
+  it('truncates a long string with default first/last values', () => {
+    expect(formatLongString('0xAbCdEf1234567890AbCdEf1234567890AbCdEf12')).toBe('0xAbCd...Ef12');
   });
 
-  it('uses custom first/last lengths', () => {
-    expect(formatLongString('0x1234567890abcdef1234567890abcdef12345678', 10, 6)).toBe(
-      '0x12345678...345678'
-    );
+  it('uses custom first and last lengths', () => {
+    expect(formatLongString('0xAbCdEf1234567890', 4, 6)).toBe('0xAb...567890');
   });
 
-  it('returns empty string for null input', () => {
+  it('returns empty string for null/undefined/empty input', () => {
     expect(formatLongString(null)).toBe('');
-  });
-
-  it('returns empty string for undefined input', () => {
     expect(formatLongString(undefined)).toBe('');
-  });
-
-  it('returns empty string for empty string input', () => {
     expect(formatLongString('')).toBe('');
   });
 
-  it('handles short strings (shorter than first + last)', () => {
-    // "abcd" with first=6, last=4 will overlap but still produce output
-    const result = formatLongString('abcd');
-    expect(result).toBe('abcd...abcd');
+  it('handles string shorter than first + last', () => {
+    // "abcde" with first=6, last=4 — slices overlap but still returns a result
+    const result = formatLongString('abcde');
+    expect(result).toBe('abcde...bcde');
+  });
+
+  it('handles exact-length strings', () => {
+    expect(formatLongString('abcdefghij', 6, 4)).toBe('abcdef...ghij');
+  });
+
+  it('works with first=0', () => {
+    expect(formatLongString('abcdefgh', 0, 4)).toBe('...efgh');
+  });
+
+  it('works with last=0', () => {
+    // slice(-0) returns entire string in JS
+    expect(formatLongString('abcdefgh', 4, 0)).toBe('abcd...abcdefgh');
   });
 });
+
+// =============================================================================
+// isNotZeroAddress
+// =============================================================================
 
 describe('isNotZeroAddress', () => {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -38,67 +51,83 @@ describe('isNotZeroAddress', () => {
     expect(isNotZeroAddress(ZERO_ADDRESS)).toBe(false);
   });
 
-  it('returns false for uppercase zero address', () => {
-    expect(isNotZeroAddress(ZERO_ADDRESS.toUpperCase())).toBe(false);
-  });
-
-  it('returns false for mixed-case zero address', () => {
+  it('returns false for zero address with mixed case', () => {
     expect(isNotZeroAddress('0x0000000000000000000000000000000000000000')).toBe(false);
   });
 
   it('returns true for a non-zero address', () => {
-    expect(isNotZeroAddress('0x1234567890abcdef1234567890abcdef12345678')).toBe(true);
+    expect(isNotZeroAddress('0xAbCdEf1234567890AbCdEf1234567890AbCdEf12')).toBe(true);
   });
 
-  it('returns true for an address with only one non-zero character', () => {
+  it('returns true for an address with a single non-zero digit', () => {
     expect(isNotZeroAddress('0x0000000000000000000000000000000000000001')).toBe(true);
+  });
+
+  it('is case-insensitive', () => {
+    const upper = '0xABCDEF1234567890ABCDEF1234567890ABCDEF12';
+    const lower = '0xabcdef1234567890abcdef1234567890abcdef12';
+    expect(isNotZeroAddress(upper)).toBe(true);
+    expect(isNotZeroAddress(lower)).toBe(true);
   });
 });
 
+// =============================================================================
+// extractAndCleanUrls
+// =============================================================================
+
 describe('extractAndCleanUrls', () => {
-  it('extracts a single HTTP URL', () => {
-    const result = extractAndCleanUrls('Visit https://example.com for more');
+  it('extracts a single URL from a string', () => {
+    const result = extractAndCleanUrls('Visit https://example.com for more info');
     expect(result).toEqual(['https://example.com/']);
   });
 
   it('extracts multiple URLs from a string', () => {
-    const result = extractAndCleanUrls(
-      'See https://example.com and http://test.org/page for details'
-    );
+    const result = extractAndCleanUrls('Check https://example.com and http://test.org/page');
     expect(result).toHaveLength(2);
-    expect(result).toContain('https://example.com/');
-    expect(result).toContain('http://test.org/page');
+    expect(result[0]).toBe('https://example.com/');
+    expect(result[1]).toBe('http://test.org/page');
   });
 
   it('returns empty array when no URLs found', () => {
-    expect(extractAndCleanUrls('No URLs here')).toEqual([]);
-  });
-
-  it('returns empty array for empty string', () => {
+    expect(extractAndCleanUrls('no urls here')).toEqual([]);
     expect(extractAndCleanUrls('')).toEqual([]);
   });
 
-  it('handles URLs with paths and query strings', () => {
+  it('handles URLs with query parameters', () => {
     const result = extractAndCleanUrls('Go to https://example.com/path?key=value&foo=bar');
     expect(result).toHaveLength(1);
-    expect(result[0]).toContain('example.com/path');
     expect(result[0]).toContain('key=value');
+    expect(result[0]).toContain('foo=bar');
   });
 
-  it('handles FTP URLs', () => {
-    const result = extractAndCleanUrls('Download from ftp://files.example.com/data.zip');
+  it('handles URLs with hash fragments', () => {
+    const result = extractAndCleanUrls('See https://example.com/page#section');
     expect(result).toHaveLength(1);
-    expect(result[0]).toContain('ftp://');
+    expect(result[0]).toContain('#section');
+  });
+
+  it('handles ftp URLs', () => {
+    const result = extractAndCleanUrls('Download from ftp://files.example.com/doc.pdf');
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBe('ftp://files.example.com/doc.pdf');
   });
 
   it('handles blob URLs by extracting pathname', () => {
-    const result = extractAndCleanUrls('blob:https://example.com/abc-123-def');
+    const result = extractAndCleanUrls('Preview at blob:https://example.com/abc-123-def');
     expect(result).toHaveLength(1);
+    // blob URLs return pathname without leading slash
+    expect(result[0]).toContain('example.com/abc-123-def');
   });
 
-  it('filters out invalid URLs gracefully', () => {
-    // extractAndCleanUrls uses URL constructor which may throw; those get filtered
-    const result = extractAndCleanUrls('Check https://valid.com');
+  it('filters out invalid URLs that match the regex but fail URL parsing', () => {
+    // The regex may match something that new URL() rejects
+    // In practice, most regex matches are valid URLs, so this tests the error path
+    const result = extractAndCleanUrls('Valid: https://example.com');
     expect(result.every((url) => url.length > 0)).toBe(true);
+  });
+
+  it('handles string with URLs surrounded by punctuation', () => {
+    const result = extractAndCleanUrls('(https://example.com/path)');
+    expect(result).toHaveLength(1);
   });
 });

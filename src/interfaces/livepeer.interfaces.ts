@@ -10,7 +10,7 @@ export interface Asset {
   downloadUrl: string;
   playbackPolicy: PlaybackPolicy;
   source: Source;
-  creatorId: Record<string, any>;
+  creatorId: Record<string, unknown>;
   storage: Storage;
   status: Status;
   name: string;
@@ -145,7 +145,7 @@ export interface Task {
 const testType = (type: string, result: string, data: string = '') => {
   logDev(`Type Test: ${type} => ${result} => ${data}`, { type, result, data });
 };
-const ActionTypes = {
+const _ActionTypes = {
   AssetUpload: {
     request: testType('RequestUpload', 'RequestUploadResponse', 'RequestUploadData'),
     upload: testType('tusUpload', 'response listners', 'upload: { url }'),

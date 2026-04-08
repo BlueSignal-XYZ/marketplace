@@ -365,13 +365,6 @@ const InfoText = styled.p`
   }
 `;
 
-const PoweredBy = styled.p`
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.textMuted};
-  margin: 24px 0 0;
-`;
-
 // ── Component ────────────────────────────────────────────────
 
 export default function ContactPage() {
@@ -447,7 +440,7 @@ export default function ContactPage() {
       setStatus('success');
       resetForm();
       return;
-    } catch (_err) {
+    } catch {
       // fetch failed, try sendBeacon
     }
 

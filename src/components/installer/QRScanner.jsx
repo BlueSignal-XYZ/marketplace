@@ -251,7 +251,7 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
         try {
           const url = new URL(decodedText);
           qrData = url.searchParams.get('d') || decodedText;
-        } catch (e) {
+        } catch {
           // Not a URL, use as-is
         }
       }

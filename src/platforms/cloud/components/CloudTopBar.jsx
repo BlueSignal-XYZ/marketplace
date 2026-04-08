@@ -331,7 +331,6 @@ export function CloudTopBar({ onMenuToggle }) {
   }, []);
 
   const displayName = user?.displayName || user?.username || user?.email || 'User';
-  const initials = displayName.charAt(0).toUpperCase();
 
   return (
     <TopBarOuter>

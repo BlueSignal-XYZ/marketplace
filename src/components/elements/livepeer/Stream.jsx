@@ -1,12 +1,11 @@
-import { useMemo, useState, useEffect } from 'react';
-import { useCreateStream } from '@livepeer/react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
 
 import { StreamPlayer } from './elements';
 
 // #BACKEND
-import { MediaAPI } from '../../../scripts/back_door';
+import { LivepeerAPI, MediaAPI } from '../../../scripts/back_door';
 import { ButtonPrimary } from '../../shared/button/Button';
 import { Input } from '../../shared/input/Input';
 import FormSection from '../../shared/FormSection/FormSection';
@@ -35,18 +34,30 @@ const ActionContainer = styled.div`
 export const Stream = () => {
   const { STATES, ACTIONS } = useAppContext();
   const [streamName, setStreamName] = useState('');
-  const {
-    mutate: createStream,
-    data: stream,
-    status,
-  } = useCreateStream(streamName ? { name: streamName } : null);
+  const [stream, setStream] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const isLoading = useMemo(() => status === 'loading', [status]);
   const { user } = STATES || {};
+
+  const createStream = async () => {
+    if (!streamName) return;
+    setIsLoading(true);
+    try {
+      const result = await LivepeerAPI.createStream({ name: streamName });
+      setStream(result);
+    } catch (error) {
+      console.error('Error creating stream:', error);
+      ACTIONS?.logNotification('error', 'Failed to create stream');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (stream?.playbackId) {
       _saveStream();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stream]);
 
   const _saveStream = async () => {
@@ -79,12 +90,7 @@ export const Stream = () => {
 
       <ActionContainer>
         {!stream && (
-          <ButtonPrimary
-            onClick={() => {
-              createStream?.();
-            }}
-            disabled={isLoading || !createStream}
-          >
+          <ButtonPrimary onClick={createStream} disabled={isLoading || !streamName}>
             Create Stream
           </ButtonPrimary>
         )}

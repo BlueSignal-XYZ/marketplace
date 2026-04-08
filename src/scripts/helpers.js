@@ -101,7 +101,7 @@ export const NUMBERS = {
     if (value == null) return 0;
     try {
       return value.toNumber();
-    } catch (e) {
+    } catch {
       if (typeof value === 'number') {
         return value;
       } else {

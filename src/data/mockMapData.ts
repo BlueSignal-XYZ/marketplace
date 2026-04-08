@@ -180,7 +180,9 @@ export const mockMapProjects: MapProject[] = [
 
 export const getProjectsByType = (type?: string): MapProject[] => {
   if (!type || type === 'all') return mockMapProjects;
-  return mockMapProjects.filter((project) => project.creditTypes.includes(type as any));
+  return mockMapProjects.filter((project) =>
+    project.creditTypes.includes(type as MapProject['creditTypes'][number])
+  );
 };
 
 export const getProjectsByStatus = (status: 'active' | 'pending' | 'completed'): MapProject[] => {

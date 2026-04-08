@@ -304,24 +304,6 @@ const BatteryIndicator = styled.span`
   color: ${({ $level }) => ($level < 20 ? '#dc2626' : $level < 50 ? '#f97316' : '#16a34a')};
 `;
 
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 48px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
-
-  h3 {
-    margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
-  }
-
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
-`;
-
 const FleetSummary = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

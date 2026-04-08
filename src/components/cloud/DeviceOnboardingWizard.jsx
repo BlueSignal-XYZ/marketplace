@@ -38,7 +38,7 @@ const ProgressStep = styled.div`
       : $completed
         ? theme.colors?.primary600 || '#0284c7'
         : theme.colors?.ui400 || '#9ca3af'};
-  background: ${({ $active, theme }) => ($active ? '#ffffff' : 'transparent')};
+  background: ${({ $active }) => ($active ? '#ffffff' : 'transparent')};
   border-bottom: 2px solid
     ${({ $active, $completed, theme }) =>
       $active

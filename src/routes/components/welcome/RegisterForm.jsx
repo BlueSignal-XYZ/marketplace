@@ -141,7 +141,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
       // Best-effort backend account creation
       try {
         await AccountAPI.create(newUser);
-      } catch (err) {
+      } catch {
         // Non-fatal - account may already exist
       }
 
@@ -158,7 +158,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
             username: newUser.username,
           };
           sessionStorage.setItem('user', JSON.stringify(publicUser));
-        } catch (e) {
+        } catch {
           // Silent fail
         }
       }
@@ -235,7 +235,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
         // Send email verification (best-effort — don't block signup)
         try {
           await sendEmailVerification(userData);
-        } catch (_) {
+        } catch {
           // Silently continue — user can request verification later
         }
 
@@ -249,7 +249,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
       // Best-effort backend account creation
       try {
         await AccountAPI.create(newUser);
-      } catch (err) {
+      } catch {
         // Non-fatal - account may already exist
       }
 
@@ -266,7 +266,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
             username: newUser.username,
           };
           sessionStorage.setItem('user', JSON.stringify(publicUser));
-        } catch (e) {
+        } catch {
           // Silent fail
         }
       }

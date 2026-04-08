@@ -206,7 +206,7 @@ export function CommissioningWizardPage() {
   const [processing, setProcessing] = useState(false);
 
   // Step 1 state
-  const [deviceCheck, setDeviceCheck] = useState(null);
+  const [, setDeviceCheck] = useState(null);
 
   // Step 2 state
   const [connectionResult, setConnectionResult] = useState(null);

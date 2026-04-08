@@ -446,7 +446,7 @@ export function PresalePage() {
         const realListings = await fetchListings();
         if (!cancelled && realListings.length > 0) {
           // Transform listings to presale shape where possible
-          const transformed = realListings.map((l: any) => ({
+          const transformed = realListings.map((l: Record<string, unknown>) => ({
             id: l.id,
             name: l.name || 'Water Quality Credits',
             location: l.location || l.watershed || 'Unknown',
