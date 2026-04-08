@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Player } from '@livepeer/react';
+import * as Player from '@livepeer/react/player';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -82,7 +82,13 @@ const MediaPlayer = ({ playbackID }) => {
 
   return (
     <Container>
-      <Player style={{ width: '100%', height: 'auto' }} title="Title" playbackId={playbackID} />
+      <Player.Root
+        src={[{ type: 'hls', src: `https://livepeercdn.studio/hls/${playbackID}/index.m3u8` }]}
+      >
+        <Player.Container style={{ width: '100%', height: 'auto' }}>
+          <Player.Video title="Title" />
+        </Player.Container>
+      </Player.Root>
       <MetricsContainer>
         {metrics && (
           <>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Player } from '@livepeer/react';
+import * as Player from '@livepeer/react/player';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -63,7 +63,19 @@ const StreamPlayer = ({ stream }) => {
     <Container>
       <PlayerContainer>
         {stream?.playbackId && (
-          <Player title={stream?.name} playbackId={stream?.playbackId} autoPlay muted />
+          <Player.Root
+            src={[
+              {
+                type: 'hls',
+                src: `https://livepeercdn.studio/hls/${stream.playbackId}/index.m3u8`,
+              },
+            ]}
+            autoPlay
+          >
+            <Player.Container>
+              <Player.Video title={stream?.name} muted />
+            </Player.Container>
+          </Player.Root>
         )}
       </PlayerContainer>
 
@@ -104,7 +116,14 @@ const BasicStreamPlayer = ({ playbackId }) => {
       {stream ? (
         <StreamPlayer stream={stream} />
       ) : (
-        <Player title={'Stream'} playbackId={playbackId} autoPlay muted />
+        <Player.Root
+          src={[{ type: 'hls', src: `https://livepeercdn.studio/hls/${playbackId}/index.m3u8` }]}
+          autoPlay
+        >
+          <Player.Container>
+            <Player.Video title="Stream" muted />
+          </Player.Container>
+        </Player.Root>
       )}
     </>
   );
