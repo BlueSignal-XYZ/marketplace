@@ -6,7 +6,7 @@ import { isDemoMode } from '../../utils/demoMode';
 import { SearchBar } from '../../design-system/primitives/SearchBar';
 import { FilterChips } from '../../design-system/primitives/FilterChips';
 import { Table } from '../../design-system/primitives/Table';
-import { Badge } from '../../design-system/primitives/Badge';
+import { Badge, type BadgeVariant } from '../../design-system/primitives/Badge';
 import { EmptyState } from '../../design-system/primitives/EmptyState';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 import { Modal } from '../../design-system/primitives/Modal';
@@ -136,7 +136,7 @@ const FILTER_OPTIONS = [
 ];
 
 function creditTypeBadge(type: string) {
-  const variants: Record<string, any> = {
+  const variants: Record<string, BadgeVariant> = {
     qc: 'info',
     kc: 'positive',
     nitrogen: 'info',

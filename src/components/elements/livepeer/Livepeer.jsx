@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
 import { Stream } from './Stream';
 import { MediaPlayer, BasicStreamPlayer } from './elements';
 import { LivepeerAPI } from '../../../scripts/back_door';
@@ -15,28 +14,20 @@ import {
 
 function Livepeer() {
   const { serviceID, playbackID, liveID } = useParams();
-  const [livepeerClient, setLivepeerClient] = useState(null);
-  const [key, setKey] = useState();
+  const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchKey();
+    checkLivepeerAvailability();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (key) {
-      const client = createReactClient({
-        provider: studioProvider(key),
-      });
-      setLivepeerClient(client);
-    }
-  }, [key]);
-
-  const fetchKey = async () => {
+  const checkLivepeerAvailability = async () => {
     try {
-      setKey(await LivepeerAPI.getKey());
-    } catch (error) {
-      throw error;
+      const key = await LivepeerAPI.getKey();
+      setIsReady(!!key);
+    } catch {
+      setIsReady(false);
     } finally {
       setIsLoading(false);
     }
@@ -57,16 +48,16 @@ function Livepeer() {
     }
   };
 
-  if (livepeerClient === null) {
+  if (!isReady) {
     return isLoading ? <LoadingState /> : <ClientUnavailableState onRetry={handleRetry} />;
   }
 
   return (
-    <LivepeerConfig client={livepeerClient}>
+    <>
       {serviceID && renderService(serviceID)}
       {playbackID && <MediaPlayer playbackID={playbackID} />}
       {liveID && <BasicStreamPlayer playbackId={liveID} />}
-    </LivepeerConfig>
+    </>
   );
 }
 

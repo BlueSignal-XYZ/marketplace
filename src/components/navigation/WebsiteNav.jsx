@@ -460,7 +460,7 @@ function SolutionsDropdown() {
 
 // ── Component ───────────────────────────────────────────
 
-export function WebsiteNav({ onMenuClick }) {
+export function WebsiteNav({ onMenuClick: _onMenuClick }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const { STATES } = useAppContext();

@@ -9,7 +9,7 @@ import jsPDF from 'jspdf';
  */
 export const generateQuotePDF = async (quoteItems, products, options = {}) => {
   const {
-    companyName = 'BlueSignal',
+    companyName: _companyName = 'BlueSignal',
     customerName = '',
     quoteNumber = `QT-${Date.now().toString(36).toUpperCase()}`,
     validDays = 30,

@@ -442,14 +442,6 @@ const LoadingWrap = styled.div`
   padding: 24px 0;
 `;
 
-const ErrorText = styled.p`
-  font-family: ${({ theme }) => theme.fonts?.sans || 'inherit'};
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors?.negative || '#EF4444'};
-  text-align: center;
-  padding: 24px 0;
-`;
-
 // ── Component ────────────────────────────────────────────
 
 export function WQTProfilePage() {

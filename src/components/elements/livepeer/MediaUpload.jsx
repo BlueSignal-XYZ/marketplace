@@ -8,7 +8,7 @@ import { LivepeerAPI, AssetAPI } from '../../../scripts/back_door';
 import { logDev, proxyLivepeerOriginEndpoint } from '../../../scripts/helpers';
 import configs from '../../../../configs';
 import AssetDisplay from './AssetDisplay';
-import { Player } from '@livepeer/react';
+import * as Player from '@livepeer/react/player';
 import { Input } from '../../shared/input/Input';
 import FormSection from '../../shared/FormSection/FormSection';
 import { ButtonPrimary } from '../../shared/button/Button';
@@ -129,7 +129,7 @@ const VideoPreview = styled.video`
   ${previewStyles}
 `;
 
-const AssetPlayer = styled(Player)`
+const AssetPlayerContainer = styled.div`
   ${previewStyles}
 `;
 
@@ -301,7 +301,7 @@ const MediaUpload = () => {
       }
 
       if (tusEndpoint) {
-        const endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(tusEndpoint)}`;
+        const _endpoint = `${configs.server_url}${proxyLivepeerOriginEndpoint(tusEndpoint)}`;
         //https://github.com/tus/tus-js-client/blob/main/docs/api.md
         const upload = new Upload(activeFile, {
           endpoint: tusEndpoint,
@@ -403,7 +403,7 @@ const MediaUpload = () => {
           console.error(error);
         }
 
-        const { result } = await AssetAPI.addMetadata(asset.id, {
+        const { result: _metadataResult } = await AssetAPI.addMetadata(asset.id, {
           name: uploadName,
           description: uploadDescription,
           tags: ['NPC'],
@@ -437,7 +437,20 @@ const MediaUpload = () => {
         <InputPreviewContainer>
           {asset ? (
             <div className="flex-col">
-              <AssetPlayer title={asset.name} playbackId={asset.playbackId} />
+              <AssetPlayerContainer>
+                <Player.Root
+                  src={[
+                    {
+                      type: 'hls',
+                      src: `https://livepeercdn.studio/hls/${asset.playbackId}/index.m3u8`,
+                    },
+                  ]}
+                >
+                  <Player.Container>
+                    <Player.Video title={asset.name} />
+                  </Player.Container>
+                </Player.Root>
+              </AssetPlayerContainer>
             </div>
           ) : previewURL?.length > 0 && activeFile?.type === 'video/mp4' ? (
             <div className="flex-col">{renderPreview(previewURL, activeFile.type)}</div>

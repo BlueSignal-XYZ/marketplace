@@ -356,24 +356,6 @@ const AlertLink = styled(Link)`
   }
 `;
 
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 48px 20px;
-  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
-
-  h3 {
-    margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
-  }
-
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
-`;
-
 const Skeleton = styled.div`
   background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
   background-size: 200% 100%;
@@ -408,6 +390,7 @@ export default function AlertsPage() {
 
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [severityFilter, statusFilter, alerts]);
 
   const loadAlerts = async () => {

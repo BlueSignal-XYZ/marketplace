@@ -247,7 +247,7 @@ const SiteList = () => {
           if (customer) {
             customerData[id] = customer;
           }
-        } catch (e) {
+        } catch {
           // Ignore
         }
       }

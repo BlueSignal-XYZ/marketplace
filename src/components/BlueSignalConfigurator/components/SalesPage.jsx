@@ -1201,7 +1201,7 @@ export default function SalesPage() {
   };
 
   // Active section tracking
-  const [activeSection, setActiveSection] = useState('hero');
+  const [, setActiveSection] = useState('hero');
 
   // Product state
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -1210,7 +1210,7 @@ export default function SalesPage() {
   // Compare state
   const [compareMode, setCompareMode] = useState(false);
   const [compareProducts, setCompareProducts] = useState([]);
-  const [showComparison, setShowComparison] = useState(false);
+  const [, setShowComparison] = useState(false);
 
   // Quote state
   const [quoteItems, setQuoteItems] = useState([]);
@@ -1234,11 +1234,8 @@ export default function SalesPage() {
     message: '',
     product: '',
   });
-  const {
-    formState: contactFormState,
-    submitForm: submitContactForm,
-    reset: resetContactForm,
-  } = useFormSubmit('contact_submissions');
+  const { formState: contactFormState, submitForm: submitContactForm } =
+    useFormSubmit('contact_submissions');
 
   const toggleFAQ = (index) => {
     setExpandedFAQ(expandedFAQ === index ? null : index);
@@ -1300,6 +1297,7 @@ export default function SalesPage() {
     if (quoteOpen === 'true' || quoteOpen === '1') {
       setShowQuoteBuilder(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update URL when state changes
@@ -1321,7 +1319,7 @@ export default function SalesPage() {
     if (newSearch === currentSearch) return;
 
     navigate(`?${newSearch}`, { replace: true });
-  }, [selectedProduct, activeTab, quoteItems]);
+  }, [selectedProduct, activeTab, quoteItems, location.search, navigate]);
 
   // Intersection Observer for active section tracking
   useEffect(() => {
@@ -1349,6 +1347,7 @@ export default function SalesPage() {
     return () => {
       observers.forEach((observer) => observer.disconnect());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Navigation handlers
@@ -1359,6 +1358,7 @@ export default function SalesPage() {
       const top = ref.current.offsetTop - headerHeight;
       window.scrollTo({ top, behavior: 'smooth' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNavigate = (sectionId) => {
@@ -1426,13 +1426,6 @@ export default function SalesPage() {
   };
 
   // Quote mode handlers
-  const enableQuoteMode = () => {
-    setSearchParams((prev) => {
-      prev.set('quote', 'true');
-      return prev;
-    });
-  };
-
   const disableQuoteMode = () => {
     setSearchParams((prev) => {
       prev.delete('quote');
@@ -1524,7 +1517,6 @@ export default function SalesPage() {
     generateSpecsPDF(PRODUCTS[selectedProduct]);
   };
 
-  const quoteItemCount = quoteItems.reduce((sum, item) => sum + item.quantity, 0);
   const product = selectedProduct ? PRODUCTS[selectedProduct] : null;
 
   const renderTabContent = () => {

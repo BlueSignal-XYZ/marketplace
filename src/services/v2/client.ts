@@ -99,8 +99,12 @@ async function request<T>(
   let res: Response;
   try {
     res = await fetch(url, init);
-  } catch (err: any) {
-    throw new ApiError(err?.message || 'Network request failed', 0, 'NETWORK_ERROR');
+  } catch (err: unknown) {
+    throw new ApiError(
+      (err instanceof Error ? err.message : null) || 'Network request failed',
+      0,
+      'NETWORK_ERROR'
+    );
   }
 
   // 403: authenticated but not authorized — do NOT retry, return error normally
@@ -132,10 +136,10 @@ async function request<T>(
         window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
         throw new ApiError('Session expired. Please sign in again.', 401, 'AUTH_REQUIRED');
       }
-      const retryErr = await retryRes.json().catch(() => ({}));
+      const retryErr: Record<string, unknown> = await retryRes.json().catch(() => ({}));
       throw new ApiError(
-        (retryErr as any)?.error ||
-          (retryErr as any)?.message ||
+        (typeof retryErr.error === 'string' ? retryErr.error : null) ||
+          (typeof retryErr.message === 'string' ? retryErr.message : null) ||
           `Request failed (${retryRes.status})`,
         retryRes.status,
         'API_ERROR'

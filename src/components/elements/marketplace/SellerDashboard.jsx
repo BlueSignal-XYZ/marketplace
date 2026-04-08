@@ -238,14 +238,14 @@ const QuickActionsBar = styled.div`
 `;
 
 const SellerDashboard = () => {
-  const { STATES, ACTIONS } = useAppContext();
+  const { ACTIONS } = useAppContext();
   const navigate = useNavigate();
   const [price, setPrice] = useState('');
   const [userNFTs, setUserNFTs] = useState([]);
   const [userListedNFTs, setUserListedNFTs] = useState([]);
   const [highestBids, setHighestBids] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState('');
+  const [_isError, setIsError] = useState('');
 
   const { setResult } = ACTIONS || {};
 

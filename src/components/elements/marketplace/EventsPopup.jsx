@@ -147,7 +147,7 @@ const EventDetail = ({ event, filterType }) => {
   return (
     <EventDetailWrapper>
       <EventSummary onClick={toggleOpen} initial="initial" animate={isOpen ? 'open' : 'collapsed'}>
-        {Object.entries(mainInfo).map(([key, value], idx) => (
+        {Object.entries(mainInfo).map(([_key, value], idx) => (
           <Event key={idx}>
             <p key={idx}>{value}</p>
             <FaChevronDown />

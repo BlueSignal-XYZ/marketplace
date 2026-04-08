@@ -190,8 +190,8 @@ export function Table<T>({
       if (col.compare) {
         return sortDir === 'asc' ? col.compare(a, b) : col.compare(b, a);
       }
-      const aVal = (a as any)[col.key];
-      const bVal = (b as any)[col.key];
+      const aVal = (a as Record<string, string | number>)[col.key];
+      const bVal = (b as Record<string, string | number>)[col.key];
       if (aVal < bVal) return sortDir === 'asc' ? -1 : 1;
       if (aVal > bVal) return sortDir === 'asc' ? 1 : -1;
       return 0;
@@ -263,7 +263,9 @@ export function Table<T>({
                     $compact={compact}
                     $hideBelow={col.hideBelow}
                   >
-                    {col.render ? col.render(row, i) : (row as any)[col.key]}
+                    {col.render
+                      ? col.render(row, i)
+                      : ((row as Record<string, unknown>)[col.key] as React.ReactNode)}
                   </Td>
                 ))}
               </Tr>

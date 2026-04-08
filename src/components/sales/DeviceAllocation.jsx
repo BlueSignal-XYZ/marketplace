@@ -520,7 +520,7 @@ const DeviceAllocation = () => {
 
   const totalRequired = order.lineItems?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
   const totalAllocated = allocatedIds.length;
-  const isComplete = totalAllocated >= totalRequired;
+  const _isComplete = totalAllocated >= totalRequired;
 
   return (
     <PageContainer>

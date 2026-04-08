@@ -76,20 +76,6 @@ const P = styled.p`
   margin: 0 0 16px;
 `;
 
-const BackLink = styled.a`
-  display: inline-block;
-  font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
-  margin-bottom: 16px;
-  transition: color 0.15s;
-
-  &:hover {
-    color: #ffffff;
-  }
-`;
-
 export default function TermsPage() {
   useEffect(() => {
     document.title = 'Terms of Service — WaterQuality.Trading';

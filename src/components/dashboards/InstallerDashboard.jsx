@@ -331,10 +331,6 @@ const InstallerDashboard = () => {
     navigate('/dashboard/devices/add');
   };
 
-  const handleViewDevice = (deviceId) => {
-    navigate(`/dashboard/${deviceId}`);
-  };
-
   const handleViewJob = (_jobId) => {
     navigate(`/dashboard/alerts`);
   };

@@ -121,25 +121,6 @@ const Label = styled.label`
   color: ${({ theme }) => theme.colors?.ui700 || '#374151'};
 `;
 
-const Select = styled.select`
-  background: ${({ theme }) => theme.colors?.ui50 || '#fafafa'};
-  height: 44px;
-  padding: 0px 12px;
-  border-radius: 12px;
-  color: ${({ theme }) => theme.colors?.ui800 || '#27272a'};
-  width: 100%;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid ${({ theme }) => theme.colors?.ui300 || '#d4d4d8'};
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors?.primary500 || '#1D7072'};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors?.primary50 || '#EFFBFB'};
-  }
-`;
-
 const SiteCard = styled.div`
   border: 2px solid
     ${({ $selected, theme }) =>
@@ -414,7 +395,7 @@ export default function FullCommissioningWizard() {
     document.title = 'Commissioning — BlueSignal Cloud';
   }, []);
   const navigate = useNavigate();
-  const { STATES, ACTIONS } = useAppContext();
+  const { STATES } = useAppContext();
   const { user } = STATES || {};
   const toast = useToastContext();
 
