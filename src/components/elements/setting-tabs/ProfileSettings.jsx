@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useState } from 'react';
 import styled from 'styled-components';
 import NeptuneIcon from '../../../assets/icon.png';
@@ -60,55 +59,11 @@ const ProfileForm = styled.form`
   gap: 16px;
 `;
 
-const PasswordButton = styled(motion.div)`
-  background: none;
-  border: none;
-  color: #63c3d1;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 25%;
-  margin-bottom: 10px;
-  transition: all 0.3s ease-in-out;
-
-  ${({ active }) =>
-    active &&
-    `
-       padding: 10px;
-       border-radius: 0;
-    background: #333;
-    color: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 2px #000;
-    `}
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const SaveButton = styled(motion.div)`
-  padding: 10px 20px;
-  background-color: #63c3d1;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  &:hover {
-    background-color: #508a99;
-  }
-`;
-
 const ProfileSettingsTab = () => {
   const { STATES } = useAppContext();
 
   const [imagePreview, setImagePreview] = useState(NeptuneIcon);
-  const [showPasswordFields, setShowPasswordFields] = useState(false);
-
   const { user } = STATES || {};
-
-  const togglePasswordFields = () => {
-    setShowPasswordFields(!showPasswordFields);
-  };
 
   const handleImageClick = () => {
     document.getElementById('profileImageInput').click();

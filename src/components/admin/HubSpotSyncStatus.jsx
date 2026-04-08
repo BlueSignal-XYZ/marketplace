@@ -267,7 +267,7 @@ const HubSpotSyncStatus = () => {
   const [activeTab, setActiveTab] = useState('customers');
   const [customers, setCustomers] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [errors, setErrors] = useState([]);
+  const [errors, _setErrors] = useState([]);
   const [stats, setStats] = useState({
     totalCustomers: 0,
     syncedCustomers: 0,

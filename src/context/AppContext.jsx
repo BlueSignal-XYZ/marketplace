@@ -90,7 +90,7 @@ export const AppProvider = ({ children }) => {
             sessionStorage.setItem('user', JSON.stringify(toSessionUser(fallbackUser)));
             setUser(fallbackUser);
           }
-        } catch (error) {
+        } catch {
           // Still set Firebase user so they're not stuck
           // SECURITY: Do not assign default role client-side
           const fallbackUser = {
@@ -132,7 +132,7 @@ export const AppProvider = ({ children }) => {
         setUser(userdata);
         return true;
       }
-    } catch (error) {
+    } catch {
       logNotification('error', 'Failed to update user data. Please try again.');
     }
     return null;
@@ -167,7 +167,7 @@ export const AppProvider = ({ children }) => {
       localStorage.removeItem('cloud_welcome_dismissed'); // Reset welcome banner
       setUser(null);
       window.location.href = '/';
-    } catch (error) {
+    } catch {
       logNotification('error', 'Logout failed. Please try again.');
     }
   };

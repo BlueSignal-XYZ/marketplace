@@ -667,19 +667,6 @@ const CommissionWorkflow = () => {
     );
   }
 
-  const getTestIcon = (status) => {
-    switch (status) {
-      case 'passed':
-        return 'check_circle';
-      case 'failed':
-        return 'error';
-      case 'running':
-        return 'sync';
-      default:
-        return 'radio_button_unchecked';
-    }
-  };
-
   return (
     <PageContainer>
       <PageHeader>

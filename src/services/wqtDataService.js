@@ -108,7 +108,7 @@ export const fetchListings = async () => {
       if (response?.listings && response.listings.length > 0) {
         return response.listings.map(transformListingToCard);
       }
-    } catch (_e) {
+    } catch {
       // Fall through to RTDB
     }
 
@@ -191,7 +191,7 @@ export const fetchMapProjects = async () => {
       if (sites && sites.length > 0) {
         return sites.map(transformSiteToMapProject);
       }
-    } catch (_e) {
+    } catch {
       // Fall through to RTDB
     }
 

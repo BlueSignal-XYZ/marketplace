@@ -462,8 +462,6 @@ function GenericIcon({ color }) {
 export function HowItWorksSection({ audience: _audience, content, trust }) {
   // Use audience-specific value props when provided, otherwise default features
   const features = content || FEATURES;
-  const isAudienceContent = !!content;
-
   // Crossfade
   const [visible, setVisible] = useState(true);
   const [displayFeatures, setDisplayFeatures] = useState(features);

@@ -62,7 +62,7 @@ const MediaPlayer = ({ playbackID }) => {
   }, [playbackID]);
 
   const getMetrics = async () => {
-    const { viewership, error } = await LivepeerAPI.get.viewership(playbackID);
+    const { viewership, error: _viewershipError } = await LivepeerAPI.get.viewership(playbackID);
 
     if (viewership) {
       setMetrics(viewership);

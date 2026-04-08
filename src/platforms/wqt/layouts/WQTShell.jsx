@@ -39,12 +39,6 @@ const AppContainer = styled.div`
   background: ${({ theme }) => theme.colors.background};
 `;
 
-const AppBody = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
-
 const MainContent = styled.main`
   flex: 1;
   display: flex;

@@ -177,7 +177,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'login', platform = '
           // Send email verification (best-effort — don't block signup)
           try {
             await sendEmailVerification(result.user);
-          } catch (_) {
+          } catch {
             // Silently continue — user can request verification later
           }
           onClose?.();

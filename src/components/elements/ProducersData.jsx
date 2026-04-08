@@ -55,14 +55,6 @@ const Producer = styled(Row)`
   }
 `;
 
-const Key = styled.span`
-  font-weight: bold;
-  margin-right: 10px;
-  @media (max-width: 768px) {
-    margin-right: 0;
-  }
-`;
-
 const Value = styled.span`
   flex-grow: 1;
   text-align: left;

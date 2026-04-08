@@ -1,41 +1,10 @@
 import { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { colors } from '../../data/styles';
 import { motion } from 'framer-motion';
 import { formatCertificateID } from '../../scripts/helpers';
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const slideDown = keyframes`
-  from {
-    height: 0;
-    opacity: 0;
-  }
-  to {
-    height: auto;
-    opacity: 1;
-  }
-`;
-
-const slideUp = keyframes`
-  from {
-    height: auto;
-    opacity: 1;
-  }
-  to {
-    height: 0;
-    opacity: 0;
-  }
-`;
 
 const Container = styled(motion.div)`
   display: flex;
@@ -90,13 +59,6 @@ const Value = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const ArgsContainer = styled.div`
-  overflow: hidden;
-  height: ${({ expanded }) => (expanded ? 'auto' : '0')};
-  animation: ${({ expanded }) => (expanded ? slideDown : slideUp)} 0.5s ease-in-out;
-  opacity: ${({ expanded }) => (expanded ? '1' : '0')};
 `;
 
 const ViewReceiptsButton = styled.button`

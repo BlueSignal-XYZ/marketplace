@@ -1,7 +1,7 @@
 // /src/components/cloud/AlertDetailPage.jsx
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
 import { AlertsAPI } from '../../scripts/back_door';
 import { getRelativeTime } from '../../services/cloudMockAPI';
@@ -191,7 +191,6 @@ const Skeleton = styled.div`
 
 export default function AlertDetailPage() {
   const { alertId } = useParams();
-  const navigate = useNavigate();
   const [alert, setAlert] = useState(null);
   const [loading, setLoading] = useState(true);
 

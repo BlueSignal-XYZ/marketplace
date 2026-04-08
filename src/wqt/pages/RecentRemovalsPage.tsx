@@ -4,7 +4,7 @@ import type { RegistryCredit } from '../../data/mockRegistryData';
 import { fetchRetiredCredits } from '../../services/wqtDataService';
 import { FilterChips } from '../../design-system/primitives/FilterChips';
 import { Table } from '../../design-system/primitives/Table';
-import { Badge } from '../../design-system/primitives/Badge';
+import { Badge, type BadgeVariant } from '../../design-system/primitives/Badge';
 import { EmptyState } from '../../design-system/primitives/EmptyState';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
 import { Modal } from '../../design-system/primitives/Modal';
@@ -141,7 +141,7 @@ const TYPE_OPTIONS = [
 ];
 
 function creditTypeBadge(type: string) {
-  const variants: Record<string, any> = {
+  const variants: Record<string, BadgeVariant> = {
     nitrogen: 'info',
     phosphorus: 'positive',
     stormwater: 'neutral',

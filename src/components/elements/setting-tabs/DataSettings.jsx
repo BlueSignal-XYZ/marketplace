@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import { ButtonDanger, ButtonSecondary } from '../../shared/button/Button';
 const DataContainer = styled.div`
   display: flex;
@@ -9,29 +8,6 @@ const DataContainer = styled.div`
   box-sizing: border-box;
   max-width: 320px;
   margin: 0 auto;
-`;
-
-const Button = styled(motion.div)`
-  padding: 10px 20px;
-  background-color: #63c3d1;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-
-  &:hover {
-    background-color: #508a99;
-  }
-`;
-
-const DangerButton = styled(Button)`
-  background-color: #e74c3c;
-  &:hover {
-    background-color: #c0392b;
-  }
 `;
 
 const DataSettingsTab = () => {

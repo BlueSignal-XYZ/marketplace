@@ -35,8 +35,8 @@ function getIcon(type: ToastType): string {
   }
 }
 
-function getSemanticColors(type: ToastType, theme: any) {
-  const c = theme.components;
+function getSemanticColors(type: ToastType, theme: import('styled-components').DefaultTheme) {
+  const c = theme.components as Record<string, string>;
   switch (type) {
     case 'success':
       return { bg: c.toastSuccessBg, border: c.toastSuccessBorder };
@@ -56,7 +56,7 @@ const slideIn = keyframes`
   to   { transform: translateX(0);    opacity: 1; }
 `;
 
-const slideOut = keyframes`
+const _slideOut = keyframes`
   from { transform: translateX(0);    opacity: 1; }
   to   { transform: translateX(100%); opacity: 0; }
 `;

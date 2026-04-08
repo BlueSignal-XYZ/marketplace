@@ -89,36 +89,8 @@ const MapContainer = styled.div`
   flex: 2;
 `;
 
-const InfoWindowContent = styled.div`
-  border-radius: 5px;
-  padding: 10px;
-  max-width: 200px;
-  overflow: hidden;
-  color: ${colorScheme.accent};
-
-  h4 {
-    margin: 0;
-    padding: 5px 0;
-    font-size: 1rem;
-    color: ${colorScheme.accent};
-  }
-
-  p {
-    color: black;
-    margin: 5px 0;
-    font-size: 0.8rem;
-  }
-
-  a {
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
 function GoogleStoreLocator({ storesData }) {
-  const [selectedStore, setSelectedStore] = useState(null);
+  const [_selectedStore, setSelectedStore] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredStores, setFilteredStores] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);

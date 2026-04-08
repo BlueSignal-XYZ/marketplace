@@ -76,7 +76,7 @@ const Welcome = ({ redirectTo: redirectToProp }) => {
   const redirectTo = redirectToProp ?? location.state?.redirectTo;
 
   const [cardState, setCardState] = useState('');
-  const [googleData, setGoogleData] = useState({});
+  const [googleData] = useState({});
   const { user } = STATES || {};
   const { updateUser } = ACTIONS || {};
 
