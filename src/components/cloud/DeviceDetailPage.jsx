@@ -1,5 +1,5 @@
 // /src/components/cloud/DeviceDetailPage.jsx
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
@@ -490,17 +490,7 @@ export default function DeviceDetailPage() {
     [device?.latestReadings]
   );
 
-  useEffect(() => {
-    loadDeviceData();
-  }, [deviceId]);
-
-  useEffect(() => {
-    if (activeTab === 'livedata') {
-      loadTimeSeriesData();
-    }
-  }, [activeTab, timeRange, deviceId]);
-
-  const loadDeviceData = async () => {
+  const loadDeviceData = useCallback(async () => {
     setLoading(true);
     try {
       // v2 API calls — routed through api.js (handles demo/real switching)
@@ -558,7 +548,18 @@ export default function DeviceDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [deviceId]);
+
+  useEffect(() => {
+    loadDeviceData();
+  }, [loadDeviceData]);
+
+  useEffect(() => {
+    if (activeTab === 'livedata') {
+      loadTimeSeriesData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, timeRange, deviceId]);
 
   const loadTimeSeriesData = async () => {
     setLoadingChart(true);

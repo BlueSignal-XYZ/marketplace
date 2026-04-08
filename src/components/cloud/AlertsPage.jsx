@@ -390,6 +390,7 @@ export default function AlertsPage() {
 
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [severityFilter, statusFilter, alerts]);
 
   const loadAlerts = async () => {
