@@ -1,0 +1,290 @@
+# Frontend Quality Scanning
+# Builds all 3 sites, runs Lighthouse CI audits, and reports bundle sizes on every PR.
+# All checks are advisory — they post PR comments but do not block merging.
+
+name: Frontend Checks
+
+'on':
+  pull_request:
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  # ------------------------------------------------------------------
+  # Build all three sites and upload artifacts
+  # ------------------------------------------------------------------
+  build:
+    name: Build All Sites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci --force
+
+      - name: Build all sites
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+          VITE_FIREBASE_DATABASE_URL: ${{ secrets.VITE_FIREBASE_DATABASE_URL }}
+          VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_LIVEPEER_API_KEY: ${{ secrets.VITE_LIVEPEER_API_KEY }}
+        run: npm run build
+
+      - name: Upload dist-wqt
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-wqt
+          path: dist-wqt/
+          retention-days: 3
+
+      - name: Upload dist-cloud
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-cloud
+          path: dist-cloud/
+          retention-days: 3
+
+      - name: Upload dist-landing
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-landing
+          path: dist-landing/
+          retention-days: 3
+
+  # ------------------------------------------------------------------
+  # Lighthouse CI — audit each site for perf, a11y, SEO, best practices
+  # ------------------------------------------------------------------
+  lighthouse:
+    name: Lighthouse Audit
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download all dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: .
+
+      - name: Install Lighthouse CI and serve
+        run: npm install -g @lhci/cli serve
+
+      - name: Start local servers
+        run: |
+          npx serve -s dist-wqt -l 8080 --no-clipboard &
+          npx serve -s dist-cloud -l 8081 --no-clipboard &
+          npx serve -s dist-landing -l 8082 --no-clipboard &
+          # Wait for servers to be ready
+          sleep 3
+
+      - name: Run Lighthouse — Marketplace (WQT)
+        id: lh_wqt
+        continue-on-error: true
+        run: |
+          lhci autorun --collect.url=http://localhost:8080 \
+            --upload.outputDir=./lhci-wqt 2>&1 | tee lhci-wqt.log
+          # Extract scores from the JSON results
+          if ls .lighthouseci/lhr-*.json 1>/dev/null 2>&1; then
+            PERF=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.performance.score*100))")
+            A11Y=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.accessibility.score*100))")
+            BP=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories['best-practices'].score*100))")
+            SEO=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.seo.score*100))")
+            echo "perf=$PERF" >> "$GITHUB_OUTPUT"
+            echo "a11y=$A11Y" >> "$GITHUB_OUTPUT"
+            echo "bp=$BP" >> "$GITHUB_OUTPUT"
+            echo "seo=$SEO" >> "$GITHUB_OUTPUT"
+          fi
+          # Move results so they don't conflict with next run
+          mv .lighthouseci lhci-results-wqt 2>/dev/null || true
+
+      - name: Run Lighthouse — Cloud
+        id: lh_cloud
+        continue-on-error: true
+        run: |
+          lhci autorun --collect.url=http://localhost:8081 \
+            --upload.outputDir=./lhci-cloud 2>&1 | tee lhci-cloud.log
+          if ls .lighthouseci/lhr-*.json 1>/dev/null 2>&1; then
+            PERF=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.performance.score*100))")
+            A11Y=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.accessibility.score*100))")
+            BP=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories['best-practices'].score*100))")
+            SEO=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.seo.score*100))")
+            echo "perf=$PERF" >> "$GITHUB_OUTPUT"
+            echo "a11y=$A11Y" >> "$GITHUB_OUTPUT"
+            echo "bp=$BP" >> "$GITHUB_OUTPUT"
+            echo "seo=$SEO" >> "$GITHUB_OUTPUT"
+          fi
+          mv .lighthouseci lhci-results-cloud 2>/dev/null || true
+
+      - name: Run Lighthouse — Landing
+        id: lh_landing
+        continue-on-error: true
+        run: |
+          lhci autorun --collect.url=http://localhost:8082 \
+            --upload.outputDir=./lhci-landing 2>&1 | tee lhci-landing.log
+          if ls .lighthouseci/lhr-*.json 1>/dev/null 2>&1; then
+            PERF=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.performance.score*100))")
+            A11Y=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.accessibility.score*100))")
+            BP=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories['best-practices'].score*100))")
+            SEO=$(node -e "const r=require('./.lighthouseci/'+(require('fs').readdirSync('.lighthouseci').filter(f=>f.startsWith('lhr-')&&f.endsWith('.json')).pop()));console.log(Math.round(r.categories.seo.score*100))")
+            echo "perf=$PERF" >> "$GITHUB_OUTPUT"
+            echo "a11y=$A11Y" >> "$GITHUB_OUTPUT"
+            echo "bp=$BP" >> "$GITHUB_OUTPUT"
+            echo "seo=$SEO" >> "$GITHUB_OUTPUT"
+          fi
+          mv .lighthouseci lhci-results-landing 2>/dev/null || true
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: |
+            lhci-results-wqt/
+            lhci-results-cloud/
+            lhci-results-landing/
+          retention-days: 14
+
+      - name: Post Lighthouse results to PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const scores = {
+              wqt: {
+                perf: '${{ steps.lh_wqt.outputs.perf }}' || '—',
+                a11y: '${{ steps.lh_wqt.outputs.a11y }}' || '—',
+                bp:   '${{ steps.lh_wqt.outputs.bp }}'   || '—',
+                seo:  '${{ steps.lh_wqt.outputs.seo }}'  || '—',
+              },
+              cloud: {
+                perf: '${{ steps.lh_cloud.outputs.perf }}' || '—',
+                a11y: '${{ steps.lh_cloud.outputs.a11y }}' || '—',
+                bp:   '${{ steps.lh_cloud.outputs.bp }}'   || '—',
+                seo:  '${{ steps.lh_cloud.outputs.seo }}'  || '—',
+              },
+              landing: {
+                perf: '${{ steps.lh_landing.outputs.perf }}' || '—',
+                a11y: '${{ steps.lh_landing.outputs.a11y }}' || '—',
+                bp:   '${{ steps.lh_landing.outputs.bp }}'   || '—',
+                seo:  '${{ steps.lh_landing.outputs.seo }}'  || '—',
+              },
+            };
+
+            function badge(score) {
+              if (score === '—') return '—';
+              const n = parseInt(score, 10);
+              if (n >= 90) return `🟢 ${score}`;
+              if (n >= 50) return `🟠 ${score}`;
+              return `🔴 ${score}`;
+            }
+
+            const body = [
+              '## Lighthouse Report',
+              '',
+              '| Site | Performance | Accessibility | Best Practices | SEO |',
+              '|------|------------|---------------|----------------|-----|',
+              `| Marketplace | ${badge(scores.wqt.perf)} | ${badge(scores.wqt.a11y)} | ${badge(scores.wqt.bp)} | ${badge(scores.wqt.seo)} |`,
+              `| Cloud | ${badge(scores.cloud.perf)} | ${badge(scores.cloud.a11y)} | ${badge(scores.cloud.bp)} | ${badge(scores.cloud.seo)} |`,
+              `| Landing | ${badge(scores.landing.perf)} | ${badge(scores.landing.a11y)} | ${badge(scores.landing.bp)} | ${badge(scores.landing.seo)} |`,
+              '',
+              '> Scores from Lighthouse CI (median of 3 runs). Full HTML reports available in [workflow artifacts](' + `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}` + ').',
+              '> 🟢 90+ · 🟠 50-89 · 🔴 <50',
+            ].join('\n');
+
+            // Find and update existing comment, or create a new one
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const marker = '## Lighthouse Report';
+            const existing = comments.find(c => c.body && c.body.startsWith(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+  # ------------------------------------------------------------------
+  # Bundle size reporting
+  # ------------------------------------------------------------------
+  bundle-size:
+    name: Bundle Size Report
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download all dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: .
+
+      - name: Measure bundle sizes
+        id: sizes
+        run: |
+          REPORT=$(bash scripts/check-bundle-sizes.sh)
+          echo "report<<SIZES_EOF" >> "$GITHUB_OUTPUT"
+          echo "$REPORT" >> "$GITHUB_OUTPUT"
+          echo "SIZES_EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Post bundle size report to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `${{ steps.sizes.outputs.report }}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const marker = '## Bundle Size Report';
+            const existing = comments.find(c => c.body && c.body.startsWith(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
