@@ -640,7 +640,7 @@ const SystemDiagram = () => (
 
     {/* ── Relay Output / Chemical Doser ── */}
     <g>
-      {/* Trace from relay area through enclosure */}
+      {/* Trace from relay area — routed around PCB to avoid overlap */}
       <path
         d="M460 30 L460 0 L460 -5"
         stroke={C.a(0.15)}
@@ -648,8 +648,9 @@ const SystemDiagram = () => (
         strokeDasharray="2 3"
         fill="none"
       />
+      {/* Cable gland to PCB right edge, down outside PCB, out enclosure bottom */}
       <path
-        d="M460 30 L460 380"
+        d="M460 30 L555 30 L555 310 L460 310 L460 380"
         stroke={C.a(0.3)}
         strokeWidth="1.5"
         strokeDasharray="5 5"

@@ -8,6 +8,8 @@ const Banner = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.w08};
   border-radius: 20px;
   padding: 56px 48px;
+  width: fit-content;
+  max-width: 100%;
 
   ${({ theme }) => theme.media.md} {
     padding: 32px 20px;
