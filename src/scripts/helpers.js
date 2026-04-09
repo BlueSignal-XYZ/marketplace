@@ -127,11 +127,6 @@ export const formatCertificate = (object) => {
 
   // Iterate over the keys of the original object
   for (const key in object) {
-    // // Check if the key is a number or not
-    // if (!isNaN(key)) {
-    //   continue; // Skip number keys
-    // }
-
     // Copy the value to the new object using the descriptive key
     if (object[key]?._isBigNumber) {
       result[key] = Number(object[key]);

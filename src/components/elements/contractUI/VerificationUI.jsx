@@ -282,14 +282,6 @@ function VerificationUI() {
   const disputeMutation = useMutation(AssetAPI.dispute);
   const resolveMutation = useMutation(AssetAPI.closeDispute);
 
-  // useEffect(() => {
-  //   if (Interactions) {
-  //     Interactions.Listeners.onDataSubmitted(({ dataId, farmer }) => {
-  //       console.log(`Data with ID ${dataId} submitted by ${farmer}`);
-  //     });
-  //   }
-  // }, [Interactions]);
-
   const handleMutation = async (mutation, params = null) => {
     setIsLoading(true);
     try {
