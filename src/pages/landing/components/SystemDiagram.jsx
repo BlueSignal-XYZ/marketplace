@@ -69,6 +69,10 @@ const SystemDiagram = () => (
         <stop offset="0%" stopColor="#171a1d" />
         <stop offset="100%" stopColor="#0f1114" />
       </linearGradient>
+      {/* Clip path to hide wiring that passes behind the PCB */}
+      <clipPath id="outsidePCB">
+        <path d="M0 0 H660 V580 H0 Z M110 55 V290 H550 V55 Z" clipRule="evenodd" />
+      </clipPath>
     </defs>
 
     {/* ══════════════════════════════════════════════════════
@@ -308,28 +312,21 @@ const SystemDiagram = () => (
           strokeWidth="0.4"
         />
 
-        {/* BlueSignal logo (simplified) */}
-        <path
-          d="M505 200 Q512 210 505 220"
-          fill="none"
-          stroke={C.w(0.12)}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M509 202 Q516 212 509 222"
-          fill="none"
-          stroke={C.w(0.1)}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M513 204 Q520 214 513 224"
-          fill="none"
-          stroke={C.w(0.08)}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
+        {/* BlueSignal wordmark */}
+        <text
+          x="530"
+          y="276"
+          textAnchor="middle"
+          fill={C.w(0.12)}
+          style={{
+            fontSize: '7px',
+            fontFamily: "'IBM Plex Mono', monospace",
+            fontWeight: 600,
+            letterSpacing: '0.06em',
+          }}
+        >
+          BlueSignal
+        </text>
 
         {/* Internal traces (subtle) */}
         <path d="M148 100 L148 110" stroke={C.r(0.1)} strokeWidth="0.4" strokeDasharray="2 3" />
@@ -640,7 +637,7 @@ const SystemDiagram = () => (
 
     {/* ── Relay Output / Chemical Doser ── */}
     <g>
-      {/* Trace from relay area — routed around PCB to avoid overlap */}
+      {/* Trace above enclosure (small stub) */}
       <path
         d="M460 30 L460 0 L460 -5"
         stroke={C.a(0.15)}
@@ -648,14 +645,15 @@ const SystemDiagram = () => (
         strokeDasharray="2 3"
         fill="none"
       />
-      {/* Cable gland to PCB right edge, down outside PCB, out enclosure bottom */}
+      {/* Relay trace — straight down from cable gland to doser, clipped behind PCB */}
       <path
-        d="M460 30 L555 30 L555 310 L460 310 L460 380"
+        d="M460 30 L460 380"
         stroke={C.a(0.3)}
         strokeWidth="1.5"
         strokeDasharray="5 5"
         className="data-flow"
         fill="none"
+        clipPath="url(#outsidePCB)"
       />
       {/* Doser housing */}
       <rect
