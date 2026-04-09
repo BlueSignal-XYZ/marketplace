@@ -92,7 +92,6 @@ function LivepeerWrapper({ children }) {
 
   useEffect(() => {
     checkAvailability();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAvailability = async () => {
