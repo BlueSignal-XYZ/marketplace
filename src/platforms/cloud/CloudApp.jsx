@@ -19,6 +19,8 @@ import { AuthModal } from '../../shared/components/AuthModal';
 import Confirmation from '../../components/popups/ConfirmationPopup';
 import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
 import { lazyWithRetry } from '../../shared/utils/lazyWithRetry';
+import { useOnlineStatus } from '../../hooks/useOnlineStatus';
+import { OfflineBanner } from '../../shared/components/OfflineBanner';
 
 import { Welcome } from '../../routes';
 import { Skeleton } from '../../design-system/primitives/Skeleton';
@@ -144,6 +146,7 @@ function CloudAuthGate({ children, authLoading, isOnboardingRoute = false }) {
 export function CloudApp({ user, authLoading }) {
   const location = useLocation();
   const isAuthLanding = location.pathname === '/';
+  const isOnline = useOnlineStatus();
   const [sessionExpiredOpen, setSessionExpiredOpen] = useState(false);
   useEffect(() => {
     const handler = () => setSessionExpiredOpen(true);
@@ -454,6 +457,7 @@ export function CloudApp({ user, authLoading }) {
                 </Routes>
               </Suspense>
             </CloudShell>
+            {!isOnline && <OfflineBanner />}
             <AuthModal
               isOpen={sessionExpiredOpen}
               onClose={() => setSessionExpiredOpen(false)}

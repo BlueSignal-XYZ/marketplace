@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import RevealOnScroll from './RevealOnScroll';
+import { fetchWithTimeout } from '../../../utils/fetchWithTimeout';
 
 const GOOGLE_SHEETS_URL =
   'https://script.google.com/macros/s/AKfycbw0ixNkMTXHbLsykRpiQ-KTlIWkBZ8yTlD9R5QjAs4jT_9b1GrZnHeSbvVSuiLqNMWARA/exec';
@@ -293,7 +294,7 @@ export function CTASection({ audience: _audience, content }) {
     payload.append('source', 'waterquality.trading');
 
     try {
-      await fetch(GOOGLE_SHEETS_URL, {
+      await fetchWithTimeout(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
         body: payload,

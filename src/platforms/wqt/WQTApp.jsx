@@ -18,6 +18,8 @@ import { AuthModal } from '../../shared/components/AuthModal';
 import Confirmation from '../../components/popups/ConfirmationPopup';
 import { AUTH_SESSION_EXPIRED_EVENT } from '../../services/v2/client';
 import { lazyWithRetry } from '../../shared/utils/lazyWithRetry';
+import { useOnlineStatus } from '../../hooks/useOnlineStatus';
+import { OfflineBanner } from '../../shared/components/OfflineBanner';
 
 // WQT Landing page (unauthenticated visitors — not lazy, above fold)
 import { WQTLandingPage } from './landing/WQTLandingPage';
@@ -115,6 +117,7 @@ function WQTAuthGate({ children, user, authLoading }) {
 export function WQTApp({ user, authLoading }) {
   const location = useLocation();
   const isAuthLanding = location.pathname === '/';
+  const isOnline = useOnlineStatus();
   const [sessionExpiredOpen, setSessionExpiredOpen] = useState(false);
 
   useEffect(() => {
@@ -259,6 +262,7 @@ export function WQTApp({ user, authLoading }) {
                 </Routes>
               </Suspense>
             </WQTShell>
+            {!isOnline && <OfflineBanner />}
             <AuthModal
               isOpen={sessionExpiredOpen}
               onClose={() => setSessionExpiredOpen(false)}

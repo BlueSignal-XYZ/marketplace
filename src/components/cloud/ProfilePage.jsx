@@ -423,18 +423,30 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true);
     setError(null);
     setSuccess(null);
 
+    if (!profile.displayName?.trim()) {
+      setError('Display name is required.');
+      return;
+    }
+
+    if (!navigator.onLine) {
+      setError('You are offline. Please check your connection and try again.');
+      return;
+    }
+
+    setSaving(true);
+
     try {
-      await UserProfileAPI.update(user.uid, profile);
+      const trimmedProfile = { ...profile, displayName: profile.displayName.trim() };
+      await UserProfileAPI.update(user.uid, trimmedProfile);
       setSuccess('Profile updated successfully!');
 
       // Always sync full profile to local context
       ACTIONS.updateUser(user.uid, {
         ...user,
-        ...profile,
+        ...trimmedProfile,
       });
     } catch (err) {
       const serverMsg = err?.response?.data?.error || err?.response?.data?.message;

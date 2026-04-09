@@ -53,6 +53,7 @@ export class ApiError extends Error {
 // ── Base URL ─────────────────────────────────────────────
 
 const BASE_URL = configs.server_url;
+const REQUEST_TIMEOUT = 30000; // 30 seconds
 
 // ── Auth token helper ────────────────────────────────────
 
@@ -97,14 +98,18 @@ async function request<T>(
   }
 
   let res: Response;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
   try {
-    res = await fetch(url, init);
+    res = await fetch(url, { ...init, signal: controller.signal });
   } catch (err: unknown) {
     throw new ApiError(
       (err instanceof Error ? err.message : null) || 'Network request failed',
       0,
       'NETWORK_ERROR'
     );
+  } finally {
+    clearTimeout(timeoutId);
   }
 
   // 403: authenticated but not authorized — do NOT retry, return error normally
@@ -127,7 +132,14 @@ async function request<T>(
       if (body && method !== 'GET') {
         retryInit.body = JSON.stringify(body);
       }
-      const retryRes = await fetch(url, retryInit);
+      const retryController = new AbortController();
+      const retryTimeoutId = setTimeout(() => retryController.abort(), REQUEST_TIMEOUT);
+      let retryRes: Response;
+      try {
+        retryRes = await fetch(url, { ...retryInit, signal: retryController.signal });
+      } finally {
+        clearTimeout(retryTimeoutId);
+      }
       if (retryRes.ok) {
         const retryJson = await retryRes.json();
         if (retryJson.success) return retryJson.data;

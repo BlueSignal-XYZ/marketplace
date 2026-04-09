@@ -1,6 +1,7 @@
 import axios from 'axios';
 import configs from '../../configs';
 import { auth } from '../apis/firebase';
+import { AUTH_SESSION_EXPIRED_EVENT } from '../services/v2/client';
 
 // Lightweight process polyfill for browser
 if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
@@ -40,7 +41,8 @@ const authPost = async (url, data = {}) => {
         const retryHeaders = { Authorization: `Bearer ${freshToken}` };
         return await axios.post(url, data, { headers: retryHeaders, timeout: REQUEST_TIMEOUT });
       } catch {
-        // Retry failed — rethrow original
+        // Retry failed — notify app of session expiry
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
       }
     }
     throw error;
@@ -59,7 +61,8 @@ const authGet = async (url, params = {}) => {
         const retryHeaders = { Authorization: `Bearer ${freshToken}` };
         return await axios.get(url, { headers: retryHeaders, params, timeout: REQUEST_TIMEOUT });
       } catch {
-        // Retry failed
+        // Retry failed — notify app of session expiry
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
       }
     }
     throw error;

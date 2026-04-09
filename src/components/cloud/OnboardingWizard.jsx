@@ -304,12 +304,23 @@ export default function OnboardingWizard() {
   };
 
   const handleComplete = async () => {
-    setLoading(true);
     setError(null);
+
+    if (!formData.displayName?.trim()) {
+      setError('Please enter your name.');
+      return;
+    }
+
+    if (!formData.role) {
+      setError('Please select a role.');
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const profilePayload = {
-        displayName: formData.displayName,
+        displayName: formData.displayName.trim(),
         company: formData.company,
         phone: formData.phone,
         bio: formData.bio,
@@ -320,12 +331,10 @@ export default function OnboardingWizard() {
 
       await UserProfileAPI.update(user.uid, profilePayload);
 
-      // Update local user state (uid, userData)
+      // Sync full profile payload to local context
       await ACTIONS.updateUser(user.uid, {
         ...user,
-        displayName: formData.displayName,
-        role: formData.role,
-        onboardingCompleted: true,
+        ...profilePayload,
       });
 
       const dashboardRoutes = {

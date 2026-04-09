@@ -37,8 +37,24 @@ const UploadMeta = styled.p`
   margin: 0;
 `;
 
+const LoadingText = styled.p`
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors?.ui500 || '#6b7280'};
+  text-align: center;
+  padding: 24px 0;
+`;
+
+const ErrorText = styled.p`
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors?.error || '#dc2626'};
+  text-align: center;
+  padding: 24px 0;
+`;
+
 const UploadsTab = ({ userId }) => {
   const [uploads, setUploads] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,20 +62,48 @@ const UploadsTab = ({ userId }) => {
   }, [userId]);
 
   const fetchVideos = async () => {
-    const { videos, error } = await UserAPI.get.videos(userId);
+    if (!userId) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { videos, error: apiError } = await UserAPI.get.videos(userId);
 
-    if (error) {
-      console.error(videos);
-    }
+      if (apiError) {
+        console.error('[UploadsTab] Fetch error:', apiError);
+        setError('Failed to load uploads. Please try again.');
+        return;
+      }
 
-    if (videos) {
-      setUploads(videos);
+      if (videos) {
+        setUploads(videos);
+      }
+    } catch (err) {
+      console.error('[UploadsTab] Unexpected error:', err);
+      setError('Failed to load uploads. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUpload = () => {
     navigate('/features/live/upload-media');
   };
+
+  if (loading) {
+    return (
+      <Container>
+        <LoadingText>Loading uploads...</LoadingText>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <ErrorText>{error}</ErrorText>
+      </Container>
+    );
+  }
 
   return (
     <Container>

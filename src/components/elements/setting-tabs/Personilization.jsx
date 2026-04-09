@@ -81,6 +81,10 @@ const PersonalizationTab = ({ APP: _APP }) => {
 
   const handleSave = async () => {
     if (!user?.uid) return;
+    if (!navigator.onLine) {
+      logNotification?.('error', 'You are offline. Please check your connection and try again.');
+      return;
+    }
     setSaving(true);
     try {
       await UserProfileAPI.update(user.uid, {

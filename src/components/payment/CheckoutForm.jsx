@@ -21,6 +21,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { NPCCreditsAPI } from '../../scripts/back_door';
 import { useAppContext } from '../../context/AppContext';
+import { fetchWithTimeout } from '../../utils/fetchWithTimeout';
 
 const Form = ({ item }) => {
   const stripe = useStripe();
@@ -166,7 +167,7 @@ const CheckoutForm = ({ item }) => {
   const { payAmount } = item || {};
 
   useEffect(() => {
-    fetch(`${serverUrl}/stripe/config`, {
+    fetchWithTimeout(`${serverUrl}/stripe/config`, {
       method: 'POST',
     }).then(async (r) => {
       const { publishableKey } = await r.json();
@@ -177,7 +178,7 @@ const CheckoutForm = ({ item }) => {
   // Create Payment Intent
   useEffect(() => {
     if (serverUrl && stripePromise && payAmount >= 50) {
-      fetch(`${serverUrl}/stripe/create/payment_intent`, {
+      fetchWithTimeout(`${serverUrl}/stripe/create/payment_intent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

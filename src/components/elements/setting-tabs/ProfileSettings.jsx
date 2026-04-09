@@ -116,20 +116,37 @@ const ProfileSettingsTab = () => {
       return;
     }
 
+    if (!displayName?.trim()) {
+      logNotification?.('error', 'Display name is required.');
+      return;
+    }
+
+    if (!username?.trim()) {
+      logNotification?.('error', 'Username is required.');
+      return;
+    }
+
+    if (!navigator.onLine) {
+      logNotification?.('error', 'You are offline. Please check your connection and try again.');
+      return;
+    }
+
     if (!user?.uid) return;
     setSaving(true);
     try {
+      const trimmedName = displayName.trim();
+      const trimmedUsername = username.trim();
       await UserProfileAPI.update(user.uid, {
-        displayName,
-        username,
+        displayName: trimmedName,
+        username: trimmedUsername,
         role,
       });
 
       // Sync updated profile to local context
       ACTIONS.updateUser(user.uid, {
         ...user,
-        displayName,
-        username,
+        displayName: trimmedName,
+        username: trimmedUsername,
         role,
       });
 
