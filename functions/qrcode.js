@@ -3,7 +3,7 @@
  * Handles QR code generation and validation for device registration
  */
 
-const functions = require("firebase-functions");
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
 

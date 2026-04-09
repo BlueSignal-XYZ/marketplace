@@ -5,7 +5,7 @@
  * When complete, computes baseline statistics and locks the baseline.
  */
 
-const functions = require("firebase-functions");
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 
 exports.checkBaselineCompletion = functions.pubsub
