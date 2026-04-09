@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import NeptuneIcon from '../../../assets/icon.png';
@@ -6,6 +6,7 @@ import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
 import FormSection from '../../shared/FormSection/FormSection';
 import { Input } from '../../shared/input/Input';
 import { useAppContext } from '../../../context/AppContext';
+import { UserProfileAPI } from '../../../scripts/back_door';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -60,11 +61,32 @@ const ProfileForm = styled.form`
   gap: 16px;
 `;
 
+const ButtonRow = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+`;
+
 const ProfileSettingsTab = () => {
-  const { STATES } = useAppContext();
+  const { STATES, ACTIONS } = useAppContext();
+  const { user } = STATES || {};
+  const { logNotification } = ACTIONS || {};
 
   const [imagePreview, setImagePreview] = useState(NeptuneIcon);
-  const { user } = STATES || {};
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [displayName, setDisplayName] = useState(user?.displayName || '');
+  const [username, setUsername] = useState(user?.username || '');
+  const [role, setRole] = useState(user?.role || '');
+
+  // Sync from user context when it changes
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.displayName || '');
+      setUsername(user.username || '');
+      setRole(user.role || '');
+    }
+  }, [user]);
 
   const handleImageClick = () => {
     document.getElementById('profileImageInput').click();
@@ -80,9 +102,61 @@ const ProfileSettingsTab = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleCancel = () => {
+    setEditing(false);
+    setDisplayName(user?.displayName || '');
+    setUsername(user?.username || '');
+    setRole(user?.role || '');
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // edit profile mode activated
+    if (!editing) {
+      setEditing(true);
+      return;
+    }
+
+    if (!displayName?.trim()) {
+      logNotification?.('error', 'Display name is required.');
+      return;
+    }
+
+    if (!username?.trim()) {
+      logNotification?.('error', 'Username is required.');
+      return;
+    }
+
+    if (!navigator.onLine) {
+      logNotification?.('error', 'You are offline. Please check your connection and try again.');
+      return;
+    }
+
+    if (!user?.uid) return;
+    setSaving(true);
+    try {
+      const trimmedName = displayName.trim();
+      const trimmedUsername = username.trim();
+      await UserProfileAPI.update(user.uid, {
+        displayName: trimmedName,
+        username: trimmedUsername,
+        role,
+      });
+
+      // Sync updated profile to local context
+      ACTIONS.updateUser(user.uid, {
+        ...user,
+        displayName: trimmedName,
+        username: trimmedUsername,
+        role,
+      });
+
+      logNotification?.('success', 'Profile updated successfully!');
+      setEditing(false);
+    } catch {
+      logNotification?.('error', 'Failed to save profile. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -100,41 +174,58 @@ const ProfileSettingsTab = () => {
         />
 
         <ProfileForm onSubmit={handleSubmit}>
+          <FormSection label={'Display Name'}>
+            <Input
+              type="text"
+              id="displayName"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              readOnly={!editing}
+            />
+          </FormSection>
           <FormSection label={'Username'}>
-            <Input type="text" id="username" value={user?.username} readOnly />
+            <Input
+              type="text"
+              id="username"
+              value={username}
+              readOnly={!editing}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </FormSection>
           <FormSection label={'Email'}>
-            <Input type="email" id="email" value={user?.email} readOnly />
+            <Input type="email" id="email" value={user?.email || ''} readOnly />
           </FormSection>
-
           <FormSection label={'Account type'}>
-            <Input type="text" id="type" value={user?.role} readOnly />
+            <Input type="text" id="type" value={role} readOnly />
           </FormSection>
 
-          <ButtonPrimary whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            Edit Profile
-          </ButtonPrimary>
+          {editing ? (
+            <ButtonRow>
+              <ButtonPrimary
+                type="submit"
+                disabled={saving}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </ButtonPrimary>
+              <ButtonSecondary
+                type="button"
+                onClick={handleCancel}
+                disabled={saving}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Cancel
+              </ButtonSecondary>
+            </ButtonRow>
+          ) : (
+            <ButtonPrimary type="submit" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              Edit Profile
+            </ButtonPrimary>
+          )}
         </ProfileForm>
       </Section>
-
-      {/* <Section>
-        <PasswordButton active={showPasswordFields} onClick={togglePasswordFields}>Change Password <FontAwesomeIcon icon={showPasswordFields ? faCaretUp : faCaretDown} /></PasswordButton>
-        {showPasswordFields && (
-          <ProfileForm>
-            <Label htmlFor="currentPassword">Current Password:</Label>
-            <Input type="password" id="currentPassword" />
-
-            <Label htmlFor="newPassword">New Password:</Label>
-            <Input type="password" id="newPassword" />
-
-            <Label htmlFor="confirmNewPassword">Confirm New Password:</Label>
-            <Input type="password" id="confirmNewPassword" />
-            <SaveButton whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              Save Changes
-            </SaveButton>
-          </ProfileForm>
-        )}
-      </Section> */}
     </ProfileContainer>
   );
 };

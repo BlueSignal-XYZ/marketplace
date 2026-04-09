@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { colors } from '../../data/styles';
 import styled from 'styled-components';
 import configs from '../../../configs';
+import { fetchWithTimeout } from '../../utils/fetchWithTimeout';
 import { ButtonPrimary } from '../shared/button/Button';
 import { Label } from '../shared/Label/Label';
 import { FaCheck } from 'react-icons/fa6';
@@ -80,7 +81,7 @@ function OrderConfirmation({ proceedToPayment, checkoutItems }) {
     //#REQ# SERVER URL AND PRICE_ID IS DEFINED.
     const priceID = checkoutItem.priceID;
     if (serverUrl && priceID) {
-      fetch(`${serverUrl}/stripe/get/price`, {
+      fetchWithTimeout(`${serverUrl}/stripe/get/price`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

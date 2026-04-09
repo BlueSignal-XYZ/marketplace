@@ -1,6 +1,7 @@
 import axios from 'axios';
 import configs from '../../configs';
 import { auth } from '../apis/firebase';
+import { AUTH_SESSION_EXPIRED_EVENT } from '../services/v2/client';
 
 // Lightweight process polyfill for browser
 if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
@@ -12,6 +13,8 @@ if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
 }
 
 // SECURITY: Create authenticated axios instance
+const REQUEST_TIMEOUT = 30000; // 30 seconds
+
 const getAuthHeaders = async () => {
   try {
     const currentUser = auth.currentUser;
@@ -25,16 +28,45 @@ const getAuthHeaders = async () => {
   return {};
 };
 
-// Authenticated POST request
+// Authenticated POST request with timeout and 401 retry
 const authPost = async (url, data = {}) => {
   const headers = await getAuthHeaders();
-  return axios.post(url, data, { headers });
+  try {
+    return await axios.post(url, data, { headers, timeout: REQUEST_TIMEOUT });
+  } catch (error) {
+    // Retry once on 401 with force-refreshed token
+    if (error?.response?.status === 401 && auth.currentUser) {
+      try {
+        const freshToken = await auth.currentUser.getIdToken(true);
+        const retryHeaders = { Authorization: `Bearer ${freshToken}` };
+        return await axios.post(url, data, { headers: retryHeaders, timeout: REQUEST_TIMEOUT });
+      } catch {
+        // Retry failed — notify app of session expiry
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+      }
+    }
+    throw error;
+  }
 };
 
-// Authenticated GET request
+// Authenticated GET request with timeout and 401 retry
 const authGet = async (url, params = {}) => {
   const headers = await getAuthHeaders();
-  return axios.get(url, { headers, params });
+  try {
+    return await axios.get(url, { headers, params, timeout: REQUEST_TIMEOUT });
+  } catch (error) {
+    if (error?.response?.status === 401 && auth.currentUser) {
+      try {
+        const freshToken = await auth.currentUser.getIdToken(true);
+        const retryHeaders = { Authorization: `Bearer ${freshToken}` };
+        return await axios.get(url, { headers: retryHeaders, params, timeout: REQUEST_TIMEOUT });
+      } catch {
+        // Retry failed — notify app of session expiry
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+      }
+    }
+    throw error;
+  }
 };
 
 /*************************ACCOUNT_ENDPOINTS************************************* */

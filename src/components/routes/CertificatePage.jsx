@@ -6,6 +6,7 @@ import { formatCertificate } from '../../scripts/helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import configs from '../../../configs';
+import { fetchWithTimeout } from '../../utils/fetchWithTimeout';
 
 const Container = styled.div`
   display: flex;
@@ -105,7 +106,7 @@ const CertificatePage = () => {
     async function fetchData() {
       try {
         //API CALL TO GET CERTIFICATE DATA
-        fetch(`${configs.server_url}/npc_credits/certificates/${id}`, {
+        fetchWithTimeout(`${configs.server_url}/npc_credits/certificates/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

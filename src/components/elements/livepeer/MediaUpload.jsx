@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, isSupported } from 'tus-js-client';
 //import { colors } from "../../../styles/colors";
 import { LivepeerAPI, AssetAPI } from '../../../scripts/back_door';
+import { fetchWithTimeout } from '../../../utils/fetchWithTimeout';
 import { logDev, proxyLivepeerOriginEndpoint } from '../../../scripts/helpers';
 import configs from '../../../../configs';
 import AssetDisplay from './AssetDisplay';
@@ -371,7 +372,7 @@ const MediaUpload = () => {
     }
 
     async function parseVttFile(vttUrl) {
-      const response = await fetch(vttUrl);
+      const response = await fetchWithTimeout(vttUrl);
       const vttText = await response.text();
 
       // Parse VTT content

@@ -423,22 +423,31 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true);
     setError(null);
     setSuccess(null);
 
+    if (!profile.displayName?.trim()) {
+      setError('Display name is required.');
+      return;
+    }
+
+    if (!navigator.onLine) {
+      setError('You are offline. Please check your connection and try again.');
+      return;
+    }
+
+    setSaving(true);
+
     try {
-      await UserProfileAPI.update(user.uid, profile);
+      const trimmedProfile = { ...profile, displayName: profile.displayName.trim() };
+      await UserProfileAPI.update(user.uid, trimmedProfile);
       setSuccess('Profile updated successfully!');
 
-      // Update local user state if name changed
-      if (profile.displayName !== user?.displayName) {
-        ACTIONS.updateUser(user.uid, {
-          ...user,
-          displayName: profile.displayName,
-          role: profile.role,
-        });
-      }
+      // Always sync full profile to local context
+      ACTIONS.updateUser(user.uid, {
+        ...user,
+        ...trimmedProfile,
+      });
     } catch (err) {
       const serverMsg = err?.response?.data?.error || err?.response?.data?.message;
       setError(serverMsg || err.message || 'Failed to save profile. Please try again.');

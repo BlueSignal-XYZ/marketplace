@@ -7,7 +7,7 @@ import { clearDeviceCache } from '../hooks/useUserDevices';
 const AppContext = createContext();
 
 /**
- * Strip user object to non-sensitive fields for sessionStorage.
+ * Strip user object to non-sensitive fields for localStorage.
  * Avoids storing email/PII in plain text (CodeQL: clear-text-storage).
  */
 const toSessionUser = (user) => {
@@ -76,7 +76,7 @@ export const AppProvider = ({ children }) => {
               ...profileData,
               emailVerified: firebaseUser.emailVerified,
             };
-            sessionStorage.setItem('user', JSON.stringify(toSessionUser(userdata)));
+            localStorage.setItem('bluesignal_user', JSON.stringify(toSessionUser(userdata)));
             setUser(userdata);
           } else {
             // Firebase user exists but not in backend — use Firebase data
@@ -87,7 +87,7 @@ export const AppProvider = ({ children }) => {
               displayName: firebaseUser.displayName,
               emailVerified: firebaseUser.emailVerified,
             };
-            sessionStorage.setItem('user', JSON.stringify(toSessionUser(fallbackUser)));
+            localStorage.setItem('bluesignal_user', JSON.stringify(toSessionUser(fallbackUser)));
             setUser(fallbackUser);
           }
         } catch {
@@ -99,12 +99,12 @@ export const AppProvider = ({ children }) => {
             displayName: firebaseUser.displayName,
             emailVerified: firebaseUser.emailVerified,
           };
-          sessionStorage.setItem('user', JSON.stringify(toSessionUser(fallbackUser)));
+          localStorage.setItem('bluesignal_user', JSON.stringify(toSessionUser(fallbackUser)));
           setUser(fallbackUser);
         }
       } else {
         // User signed out
-        sessionStorage.removeItem('user');
+        localStorage.removeItem('bluesignal_user');
         setUser(null);
       }
 
@@ -128,7 +128,7 @@ export const AppProvider = ({ children }) => {
         userdata = await UserProfileAPI.get(uid);
       }
       if (userdata?.uid) {
-        sessionStorage.setItem('user', JSON.stringify(toSessionUser(userdata)));
+        localStorage.setItem('bluesignal_user', JSON.stringify(toSessionUser(userdata)));
         setUser(userdata);
         return true;
       }
@@ -162,7 +162,7 @@ export const AppProvider = ({ children }) => {
         await signOut(auth);
       }
       // Clear all cached user data
-      sessionStorage.removeItem('user');
+      localStorage.removeItem('bluesignal_user');
       clearDeviceCache(); // Clear device detection cache
       localStorage.removeItem('cloud_welcome_dismissed'); // Reset welcome banner
       setUser(null);

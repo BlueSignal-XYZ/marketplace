@@ -32,6 +32,7 @@ import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { Pagination } from '../../../design-system/primitives/Pagination';
 import { isDemoMode, setDemoMode } from '../../../utils/demoMode';
+import { UserProfileAPI } from '../../../scripts/back_door';
 
 // ── Constants ────────────────────────────────────────────
 
@@ -464,7 +465,7 @@ export function WQTProfilePage() {
   // Demo mode
   const [demoEnabled, setDemoEnabled] = useState(isDemoMode());
 
-  // Notification prefs (persisted to localStorage)
+  // Notification prefs (persisted to localStorage + backend)
   const [emailNotif, setEmailNotif] = useState(() => {
     try {
       const v = localStorage.getItem('wqt_pref_emailNotif');
@@ -490,6 +491,24 @@ export function WQTProfilePage() {
     }
   });
 
+  // Load notification prefs from backend on mount
+  useEffect(() => {
+    if (!user?.uid) return;
+    UserProfileAPI.get(user.uid)
+      .then((data) => {
+        const prefs = data?.preferences;
+        if (prefs) {
+          if (prefs.emailNotifications !== undefined) setEmailNotif(prefs.emailNotifications);
+          if (prefs.marketNotifications !== undefined) setMarketNotif(prefs.marketNotifications);
+          if (prefs.deviceNotifications !== undefined) setDeviceNotif(prefs.deviceNotifications);
+        }
+      })
+      .catch(() => {
+        // Use localStorage defaults on error
+      });
+  }, [user?.uid]);
+
+  // Persist to localStorage immediately + debounce backend save
   useEffect(() => {
     try {
       localStorage.setItem('wqt_pref_emailNotif', JSON.stringify(emailNotif));
@@ -498,7 +517,22 @@ export function WQTProfilePage() {
     } catch {
       /* localStorage unavailable */
     }
-  }, [emailNotif, marketNotif, deviceNotif]);
+
+    // Debounce backend save (1 second)
+    if (!user?.uid) return;
+    const timer = setTimeout(() => {
+      UserProfileAPI.update(user.uid, {
+        preferences: {
+          emailNotifications: emailNotif,
+          marketNotifications: marketNotif,
+          deviceNotifications: deviceNotif,
+        },
+      }).catch(() => {
+        // Silent fail — localStorage has the latest values as fallback
+      });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [emailNotif, marketNotif, deviceNotif, user?.uid]);
 
   // Fetch portfolio
   useEffect(() => {
