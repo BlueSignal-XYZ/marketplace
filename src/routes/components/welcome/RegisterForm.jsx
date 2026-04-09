@@ -152,12 +152,12 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
       }
       if (!updatedOK) {
         try {
-          // Store only non-sensitive public user data in sessionStorage
+          // Store only non-sensitive public user data in localStorage
           const publicUser = {
             uid: newUser.uid,
             username: newUser.username,
           };
-          sessionStorage.setItem('user', JSON.stringify(publicUser));
+          localStorage.setItem('bluesignal_user', JSON.stringify(publicUser));
         } catch {
           // Silent fail
         }
@@ -260,12 +260,12 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin, updateUser, googleData }) =>
       }
       if (!updatedOK) {
         try {
-          // Store only non-sensitive public user data in sessionStorage
+          // Store only non-sensitive public user data in localStorage
           const publicUser = {
             uid: newUser.uid,
             username: newUser.username,
           };
-          sessionStorage.setItem('user', JSON.stringify(publicUser));
+          localStorage.setItem('bluesignal_user', JSON.stringify(publicUser));
         } catch {
           // Silent fail
         }

@@ -382,7 +382,7 @@ describe('AppContext', () => {
 
       await waitFor(
         () => {
-          expect(sessionStorage.getItem('user')).toBeNull();
+          expect(localStorage.getItem('bluesignal_user')).toBeNull();
         },
         { timeout: 2000 }
       );
@@ -497,7 +497,7 @@ describe('AppContext', () => {
       );
 
       expect(screen.getByTestId('user-role')).toHaveTextContent('installer');
-      expect(sessionStorage.getItem('user')).toContain('new-user-123');
+      expect(localStorage.getItem('bluesignal_user')).toContain('new-user-123');
     });
 
     it('should update user with provided userdata object', async () => {

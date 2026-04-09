@@ -431,14 +431,11 @@ export default function ProfilePage() {
       await UserProfileAPI.update(user.uid, profile);
       setSuccess('Profile updated successfully!');
 
-      // Update local user state if name changed
-      if (profile.displayName !== user?.displayName) {
-        ACTIONS.updateUser(user.uid, {
-          ...user,
-          displayName: profile.displayName,
-          role: profile.role,
-        });
-      }
+      // Always sync full profile to local context
+      ACTIONS.updateUser(user.uid, {
+        ...user,
+        ...profile,
+      });
     } catch (err) {
       const serverMsg = err?.response?.data?.error || err?.response?.data?.message;
       setError(serverMsg || err.message || 'Failed to save profile. Please try again.');
