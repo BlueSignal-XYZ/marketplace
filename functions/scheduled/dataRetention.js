@@ -15,7 +15,7 @@
  * delete data that hasn't been archived.
  */
 
-const functions = require("firebase-functions");
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 
 const ARCHIVE_THRESHOLD_DAYS = 365; // Readings older than this are archival candidates

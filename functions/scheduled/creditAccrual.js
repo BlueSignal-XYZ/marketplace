@@ -9,7 +9,7 @@
  *   kg  = (baseline_mg_L - measured_mg_L) × flow_m3 × 0.001
  */
 
-const functions = require("firebase-functions");
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 
 // Unit conversion constants — the math that makes every credit correct

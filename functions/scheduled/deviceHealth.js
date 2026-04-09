@@ -5,7 +5,7 @@
  * Creates "device_offline" alerts and "came_online" events.
  */
 
-const functions = require("firebase-functions");
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 
 exports.checkDeviceHealth = functions.pubsub
