@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
 import { useAppContext } from '../../context/AppContext';
 import { GeocodingAPI } from '../../scripts/back_door';
-import { LocationCapture } from '../installer';
+import LocationCapture from '../installer/LocationCapture';
 import { ButtonPrimary, ButtonSecondary } from '../shared/button/Button';
 import { Input } from '../shared/input/Input';
 

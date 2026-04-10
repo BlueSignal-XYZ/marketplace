@@ -8,10 +8,7 @@
       "States": "FL",
       "Zip Code": "33767",
       "geometry": {
-        "coordinates": [
-          -81.5158,
-          27.6648
-        ],
+        "coordinates": [-81.5158, 27.6648],
         "type": "Point"
       }
     },
@@ -23,10 +20,7 @@
       "States": "FL",
       "Zip Code": "33139",
       "geometry": {
-        "coordinates": [
-          -81.5058,
-          27.6748
-        ],
+        "coordinates": [-81.5058, 27.6748],
         "type": "Point"
       }
     },
@@ -38,10 +32,7 @@
       "States": "FL",
       "Zip Code": "32137",
       "geometry": {
-        "coordinates": [
-          -81.5258,
-          27.6548
-        ],
+        "coordinates": [-81.5258, 27.6548],
         "type": "Point"
       }
     },
@@ -53,10 +44,7 @@
       "States": "FL",
       "Zip Code": "34139",
       "geometry": {
-        "coordinates": [
-          -81.4958,
-          27.6648
-        ],
+        "coordinates": [-81.4958, 27.6648],
         "type": "Point"
       }
     },
@@ -68,10 +56,7 @@
       "States": "FL",
       "Zip Code": "32819",
       "geometry": {
-        "coordinates": [
-          -81.5358,
-          27.6848
-        ],
+        "coordinates": [-81.5358, 27.6848],
         "type": "Point"
       }
     },
@@ -83,10 +68,7 @@
       "States": "FL",
       "Zip Code": "32080",
       "geometry": {
-        "coordinates": [
-          -81.5158,
-          27.6948
-        ],
+        "coordinates": [-81.5158, 27.6948],
         "type": "Point"
       }
     },
@@ -98,10 +80,7 @@
       "States": "FL",
       "Zip Code": "33611",
       "geometry": {
-        "coordinates": [
-          -81.4858,
-          27.6748
-        ],
+        "coordinates": [-81.4858, 27.6748],
         "type": "Point"
       }
     },
@@ -113,10 +92,7 @@
       "States": "FL",
       "Zip Code": "34102",
       "geometry": {
-        "coordinates": [
-          -81.5258,
-          27.6548
-        ],
+        "coordinates": [-81.5258, 27.6548],
         "type": "Point"
       }
     },
@@ -128,10 +104,7 @@
       "States": "FL",
       "Zip Code": "32401",
       "geometry": {
-        "coordinates": [
-          -81.5058,
-          27.6748
-        ],
+        "coordinates": [-81.5058, 27.6748],
         "type": "Point"
       }
     },
@@ -143,12 +116,9 @@
       "States": "FL",
       "Zip Code": "33040",
       "geometry": {
-        "coordinates": [
-          -81.4958,
-          27.6648
-        ],
+        "coordinates": [-81.4958, 27.6648],
         "type": "Point"
       }
     }
-  ]  
+  ]
 }

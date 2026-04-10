@@ -8,10 +8,7 @@
       "States": "AL",
       "Zip Code": "35976",
       "geometry": {
-        "coordinates": [
-          -86.13980099999999,
-          34.3650436
-        ],
+        "coordinates": [-86.13980099999999, 34.3650436],
         "type": "Point"
       }
     },
@@ -23,10 +20,7 @@
       "States": "AL",
       "Zip Code": "36067",
       "geometry": {
-        "coordinates": [
-          -86.55162469999999,
-          32.5756274
-        ],
+        "coordinates": [-86.55162469999999, 32.5756274],
         "type": "Point"
       }
     },
@@ -39,10 +33,7 @@
       "States": "AL",
       "Zip Code": "36003",
       "geometry": {
-        "coordinates": [
-          -86.7432678,
-          32.4512783
-        ],
+        "coordinates": [-86.7432678, 32.4512783],
         "type": "Point"
       }
     },
@@ -54,10 +45,7 @@
       "States": "AL",
       "Zip Code": "36027",
       "geometry": {
-        "coordinates": [
-          -85.3047757,
-          31.7764256
-        ],
+        "coordinates": [-85.3047757, 31.7764256],
         "type": "Point"
       }
     },
@@ -70,10 +58,7 @@
       "States": "AL",
       "Zip Code": "35543",
       "geometry": {
-        "coordinates": [
-          -87.7113271,
-          34.265364
-        ],
+        "coordinates": [-87.7113271, 34.265364],
         "type": "Point"
       }
     },
@@ -85,10 +70,7 @@
       "States": "AL",
       "Zip Code": "36804",
       "geometry": {
-        "coordinates": [
-          -85.3749441,
-          32.55004
-        ],
+        "coordinates": [-85.3749441, 32.55004],
         "type": "Point"
       }
     },
@@ -99,10 +81,7 @@
       "States": "IL",
       "Zip Code": "60104",
       "geometry": {
-        "coordinates": [
-          -87.8728505,
-          41.8813295
-        ],
+        "coordinates": [-87.8728505, 41.8813295],
         "type": "Point"
       }
     },
@@ -114,10 +93,7 @@
       "States": "AL",
       "Zip Code": "35954",
       "geometry": {
-        "coordinates": [
-          -86.0321246,
-          34.1110066
-        ],
+        "coordinates": [-86.0321246, 34.1110066],
         "type": "Point"
       }
     },
@@ -130,10 +106,7 @@
       "States": "AL",
       "Zip Code": "35049",
       "geometry": {
-        "coordinates": [
-          -86.5878966,
-          33.9828519
-        ],
+        "coordinates": [-86.5878966, 33.9828519],
         "type": "Point"
       }
     },
@@ -146,10 +119,7 @@
       "States": "AL",
       "Zip Code": "35504",
       "geometry": {
-        "coordinates": [
-          -87.1835918,
-          33.852184
-        ],
+        "coordinates": [-87.1835918, 33.852184],
         "type": "Point"
       }
     },
@@ -162,10 +132,7 @@
       "States": "AL",
       "Zip Code": "35446",
       "geometry": {
-        "coordinates": [
-          -87.7527485,
-          33.2564977
-        ],
+        "coordinates": [-87.7527485, 33.2564977],
         "type": "Point"
       }
     },
@@ -177,10 +144,7 @@
       "States": "KY",
       "Zip Code": "42261",
       "geometry": {
-        "coordinates": [
-          -86.6835998,
-          37.2256023
-        ],
+        "coordinates": [-86.6835998, 37.2256023],
         "type": "Point"
       }
     },
@@ -193,10 +157,7 @@
       "States": "AL",
       "Zip Code": "36250",
       "geometry": {
-        "coordinates": [
-          -85.8811236,
-          33.7718834
-        ],
+        "coordinates": [-85.8811236, 33.7718834],
         "type": "Point"
       }
     },
@@ -209,10 +170,7 @@
       "States": "NM",
       "Zip Code": "87571",
       "geometry": {
-        "coordinates": [
-          -105.586918,
-          36.3849497
-        ],
+        "coordinates": [-105.586918, 36.3849497],
         "type": "Point"
       }
     },
@@ -225,10 +183,7 @@
       "States": "AL",
       "Zip Code": "35475",
       "geometry": {
-        "coordinates": [
-          -87.58054659999999,
-          33.3244986
-        ],
+        "coordinates": [-87.58054659999999, 33.3244986],
         "type": "Point"
       }
     },
@@ -240,10 +195,7 @@
       "States": "AL",
       "Zip Code": "36093",
       "geometry": {
-        "coordinates": [
-          -86.1936558,
-          32.4615173
-        ],
+        "coordinates": [-86.1936558, 32.4615173],
         "type": "Point"
       }
     },
@@ -255,10 +207,7 @@
       "States": "AL",
       "Zip Code": "35014",
       "geometry": {
-        "coordinates": [
-          -86.1889626,
-          33.340794
-        ],
+        "coordinates": [-86.1889626, 33.340794],
         "type": "Point"
       }
     },
@@ -269,10 +218,7 @@
       "States": "AL",
       "Zip Code": "35987",
       "geometry": {
-        "coordinates": [
-          -86.25326419999999,
-          33.9384612
-        ],
+        "coordinates": [-86.25326419999999, 33.9384612],
         "type": "Point"
       }
     },
@@ -283,10 +229,7 @@
       "States": "AL",
       "Zip Code": "36863",
       "geometry": {
-        "coordinates": [
-          -85.1900319,
-          32.8577158
-        ],
+        "coordinates": [-85.1900319, 32.8577158],
         "type": "Point"
       }
     },
@@ -299,10 +242,7 @@
       "States": "AL",
       "Zip Code": "35960",
       "geometry": {
-        "coordinates": [
-          -85.6781797,
-          34.1520152
-        ],
+        "coordinates": [-85.6781797, 34.1520152],
         "type": "Point"
       }
     },
@@ -314,10 +254,7 @@
       "States": "AL",
       "Zip Code": "35045",
       "geometry": {
-        "coordinates": [
-          -86.6925217,
-          32.8985404
-        ],
+        "coordinates": [-86.6925217, 32.8985404],
         "type": "Point"
       }
     },
@@ -329,10 +266,7 @@
       "States": "AL",
       "Zip Code": "35634",
       "geometry": {
-        "coordinates": [
-          -87.66749899999999,
-          34.917279
-        ],
+        "coordinates": [-87.66749899999999, 34.917279],
         "type": "Point"
       }
     },
@@ -343,10 +277,7 @@
       "States": "AL",
       "Zip Code": "36916",
       "geometry": {
-        "coordinates": [
-          -88.0781427,
-          32.222533
-        ],
+        "coordinates": [-88.0781427, 32.222533],
         "type": "Point"
       }
     },
@@ -357,10 +288,7 @@
       "States": "AL",
       "Zip Code": "36723",
       "geometry": {
-        "coordinates": [
-          -87.3036518,
-          32.0587593
-        ],
+        "coordinates": [-87.3036518, 32.0587593],
         "type": "Point"
       }
     },
@@ -373,10 +301,7 @@
       "States": "FL",
       "Zip Code": "32068",
       "geometry": {
-        "coordinates": [
-          -81.8152191,
-          30.1150833
-        ],
+        "coordinates": [-81.8152191, 30.1150833],
         "type": "Point"
       }
     },
@@ -388,10 +313,7 @@
       "States": "AL",
       "Zip Code": "36264",
       "geometry": {
-        "coordinates": [
-          -85.5706172,
-          33.6554664
-        ],
+        "coordinates": [-85.5706172, 33.6554664],
         "type": "Point"
       }
     },
@@ -403,10 +325,7 @@
       "States": "AL",
       "Zip Code": "35453",
       "geometry": {
-        "coordinates": [
-          -87.3396125,
-          33.1574846
-        ],
+        "coordinates": [-87.3396125, 33.1574846],
         "type": "Point"
       }
     },
@@ -418,10 +337,7 @@
       "States": "AL",
       "Zip Code": "36323",
       "geometry": {
-        "coordinates": [
-          -86.0552108,
-          31.4117129
-        ],
+        "coordinates": [-86.0552108, 31.4117129],
         "type": "Point"
       }
     },
@@ -434,10 +350,7 @@
       "States": "AL",
       "Zip Code": "35452",
       "geometry": {
-        "coordinates": [
-          -87.6877354,
-          33.2452453
-        ],
+        "coordinates": [-87.6877354, 33.2452453],
         "type": "Point"
       }
     },
@@ -450,10 +363,7 @@
       "States": "AL",
       "Zip Code": "35128",
       "geometry": {
-        "coordinates": [
-          -86.3958586,
-          33.5923891
-        ],
+        "coordinates": [-86.3958586, 33.5923891],
         "type": "Point"
       }
     },
@@ -466,10 +376,7 @@
       "States": "AL",
       "Zip Code": "35131",
       "geometry": {
-        "coordinates": [
-          -86.19018659999999,
-          33.7072238
-        ],
+        "coordinates": [-86.19018659999999, 33.7072238],
         "type": "Point"
       }
     },
@@ -482,10 +389,7 @@
       "States": "AL",
       "Zip Code": "36420",
       "geometry": {
-        "coordinates": [
-          -86.46144149999999,
-          31.31361189999999
-        ],
+        "coordinates": [-86.46144149999999, 31.31361189999999],
         "type": "Point"
       }
     },
@@ -496,10 +400,7 @@
       "States": "AL",
       "Zip Code": "36027",
       "geometry": {
-        "coordinates": [
-          -85.1461336,
-          31.9205411
-        ],
+        "coordinates": [-85.1461336, 31.9205411],
         "type": "Point"
       }
     },
@@ -511,10 +412,7 @@
       "States": "AL",
       "Zip Code": "35768",
       "geometry": {
-        "coordinates": [
-          -86.11929599999999,
-          34.7832419
-        ],
+        "coordinates": [-86.11929599999999, 34.7832419],
         "type": "Point"
       }
     },
@@ -527,10 +425,7 @@
       "States": "AL",
       "Zip Code": "35503",
       "geometry": {
-        "coordinates": [
-          -87.2836501,
-          33.8878774
-        ],
+        "coordinates": [-87.2836501, 33.8878774],
         "type": "Point"
       }
     },
@@ -542,10 +437,7 @@
       "States": "AL",
       "Zip Code": "36360",
       "geometry": {
-        "coordinates": [
-          -85.640289,
-          31.459017
-        ],
+        "coordinates": [-85.640289, 31.459017],
         "type": "Point"
       }
     },
@@ -557,10 +449,7 @@
       "States": "AL",
       "Zip Code": "36529",
       "geometry": {
-        "coordinates": [
-          -88.3133671,
-          31.2170996
-        ],
+        "coordinates": [-88.3133671, 31.2170996],
         "type": "Point"
       }
     },
@@ -573,10 +462,7 @@
       "States": "AL",
       "Zip Code": "35981",
       "geometry": {
-        "coordinates": [
-          -85.6829334,
-          34.7203102
-        ],
+        "coordinates": [-85.6829334, 34.7203102],
         "type": "Point"
       }
     },
@@ -589,10 +475,7 @@
       "States": "AL",
       "Zip Code": "35980",
       "geometry": {
-        "coordinates": [
-          -86.32385049999999,
-          34.1821224
-        ],
+        "coordinates": [-86.32385049999999, 34.1821224],
         "type": "Point"
       }
     },
@@ -605,10 +488,7 @@
       "States": "AL",
       "Zip Code": "35652",
       "geometry": {
-        "coordinates": [
-          -87.2947417,
-          34.8256425
-        ],
+        "coordinates": [-87.2947417, 34.8256425],
         "type": "Point"
       }
     },
@@ -621,10 +501,7 @@
       "States": "IN",
       "Zip Code": "47122",
       "geometry": {
-        "coordinates": [
-          -85.9755239,
-          38.2945115
-        ],
+        "coordinates": [-85.9755239, 38.2945115],
         "type": "Point"
       }
     },
@@ -636,10 +513,7 @@
       "States": "AL",
       "Zip Code": "36025",
       "geometry": {
-        "coordinates": [
-          -86.3356242,
-          32.5211491
-        ],
+        "coordinates": [-86.3356242, 32.5211491],
         "type": "Point"
       }
     },
@@ -651,10 +525,7 @@
       "States": "AL",
       "Zip Code": "35555",
       "geometry": {
-        "coordinates": [
-          -87.8166394,
-          33.7185849
-        ],
+        "coordinates": [-87.8166394, 33.7185849],
         "type": "Point"
       }
     },
@@ -667,10 +538,7 @@
       "States": "NC",
       "Zip Code": "28301",
       "geometry": {
-        "coordinates": [
-          -78.87619219999999,
-          35.0509357
-        ],
+        "coordinates": [-78.87619219999999, 35.0509357],
         "type": "Point"
       }
     },
@@ -681,10 +549,7 @@
       "States": "AL",
       "Zip Code": "36092",
       "geometry": {
-        "coordinates": [
-          -86.29422199999999,
-          32.589617
-        ],
+        "coordinates": [-86.29422199999999, 32.589617],
         "type": "Point"
       }
     },
@@ -696,10 +561,7 @@
       "States": "AL",
       "Zip Code": "35480",
       "geometry": {
-        "coordinates": [
-          -87.7665895,
-          33.0432798
-        ],
+        "coordinates": [-87.7665895, 33.0432798],
         "type": "Point"
       }
     },
@@ -712,10 +574,7 @@
       "States": "AL",
       "Zip Code": "35653",
       "geometry": {
-        "coordinates": [
-          -87.8650071,
-          34.4572489
-        ],
+        "coordinates": [-87.8650071, 34.4572489],
         "type": "Point"
       }
     },
@@ -726,10 +585,7 @@
       "States": "AL",
       "Zip Code": "36538",
       "geometry": {
-        "coordinates": [
-          -88.15138379999999,
-          31.6439671
-        ],
+        "coordinates": [-88.15138379999999, 31.6439671],
         "type": "Point"
       }
     },
@@ -742,10 +598,7 @@
       "States": "AL",
       "Zip Code": "35634",
       "geometry": {
-        "coordinates": [
-          -87.5197296,
-          34.9703108
-        ],
+        "coordinates": [-87.5197296, 34.9703108],
         "type": "Point"
       }
     },
@@ -756,10 +609,7 @@
       "States": "AL",
       "Zip Code": "35010",
       "geometry": {
-        "coordinates": [
-          -85.9712921,
-          33.05846
-        ],
+        "coordinates": [-85.9712921, 33.05846],
         "type": "Point"
       }
     },
@@ -771,10 +621,7 @@
       "States": "AL",
       "Zip Code": "36744",
       "geometry": {
-        "coordinates": [
-          -87.5918939,
-          32.7224452
-        ],
+        "coordinates": [-87.5918939, 32.7224452],
         "type": "Point"
       }
     },
@@ -785,10 +632,7 @@
       "States": "AL",
       "Zip Code": "36401",
       "geometry": {
-        "coordinates": [
-          -86.9086609,
-          31.4377325
-        ],
+        "coordinates": [-86.9086609, 31.4377325],
         "type": "Point"
       }
     },
@@ -801,10 +645,7 @@
       "States": "PA",
       "Zip Code": "17110",
       "geometry": {
-        "coordinates": [
-          -76.9047908,
-          40.2961025
-        ],
+        "coordinates": [-76.9047908, 40.2961025],
         "type": "Point"
       }
     },
@@ -817,10 +658,7 @@
       "States": "AL",
       "Zip Code": "35749",
       "geometry": {
-        "coordinates": [
-          -86.7478493,
-          34.8587988
-        ],
+        "coordinates": [-86.7478493, 34.8587988],
         "type": "Point"
       }
     },
@@ -833,10 +671,7 @@
       "States": "GA",
       "Zip Code": "30253",
       "geometry": {
-        "coordinates": [
-          -84.189966,
-          33.4173339
-        ],
+        "coordinates": [-84.189966, 33.4173339],
         "type": "Point"
       }
     },
@@ -849,10 +684,7 @@
       "States": "AL",
       "Zip Code": "35904",
       "geometry": {
-        "coordinates": [
-          -85.939543,
-          34.127183
-        ],
+        "coordinates": [-85.939543, 34.127183],
         "type": "Point"
       }
     },
@@ -863,10 +695,7 @@
       "States": "AL",
       "Zip Code": "35072",
       "geometry": {
-        "coordinates": [
-          -86.1450675,
-          33.1168193
-        ],
+        "coordinates": [-86.1450675, 33.1168193],
         "type": "Point"
       }
     },
@@ -878,10 +707,7 @@
       "States": "AL",
       "Zip Code": "36301",
       "geometry": {
-        "coordinates": [
-          -85.37474499999999,
-          31.1941479
-        ],
+        "coordinates": [-85.37474499999999, 31.1941479],
         "type": "Point"
       }
     },
@@ -893,10 +719,7 @@
       "States": "AL",
       "Zip Code": "36863",
       "geometry": {
-        "coordinates": [
-          -85.22837390000001,
-          32.8463231
-        ],
+        "coordinates": [-85.22837390000001, 32.8463231],
         "type": "Point"
       }
     },
@@ -909,10 +732,7 @@
       "States": "AL",
       "Zip Code": "35801",
       "geometry": {
-        "coordinates": [
-          -86.5874631,
-          34.7296476
-        ],
+        "coordinates": [-86.5874631, 34.7296476],
         "type": "Point"
       }
     },
@@ -923,10 +743,7 @@
       "States": "AL",
       "Zip Code": "36502",
       "geometry": {
-        "coordinates": [
-          -87.4579387,
-          31.1859379
-        ],
+        "coordinates": [-87.4579387, 31.1859379],
         "type": "Point"
       }
     },
@@ -937,10 +754,7 @@
       "States": "AZ",
       "Zip Code": "85251",
       "geometry": {
-        "coordinates": [
-          -111.9209052,
-          33.492973
-        ],
+        "coordinates": [-111.9209052, 33.492973],
         "type": "Point"
       }
     },
@@ -952,10 +766,7 @@
       "States": "AL",
       "Zip Code": "36861",
       "geometry": {
-        "coordinates": [
-          -85.833016,
-          32.8822958
-        ],
+        "coordinates": [-85.833016, 32.8822958],
         "type": "Point"
       }
     },
@@ -966,10 +777,7 @@
       "States": "AL",
       "Zip Code": "35087",
       "geometry": {
-        "coordinates": [
-          -86.56479610000001,
-          34.295936
-        ],
+        "coordinates": [-86.56479610000001, 34.295936],
         "type": "Point"
       }
     },
@@ -981,10 +789,7 @@
       "States": "AL",
       "Zip Code": "36613",
       "geometry": {
-        "coordinates": [
-          -88.1629281,
-          30.819996
-        ],
+        "coordinates": [-88.1629281, 30.819996],
         "type": "Point"
       }
     },
@@ -997,10 +802,7 @@
       "States": "GA",
       "Zip Code": "30240",
       "geometry": {
-        "coordinates": [
-          -85.07569819999999,
-          33.0209601
-        ],
+        "coordinates": [-85.07569819999999, 33.0209601],
         "type": "Point"
       }
     },
@@ -1013,10 +815,7 @@
       "States": "TX",
       "Zip Code": "78711",
       "geometry": {
-        "coordinates": [
-          -97.7430608,
-          30.267153
-        ],
+        "coordinates": [-97.7430608, 30.267153],
         "type": "Point"
       }
     },
@@ -1029,10 +828,7 @@
       "States": "AL",
       "Zip Code": "36548",
       "geometry": {
-        "coordinates": [
-          -87.9728915,
-          31.5009238
-        ],
+        "coordinates": [-87.9728915, 31.5009238],
         "type": "Point"
       }
     },
@@ -1044,10 +840,7 @@
       "States": "AL",
       "Zip Code": "35611",
       "geometry": {
-        "coordinates": [
-          -87.0142527,
-          34.7904942
-        ],
+        "coordinates": [-87.0142527, 34.7904942],
         "type": "Point"
       }
     },
@@ -1058,10 +851,7 @@
       "States": "AL",
       "Zip Code": "35051",
       "geometry": {
-        "coordinates": [
-          -86.60687949999999,
-          33.178225
-        ],
+        "coordinates": [-86.60687949999999, 33.178225],
         "type": "Point"
       }
     },
@@ -1074,10 +864,7 @@
       "States": "AL",
       "Zip Code": "36865",
       "geometry": {
-        "coordinates": [
-          -85.60387089999999,
-          32.6120431
-        ],
+        "coordinates": [-85.60387089999999, 32.6120431],
         "type": "Point"
       }
     },
@@ -1090,10 +877,7 @@
       "States": "AL",
       "Zip Code": "36040",
       "geometry": {
-        "coordinates": [
-          -86.5925667,
-          32.1756008
-        ],
+        "coordinates": [-86.5925667, 32.1756008],
         "type": "Point"
       }
     },
@@ -1106,10 +890,7 @@
       "States": "AL",
       "Zip Code": "36752",
       "geometry": {
-        "coordinates": [
-          -86.6126999,
-          32.2754892
-        ],
+        "coordinates": [-86.6126999, 32.2754892],
         "type": "Point"
       }
     },
@@ -1120,10 +901,7 @@
       "States": "AL",
       "Zip Code": "36401",
       "geometry": {
-        "coordinates": [
-          -86.976711,
-          31.5541671
-        ],
+        "coordinates": [-86.976711, 31.5541671],
         "type": "Point"
       }
     },
@@ -1136,10 +914,7 @@
       "States": "AL",
       "Zip Code": "36083",
       "geometry": {
-        "coordinates": [
-          -85.69919689999999,
-          32.4171909
-        ],
+        "coordinates": [-85.69919689999999, 32.4171909],
         "type": "Point"
       }
     },
@@ -1151,10 +926,7 @@
       "States": "AL",
       "Zip Code": "36582",
       "geometry": {
-        "coordinates": [
-          -88.1755948,
-          30.5552585
-        ],
+        "coordinates": [-88.1755948, 30.5552585],
         "type": "Point"
       }
     },
@@ -1165,10 +937,7 @@
       "States": "AL",
       "Zip Code": "36553",
       "geometry": {
-        "coordinates": [
-          -88.02944939999999,
-          31.26054229999999
-        ],
+        "coordinates": [-88.02944939999999, 31.26054229999999],
         "type": "Point"
       }
     },
@@ -1179,10 +948,7 @@
       "States": "AL",
       "Zip Code": "36446",
       "geometry": {
-        "coordinates": [
-          -87.7335356,
-          31.7870208
-        ],
+        "coordinates": [-87.7335356, 31.7870208],
         "type": "Point"
       }
     },
@@ -1195,10 +961,7 @@
       "States": "AL",
       "Zip Code": "36726",
       "geometry": {
-        "coordinates": [
-          -87.28981639999999,
-          31.9913218
-        ],
+        "coordinates": [-87.28981639999999, 31.9913218],
         "type": "Point"
       }
     },
@@ -1211,10 +974,7 @@
       "States": "AL",
       "Zip Code": "36261",
       "geometry": {
-        "coordinates": [
-          -85.9315635,
-          33.1901652
-        ],
+        "coordinates": [-85.9315635, 33.1901652],
         "type": "Point"
       }
     },
@@ -1226,10 +986,7 @@
       "States": "AL",
       "Zip Code": "36109",
       "geometry": {
-        "coordinates": [
-          -86.24058289999999,
-          32.3610748
-        ],
+        "coordinates": [-86.24058289999999, 32.3610748],
         "type": "Point"
       }
     },
@@ -1241,10 +998,7 @@
       "States": "CA",
       "Zip Code": "92653",
       "geometry": {
-        "coordinates": [
-          -117.701882,
-          33.583038
-        ],
+        "coordinates": [-117.701882, 33.583038],
         "type": "Point"
       }
     },
@@ -1255,10 +1009,7 @@
       "States": "AL",
       "Zip Code": "36053",
       "geometry": {
-        "coordinates": [
-          -85.54056059999999,
-          31.9630781
-        ],
+        "coordinates": [-85.54056059999999, 31.9630781],
         "type": "Point"
       }
     },
@@ -1271,10 +1022,7 @@
       "States": "PA",
       "Zip Code": "15674",
       "geometry": {
-        "coordinates": [
-          -79.4975588,
-          40.2082565
-        ],
+        "coordinates": [-79.4975588, 40.2082565],
         "type": "Point"
       }
     },
@@ -1287,10 +1035,7 @@
       "States": "AL",
       "Zip Code": "36268",
       "geometry": {
-        "coordinates": [
-          -85.9538256,
-          33.5302172
-        ],
+        "coordinates": [-85.9538256, 33.5302172],
         "type": "Point"
       }
     },
@@ -1302,10 +1047,7 @@
       "States": "CT",
       "Zip Code": "06320",
       "geometry": {
-        "coordinates": [
-          -72.09583599999999,
-          41.3553955
-        ],
+        "coordinates": [-72.09583599999999, 41.3553955],
         "type": "Point"
       }
     },
@@ -1317,10 +1059,7 @@
       "States": "GA",
       "Zip Code": "31034",
       "geometry": {
-        "coordinates": [
-          -83.2308097,
-          33.05246899999999
-        ],
+        "coordinates": [-83.2308097, 33.05246899999999],
         "type": "Point"
       }
     },
@@ -1332,10 +1071,7 @@
       "States": "AL",
       "Zip Code": "36912",
       "geometry": {
-        "coordinates": [
-          -88.27182959999999,
-          32.1721292
-        ],
+        "coordinates": [-88.27182959999999, 32.1721292],
         "type": "Point"
       }
     },
@@ -1346,10 +1082,7 @@
       "States": "AL",
       "Zip Code": "36784",
       "geometry": {
-        "coordinates": [
-          -87.8732864,
-          31.911651
-        ],
+        "coordinates": [-87.8732864, 31.911651],
         "type": "Point"
       }
     },
@@ -1361,10 +1094,7 @@
       "States": "AL",
       "Zip Code": "36701",
       "geometry": {
-        "coordinates": [
-          -86.9867045,
-          32.5103431
-        ],
+        "coordinates": [-86.9867045, 32.5103431],
         "type": "Point"
       }
     },
@@ -1377,10 +1107,7 @@
       "States": "AL",
       "Zip Code": "36340",
       "geometry": {
-        "coordinates": [
-          -85.863377,
-          31.0333217
-        ],
+        "coordinates": [-85.863377, 31.0333217],
         "type": "Point"
       }
     },
@@ -1393,10 +1120,7 @@
       "States": "AL",
       "Zip Code": "35981",
       "geometry": {
-        "coordinates": [
-          -85.6829334,
-          34.7203102
-        ],
+        "coordinates": [-85.6829334, 34.7203102],
         "type": "Point"
       }
     },
@@ -1409,10 +1133,7 @@
       "States": "AL",
       "Zip Code": "35968",
       "geometry": {
-        "coordinates": [
-          -85.7227312,
-          34.4767809
-        ],
+        "coordinates": [-85.7227312, 34.4767809],
         "type": "Point"
       }
     },
@@ -1425,10 +1146,7 @@
       "States": "AL",
       "Zip Code": "35670",
       "geometry": {
-        "coordinates": [
-          -86.7539528,
-          34.4437999
-        ],
+        "coordinates": [-86.7539528, 34.4437999],
         "type": "Point"
       }
     },
@@ -1439,10 +1157,7 @@
       "States": "AL",
       "Zip Code": "36545",
       "geometry": {
-        "coordinates": [
-          -87.89483919999999,
-          31.519201
-        ],
+        "coordinates": [-87.89483919999999, 31.519201],
         "type": "Point"
       }
     },
@@ -1454,10 +1169,7 @@
       "States": "AL",
       "Zip Code": "35749",
       "geometry": {
-        "coordinates": [
-          -86.7478493,
-          34.8587988
-        ],
+        "coordinates": [-86.7478493, 34.8587988],
         "type": "Point"
       }
     },
@@ -1470,10 +1182,7 @@
       "States": "AL",
       "Zip Code": "36561",
       "geometry": {
-        "coordinates": [
-          -87.59636429999999,
-          30.2909957
-        ],
+        "coordinates": [-87.59636429999999, 30.2909957],
         "type": "Point"
       }
     },
@@ -1484,10 +1193,7 @@
       "States": "MN",
       "Zip Code": "55901",
       "geometry": {
-        "coordinates": [
-          -92.5113224,
-          44.0447084
-        ],
+        "coordinates": [-92.5113224, 44.0447084],
         "type": "Point"
       }
     },
@@ -1499,10 +1205,7 @@
       "States": "AL",
       "Zip Code": "35763",
       "geometry": {
-        "coordinates": [
-          -86.4586954,
-          34.5909403
-        ],
+        "coordinates": [-86.4586954, 34.5909403],
         "type": "Point"
       }
     },
@@ -1514,10 +1217,7 @@
       "States": "AL",
       "Zip Code": "36526",
       "geometry": {
-        "coordinates": [
-          -87.90953429999999,
-          30.6300006
-        ],
+        "coordinates": [-87.90953429999999, 30.6300006],
         "type": "Point"
       }
     },
@@ -1530,10 +1230,7 @@
       "States": "AL",
       "Zip Code": "36530",
       "geometry": {
-        "coordinates": [
-          -87.545164,
-          30.379609
-        ],
+        "coordinates": [-87.545164, 30.379609],
         "type": "Point"
       }
     },
@@ -1545,10 +1242,7 @@
       "States": "AL",
       "Zip Code": "36530",
       "geometry": {
-        "coordinates": [
-          -87.545164,
-          30.379609
-        ],
+        "coordinates": [-87.545164, 30.379609],
         "type": "Point"
       }
     },
@@ -1561,10 +1255,7 @@
       "States": "AL",
       "Zip Code": "36756",
       "geometry": {
-        "coordinates": [
-          -87.32036509999999,
-          32.6346345
-        ],
+        "coordinates": [-87.32036509999999, 32.6346345],
         "type": "Point"
       }
     },
@@ -1576,10 +1267,7 @@
       "States": "AL",
       "Zip Code": "35453",
       "geometry": {
-        "coordinates": [
-          -87.4244373,
-          33.2339699
-        ],
+        "coordinates": [-87.4244373, 33.2339699],
         "type": "Point"
       }
     },
@@ -1591,10 +1279,7 @@
       "States": "GA",
       "Zip Code": "30143",
       "geometry": {
-        "coordinates": [
-          -84.4129334,
-          34.4582066
-        ],
+        "coordinates": [-84.4129334, 34.4582066],
         "type": "Point"
       }
     },
@@ -1606,10 +1291,7 @@
       "States": "AL",
       "Zip Code": "36081",
       "geometry": {
-        "coordinates": [
-          -85.90515580000002,
-          31.766453
-        ],
+        "coordinates": [-85.90515580000002, 31.766453],
         "type": "Point"
       }
     },
@@ -1622,10 +1304,7 @@
       "States": "AL",
       "Zip Code": "36069",
       "geometry": {
-        "coordinates": [
-          -86.1383967,
-          32.1487263
-        ],
+        "coordinates": [-86.1383967, 32.1487263],
         "type": "Point"
       }
     },
@@ -1637,10 +1316,7 @@
       "States": "AL",
       "Zip Code": "35097",
       "geometry": {
-        "coordinates": [
-          -86.61002119999999,
-          33.912259
-        ],
+        "coordinates": [-86.61002119999999, 33.912259],
         "type": "Point"
       }
     },
@@ -1652,10 +1328,7 @@
       "States": "NC",
       "Zip Code": "27568",
       "geometry": {
-        "coordinates": [
-          -78.2449621,
-          35.5123001
-        ],
+        "coordinates": [-78.2449621, 35.5123001],
         "type": "Point"
       }
     },
@@ -1668,10 +1341,7 @@
       "States": "AL",
       "Zip Code": "36105",
       "geometry": {
-        "coordinates": [
-          -86.37252,
-          32.262082
-        ],
+        "coordinates": [-86.37252, 32.262082],
         "type": "Point"
       }
     },
@@ -1684,10 +1354,7 @@
       "States": "RI",
       "Zip Code": "02907",
       "geometry": {
-        "coordinates": [
-          -71.4330821,
-          41.7995667
-        ],
+        "coordinates": [-71.4330821, 41.7995667],
         "type": "Point"
       }
     },
@@ -1699,10 +1366,7 @@
       "States": "AL",
       "Zip Code": "36046",
       "geometry": {
-        "coordinates": [
-          -86.2918273,
-          31.96510129999999
-        ],
+        "coordinates": [-86.2918273, 31.96510129999999],
         "type": "Point"
       }
     },
@@ -1713,10 +1377,7 @@
       "States": "AL",
       "Zip Code": "35010",
       "geometry": {
-        "coordinates": [
-          -86.0419459,
-          32.8865223
-        ],
+        "coordinates": [-86.0419459, 32.8865223],
         "type": "Point"
       }
     },
@@ -1729,10 +1390,7 @@
       "States": "AL",
       "Zip Code": "35133",
       "geometry": {
-        "coordinates": [
-          -86.5979258,
-          33.8183865
-        ],
+        "coordinates": [-86.5979258, 33.8183865],
         "type": "Point"
       }
     },
@@ -1744,10 +1402,7 @@
       "States": "AL",
       "Zip Code": "36426",
       "geometry": {
-        "coordinates": [
-          -87.072521,
-          31.107957
-        ],
+        "coordinates": [-87.072521, 31.107957],
         "type": "Point"
       }
     },
@@ -1760,10 +1415,7 @@
       "States": "OR",
       "Zip Code": "97230",
       "geometry": {
-        "coordinates": [
-          -122.4605822,
-          45.5342615
-        ],
+        "coordinates": [-122.4605822, 45.5342615],
         "type": "Point"
       }
     },
@@ -1776,10 +1428,7 @@
       "States": "AL",
       "Zip Code": "36869",
       "geometry": {
-        "coordinates": [
-          -85.0916376,
-          32.4145837
-        ],
+        "coordinates": [-85.0916376, 32.4145837],
         "type": "Point"
       }
     },
@@ -1791,10 +1440,7 @@
       "States": "AL",
       "Zip Code": "36544",
       "geometry": {
-        "coordinates": [
-          -88.25784209999999,
-          30.5032585
-        ],
+        "coordinates": [-88.25784209999999, 30.5032585],
         "type": "Point"
       }
     },
@@ -1806,10 +1452,7 @@
       "States": "AL",
       "Zip Code": "35981",
       "geometry": {
-        "coordinates": [
-          -85.6829334,
-          34.7203102
-        ],
+        "coordinates": [-85.6829334, 34.7203102],
         "type": "Point"
       }
     },
@@ -1822,10 +1465,7 @@
       "States": "AL",
       "Zip Code": "35475",
       "geometry": {
-        "coordinates": [
-          -87.643582,
-          33.317985
-        ],
+        "coordinates": [-87.643582, 33.317985],
         "type": "Point"
       }
     },
@@ -1837,10 +1477,7 @@
       "States": "VA",
       "Zip Code": "22031",
       "geometry": {
-        "coordinates": [
-          -77.23813539999999,
-          38.8667982
-        ],
+        "coordinates": [-77.23813539999999, 38.8667982],
         "type": "Point"
       }
     },
@@ -1853,10 +1490,7 @@
       "States": "AL",
       "Zip Code": "36877",
       "geometry": {
-        "coordinates": [
-          -86.902298,
-          32.3182314
-        ],
+        "coordinates": [-86.902298, 32.3182314],
         "type": "Point"
       }
     },
@@ -1868,10 +1502,7 @@
       "States": "AL",
       "Zip Code": "36105",
       "geometry": {
-        "coordinates": [
-          -86.2945033,
-          32.2265802
-        ],
+        "coordinates": [-86.2945033, 32.2265802],
         "type": "Point"
       }
     },
@@ -1884,10 +1515,7 @@
       "States": "AL",
       "Zip Code": "36089",
       "geometry": {
-        "coordinates": [
-          -85.71096539999999,
-          32.1427009
-        ],
+        "coordinates": [-85.71096539999999, 32.1427009],
         "type": "Point"
       }
     },
@@ -1898,10 +1526,7 @@
       "States": "AL",
       "Zip Code": "36009",
       "geometry": {
-        "coordinates": [
-          -86.2601606,
-          31.59968589999999
-        ],
+        "coordinates": [-86.2601606, 31.59968589999999],
         "type": "Point"
       }
     },
@@ -1912,10 +1537,7 @@
       "States": "AL",
       "Zip Code": "36701",
       "geometry": {
-        "coordinates": [
-          -86.9846178,
-          32.3076726
-        ],
+        "coordinates": [-86.9846178, 32.3076726],
         "type": "Point"
       }
     },
@@ -1928,10 +1550,7 @@
       "States": "AL",
       "Zip Code": "36748",
       "geometry": {
-        "coordinates": [
-          -87.7851336,
-          32.21651360000001
-        ],
+        "coordinates": [-87.7851336, 32.21651360000001],
         "type": "Point"
       }
     },
@@ -1943,10 +1562,7 @@
       "States": "AL",
       "Zip Code": "36471",
       "geometry": {
-        "coordinates": [
-          -87.2594814,
-          31.586635
-        ],
+        "coordinates": [-87.2594814, 31.586635],
         "type": "Point"
       }
     },
@@ -1959,10 +1575,7 @@
       "States": "TX",
       "Zip Code": "78711",
       "geometry": {
-        "coordinates": [
-          -97.7430608,
-          30.267153
-        ],
+        "coordinates": [-97.7430608, 30.267153],
         "type": "Point"
       }
     },
@@ -1973,10 +1586,7 @@
       "States": "AL",
       "Zip Code": "36083",
       "geometry": {
-        "coordinates": [
-          -85.71323199999999,
-          32.4303014
-        ],
+        "coordinates": [-85.71323199999999, 32.4303014],
         "type": "Point"
       }
     },
@@ -1988,10 +1598,7 @@
       "States": "AL",
       "Zip Code": "35151",
       "geometry": {
-        "coordinates": [
-          -86.190508,
-          33.1059301
-        ],
+        "coordinates": [-86.190508, 33.1059301],
         "type": "Point"
       }
     },
@@ -2004,10 +1611,7 @@
       "States": "AL",
       "Zip Code": "35470",
       "geometry": {
-        "coordinates": [
-          -88.1947307,
-          32.6205913
-        ],
+        "coordinates": [-88.1947307, 32.6205913],
         "type": "Point"
       }
     },
@@ -2018,10 +1622,7 @@
       "States": "AL",
       "Zip Code": "36583",
       "geometry": {
-        "coordinates": [
-          -88.2489799,
-          31.3622699
-        ],
+        "coordinates": [-88.2489799, 31.3622699],
         "type": "Point"
       }
     },
@@ -2033,10 +1634,7 @@
       "States": "AL",
       "Zip Code": "35903",
       "geometry": {
-        "coordinates": [
-          -85.9423541,
-          34.0108767
-        ],
+        "coordinates": [-85.9423541, 34.0108767],
         "type": "Point"
       }
     },
@@ -2049,10 +1647,7 @@
       "States": "AL",
       "Zip Code": "35587",
       "geometry": {
-        "coordinates": [
-          -87.4336479,
-          33.8281838
-        ],
+        "coordinates": [-87.4336479, 33.8281838],
         "type": "Point"
       }
     },
@@ -2064,10 +1659,7 @@
       "States": "AL",
       "Zip Code": "36571",
       "geometry": {
-        "coordinates": [
-          -88.12589750000001,
-          30.9253064
-        ],
+        "coordinates": [-88.12589750000001, 30.9253064],
         "type": "Point"
       }
     },
@@ -2080,10 +1672,7 @@
       "States": "AL",
       "Zip Code": "35563",
       "geometry": {
-        "coordinates": [
-          -87.8577186,
-          34.0033804
-        ],
+        "coordinates": [-87.8577186, 34.0033804],
         "type": "Point"
       }
     },
@@ -2094,10 +1683,7 @@
       "States": "AL",
       "Zip Code": "35565",
       "geometry": {
-        "coordinates": [
-          -87.6235183,
-          34.1518365
-        ],
+        "coordinates": [-87.6235183, 34.1518365],
         "type": "Point"
       }
     },
@@ -2109,10 +1695,7 @@
       "States": "AL",
       "Zip Code": "36078",
       "geometry": {
-        "coordinates": [
-          -85.8212247,
-          32.5582167
-        ],
+        "coordinates": [-85.8212247, 32.5582167],
         "type": "Point"
       }
     },
@@ -2124,10 +1707,7 @@
       "States": "AL",
       "Zip Code": "36853",
       "geometry": {
-        "coordinates": [
-          -85.7998557,
-          32.7083289
-        ],
+        "coordinates": [-85.7998557, 32.7083289],
         "type": "Point"
       }
     },
@@ -2138,10 +1718,7 @@
       "States": "AL",
       "Zip Code": "35077",
       "geometry": {
-        "coordinates": [
-          -86.7461612,
-          34.0582497
-        ],
+        "coordinates": [-86.7461612, 34.0582497],
         "type": "Point"
       }
     },
@@ -2154,10 +1731,7 @@
       "States": "AL",
       "Zip Code": "35023",
       "geometry": {
-        "coordinates": [
-          -87.14178299999999,
-          33.4457867
-        ],
+        "coordinates": [-87.14178299999999, 33.4457867],
         "type": "Point"
       }
     },
@@ -2170,10 +1744,7 @@
       "States": "UT",
       "Zip Code": "84770",
       "geometry": {
-        "coordinates": [
-          -113.5727106,
-          37.1136566
-        ],
+        "coordinates": [-113.5727106, 37.1136566],
         "type": "Point"
       }
     },
@@ -2186,10 +1757,7 @@
       "States": "AL",
       "Zip Code": "35131",
       "geometry": {
-        "coordinates": [
-          -86.26383,
-          33.6608012
-        ],
+        "coordinates": [-86.26383, 33.6608012],
         "type": "Point"
       }
     },
@@ -2201,10 +1769,7 @@
       "States": "AL",
       "Zip Code": "36003",
       "geometry": {
-        "coordinates": [
-          -86.7432678,
-          32.4512783
-        ],
+        "coordinates": [-86.7432678, 32.4512783],
         "type": "Point"
       }
     },
@@ -2217,10 +1782,7 @@
       "States": "AL",
       "Zip Code": "36830",
       "geometry": {
-        "coordinates": [
-          -85.5079921,
-          32.5362447
-        ],
+        "coordinates": [-85.5079921, 32.5362447],
         "type": "Point"
       }
     },
@@ -2232,10 +1794,7 @@
       "States": "AL",
       "Zip Code": "36524",
       "geometry": {
-        "coordinates": [
-          -88.055078,
-          31.7917189
-        ],
+        "coordinates": [-88.055078, 31.7917189],
         "type": "Point"
       }
     },
@@ -2246,10 +1805,7 @@
       "States": "AL",
       "Zip Code": "36701",
       "geometry": {
-        "coordinates": [
-          -86.9846178,
-          32.3076726
-        ],
+        "coordinates": [-86.9846178, 32.3076726],
         "type": "Point"
       }
     },
@@ -2261,10 +1817,7 @@
       "States": "AL",
       "Zip Code": "35954",
       "geometry": {
-        "coordinates": [
-          -86.1213049,
-          34.0358412
-        ],
+        "coordinates": [-86.1213049, 34.0358412],
         "type": "Point"
       }
     },
@@ -2277,10 +1830,7 @@
       "States": "AL",
       "Zip Code": "35633",
       "geometry": {
-        "coordinates": [
-          -87.7908394,
-          34.8949833
-        ],
+        "coordinates": [-87.7908394, 34.8949833],
         "type": "Point"
       }
     },
@@ -2293,10 +1843,7 @@
       "States": "AL",
       "Zip Code": "35603",
       "geometry": {
-        "coordinates": [
-          -87.0807213,
-          34.52367950000001
-        ],
+        "coordinates": [-87.0807213, 34.52367950000001],
         "type": "Point"
       }
     },
@@ -2307,10 +1854,7 @@
       "States": "AL",
       "Zip Code": "35901",
       "geometry": {
-        "coordinates": [
-          -85.993811,
-          33.96702980000001
-        ],
+        "coordinates": [-85.993811, 33.96702980000001],
         "type": "Point"
       }
     },
@@ -2323,10 +1867,7 @@
       "States": "UT",
       "Zip Code": "84310",
       "geometry": {
-        "coordinates": [
-          -111.8271534,
-          41.3057048
-        ],
+        "coordinates": [-111.8271534, 41.3057048],
         "type": "Point"
       }
     },
@@ -2339,10 +1880,7 @@
       "States": "AZ",
       "Zip Code": "85015",
       "geometry": {
-        "coordinates": [
-          -112.1125156,
-          33.4916025
-        ],
+        "coordinates": [-112.1125156, 33.4916025],
         "type": "Point"
       }
     },
@@ -2355,10 +1893,7 @@
       "States": "AZ",
       "Zip Code": "86442",
       "geometry": {
-        "coordinates": [
-          -114.6048612,
-          35.1017277
-        ],
+        "coordinates": [-114.6048612, 35.1017277],
         "type": "Point"
       }
     },
@@ -2370,10 +1905,7 @@
       "States": "AZ",
       "Zip Code": "85003",
       "geometry": {
-        "coordinates": [
-          -112.0771654,
-          33.4488153
-        ],
+        "coordinates": [-112.0771654, 33.4488153],
         "type": "Point"
       }
     },
@@ -2386,10 +1918,7 @@
       "States": "AZ",
       "Zip Code": "85130",
       "geometry": {
-        "coordinates": [
-          -111.7733902,
-          32.9110027
-        ],
+        "coordinates": [-111.7733902, 32.9110027],
         "type": "Point"
       }
     },
@@ -2401,10 +1930,7 @@
       "States": "AZ",
       "Zip Code": "85024",
       "geometry": {
-        "coordinates": [
-          -112.0302178,
-          33.6618697
-        ],
+        "coordinates": [-112.0302178, 33.6618697],
         "type": "Point"
       }
     },
@@ -2416,10 +1942,7 @@
       "States": "AZ",
       "Zip Code": "85123",
       "geometry": {
-        "coordinates": [
-          -111.6720346,
-          32.7521702
-        ],
+        "coordinates": [-111.6720346, 32.7521702],
         "type": "Point"
       }
     },
@@ -2432,10 +1955,7 @@
       "States": "AZ",
       "Zip Code": "85139",
       "geometry": {
-        "coordinates": [
-          -112.0491893,
-          33.0595488
-        ],
+        "coordinates": [-112.0491893, 33.0595488],
         "type": "Point"
       }
     },
@@ -2448,10 +1968,7 @@
       "States": "AZ",
       "Zip Code": "85726",
       "geometry": {
-        "coordinates": [
-          -110.9450752,
-          32.2047933
-        ],
+        "coordinates": [-110.9450752, 32.2047933],
         "type": "Point"
       }
     },
@@ -2464,10 +1981,7 @@
       "States": "AR",
       "Zip Code": "72202",
       "geometry": {
-        "coordinates": [
-          -92.2690858,
-          34.7435845
-        ],
+        "coordinates": [-92.2690858, 34.7435845],
         "type": "Point"
       }
     },
@@ -2480,10 +1994,7 @@
       "States": "AR",
       "Zip Code": "72204",
       "geometry": {
-        "coordinates": [
-          -92.39371159999999,
-          34.7045389
-        ],
+        "coordinates": [-92.39371159999999, 34.7045389],
         "type": "Point"
       }
     },
@@ -2496,10 +2007,7 @@
       "States": "CA",
       "Zip Code": "91770",
       "geometry": {
-        "coordinates": [
-          -118.0803525,
-          34.092435
-        ],
+        "coordinates": [-118.0803525, 34.092435],
         "type": "Point"
       }
     },
@@ -2512,10 +2020,7 @@
       "States": "CA",
       "Zip Code": "94236",
       "geometry": {
-        "coordinates": [
-          -121.49,
-          38.58
-        ],
+        "coordinates": [-121.49, 38.58],
         "type": "Point"
       }
     },
@@ -2528,10 +2033,7 @@
       "States": "CA",
       "Zip Code": "95205",
       "geometry": {
-        "coordinates": [
-          -121.2698344,
-          37.9521835
-        ],
+        "coordinates": [-121.2698344, 37.9521835],
         "type": "Point"
       }
     },
@@ -2544,10 +2046,7 @@
       "States": "CA",
       "Zip Code": "91350",
       "geometry": {
-        "coordinates": [
-          -118.5210012,
-          34.4354444
-        ],
+        "coordinates": [-118.5210012, 34.4354444],
         "type": "Point"
       }
     },
@@ -2560,10 +2059,7 @@
       "States": "NM",
       "Zip Code": "87002",
       "geometry": {
-        "coordinates": [
-          -106.7248807,
-          34.6397854
-        ],
+        "coordinates": [-106.7248807, 34.6397854],
         "type": "Point"
       }
     },
@@ -2576,10 +2072,7 @@
       "States": "CA",
       "Zip Code": "94607",
       "geometry": {
-        "coordinates": [
-          -122.2708386,
-          37.8013164
-        ],
+        "coordinates": [-122.2708386, 37.8013164],
         "type": "Point"
       }
     },
@@ -2592,10 +2085,7 @@
       "States": "CA",
       "Zip Code": "92025",
       "geometry": {
-        "coordinates": [
-          -117.0831777,
-          33.1226504
-        ],
+        "coordinates": [-117.0831777, 33.1226504],
         "type": "Point"
       }
     },
@@ -2608,10 +2098,7 @@
       "States": "CA",
       "Zip Code": "92028",
       "geometry": {
-        "coordinates": [
-          -117.2411101,
-          33.3876137
-        ],
+        "coordinates": [-117.2411101, 33.3876137],
         "type": "Point"
       }
     },
@@ -2624,10 +2111,7 @@
       "States": "CA",
       "Zip Code": "93725",
       "geometry": {
-        "coordinates": [
-          -119.7451375,
-          36.6950749
-        ],
+        "coordinates": [-119.7451375, 36.6950749],
         "type": "Point"
       }
     },
@@ -2640,10 +2124,7 @@
       "States": "CA",
       "Zip Code": "93311",
       "geometry": {
-        "coordinates": [
-          -119.0974963,
-          35.3401336
-        ],
+        "coordinates": [-119.0974963, 35.3401336],
         "type": "Point"
       }
     },
@@ -2656,10 +2137,7 @@
       "States": "CA",
       "Zip Code": "93725",
       "geometry": {
-        "coordinates": [
-          -119.7327156,
-          36.7064133
-        ],
+        "coordinates": [-119.7327156, 36.7064133],
         "type": "Point"
       }
     },
@@ -2672,10 +2150,7 @@
       "States": "CA",
       "Zip Code": "91103",
       "geometry": {
-        "coordinates": [
-          -118.1528028,
-          34.1499201
-        ],
+        "coordinates": [-118.1528028, 34.1499201],
         "type": "Point"
       }
     },
@@ -2688,10 +2163,7 @@
       "States": "CA",
       "Zip Code": "90807",
       "geometry": {
-        "coordinates": [
-          -118.1704137,
-          33.8177675
-        ],
+        "coordinates": [-118.1704137, 33.8177675],
         "type": "Point"
       }
     },
@@ -2704,10 +2176,7 @@
       "States": "CA",
       "Zip Code": "90012",
       "geometry": {
-        "coordinates": [
-          -118.2500184,
-          34.0569261
-        ],
+        "coordinates": [-118.2500184, 34.0569261],
         "type": "Point"
       }
     },
@@ -2720,10 +2189,7 @@
       "States": "CA",
       "Zip Code": "94925",
       "geometry": {
-        "coordinates": [
-          -122.5179198,
-          37.9370289
-        ],
+        "coordinates": [-122.5179198, 37.9370289],
         "type": "Point"
       }
     },
@@ -2736,10 +2202,7 @@
       "States": "CA",
       "Zip Code": "92627",
       "geometry": {
-        "coordinates": [
-          -117.9326806,
-          33.645888
-        ],
+        "coordinates": [-117.9326806, 33.645888],
         "type": "Point"
       }
     },
@@ -2752,10 +2215,7 @@
       "States": "Ca",
       "Zip Code": "90012",
       "geometry": {
-        "coordinates": [
-          -118.236238,
-          34.054884
-        ],
+        "coordinates": [-118.236238, 34.054884],
         "type": "Point"
       }
     },
@@ -2767,10 +2227,7 @@
       "States": "CA",
       "Zip Code": "92708",
       "geometry": {
-        "coordinates": [
-          -117.9447167,
-          33.6932268
-        ],
+        "coordinates": [-117.9447167, 33.6932268],
         "type": "Point"
       }
     },
@@ -2783,10 +2240,7 @@
       "States": "CA",
       "Zip Code": "92058",
       "geometry": {
-        "coordinates": [
-          -117.331334,
-          33.2448626
-        ],
+        "coordinates": [-117.331334, 33.2448626],
         "type": "Point"
       }
     },
@@ -2799,10 +2253,7 @@
       "States": "CA",
       "Zip Code": "92708",
       "geometry": {
-        "coordinates": [
-          -117.9447167,
-          33.6932268
-        ],
+        "coordinates": [-117.9447167, 33.6932268],
         "type": "Point"
       }
     },
@@ -2815,10 +2266,7 @@
       "States": "CA",
       "Zip Code": "93646",
       "geometry": {
-        "coordinates": [
-          -119.3194762,
-          36.6248646
-        ],
+        "coordinates": [-119.3194762, 36.6248646],
         "type": "Point"
       }
     },
@@ -2831,10 +2279,7 @@
       "States": "CA",
       "Zip Code": "91978",
       "geometry": {
-        "coordinates": [
-          -116.9663855,
-          32.7242896
-        ],
+        "coordinates": [-116.9663855, 32.7242896],
         "type": "Point"
       }
     },
@@ -2846,10 +2291,7 @@
       "States": "CA",
       "Zip Code": "92071",
       "geometry": {
-        "coordinates": [
-          -117.0052008,
-          32.8454863
-        ],
+        "coordinates": [-117.0052008, 32.8454863],
         "type": "Point"
       }
     },
@@ -2861,10 +2303,7 @@
       "States": "CA",
       "Zip Code": "93622",
       "geometry": {
-        "coordinates": [
-          -120.7291145,
-          36.8900204
-        ],
+        "coordinates": [-120.7291145, 36.8900204],
         "type": "Point"
       }
     },
@@ -2877,10 +2316,7 @@
       "States": "CA",
       "Zip Code": "92123",
       "geometry": {
-        "coordinates": [
-          -117.1313468,
-          32.8255822
-        ],
+        "coordinates": [-117.1313468, 32.8255822],
         "type": "Point"
       }
     },
@@ -2893,10 +2329,7 @@
       "States": "CA",
       "Zip Code": "92040",
       "geometry": {
-        "coordinates": [
-          -116.9266201,
-          32.9066231
-        ],
+        "coordinates": [-116.9266201, 32.9066231],
         "type": "Point"
       }
     },
@@ -2909,10 +2342,7 @@
       "States": "CA",
       "Zip Code": "94102",
       "geometry": {
-        "coordinates": [
-          -122.419371,
-          37.7809272
-        ],
+        "coordinates": [-122.419371, 37.7809272],
         "type": "Point"
       }
     },
@@ -2925,10 +2355,7 @@
       "States": "CA",
       "Zip Code": "95110",
       "geometry": {
-        "coordinates": [
-          -121.9015287,
-          37.3480198
-        ],
+        "coordinates": [-121.9015287, 37.3480198],
         "type": "Point"
       }
     },
@@ -2941,10 +2368,7 @@
       "States": "CA",
       "Zip Code": "93635",
       "geometry": {
-        "coordinates": [
-          -120.847638,
-          37.0610755
-        ],
+        "coordinates": [-120.847638, 37.0610755],
         "type": "Point"
       }
     },
@@ -2957,10 +2381,7 @@
       "States": "CA",
       "Zip Code": "95118",
       "geometry": {
-        "coordinates": [
-          -121.8733673,
-          37.2453331
-        ],
+        "coordinates": [-121.8733673, 37.2453331],
         "type": "Point"
       }
     },
@@ -2973,10 +2394,7 @@
       "States": "CA",
       "Zip Code": "92688",
       "geometry": {
-        "coordinates": [
-          -117.6328955,
-          33.58133370000001
-        ],
+        "coordinates": [-117.6328955, 33.58133370000001],
         "type": "Point"
       }
     },
@@ -2988,10 +2406,7 @@
       "States": "CA",
       "Zip Code": "93280",
       "geometry": {
-        "coordinates": [
-          -119.3588348,
-          35.5897272
-        ],
+        "coordinates": [-119.3588348, 35.5897272],
         "type": "Point"
       }
     },
@@ -3004,10 +2419,7 @@
       "States": "CA",
       "Zip Code": "95688",
       "geometry": {
-        "coordinates": [
-          -121.956192,
-          38.3939498
-        ],
+        "coordinates": [-121.956192, 38.3939498],
         "type": "Point"
       }
     },
@@ -3020,10 +2432,7 @@
       "States": "CA",
       "Zip Code": "92320",
       "geometry": {
-        "coordinates": [
-          -117.0514801,
-          33.9992673
-        ],
+        "coordinates": [-117.0514801, 33.9992673],
         "type": "Point"
       }
     },
@@ -3036,10 +2445,7 @@
       "States": "CA",
       "Zip Code": "90640",
       "geometry": {
-        "coordinates": [
-          -118.1058098,
-          34.0014624
-        ],
+        "coordinates": [-118.1058098, 34.0014624],
         "type": "Point"
       }
     },
@@ -3052,10 +2458,7 @@
       "States": "TX",
       "Zip Code": "77478",
       "geometry": {
-        "coordinates": [
-          -95.6036644,
-          29.635264
-        ],
+        "coordinates": [-95.6036644, 29.635264],
         "type": "Point"
       }
     },
@@ -3068,10 +2471,7 @@
       "States": "CA",
       "Zip Code": "91107",
       "geometry": {
-        "coordinates": [
-          -118.0886291,
-          34.1299046
-        ],
+        "coordinates": [-118.0886291, 34.1299046],
         "type": "Point"
       }
     },
@@ -3083,10 +2483,7 @@
       "States": "CA",
       "Zip Code": "93212",
       "geometry": {
-        "coordinates": [
-          -119.5606559,
-          36.0995365
-        ],
+        "coordinates": [-119.5606559, 36.0995365],
         "type": "Point"
       }
     },
@@ -3097,10 +2494,7 @@
       "States": "CA",
       "Zip Code": "93212",
       "geometry": {
-        "coordinates": [
-          -119.5621055,
-          36.0975162
-        ],
+        "coordinates": [-119.5621055, 36.0975162],
         "type": "Point"
       }
     },
@@ -3113,10 +2507,7 @@
       "States": "CA",
       "Zip Code": "95381",
       "geometry": {
-        "coordinates": [
-          -120.8811142,
-          37.5323606
-        ],
+        "coordinates": [-120.8811142, 37.5323606],
         "type": "Point"
       }
     },
@@ -3129,10 +2520,7 @@
       "States": "CA",
       "Zip Code": "92069",
       "geometry": {
-        "coordinates": [
-          -117.1799431,
-          33.1437187
-        ],
+        "coordinates": [-117.1799431, 33.1437187],
         "type": "Point"
       }
     },
@@ -3144,10 +2532,7 @@
       "States": "CA",
       "Zip Code": "92082",
       "geometry": {
-        "coordinates": [
-          -117.0216975,
-          33.2321691
-        ],
+        "coordinates": [-117.0216975, 33.2321691],
         "type": "Point"
       }
     },
@@ -3160,10 +2545,7 @@
       "States": "CA",
       "Zip Code": "92081",
       "geometry": {
-        "coordinates": [
-          -117.2374354,
-          33.14762
-        ],
+        "coordinates": [-117.2374354, 33.14762],
         "type": "Point"
       }
     },
@@ -3176,10 +2558,7 @@
       "States": "CA",
       "Zip Code": "91789",
       "geometry": {
-        "coordinates": [
-          -117.8430941,
-          34.0166736
-        ],
+        "coordinates": [-117.8430941, 34.0166736],
         "type": "Point"
       }
     },
@@ -3192,10 +2571,7 @@
       "States": "CA",
       "Zip Code": "92399",
       "geometry": {
-        "coordinates": [
-          -117.0981493,
-          34.030506
-        ],
+        "coordinates": [-117.0981493, 34.030506],
         "type": "Point"
       }
     },
@@ -3208,10 +2584,7 @@
       "States": "CA",
       "Zip Code": "93703",
       "geometry": {
-        "coordinates": [
-          -119.780529,
-          36.7789042
-        ],
+        "coordinates": [-119.780529, 36.7789042],
         "type": "Point"
       }
     },
@@ -3224,10 +2597,7 @@
       "States": "CO",
       "Zip Code": "80921",
       "geometry": {
-        "coordinates": [
-          -104.7953204,
-          39.0514458
-        ],
+        "coordinates": [-104.7953204, 39.0514458],
         "type": "Point"
       }
     },
@@ -3239,10 +2609,7 @@
       "States": "CO",
       "Zip Code": "80424",
       "geometry": {
-        "coordinates": [
-          -106.0529504,
-          39.5604431
-        ],
+        "coordinates": [-106.0529504, 39.5604431],
         "type": "Point"
       }
     },
@@ -3255,10 +2622,7 @@
       "States": "CO",
       "Zip Code": "80122",
       "geometry": {
-        "coordinates": [
-          -104.9455247,
-          39.5968039
-        ],
+        "coordinates": [-104.9455247, 39.5968039],
         "type": "Point"
       }
     },
@@ -3271,10 +2635,7 @@
       "States": "CO",
       "Zip Code": "80012",
       "geometry": {
-        "coordinates": [
-          -104.8307783,
-          39.7171267
-        ],
+        "coordinates": [-104.8307783, 39.7171267],
         "type": "Point"
       }
     },
@@ -3287,10 +2648,7 @@
       "States": "CO",
       "Zip Code": "81131",
       "geometry": {
-        "coordinates": [
-          -105.6865436,
-          37.9872152
-        ],
+        "coordinates": [-105.6865436, 37.9872152],
         "type": "Point"
       }
     },
@@ -3303,10 +2661,7 @@
       "States": "CO",
       "Zip Code": "80421",
       "geometry": {
-        "coordinates": [
-          -105.4735785,
-          39.4052103
-        ],
+        "coordinates": [-105.4735785, 39.4052103],
         "type": "Point"
       }
     },
@@ -3319,10 +2674,7 @@
       "States": "CO",
       "Zip Code": "80226",
       "geometry": {
-        "coordinates": [
-          -105.0808485,
-          39.6999256
-        ],
+        "coordinates": [-105.0808485, 39.6999256],
         "type": "Point"
       }
     },
@@ -3335,10 +2687,7 @@
       "States": "CO",
       "Zip Code": "80303",
       "geometry": {
-        "coordinates": [
-          -105.1519942,
-          39.999498
-        ],
+        "coordinates": [-105.1519942, 39.999498],
         "type": "Point"
       }
     },
@@ -3351,10 +2700,7 @@
       "States": "CO",
       "Zip Code": "80227",
       "geometry": {
-        "coordinates": [
-          -105.0999953,
-          39.6711594
-        ],
+        "coordinates": [-105.0999953, 39.6711594],
         "type": "Point"
       }
     },
@@ -3367,10 +2713,7 @@
       "States": "CO",
       "Zip Code": "80227",
       "geometry": {
-        "coordinates": [
-          -105.107759,
-          39.655423
-        ],
+        "coordinates": [-105.107759, 39.655423],
         "type": "Point"
       }
     },
@@ -3383,10 +2726,7 @@
       "States": "CO",
       "Zip Code": "80002",
       "geometry": {
-        "coordinates": [
-          -105.0455588,
-          39.8024634
-        ],
+        "coordinates": [-105.0455588, 39.8024634],
         "type": "Point"
       }
     },
@@ -3399,10 +2739,7 @@
       "States": "CO",
       "Zip Code": "81023",
       "geometry": {
-        "coordinates": [
-          -104.9930577,
-          38.0724954
-        ],
+        "coordinates": [-104.9930577, 38.0724954],
         "type": "Point"
       }
     },
@@ -3415,10 +2752,7 @@
       "States": "CO",
       "Zip Code": "80403",
       "geometry": {
-        "coordinates": [
-          -105.2846971,
-          39.8605965
-        ],
+        "coordinates": [-105.2846971, 39.8605965],
         "type": "Point"
       }
     },
@@ -3430,10 +2764,7 @@
       "States": "CO",
       "Zip Code": "81428",
       "geometry": {
-        "coordinates": [
-          -107.5920017,
-          38.8683204
-        ],
+        "coordinates": [-107.5920017, 38.8683204],
         "type": "Point"
       }
     },
@@ -3446,10 +2777,7 @@
       "States": "CO",
       "Zip Code": "80226",
       "geometry": {
-        "coordinates": [
-          -105.1046771,
-          39.7122788
-        ],
+        "coordinates": [-105.1046771, 39.7122788],
         "type": "Point"
       }
     },
@@ -3462,10 +2790,7 @@
       "States": "CO",
       "Zip Code": "80123",
       "geometry": {
-        "coordinates": [
-          -105.0860191,
-          39.6390307
-        ],
+        "coordinates": [-105.0860191, 39.6390307],
         "type": "Point"
       }
     },
@@ -3478,10 +2803,7 @@
       "States": "SD",
       "Zip Code": "57719",
       "geometry": {
-        "coordinates": [
-          -103.0649073,
-          44.1333647
-        ],
+        "coordinates": [-103.0649073, 44.1333647],
         "type": "Point"
       }
     },
@@ -3494,10 +2816,7 @@
       "States": "CO",
       "Zip Code": "80439",
       "geometry": {
-        "coordinates": [
-          -105.373867,
-          39.582664
-        ],
+        "coordinates": [-105.373867, 39.582664],
         "type": "Point"
       }
     },
@@ -3509,10 +2828,7 @@
       "States": "OR",
       "Zip Code": "97327",
       "geometry": {
-        "coordinates": [
-          -122.9848108,
-          44.39345710000001
-        ],
+        "coordinates": [-122.9848108, 44.39345710000001],
         "type": "Point"
       }
     },
@@ -3524,10 +2840,7 @@
       "States": "WV",
       "Zip Code": "25607",
       "geometry": {
-        "coordinates": [
-          -81.761996,
-          37.7957667
-        ],
+        "coordinates": [-81.761996, 37.7957667],
         "type": "Point"
       }
     },
@@ -3538,10 +2851,7 @@
       "States": "CO",
       "Zip Code": "80103",
       "geometry": {
-        "coordinates": [
-          -104.2248108,
-          39.7053269
-        ],
+        "coordinates": [-104.2248108, 39.7053269],
         "type": "Point"
       }
     },
@@ -3552,10 +2862,7 @@
       "States": "NY",
       "Zip Code": "12033",
       "geometry": {
-        "coordinates": [
-          -73.75702509999999,
-          42.5274903
-        ],
+        "coordinates": [-73.75702509999999, 42.5274903],
         "type": "Point"
       }
     },
@@ -3567,10 +2874,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8906614,
-          39.6223566
-        ],
+        "coordinates": [-104.8906614, 39.6223566],
         "type": "Point"
       }
     },
@@ -3583,10 +2887,7 @@
       "States": "CO",
       "Zip Code": "80129",
       "geometry": {
-        "coordinates": [
-          -104.9888729,
-          39.5584882
-        ],
+        "coordinates": [-104.9888729, 39.5584882],
         "type": "Point"
       }
     },
@@ -3599,10 +2900,7 @@
       "States": "CO",
       "Zip Code": "80022",
       "geometry": {
-        "coordinates": [
-          -104.9117262,
-          39.8240567
-        ],
+        "coordinates": [-104.9117262, 39.8240567],
         "type": "Point"
       }
     },
@@ -3615,10 +2913,7 @@
       "States": "CO",
       "Zip Code": "80631",
       "geometry": {
-        "coordinates": [
-          -104.6807008,
-          40.4010798
-        ],
+        "coordinates": [-104.6807008, 40.4010798],
         "type": "Point"
       }
     },
@@ -3631,10 +2926,7 @@
       "States": "CO",
       "Zip Code": "80138",
       "geometry": {
-        "coordinates": [
-          -104.620936,
-          39.5555671
-        ],
+        "coordinates": [-104.620936, 39.5555671],
         "type": "Point"
       }
     },
@@ -3646,10 +2938,7 @@
       "States": "CO",
       "Zip Code": "80231",
       "geometry": {
-        "coordinates": [
-          -104.8898937,
-          39.6734327
-        ],
+        "coordinates": [-104.8898937, 39.6734327],
         "type": "Point"
       }
     },
@@ -3662,10 +2951,7 @@
       "States": "CO",
       "Zip Code": "80203",
       "geometry": {
-        "coordinates": [
-          -104.9854807,
-          39.743642
-        ],
+        "coordinates": [-104.9854807, 39.743642],
         "type": "Point"
       }
     },
@@ -3677,10 +2963,7 @@
       "States": "CO",
       "Zip Code": "80113",
       "geometry": {
-        "coordinates": [
-          -104.9589183,
-          39.6550001
-        ],
+        "coordinates": [-104.9589183, 39.6550001],
         "type": "Point"
       }
     },
@@ -3693,10 +2976,7 @@
       "States": "CO",
       "Zip Code": "81403",
       "geometry": {
-        "coordinates": [
-          -107.9345504,
-          38.4795807
-        ],
+        "coordinates": [-107.9345504, 38.4795807],
         "type": "Point"
       }
     },
@@ -3709,10 +2989,7 @@
       "States": "CO",
       "Zip Code": "80817",
       "geometry": {
-        "coordinates": [
-          -104.7009659,
-          38.6833787
-        ],
+        "coordinates": [-104.7009659, 38.6833787],
         "type": "Point"
       }
     },
@@ -3725,10 +3002,7 @@
       "States": "CO",
       "Zip Code": "80002",
       "geometry": {
-        "coordinates": [
-          -105.0602547,
-          39.7943039
-        ],
+        "coordinates": [-105.0602547, 39.7943039],
         "type": "Point"
       }
     },
@@ -3741,10 +3015,7 @@
       "States": "CO",
       "Zip Code": "81520",
       "geometry": {
-        "coordinates": [
-          -108.422969,
-          39.076333
-        ],
+        "coordinates": [-108.422969, 39.076333],
         "type": "Point"
       }
     },
@@ -3757,10 +3028,7 @@
       "States": "CO",
       "Zip Code": "80903",
       "geometry": {
-        "coordinates": [
-          -104.8248984,
-          38.831958
-        ],
+        "coordinates": [-104.8248984, 38.831958],
         "type": "Point"
       }
     },
@@ -3773,10 +3041,7 @@
       "States": "CO",
       "Zip Code": "80447",
       "geometry": {
-        "coordinates": [
-          -105.8523778,
-          40.2524825
-        ],
+        "coordinates": [-105.8523778, 40.2524825],
         "type": "Point"
       }
     },
@@ -3788,10 +3053,7 @@
       "States": "CO",
       "Zip Code": "80123",
       "geometry": {
-        "coordinates": [
-          -105.0954296,
-          39.5956298
-        ],
+        "coordinates": [-105.0954296, 39.5956298],
         "type": "Point"
       }
     },
@@ -3804,10 +3066,7 @@
       "States": "CO",
       "Zip Code": "80112",
       "geometry": {
-        "coordinates": [
-          -104.8700007,
-          39.5701574
-        ],
+        "coordinates": [-104.8700007, 39.5701574],
         "type": "Point"
       }
     },
@@ -3820,10 +3079,7 @@
       "States": "CO",
       "Zip Code": "80221",
       "geometry": {
-        "coordinates": [
-          -105.0032106,
-          39.826321
-        ],
+        "coordinates": [-105.0032106, 39.826321],
         "type": "Point"
       }
     },
@@ -3835,10 +3091,7 @@
       "States": "CO",
       "Zip Code": "80439",
       "geometry": {
-        "coordinates": [
-          -105.3557024,
-          39.693041
-        ],
+        "coordinates": [-105.3557024, 39.693041],
         "type": "Point"
       }
     },
@@ -3851,10 +3104,7 @@
       "States": "CO",
       "Zip Code": "81055",
       "geometry": {
-        "coordinates": [
-          -105.1054711,
-          37.3724501
-        ],
+        "coordinates": [-105.1054711, 37.3724501],
         "type": "Point"
       }
     },
@@ -3867,10 +3117,7 @@
       "States": "CO",
       "Zip Code": "80138",
       "geometry": {
-        "coordinates": [
-          -104.6037011,
-          39.46619150000001
-        ],
+        "coordinates": [-104.6037011, 39.46619150000001],
         "type": "Point"
       }
     },
@@ -3881,10 +3128,7 @@
       "States": "CO",
       "Zip Code": "80134",
       "geometry": {
-        "coordinates": [
-          -104.7632149,
-          39.4383772
-        ],
+        "coordinates": [-104.7632149, 39.4383772],
         "type": "Point"
       }
     },
@@ -3897,10 +3141,7 @@
       "States": "MS",
       "Zip Code": "39525",
       "geometry": {
-        "coordinates": [
-          -89.3823592,
-          30.3747494
-        ],
+        "coordinates": [-89.3823592, 30.3747494],
         "type": "Point"
       }
     },
@@ -3913,10 +3154,7 @@
       "States": "CO",
       "Zip Code": "80112",
       "geometry": {
-        "coordinates": [
-          -104.8815384,
-          39.5910196
-        ],
+        "coordinates": [-104.8815384, 39.5910196],
         "type": "Point"
       }
     },
@@ -3928,10 +3166,7 @@
       "States": "CO",
       "Zip Code": "80921",
       "geometry": {
-        "coordinates": [
-          -104.8156877,
-          39.0562604
-        ],
+        "coordinates": [-104.8156877, 39.0562604],
         "type": "Point"
       }
     },
@@ -3944,10 +3179,7 @@
       "States": "CO",
       "Zip Code": "81657",
       "geometry": {
-        "coordinates": [
-          -106.3945051,
-          39.6413429
-        ],
+        "coordinates": [-106.3945051, 39.6413429],
         "type": "Point"
       }
     },
@@ -3960,10 +3192,7 @@
       "States": "CO",
       "Zip Code": "81101",
       "geometry": {
-        "coordinates": [
-          -105.8594195,
-          37.470559
-        ],
+        "coordinates": [-105.8594195, 37.470559],
         "type": "Point"
       }
     },
@@ -3976,10 +3205,7 @@
       "States": "CO",
       "Zip Code": "80301",
       "geometry": {
-        "coordinates": [
-          -105.2077798,
-          40.04065060000001
-        ],
+        "coordinates": [-105.2077798, 40.04065060000001],
         "type": "Point"
       }
     },
@@ -3992,10 +3218,7 @@
       "States": "CO",
       "Zip Code": "80016",
       "geometry": {
-        "coordinates": [
-          -104.7173751,
-          39.60415820000001
-        ],
+        "coordinates": [-104.7173751, 39.60415820000001],
         "type": "Point"
       }
     },
@@ -4008,10 +3231,7 @@
       "States": "CO",
       "Zip Code": "80435",
       "geometry": {
-        "coordinates": [
-          -106.0030666,
-          39.588391
-        ],
+        "coordinates": [-106.0030666, 39.588391],
         "type": "Point"
       }
     },
@@ -4024,10 +3244,7 @@
       "States": "CO",
       "Zip Code": "80524",
       "geometry": {
-        "coordinates": [
-          -105.0496912,
-          40.5845515
-        ],
+        "coordinates": [-105.0496912, 40.5845515],
         "type": "Point"
       }
     },
@@ -4038,10 +3255,7 @@
       "States": "CO",
       "Zip Code": "80816",
       "geometry": {
-        "coordinates": [
-          -105.2930195,
-          38.9445691
-        ],
+        "coordinates": [-105.2930195, 38.9445691],
         "type": "Point"
       }
     },
@@ -4054,10 +3268,7 @@
       "States": "CO",
       "Zip Code": "80132",
       "geometry": {
-        "coordinates": [
-          -104.8934884,
-          39.1050912
-        ],
+        "coordinates": [-104.8934884, 39.1050912],
         "type": "Point"
       }
     },
@@ -4070,10 +3281,7 @@
       "States": "CO",
       "Zip Code": "80525",
       "geometry": {
-        "coordinates": [
-          -105.0751496,
-          40.5160073
-        ],
+        "coordinates": [-105.0751496, 40.5160073],
         "type": "Point"
       }
     },
@@ -4085,10 +3293,7 @@
       "States": "CO",
       "Zip Code": "80120",
       "geometry": {
-        "coordinates": [
-          -105.0038039,
-          39.57523219999999
-        ],
+        "coordinates": [-105.0038039, 39.57523219999999],
         "type": "Point"
       }
     },
@@ -4100,10 +3305,7 @@
       "States": "CO",
       "Zip Code": "80401",
       "geometry": {
-        "coordinates": [
-          -105.2720998,
-          39.6742114
-        ],
+        "coordinates": [-105.2720998, 39.6742114],
         "type": "Point"
       }
     },
@@ -4114,10 +3316,7 @@
       "States": "CO",
       "Zip Code": "80446",
       "geometry": {
-        "coordinates": [
-          -105.9165036,
-          40.0529349
-        ],
+        "coordinates": [-105.9165036, 40.0529349],
         "type": "Point"
       }
     },
@@ -4128,10 +3327,7 @@
       "States": "CO",
       "Zip Code": "80482",
       "geometry": {
-        "coordinates": [
-          -105.785836,
-          39.9172063
-        ],
+        "coordinates": [-105.785836, 39.9172063],
         "type": "Point"
       }
     },
@@ -4144,10 +3340,7 @@
       "States": "CO",
       "Zip Code": "80228",
       "geometry": {
-        "coordinates": [
-          -105.1530563,
-          39.6858412
-        ],
+        "coordinates": [-105.1530563, 39.6858412],
         "type": "Point"
       }
     },
@@ -4160,10 +3353,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8909807,
-          39.6004078
-        ],
+        "coordinates": [-104.8909807, 39.6004078],
         "type": "Point"
       }
     },
@@ -4175,10 +3365,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8906614,
-          39.6223566
-        ],
+        "coordinates": [-104.8906614, 39.6223566],
         "type": "Point"
       }
     },
@@ -4189,10 +3376,7 @@
       "States": "CO",
       "Zip Code": "80640",
       "geometry": {
-        "coordinates": [
-          -104.8841057,
-          39.8855577
-        ],
+        "coordinates": [-104.8841057, 39.8855577],
         "type": "Point"
       }
     },
@@ -4205,10 +3389,7 @@
       "States": "CO",
       "Zip Code": "80498",
       "geometry": {
-        "coordinates": [
-          -106.310736,
-          39.8749656
-        ],
+        "coordinates": [-106.310736, 39.8749656],
         "type": "Point"
       }
     },
@@ -4220,10 +3401,7 @@
       "States": "CO",
       "Zip Code": "80215",
       "geometry": {
-        "coordinates": [
-          -105.1092435,
-          39.7334034
-        ],
+        "coordinates": [-105.1092435, 39.7334034],
         "type": "Point"
       }
     },
@@ -4234,10 +3412,7 @@
       "States": "CO",
       "Zip Code": "80814",
       "geometry": {
-        "coordinates": [
-          -105.2035178,
-          38.9525164
-        ],
+        "coordinates": [-105.2035178, 38.9525164],
         "type": "Point"
       }
     },
@@ -4249,10 +3424,7 @@
       "States": "CO",
       "Zip Code": "80222",
       "geometry": {
-        "coordinates": [
-          -104.9188777,
-          39.66736720000001
-        ],
+        "coordinates": [-104.9188777, 39.66736720000001],
         "type": "Point"
       }
     },
@@ -4264,10 +3436,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8960846,
-          39.6210501
-        ],
+        "coordinates": [-104.8960846, 39.6210501],
         "type": "Point"
       }
     },
@@ -4279,10 +3448,7 @@
       "States": "CO",
       "Zip Code": "80203",
       "geometry": {
-        "coordinates": [
-          -104.9857089,
-          39.7439663
-        ],
+        "coordinates": [-104.9857089, 39.7439663],
         "type": "Point"
       }
     },
@@ -4294,10 +3460,7 @@
       "States": "Co",
       "Zip Code": "80228",
       "geometry": {
-        "coordinates": [
-          -105.1346416,
-          39.7159403
-        ],
+        "coordinates": [-105.1346416, 39.7159403],
         "type": "Point"
       }
     },
@@ -4310,10 +3473,7 @@
       "States": "CO",
       "Zip Code": "80401",
       "geometry": {
-        "coordinates": [
-          -105.2595722,
-          39.6968384
-        ],
+        "coordinates": [-105.2595722, 39.6968384],
         "type": "Point"
       }
     },
@@ -4325,10 +3485,7 @@
       "States": "CO",
       "Zip Code": "80401",
       "geometry": {
-        "coordinates": [
-          -105.2432282,
-          39.6782942
-        ],
+        "coordinates": [-105.2432282, 39.6782942],
         "type": "Point"
       }
     },
@@ -4341,10 +3498,7 @@
       "States": "CO",
       "Zip Code": "80454",
       "geometry": {
-        "coordinates": [
-          -105.264323,
-          39.63655
-        ],
+        "coordinates": [-105.264323, 39.63655],
         "type": "Point"
       }
     },
@@ -4357,10 +3511,7 @@
       "States": "CO",
       "Zip Code": "80112",
       "geometry": {
-        "coordinates": [
-          -104.8699985,
-          39.5702901
-        ],
+        "coordinates": [-104.8699985, 39.5702901],
         "type": "Point"
       }
     },
@@ -4372,10 +3523,7 @@
       "States": "CO",
       "Zip Code": "80127",
       "geometry": {
-        "coordinates": [
-          -105.1193222,
-          39.5671611
-        ],
+        "coordinates": [-105.1193222, 39.5671611],
         "type": "Point"
       }
     },
@@ -4388,10 +3536,7 @@
       "States": "CO",
       "Zip Code": "80127",
       "geometry": {
-        "coordinates": [
-          -105.1193222,
-          39.5671611
-        ],
+        "coordinates": [-105.1193222, 39.5671611],
         "type": "Point"
       }
     },
@@ -4402,10 +3547,7 @@
       "States": "CO",
       "Zip Code": "80457",
       "geometry": {
-        "coordinates": [
-          -105.3050917,
-          39.6535532
-        ],
+        "coordinates": [-105.3050917, 39.6535532],
         "type": "Point"
       }
     },
@@ -4418,10 +3560,7 @@
       "States": "CO",
       "Zip Code": "80123",
       "geometry": {
-        "coordinates": [
-          -105.0860191,
-          39.6390307
-        ],
+        "coordinates": [-105.0860191, 39.6390307],
         "type": "Point"
       }
     },
@@ -4432,10 +3571,7 @@
       "States": "TX",
       "Zip Code": "78711",
       "geometry": {
-        "coordinates": [
-          -97.7430608,
-          30.267153
-        ],
+        "coordinates": [-97.7430608, 30.267153],
         "type": "Point"
       }
     },
@@ -4448,10 +3584,7 @@
       "States": "CO",
       "Zip Code": "80503",
       "geometry": {
-        "coordinates": [
-          -105.1923997,
-          40.1125071
-        ],
+        "coordinates": [-105.1923997, 40.1125071],
         "type": "Point"
       }
     },
@@ -4463,10 +3596,7 @@
       "States": "CO",
       "Zip Code": "80513",
       "geometry": {
-        "coordinates": [
-          -105.0607188,
-          40.3044834
-        ],
+        "coordinates": [-105.0607188, 40.3044834],
         "type": "Point"
       }
     },
@@ -4478,10 +3608,7 @@
       "States": "CO",
       "Zip Code": "80504",
       "geometry": {
-        "coordinates": [
-          -105.1226921,
-          40.2178116
-        ],
+        "coordinates": [-105.1226921, 40.2178116],
         "type": "Point"
       }
     },
@@ -4494,10 +3621,7 @@
       "States": "CO",
       "Zip Code": "80439",
       "geometry": {
-        "coordinates": [
-          -105.3557024,
-          39.693041
-        ],
+        "coordinates": [-105.3557024, 39.693041],
         "type": "Point"
       }
     },
@@ -4509,10 +3633,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8960846,
-          39.6210501
-        ],
+        "coordinates": [-104.8960846, 39.6210501],
         "type": "Point"
       }
     },
@@ -4525,10 +3646,7 @@
       "States": "CA",
       "Zip Code": "95348",
       "geometry": {
-        "coordinates": [
-          -120.5263466,
-          37.32110249999999
-        ],
+        "coordinates": [-120.5263466, 37.32110249999999],
         "type": "Point"
       }
     },
@@ -4540,10 +3658,7 @@
       "States": "CO",
       "Zip Code": "80498",
       "geometry": {
-        "coordinates": [
-          -106.0712941,
-          39.6296191
-        ],
+        "coordinates": [-106.0712941, 39.6296191],
         "type": "Point"
       }
     },
@@ -4554,10 +3669,7 @@
       "States": "AZ",
       "Zip Code": "85211",
       "geometry": {
-        "coordinates": [
-          -111.8313906,
-          33.4180523
-        ],
+        "coordinates": [-111.8313906, 33.4180523],
         "type": "Point"
       }
     },
@@ -4569,10 +3681,7 @@
       "States": "CO",
       "Zip Code": "80127",
       "geometry": {
-        "coordinates": [
-          -105.1191967,
-          39.5668526
-        ],
+        "coordinates": [-105.1191967, 39.5668526],
         "type": "Point"
       }
     },
@@ -4585,10 +3694,7 @@
       "States": "CO",
       "Zip Code": "81321",
       "geometry": {
-        "coordinates": [
-          -108.6115785,
-          37.3103865
-        ],
+        "coordinates": [-108.6115785, 37.3103865],
         "type": "Point"
       }
     },
@@ -4601,10 +3707,7 @@
       "States": "CO",
       "Zip Code": "80701",
       "geometry": {
-        "coordinates": [
-          -103.7720947,
-          40.2554033
-        ],
+        "coordinates": [-103.7720947, 40.2554033],
         "type": "Point"
       }
     },
@@ -4617,10 +3720,7 @@
       "States": "CO",
       "Zip Code": "80467",
       "geometry": {
-        "coordinates": [
-          -106.8391787,
-          40.2710014
-        ],
+        "coordinates": [-106.8391787, 40.2710014],
         "type": "Point"
       }
     },
@@ -4631,10 +3731,7 @@
       "States": "CO",
       "Zip Code": "80215",
       "geometry": {
-        "coordinates": [
-          -105.1092435,
-          39.7334034
-        ],
+        "coordinates": [-105.1092435, 39.7334034],
         "type": "Point"
       }
     },
@@ -4647,10 +3744,7 @@
       "States": "CO",
       "Zip Code": "80433",
       "geometry": {
-        "coordinates": [
-          -105.346645,
-          39.4921474
-        ],
+        "coordinates": [-105.346645, 39.4921474],
         "type": "Point"
       }
     },
@@ -4663,10 +3757,7 @@
       "States": "CO",
       "Zip Code": "81224",
       "geometry": {
-        "coordinates": [
-          -106.9706795,
-          38.8921101
-        ],
+        "coordinates": [-106.9706795, 38.8921101],
         "type": "Point"
       }
     },
@@ -4679,10 +3770,7 @@
       "States": "CO",
       "Zip Code": "80487",
       "geometry": {
-        "coordinates": [
-          -106.7844245,
-          40.4762946
-        ],
+        "coordinates": [-106.7844245, 40.4762946],
         "type": "Point"
       }
     },
@@ -4695,10 +3783,7 @@
       "States": "CO",
       "Zip Code": "81089",
       "geometry": {
-        "coordinates": [
-          -104.96638,
-          37.5930403
-        ],
+        "coordinates": [-104.96638, 37.5930403],
         "type": "Point"
       }
     },
@@ -4711,10 +3796,7 @@
       "States": "IA",
       "Zip Code": "51510",
       "geometry": {
-        "coordinates": [
-          -95.929557,
-          41.2853622
-        ],
+        "coordinates": [-95.929557, 41.2853622],
         "type": "Point"
       }
     },
@@ -4726,10 +3808,7 @@
       "States": "CO",
       "Zip Code": "80202",
       "geometry": {
-        "coordinates": [
-          -104.9865995,
-          39.74132609999999
-        ],
+        "coordinates": [-104.9865995, 39.74132609999999],
         "type": "Point"
       }
     },
@@ -4741,10 +3820,7 @@
       "States": "CO",
       "Zip Code": "80221",
       "geometry": {
-        "coordinates": [
-          -105.0057568,
-          39.82212380000001
-        ],
+        "coordinates": [-105.0057568, 39.82212380000001],
         "type": "Point"
       }
     },
@@ -4756,10 +3832,7 @@
       "States": "WA",
       "Zip Code": "98028",
       "geometry": {
-        "coordinates": [
-          -122.2475275,
-          47.7630878
-        ],
+        "coordinates": [-122.2475275, 47.7630878],
         "type": "Point"
       }
     },
@@ -4772,10 +3845,7 @@
       "States": "CO",
       "Zip Code": "80403",
       "geometry": {
-        "coordinates": [
-          -105.166329,
-          39.79017
-        ],
+        "coordinates": [-105.166329, 39.79017],
         "type": "Point"
       }
     },
@@ -4788,10 +3858,7 @@
       "States": "CO",
       "Zip Code": "80646",
       "geometry": {
-        "coordinates": [
-          -104.6973211,
-          40.4789014
-        ],
+        "coordinates": [-104.6973211, 40.4789014],
         "type": "Point"
       }
     },
@@ -4804,10 +3871,7 @@
       "States": "CO",
       "Zip Code": "80513",
       "geometry": {
-        "coordinates": [
-          -105.0680238,
-          40.3207682
-        ],
+        "coordinates": [-105.0680238, 40.3207682],
         "type": "Point"
       }
     },
@@ -4820,10 +3884,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8906614,
-          39.6223566
-        ],
+        "coordinates": [-104.8906614, 39.6223566],
         "type": "Point"
       }
     },
@@ -4834,10 +3895,7 @@
       "States": "CO",
       "Zip Code": "80210",
       "geometry": {
-        "coordinates": [
-          -104.9414275,
-          39.6854313
-        ],
+        "coordinates": [-104.9414275, 39.6854313],
         "type": "Point"
       }
     },
@@ -4849,10 +3907,7 @@
       "States": "CO",
       "Zip Code": "80302",
       "geometry": {
-        "coordinates": [
-          -105.301311,
-          40.0734599
-        ],
+        "coordinates": [-105.301311, 40.0734599],
         "type": "Point"
       }
     },
@@ -4865,10 +3920,7 @@
       "States": "CO",
       "Zip Code": "81147",
       "geometry": {
-        "coordinates": [
-          -107.1019084,
-          37.2549065
-        ],
+        "coordinates": [-107.1019084, 37.2549065],
         "type": "Point"
       }
     },
@@ -4880,10 +3932,7 @@
       "States": "CO",
       "Zip Code": "81212",
       "geometry": {
-        "coordinates": [
-          -105.2276629,
-          38.4960167
-        ],
+        "coordinates": [-105.2276629, 38.4960167],
         "type": "Point"
       }
     },
@@ -4896,10 +3945,7 @@
       "States": "CO",
       "Zip Code": "80908",
       "geometry": {
-        "coordinates": [
-          -104.69092,
-          38.994591
-        ],
+        "coordinates": [-104.69092, 38.994591],
         "type": "Point"
       }
     },
@@ -4912,10 +3958,7 @@
       "States": "CO",
       "Zip Code": "80134",
       "geometry": {
-        "coordinates": [
-          -104.7796853,
-          39.5522798
-        ],
+        "coordinates": [-104.7796853, 39.5522798],
         "type": "Point"
       }
     },
@@ -4928,10 +3971,7 @@
       "States": "CO",
       "Zip Code": "80461",
       "geometry": {
-        "coordinates": [
-          -106.2920727,
-          39.2613803
-        ],
+        "coordinates": [-106.2920727, 39.2613803],
         "type": "Point"
       }
     },
@@ -4944,10 +3984,7 @@
       "States": "CO",
       "Zip Code": "81240",
       "geometry": {
-        "coordinates": [
-          -105.0250747,
-          38.4244783
-        ],
+        "coordinates": [-105.0250747, 38.4244783],
         "type": "Point"
       }
     },
@@ -4960,10 +3997,7 @@
       "States": "CO",
       "Zip Code": "80540",
       "geometry": {
-        "coordinates": [
-          -105.3521571,
-          40.2874584
-        ],
+        "coordinates": [-105.3521571, 40.2874584],
         "type": "Point"
       }
     },
@@ -4976,10 +4010,7 @@
       "States": "CO",
       "Zip Code": "80132",
       "geometry": {
-        "coordinates": [
-          -104.8337879,
-          39.0994223
-        ],
+        "coordinates": [-104.8337879, 39.0994223],
         "type": "Point"
       }
     },
@@ -4992,10 +4023,7 @@
       "States": "CO",
       "Zip Code": "80123",
       "geometry": {
-        "coordinates": [
-          -105.0954296,
-          39.5956298
-        ],
+        "coordinates": [-105.0954296, 39.5956298],
         "type": "Point"
       }
     },
@@ -5008,10 +4036,7 @@
       "States": "CO",
       "Zip Code": "80401",
       "geometry": {
-        "coordinates": [
-          -105.1764287,
-          39.7319356
-        ],
+        "coordinates": [-105.1764287, 39.7319356],
         "type": "Point"
       }
     },
@@ -5023,10 +4048,7 @@
       "States": "CO",
       "Zip Code": "80814",
       "geometry": {
-        "coordinates": [
-          -105.1575797,
-          38.8558741
-        ],
+        "coordinates": [-105.1575797, 38.8558741],
         "type": "Point"
       }
     },
@@ -5038,10 +4060,7 @@
       "States": "CO",
       "Zip Code": "80007",
       "geometry": {
-        "coordinates": [
-          -105.1789649,
-          39.8400758
-        ],
+        "coordinates": [-105.1789649, 39.8400758],
         "type": "Point"
       }
     },
@@ -5052,10 +4071,7 @@
       "States": "CO",
       "Zip Code": "80237",
       "geometry": {
-        "coordinates": [
-          -104.9115926,
-          39.6270831
-        ],
+        "coordinates": [-104.9115926, 39.6270831],
         "type": "Point"
       }
     },
@@ -5067,10 +4083,7 @@
       "States": "CO",
       "Zip Code": "81623",
       "geometry": {
-        "coordinates": [
-          -107.2338096,
-          39.1920955
-        ],
+        "coordinates": [-107.2338096, 39.1920955],
         "type": "Point"
       }
     },
@@ -5082,10 +4095,7 @@
       "States": "CO",
       "Zip Code": "80229",
       "geometry": {
-        "coordinates": [
-          -104.9506812,
-          39.8377554
-        ],
+        "coordinates": [-104.9506812, 39.8377554],
         "type": "Point"
       }
     },
@@ -5098,10 +4108,7 @@
       "States": "NJ",
       "Zip Code": "07450",
       "geometry": {
-        "coordinates": [
-          -74.11172470000001,
-          40.9822319
-        ],
+        "coordinates": [-74.11172470000001, 40.9822319],
         "type": "Point"
       }
     },
@@ -5114,10 +4121,7 @@
       "States": "CO",
       "Zip Code": "81601",
       "geometry": {
-        "coordinates": [
-          -107.3247762,
-          39.5505376
-        ],
+        "coordinates": [-107.3247762, 39.5505376],
         "type": "Point"
       }
     },
@@ -5130,10 +4134,7 @@
       "States": "CO",
       "Zip Code": "80926",
       "geometry": {
-        "coordinates": [
-          -104.8305275,
-          38.7130799
-        ],
+        "coordinates": [-104.8305275, 38.7130799],
         "type": "Point"
       }
     },
@@ -5146,10 +4147,7 @@
       "States": "CO",
       "Zip Code": "81252",
       "geometry": {
-        "coordinates": [
-          -105.4669918,
-          38.1369571
-        ],
+        "coordinates": [-105.4669918, 38.1369571],
         "type": "Point"
       }
     },
@@ -5162,10 +4160,7 @@
       "States": "CO",
       "Zip Code": "80125",
       "geometry": {
-        "coordinates": [
-          -105.0715874,
-          39.4528808
-        ],
+        "coordinates": [-105.0715874, 39.4528808],
         "type": "Point"
       }
     },
@@ -5178,10 +4173,7 @@
       "States": "CO",
       "Zip Code": "80134",
       "geometry": {
-        "coordinates": [
-          -104.7754307,
-          39.4626087
-        ],
+        "coordinates": [-104.7754307, 39.4626087],
         "type": "Point"
       }
     },
@@ -5194,10 +4186,7 @@
       "States": "CO",
       "Zip Code": "80911",
       "geometry": {
-        "coordinates": [
-          -104.7381027,
-          38.74666370000001
-        ],
+        "coordinates": [-104.7381027, 38.74666370000001],
         "type": "Point"
       }
     },
@@ -5209,10 +4198,7 @@
       "States": "MO",
       "Zip Code": "65301",
       "geometry": {
-        "coordinates": [
-          -93.2295333,
-          38.7097959
-        ],
+        "coordinates": [-93.2295333, 38.7097959],
         "type": "Point"
       }
     },
@@ -5225,10 +4211,7 @@
       "States": "CO",
       "Zip Code": "80303",
       "geometry": {
-        "coordinates": [
-          -105.1401774,
-          40.0111804
-        ],
+        "coordinates": [-105.1401774, 40.0111804],
         "type": "Point"
       }
     },
@@ -5241,10 +4224,7 @@
       "States": "CO",
       "Zip Code": "80108",
       "geometry": {
-        "coordinates": [
-          -104.8681,
-          39.41871
-        ],
+        "coordinates": [-104.8681, 39.41871],
         "type": "Point"
       }
     },
@@ -5257,10 +4237,7 @@
       "States": "CO",
       "Zip Code": "80446",
       "geometry": {
-        "coordinates": [
-          -105.9165036,
-          40.0529349
-        ],
+        "coordinates": [-105.9165036, 40.0529349],
         "type": "Point"
       }
     },
@@ -5273,10 +4250,7 @@
       "States": "CO",
       "Zip Code": "80435",
       "geometry": {
-        "coordinates": [
-          -105.9489265,
-          39.6071262
-        ],
+        "coordinates": [-105.9489265, 39.6071262],
         "type": "Point"
       }
     },
@@ -5289,10 +4263,7 @@
       "States": "CO",
       "Zip Code": "81615",
       "geometry": {
-        "coordinates": [
-          -106.9233353,
-          39.2205299
-        ],
+        "coordinates": [-106.9233353, 39.2205299],
         "type": "Point"
       }
     },
@@ -5304,10 +4275,7 @@
       "States": "CO",
       "Zip Code": "81434",
       "geometry": {
-        "coordinates": [
-          -107.470755,
-          38.9267581
-        ],
+        "coordinates": [-107.470755, 38.9267581],
         "type": "Point"
       }
     },
@@ -5320,10 +4288,7 @@
       "States": "CO",
       "Zip Code": "80022",
       "geometry": {
-        "coordinates": [
-          -104.9117262,
-          39.8240567
-        ],
+        "coordinates": [-104.9117262, 39.8240567],
         "type": "Point"
       }
     },
@@ -5335,10 +4300,7 @@
       "States": "CO",
       "Zip Code": "80439",
       "geometry": {
-        "coordinates": [
-          -105.364257,
-          39.68294969999999
-        ],
+        "coordinates": [-105.364257, 39.68294969999999],
         "type": "Point"
       }
     },
@@ -5351,10 +4313,7 @@
       "States": "CO",
       "Zip Code": "81154",
       "geometry": {
-        "coordinates": [
-          -106.614807,
-          37.676108
-        ],
+        "coordinates": [-106.614807, 37.676108],
         "type": "Point"
       }
     },
@@ -5367,10 +4326,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8960846,
-          39.6210501
-        ],
+        "coordinates": [-104.8960846, 39.6210501],
         "type": "Point"
       }
     },
@@ -5382,10 +4338,7 @@
       "States": "FL",
       "Zip Code": "34223",
       "geometry": {
-        "coordinates": [
-          -82.3487938,
-          26.9536972
-        ],
+        "coordinates": [-82.3487938, 26.9536972],
         "type": "Point"
       }
     },
@@ -5398,10 +4351,7 @@
       "States": "CO",
       "Zip Code": "80123",
       "geometry": {
-        "coordinates": [
-          -105.0954296,
-          39.5956298
-        ],
+        "coordinates": [-105.0954296, 39.5956298],
         "type": "Point"
       }
     },
@@ -5413,10 +4363,7 @@
       "States": "CO",
       "Zip Code": "80439",
       "geometry": {
-        "coordinates": [
-          -105.364257,
-          39.68294969999999
-        ],
+        "coordinates": [-105.364257, 39.68294969999999],
         "type": "Point"
       }
     },
@@ -5428,10 +4375,7 @@
       "States": "CO",
       "Zip Code": "80526",
       "geometry": {
-        "coordinates": [
-          -105.167518,
-          40.5193008
-        ],
+        "coordinates": [-105.167518, 40.5193008],
         "type": "Point"
       }
     },
@@ -5442,10 +4386,7 @@
       "States": "CO",
       "Zip Code": "80537",
       "geometry": {
-        "coordinates": [
-          -105.0840141,
-          40.4044836
-        ],
+        "coordinates": [-105.0840141, 40.4044836],
         "type": "Point"
       }
     },
@@ -5458,10 +4399,7 @@
       "States": "CO",
       "Zip Code": "80428",
       "geometry": {
-        "coordinates": [
-          -106.9594723,
-          40.8536562
-        ],
+        "coordinates": [-106.9594723, 40.8536562],
         "type": "Point"
       }
     },
@@ -5473,10 +4411,7 @@
       "States": "CO",
       "Zip Code": "80136",
       "geometry": {
-        "coordinates": [
-          -104.3223501,
-          39.7429026
-        ],
+        "coordinates": [-104.3223501, 39.7429026],
         "type": "Point"
       }
     },
@@ -5489,10 +4424,7 @@
       "States": "CO",
       "Zip Code": "80906",
       "geometry": {
-        "coordinates": [
-          -104.7913416,
-          38.7743055
-        ],
+        "coordinates": [-104.7913416, 38.7743055],
         "type": "Point"
       }
     },
@@ -5505,10 +4437,7 @@
       "States": "CO",
       "Zip Code": "80478",
       "geometry": {
-        "coordinates": [
-          -105.8586396,
-          39.9913049
-        ],
+        "coordinates": [-105.8586396, 39.9913049],
         "type": "Point"
       }
     },
@@ -5521,10 +4450,7 @@
       "States": "CO",
       "Zip Code": "80866",
       "geometry": {
-        "coordinates": [
-          -105.0495755,
-          38.9946259
-        ],
+        "coordinates": [-105.0495755, 38.9946259],
         "type": "Point"
       }
     },
@@ -5536,10 +4462,7 @@
       "States": "CA",
       "Zip Code": "95450",
       "geometry": {
-        "coordinates": [
-          -123.2735402,
-          38.5456391
-        ],
+        "coordinates": [-123.2735402, 38.5456391],
         "type": "Point"
       }
     },
@@ -5551,10 +4474,7 @@
       "States": "NM",
       "Zip Code": "88350",
       "geometry": {
-        "coordinates": [
-          -105.6903675,
-          32.6418051
-        ],
+        "coordinates": [-105.6903675, 32.6418051],
         "type": "Point"
       }
     },
@@ -5567,10 +4487,7 @@
       "States": "CO",
       "Zip Code": "81401",
       "geometry": {
-        "coordinates": [
-          -107.8800003,
-          38.4869938
-        ],
+        "coordinates": [-107.8800003, 38.4869938],
         "type": "Point"
       }
     },
@@ -5581,10 +4498,7 @@
       "States": "CO",
       "Zip Code": "80926",
       "geometry": {
-        "coordinates": [
-          -104.9154779,
-          38.607068
-        ],
+        "coordinates": [-104.9154779, 38.607068],
         "type": "Point"
       }
     },
@@ -5597,10 +4511,7 @@
       "States": "CO",
       "Zip Code": "80111",
       "geometry": {
-        "coordinates": [
-          -104.8919561,
-          39.6210949
-        ],
+        "coordinates": [-104.8919561, 39.6210949],
         "type": "Point"
       }
     },
@@ -5613,10 +4524,7 @@
       "States": "CO",
       "Zip Code": "80227",
       "geometry": {
-        "coordinates": [
-          -105.0999953,
-          39.6711594
-        ],
+        "coordinates": [-105.0999953, 39.6711594],
         "type": "Point"
       }
     },
@@ -5629,10 +4537,7 @@
       "States": "CO",
       "Zip Code": "80808",
       "geometry": {
-        "coordinates": [
-          -104.3001723,
-          39.0357835
-        ],
+        "coordinates": [-104.3001723, 39.0357835],
         "type": "Point"
       }
     },
@@ -5644,10 +4549,7 @@
       "States": "CO",
       "Zip Code": "80478",
       "geometry": {
-        "coordinates": [
-          -105.8430661,
-          39.9935977
-        ],
+        "coordinates": [-105.8430661, 39.9935977],
         "type": "Point"
       }
     },
@@ -5660,10 +4562,7 @@
       "States": "CA",
       "Zip Code": "95118",
       "geometry": {
-        "coordinates": [
-          -121.8733673,
-          37.2453331
-        ],
+        "coordinates": [-121.8733673, 37.2453331],
         "type": "Point"
       }
     },
@@ -5676,10 +4575,7 @@
       "States": "CO",
       "Zip Code": "80535",
       "geometry": {
-        "coordinates": [
-          -105.1384588,
-          40.626289
-        ],
+        "coordinates": [-105.1384588, 40.626289],
         "type": "Point"
       }
     },
@@ -5692,10 +4588,7 @@
       "States": "CO",
       "Zip Code": "80863",
       "geometry": {
-        "coordinates": [
-          -105.1611531,
-          39.1337914
-        ],
+        "coordinates": [-105.1611531, 39.1337914],
         "type": "Point"
       }
     },
@@ -5708,10 +4601,7 @@
       "States": "CO",
       "Zip Code": "80863",
       "geometry": {
-        "coordinates": [
-          -105.0798764,
-          38.976562
-        ],
+        "coordinates": [-105.0798764, 38.976562],
         "type": "Point"
       }
     },
@@ -5724,10 +4614,7 @@
       "States": "CO",
       "Zip Code": "80033",
       "geometry": {
-        "coordinates": [
-          -105.0725846,
-          39.7696251
-        ],
+        "coordinates": [-105.0725846, 39.7696251],
         "type": "Point"
       }
     },
@@ -5740,10 +4627,7 @@
       "States": "CO",
       "Zip Code": "80925",
       "geometry": {
-        "coordinates": [
-          -104.6733128,
-          38.7369475
-        ],
+        "coordinates": [-104.6733128, 38.7369475],
         "type": "Point"
       }
     },
@@ -5756,10 +4640,7 @@
       "States": "CO",
       "Zip Code": "80227",
       "geometry": {
-        "coordinates": [
-          -105.1077593,
-          39.655423
-        ],
+        "coordinates": [-105.1077593, 39.655423],
         "type": "Point"
       }
     },
@@ -5772,10 +4653,7 @@
       "States": "CO",
       "Zip Code": "80112",
       "geometry": {
-        "coordinates": [
-          -104.9211409,
-          39.590355
-        ],
+        "coordinates": [-104.9211409, 39.590355],
         "type": "Point"
       }
     },
@@ -5787,10 +4665,7 @@
       "States": "CO",
       "Zip Code": "80482",
       "geometry": {
-        "coordinates": [
-          -105.7630624,
-          39.8916537
-        ],
+        "coordinates": [-105.7630624, 39.8916537],
         "type": "Point"
       }
     },
@@ -5802,10 +4677,7 @@
       "States": "CO",
       "Zip Code": "80482",
       "geometry": {
-        "coordinates": [
-          -105.7630624,
-          39.8916537
-        ],
+        "coordinates": [-105.7630624, 39.8916537],
         "type": "Point"
       }
     },
@@ -5818,10 +4690,7 @@
       "States": "CO",
       "Zip Code": "80132",
       "geometry": {
-        "coordinates": [
-          -104.8605706,
-          39.0977465
-        ],
+        "coordinates": [-104.8605706, 39.0977465],
         "type": "Point"
       }
     },
@@ -5834,10 +4703,7 @@
       "States": "CT",
       "Zip Code": "06103",
       "geometry": {
-        "coordinates": [
-          -72.6747074,
-          41.7629956
-        ],
+        "coordinates": [-72.6747074, 41.7629956],
         "type": "Point"
       }
     },
@@ -5849,10 +4715,7 @@
       "States": "CT",
       "Zip Code": "06511",
       "geometry": {
-        "coordinates": [
-          -72.9251977,
-          41.2889778
-        ],
+        "coordinates": [-72.9251977, 41.2889778],
         "type": "Point"
       }
     },
@@ -5864,10 +4727,7 @@
       "States": "CT",
       "Zip Code": "06468",
       "geometry": {
-        "coordinates": [
-          -73.225537,
-          41.2980464
-        ],
+        "coordinates": [-73.225537, 41.2980464],
         "type": "Point"
       }
     },
@@ -5879,10 +4739,7 @@
       "States": "DE",
       "Zip Code": "19958",
       "geometry": {
-        "coordinates": [
-          -75.13827119999999,
-          38.7731907
-        ],
+        "coordinates": [-75.13827119999999, 38.7731907],
         "type": "Point"
       }
     },
@@ -5895,10 +4752,7 @@
       "States": "DE",
       "Zip Code": "19975",
       "geometry": {
-        "coordinates": [
-          -75.1166827,
-          38.4687429
-        ],
+        "coordinates": [-75.1166827, 38.4687429],
         "type": "Point"
       }
     },
@@ -5911,10 +4765,7 @@
       "States": "DE",
       "Zip Code": "19720",
       "geometry": {
-        "coordinates": [
-          -75.5668166,
-          39.6620397
-        ],
+        "coordinates": [-75.5668166, 39.6620397],
         "type": "Point"
       }
     },
@@ -5927,10 +4778,7 @@
       "States": "IL",
       "Zip Code": "60481",
       "geometry": {
-        "coordinates": [
-          -88.163009,
-          41.319366
-        ],
+        "coordinates": [-88.163009, 41.319366],
         "type": "Point"
       }
     },
@@ -5943,10 +4791,7 @@
       "States": "DC",
       "Zip Code": "20003",
       "geometry": {
-        "coordinates": [
-          -77.0040059,
-          38.8730286
-        ],
+        "coordinates": [-77.0040059, 38.8730286],
         "type": "Point"
       }
     },
@@ -5957,10 +4802,7 @@
       "States": "DC",
       "Zip Code": "20016",
       "geometry": {
-        "coordinates": [
-          -77.1138186,
-          38.9379544
-        ],
+        "coordinates": [-77.1138186, 38.9379544],
         "type": "Point"
       }
     },
@@ -5971,10 +4813,7 @@
       "States": "PA",
       "Zip Code": "19010",
       "geometry": {
-        "coordinates": [
-          -75.3163256,
-          40.0196643
-        ],
+        "coordinates": [-75.3163256, 40.0196643],
         "type": "Point"
       }
     },
@@ -5986,10 +4825,7 @@
       "States": "FL",
       "Zip Code": "32609",
       "geometry": {
-        "coordinates": [
-          -82.316251,
-          29.69937699999999
-        ],
+        "coordinates": [-82.316251, 29.69937699999999],
         "type": "Point"
       }
     },
@@ -6001,10 +4837,7 @@
       "States": "Fl",
       "Zip Code": "33018",
       "geometry": {
-        "coordinates": [
-          -80.3716283,
-          25.8975358
-        ],
+        "coordinates": [-80.3716283, 25.8975358],
         "type": "Point"
       }
     },
@@ -6017,10 +4850,7 @@
       "States": "FL",
       "Zip Code": "32206",
       "geometry": {
-        "coordinates": [
-          -81.6601589,
-          30.3502934
-        ],
+        "coordinates": [-81.6601589, 30.3502934],
         "type": "Point"
       }
     },
@@ -6033,10 +4863,7 @@
       "States": "FL",
       "Zip Code": "33146",
       "geometry": {
-        "coordinates": [
-          -80.25556739999999,
-          25.7329971
-        ],
+        "coordinates": [-80.25556739999999, 25.7329971],
         "type": "Point"
       }
     },
@@ -6049,10 +4876,7 @@
       "States": "FL",
       "Zip Code": "33706",
       "geometry": {
-        "coordinates": [
-          -82.74740949999999,
-          27.7436812
-        ],
+        "coordinates": [-82.74740949999999, 27.7436812],
         "type": "Point"
       }
     },
@@ -6065,10 +4889,7 @@
       "States": "FL",
       "Zip Code": "32839",
       "geometry": {
-        "coordinates": [
-          -81.4234342,
-          28.5030608
-        ],
+        "coordinates": [-81.4234342, 28.5030608],
         "type": "Point"
       }
     },
@@ -6080,10 +4901,7 @@
       "States": "FL",
       "Zip Code": "33713",
       "geometry": {
-        "coordinates": [
-          -82.6572723,
-          27.7746925
-        ],
+        "coordinates": [-82.6572723, 27.7746925],
         "type": "Point"
       }
     },
@@ -6096,10 +4914,7 @@
       "States": "FL",
       "Zip Code": "33763",
       "geometry": {
-        "coordinates": [
-          -82.7401457,
-          28.0153574
-        ],
+        "coordinates": [-82.7401457, 28.0153574],
         "type": "Point"
       }
     },
@@ -6111,10 +4926,7 @@
       "States": "GA",
       "Zip Code": "30303",
       "geometry": {
-        "coordinates": [
-          -84.39255899999999,
-          33.7561621
-        ],
+        "coordinates": [-84.39255899999999, 33.7561621],
         "type": "Point"
       }
     },
@@ -6127,10 +4939,7 @@
       "States": "GA",
       "Zip Code": "30114",
       "geometry": {
-        "coordinates": [
-          -84.4915,
-          34.2371426
-        ],
+        "coordinates": [-84.4915, 34.2371426],
         "type": "Point"
       }
     },
@@ -6143,10 +4952,7 @@
       "States": "GA",
       "Zip Code": "30106",
       "geometry": {
-        "coordinates": [
-          -84.6327518,
-          33.8139566
-        ],
+        "coordinates": [-84.6327518, 33.8139566],
         "type": "Point"
       }
     },
@@ -6159,10 +4965,7 @@
       "States": "TX",
       "Zip Code": "75103",
       "geometry": {
-        "coordinates": [
-          -95.8636184,
-          32.557523
-        ],
+        "coordinates": [-95.8636184, 32.557523],
         "type": "Point"
       }
     },
@@ -6174,10 +4977,7 @@
       "States": "GA",
       "Zip Code": "30075",
       "geometry": {
-        "coordinates": [
-          -84.4151943,
-          34.0835335
-        ],
+        "coordinates": [-84.4151943, 34.0835335],
         "type": "Point"
       }
     },
@@ -6189,10 +4989,7 @@
       "States": "GA",
       "Zip Code": "30127",
       "geometry": {
-        "coordinates": [
-          -84.6832452,
-          33.8597877
-        ],
+        "coordinates": [-84.6832452, 33.8597877],
         "type": "Point"
       }
     },
@@ -6205,10 +5002,7 @@
       "States": "GA",
       "Zip Code": "30066",
       "geometry": {
-        "coordinates": [
-          -84.53494359999999,
-          33.9807334
-        ],
+        "coordinates": [-84.53494359999999, 33.9807334],
         "type": "Point"
       }
     },
@@ -6221,10 +5015,7 @@
       "States": "IL",
       "Zip Code": "60098",
       "geometry": {
-        "coordinates": [
-          -88.448258,
-          42.3134503
-        ],
+        "coordinates": [-88.448258, 42.3134503],
         "type": "Point"
       }
     },
@@ -6237,10 +5028,7 @@
       "States": "GA",
       "Zip Code": "30066",
       "geometry": {
-        "coordinates": [
-          -84.53494359999999,
-          33.9807334
-        ],
+        "coordinates": [-84.53494359999999, 33.9807334],
         "type": "Point"
       }
     },
@@ -6253,10 +5041,7 @@
       "States": "GA",
       "Zip Code": "30060",
       "geometry": {
-        "coordinates": [
-          -84.5403396,
-          33.9365026
-        ],
+        "coordinates": [-84.5403396, 33.9365026],
         "type": "Point"
       }
     },
@@ -6269,10 +5054,7 @@
       "States": "GA",
       "Zip Code": "31901",
       "geometry": {
-        "coordinates": [
-          -84.9880167,
-          32.473393
-        ],
+        "coordinates": [-84.9880167, 32.473393],
         "type": "Point"
       }
     },
@@ -6285,10 +5067,7 @@
       "States": "GA",
       "Zip Code": "30134",
       "geometry": {
-        "coordinates": [
-          -84.73426479999999,
-          33.7433311
-        ],
+        "coordinates": [-84.73426479999999, 33.7433311],
         "type": "Point"
       }
     },
@@ -6301,10 +5080,7 @@
       "States": "GA",
       "Zip Code": "30534",
       "geometry": {
-        "coordinates": [
-          -84.1043593,
-          34.4086796
-        ],
+        "coordinates": [-84.1043593, 34.4086796],
         "type": "Point"
       }
     },
@@ -6317,10 +5093,7 @@
       "States": "GA",
       "Zip Code": "30045",
       "geometry": {
-        "coordinates": [
-          -83.96162849999999,
-          33.9697702
-        ],
+        "coordinates": [-83.96162849999999, 33.9697702],
         "type": "Point"
       }
     },
@@ -6333,10 +5106,7 @@
       "States": "GA",
       "Zip Code": "30540",
       "geometry": {
-        "coordinates": [
-          -84.4900153,
-          34.6744236
-        ],
+        "coordinates": [-84.4900153, 34.6744236],
         "type": "Point"
       }
     },
@@ -6348,10 +5118,7 @@
       "States": "GA",
       "Zip Code": "30217",
       "geometry": {
-        "coordinates": [
-          -85.1098629,
-          33.2847527
-        ],
+        "coordinates": [-85.1098629, 33.2847527],
         "type": "Point"
       }
     },
@@ -6363,10 +5130,7 @@
       "States": "GA",
       "Zip Code": "30253",
       "geometry": {
-        "coordinates": [
-          -84.189966,
-          33.4173339
-        ],
+        "coordinates": [-84.189966, 33.4173339],
         "type": "Point"
       }
     },
@@ -6379,10 +5143,7 @@
       "States": "GA",
       "Zip Code": "30549",
       "geometry": {
-        "coordinates": [
-          -83.5755409,
-          34.0982825
-        ],
+        "coordinates": [-83.5755409, 34.0982825],
         "type": "Point"
       }
     },
@@ -6395,10 +5156,7 @@
       "States": "GA",
       "Zip Code": "31201",
       "geometry": {
-        "coordinates": [
-          -83.6328893,
-          32.831479
-        ],
+        "coordinates": [-83.6328893, 32.831479],
         "type": "Point"
       }
     },
@@ -6409,10 +5167,7 @@
       "States": "GA",
       "Zip Code": "30060",
       "geometry": {
-        "coordinates": [
-          -84.5322688,
-          33.9598043
-        ],
+        "coordinates": [-84.5322688, 33.9598043],
         "type": "Point"
       }
     },
@@ -6425,10 +5180,7 @@
       "States": "GA",
       "Zip Code": "30141",
       "geometry": {
-        "coordinates": [
-          -84.7781807,
-          33.9083582
-        ],
+        "coordinates": [-84.7781807, 33.9083582],
         "type": "Point"
       }
     },
@@ -6441,10 +5193,7 @@
       "States": "GA",
       "Zip Code": "30143",
       "geometry": {
-        "coordinates": [
-          -84.4129334,
-          34.4582066
-        ],
+        "coordinates": [-84.4129334, 34.4582066],
         "type": "Point"
       }
     },
@@ -6457,10 +5206,7 @@
       "States": "GA",
       "Zip Code": "30605",
       "geometry": {
-        "coordinates": [
-          -83.34933629999999,
-          33.9300317
-        ],
+        "coordinates": [-83.34933629999999, 33.9300317],
         "type": "Point"
       }
     },
@@ -6472,10 +5218,7 @@
       "States": "GA",
       "Zip Code": "30183",
       "geometry": {
-        "coordinates": [
-          -84.55515539999999,
-          34.3134101
-        ],
+        "coordinates": [-84.55515539999999, 34.3134101],
         "type": "Point"
       }
     },
@@ -6488,10 +5231,7 @@
       "States": "HI",
       "Zip Code": "96825",
       "geometry": {
-        "coordinates": [
-          -157.7130971,
-          21.2826268
-        ],
+        "coordinates": [-157.7130971, 21.2826268],
         "type": "Point"
       }
     },
@@ -6502,10 +5242,7 @@
       "States": "IL",
       "Zip Code": "60901",
       "geometry": {
-        "coordinates": [
-          -87.8654772,
-          41.1085564
-        ],
+        "coordinates": [-87.8654772, 41.1085564],
         "type": "Point"
       }
     },
@@ -6516,10 +5253,7 @@
       "States": "IL",
       "Zip Code": "60505",
       "geometry": {
-        "coordinates": [
-          -88.31455369999999,
-          41.7566092
-        ],
+        "coordinates": [-88.31455369999999, 41.7566092],
         "type": "Point"
       }
     },
@@ -6532,10 +5266,7 @@
       "States": "VA",
       "Zip Code": "24054",
       "geometry": {
-        "coordinates": [
-          -79.7459142,
-          36.6730235
-        ],
+        "coordinates": [-79.7459142, 36.6730235],
         "type": "Point"
       }
     },
@@ -6548,10 +5279,7 @@
       "States": "IL",
       "Zip Code": "60630",
       "geometry": {
-        "coordinates": [
-          -87.74901679999999,
-          41.9628279
-        ],
+        "coordinates": [-87.74901679999999, 41.9628279],
         "type": "Point"
       }
     },
@@ -6564,10 +5292,7 @@
       "States": "IL",
       "Zip Code": "62223",
       "geometry": {
-        "coordinates": [
-          -90.03989089999999,
-          38.5262234
-        ],
+        "coordinates": [-90.03989089999999, 38.5262234],
         "type": "Point"
       }
     },
@@ -6580,10 +5305,7 @@
       "States": "IL",
       "Zip Code": "61102",
       "geometry": {
-        "coordinates": [
-          -89.1159498,
-          42.2693649
-        ],
+        "coordinates": [-89.1159498, 42.2693649],
         "type": "Point"
       }
     },
@@ -6594,10 +5316,7 @@
       "States": "IN",
       "Zip Code": "46814",
       "geometry": {
-        "coordinates": [
-          -85.322749,
-          41.07209719999999
-        ],
+        "coordinates": [-85.322749, 41.07209719999999],
         "type": "Point"
       }
     },
@@ -6608,10 +5327,7 @@
       "States": "NJ",
       "Zip Code": "08102",
       "geometry": {
-        "coordinates": [
-          -75.13080769999999,
-          39.9487721
-        ],
+        "coordinates": [-75.13080769999999, 39.9487721],
         "type": "Point"
       }
     },
@@ -6622,10 +5338,7 @@
       "States": "IN",
       "Zip Code": "46278",
       "geometry": {
-        "coordinates": [
-          -86.26682799999999,
-          39.875804
-        ],
+        "coordinates": [-86.26682799999999, 39.875804],
         "type": "Point"
       }
     },
@@ -6638,10 +5351,7 @@
       "States": "IA",
       "Zip Code": "50321",
       "geometry": {
-        "coordinates": [
-          -93.64735379999999,
-          41.5689979
-        ],
+        "coordinates": [-93.64735379999999, 41.5689979],
         "type": "Point"
       }
     },
@@ -6652,10 +5362,7 @@
       "States": "IA",
       "Zip Code": "52807",
       "geometry": {
-        "coordinates": [
-          -90.5644445,
-          41.5719654
-        ],
+        "coordinates": [-90.5644445, 41.5719654],
         "type": "Point"
       }
     },
@@ -6668,10 +5375,7 @@
       "States": "KS",
       "Zip Code": "66101",
       "geometry": {
-        "coordinates": [
-          -94.6236612,
-          39.1158241
-        ],
+        "coordinates": [-94.6236612, 39.1158241],
         "type": "Point"
       }
     },
@@ -6684,10 +5388,7 @@
       "States": "KS",
       "Zip Code": "66219",
       "geometry": {
-        "coordinates": [
-          -94.7775729,
-          38.9338252
-        ],
+        "coordinates": [-94.7775729, 38.9338252],
         "type": "Point"
       }
     },
@@ -6698,10 +5399,7 @@
       "States": "KY",
       "Zip Code": "40502",
       "geometry": {
-        "coordinates": [
-          -84.4634658,
-          38.0159433
-        ],
+        "coordinates": [-84.4634658, 38.0159433],
         "type": "Point"
       }
     },
@@ -6714,10 +5412,7 @@
       "States": "KY",
       "Zip Code": "40202",
       "geometry": {
-        "coordinates": [
-          -85.756651,
-          38.249058
-        ],
+        "coordinates": [-85.756651, 38.249058],
         "type": "Point"
       }
     },
@@ -6729,10 +5424,7 @@
       "States": "KY",
       "Zip Code": "42301",
       "geometry": {
-        "coordinates": [
-          -87.13687329999999,
-          37.7330077
-        ],
+        "coordinates": [-87.13687329999999, 37.7330077],
         "type": "Point"
       }
     },
@@ -6744,10 +5436,7 @@
       "States": "KY",
       "Zip Code": "41224",
       "geometry": {
-        "coordinates": [
-          -82.5387633,
-          37.8664833
-        ],
+        "coordinates": [-82.5387633, 37.8664833],
         "type": "Point"
       }
     },
@@ -6760,10 +5449,7 @@
       "States": "KY",
       "Zip Code": "41653",
       "geometry": {
-        "coordinates": [
-          -82.74281850000001,
-          37.6692533
-        ],
+        "coordinates": [-82.74281850000001, 37.6692533],
         "type": "Point"
       }
     },
@@ -6776,10 +5462,7 @@
       "States": "KY",
       "Zip Code": "41240",
       "geometry": {
-        "coordinates": [
-          -82.8044297,
-          37.8142843
-        ],
+        "coordinates": [-82.8044297, 37.8142843],
         "type": "Point"
       }
     },
@@ -6790,10 +5473,7 @@
       "States": "KY",
       "Zip Code": "41230",
       "geometry": {
-        "coordinates": [
-          -82.6039495,
-          38.1168976
-        ],
+        "coordinates": [-82.6039495, 38.1168976],
         "type": "Point"
       }
     },
@@ -6804,10 +5484,7 @@
       "States": "KY",
       "Zip Code": "41647",
       "geometry": {
-        "coordinates": [
-          -82.7360839,
-          37.4563396
-        ],
+        "coordinates": [-82.7360839, 37.4563396],
         "type": "Point"
       }
     },
@@ -6820,10 +5497,7 @@
       "States": "KY",
       "Zip Code": "41465",
       "geometry": {
-        "coordinates": [
-          -83.0671358,
-          37.7391194
-        ],
+        "coordinates": [-83.0671358, 37.7391194],
         "type": "Point"
       }
     },
@@ -6836,10 +5510,7 @@
       "States": "KY",
       "Zip Code": "41501",
       "geometry": {
-        "coordinates": [
-          -82.4578222,
-          37.549426
-        ],
+        "coordinates": [-82.4578222, 37.549426],
         "type": "Point"
       }
     },
@@ -6852,10 +5523,7 @@
       "States": "KY",
       "Zip Code": "40601",
       "geometry": {
-        "coordinates": [
-          -84.8458378,
-          38.1882739
-        ],
+        "coordinates": [-84.8458378, 38.1882739],
         "type": "Point"
       }
     },
@@ -6867,10 +5535,7 @@
       "States": "KY",
       "Zip Code": "41129",
       "geometry": {
-        "coordinates": [
-          -82.714061,
-          38.32639899999999
-        ],
+        "coordinates": [-82.714061, 38.32639899999999],
         "type": "Point"
       }
     },
@@ -6883,10 +5548,7 @@
       "States": "KY",
       "Zip Code": "41143",
       "geometry": {
-        "coordinates": [
-          -82.9655929,
-          38.2584051
-        ],
+        "coordinates": [-82.9655929, 38.2584051],
         "type": "Point"
       }
     },
@@ -6899,10 +5561,7 @@
       "States": "OR",
       "Zip Code": "97520",
       "geometry": {
-        "coordinates": [
-          -122.6987394,
-          42.1955122
-        ],
+        "coordinates": [-122.6987394, 42.1955122],
         "type": "Point"
       }
     },
@@ -6915,10 +5574,7 @@
       "States": "LA",
       "Zip Code": "70806",
       "geometry": {
-        "coordinates": [
-          -91.0935197,
-          30.4436686
-        ],
+        "coordinates": [-91.0935197, 30.4436686],
         "type": "Point"
       }
     },
@@ -6931,10 +5587,7 @@
       "States": "LA",
       "Zip Code": "70427",
       "geometry": {
-        "coordinates": [
-          -89.8601178,
-          30.7860543
-        ],
+        "coordinates": [-89.8601178, 30.7860543],
         "type": "Point"
       }
     },
@@ -6946,10 +5599,7 @@
       "States": "WA",
       "Zip Code": "98272",
       "geometry": {
-        "coordinates": [
-          -121.981933,
-          47.8518001
-        ],
+        "coordinates": [-121.981933, 47.8518001],
         "type": "Point"
       }
     },
@@ -6962,10 +5612,7 @@
       "States": "LA",
       "Zip Code": "70121",
       "geometry": {
-        "coordinates": [
-          -90.1625564,
-          29.9624356
-        ],
+        "coordinates": [-90.1625564, 29.9624356],
         "type": "Point"
       }
     },
@@ -6978,10 +5625,7 @@
       "States": "LA",
       "Zip Code": "70165",
       "geometry": {
-        "coordinates": [
-          -90.0717188,
-          29.9445377
-        ],
+        "coordinates": [-90.0717188, 29.9445377],
         "type": "Point"
       }
     },
@@ -6994,10 +5638,7 @@
       "States": "LA",
       "Zip Code": "71101",
       "geometry": {
-        "coordinates": [
-          -93.7508828,
-          32.5131101
-        ],
+        "coordinates": [-93.7508828, 32.5131101],
         "type": "Point"
       }
     },
@@ -7010,10 +5651,7 @@
       "States": "ME",
       "Zip Code": "04101",
       "geometry": {
-        "coordinates": [
-          -70.24966069999999,
-          43.6567659
-        ],
+        "coordinates": [-70.24966069999999, 43.6567659],
         "type": "Point"
       }
     },
@@ -7024,10 +5662,7 @@
       "States": "CT",
       "Zip Code": "06413",
       "geometry": {
-        "coordinates": [
-          -72.5371432,
-          41.2786433
-        ],
+        "coordinates": [-72.5371432, 41.2786433],
         "type": "Point"
       }
     },
@@ -7040,10 +5675,7 @@
       "States": "OR",
       "Zip Code": "97227",
       "geometry": {
-        "coordinates": [
-          -122.6736601,
-          45.537485
-        ],
+        "coordinates": [-122.6736601, 45.537485],
         "type": "Point"
       }
     },
@@ -7056,10 +5688,7 @@
       "States": "MD",
       "Zip Code": "21401",
       "geometry": {
-        "coordinates": [
-          -76.56071779999999,
-          38.9742741
-        ],
+        "coordinates": [-76.56071779999999, 38.9742741],
         "type": "Point"
       }
     },
@@ -7071,10 +5700,7 @@
       "States": "MD",
       "Zip Code": "21202",
       "geometry": {
-        "coordinates": [
-          -76.61053799999999,
-          39.2916462
-        ],
+        "coordinates": [-76.61053799999999, 39.2916462],
         "type": "Point"
       }
     },
@@ -7087,10 +5713,7 @@
       "States": "MD",
       "Zip Code": "21601",
       "geometry": {
-        "coordinates": [
-          -76.07649239999999,
-          38.7775832
-        ],
+        "coordinates": [-76.07649239999999, 38.7775832],
         "type": "Point"
       }
     },
@@ -7101,10 +5724,7 @@
       "States": "MD",
       "Zip Code": "21014",
       "geometry": {
-        "coordinates": [
-          -76.3628014,
-          39.5287739
-        ],
+        "coordinates": [-76.3628014, 39.5287739],
         "type": "Point"
       }
     },
@@ -7117,10 +5737,7 @@
       "States": "MD",
       "Zip Code": "20707",
       "geometry": {
-        "coordinates": [
-          -76.89668619999999,
-          39.08865979999999
-        ],
+        "coordinates": [-76.89668619999999, 39.08865979999999],
         "type": "Point"
       }
     },
@@ -7133,10 +5750,7 @@
       "States": "MA",
       "Zip Code": "02119",
       "geometry": {
-        "coordinates": [
-          -71.0784307,
-          42.3323043
-        ],
+        "coordinates": [-71.0784307, 42.3323043],
         "type": "Point"
       }
     },
@@ -7149,10 +5763,7 @@
       "States": "MA",
       "Zip Code": "02138",
       "geometry": {
-        "coordinates": [
-          -71.1440161,
-          42.3830514
-        ],
+        "coordinates": [-71.1440161, 42.3830514],
         "type": "Point"
       }
     },
@@ -7165,10 +5776,7 @@
       "States": "MA",
       "Zip Code": "01040",
       "geometry": {
-        "coordinates": [
-          -72.6118467,
-          42.2006049
-        ],
+        "coordinates": [-72.6118467, 42.2006049],
         "type": "Point"
       }
     },
@@ -7181,10 +5789,7 @@
       "States": "MA",
       "Zip Code": "01240",
       "geometry": {
-        "coordinates": [
-          -73.2806134,
-          42.3612558
-        ],
+        "coordinates": [-73.2806134, 42.3612558],
         "type": "Point"
       }
     },
@@ -7197,10 +5802,7 @@
       "States": "MA",
       "Zip Code": "01905",
       "geometry": {
-        "coordinates": [
-          -70.9750214,
-          42.473386
-        ],
+        "coordinates": [-70.9750214, 42.473386],
         "type": "Point"
       }
     },
@@ -7213,10 +5815,7 @@
       "States": "MA",
       "Zip Code": "02129",
       "geometry": {
-        "coordinates": [
-          -71.0536364,
-          42.3757429
-        ],
+        "coordinates": [-71.0536364, 42.3757429],
         "type": "Point"
       }
     },
@@ -7229,10 +5828,7 @@
       "States": "MI",
       "Zip Code": "48226",
       "geometry": {
-        "coordinates": [
-          -83.04417819999999,
-          42.3326701
-        ],
+        "coordinates": [-83.04417819999999, 42.3326701],
         "type": "Point"
       }
     },
@@ -7244,10 +5840,7 @@
       "States": "MI",
       "Zip Code": "49505",
       "geometry": {
-        "coordinates": [
-          -85.62080089999999,
-          42.9743487
-        ],
+        "coordinates": [-85.62080089999999, 42.9743487],
         "type": "Point"
       }
     },
@@ -7260,10 +5853,7 @@
       "States": "MI",
       "Zip Code": "48226",
       "geometry": {
-        "coordinates": [
-          -83.04413790000001,
-          42.3327098
-        ],
+        "coordinates": [-83.04413790000001, 42.3327098],
         "type": "Point"
       }
     },
@@ -7276,10 +5866,7 @@
       "States": "MI",
       "Zip Code": "49423",
       "geometry": {
-        "coordinates": [
-          -86.08435569999999,
-          42.7737376
-        ],
+        "coordinates": [-86.08435569999999, 42.7737376],
         "type": "Point"
       }
     },
@@ -7292,10 +5879,7 @@
       "States": "MI",
       "Zip Code": "48912",
       "geometry": {
-        "coordinates": [
-          -84.5338202,
-          42.7203502
-        ],
+        "coordinates": [-84.5338202, 42.7203502],
         "type": "Point"
       }
     },
@@ -7308,10 +5892,7 @@
       "States": "MI",
       "Zip Code": "49913",
       "geometry": {
-        "coordinates": [
-          -88.45295809999999,
-          47.2470673
-        ],
+        "coordinates": [-88.45295809999999, 47.2470673],
         "type": "Point"
       }
     },
@@ -7324,10 +5905,7 @@
       "States": "MN",
       "Zip Code": "55384",
       "geometry": {
-        "coordinates": [
-          -93.62767850000002,
-          44.93485769999999
-        ],
+        "coordinates": [-93.62767850000002, 44.93485769999999],
         "type": "Point"
       }
     },
@@ -7340,10 +5918,7 @@
       "States": "MN",
       "Zip Code": "55113",
       "geometry": {
-        "coordinates": [
-          -93.1028456,
-          44.9953018
-        ],
+        "coordinates": [-93.1028456, 44.9953018],
         "type": "Point"
       }
     },
@@ -7354,10 +5929,7 @@
       "States": "MS",
       "Zip Code": "39201",
       "geometry": {
-        "coordinates": [
-          -90.1817469,
-          32.2980039
-        ],
+        "coordinates": [-90.1817469, 32.2980039],
         "type": "Point"
       }
     },
@@ -7368,10 +5940,7 @@
       "States": "MO",
       "Zip Code": "65109",
       "geometry": {
-        "coordinates": [
-          -92.2939384,
-          38.5844914
-        ],
+        "coordinates": [-92.2939384, 38.5844914],
         "type": "Point"
       }
     },
@@ -7384,10 +5953,7 @@
       "States": "MO",
       "Zip Code": "65802",
       "geometry": {
-        "coordinates": [
-          -93.2906781,
-          37.2181484
-        ],
+        "coordinates": [-93.2906781, 37.2181484],
         "type": "Point"
       }
     },
@@ -7398,10 +5964,7 @@
       "States": "MO",
       "Zip Code": "63141",
       "geometry": {
-        "coordinates": [
-          -90.4375262,
-          38.6692288
-        ],
+        "coordinates": [-90.4375262, 38.6692288],
         "type": "Point"
       }
     },
@@ -7414,10 +5977,7 @@
       "States": "MO",
       "Zip Code": "63110",
       "geometry": {
-        "coordinates": [
-          -90.26337,
-          38.6201249
-        ],
+        "coordinates": [-90.26337, 38.6201249],
         "type": "Point"
       }
     },
@@ -7430,10 +5990,7 @@
       "States": "NE",
       "Zip Code": "68122",
       "geometry": {
-        "coordinates": [
-          -96.026814,
-          41.33944229999999
-        ],
+        "coordinates": [-96.026814, 41.33944229999999],
         "type": "Point"
       }
     },
@@ -7446,10 +6003,7 @@
       "States": "NH",
       "Zip Code": "03060",
       "geometry": {
-        "coordinates": [
-          -71.4687642,
-          42.7598975
-        ],
+        "coordinates": [-71.4687642, 42.7598975],
         "type": "Point"
       }
     },
@@ -7460,10 +6014,7 @@
       "States": "NJ",
       "Zip Code": "08691",
       "geometry": {
-        "coordinates": [
-          -74.6425695,
-          40.20524080000001
-        ],
+        "coordinates": [-74.6425695, 40.20524080000001],
         "type": "Point"
       }
     },
@@ -7476,10 +6027,7 @@
       "States": "NJ",
       "Zip Code": "08401",
       "geometry": {
-        "coordinates": [
-          -74.4263216,
-          39.3700502
-        ],
+        "coordinates": [-74.4263216, 39.3700502],
         "type": "Point"
       }
     },
@@ -7491,10 +6039,7 @@
       "States": "NJ",
       "Zip Code": "08520",
       "geometry": {
-        "coordinates": [
-          -74.56562699999999,
-          40.26962
-        ],
+        "coordinates": [-74.56562699999999, 40.26962],
         "type": "Point"
       }
     },
@@ -7506,10 +6051,7 @@
       "States": "NJ",
       "Zip Code": "07728",
       "geometry": {
-        "coordinates": [
-          -74.29445,
-          40.2350741
-        ],
+        "coordinates": [-74.29445, 40.2350741],
         "type": "Point"
       }
     },
@@ -7522,10 +6064,7 @@
       "States": "DE",
       "Zip Code": "19975",
       "geometry": {
-        "coordinates": [
-          -75.1166827,
-          38.4687429
-        ],
+        "coordinates": [-75.1166827, 38.4687429],
         "type": "Point"
       }
     },
@@ -7536,10 +6075,7 @@
       "States": "NJ",
       "Zip Code": "08102",
       "geometry": {
-        "coordinates": [
-          -75.13080769999999,
-          39.9487721
-        ],
+        "coordinates": [-75.13080769999999, 39.9487721],
         "type": "Point"
       }
     },
@@ -7551,10 +6087,7 @@
       "States": "NJ",
       "Zip Code": "07102",
       "geometry": {
-        "coordinates": [
-          -74.173497,
-          40.7318943
-        ],
+        "coordinates": [-74.173497, 40.7318943],
         "type": "Point"
       }
     },
@@ -7567,10 +6100,7 @@
       "States": "NJ",
       "Zip Code": "08721",
       "geometry": {
-        "coordinates": [
-          -74.1702853,
-          39.9082017
-        ],
+        "coordinates": [-74.1702853, 39.9082017],
         "type": "Point"
       }
     },
@@ -7583,10 +6113,7 @@
       "States": "NJ",
       "Zip Code": "07011",
       "geometry": {
-        "coordinates": [
-          -74.1512163,
-          40.8852459
-        ],
+        "coordinates": [-74.1512163, 40.8852459],
         "type": "Point"
       }
     },
@@ -7598,10 +6125,7 @@
       "States": "NJ",
       "Zip Code": "08638",
       "geometry": {
-        "coordinates": [
-          -74.7411454,
-          40.237797
-        ],
+        "coordinates": [-74.7411454, 40.237797],
         "type": "Point"
       }
     },
@@ -7614,10 +6138,7 @@
       "States": "NJ",
       "Zip Code": "07652",
       "geometry": {
-        "coordinates": [
-          -74.0695401,
-          40.9511688
-        ],
+        "coordinates": [-74.0695401, 40.9511688],
         "type": "Point"
       }
     },
@@ -7628,10 +6149,7 @@
       "States": "NJ",
       "Zip Code": "08102",
       "geometry": {
-        "coordinates": [
-          -75.13080769999999,
-          39.9487721
-        ],
+        "coordinates": [-75.13080769999999, 39.9487721],
         "type": "Point"
       }
     },
@@ -7644,10 +6162,7 @@
       "States": "PA",
       "Zip Code": "19010",
       "geometry": {
-        "coordinates": [
-          -75.3163256,
-          40.0196643
-        ],
+        "coordinates": [-75.3163256, 40.0196643],
         "type": "Point"
       }
     },
@@ -7660,10 +6175,7 @@
       "States": "NJ",
       "Zip Code": "08724",
       "geometry": {
-        "coordinates": [
-          -74.1413024,
-          40.0778033
-        ],
+        "coordinates": [-74.1413024, 40.0778033],
         "type": "Point"
       }
     },
@@ -7676,10 +6188,7 @@
       "States": "NY",
       "Zip Code": "14203",
       "geometry": {
-        "coordinates": [
-          -78.8748967,
-          42.8824162
-        ],
+        "coordinates": [-78.8748967, 42.8824162],
         "type": "Point"
       }
     },
@@ -7692,10 +6201,7 @@
       "States": "NJ",
       "Zip Code": "08701",
       "geometry": {
-        "coordinates": [
-          -74.1844089,
-          40.0768823
-        ],
+        "coordinates": [-74.1844089, 40.0768823],
         "type": "Point"
       }
     },
@@ -7708,10 +6214,7 @@
       "States": "NY",
       "Zip Code": "11368",
       "geometry": {
-        "coordinates": [
-          -73.86449340000001,
-          40.7348129
-        ],
+        "coordinates": [-73.86449340000001, 40.7348129],
         "type": "Point"
       }
     },
@@ -7722,10 +6225,7 @@
       "States": "NY",
       "Zip Code": "14614",
       "geometry": {
-        "coordinates": [
-          -77.6150823,
-          43.15725
-        ],
+        "coordinates": [-77.6150823, 43.15725],
         "type": "Point"
       }
     },
@@ -7738,10 +6238,7 @@
       "States": "NY",
       "Zip Code": "13902",
       "geometry": {
-        "coordinates": [
-          -75.90657829999999,
-          42.1017651
-        ],
+        "coordinates": [-75.90657829999999, 42.1017651],
         "type": "Point"
       }
     },
@@ -7754,10 +6251,7 @@
       "States": "NY",
       "Zip Code": "10701",
       "geometry": {
-        "coordinates": [
-          -73.8979015,
-          40.9320831
-        ],
+        "coordinates": [-73.8979015, 40.9320831],
         "type": "Point"
       }
     },
@@ -7768,10 +6262,7 @@
       "States": "NC",
       "Zip Code": "27511",
       "geometry": {
-        "coordinates": [
-          -78.8077306,
-          35.732934
-        ],
+        "coordinates": [-78.8077306, 35.732934],
         "type": "Point"
       }
     },
@@ -7784,10 +6275,7 @@
       "States": "NC",
       "Zip Code": "28403",
       "geometry": {
-        "coordinates": [
-          -77.8673668,
-          34.2404216
-        ],
+        "coordinates": [-77.8673668, 34.2404216],
         "type": "Point"
       }
     },
@@ -7800,10 +6288,7 @@
       "States": "NC",
       "Zip Code": "28217",
       "geometry": {
-        "coordinates": [
-          -80.90495949999999,
-          35.1907281
-        ],
+        "coordinates": [-80.90495949999999, 35.1907281],
         "type": "Point"
       }
     },
@@ -7815,10 +6300,7 @@
       "States": "NC",
       "Zip Code": "27701",
       "geometry": {
-        "coordinates": [
-          -78.89908659999999,
-          35.9960987
-        ],
+        "coordinates": [-78.89908659999999, 35.9960987],
         "type": "Point"
       }
     },
@@ -7829,10 +6311,7 @@
       "States": "NC",
       "Zip Code": "27401",
       "geometry": {
-        "coordinates": [
-          -79.7927495,
-          36.0721209
-        ],
+        "coordinates": [-79.7927495, 36.0721209],
         "type": "Point"
       }
     },
@@ -7845,10 +6324,7 @@
       "States": "NC",
       "Zip Code": "27510",
       "geometry": {
-        "coordinates": [
-          -79.08058969999999,
-          35.9085274
-        ],
+        "coordinates": [-79.08058969999999, 35.9085274],
         "type": "Point"
       }
     },
@@ -7861,10 +6337,7 @@
       "States": "NC",
       "Zip Code": "27601",
       "geometry": {
-        "coordinates": [
-          -78.63862970000001,
-          35.77772
-        ],
+        "coordinates": [-78.63862970000001, 35.77772],
         "type": "Point"
       }
     },
@@ -7877,10 +6350,7 @@
       "States": "NC",
       "Zip Code": "27101",
       "geometry": {
-        "coordinates": [
-          -80.2429622,
-          36.0945537
-        ],
+        "coordinates": [-80.2429622, 36.0945537],
         "type": "Point"
       }
     },
@@ -7893,10 +6363,7 @@
       "States": "OH",
       "Zip Code": "44301",
       "geometry": {
-        "coordinates": [
-          -81.53006320000001,
-          41.05317960000001
-        ],
+        "coordinates": [-81.53006320000001, 41.05317960000001],
         "type": "Point"
       }
     },
@@ -7907,10 +6374,7 @@
       "States": "OH",
       "Zip Code": "43302",
       "geometry": {
-        "coordinates": [
-          -83.1212951,
-          40.5885393
-        ],
+        "coordinates": [-83.1212951, 40.5885393],
         "type": "Point"
       }
     },
@@ -7923,10 +6387,7 @@
       "States": "OH",
       "Zip Code": "44114",
       "geometry": {
-        "coordinates": [
-          -81.6894168,
-          41.5075143
-        ],
+        "coordinates": [-81.6894168, 41.5075143],
         "type": "Point"
       }
     },
@@ -7939,10 +6400,7 @@
       "States": "OH",
       "Zip Code": "43215",
       "geometry": {
-        "coordinates": [
-          -83.03161949999999,
-          39.9707152
-        ],
+        "coordinates": [-83.03161949999999, 39.9707152],
         "type": "Point"
       }
     },
@@ -7955,10 +6413,7 @@
       "States": "OH",
       "Zip Code": "43015",
       "geometry": {
-        "coordinates": [
-          -83.0576575,
-          40.2021323
-        ],
+        "coordinates": [-83.0576575, 40.2021323],
         "type": "Point"
       }
     },
@@ -7971,10 +6426,7 @@
       "States": "OH",
       "Zip Code": "45230",
       "geometry": {
-        "coordinates": [
-          -84.4249804,
-          39.0735339
-        ],
+        "coordinates": [-84.4249804, 39.0735339],
         "type": "Point"
       }
     },
@@ -7985,10 +6437,7 @@
       "States": "CO",
       "Zip Code": "80235",
       "geometry": {
-        "coordinates": [
-          -105.0705628,
-          39.6381519
-        ],
+        "coordinates": [-105.0705628, 39.6381519],
         "type": "Point"
       }
     },
@@ -8001,10 +6450,7 @@
       "States": "OH",
       "Zip Code": "43604",
       "geometry": {
-        "coordinates": [
-          -83.5352951,
-          41.6517725
-        ],
+        "coordinates": [-83.5352951, 41.6517725],
         "type": "Point"
       }
     },
@@ -8017,10 +6463,7 @@
       "States": "OK",
       "Zip Code": "73105",
       "geometry": {
-        "coordinates": [
-          -97.50426739999999,
-          35.4943913
-        ],
+        "coordinates": [-97.50426739999999, 35.4943913],
         "type": "Point"
       }
     },
@@ -8033,10 +6476,7 @@
       "States": "OR",
       "Zip Code": "97208",
       "geometry": {
-        "coordinates": [
-          -122.678709,
-          45.5287071
-        ],
+        "coordinates": [-122.678709, 45.5287071],
         "type": "Point"
       }
     },
@@ -8047,10 +6487,7 @@
       "States": "PA",
       "Zip Code": "19010",
       "geometry": {
-        "coordinates": [
-          -75.3163256,
-          40.0196643
-        ],
+        "coordinates": [-75.3163256, 40.0196643],
         "type": "Point"
       }
     },
@@ -8063,10 +6500,7 @@
       "States": "PA",
       "Zip Code": "19530",
       "geometry": {
-        "coordinates": [
-          -75.76581620000002,
-          40.5179182
-        ],
+        "coordinates": [-75.76581620000002, 40.5179182],
         "type": "Point"
       }
     },
@@ -8078,10 +6512,7 @@
       "States": "PA",
       "Zip Code": "18951",
       "geometry": {
-        "coordinates": [
-          -75.33723669999999,
-          40.4424476
-        ],
+        "coordinates": [-75.33723669999999, 40.4424476],
         "type": "Point"
       }
     },
@@ -8094,10 +6525,7 @@
       "States": "PA",
       "Zip Code": "17972",
       "geometry": {
-        "coordinates": [
-          -76.1777626,
-          40.6376058
-        ],
+        "coordinates": [-76.1777626, 40.6376058],
         "type": "Point"
       }
     },
@@ -8109,10 +6537,7 @@
       "States": "PA",
       "Zip Code": "18018",
       "geometry": {
-        "coordinates": [
-          -75.3778801,
-          40.6182414
-        ],
+        "coordinates": [-75.3778801, 40.6182414],
         "type": "Point"
       }
     },
@@ -8125,10 +6550,7 @@
       "States": "PA",
       "Zip Code": "18901",
       "geometry": {
-        "coordinates": [
-          -75.1380744,
-          40.3141477
-        ],
+        "coordinates": [-75.1380744, 40.3141477],
         "type": "Point"
       }
     },
@@ -8141,10 +6563,7 @@
       "States": "PA",
       "Zip Code": "17522",
       "geometry": {
-        "coordinates": [
-          -76.1795513,
-          40.1775695
-        ],
+        "coordinates": [-76.1795513, 40.1775695],
         "type": "Point"
       }
     },
@@ -8156,10 +6575,7 @@
       "States": "PA",
       "Zip Code": "16501",
       "geometry": {
-        "coordinates": [
-          -80.0867841,
-          42.1219404
-        ],
+        "coordinates": [-80.0867841, 42.1219404],
         "type": "Point"
       }
     },
@@ -8172,10 +6588,7 @@
       "States": "PA",
       "Zip Code": "19044",
       "geometry": {
-        "coordinates": [
-          -75.1502969,
-          40.1905882
-        ],
+        "coordinates": [-75.1502969, 40.1905882],
         "type": "Point"
       }
     },
@@ -8188,10 +6601,7 @@
       "States": "PA",
       "Zip Code": "19446",
       "geometry": {
-        "coordinates": [
-          -75.32414849999999,
-          40.2618079
-        ],
+        "coordinates": [-75.32414849999999, 40.2618079],
         "type": "Point"
       }
     },
@@ -8204,10 +6614,7 @@
       "States": "PA",
       "Zip Code": "19454",
       "geometry": {
-        "coordinates": [
-          -75.2800795,
-          40.2095476
-        ],
+        "coordinates": [-75.2800795, 40.2095476],
         "type": "Point"
       }
     },
@@ -8218,10 +6625,7 @@
       "States": "PA",
       "Zip Code": "17055",
       "geometry": {
-        "coordinates": [
-          -77.0080309,
-          40.2132692
-        ],
+        "coordinates": [-77.0080309, 40.2132692],
         "type": "Point"
       }
     },
@@ -8234,10 +6638,7 @@
       "States": "PA",
       "Zip Code": "19107",
       "geometry": {
-        "coordinates": [
-          -75.15841429999999,
-          39.9521671
-        ],
+        "coordinates": [-75.15841429999999, 39.9521671],
         "type": "Point"
       }
     },
@@ -8249,10 +6650,7 @@
       "States": "PA",
       "Zip Code": "15222",
       "geometry": {
-        "coordinates": [
-          -79.9918312,
-          40.4458335
-        ],
+        "coordinates": [-79.9918312, 40.4458335],
         "type": "Point"
       }
     },
@@ -8265,10 +6663,7 @@
       "States": "PA",
       "Zip Code": "17007",
       "geometry": {
-        "coordinates": [
-          -77.0957916,
-          40.1470725
-        ],
+        "coordinates": [-77.0957916, 40.1470725],
         "type": "Point"
       }
     },
@@ -8281,10 +6676,7 @@
       "States": "PA",
       "Zip Code": "18974",
       "geometry": {
-        "coordinates": [
-          -75.1069615,
-          40.2051715
-        ],
+        "coordinates": [-75.1069615, 40.2051715],
         "type": "Point"
       }
     },
@@ -8295,10 +6687,7 @@
       "States": "PA",
       "Zip Code": "19010",
       "geometry": {
-        "coordinates": [
-          -75.3163256,
-          40.0196643
-        ],
+        "coordinates": [-75.3163256, 40.0196643],
         "type": "Point"
       }
     },
@@ -8311,10 +6700,7 @@
       "States": "SC",
       "Zip Code": "29909",
       "geometry": {
-        "coordinates": [
-          -80.86843650000002,
-          32.3649804
-        ],
+        "coordinates": [-80.86843650000002, 32.3649804],
         "type": "Point"
       }
     },
@@ -8327,10 +6713,7 @@
       "States": "SC",
       "Zip Code": "29403",
       "geometry": {
-        "coordinates": [
-          -79.93930730000001,
-          32.7873729
-        ],
+        "coordinates": [-79.93930730000001, 32.7873729],
         "type": "Point"
       }
     },
@@ -8343,10 +6726,7 @@
       "States": "SC",
       "Zip Code": "29203",
       "geometry": {
-        "coordinates": [
-          -81.0275453,
-          34.0252177
-        ],
+        "coordinates": [-81.0275453, 34.0252177],
         "type": "Point"
       }
     },
@@ -8358,10 +6738,7 @@
       "States": "SC",
       "Zip Code": "29601",
       "geometry": {
-        "coordinates": [
-          -82.405901,
-          34.8516857
-        ],
+        "coordinates": [-82.405901, 34.8516857],
         "type": "Point"
       }
     },
@@ -8374,10 +6751,7 @@
       "States": "SC",
       "Zip Code": "29306",
       "geometry": {
-        "coordinates": [
-          -81.9288096,
-          34.9518559
-        ],
+        "coordinates": [-81.9288096, 34.9518559],
         "type": "Point"
       }
     },
@@ -8388,10 +6762,7 @@
       "States": "MO",
       "Zip Code": "63179",
       "geometry": {
-        "coordinates": [
-          -90.2099999,
-          38.63
-        ],
+        "coordinates": [-90.2099999, 38.63],
         "type": "Point"
       }
     },
@@ -8402,10 +6773,7 @@
       "States": "TX",
       "Zip Code": "78028",
       "geometry": {
-        "coordinates": [
-          -99.1424588,
-          30.0536051
-        ],
+        "coordinates": [-99.1424588, 30.0536051],
         "type": "Point"
       }
     },
@@ -8418,10 +6786,7 @@
       "States": "TX",
       "Zip Code": "78701",
       "geometry": {
-        "coordinates": [
-          -97.7346683,
-          30.2695995
-        ],
+        "coordinates": [-97.7346683, 30.2695995],
         "type": "Point"
       }
     },
@@ -8434,10 +6799,7 @@
       "States": "TX",
       "Zip Code": "77058",
       "geometry": {
-        "coordinates": [
-          -95.12126380000001,
-          29.5536128
-        ],
+        "coordinates": [-95.12126380000001, 29.5536128],
         "type": "Point"
       }
     },
@@ -8450,10 +6812,7 @@
       "States": "TX",
       "Zip Code": "78415",
       "geometry": {
-        "coordinates": [
-          -97.4267417,
-          27.7240629
-        ],
+        "coordinates": [-97.4267417, 27.7240629],
         "type": "Point"
       }
     },
@@ -8466,10 +6825,7 @@
       "States": "TX",
       "Zip Code": "75201",
       "geometry": {
-        "coordinates": [
-          -96.79734219999999,
-          32.7761807
-        ],
+        "coordinates": [-96.79734219999999, 32.7761807],
         "type": "Point"
       }
     },
@@ -8482,10 +6838,7 @@
       "States": "TX",
       "Zip Code": "79925",
       "geometry": {
-        "coordinates": [
-          -106.4609248,
-          31.7834882
-        ],
+        "coordinates": [-106.4609248, 31.7834882],
         "type": "Point"
       }
     },
@@ -8498,10 +6851,7 @@
       "States": "TX",
       "Zip Code": "76102",
       "geometry": {
-        "coordinates": [
-          -97.33148729999999,
-          32.7492135
-        ],
+        "coordinates": [-97.33148729999999, 32.7492135],
         "type": "Point"
       }
     },
@@ -8514,10 +6864,7 @@
       "States": "TX",
       "Zip Code": "75020",
       "geometry": {
-        "coordinates": [
-          -96.66585529999999,
-          33.7095663
-        ],
+        "coordinates": [-96.66585529999999, 33.7095663],
         "type": "Point"
       }
     },
@@ -8530,10 +6877,7 @@
       "States": "TX",
       "Zip Code": "77251",
       "geometry": {
-        "coordinates": [
-          -95.53999999999999,
-          29.7
-        ],
+        "coordinates": [-95.53999999999999, 29.7],
         "type": "Point"
       }
     },
@@ -8546,10 +6890,7 @@
       "States": "TX",
       "Zip Code": "75098",
       "geometry": {
-        "coordinates": [
-          -96.5331025,
-          33.0175689
-        ],
+        "coordinates": [-96.5331025, 33.0175689],
         "type": "Point"
       }
     },
@@ -8562,10 +6903,7 @@
       "States": "TX",
       "Zip Code": "78212",
       "geometry": {
-        "coordinates": [
-          -98.47964850000001,
-          29.4586417
-        ],
+        "coordinates": [-98.47964850000001, 29.4586417],
         "type": "Point"
       }
     },
@@ -8578,10 +6916,7 @@
       "States": "TX",
       "Zip Code": "76164",
       "geometry": {
-        "coordinates": [
-          -97.3411928,
-          32.7727749
-        ],
+        "coordinates": [-97.3411928, 32.7727749],
         "type": "Point"
       }
     },
@@ -8592,10 +6927,7 @@
       "States": "TX",
       "Zip Code": "75252",
       "geometry": {
-        "coordinates": [
-          -96.80219559999999,
-          32.9866894
-        ],
+        "coordinates": [-96.80219559999999, 32.9866894],
         "type": "Point"
       }
     },
@@ -8608,10 +6940,7 @@
       "States": "TX",
       "Zip Code": "76018",
       "geometry": {
-        "coordinates": [
-          -97.0897635,
-          32.6595397
-        ],
+        "coordinates": [-97.0897635, 32.6595397],
         "type": "Point"
       }
     },
@@ -8623,10 +6952,7 @@
       "States": "UT",
       "Zip Code": "84116",
       "geometry": {
-        "coordinates": [
-          -111.9479834,
-          40.8173113
-        ],
+        "coordinates": [-111.9479834, 40.8173113],
         "type": "Point"
       }
     },
@@ -8639,10 +6965,7 @@
       "States": "UT",
       "Zip Code": "84770",
       "geometry": {
-        "coordinates": [
-          -113.5727106,
-          37.1136566
-        ],
+        "coordinates": [-113.5727106, 37.1136566],
         "type": "Point"
       }
     },
@@ -8655,10 +6978,7 @@
       "States": "VT",
       "Zip Code": "05401",
       "geometry": {
-        "coordinates": [
-          -73.2152406,
-          44.46159859999999
-        ],
+        "coordinates": [-73.2152406, 44.46159859999999],
         "type": "Point"
       }
     },
@@ -8669,10 +6989,7 @@
       "States": "VA",
       "Zip Code": "22963",
       "geometry": {
-        "coordinates": [
-          -78.3421299,
-          37.912683
-        ],
+        "coordinates": [-78.3421299, 37.912683],
         "type": "Point"
       }
     },
@@ -8685,10 +7002,7 @@
       "States": "VA",
       "Zip Code": "22030",
       "geometry": {
-        "coordinates": [
-          -77.3082469,
-          38.8407875
-        ],
+        "coordinates": [-77.3082469, 38.8407875],
         "type": "Point"
       }
     },
@@ -8701,10 +7015,7 @@
       "States": "VA",
       "Zip Code": "22046",
       "geometry": {
-        "coordinates": [
-          -77.1724663,
-          38.8856981
-        ],
+        "coordinates": [-77.1724663, 38.8856981],
         "type": "Point"
       }
     },
@@ -8716,10 +7027,7 @@
       "States": "VA",
       "Zip Code": "20110",
       "geometry": {
-        "coordinates": [
-          -77.46218619999999,
-          38.768592
-        ],
+        "coordinates": [-77.46218619999999, 38.768592],
         "type": "Point"
       }
     },
@@ -8732,10 +7040,7 @@
       "States": "VA",
       "Zip Code": "22031",
       "geometry": {
-        "coordinates": [
-          -77.23813539999999,
-          38.8667982
-        ],
+        "coordinates": [-77.23813539999999, 38.8667982],
         "type": "Point"
       }
     },
@@ -8748,10 +7053,7 @@
       "States": "VA",
       "Zip Code": "20147",
       "geometry": {
-        "coordinates": [
-          -77.44500819999999,
-          39.0297783
-        ],
+        "coordinates": [-77.44500819999999, 39.0297783],
         "type": "Point"
       }
     },
@@ -8764,10 +7066,7 @@
       "States": "VA",
       "Zip Code": "22192",
       "geometry": {
-        "coordinates": [
-          -77.3497605,
-          38.6807618
-        ],
+        "coordinates": [-77.3497605, 38.6807618],
         "type": "Point"
       }
     },
@@ -8780,10 +7079,7 @@
       "States": "VA",
       "Zip Code": "22312",
       "geometry": {
-        "coordinates": [
-          -77.16626579999999,
-          38.8041669
-        ],
+        "coordinates": [-77.16626579999999, 38.8041669],
         "type": "Point"
       }
     },
@@ -8796,10 +7092,7 @@
       "States": "VA",
       "Zip Code": "20132",
       "geometry": {
-        "coordinates": [
-          -77.71657019999999,
-          39.13476259999999
-        ],
+        "coordinates": [-77.71657019999999, 39.13476259999999],
         "type": "Point"
       }
     },
@@ -8810,10 +7103,7 @@
       "States": "VA",
       "Zip Code": "22314",
       "geometry": {
-        "coordinates": [
-          -77.0675543,
-          38.8056028
-        ],
+        "coordinates": [-77.0675543, 38.8056028],
         "type": "Point"
       }
     },
@@ -8826,10 +7116,7 @@
       "States": "WA",
       "Zip Code": "98004",
       "geometry": {
-        "coordinates": [
-          -122.1882439,
-          47.6023052
-        ],
+        "coordinates": [-122.1882439, 47.6023052],
         "type": "Point"
       }
     },
@@ -8842,10 +7129,7 @@
       "States": "WA",
       "Zip Code": "98104",
       "geometry": {
-        "coordinates": [
-          -122.3296198,
-          47.6050203
-        ],
+        "coordinates": [-122.3296198, 47.6050203],
         "type": "Point"
       }
     },
@@ -8858,10 +7142,7 @@
       "States": "WA",
       "Zip Code": "98206",
       "geometry": {
-        "coordinates": [
-          -122.2098598,
-          47.979924
-        ],
+        "coordinates": [-122.2098598, 47.979924],
         "type": "Point"
       }
     },
@@ -8873,10 +7154,7 @@
       "States": "WA",
       "Zip Code": "98409",
       "geometry": {
-        "coordinates": [
-          -122.4854188,
-          47.2279151
-        ],
+        "coordinates": [-122.4854188, 47.2279151],
         "type": "Point"
       }
     },
@@ -8887,10 +7165,7 @@
       "States": "WV",
       "Zip Code": "25302",
       "geometry": {
-        "coordinates": [
-          -81.6212355,
-          38.3602292
-        ],
+        "coordinates": [-81.6212355, 38.3602292],
         "type": "Point"
       }
     },
@@ -8903,10 +7178,7 @@
       "States": "TX",
       "Zip Code": "79745",
       "geometry": {
-        "coordinates": [
-          -103.0973697,
-          31.8557481
-        ],
+        "coordinates": [-103.0973697, 31.8557481],
         "type": "Point"
       }
     },
@@ -8917,10 +7189,7 @@
       "States": "WV",
       "Zip Code": "25514",
       "geometry": {
-        "coordinates": [
-          -82.5992433,
-          38.1183413
-        ],
+        "coordinates": [-82.5992433, 38.1183413],
         "type": "Point"
       }
     },
@@ -8932,10 +7201,7 @@
       "States": "OH",
       "Zip Code": "43138",
       "geometry": {
-        "coordinates": [
-          -82.406748,
-          39.5397958
-        ],
+        "coordinates": [-82.406748, 39.5397958],
         "type": "Point"
       }
     },
@@ -8948,10 +7214,7 @@
       "States": "AZ",
       "Zip Code": "85296",
       "geometry": {
-        "coordinates": [
-          -111.7890023,
-          33.3315551
-        ],
+        "coordinates": [-111.7890023, 33.3315551],
         "type": "Point"
       }
     },
@@ -8964,10 +7227,7 @@
       "States": "WI",
       "Zip Code": "53713",
       "geometry": {
-        "coordinates": [
-          -89.3821742,
-          43.0517486
-        ],
+        "coordinates": [-89.3821742, 43.0517486],
         "type": "Point"
       }
     },
@@ -8980,10 +7240,7 @@
       "States": "WI",
       "Zip Code": "53202",
       "geometry": {
-        "coordinates": [
-          -87.9088701,
-          43.04192279999999
-        ],
+        "coordinates": [-87.9088701, 43.04192279999999],
         "type": "Point"
       }
     }

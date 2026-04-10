@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import { ProfileDropMenu } from './elements';
+import ProfileDropMenu from './elements/ProfileDropMenu';
 
 /**
  * Desktop Menu Component

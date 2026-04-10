@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Loading, Error } from '../elements';
+import Loading from '../elements/Loading';
+import Error from '../elements/Error';
 import { NUMBERS, formatCertificate } from '../../scripts/helpers';
 import { NPCCreditsAPI } from '../../scripts/back_door';
 

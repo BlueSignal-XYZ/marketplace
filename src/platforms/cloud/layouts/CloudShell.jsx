@@ -11,8 +11,7 @@ import { CloudTopBar } from '../components/CloudTopBar';
 import { CloudSidebar } from '../components/CloudSidebar';
 import { DemoBanner } from '../../../components/DemoBanner';
 import Footer from '../../../components/shared/Footer/Footer';
-import LinkBadgePortal from '../../../components/LinkBadgePortal.jsx';
-import { SettingsMenu } from '../../../components';
+import SettingsMenu from '../../../components/SettingsMenu';
 
 const SIDEBAR_WIDTH = 240;
 
@@ -128,9 +127,6 @@ export function CloudShell({ user, isAuthLanding, children }) {
           <Footer />
         </FooterWrapper>
       </ContentWrapper>
-
-      {/* Link badge */}
-      {user?.uid && <LinkBadgePortal />}
     </AppContainer>
   );
 }

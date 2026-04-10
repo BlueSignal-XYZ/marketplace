@@ -1,27 +1,27 @@
 {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {
-          "name": "Store 1",
-          "hours": "8AM to 10PM"
-        },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [-73.968285, 40.785091]
-        }
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Store 1",
+        "hours": "8AM to 10PM"
       },
-      {
-        "type": "Feature",
-        "properties": {
-          "name": "Store 2",
-          "hours": "9AM to 9PM"
-        },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [-73.968285, 40.790091]
-        }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.968285, 40.785091]
       }
-    ]
-  }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Store 2",
+        "hours": "9AM to 9PM"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-73.968285, 40.790091]
+      }
+    }
+  ]
+}
