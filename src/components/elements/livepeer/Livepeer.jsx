@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Stream } from './Stream';
-import { MediaPlayer, BasicStreamPlayer } from './elements';
+import MediaPlayer from './elements/MediaPlayer';
+import { BasicStreamPlayer } from './elements/StreamPlayer';
 import { LivepeerAPI } from '../../../scripts/back_door';
 import MediaUpload from './MediaUpload';
 import {

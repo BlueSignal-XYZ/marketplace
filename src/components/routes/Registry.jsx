@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { EventData, ProducersData, AccountSearch, Line } from '../elements/index';
+import EventData from '../elements/EventData';
+import ProducersData from '../elements/ProducersData';
+import AccountSearch from '../elements/AccountSearch';
+import Line from '../elements/Line';
 import { NUMBERS } from '../../scripts/helpers';
 import { NPCCreditsAPI } from '../../scripts/back_door';
 import { media, safeAreaInsets } from '../../styles/breakpoints';

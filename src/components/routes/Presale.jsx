@@ -14,7 +14,7 @@ import { NUMBERS } from '../../scripts/helpers';
 
 import { FaCertificate, FaLeaf } from 'react-icons/fa6';
 import MapBox from '../elements/MapBox';
-import { ProductDisplay } from '../payment';
+import ProductDisplay from '../payment/ProductDisplay';
 import { presaleProducer } from '../payment/data';
 import { CARD_SECTION, CARD_WRAPPER, FULL_PAGE_CONTAINER } from '../payment/styled';
 

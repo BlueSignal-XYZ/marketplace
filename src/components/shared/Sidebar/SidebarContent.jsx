@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
-import { Sidebar_MenuItem } from '../../elements';
+import Sidebar_MenuItem from '../../elements/sidebar/Sidebar_MenuItem';
 import { FaChevronDown } from 'react-icons/fa6';
 import {
   faBroadcastTower,
@@ -13,7 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ProfileDropMenu } from '../../elements/navbar/elements';
+import ProfileDropMenu from '../../elements/navbar/elements/ProfileDropMenu';
 
 const StyledSidebarContent = styled.div`
   height: 100%;

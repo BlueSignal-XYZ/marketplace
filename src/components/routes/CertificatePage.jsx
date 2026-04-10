@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Loading, Error, Certificate } from '../elements/index';
+import Loading from '../elements/Loading';
+import Error from '../elements/Error';
+import Certificate from '../elements/Certificate';
 import { formatCertificate } from '../../scripts/helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';

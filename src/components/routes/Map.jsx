@@ -1,4 +1,4 @@
-import { GoogleStoreLocator } from '../elements';
+import GoogleStoreLocator from '../elements/GoogleStoreLocator';
 import storeData from '../../data/companyData_Florida.json';
 
 const Map = () => {

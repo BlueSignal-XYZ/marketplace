@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CloudPageLayout from './CloudPageLayout';
 import NutrientCalculator from '../NutrientCalculator';
-import { VerificationUI } from '../elements/contractUI';
-import { MediaPlayer, BasicStreamPlayer } from '../elements/livepeer';
+import VerificationUI from '../elements/contractUI/VerificationUI';
+import MediaPlayer from '../elements/livepeer/elements/MediaPlayer';
+import { BasicStreamPlayer } from '../elements/livepeer/elements/StreamPlayer';
 import { LivepeerAPI } from '../../scripts/back_door';
 
 /**

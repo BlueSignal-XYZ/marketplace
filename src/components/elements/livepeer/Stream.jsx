@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
 
-import { StreamPlayer } from './elements';
+import { StreamPlayer } from './elements/StreamPlayer';
 
 // #BACKEND
 import { LivepeerAPI, MediaAPI } from '../../../scripts/back_door';

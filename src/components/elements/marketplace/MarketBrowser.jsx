@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { NFTCard } from './elements';
+import NFTCard from './elements/NFTCard';
 import { useNavigate } from 'react-router-dom';
 import { MarketplaceAPI } from '../../../scripts/back_door';
 import { ListingCardSkeleton } from '../../shared/Skeleton/Skeleton';
