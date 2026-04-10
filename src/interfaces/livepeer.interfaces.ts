@@ -1,5 +1,3 @@
-import { logDev } from '../scripts/helpers';
-
 export interface Asset {
   id: string;
   type: string;
@@ -141,13 +139,3 @@ export interface RequestUploadData {
 export interface Task {
   id: string;
 }
-
-const testType = (type: string, result: string, data: string = '') => {
-  logDev(`Type Test: ${type} => ${result} => ${data}`, { type, result, data });
-};
-const _ActionTypes = {
-  AssetUpload: {
-    request: testType('RequestUpload', 'RequestUploadResponse', 'RequestUploadData'),
-    upload: testType('tusUpload', 'response listners', 'upload: { url }'),
-  },
-};
