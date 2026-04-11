@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { firebaseError } from './firebase';
 import { useAuth } from './hooks/useAuth';
+import PinScreen, { isPinVerified } from './auth/PinScreen';
 import LoginScreen from './auth/LoginScreen';
 import DashboardLayout from './layout/DashboardLayout';
 
@@ -44,6 +45,11 @@ export default function App() {
         <ErrorDetail>{firebaseError}</ErrorDetail>
       </ErrorWrapper>
     );
+  }
+
+  // PIN gate — required once per browser session
+  if (!isPinVerified()) {
+    return <PinScreen />;
   }
 
   return <AuthGate />;

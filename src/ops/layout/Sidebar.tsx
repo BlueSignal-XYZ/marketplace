@@ -154,7 +154,33 @@ export default function Sidebar({ activePanel, onNavigate, open, onClose }: Side
     <>
       {open && <Overlay onClick={onClose} />}
       <Aside $open={open}>
-        <Logo>BlueSignal Ops</Logo>
+        <Logo>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="6" fill="#08090a" />
+            <path
+              d="M5 10 C9 7, 17 7, 27 10"
+              stroke="#2d8cf0"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+            <path
+              d="M5 16 C9 13, 17 13, 27 16"
+              stroke="#2d8cf0"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+            <path
+              d="M5 22 C9 19, 17 19, 27 22"
+              stroke="#2d8cf0"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </svg>
+          BlueSignal Ops
+        </Logo>
         {NAV_GROUPS.map((group) => (
           <div key={group.name}>
             <GroupHeader onClick={() => toggle(group.name)}>
