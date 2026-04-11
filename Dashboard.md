@@ -7,10 +7,14 @@ Priority-sorted task index. Organized by urgency tier. Every item stays here unt
 ## Urgent — Needs Action Today
 
 ### Sales — Prospect Outreach
-- [ ] **Begin outreach to top 5 Water Prospects** — Prioritize: (1) Tank Depot (14 locations, national distribution), (2) Brite Ideas Aquaponics (4 locations, strongest product-market fit), (3) LegaSeay Water Solutions (GIS/Water Resources background, 5.0/137 reviews), (4) Rain Harvesting Supplies (retailer, could carry WQM-1), (5) B-E Waterwell Services (45yr, largest service area). Full profiles in `Knowledge/People/Partners/`. Owner: Founder. Target: 2026-04-14. (Added 2026-04-10, updated 2026-04-10)
+- [ ] **Begin outreach to top 5 Water Prospects** — Prioritize: (1) Tank Depot (14 locations, national distribution), (2) Brite Ideas Aquaponics (4 locations, strongest product-market fit), (3) LegaSeay Water Solutions (GIS/Water Resources background, 5.0/137 reviews), (4) Rain Harvesting Supplies (retailer, could carry WQM-1), (5) B-E Waterwell Services (45yr, largest service area). Full profiles in `Knowledge/People/Partners/`. Owner: Founder. Target: 2026-04-14. (Added 2026-04-10, updated 2026-04-11)
 
 ### Engineering — Blocking
-- [ ] **CI/CD pipeline setup** — Set up GitHub Actions automated testing and deployment pipelines for both `wqm-1` and `marketplace` repos. Blocks all reliable dev work. Owner: Founder. Target: 2026-04-14. (Added 2026-04-10, updated 2026-04-10)
+- [ ] **CI/CD pipeline setup** — Set up GitHub Actions automated testing and deployment pipelines for both `wqm-1` and `marketplace` repos. Blocks all reliable dev work. Owner: Founder. Target: 2026-04-14. (Added 2026-04-10, updated 2026-04-11)
+
+### Engineering — PRs Needing Review
+- [ ] **Review PR #287 — Security hardening** — Role escalation fix, wallet/Stripe verification, 33 new tests (339 total passing). Critical security fix. Owner: Founder. Target: 2026-04-13. (Added 2026-04-11, updated 2026-04-11)
+- [ ] **Review PR #283 — Dependabot axios bump** — axios 1.14→1.15 in /functions. Fixes SSRF + header injection vulnerabilities. Owner: Founder. Target: 2026-04-13. (Added 2026-04-11, updated 2026-04-11)
 
 ---
 
