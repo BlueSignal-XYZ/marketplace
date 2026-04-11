@@ -21,6 +21,8 @@ const VITE_ENV_VARS = [
   'VITE_FIREBASE_APP_ID',
   'VITE_FIREBASE_MEASUREMENT_ID',
   'VITE_FIREBASE_DATABASE_URL',
+  // Ops dashboard RTDB (separate from main app RTDB)
+  'VITE_OPS_DATABASE_URL',
   // Third-party API keys
   'VITE_ALCHEMY_API_KEY',
   'VITE_GOOGLE_MAPS_API_KEY',
