@@ -54,34 +54,31 @@ const MediaPlayer = ({ playbackID }) => {
   const [metrics, setMetrics] = useState(null);
   const [video, setVideo] = useState(null);
 
+  const getMetrics = async () => {
+    const { viewership, error: _viewershipError } = await LivepeerAPI.get.viewership(playbackID);
+
+    if (viewership) {
+      setMetrics(viewership);
+    }
+  };
+
+  const getVideoAsset = async () => {
+    const { video, error } = await MediaAPI.get.video(playbackID);
+
+    if (error) {
+      console.error(error);
+    }
+
+    if (video) {
+      setVideo(video);
+    }
+  };
+
   useEffect(() => {
-    if (!playbackID) return;
-    let cancelled = false;
-
-    const fetchData = async () => {
-      const [viewershipResult, videoResult] = await Promise.allSettled([
-        LivepeerAPI.get.viewership(playbackID),
-        MediaAPI.get.video(playbackID),
-      ]);
-
-      if (cancelled) return;
-
-      if (viewershipResult.status === 'fulfilled' && viewershipResult.value?.viewership) {
-        setMetrics(viewershipResult.value.viewership);
-      }
-
-      if (videoResult.status === 'fulfilled') {
-        const { video: v, error } = videoResult.value;
-        if (error) console.error(error);
-        if (v) setVideo(v);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      cancelled = true;
-    };
+    if (playbackID) {
+      getMetrics();
+      getVideoAsset();
+    }
   }, [playbackID]);
 
   return (

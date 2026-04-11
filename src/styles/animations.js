@@ -25,39 +25,6 @@ export const fadeInUp = keyframes`
   }
 `;
 
-export const fadeInDown = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-export const fadeInLeft = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
-export const fadeInRight = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
 export const scaleIn = keyframes`
   from {
     opacity: 0;
@@ -349,72 +316,12 @@ export const hoverLiftGlow = css`
   }
 `;
 
-export const hoverScale = css`
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-`;
-
-// Subtle scale for icons/buttons
-export const hoverScaleSubtle = css`
-  transition: transform 0.15s ease-out;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-`;
-
-export const hoverGlow = (color = 'rgba(56, 189, 190, 0.4)') => css`
-  transition: box-shadow 0.2s ease-out;
-
-  &:hover {
-    box-shadow: 0 0 20px ${color};
-  }
-`;
-
-export const hoverBrighten = css`
-  transition: filter 0.2s ease-out;
-
-  &:hover {
-    filter: brightness(1.05);
-  }
-`;
-
-// Border highlight effect
-export const hoverBorderHighlight = css`
-  transition:
-    border-color 0.2s ease-out,
-    box-shadow 0.2s ease-out;
-
-  &:hover {
-    border-color: var(--color-primary-300, #5dc9cc);
-    box-shadow: 0 0 0 3px rgba(56, 189, 190, 0.1);
-  }
-`;
-
 // ===== FOCUS STATES =====
 
 export const focusRing = css`
   &:focus-visible {
     outline: 2px solid var(--color-primary-400, #38bdbe);
     outline-offset: 2px;
-  }
-`;
-
-export const focusRingInset = css`
-  &:focus-visible {
-    outline: none;
-    box-shadow: inset 0 0 0 2px var(--color-primary-400, #38bdbe);
   }
 `;
 
@@ -432,89 +339,8 @@ export const skeleton = css`
   border-radius: 4px;
 `;
 
-// Enhanced skeleton with subtle color
-export const skeletonPrimary = css`
-  background: linear-gradient(
-    90deg,
-    rgba(56, 189, 190, 0.05) 25%,
-    rgba(56, 189, 190, 0.1) 50%,
-    rgba(56, 189, 190, 0.05) 75%
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.5s infinite;
-  border-radius: 8px;
-`;
-
 export const loadingSpinner = css`
   animation: ${spin} 1s linear infinite;
-`;
-
-export const loadingPulse = css`
-  animation: ${pulse} 2s ease-in-out infinite;
-`;
-
-// ===== ENTRANCE ANIMATIONS FOR LISTS =====
-
-export const listItemEntrance = (index) => css`
-  opacity: 0;
-  animation: ${fadeInUp} 0.3s ease-out forwards;
-  animation-delay: ${index * 0.05}s;
-`;
-
-// Card entrance with pop effect
-export const cardEntrance = (index = 0) => css`
-  opacity: 0;
-  animation: ${popIn} 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: ${index * 0.08}s;
-`;
-
-// ===== INTERACTIVE FEEDBACK =====
-
-// Press effect for buttons
-export const pressEffect = css`
-  transition: transform 0.1s ease-out;
-
-  &:active {
-    transform: scale(0.97);
-  }
-`;
-
-// Ripple effect placeholder (requires JS to position)
-export const rippleBase = css`
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition:
-      width 0.4s ease-out,
-      height 0.4s ease-out,
-      opacity 0.4s ease-out;
-    opacity: 0;
-  }
-
-  &:active::after {
-    width: 200%;
-    height: 200%;
-    opacity: 1;
-    transition: 0s;
-  }
-`;
-
-// ===== SECTION ANIMATIONS =====
-
-// Staggered section entrance
-export const sectionEntrance = css`
-  opacity: 0;
-  animation: ${fadeInUp} 0.4s ease-out forwards;
 `;
 
 // ===== REDUCED MOTION =====

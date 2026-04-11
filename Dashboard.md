@@ -29,7 +29,7 @@ Priority-sorted task index. Organized by urgency tier. Every item stays here unt
 
 ### Engineering — Active
 - [ ] **WQM-1 sensor calibration routines** — Finish pH, TDS, turbidity, ORP, and temperature calibration code. Include reference value tests. Owner: Founder. Target: 2026-04-17. (Added 2026-04-10, updated 2026-04-10)
-- [ ] **Stripe payment integration** — Complete Stripe Connect integration for Marketplace. Payment flows for nutrient credit purchases + dealer subscriptions. Owner: Founder. Target: 2026-04-17. (Added 2026-04-10, updated 2026-04-10)
+- [ ] **Stripe payment integration** — Complete Stripe Connect integration for Marketplace. Payment flows for nutrient credit purchases + dealer subscriptions. _Progress: idempotency keys added to payment intents, CheckoutForm test coverage added (7 tests), API auth retry logic tested (4 tests)._ Owner: Founder. Target: 2026-04-17. (Added 2026-04-10, updated 2026-04-11)
 
 ### Operations
 - [ ] **CRM pipeline stages setup** — Define and implement dealer journey tracking: Prospect → Aware → Onboarding → Installing → Engaged → Retention → Re-Engage. 15 prospects already loaded. Owner: Founder. Target: 2026-04-15. (Added 2026-04-10, updated 2026-04-10)

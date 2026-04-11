@@ -198,7 +198,8 @@ const hoverAnimation = {
   boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.2)',
 };
 
-export const signedUser = '0x94439f811328BAD743F68C26b5bF5B0A67b3b1df';
+// SECURITY: Wallet address must come from authenticated user context, never hardcoded
+// Previously contained a hardcoded address — now derived at runtime in SellerDashboard component
 
 //USE API
 /** IMPLEMENT MARKETPLACE FUNCTIONALITY */
@@ -238,7 +239,8 @@ const QuickActionsBar = styled.div`
 `;
 
 const SellerDashboard = () => {
-  const { ACTIONS } = useAppContext();
+  const { STATES, ACTIONS } = useAppContext();
+  const walletAddress = STATES?.user?.walletAddress;
   const navigate = useNavigate();
   const [price, setPrice] = useState('');
   const [userNFTs, setUserNFTs] = useState([]);
@@ -263,7 +265,7 @@ const SellerDashboard = () => {
   const fetchUserNFTs = async () => {
     setIsLoading(true);
     try {
-      const { wallet_nfts } = await NFT_API.get.wallet_nfts(signedUser);
+      const { wallet_nfts } = await NFT_API.get.wallet_nfts(walletAddress);
 
       if (wallet_nfts) {
         // wallet NFTs loaded
@@ -283,7 +285,7 @@ const SellerDashboard = () => {
     setIsLoading(true);
     try {
       const nfts = await MarketplaceAPI.Events.listAvailableNFTs();
-      const _userListed = nfts.filter((event) => event.seller === signedUser);
+      const _userListed = nfts.filter((event) => event.seller === walletAddress);
       setUserListedNFTs(_userListed);
       return _userListed;
     } catch (error) {

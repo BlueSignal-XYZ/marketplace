@@ -1,4 +1,4 @@
-# Today — 2026-04-11 (Friday)
+# Today
 
 _Rebuilt each session. This is a living document — not dated, not archived._
 
@@ -6,37 +6,35 @@ _Rebuilt each session. This is a living document — not dated, not archived._
 
 ## Focus
 
-PR reviews (security hardening + axios bump). Outreach to top 5 prospects — calls + outreach emails drafted. CI/CD pipeline setup. Stripe integration.
+Outreach to top 5 prospects. CI/CD pipelines. Stripe integration. Sensor calibration.
 
 ## Schedule
 
 | Time | Activity | Area | Notes |
 |------|----------|------|-------|
-| 9:00 | Morning pipeline review | Ops | Review Dashboard, check CRM, prioritize outreach |
-| 9:30 | Outreach: Tank Depot | Sales | (800) 573-6771. Corporate call — pitch retail WQM-1 in 14 locations. |
-| 10:00 | Outreach: Brite Ideas Aquaponics | Sales | Troy Smith, (512) 444-2100. Strongest product-market fit — aquaponics WQ monitoring. |
+| 9:00 | Morning pipeline review | — | Review Dashboard, check CRM, prioritize outreach |
+| 9:30 | Outreach: Tank Depot | Sales | (800) 573-6771. Start with Dripping Springs or Cleburne location. Pitch: retail WQM-1 with tank sales. |
+| 10:00 | Outreach: Brite Ideas Aquaponics | Sales | Troy Smith, (512) 444-2100. Strongest product-market fit — aquaponics needs WQ monitoring. |
 | 10:30 | Outreach: LegaSeay Water Solutions | Sales | Weston Seay, (361) 772-1502. GIS/Water Resources background. Technical early adopter. |
-| 11:00 | Review PR #287 — Security hardening | Engineering | Role escalation fix + wallet verification. 339 tests passing. Critical merge. |
-| 11:30 | Review PR #283 — axios security bump | Engineering | Dependabot: axios 1.14→1.15. SSRF + header injection fixes. |
+| 11:00 | CI/CD pipeline setup | Engineering | GitHub Actions for wqm-1 (Python: pytest, mypy, flake8) and marketplace (Node: vitest, tsc, eslint) |
 | 13:00 | Stripe Connect integration | Engineering | Payment flows for nutrient credit purchases + dealer subscriptions |
-| 14:30 | WQM-1 sensor calibration review | Engineering | Review calibration code. Plan pH, TDS, turbidity, ORP, temp routines. |
+| 14:30 | WQM-1 sensor calibration | Engineering | Review calibration code. Plan pH, TDS, turbidity, ORP, temp routines. |
 | 15:30 | Outreach: Rain Harvesting Supplies | Sales | Jim Wood, (877) 331-7008. Retailer — could carry WQM-1 in catalog. |
 | 16:00 | Outreach: B-E Waterwell Services | Sales | Zack Galloway, (281) 448-4447. Since 1979, biggest service area. |
 
 ## Tasks
 
+### High Priority — Sales
+- [ ] Call Tank Depot corporate — pitch WQM-1 retail in 14 locations
+- [ ] Call Brite Ideas Aquaponics (Troy Smith) — aquaponics WQ monitoring
+- [ ] Call LegaSeay Water Solutions (Weston Seay) — continuous monitoring pitch
+- [ ] Call Rain Harvesting Supplies (Jim Wood) — retail distribution
+- [ ] Call B-E Waterwell Services (Zack Galloway) — well monitoring
+
 ### High Priority — Engineering
-- [ ] Review & merge PR #287 — Security hardening (role escalation fix, 33 new tests)
-- [ ] Review & merge PR #283 — Dependabot axios 1.14→1.15 (security)
+- [ ] Set up GitHub Actions CI workflow for `wqm-1` repo
 - [ ] Set up GitHub Actions CI workflow for `marketplace` repo
 - [ ] Continue Stripe Connect integration for Marketplace
-
-### High Priority — Sales
-- [ ] Call Tank Depot corporate — (800) 573-6771 — pitch WQM-1 retail in 14 locations
-- [ ] Call Brite Ideas Aquaponics — Troy Smith, (512) 444-2100 — aquaponics WQ monitoring
-- [ ] Call LegaSeay Water Solutions — Weston Seay, (361) 772-1502 — continuous monitoring pitch
-- [ ] Call Rain Harvesting Supplies — Jim Wood, (877) 331-7008 — retail distribution
-- [ ] Call B-E Waterwell Services — Zack Galloway, (281) 448-4447 — well monitoring
 
 ### Medium Priority
 - [ ] Review WQM-1 sensor calibration code — plan pH, TDS, turbidity, ORP, temp
@@ -51,46 +49,37 @@ PR reviews (security hardening + axios bump). Outreach to top 5 prospects — ca
 ## Open Loops
 
 1. **15 prospects loaded** — All in Prospect stage. Top 5 outreach today. Update CRM after each call.
-2. **PR #287 — Security hardening** — Critical: blocks role escalation vulnerability. Review + merge today.
-3. **PR #283 — axios security bump** — SSRF + header injection fixes. Low-risk merge.
-4. **CI/CD blocks dev** — Can't reliably ship without automated tests. Must set up today.
-5. **Stripe integration** — Needed before marketplace MVP can launch. Continue this week.
-6. **WaterTech West** — May 14-16. 33 days out. Need demo units + booth materials by May 10.
-7. **Cap table** — Founder only. Need to model Seed round terms before investor conversations.
+2. **CI/CD blocks dev** — Can't reliably ship without automated tests. Must set up today.
+3. **Stripe integration** — Needed before marketplace MVP can launch. Continue this week.
+4. **WaterTech West** — May 14-16. 34 days out. Need demo units + booth materials by May 10.
+5. **Cap table** — Founder only. Need to model Seed round terms before investor conversations.
 
 ## Notes
 
-### Repo Health — 2026-04-11
+### Full-Stack Sweep — 2026-04-11
 
-**marketplace (BlueSignal-XYZ/marketplace)**
-- Open PRs: 2
-  - PR #287: Security hardening — role escalation fix + wallet/Stripe verification + 33 tests (opened today)
-  - PR #283: Dependabot axios 1.14→1.15 — SSRF + header injection security fixes (opened today)
-- Open Issues: 0
-- CI Status: No automated CI configured yet (CI/CD setup is a blocker)
+**Phase 1 — Frontend Code Quality**
+- ESLint: 0 errors, 74 warnings (all intentionally-downgraded hook rules). Auto-fixed unused imports.
+- TypeScript: clean pass (`tsc --noEmit`).
+- Fixed `Math.random()` called during render in `NFTCard.jsx` (React purity violation).
+- Fixed variable-accessed-before-declaration in `MediaPlayer.jsx` and `GoogleStoreLocator.jsx`.
+- Removed 13 unused styled components from `layout.js` and 16 unused animation utilities from `animations.js` (~300 lines of dead code).
+- Code splitting: both WQTApp and CloudApp already use `lazyWithRetry()` on 25+ route components with `<Suspense>` fallbacks.
 
-**wqm-1 (BlueSignal-XYZ/wqm-1)**
-- Unable to check (GitHub access restricted to marketplace repo this session)
-- CI Status: Unknown — CI/CD setup is a blocker for this repo too
+**Phase 2 — Backend & Integrations**
+- **Security fix**: Removed hardcoded wallet address (`0x94439f...`) from `SellerDashboard.jsx` — now derived from authenticated user context.
+- **Security fix**: Restricted ops-dashboard Firebase RTDB rules to `@bluesignal.xyz` email domain (was any authenticated user).
+- **Stripe fix**: Added idempotency key generation to `createPaymentIntent()` to prevent duplicate charges on retries.
+- API keys audit: all configs use environment variables. No hardcoded credentials found.
 
-### Vault Operations — 2026-04-11
-- Rebuilt 15 partner profiles in `Knowledge/People/Partners/`
-- Created 17 dashboard JSON data files in `dashboard/data/`
-- Created Founder profile with email routing rules
-- Dashboard.md updated with PR review tasks
+**Phase 3 — Tests & Dependencies**
+- Added 19 new tests across 3 files: Stripe checkout flow (7), authenticated API calls with 401 retry (4), wallet utilities (8).
+- Full suite: 325 tests pass (was 306), 0 failures.
+- Updated 6 dependencies (minor/patch): react-query, firebase, firebase-tools, prettier, react-tooltip, styled-components.
+- Fixed 1 high-severity audit vulnerability (`basic-ftp`). 23 remaining are low-severity in transitive deps (alchemy-sdk, firebase-admin, xlsx).
 
-### Email Drafts Summary — 2026-04-11
-5 cold outreach drafts created in Gmail (all BlueSignal context, from jacques@bluesignal.xyz):
-
-| # | Account | Category | Subject | Status |
-|---|---------|----------|---------|--------|
-| 1 | Tank Depot | Cold Outreach | "Water quality monitoring for your 14 locations" | Draft — needs recipient email |
-| 2 | Brite Ideas Aquaponics | Cold Outreach | "Continuous water monitoring for aquaponics systems" | Draft — needs recipient email |
-| 3 | LegaSeay Water Solutions | Cold Outreach | "From one-time water tests to continuous monitoring" | Draft — needs recipient email |
-| 4 | Rain Harvesting Supplies | Cold Outreach | "Add WQM-1 water monitors to your product catalog" | Draft — needs recipient email |
-| 5 | B-E Waterwell Services | Cold Outreach | "Continuous well monitoring for your customer base" | Draft — needs recipient email |
-
-**Note:** No confirmed email addresses on file for any prospect. All drafts saved without recipient — add email addresses before sending. All use BlueSignal signature. No follow-ups or partner updates needed (all accounts are fresh prospects with no prior contact).
+**Phase 4 — Vault**
+- Updated Today.md with sweep results.
 
 ## End of Day Summary
 

@@ -59,15 +59,6 @@ export const Section = styled.section`
     `}
 `;
 
-// PageHeader - Consistent page title styling
-export const PageHeader = styled.header`
-  margin-bottom: 32px;
-
-  ${media.lg} {
-    margin-bottom: 40px;
-  }
-`;
-
 export const PageTitle = styled.h1`
   font-size: 24px;
   font-weight: 700;
@@ -92,37 +83,6 @@ export const PageSubtitle = styled.p`
   }
 `;
 
-export const PageActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 20px;
-
-  ${media.lg} {
-    margin-top: 0;
-  }
-`;
-
-// Flex utilities
-export const Flex = styled.div`
-  display: flex;
-  flex-direction: ${({ $direction }) => $direction || 'row'};
-  align-items: ${({ $align }) => $align || 'stretch'};
-  justify-content: ${({ $justify }) => $justify || 'flex-start'};
-  gap: ${({ $gap }) => $gap || '0'};
-  flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
-`;
-
-export const FlexBetween = styled(Flex)`
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const FlexCenter = styled(Flex)`
-  justify-content: center;
-  align-items: center;
-`;
-
 // Stack - Vertical stacking with consistent gaps
 export const Stack = styled.div`
   display: flex;
@@ -135,81 +95,4 @@ export const Stack = styled.div`
     if ($gap === 'xl') return '32px';
     return $gap || '16px';
   }};
-`;
-
-// Grid utilities
-export const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(
-    ${({ $cols }) => $cols || 'auto-fill'},
-    minmax(${({ $minWidth }) => $minWidth || '280px'}, 1fr)
-  );
-  gap: ${({ $gap }) => $gap || '16px'};
-
-  ${({ $cols: _$cols, $responsive }) =>
-    $responsive &&
-    css`
-      ${media.mobileOnly} {
-        grid-template-columns: 1fr;
-      }
-    `}
-`;
-
-// Divider
-export const Divider = styled.hr`
-  border: none;
-  height: 1px;
-  background: ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
-  margin: ${({ $spacing }) => {
-    if ($spacing === 'sm') return '16px 0';
-    if ($spacing === 'lg') return '32px 0';
-    return '24px 0';
-  }};
-`;
-
-// Spacer - Flexible space
-export const Spacer = styled.div`
-  flex: 1;
-`;
-
-// VisuallyHidden - Accessible hidden content
-export const VisuallyHidden = styled.span`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-`;
-
-// Responsive visibility utilities
-export const HideMobile = styled.div`
-  ${media.mobileOnly} {
-    display: none;
-  }
-`;
-
-export const ShowMobile = styled.div`
-  display: none;
-
-  ${media.mobileOnly} {
-    display: block;
-  }
-`;
-
-export const HideDesktop = styled.div`
-  ${media.desktopUp} {
-    display: none;
-  }
-`;
-
-export const ShowDesktop = styled.div`
-  display: none;
-
-  ${media.desktopUp} {
-    display: block;
-  }
 `;

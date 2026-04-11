@@ -102,13 +102,13 @@ const NFTCard = ({ nft, navigate }) => (
         <Title>
           {nft.name} #{Number(nft.tokenId)}
         </Title>
-        <Price>${Math.round(nft.price * Math.random() * 100)}</Price>
+        <Price>${nft.price != null ? Math.round(nft.price * 100) : '—'}</Price>
       </div>
     </div>
 
     <NFTInfo>
       <Seller>Seller: {nft.sellerName || formatLongString(nft.seller)}</Seller>
-      <Seller>Available: {nft.available || Math.round(Math.random() * 100)}</Seller>
+      <Seller>Available: {nft.available ?? '—'}</Seller>
     </NFTInfo>
 
     <ButtonPrimary onClick={() => navigate(`listing/${nft.listingId}`)}>Buy Now</ButtonPrimary>
