@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
+import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getDatabase, type Database } from 'firebase/database';
 
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -9,6 +9,17 @@ const config = {
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
 };
 
-const app = initializeApp(config);
-export const auth = getAuth(app);
-export const db = getDatabase(app);
+export let app: FirebaseApp;
+export let auth: Auth;
+export let db: Database;
+export let firebaseError: string | null = null;
+
+try {
+  if (!config.apiKey) throw new Error('VITE_FIREBASE_API_KEY is not set');
+  app = initializeApp(config);
+  auth = getAuth(app);
+  db = getDatabase(app);
+} catch (e) {
+  firebaseError = e instanceof Error ? e.message : 'Firebase initialization failed';
+  console.error('[ops] Firebase init error:', firebaseError);
+}
