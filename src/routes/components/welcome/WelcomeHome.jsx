@@ -90,12 +90,12 @@ const FeatureTag = styled.span`
   font-weight: 600;
 `;
 
-export const contentVariants = {
+const contentVariants = {
   hidden: { y: 30, opacity: 0 },
   visible: { y: 0, opacity: 1, transition: { duration: 0.6, delay: 0.1 } },
 };
 
-export const StyledWelcomeHome = styled.div`
+const StyledWelcomeHome = styled.div`
   position: relative;
   padding: 24px;
   margin-bottom: 24px;

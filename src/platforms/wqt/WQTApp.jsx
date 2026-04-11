@@ -38,9 +38,6 @@ const PortfolioPage = lazyWithRetry(() => import('./pages/PortfolioPage'));
 const SellerOnboardingPage = lazyWithRetry(() => import('./pages/SellerOnboardingPage'));
 const WQTDashboardPage = lazyWithRetry(() => import('./pages/WQTDashboardPage'));
 const ProgramsPage = lazyWithRetry(() => import('./pages/ProgramsPage'));
-const FinancialDashboard = lazyWithRetry(
-  () => import('../../routes/marketplace/account/FinancialDashboard')
-);
 const RegistryPage = lazyWithRetry(() => import('../../wqt/pages/RegistryPage'));
 const RecentRemovalsPage = lazyWithRetry(() => import('../../wqt/pages/RecentRemovalsPage'));
 const MapPage = lazyWithRetry(() => import('../../wqt/pages/MapPage'));
@@ -238,14 +235,6 @@ export function WQTApp({ user, authLoading }) {
                     element={
                       <WQTAuthGate user={user} authLoading={authLoading}>
                         <CreateListingPage />
-                      </WQTAuthGate>
-                    }
-                  />
-                  <Route
-                    path="/dashboard/financial"
-                    element={
-                      <WQTAuthGate user={user} authLoading={authLoading}>
-                        <FinancialDashboard />
                       </WQTAuthGate>
                     }
                   />

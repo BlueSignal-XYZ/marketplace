@@ -56,11 +56,6 @@ const slideIn = keyframes`
   to   { transform: translateX(0);    opacity: 1; }
 `;
 
-const _slideOut = keyframes`
-  from { transform: translateX(0);    opacity: 1; }
-  to   { transform: translateX(100%); opacity: 0; }
-`;
-
 // ── Styled ────────────────────────────────────────────────
 
 const Container = styled.div`

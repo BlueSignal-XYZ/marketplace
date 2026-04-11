@@ -149,18 +149,6 @@ export const mockPresaleProjects: PresaleProject[] = [
   },
 ];
 
-// Helper functions
-export const getPresalesByStatus = (status: PresaleProject['status']): PresaleProject[] => {
-  return mockPresaleProjects.filter((p) => p.status === status);
-};
-
-export const getPresalesByCreditType = (
-  type: PresaleProject['creditType'] | 'all'
-): PresaleProject[] => {
-  if (type === 'all') return mockPresaleProjects;
-  return mockPresaleProjects.filter((p) => p.creditType === type);
-};
-
 export const getCreditTypeColor = (type: string): string => {
   const colors: Record<string, string> = {
     nitrogen: '#3b82f6',
