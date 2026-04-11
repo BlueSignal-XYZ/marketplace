@@ -1,5 +1,5 @@
 // QR Code Scanner Component for Device Commissioning
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Html5Qrcode } from 'html5-qrcode';
 
@@ -374,9 +374,10 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
         html5QrCodeRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, onScan]);
 
-  const handleClose = async () => {
+  const handleClose = useCallback(async () => {
     if (html5QrCodeRef.current) {
       try {
         await html5QrCodeRef.current.stop();
@@ -386,7 +387,7 @@ export default function QRScanner({ isOpen, onClose, onScan }) {
       html5QrCodeRef.current = null;
     }
     onClose();
-  };
+  }, [onClose]);
 
   const handleManualSubmit = () => {
     if (manualEntry.trim()) {

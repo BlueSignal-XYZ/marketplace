@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -595,21 +595,16 @@ const BuyerDashboard = () => {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadDashboardData();
-    loadDevices();
-  }, [user?.uid]);
-
-  const loadDevices = async () => {
+  const loadDevices = useCallback(async () => {
     try {
       const userDevices = await fetchUserDevices();
       setDevices(Array.isArray(userDevices) ? userDevices : []);
     } catch {
       setDevices([]);
     }
-  };
+  }, []);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch real data from RTDB
@@ -659,7 +654,12 @@ const BuyerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
+
+  useEffect(() => {
+    loadDashboardData();
+    loadDevices();
+  }, [user?.uid, loadDashboardData, loadDevices]);
 
   const handleViewCredit = (creditId) => {
     navigate(`/marketplace/listing/${creditId}`);

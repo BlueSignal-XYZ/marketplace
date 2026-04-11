@@ -3,7 +3,7 @@
  * Full 7-Step Commissioning Wizard
  * Uses the real backend API via useCommission hook
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -429,12 +429,7 @@ export default function FullCommissioningWizard() {
 
   const currentStep = STEPS[currentStepIndex];
 
-  // Load sites on mount
-  useEffect(() => {
-    loadSites();
-  }, []);
-
-  const loadSites = async () => {
+  const loadSites = useCallback(async () => {
     setLoadingSites(true);
     try {
       const data = await getSites(user?.uid);
@@ -444,7 +439,12 @@ export default function FullCommissioningWizard() {
     } finally {
       setLoadingSites(false);
     }
-  };
+  }, [user?.uid]);
+
+  // Load sites on mount
+  useEffect(() => {
+    loadSites();
+  }, [loadSites]);
 
   // Handle device scan success
   const handleDeviceScan = async (device) => {

@@ -1,5 +1,5 @@
 // /src/components/cloud/DevicesListPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
@@ -473,15 +473,7 @@ export default function DevicesListPage() {
   const [lifecycleFilter, setLifecycleFilter] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
 
-  useEffect(() => {
-    loadDevices();
-  }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchQuery, statusFilter, typeFilter, lifecycleFilter, devices]);
-
-  const loadDevices = async () => {
+  const loadDevices = useCallback(async () => {
     setLoading(true);
     setLoadError(null);
     try {
@@ -530,14 +522,9 @@ export default function DevicesListPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
 
-  // Handle modal success - refresh device list
-  const handleAddDeviceSuccess = () => {
-    loadDevices();
-  };
-
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...devices];
 
     // Apply search
@@ -570,6 +557,19 @@ export default function DevicesListPage() {
     }
 
     setFilteredDevices(filtered);
+  }, [devices, searchQuery, statusFilter, typeFilter, lifecycleFilter]);
+
+  useEffect(() => {
+    loadDevices();
+  }, [loadDevices]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
+
+  // Handle modal success - refresh device list
+  const handleAddDeviceSuccess = () => {
+    loadDevices();
   };
 
   const getStatusVariant = (status) => {
