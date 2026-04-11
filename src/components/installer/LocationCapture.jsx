@@ -170,10 +170,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
   /**
    * Reverse geocode helper
    */
-  const reverseGeocodeLocal = useCallback(
-    (...args) => reverseGeocode(...args),
-    [reverseGeocode]
-  );
+  const reverseGeocodeLocal = useCallback((...args) => reverseGeocode(...args), [reverseGeocode]);
 
   /**
    * Capture GPS location
@@ -336,33 +333,6 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
       setLoading(false);
     }
   }, [address, isLoaded, onLocationSet]);
-
-  /**
-   * Reverse geocode coordinates locally
-   */
-  const reverseGeocodeLocal = useCallback(
-    async (coords) => {
-      if (!isLoaded || !window.google) return;
-
-      try {
-        const geocoder = new window.google.maps.Geocoder();
-        const result = await new Promise((resolve, reject) => {
-          geocoder.geocode({ location: coords }, (results, status) => {
-            if (status === 'OK' && results.length > 0) {
-              resolve(results[0]);
-            } else {
-              reject(new Error('Location not found'));
-            }
-          });
-        });
-
-        setFormattedAddress(result.formatted_address);
-      } catch (err) {
-        console.error('Reverse geocoding failed:', err);
-      }
-    },
-    [isLoaded]
-  );
 
   /**
    * Center map on coordinates
