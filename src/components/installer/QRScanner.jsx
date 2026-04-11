@@ -215,7 +215,8 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
       setStatus({ type: 'error', message: 'Failed to access camera. Please allow camera access.' });
       onError?.(err.message);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onError]);
 
   /**
    * Stop the QR scanner
@@ -235,7 +236,8 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
   useEffect(() => {
     startScanner();
     return () => stopScanner();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startScanner, stopScanner]);
 
   /**
    * Handle scanned QR code

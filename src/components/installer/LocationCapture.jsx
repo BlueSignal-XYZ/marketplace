@@ -168,6 +168,14 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
   });
 
   /**
+   * Reverse geocode helper
+   */
+  const reverseGeocodeLocal = useCallback(
+    (...args) => reverseGeocode(...args),
+    [reverseGeocode]
+  );
+
+  /**
    * Capture GPS location
    */
   const captureGPS = useCallback(() => {
@@ -224,7 +232,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
         maximumAge: 0,
       }
     );
-  }, [isLoaded, onLocationSet]);
+  }, [isLoaded, onLocationSet, reverseGeocodeLocal]);
 
   /**
    * Handle map click for pin placement
@@ -252,7 +260,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
         reverseGeocodeLocal(coords);
       }
     },
-    [method, isLoaded, onLocationSet]
+    [method, isLoaded, onLocationSet, reverseGeocodeLocal]
   );
 
   /**
@@ -278,7 +286,7 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
         reverseGeocodeLocal(coords);
       }
     },
-    [isLoaded, onLocationSet]
+    [isLoaded, onLocationSet, reverseGeocodeLocal]
   );
 
   /**
@@ -375,7 +383,8 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
     if (method === 'gps' && !coordinates) {
       captureGPS();
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [captureGPS, method]);
 
   if (loadError) {
     return <ErrorMessage>Failed to load Google Maps</ErrorMessage>;
