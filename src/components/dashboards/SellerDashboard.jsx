@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -610,14 +610,7 @@ const SellerDashboard = () => {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadDashboardData();
-    fetchUserDevices()
-      .then((d) => setDevices(Array.isArray(d) ? d : []))
-      .catch(() => setDevices([]));
-  }, [user?.uid]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch real data from RTDB
@@ -670,7 +663,14 @@ const SellerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
+
+  useEffect(() => {
+    loadDashboardData();
+    fetchUserDevices()
+      .then((d) => setDevices(Array.isArray(d) ? d : []))
+      .catch(() => setDevices([]));
+  }, [loadDashboardData]);
 
   const handleCreateListing = () => {
     navigate('/marketplace/seller-dashboard');

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { MapsAPI } from '../../scripts/back_door';
 
@@ -45,6 +45,20 @@ function MapBox() {
     fetchKey();
   }, []);
 
+  const initializeMap = useCallback(() => {
+    if (mapContainerRef.current) {
+      setMap(
+        new google.maps.Map(mapContainerRef.current, {
+          center: { lat: 48.8036, lng: -95.0969 },
+          zoom: 13,
+          disableDefaultUI: true,
+          gestureHandling: 'none',
+          mapTypeId: 'satellite',
+        })
+      );
+    }
+  }, []);
+
   // Load Google Maps script only after we have the API key
   useEffect(() => {
     if (!apiKey) return;
@@ -74,21 +88,8 @@ function MapBox() {
         window.google.maps.event.clearInstanceListeners(map);
       }
     };
-  }, [apiKey]);
-
-  const initializeMap = () => {
-    if (mapContainerRef.current) {
-      setMap(
-        new google.maps.Map(mapContainerRef.current, {
-          center: { lat: 48.8036, lng: -95.0969 },
-          zoom: 13,
-          disableDefaultUI: true,
-          gestureHandling: 'none',
-          mapTypeId: 'satellite',
-        })
-      );
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiKey, initializeMap]);
 
   if (loading) {
     return (

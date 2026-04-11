@@ -231,26 +231,29 @@ const MediaUpload = () => {
     if (activeFile?.name && uploadName.length === 0) {
       setUploadName(activeFile.name);
     }
-  }, [activeFile]);
+  }, [activeFile, uploadName.length]);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const validFiles = acceptedFiles.filter(
-      (file) => file.type === 'video/mp4' || file.type === 'application/pdf'
-    );
-
-    if (validFiles.length === 0) {
-      ACTIONS.logNotification(
-        'error',
-        'No valid files. Only MP4 videos and PDF files are allowed.'
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const validFiles = acceptedFiles.filter(
+        (file) => file.type === 'video/mp4' || file.type === 'application/pdf'
       );
-      return;
-    }
 
-    setFile({
-      activeFile: validFiles[0],
-      previewURL: URL.createObjectURL(validFiles[0]),
-    });
-  }, []);
+      if (validFiles.length === 0) {
+        ACTIONS.logNotification(
+          'error',
+          'No valid files. Only MP4 videos and PDF files are allowed.'
+        );
+        return;
+      }
+
+      setFile({
+        activeFile: validFiles[0],
+        previewURL: URL.createObjectURL(validFiles[0]),
+      });
+    },
+    [ACTIONS]
+  );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
