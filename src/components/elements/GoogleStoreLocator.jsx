@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -98,9 +98,7 @@ function GoogleStoreLocator({ storesData }) {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  const getKey = useCallback(async () => {
-    setApiKey((await MapsAPI.getAPI()) || null);
-  }, []);
+  const getKey = async () => setApiKey((await MapsAPI.getAPI()) || null);
 
   const checkViewpoint = () => {
     setIsMobile(window.innerWidth <= 768);
@@ -113,7 +111,7 @@ function GoogleStoreLocator({ storesData }) {
     return () => {
       window.removeEventListener('resize', checkViewpoint);
     };
-  }, [getKey]);
+  }, []);
 
   useEffect(() => {
     if (isMobile) {
@@ -121,23 +119,19 @@ function GoogleStoreLocator({ storesData }) {
     }
   }, [isMobile]);
 
-  const stores = useMemo(
-    () =>
-      storesData.Database.map((store) => ({
-        name: store.CompanyName,
-        location: {
-          lat: store.geometry?.coordinates?.[1],
-          lng: store.geometry?.coordinates?.[0],
-        },
-        website: store.Website,
-        email: store.Email,
-        address: store['Address'],
-        city: store['City'],
-        states: store['States'],
-        zipCode: store['Zip Code'],
-      })),
-    [storesData.Database]
-  );
+  const stores = storesData.Database.map((store) => ({
+    name: store.CompanyName,
+    location: {
+      lat: store.geometry?.coordinates?.[1],
+      lng: store.geometry?.coordinates?.[0],
+    },
+    website: store.Website,
+    email: store.Email,
+    address: store['Address'],
+    city: store['City'],
+    states: store['States'],
+    zipCode: store['Zip Code'],
+  }));
 
   //const center = { lat: 37.926868, lng: -78.024902 };
 
@@ -152,7 +146,7 @@ function GoogleStoreLocator({ storesData }) {
       );
       setFilteredStores(filtered);
     }
-  }, [searchTerm, stores]);
+  }, [searchTerm]);
 
   const mapOptions = {
     styles: [
