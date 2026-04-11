@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import styled from 'styled-components';
 
 // SHA-256 hash of the PIN — computed at build time, never stored in plain text
-const PIN_HASH = '81dc27a8b26bc4e44b7ace4e8e78cfbfdd3ea2e67455762a9877b83e0e7d482e';
+const PIN_HASH = '1ef79462017df1bf88a3e99aff3a3b5d5935816797117cfa617e8fa30e31be2d';
 
 const Wrapper = styled.div`
   display: flex;
