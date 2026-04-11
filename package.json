@@ -60,7 +60,7 @@
     "typecheck": "tsc --noEmit",
     "seed": "node scripts/seed-data.js",
     "seed:clear": "node scripts/seed-data.js --clear",
-    "seed:ops": "node scripts/seed-ops-data.js",
+    "seed:ops": "node scripts/seed-ops-data.cjs",
     "prepare": "husky"
   },
   "lint-staged": {
