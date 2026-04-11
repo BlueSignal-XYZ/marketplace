@@ -127,6 +127,7 @@ jobs:
           HOOK_WQT: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_WQT }}
           HOOK_CLOUD: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_CLOUD }}
           HOOK_LANDING: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_LANDING }}
+          HOOK_OPS: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_OPS }}
         run: |
           trigger_hook() {
             local hook_url="$1"
@@ -183,6 +184,8 @@ jobs:
           trigger_hook "$HOOK_CLOUD" "cloud" || failed=$((failed + 1))
           sleep 5
           trigger_hook "$HOOK_LANDING" "landing" || failed=$((failed + 1))
+          sleep 5
+          trigger_hook "$HOOK_OPS" "ops" || failed=$((failed + 1))
 
           if [ $failed -gt 0 ]; then
             echo "$failed Cloudflare deployment(s) failed"

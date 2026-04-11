@@ -163,9 +163,9 @@ main() {
     case "$mode" in
         "hook")
             # Deploy hook mode - uses pre-configured webhook URLs
-            if [ -z "$CLOUDFLARE_DEPLOY_HOOK_WQT" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_CLOUD" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_LANDING" ]; then
+            if [ -z "$CLOUDFLARE_DEPLOY_HOOK_WQT" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_CLOUD" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_LANDING" ] && [ -z "$CLOUDFLARE_DEPLOY_HOOK_OPS" ]; then
                 log_error "No Cloudflare deploy hooks configured"
-                log_info "Set CLOUDFLARE_DEPLOY_HOOK_WQT, CLOUDFLARE_DEPLOY_HOOK_CLOUD, or CLOUDFLARE_DEPLOY_HOOK_LANDING"
+                log_info "Set CLOUDFLARE_DEPLOY_HOOK_WQT, CLOUDFLARE_DEPLOY_HOOK_CLOUD, CLOUDFLARE_DEPLOY_HOOK_LANDING, or CLOUDFLARE_DEPLOY_HOOK_OPS"
                 exit 1
             fi
 
@@ -183,6 +183,11 @@ main() {
 
             if [ -n "$CLOUDFLARE_DEPLOY_HOOK_LANDING" ]; then
                 trigger_cloudflare_hook "$CLOUDFLARE_DEPLOY_HOOK_LANDING" "landing-bluesignal" || failed=$((failed + 1))
+                sleep 5
+            fi
+
+            if [ -n "$CLOUDFLARE_DEPLOY_HOOK_OPS" ]; then
+                trigger_cloudflare_hook "$CLOUDFLARE_DEPLOY_HOOK_OPS" "ops-bluesignal" || failed=$((failed + 1))
             fi
 
             if [ $failed -gt 0 ]; then
@@ -212,6 +217,10 @@ main() {
                 trigger_cloudflare_api "$CLOUDFLARE_ACCOUNT_ID" "$CLOUDFLARE_PROJECT_LANDING" "$CLOUDFLARE_API_TOKEN" "${2:-main}" || failed=$((failed + 1))
             fi
 
+            if [ -n "$CLOUDFLARE_PROJECT_OPS" ]; then
+                trigger_cloudflare_api "$CLOUDFLARE_ACCOUNT_ID" "$CLOUDFLARE_PROJECT_OPS" "$CLOUDFLARE_API_TOKEN" "${2:-main}" || failed=$((failed + 1))
+            fi
+
             if [ $failed -gt 0 ]; then
                 log_error "$failed deployment(s) failed"
                 exit 1
@@ -239,12 +248,13 @@ main() {
             echo "Modes:"
             echo "  hook              Trigger all configured deploy hooks (default)"
             echo "  api [branch]      Trigger builds via Cloudflare API"
-            echo "  single <site>     Trigger a single site (wqt, cloud, or landing)"
+            echo "  single <site>     Trigger a single site (wqt, cloud, landing, or ops)"
             echo ""
             echo "Environment Variables (hook mode):"
             echo "  CLOUDFLARE_DEPLOY_HOOK_WQT      Deploy hook URL for waterquality-trading"
             echo "  CLOUDFLARE_DEPLOY_HOOK_CLOUD    Deploy hook URL for cloud-bluesignal"
             echo "  CLOUDFLARE_DEPLOY_HOOK_LANDING  Deploy hook URL for bluesignal.xyz"
+            echo "  CLOUDFLARE_DEPLOY_HOOK_OPS      Deploy hook URL for ops.bluesignal.xyz"
             echo ""
             echo "Environment Variables (API mode):"
             echo "  CLOUDFLARE_ACCOUNT_ID           Cloudflare account ID"
@@ -252,6 +262,7 @@ main() {
             echo "  CLOUDFLARE_PROJECT_WQT          Project name for waterquality-trading"
             echo "  CLOUDFLARE_PROJECT_CLOUD        Project name for cloud-bluesignal"
             echo "  CLOUDFLARE_PROJECT_LANDING      Project name for bluesignal.xyz"
+            echo "  CLOUDFLARE_PROJECT_OPS          Project name for ops.bluesignal.xyz"
             exit 1
             ;;
     esac

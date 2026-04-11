@@ -27,5 +27,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist-wqt", "dist-cloud", "dist-landing"]
+  "exclude": ["node_modules", "dist-wqt", "dist-cloud", "dist-landing", "dist-ops", "src/ops"]
 }
