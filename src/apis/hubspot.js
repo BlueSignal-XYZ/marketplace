@@ -16,7 +16,7 @@ import axios from 'axios';
 import configs from '../../configs';
 
 // HubSpot deal stages mapped to our order statuses
-const HUBSPOT_DEAL_STAGES = {
+export const HUBSPOT_DEAL_STAGES = {
   lead: 'Lead',
   qualified: 'Qualified',
   quoted: 'Quoted',
@@ -26,7 +26,7 @@ const HUBSPOT_DEAL_STAGES = {
 };
 
 // Map our order status to HubSpot deal stage
-const ORDER_STATUS_TO_DEAL_STAGE = {
+export const ORDER_STATUS_TO_DEAL_STAGE = {
   draft: 'Lead',
   quoted: 'Quoted',
   approved: 'Qualified',
@@ -400,7 +400,7 @@ const handleContactWebhook = async (payload) => {
 };
 
 // Export API objects
-const HubSpotContactsAPI = {
+export const HubSpotContactsAPI = {
   create: createContact,
   update: updateContact,
   get: getContact,
@@ -408,7 +408,7 @@ const HubSpotContactsAPI = {
   search: searchContacts,
 };
 
-const HubSpotDealsAPI = {
+export const HubSpotDealsAPI = {
   create: createDeal,
   update: updateDeal,
   updateStage: updateDealStage,
@@ -417,14 +417,14 @@ const HubSpotDealsAPI = {
   associateWithContact: associateDealWithContact,
 };
 
-const HubSpotDevicesAPI = {
+export const HubSpotDevicesAPI = {
   create: createDevice,
   update: updateDevice,
   get: getDevice,
   associateWithDeal: associateDeviceWithDeal,
 };
 
-const HubSpotSyncAPI = {
+export const HubSpotSyncAPI = {
   getStatus: getSyncStatus,
   syncEntity: syncEntity,
   batchSync: batchSync,
@@ -436,7 +436,7 @@ const HubSpotSyncAPI = {
   syncDevice: syncDeviceToHubSpot,
 };
 
-const HubSpotWebhooksAPI = {
+export const HubSpotWebhooksAPI = {
   handleDeal: handleDealWebhook,
   handleContact: handleContactWebhook,
 };
