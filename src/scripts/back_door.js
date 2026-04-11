@@ -748,9 +748,12 @@ const getStripeConfig = async () => {
 const createPaymentIntent = async (amount, currency, optional_params) => {
   try {
     // SECURITY: Amount should be validated server-side, never trusted from client
+    // Generate idempotency key to prevent duplicate charges on retries
+    const idempotencyKey = `pi_${Date.now()}_${crypto.randomUUID()}`;
     const response = await authPost(`${configs.server_url}/stripe/create/payment_intent`, {
       amount,
       currency,
+      idempotencyKey,
       optional_params,
     });
     return response?.data;

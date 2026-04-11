@@ -475,8 +475,8 @@
     },
 
     "ops-dashboard": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": "auth != null && auth.token.email.endsWith('@bluesignal.xyz')",
+      ".write": "auth != null && auth.token.email.endsWith('@bluesignal.xyz')"
     }
   }
 }
