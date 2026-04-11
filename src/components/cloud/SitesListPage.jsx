@@ -1,5 +1,5 @@
 // /src/components/cloud/SitesListPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
@@ -146,18 +146,9 @@ export default function SitesListPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  useEffect(() => {
-    loadSites();
-  }, [user?.uid]);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchQuery, statusFilter, sites]);
-
-  const loadSites = async () => {
+  const loadSites = useCallback(async () => {
     setLoading(true);
     try {
-      // v2 API — routed through api.js (handles demo/real switching)
       const data = await getSites(user?.uid).catch(() => []);
       setSites(data || []);
     } catch (error) {
@@ -165,12 +156,11 @@ export default function SitesListPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...sites];
 
-    // Apply search
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -183,13 +173,20 @@ export default function SitesListPage() {
       );
     }
 
-    // Apply status filter
     if (statusFilter !== 'all') {
       filtered = filtered.filter((s) => s.status === statusFilter);
     }
 
     setFilteredSites(filtered);
-  };
+  }, [sites, searchQuery, statusFilter]);
+
+  useEffect(() => {
+    loadSites();
+  }, [loadSites]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   if (loading) {
     return (

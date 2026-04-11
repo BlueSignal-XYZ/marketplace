@@ -1,5 +1,5 @@
 // /src/components/cloud/SiteDetailPage.jsx
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { GoogleMap, LoadScript, Marker, Polygon } from '@react-google-maps/api';
@@ -389,7 +389,7 @@ export default function SiteDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [mapsApiKey]);
 
   // Map center - memoized to prevent re-renders
   const mapCenter = useMemo(() => {
@@ -399,34 +399,25 @@ export default function SiteDetailPage() {
     return { lat: 39.5, lng: -79.3 }; // Default center
   }, [site?.coordinates]);
 
-  useEffect(() => {
-    loadSiteData();
-  }, [siteId]);
-
-  const loadSiteData = async () => {
+  const loadSiteData = useCallback(async () => {
     if (!siteId) return;
     setLoading(true);
     setError(null);
     try {
-      // v2 API calls — routed through api.js (handles demo/real switching)
       const [allSites, allDevices, allAlerts] = await Promise.all([
         getSites(user?.uid).catch(() => []),
         getDevices(user?.uid).catch(() => []),
         getAlerts(user?.uid).catch(() => []),
       ]);
 
-      // Find the specific site
       const siteData = (allSites || []).find((s) => s.id === siteId);
-      // v2 API: site has devices[] array of IDs. Demo: devices filtered by d.siteId.
       const siteDeviceIds = siteData?.devices?.length
         ? siteData.devices
         : (allDevices || []).filter((d) => d.siteId === siteId).map((d) => d.id);
       const siteDevices = (allDevices || []).filter((d) => siteDeviceIds.includes(d.id));
-      // Filter alerts for this site's devices
       const siteAlerts = (allAlerts || []).filter((a) => siteDeviceIds.includes(a.deviceId));
 
       if (siteData) {
-        // Normalize site shape: v2 has location{}, devices[]; CloudMockAPI has customer, coordinates, deviceCount
         const normalized = normalizeSiteForDisplay(siteData, siteDevices.length);
         setSite(normalized);
         setDevices(siteDevices.map(normalizeDeviceForDisplay));
@@ -440,7 +431,11 @@ export default function SiteDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [siteId, user?.uid]);
+
+  useEffect(() => {
+    loadSiteData();
+  }, [loadSiteData]);
 
   const getStatusVariant = (status) => {
     if (status === 'offline') return 'offline';

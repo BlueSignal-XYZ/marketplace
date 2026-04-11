@@ -1,5 +1,5 @@
 // /src/components/cloud/ProfilePage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
@@ -348,13 +348,7 @@ export default function ProfilePage() {
     },
   });
 
-  useEffect(() => {
-    if (user?.uid) {
-      loadProfile();
-    }
-  }, [user?.uid]);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -392,7 +386,13 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      loadProfile();
+    }
+  }, [user?.uid, loadProfile]);
 
   const handleChange = (field, value) => {
     setProfile((prev) => ({
