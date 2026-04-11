@@ -472,6 +472,11 @@
         "actionUrl": { ".validate": "newData.isString()" },
         "createdAt": { ".validate": "newData.isNumber()" }
       }
+    },
+
+    "ops-dashboard": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

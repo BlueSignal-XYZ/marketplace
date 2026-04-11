@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BlueSignal Pipeline</title>
+  <meta name="description" content="BlueSignal dealer pipeline management dashboard">
+  <meta name="theme-color" content="#4f8ff7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pipeline">
+  <meta property="og:title" content="BlueSignal Pipeline Dashboard">
+  <meta property="og:description" content="Dealer pipeline management for BlueSignal water quality monitoring">
+  <meta property="og:type" content="website">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <svg class="brand-logo" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#08090a"/><path d="M5 10 C9 7, 17 7, 27 10" stroke="#2d8cf0" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M5 16 C9 13, 17 13, 27 16" stroke="#2d8cf0" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M5 22 C9 19, 17 19, 27 22" stroke="#2d8cf0" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      <span class="brand-text">BlueSignal</span>
+      <button class="sidebar-close" id="sidebar-close">&#10005;</button>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <div class="nav-group-label">Pipeline</div>
+      <a href="#needs-action" class="nav-item active" data-section="needs-action">
+        <span class="nav-icon">&#9888;</span><span class="nav-label">Action Items</span>
+        <span class="nav-badge" id="nav-action-count"></span>
+      </a>
+      <a href="#top-accounts" class="nav-item" data-section="top-accounts">
+        <span class="nav-icon">&#9733;</span><span class="nav-label">Top Accounts</span>
+      </a>
+      <a href="#pipeline" class="nav-item" data-section="pipeline">
+        <span class="nav-icon">&#9654;</span><span class="nav-label">Pipeline</span>
+      </a>
+      <a href="#forecast" class="nav-item" data-section="forecast">
+        <span class="nav-icon">&#9650;</span><span class="nav-label">Forecast</span>
+      </a>
+
+      <div class="nav-group-label">Schedule</div>
+      <a href="#agenda" class="nav-item" data-section="agenda">
+        <span class="nav-icon">&#9779;</span><span class="nav-label">Today's Agenda</span>
+      </a>
+      <a href="#dealer-calls" class="nav-item" data-section="dealer-calls">
+        <span class="nav-icon">&#9743;</span><span class="nav-label">Dealer Calls</span>
+      </a>
+
+      <div class="nav-group-label">Accounts</div>
+      <a href="#dealer-health" class="nav-item" data-section="dealer-health">
+        <span class="nav-icon">&#9829;</span><span class="nav-label">Dealer Health</span>
+      </a>
+      <a href="#spa-alerts" class="nav-item" data-section="spa-alerts">
+        <span class="nav-icon">&#9889;</span><span class="nav-label">SPA Alerts</span>
+        <span class="nav-badge nav-badge-warn" id="nav-spa-count"></span>
+      </a>
+      <a href="#open-loops" class="nav-item" data-section="open-loops">
+        <span class="nav-icon">&#8635;</span><span class="nav-label">Open Loops</span>
+        <span class="nav-badge" id="nav-loops-count"></span>
+      </a>
+      <a href="#customers" class="nav-item" data-section="customers">
+        <span class="nav-icon">&#9823;</span><span class="nav-label">CRM</span>
+      </a>
+      <a href="#stale" class="nav-item" data-section="stale">
+        <span class="nav-icon">&#9201;</span><span class="nav-label">Stale Items</span>
+        <span class="nav-badge nav-badge-warn" id="nav-stale-count"></span>
+      </a>
+
+      <div class="nav-group-label">Strategy</div>
+      <a href="#initiatives" class="nav-item" data-section="initiatives">
+        <span class="nav-icon">&#9881;</span><span class="nav-label">Initiatives</span>
+      </a>
+      <a href="#products" class="nav-item" data-section="products">
+        <span class="nav-icon">&#9638;</span><span class="nav-label">Products</span>
+      </a>
+      <a href="#competitive" class="nav-item" data-section="competitive">
+        <span class="nav-icon">&#9876;</span><span class="nav-label">Competitive Intel</span>
+      </a>
+      <a href="#territory" class="nav-item" data-section="territory">
+        <span class="nav-icon">&#9673;</span><span class="nav-label">Territory Map</span>
+      </a>
+      <a href="#events" class="nav-item" data-section="events">
+        <span class="nav-icon">&#9992;</span><span class="nav-label">Events</span>
+      </a>
+      <a href="#team-cap" class="nav-item" data-section="team-cap">
+        <span class="nav-icon">&#9975;</span><span class="nav-label">Team &amp; Cap Table</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main wrapper -->
+  <div class="main-wrapper" id="main-wrapper">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menu-toggle">&#9776;</button>
+        <h1 class="page-title" id="page-title">Action Items</h1>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date" id="header-date"></span>
+        <button class="btn-icon" id="btn-refresh" title="Refresh">&#x21bb;</button>
+      </div>
+    </header>
+
+    <!-- Content area -->
+    <main class="content" id="content">
+      <section class="panel" id="needs-action">
+        <div class="panel-header"><h2>Needs Action Today</h2><span class="badge" id="action-count">0</span></div>
+        <div class="panel-body" id="needs-action-body"></div>
+      </section>
+
+      <section class="panel" id="top-accounts">
+        <div class="panel-header"><h2>Top 10 Attention Accounts</h2></div>
+        <div class="panel-body" id="top-accounts-body"></div>
+      </section>
+
+      <section class="panel" id="agenda">
+        <div class="panel-header"><h2>Today's Agenda</h2></div>
+        <div class="panel-body" id="agenda-body"></div>
+      </section>
+
+      <section class="panel" id="dealer-calls">
+        <div class="panel-header"><h2>This Week's Dealer Calls</h2><span class="panel-subtitle" id="calls-week"></span></div>
+        <div class="panel-body" id="dealer-calls-body"></div>
+      </section>
+
+      <section class="panel" id="initiatives">
+        <div class="panel-header"><h2>Active Initiatives</h2></div>
+        <div class="panel-body" id="initiatives-body"></div>
+      </section>
+
+      <section class="panel" id="pipeline">
+        <div class="panel-header"><h2>Pipeline Snapshot</h2></div>
+        <div class="panel-body" id="pipeline-body"></div>
+      </section>
+
+      <section class="panel" id="spa-alerts">
+        <div class="panel-header"><h2>SPA Alerts</h2><span class="badge badge-warn" id="spa-count">0</span></div>
+        <div class="panel-body" id="spa-body"></div>
+      </section>
+
+      <section class="panel" id="dealer-health">
+        <div class="panel-header"><h2>Dealer Portfolio Health</h2></div>
+        <div class="panel-body" id="dealer-health-body"></div>
+      </section>
+
+      <section class="panel" id="open-loops">
+        <div class="panel-header"><h2>Open Loops</h2><span class="badge" id="loops-count">0</span></div>
+        <div class="panel-body" id="open-loops-body"></div>
+      </section>
+
+      <section class="panel" id="customers">
+        <div class="panel-header"><h2>Customers &amp; Pipeline</h2><button class="btn-sm" id="btn-add-customer" onclick="toggleForm('customer-form')" title="Add Customer">+ Add Customer</button></div>
+        <div class="panel-body" id="customers-body"></div>
+      </section>
+
+      <section class="panel" id="forecast">
+        <div class="panel-header"><h2>Next Quarter Forecast</h2></div>
+        <div class="panel-body" id="forecast-body"></div>
+      </section>
+
+      <section class="panel" id="products">
+        <div class="panel-header"><h2>Products &amp; Pricing</h2></div>
+        <div class="panel-body" id="products-body"></div>
+      </section>
+
+      <section class="panel" id="competitive">
+        <div class="panel-header"><h2>Competitive Intel</h2></div>
+        <div class="panel-body" id="competitive-body"></div>
+      </section>
+
+      <section class="panel" id="stale">
+        <div class="panel-header"><h2>Stale Items</h2><span class="badge badge-warn" id="stale-count">0</span></div>
+        <div class="panel-body" id="stale-body"></div>
+      </section>
+
+      <section class="panel" id="territory">
+        <div class="panel-header"><h2>Territory &amp; Dealer Map</h2></div>
+        <div class="panel-body" id="territory-body"></div>
+      </section>
+
+      <section class="panel" id="events">
+        <div class="panel-header"><h2>Events &amp; Programs</h2></div>
+        <div class="panel-body" id="events-body"></div>
+      </section>
+
+      <section class="panel" id="team-cap">
+        <div class="panel-header"><h2>Team &amp; Cap Table</h2><div><button class="btn-sm" id="btn-add-member" onclick="toggleForm('member-form')" title="Add Team Member">+ Member</button> <button class="btn-sm" id="btn-add-round" onclick="toggleForm('round-form')" title="Add Round">+ Round</button></div></div>
+        <div class="panel-body" id="team-cap-body"></div>
+      </section>
+    </main>
+
+    <!-- Terminal panel -->
+    <div class="terminal-wrapper" id="terminal-wrapper">
+      <div class="terminal-bar" id="terminal-bar">
+        <span class="terminal-title">Terminal</span>
+        <div class="terminal-controls">
+          <button class="term-btn" id="term-clear" title="Clear">Clear</button>
+          <button class="term-btn" id="term-toggle" title="Toggle terminal">&#9650;</button>
+        </div>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <div class="terminal-output" id="terminal-output">
+          <div class="term-line term-system">BlueSignal Terminal ready. Type commands below.</div>
+        </div>
+        <div class="terminal-input-row">
+          <span class="term-prompt">$</span>
+          <input type="text" class="terminal-input" id="terminal-input" placeholder="Enter command..." autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Nuke any cached service worker BEFORE app.js loads -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(regs) {
+      regs.forEach(function(r) { r.unregister(); });
+    });
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        names.forEach(function(name) { caches.delete(name); });
+      });
+    }
+  }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

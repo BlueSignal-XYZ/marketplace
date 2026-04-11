@@ -14,6 +14,7 @@ dist/
 dist-wqt/
 dist-cloud/
 dist-landing/
+dist-ops/
 *.local
 
 # Vite Temp
@@ -50,6 +51,15 @@ serviceAccountKey.json
 firebase-adminsdk*.json
 *.bak
 *.backup
+
+################################################################################
+# Vault — Sensitive Operational Data
+# These contain real phone numbers, addresses, contacts, equity/pricing data.
+# They stay local and sync to Firebase RTDB — not committed to GitHub.
+################################################################################
+Knowledge/People/Partners/
+Knowledge/People/Team/
+dashboard/data/
 
 ################################################################################
 # IDE / Editor Junk

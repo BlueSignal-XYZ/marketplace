@@ -88,6 +88,7 @@ export default defineConfig(({ mode }) => {
   const inputMap: Record<string, string> = {
     cloud: 'cloud.html',
     landing: 'landing.html',
+    ops: 'ops.html',
   };
   const input = inputMap[buildTarget || ''] || 'index.html';
 
@@ -109,6 +110,23 @@ export default defineConfig(({ mode }) => {
             if (buildTarget === 'landing') {
               if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
                 return 'vendor';
+              }
+            } else if (buildTarget === 'ops') {
+              // Ops dashboard: React + styled-components + Firebase only
+              if (
+                id.includes('node_modules/react-dom') ||
+                id.includes('node_modules/react/') ||
+                id.includes('node_modules/styled-components')
+              ) {
+                return 'vendor';
+              }
+              if (
+                id.includes('node_modules/firebase/app') ||
+                id.includes('node_modules/firebase/auth') ||
+                id.includes('node_modules/firebase/database') ||
+                id.includes('node_modules/@firebase/')
+              ) {
+                return 'firebase';
               }
             } else {
               if (
