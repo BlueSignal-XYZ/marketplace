@@ -19,7 +19,7 @@ export function hasWalletProvider() {
  * Connect to MetaMask and return the wallet address.
  * Throws if user rejects or MetaMask is not installed.
  */
-export async function connectWallet() {
+async function connectWallet() {
   if (!hasWalletProvider()) {
     throw new Error('MetaMask is not installed. Please install MetaMask to connect your wallet.');
   }
@@ -38,7 +38,7 @@ export async function connectWallet() {
  * Request the user to sign a message proving wallet ownership.
  * Returns { address, signature, message }.
  */
-export async function signWalletMessage(address) {
+async function signWalletMessage(address) {
   if (!hasWalletProvider()) {
     throw new Error('MetaMask is not installed.');
   }

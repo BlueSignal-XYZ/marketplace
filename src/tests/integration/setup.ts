@@ -33,9 +33,6 @@ process.env.GCLOUD_PROJECT = PROJECT_ID;
 // ── Initialize Firebase Admin for tests ──────────────────
 
 let app: App;
-let _auth: Auth;
-let _db: Database;
-
 beforeAll(() => {
   // Clean up any existing apps
   const existingApps = getApps();
@@ -48,8 +45,8 @@ beforeAll(() => {
     });
   }
 
-  _auth = getAuth(app);
-  _db = getDatabase(app);
+  getAuth(app);
+  getDatabase(app);
 });
 
 afterAll(async () => {

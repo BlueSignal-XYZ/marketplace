@@ -52,15 +52,6 @@ const CardShell = styled.div`
   }
 `;
 
-// (kept for animation compatibility if you use it elsewhere)
-const StyledLogo = styled.img``;
-export const CardLogo = styled(StyledLogo)``;
-
-export const logoVariants = {
-  hidden: { y: -50, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 1 } },
-};
-
 function getRedirectTarget(redirectTo, user, mode) {
   if (!redirectTo || redirectTo === '/' || redirectTo === '/login') {
     return getDefaultDashboardRoute(user, mode);

@@ -18,14 +18,14 @@ const SkeletonBase = css`
 `;
 
 // Generic skeleton box
-export const SkeletonBox = styled.div`
+const SkeletonBox = styled.div`
   ${SkeletonBase}
   width: ${({ $width }) => $width || '100%'};
   height: ${({ $height }) => $height || '20px'};
 `;
 
 // Text line skeleton
-export const SkeletonText = styled.div`
+const SkeletonText = styled.div`
   ${SkeletonBase}
   height: ${({ $size }) => {
     if ($size === 'sm') return '14px';
@@ -38,7 +38,7 @@ export const SkeletonText = styled.div`
 `;
 
 // Circle skeleton (for avatars)
-export const SkeletonCircle = styled.div`
+const SkeletonCircle = styled.div`
   ${SkeletonBase}
   width: ${({ $size }) => $size || '40px'};
   height: ${({ $size }) => $size || '40px'};
@@ -47,7 +47,7 @@ export const SkeletonCircle = styled.div`
 `;
 
 // Image/thumbnail skeleton
-export const SkeletonImage = styled.div`
+const SkeletonImage = styled.div`
   ${SkeletonBase}
   width: 100%;
   padding-top: ${({ $ratio }) => {
@@ -60,7 +60,7 @@ export const SkeletonImage = styled.div`
 `;
 
 // Card skeleton - mimics a typical content card
-export const SkeletonCard = styled.div`
+const SkeletonCard = styled.div`
   background: white;
   border: 1px solid ${({ theme }) => theme.colors?.ui200 || '#E5E7EB'};
   border-radius: 16px;
@@ -71,7 +71,7 @@ export const SkeletonCard = styled.div`
 `;
 
 // Button skeleton
-export const SkeletonButton = styled.div`
+const SkeletonButton = styled.div`
   ${SkeletonBase}
   height: 44px;
   width: ${({ $width }) => $width || '120px'};

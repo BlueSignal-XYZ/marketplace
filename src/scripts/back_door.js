@@ -2231,7 +2231,6 @@ export {
   MapsAPI,
   NPCCreditsAPI,
   NFT_API,
-  StripeAPI,
   DeviceAPI,
   MarketplaceAPI,
   // Commercial pipeline APIs
@@ -2240,14 +2239,11 @@ export {
   OrderAPI,
   CommissionAPI,
   // Backend Revolution APIs
-  QRCodeAPI,
   GeocodingAPI,
   ReadingsAPI,
   AlertsAPI,
   CreditsMarketplaceAPI,
   UserProfileAPI,
-  // Virginia Nutrient Credit Exchange
-  VirginiaAPI,
   // Cross-platform APIs
   TradingProgramAPI,
   EnrollmentAPI,
