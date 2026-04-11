@@ -168,6 +168,14 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
   });
 
   /**
+   * Reverse geocode helper
+   */
+  const reverseGeocodeLocal = useCallback(
+    (...args) => reverseGeocode(...args),
+    [reverseGeocode]
+  );
+
+  /**
    * Capture GPS location
    */
   const captureGPS = useCallback(() => {
