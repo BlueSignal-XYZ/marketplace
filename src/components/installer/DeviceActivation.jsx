@@ -1,5 +1,5 @@
 // Device Activation Component - Activate device after successful commission
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { DeviceAPI, CustomerAPI } from '../../scripts/back_door';
@@ -295,11 +295,7 @@ const DeviceActivation = () => {
   const [selectedCustomer, setSelectedCustomer] = useState('');
   const [activated, setActivated] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, [commissionId]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -332,7 +328,11 @@ const DeviceActivation = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [commissionId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleActivate = async () => {
     if (!selectedCustomer) {
