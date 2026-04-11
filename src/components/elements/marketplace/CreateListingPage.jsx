@@ -2,7 +2,7 @@
 /**
  * Create Listing Page - Allow sellers to list nutrient credits for sale
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/AppContext';
@@ -324,18 +324,18 @@ export default function CreateListingPage() {
   });
 
   // Load user's sites
-  useEffect(() => {
-    loadSites();
-  }, [user?.uid]);
-
-  const loadSites = async () => {
+  const loadSites = useCallback(async () => {
     try {
       const data = await getSites(user?.uid);
       setSites(data || []);
     } catch (err) {
       console.error('Error loading sites:', err);
     }
-  };
+  }, [user?.uid]);
+
+  useEffect(() => {
+    loadSites();
+  }, [loadSites]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({

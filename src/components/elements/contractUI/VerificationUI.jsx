@@ -20,6 +20,16 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { isCloudMode } from '../../../utils/modeDetection';
 
+const TABS = ['uploads', 'submissions', 'disputes', 'approvals'];
+
+const TAB_ACCESS = {
+  farmer: TABS,
+  verifier: ['submissions', 'disputes', 'approvals'],
+  admin: TABS,
+};
+
+const getAccessibleTabs = (userRole) => TAB_ACCESS[userRole] || [];
+
 const TabContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -275,7 +285,7 @@ function VerificationUI() {
       setActiveTab(finalTabs[0]);
       loadData();
     }
-  }, [user?.uid, loadData]);
+  }, [user?.uid, user?.role, loadData]);
 
   const submitMutation = useMutation(AssetAPI.submit);
   const approveMutation = useMutation(AssetAPI.approve);
@@ -318,17 +328,7 @@ function VerificationUI() {
     logDev('Verification: Handle Submission', { assetID });
   };
 
-  const tabs = ['uploads', 'submissions', 'disputes', 'approvals'];
-
-  const tabAccess = {
-    farmer: tabs,
-    verifier: ['submissions', 'disputes', 'approvals'],
-    admin: tabs,
-  };
-
   const handleApprovalDetails = async () => {};
-
-  const getAccessibleTabs = (userRole) => tabAccess[userRole] || [];
 
   // Show welcome state if no user or no tabs
   if (!user?.uid) {
