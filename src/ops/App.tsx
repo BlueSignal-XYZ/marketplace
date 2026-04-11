@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { firebaseError, db } from './firebase';
+import { firebaseError } from './firebase';
 import { useAuth } from './hooks/useAuth';
-import { useFirebaseData } from './hooks/useFirebaseData';
 import PinScreen, { isPinVerified } from './auth/PinScreen';
 import LoginScreen from './auth/LoginScreen';
 import DashboardLayout from './layout/DashboardLayout';
@@ -56,29 +55,6 @@ export default function App() {
   return <AuthGate />;
 }
 
-const DebugBanner = styled.div`
-  background: ${({ theme }) => theme.colors.surface2};
-  color: ${({ theme }) => theme.colors.text3};
-  font-size: 0.65rem;
-  padding: 0.25rem 0.5rem;
-  font-family: monospace;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-`;
-
-function DebugInfo({ email }: { email: string | null }) {
-  const { data, error } = useFirebaseData<unknown>('/ops-dashboard/last-synced');
-  return (
-    <DebugBanner>
-      <span>auth: {email || 'none'}</span>
-      <span>db: {db ? 'init' : 'FAIL'}</span>
-      <span>rtdb: {error ? `ERR: ${error.message}` : data ? `ok (synced: ${data})` : 'null'}</span>
-    </DebugBanner>
-  );
-}
-
 function AuthGate() {
   const { user, loading, signOut } = useAuth();
 
@@ -90,10 +66,5 @@ function AuthGate() {
     return <LoginScreen />;
   }
 
-  return (
-    <>
-      <DebugInfo email={user.email} />
-      <DashboardLayout onSignOut={signOut} />
-    </>
-  );
+  return <DashboardLayout onSignOut={signOut} />;
 }
