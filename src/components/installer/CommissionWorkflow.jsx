@@ -1,5 +1,5 @@
 // Commission Workflow Component - Full commissioning workflow for installers
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import commissionService from '../../services/commissionService';
@@ -456,11 +456,7 @@ const CommissionWorkflow = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [signerName, setSignerName] = useState('');
 
-  useEffect(() => {
-    loadCommission();
-  }, [commissionId]);
-
-  const loadCommission = async () => {
+  const loadCommission = useCallback(async () => {
     try {
       setLoading(true);
       const data = await commissionService.getCommissionWithContext(commissionId);
@@ -471,7 +467,11 @@ const CommissionWorkflow = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [commissionId]);
+
+  useEffect(() => {
+    loadCommission();
+  }, [loadCommission]);
 
   const handlePreDeploymentChange = async (checkId, completed, notes) => {
     try {

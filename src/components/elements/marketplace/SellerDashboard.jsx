@@ -2,7 +2,7 @@
 
 import { ethers } from 'ethers';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import styled from 'styled-components';
@@ -251,18 +251,7 @@ const SellerDashboard = () => {
 
   const { setResult } = ACTIONS || {};
 
-  useEffect(() => {
-    fetchUserNFTs();
-    fetchListedNFTs();
-  }, []);
-
-  useEffect(() => {
-    if (userListedNFTs.length > 0) {
-      fetchHighestBids();
-    }
-  }, [userListedNFTs]);
-
-  const fetchUserNFTs = async () => {
+  const fetchUserNFTs = useCallback(async () => {
     setIsLoading(true);
     try {
       const { wallet_nfts } = await NFT_API.get.wallet_nfts(walletAddress);
@@ -279,9 +268,9 @@ const SellerDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [walletAddress]);
 
-  const fetchListedNFTs = async () => {
+  const fetchListedNFTs = useCallback(async () => {
     setIsLoading(true);
     try {
       const nfts = await MarketplaceAPI.Events.listAvailableNFTs();
@@ -293,9 +282,9 @@ const SellerDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [walletAddress]);
 
-  const fetchHighestBids = async () => {
+  const fetchHighestBids = useCallback(async () => {
     setIsLoading(true);
     try {
       const bidsPromises = userListedNFTs.map(async (nft) => {
@@ -319,7 +308,18 @@ const SellerDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [userListedNFTs]);
+
+  useEffect(() => {
+    fetchUserNFTs();
+    fetchListedNFTs();
+  }, [fetchUserNFTs, fetchListedNFTs]);
+
+  useEffect(() => {
+    if (userListedNFTs.length > 0) {
+      fetchHighestBids();
+    }
+  }, [userListedNFTs, fetchHighestBids]);
 
   const handleListNFT = async (tokenAddress, tokenId) => {
     setIsLoading(true);

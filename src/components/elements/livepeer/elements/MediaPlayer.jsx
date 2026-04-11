@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as Player from '@livepeer/react/player';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,15 +54,15 @@ const MediaPlayer = ({ playbackID }) => {
   const [metrics, setMetrics] = useState(null);
   const [video, setVideo] = useState(null);
 
-  const getMetrics = async () => {
+  const getMetrics = useCallback(async () => {
     const { viewership, error: _viewershipError } = await LivepeerAPI.get.viewership(playbackID);
 
     if (viewership) {
       setMetrics(viewership);
     }
-  };
+  }, [playbackID]);
 
-  const getVideoAsset = async () => {
+  const getVideoAsset = useCallback(async () => {
     const { video, error } = await MediaAPI.get.video(playbackID);
 
     if (error) {
@@ -72,14 +72,14 @@ const MediaPlayer = ({ playbackID }) => {
     if (video) {
       setVideo(video);
     }
-  };
+  }, [playbackID]);
 
   useEffect(() => {
     if (playbackID) {
       getMetrics();
       getVideoAsset();
     }
-  }, [playbackID]);
+  }, [playbackID, getMetrics, getVideoAsset]);
 
   return (
     <Container>

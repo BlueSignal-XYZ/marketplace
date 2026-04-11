@@ -1,5 +1,5 @@
 // /src/components/elements/marketplace/TransactionPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/AppContext';
@@ -351,11 +351,7 @@ const TransactionPage = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    loadTransactions();
-  }, [user?.uid]);
-
-  const loadTransactions = async () => {
+  const loadTransactions = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch real orders from RTDB
@@ -390,7 +386,11 @@ const TransactionPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
+
+  useEffect(() => {
+    loadTransactions();
+  }, [loadTransactions]);
 
   const filteredTransactions = transactions.filter((tx) => {
     // Type filter

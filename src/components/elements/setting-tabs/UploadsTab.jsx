@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -57,11 +57,7 @@ const UploadsTab = ({ userId }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchVideos();
-  }, [userId]);
-
-  const fetchVideos = async () => {
+  const fetchVideos = useCallback(async () => {
     if (!userId) return;
     setLoading(true);
     setError(null);
@@ -83,7 +79,11 @@ const UploadsTab = ({ userId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
 
   const handleUpload = () => {
     navigate('/features/live/upload-media');
