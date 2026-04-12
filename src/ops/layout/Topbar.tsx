@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import { useFirebaseData } from '../hooks/useFirebaseData';
 
 const Bar = styled.header`
-  height: ${({ theme }) => theme.layout.topbarHeight};
+  min-height: ${({ theme }) => theme.layout.topbarHeight};
   background: ${({ theme }) => theme.colors.surface};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
+  padding-top: env(safe-area-inset-top);
   flex-shrink: 0;
 `;
 
@@ -27,7 +28,13 @@ const Hamburger = styled.button`
   cursor: pointer;
 
   @media (max-width: 1024px) {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    margin: -0.5rem 0 -0.5rem -0.5rem;
   }
 `;
 
@@ -43,6 +50,16 @@ const Right = styled.div`
   gap: 0.75rem;
   font-size: 0.75rem;
   color: ${({ theme }) => theme.colors.text3};
+
+  /* Hide auxiliary date / synced text on phones to keep the action buttons reachable. */
+  @media (max-width: 640px) {
+    gap: 0.5rem;
+    font-size: 0.7rem;
+
+    & > span {
+      display: none;
+    }
+  }
 `;
 
 const RefreshBtn = styled.button`
@@ -58,6 +75,11 @@ const RefreshBtn = styled.button`
   &:hover {
     border-color: ${({ theme }) => theme.colors.accent};
   }
+
+  @media (max-width: 768px) {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const SignOutBtn = styled.button`
@@ -72,6 +94,11 @@ const SignOutBtn = styled.button`
   &:hover {
     color: ${({ theme }) => theme.colors.red};
     border-color: ${({ theme }) => theme.colors.red};
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
   }
 `;
 

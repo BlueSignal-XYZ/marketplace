@@ -37,6 +37,11 @@ const Content = styled.div`
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    padding-bottom: calc(0.6rem + env(safe-area-inset-bottom));
+  }
 `;
 
 const ALL_ITEMS = NAV_GROUPS.flatMap((g) => g.items);

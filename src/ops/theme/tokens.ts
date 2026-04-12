@@ -26,6 +26,11 @@ export const opsTheme = {
     radius: '8px',
     radiusSm: '5px',
   },
+  breakpoints: {
+    mobile: '480px',
+    tablet: '768px',
+    desktop: '1024px',
+  },
   fonts: {
     body: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif",
     mono: "'SF Mono', Menlo, Monaco, Consolas, monospace",
