@@ -16,61 +16,6 @@ if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
 // SECURITY: Create authenticated axios instance
 const REQUEST_TIMEOUT = 30000; // 30 seconds
 
-// Retry config for 5xx and transient network errors. Backoff schedule
-// matches CLAUDE.md's git-ops guidance (2s, 4s, 8s, 16s, capped at 4 attempts).
-const RETRY_BACKOFF_MS = [2000, 4000, 8000, 16000];
-const RETRYABLE_STATUS = new Set([500, 502, 503, 504]);
-const RETRYABLE_NETWORK_CODES = new Set([
-  'ECONNABORTED', // timeout
-  'ETIMEDOUT',
-  'ECONNRESET',
-  'ERR_NETWORK',
-  'ENOTFOUND',
-]);
-
-const isRetryable = (error) => {
-  if (!error) return false;
-  if (error.response && RETRYABLE_STATUS.has(error.response.status)) return true;
-  if (error.code && RETRYABLE_NETWORK_CODES.has(error.code)) return true;
-  // Axios surfaces network errors with no `response` and a `message` like
-  // "Network Error". Fall back to message-sniffing in that case.
-  if (
-    !error.response &&
-    typeof error.message === 'string' &&
-    /Network Error|timeout/i.test(error.message)
-  ) {
-    return true;
-  }
-  return false;
-};
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-/**
- * Classify an error into a stable category so UI callers can render a
- * meaningful message instead of "Failed to save. Please try again."
- */
-const classifyError = (error) => {
-  const status = error?.response?.status;
-  const serverMsg = error?.response?.data?.error || error?.response?.data?.message;
-  if (status === 400) return { kind: 'validation', userMessage: serverMsg || 'Invalid input.' };
-  if (status === 401)
-    return { kind: 'auth', userMessage: 'Your session expired. Please sign in again.' };
-  if (status === 403)
-    return {
-      kind: 'auth',
-      userMessage: serverMsg || 'You do not have permission for this action.',
-    };
-  if (status === 404) return { kind: 'notFound', userMessage: serverMsg || 'Not found.' };
-  if (status === 409)
-    return { kind: 'conflict', userMessage: serverMsg || 'Conflict with existing data.' };
-  if (status >= 500)
-    return { kind: 'server', userMessage: 'Server error. Please try again shortly.' };
-  if (isRetryable(error))
-    return { kind: 'network', userMessage: 'Network problem. Check your connection.' };
-  return { kind: 'unknown', userMessage: serverMsg || error?.message || 'Unexpected error.' };
-};
-
 const getAuthHeaders = async () => {
   try {
     const currentUser = auth.currentUser;
@@ -84,57 +29,45 @@ const getAuthHeaders = async () => {
   return {};
 };
 
-// Core request runner with 401-refresh + 5xx/network retry-with-backoff.
-const runWithRetry = async (method, url, config, data) => {
-  let attempt = 0;
-  let lastError;
-  while (attempt <= RETRY_BACKOFF_MS.length) {
-    try {
-      if (method === 'post') return await axios.post(url, data, config);
-      return await axios.get(url, config);
-    } catch (error) {
-      lastError = error;
-      // 401 — try a single forced token refresh, then stop (don't retry 401s).
-      if (error?.response?.status === 401 && auth.currentUser) {
-        try {
-          const freshToken = await auth.currentUser.getIdToken(true);
-          const retryConfig = {
-            ...config,
-            headers: { ...config.headers, Authorization: `Bearer ${freshToken}` },
-          };
-          if (method === 'post') return await axios.post(url, data, retryConfig);
-          return await axios.get(url, retryConfig);
-        } catch {
-          window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
-          throw error;
-        }
-      }
-      // 5xx / network — retry with backoff, bounded attempts.
-      if (isRetryable(error) && attempt < RETRY_BACKOFF_MS.length) {
-        const delay = RETRY_BACKOFF_MS[attempt];
-        console.warn(
-          `[back_door] ${method.toUpperCase()} ${url} failed (${error?.response?.status || error?.code || 'network'}), retrying in ${delay}ms (attempt ${attempt + 1}/${RETRY_BACKOFF_MS.length})`
-        );
-        await sleep(delay);
-        attempt += 1;
-        continue;
-      }
-      throw error;
-    }
-  }
-  throw lastError;
-};
-
-// Authenticated POST request with timeout, 401 refresh, and retry-with-backoff on 5xx/network.
+// Authenticated POST request with timeout and 401 retry
 const authPost = async (url, data = {}) => {
   const headers = await getAuthHeaders();
-  return runWithRetry('post', url, { headers, timeout: REQUEST_TIMEOUT }, data);
+  try {
+    return await axios.post(url, data, { headers, timeout: REQUEST_TIMEOUT });
+  } catch (error) {
+    // Retry once on 401 with force-refreshed token
+    if (error?.response?.status === 401 && auth.currentUser) {
+      try {
+        const freshToken = await auth.currentUser.getIdToken(true);
+        const retryHeaders = { Authorization: `Bearer ${freshToken}` };
+        return await axios.post(url, data, { headers: retryHeaders, timeout: REQUEST_TIMEOUT });
+      } catch {
+        // Retry failed — notify app of session expiry
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+      }
+    }
+    throw error;
+  }
 };
 
-// Authenticated GET request with timeout, 401 refresh, and retry-with-backoff on 5xx/network.
+// Authenticated GET request with timeout and 401 retry
 const authGet = async (url, params = {}) => {
   const headers = await getAuthHeaders();
-  return runWithRetry('get', url, { headers, params, timeout: REQUEST_TIMEOUT });
+  try {
+    return await axios.get(url, { headers, params, timeout: REQUEST_TIMEOUT });
+  } catch (error) {
+    if (error?.response?.status === 401 && auth.currentUser) {
+      try {
+        const freshToken = await auth.currentUser.getIdToken(true);
+        const retryHeaders = { Authorization: `Bearer ${freshToken}` };
+        return await axios.get(url, { headers: retryHeaders, params, timeout: REQUEST_TIMEOUT });
+      } catch {
+        // Retry failed — notify app of session expiry
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+      }
+    }
+    throw error;
+  }
 };
 
 /*************************ACCOUNT_ENDPOINTS************************************* */
@@ -1721,43 +1654,24 @@ const AlertsAPI = {
 
 /*************************CREDITS_MARKETPLACE_ENDPOINTS************************************* */
 
-/**
- * Create a credit listing.
- *
- * Accepts either:
- *   (a) Positional legacy args: (creditId, quantity, pricePerUnit, minPurchase, expiresInDays)
- *   (b) A single options object matching the UI form shape:
- *       { creditType, quantity, pricePerUnit, siteId, unit, title, description,
- *         verificationStandard, vintageYear, expirationDate, minimumPurchase,
- *         metadata, images, currency }
- *
- * The backend accepts both shapes and routes based on whether `creditId` is present.
- */
 const createCreditListing = async (
-  creditIdOrOptions,
+  creditId,
   quantity,
   pricePerUnit,
   minPurchase,
   expiresInDays
 ) => {
-  const payload =
-    typeof creditIdOrOptions === 'object' && creditIdOrOptions !== null
-      ? creditIdOrOptions
-      : {
-          creditId: creditIdOrOptions,
-          quantity,
-          pricePerUnit,
-          minPurchase,
-          expiresInDays,
-        };
-
   try {
-    const response = await authPost(`${configs.server_url}/marketplace/listing/create`, payload);
+    const response = await authPost(`${configs.server_url}/marketplace/listing/create`, {
+      creditId,
+      quantity,
+      pricePerUnit,
+      minPurchase,
+      expiresInDays,
+    });
     return response?.data;
-  } catch (error) {
-    const serverMsg = error?.response?.data?.error || error?.response?.data?.message;
-    console.error('[CreditsMarketplaceAPI.createListing] Failed:', serverMsg || error.message);
-    throw error;
+  } catch {
+    throw new Error('Failed to create listing');
   }
 };
 
@@ -2336,6 +2250,4 @@ export {
   TradingProgramAPI,
   EnrollmentAPI,
   NotificationsAPI,
-  // Error classification helper for callers that want structured errors
-  classifyError,
 };

@@ -12,33 +12,12 @@
           ".validate": "newData.hasChildren(['email', 'role'])",
           "email": { ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+$/)" },
           "displayName": { ".validate": "newData.isString() && newData.val().length <= 100" },
-          "username": { ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9_-]{3,50}$/)" },
           "phone": { ".validate": "newData.isString() && newData.val().length <= 20" },
           "company": { ".validate": "newData.isString() && newData.val().length <= 200" },
-          "bio": { ".validate": "newData.isString() && newData.val().length <= 1000" },
-          "photoURL": { ".validate": "newData.isString() && newData.val().length <= 2048" },
-          "role": {
-            ".validate": "newData.isString() && newData.val().matches(/^(buyer|seller|installer|admin)$/) && (newData.val() !== 'admin' || root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin')"
-          },
+          "role": { ".validate": "newData.isString() && newData.val().matches(/^(buyer|seller|installer|admin)$/)" },
           "createdAt": { ".validate": "newData.isNumber()" },
           "updatedAt": { ".validate": "newData.isNumber()" },
-          "onboardingComplete": { ".validate": "newData.isBoolean()" },
-
-          "address": {
-            "street": { ".validate": "newData.isString() && newData.val().length <= 200" },
-            "city": { ".validate": "newData.isString() && newData.val().length <= 100" },
-            "state": { ".validate": "newData.isString() && newData.val().length <= 100" },
-            "zip": { ".validate": "newData.isString() && newData.val().length <= 20" },
-            "postalCode": { ".validate": "newData.isString() && newData.val().length <= 20" },
-            "country": { ".validate": "newData.isString() && newData.val().length <= 100" }
-          },
-
-          "privacy": {
-            "profileVisibility": { ".validate": "newData.isString() && newData.val().length <= 50" },
-            "activityStatus": { ".validate": "newData.isBoolean()" },
-            "transactionPrivacy": { ".validate": "newData.isBoolean()" },
-            "dataUploadPrivacy": { ".validate": "newData.isBoolean()" }
-          }
+          "onboardingComplete": { ".validate": "newData.isBoolean()" }
         },
 
         "settings": {

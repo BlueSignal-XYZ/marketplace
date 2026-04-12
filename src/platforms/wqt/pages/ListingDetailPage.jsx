@@ -13,8 +13,6 @@ import { Tabs } from '../../../design-system/primitives/Tabs';
 import { Skeleton } from '../../../design-system/primitives/Skeleton';
 import { EmptyState } from '../../../design-system/primitives/EmptyState';
 import { getListing, ApiError } from '../../../services/v2/api';
-import { CreditsMarketplaceAPI } from '../../../scripts/back_door';
-import { useAppContext } from '../../../context/AppContext';
 
 const Page = styled.div`
   max-width: 1000px;
@@ -246,36 +244,10 @@ export function ListingDetailPage() {
   }, []);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { STATES, ACTIONS } = useAppContext();
-  const { user } = STATES || {};
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('details');
-  const [cancelling, setCancelling] = useState(false);
-
-  const isSeller = Boolean(
-    listing && user?.uid && (listing.sellerId === user.uid || listing.sellerUid === user.uid)
-  );
-
-  const handleCancelListing = async () => {
-    if (!id) return;
-    const confirmed = window.confirm(
-      'Cancel this listing? Buyers will no longer be able to purchase it.'
-    );
-    if (!confirmed) return;
-    setCancelling(true);
-    try {
-      await CreditsMarketplaceAPI.cancelListing(id);
-      ACTIONS?.logNotification?.('success', 'Listing cancelled.');
-      navigate('/marketplace');
-    } catch (err) {
-      const serverMsg = err?.response?.data?.error || err?.message;
-      ACTIONS?.logNotification?.('error', serverMsg || 'Failed to cancel listing.');
-    } finally {
-      setCancelling(false);
-    }
-  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -353,15 +325,9 @@ export function ListingDetailPage() {
             {(listing.quantity || 0).toLocaleString()} kg available · ${totalPrice.toLocaleString()}{' '}
             total
           </PriceSub>
-          {isSeller ? (
-            <Button fullWidth variant="outline" disabled={cancelling} onClick={handleCancelListing}>
-              {cancelling ? 'Cancelling…' : 'Cancel My Listing'}
-            </Button>
-          ) : (
-            <Button fullWidth onClick={() => navigate(`/purchase/${listing.id}`)}>
-              Buy Credits
-            </Button>
-          )}
+          <Button fullWidth onClick={() => navigate(`/purchase/${listing.id}`)}>
+            Buy Credits
+          </Button>
         </PriceCard>
       </HeaderRow>
 

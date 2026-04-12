@@ -8,7 +8,7 @@
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getDatabase, onValue, ref } from 'firebase/database';
+import { getDatabase } from 'firebase/database';
 // Firebase configuration for waterquality-trading project
 // Used by both Cloud and Marketplace modes
 // SECURITY: All config values MUST come from environment variables
@@ -48,8 +48,6 @@ if (isFirebaseConfigured) {
 
 // Lazy-load Firestore — only import firebase/firestore when actually needed.
 // This avoids pulling ~180KB into the main bundle for features that rarely use it.
-// When loaded, we enable IndexedDB persistence so Firestore data survives across
-// sessions and the tab can operate offline.
 let _firestore = null;
 export async function getFirestoreInstance() {
   if (_firestore) return _firestore;
@@ -59,64 +57,9 @@ export async function getFirestoreInstance() {
     );
     return null;
   }
-  const { getFirestore, enableIndexedDbPersistence } = await import('firebase/firestore');
+  const { getFirestore } = await import('firebase/firestore');
   _firestore = getFirestore(app);
-  try {
-    await enableIndexedDbPersistence(_firestore);
-  } catch (err) {
-    // Typical causes: multiple tabs open, or browser doesn't support it.
-    // Not fatal — Firestore will still work in-memory.
-    if (err?.code === 'failed-precondition') {
-      console.warn('[Firebase] Firestore persistence disabled — multiple tabs open.');
-    } else if (err?.code === 'unimplemented') {
-      console.warn('[Firebase] Firestore persistence not supported in this browser.');
-    } else {
-      console.warn('[Firebase] Firestore persistence init failed:', err?.message);
-    }
-  }
   return _firestore;
-}
-
-// Lazy-load Firebase Storage. Same rationale as Firestore above — keep the
-// ~100KB storage SDK out of the main bundle.
-let _storage = null;
-export async function getStorageInstance() {
-  if (_storage) return _storage;
-  if (!app) {
-    console.error('[Firebase] Cannot initialise Storage — Firebase app is not configured.');
-    return null;
-  }
-  const { getStorage } = await import('firebase/storage');
-  _storage = getStorage(app);
-  return _storage;
-}
-
-/**
- * Subscribe to RTDB's `.info/connected` node to track online/offline state.
- * Returns an unsubscribe function. Callback receives `true` when connected.
- *
- * RTDB automatically queues writes made while offline and flushes them on
- * reconnect (built-in behavior, no configuration needed). This helper exists
- * so the UI can surface connection state to the user.
- */
-export function subscribeToConnectionState(callback) {
-  if (!db) {
-    // Not configured — treat as offline so UI doesn't lie to users.
-    try {
-      callback(false);
-    } catch (_e) {
-      /* no-op */
-    }
-    return () => {};
-  }
-  const connectedRef = ref(db, '.info/connected');
-  return onValue(connectedRef, (snap) => {
-    try {
-      callback(Boolean(snap.val()));
-    } catch (_e) {
-      /* no-op */
-    }
-  });
 }
 
 // Synchronous export kept for legacy callers — null until getFirestoreInstance() is called.

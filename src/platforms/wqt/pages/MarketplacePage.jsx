@@ -570,7 +570,6 @@ function TableSkeleton() {
 
 function OrderPanel() {
   const { toast } = useToastContext();
-  const navigate = useNavigate();
   const [side, setSide] = useState('buy');
   const [creditType, setCreditType] = useState('nitrogen');
   const [quantity, setQuantity] = useState('');
@@ -581,36 +580,8 @@ function OrderPanel() {
   const prc = parseFloat(price) || 0;
   const total = qty * prc;
 
-  // Order-book matching across multiple listings isn't implemented yet —
-  // this panel captures the user's intent and routes them to the flow
-  // that actually exists: buyers see filtered marketplace listings,
-  // sellers are taken to the create-listing form with their inputs pre-populated.
-  // The underlying /marketplace/purchase endpoint is wired per-listing in
-  // PurchaseFlowPage, which is reached via /marketplace/listing/:id "Buy Credits".
   const handlePlaceOrder = () => {
-    if (qty <= 0 || prc <= 0) {
-      toast({ type: 'error', message: 'Enter a quantity and price first.' });
-      return;
-    }
-    if (isBuy) {
-      const params = new URLSearchParams({
-        creditType,
-        minQuantity: String(qty),
-        maxPrice: String(prc),
-      });
-      toast({
-        type: 'info',
-        message: 'Showing listings matching your buy order.',
-      });
-      navigate(`/marketplace?${params.toString()}`);
-    } else {
-      const params = new URLSearchParams({
-        creditType,
-        quantity: String(qty),
-        pricePerUnit: String(prc),
-      });
-      navigate(`/marketplace/tools/upload?${params.toString()}`);
-    }
+    toast({ type: 'info', message: 'Order placement coming soon.' });
   };
 
   return (

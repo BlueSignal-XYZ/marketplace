@@ -439,31 +439,18 @@ export default function ProfilePage() {
     setSaving(true);
 
     try {
-      // Strip fields that the profile update endpoint doesn't accept.
-      // - email: owned by Firebase Auth
-      // - role: admin-only (use /user/role/update)
-      // Map the local `preferences` shape to the backend's `notifications` shape.
-      // eslint-disable-next-line no-unused-vars
-      const { email: _email, role: _role, preferences, ...updatable } = profile;
-      const notifications = preferences
-        ? {
-            email: Boolean(preferences.emailNotifications),
-            sms: Boolean(preferences.smsNotifications),
-            push: preferences.push !== undefined ? Boolean(preferences.push) : true,
-          }
-        : undefined;
-      const payload = {
-        ...updatable,
-        displayName: profile.displayName.trim(),
-        ...(notifications ? { notifications } : {}),
-      };
-
-      const result = await ACTIONS.saveProfile(user.uid, payload);
-      if (!result.success) {
-        setError(result.error || 'Failed to save profile. Please try again.');
-        return;
-      }
+      const trimmedProfile = { ...profile, displayName: profile.displayName.trim() };
+      await UserProfileAPI.update(user.uid, trimmedProfile);
       setSuccess('Profile updated successfully!');
+
+      // Always sync full profile to local context
+      ACTIONS.updateUser(user.uid, {
+        ...user,
+        ...trimmedProfile,
+      });
+    } catch (err) {
+      const serverMsg = err?.response?.data?.error || err?.response?.data?.message;
+      setError(serverMsg || err.message || 'Failed to save profile. Please try again.');
     } finally {
       setSaving(false);
     }

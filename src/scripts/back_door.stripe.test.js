@@ -77,25 +77,11 @@ describe('Authenticated API calls (authPost)', () => {
   });
 
   it('should propagate non-401 errors', async () => {
-    vi.useFakeTimers();
-    try {
-      const error500 = new Error('Server Error');
-      error500.response = { status: 500 };
-      // Reject every attempt so retries exhaust and the error propagates.
-      axios.post.mockRejectedValue(error500);
+    const error500 = new Error('Server Error');
+    error500.response = { status: 500 };
+    axios.post.mockRejectedValueOnce(error500);
 
-      const promise = UserAPI.account.getUserFromUID('user-1');
-      // Attach the rejection assertion before draining timers so the
-      // unhandled-rejection guard doesn't fire between retry attempts.
-      const assertion = expect(promise).rejects.toThrow('Server Error');
-      await vi.runAllTimersAsync();
-      await assertion;
-
-      // 1 initial + 4 retries (RETRY_BACKOFF_MS has 4 entries).
-      expect(axios.post).toHaveBeenCalledTimes(5);
-    } finally {
-      vi.useRealTimers();
-    }
+    await expect(UserAPI.account.getUserFromUID('user-1')).rejects.toThrow('Server Error');
   });
 
   it('should set request timeout to 30 seconds', async () => {
