@@ -6,6 +6,7 @@ import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
 import FormSection from '../../shared/FormSection/FormSection';
 import { Input } from '../../shared/input/Input';
 import { useAppContext } from '../../../context/AppContext';
+import { uploadProfileImage } from '../../../apis/storage';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -71,7 +72,8 @@ const ProfileSettingsTab = () => {
   const { user } = STATES || {};
   const { logNotification } = ACTIONS || {};
 
-  const [imagePreview, setImagePreview] = useState(NeptuneIcon);
+  const [imagePreview, setImagePreview] = useState(user?.photoURL || NeptuneIcon);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [displayName, setDisplayName] = useState(user?.displayName || '');
@@ -84,20 +86,46 @@ const ProfileSettingsTab = () => {
       setDisplayName(user.displayName || '');
       setUsername(user.username || '');
       setRole(user.role || '');
+      if (user.photoURL) setImagePreview(user.photoURL);
     }
   }, [user]);
 
   const handleImageClick = () => {
+    if (uploadingImage) return;
     document.getElementById('profileImageInput').click();
   };
 
-  const handleImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
+  const handleImageChange = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!user?.uid) {
+      logNotification?.('error', 'You must be signed in to change your avatar.');
+      return;
+    }
+
+    // Show optimistic local preview while uploading.
+    const reader = new FileReader();
+    reader.onload = (e) => setImagePreview(e.target.result);
+    reader.readAsDataURL(file);
+
+    setUploadingImage(true);
+    try {
+      const photoURL = await uploadProfileImage(user.uid, file);
+      const result = await ACTIONS.saveProfile(user.uid, { photoURL });
+      if (!result.success) {
+        logNotification?.('error', result.error || 'Avatar uploaded but profile save failed.');
+        return;
+      }
+      setImagePreview(photoURL);
+      logNotification?.('success', 'Profile image updated!');
+    } catch (err) {
+      logNotification?.('error', err?.message || 'Failed to upload profile image.');
+      // Revert preview to previous on failure.
+      setImagePreview(user?.photoURL || NeptuneIcon);
+    } finally {
+      setUploadingImage(false);
+      // Clear the input so the same file can be re-selected.
+      event.target.value = '';
     }
   };
 
@@ -159,11 +187,14 @@ const ProfileSettingsTab = () => {
       <Section>
         <div className="profile-image-section">
           <ProfileImage src={imagePreview} onClick={handleImageClick} />
-          <ButtonSecondary onClick={handleImageClick}>Upload Profile Image</ButtonSecondary>
+          <ButtonSecondary onClick={handleImageClick} disabled={uploadingImage}>
+            {uploadingImage ? 'Uploading…' : 'Upload Profile Image'}
+          </ButtonSecondary>
         </div>
         <Input
           type="file"
           id="profileImageInput"
+          accept="image/*"
           style={{ display: 'none' }}
           onChange={handleImageChange}
         />

@@ -77,6 +77,20 @@ export async function getFirestoreInstance() {
   return _firestore;
 }
 
+// Lazy-load Firebase Storage. Same rationale as Firestore above — keep the
+// ~100KB storage SDK out of the main bundle.
+let _storage = null;
+export async function getStorageInstance() {
+  if (_storage) return _storage;
+  if (!app) {
+    console.error('[Firebase] Cannot initialise Storage — Firebase app is not configured.');
+    return null;
+  }
+  const { getStorage } = await import('firebase/storage');
+  _storage = getStorage(app);
+  return _storage;
+}
+
 /**
  * Subscribe to RTDB's `.info/connected` node to track online/offline state.
  * Returns an unsubscribe function. Callback receives `true` when connected.
