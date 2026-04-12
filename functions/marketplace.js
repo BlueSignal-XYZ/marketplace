@@ -7,47 +7,13 @@ const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 
 /**
- * Create a new credit listing.
- *
- * Supports two flows:
- *
- *  (a) "Select existing credit" — legacy: caller supplies { creditId, quantity, pricePerUnit, ... }
- *      and the credit must already exist, be owned by the caller, and be verified.
- *
- *  (b) "List from site" — UI-driven: caller supplies { creditType, quantity, pricePerUnit,
- *      siteId, ... } with no creditId. Server verifies site ownership, auto-creates a verified
- *      credit, and lists it. This matches how CreateListingPage.jsx collects data.
+ * Create a new credit listing
  */
 const createListing = async (req, res) => {
-  const {
-    // Core (both flows)
-    creditId,
-    quantity,
-    pricePerUnit,
-    minPurchase,
-    minimumPurchase, // UI field name
-    expiresInDays = 30,
-    // Flow (b) fields
-    creditType,
-    unit,
-    currency = "USD",
-    siteId,
-    title,
-    description,
-    verificationStandard,
-    vintageYear,
-    expirationDate,
-    metadata: uiMetadata,
-    images,
-  } = req.body;
+  const { creditId, quantity, pricePerUnit, minPurchase = 1, expiresInDays = 30 } = req.body;
 
-  if (!quantity || !pricePerUnit) {
-    return res.status(400).json({ error: "Missing required fields: quantity, pricePerUnit" });
-  }
-  if (!creditId && !creditType) {
-    return res
-      .status(400)
-      .json({ error: "Must provide either creditId (to list existing credit) or creditType + siteId (to auto-create)" });
+  if (!creditId || !quantity || !pricePerUnit) {
+    return res.status(400).json({ error: "Missing required fields: creditId, quantity, pricePerUnit" });
   }
 
   const authHeader = req.headers.authorization;
@@ -62,120 +28,51 @@ const createListing = async (req, res) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    let effectiveCreditId = creditId;
-    let credit;
-    const now = Date.now();
-
-    if (effectiveCreditId) {
-      // Flow (a): list an existing verified credit the caller owns.
-      const creditSnapshot = await db.ref(`credits/${effectiveCreditId}`).once("value");
-      if (!creditSnapshot.exists()) {
-        return res.status(404).json({ error: "Credit not found" });
-      }
-      credit = creditSnapshot.val();
-      if (credit.ownership?.currentOwner !== uid) {
-        return res.status(403).json({ error: "You don't own this credit" });
-      }
-      if (credit.status !== "verified") {
-        return res.status(400).json({ error: "Credit must be verified before listing" });
-      }
-    } else {
-      // Flow (b): auto-create a verified credit from site + type + quantity.
-      if (!siteId) {
-        return res.status(400).json({ error: "Missing siteId (required when no creditId supplied)" });
-      }
-      const validTypes = ["nitrogen", "phosphorus", "stormwater", "thermal", "carbon", "water_quality"];
-      if (!validTypes.includes(creditType)) {
-        return res.status(400).json({ error: `Invalid creditType. Must be one of ${validTypes.join(", ")}` });
-      }
-
-      const siteSnap = await db.ref(`sites/${siteId}`).once("value");
-      if (!siteSnap.exists()) {
-        return res.status(404).json({ error: "Site not found" });
-      }
-      const site = siteSnap.val();
-      if (site.ownerId !== uid) {
-        return res.status(403).json({ error: "You don't own this site" });
-      }
-
-      effectiveCreditId = db.ref("credits").push().key;
-      credit = {
-        type: creditType,
-        // Auto-verify for UI-driven creation. Until formal verification is wired,
-        // this path is gated only by site ownership. Tighten when verification
-        // workflow ships.
-        status: "verified",
-        origin: {
-          siteId,
-          deviceId: "",
-          watershed: site.location?.watershed || "",
-          generatedFrom: now - 365 * 24 * 60 * 60 * 1000,
-          generatedTo: now,
-          methodology: "user-declared",
-        },
-        quantity: { amount: Number(quantity), unit: unit || "kg" },
-        verification: {
-          verifiedAt: now,
-          certificateHash: "",
-          transactionHash: "",
-        },
-        ownership: {
-          currentOwner: uid,
-          originalOwner: uid,
-          transferHistory: [],
-        },
-        listing: null,
-        createdAt: now,
-      };
-      await db.ref(`credits/${effectiveCreditId}`).set(credit);
+    // Verify credit exists and user owns it
+    const creditSnapshot = await db.ref(`credits/${creditId}`).once("value");
+    if (!creditSnapshot.exists()) {
+      return res.status(404).json({ error: "Credit not found" });
     }
 
-    // Gather location data from the credit's originating site.
+    const credit = creditSnapshot.val();
+    if (credit.ownership?.currentOwner !== uid) {
+      return res.status(403).json({ error: "You don't own this credit" });
+    }
+
+    if (credit.status !== "verified") {
+      return res.status(400).json({ error: "Credit must be verified before listing" });
+    }
+
+    // Get site info for location data
     let locationData = {};
-    const effectiveSiteId = credit.origin?.siteId || siteId;
-    if (effectiveSiteId) {
-      const siteSnapshot = await db.ref(`sites/${effectiveSiteId}`).once("value");
+    if (credit.origin?.siteId) {
+      const siteSnapshot = await db.ref(`sites/${credit.origin.siteId}`).once("value");
       if (siteSnapshot.exists()) {
-        const s = siteSnapshot.val();
+        const site = siteSnapshot.val();
         locationData = {
-          watershed: s.location?.watershed || "",
-          state: s.location?.state || "",
-          siteId: effectiveSiteId,
-          coordinates: s.location?.coordinates || null,
+          watershed: site.location?.watershed || "",
+          state: site.location?.state || "",
+          siteId: credit.origin.siteId,
+          coordinates: site.location?.coordinates || null,
         };
       }
     }
 
-    const effMinPurchase = Math.min(
-      Number(minimumPurchase ?? minPurchase ?? 1) || 1,
-      Number(quantity)
-    );
-
-    // Expiration: explicit date wins over expiresInDays.
-    let expiresAt;
-    if (expirationDate) {
-      const parsed = new Date(expirationDate).getTime();
-      expiresAt = Number.isNaN(parsed) ? now + expiresInDays * 24 * 60 * 60 * 1000 : parsed;
-    } else {
-      expiresAt = now + expiresInDays * 24 * 60 * 60 * 1000;
-    }
-
+    // Create listing
     const listingId = db.ref("listings").push().key;
+    const now = Date.now();
+    const expiresAt = now + expiresInDays * 24 * 60 * 60 * 1000;
+
     const listing = {
-      creditId: effectiveCreditId,
+      creditId,
       sellerId: uid,
       details: {
         creditType: credit.type,
         quantity: Number(quantity),
         pricePerUnit: Number(pricePerUnit),
         totalPrice: Number(quantity) * Number(pricePerUnit),
-        currency,
-        minPurchase: effMinPurchase,
-        ...(unit ? { unit } : {}),
-        ...(title ? { title: String(title).slice(0, 200) } : {}),
-        ...(description ? { description: String(description).slice(0, 2000) } : {}),
-        ...(verificationStandard ? { verificationStandard } : {}),
-        ...(vintageYear ? { vintageYear: Number(vintageYear) } : {}),
+        currency: "USD",
+        minPurchase: Math.min(Number(minPurchase), Number(quantity)),
       },
       location: locationData,
       status: "active",
@@ -189,15 +86,14 @@ const createListing = async (req, res) => {
         views: 0,
         inquiries: 0,
         featured: false,
-        ...(uiMetadata && typeof uiMetadata === "object" ? { extra: uiMetadata } : {}),
-        ...(Array.isArray(images) && images.length > 0 ? { images: images.slice(0, 20) } : {}),
       },
     };
 
+    // Save listing and update credit status
     const updates = {
       [`listings/${listingId}`]: listing,
-      [`credits/${effectiveCreditId}/status`]: "listed",
-      [`credits/${effectiveCreditId}/listing`]: {
+      [`credits/${creditId}/status`]: "listed",
+      [`credits/${creditId}/listing`]: {
         listingId,
         price: Number(pricePerUnit),
         listedAt: now,
@@ -206,13 +102,14 @@ const createListing = async (req, res) => {
 
     await db.ref().update(updates);
 
+    // Log activity
     await db.ref(`users/${uid}/activity`).push({
       type: "credit_listed",
       timestamp: now,
-      metadata: { listingId, creditId: effectiveCreditId, pricePerUnit },
+      metadata: { listingId, creditId, pricePerUnit },
     });
 
-    res.json({ success: true, listingId, creditId: effectiveCreditId, listing });
+    res.json({ success: true, listingId, listing });
   } catch (error) {
     console.error("Failed to create listing:", error);
     res.status(500).json({ error: "Failed to create listing" });
