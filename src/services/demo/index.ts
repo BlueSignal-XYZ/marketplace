@@ -41,10 +41,13 @@ export function isDemoMode(): boolean {
 
   // Honor legacy env-var aliases so a rollback to the previous flags still works.
   // These are deprecated — new code must not read them directly.
+  //
+  // Use direct `import.meta.env.KEY` access (not an extracted `env` variable) so
+  // Vite/vitest can statically rewrite the reference — otherwise `vi.stubEnv`
+  // in tests never reaches this read. Matches the pattern in `demoMode.ts`.
   try {
-    const env = (import.meta as unknown as { env?: Record<string, string | undefined> }).env || {};
-    if (env.VITE_USE_MOCK_DATA === 'true') return true;
-    if (env.VITE_USE_MARKETPLACE_MOCKS === 'true') return true;
+    if (import.meta.env.VITE_USE_MOCK_DATA === 'true') return true;
+    if (import.meta.env.VITE_USE_MARKETPLACE_MOCKS === 'true') return true;
   } catch {
     // import.meta may not exist in certain test environments
   }
