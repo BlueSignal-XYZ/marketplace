@@ -50,7 +50,7 @@ const FooterWrapper = styled.div`
   margin-top: auto;
 `;
 
-export function CloudShell({ user, isAuthLanding, children }) {
+export function CloudShell({ user: _user, isAuthLanding, children }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 

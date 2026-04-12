@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TradingProgramAPI, EnrollmentAPI, DeviceAPI } from '../../scripts/back_door';
@@ -199,12 +199,7 @@ export function TradingProgramDetailPage() {
   const [enrolled, setEnrolled] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadProgram();
-    if (user?.uid) loadDevices();
-  }, [programId, user?.uid]);
-
-  const loadProgram = async () => {
+  const loadProgram = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -230,9 +225,9 @@ export function TradingProgramDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [programId]);
 
-  const loadDevices = async () => {
+  const loadDevices = useCallback(async () => {
     try {
       const response = await DeviceAPI.getDevices();
       const deviceList = response?.devices || [];
@@ -240,7 +235,12 @@ export function TradingProgramDetailPage() {
     } catch {
       setDevices([]);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadProgram();
+    if (user?.uid) loadDevices();
+  }, [programId, user?.uid, loadProgram, loadDevices]);
 
   const toggleDevice = (deviceId) => {
     setSelectedDevices((prev) =>

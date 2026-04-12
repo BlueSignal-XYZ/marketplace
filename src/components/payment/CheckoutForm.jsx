@@ -192,7 +192,7 @@ const CheckoutForm = ({ item }) => {
         setClientSecret(payment_intent?.clientSecret);
       });
     }
-  }, [stripePromise, item]);
+  }, [stripePromise, payAmount, serverUrl]);
 
   //#REQ# STRIPE, CLIENT SECRET AND ITEM SHOULD BE DEFINED.
   if (!stripePromise || !clientSecret || !item) {

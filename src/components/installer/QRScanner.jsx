@@ -236,7 +236,6 @@ export function QRScanner({ onScan, onError, onDeviceValidated }) {
   useEffect(() => {
     startScanner();
     return () => stopScanner();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startScanner, stopScanner]);
 
   /**

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -196,13 +196,7 @@ export function CreditPortfolioPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
 
-  useEffect(() => {
-    if (user?.uid) {
-      loadPortfolio();
-    }
-  }, [user?.uid]);
-
-  const loadPortfolio = async () => {
+  const loadPortfolio = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -220,7 +214,13 @@ export function CreditPortfolioPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      loadPortfolio();
+    }
+  }, [user?.uid, loadPortfolio]);
 
   const filteredCredits = useMemo(() => {
     let result = credits;

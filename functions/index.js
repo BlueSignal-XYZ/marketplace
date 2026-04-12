@@ -55,16 +55,19 @@ const scheduledDataRetention = require("./scheduled/dataRetention");
 // Create Express app for HTTP endpoints
 const app = express();
 
-// SECURITY: Restrict CORS to allowed origins only
+// SECURITY: Restrict CORS to allowed origins only.
+// Keep this list in sync with the four production sites (see CLAUDE.md § Architecture).
 const allowedOrigins = [
   'https://waterquality.trading',
   'https://www.waterquality.trading',
   'https://cloud.bluesignal.xyz',
   'https://bluesignal.xyz',
   'https://www.bluesignal.xyz',
+  'https://ops.bluesignal.xyz',
   'https://waterquality-trading.web.app',
   'https://cloud-bluesignal.web.app',
   'https://landing-bluesignal.web.app',
+  'https://ops-bluesignal.web.app',
   // Allow localhost for development
   'http://localhost:3000',
   'http://localhost:5173',
@@ -684,8 +687,10 @@ const crypto = require("crypto");
 // Verify HubSpot webhook signature
 const verifyHubSpotSignature = (req, clientSecret) => {
   if (!clientSecret) {
-    console.warn("HUBSPOT_CLIENT_SECRET not configured - signature verification skipped");
-    return true; // Skip verification if secret not configured (for backwards compatibility)
+    // SECURITY: never accept an unsigned webhook. If the secret isn't configured,
+    // reject so an attacker cannot forge events by simply omitting the header.
+    console.error("HUBSPOT_CLIENT_SECRET not configured - rejecting request");
+    return false;
   }
 
   const signature = req.headers["x-hubspot-signature-v3"] || req.headers["x-hubspot-signature"];
@@ -702,10 +707,11 @@ const verifyHubSpotSignature = (req, clientSecret) => {
       .update(requestBody)
       .digest("hex");
 
-    return crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedHash)
-    );
+    const sigBuf = Buffer.from(signature);
+    const expectedBuf = Buffer.from(expectedHash);
+    // timingSafeEqual throws on unequal-length buffers; guard up front.
+    if (sigBuf.length !== expectedBuf.length) return false;
+    return crypto.timingSafeEqual(sigBuf, expectedBuf);
   } catch (error) {
     console.error("Signature verification error:", error);
     return false;

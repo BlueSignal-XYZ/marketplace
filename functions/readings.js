@@ -924,7 +924,14 @@ const ttnWebhook = async (req, res) => {
     return;
   }
 
-  if (secret !== expectedSecret) {
+  // SECURITY: timing-safe comparison so an attacker cannot probe the secret
+  // one byte at a time via response-time variance.
+  const secretBuf = Buffer.from(secret || "");
+  const expectedBuf = Buffer.from(expectedSecret);
+  if (
+    secretBuf.length !== expectedBuf.length ||
+    !crypto.timingSafeEqual(secretBuf, expectedBuf)
+  ) {
     console.warn("TTN webhook: invalid secret");
     res.status(401).json({ error: "Invalid webhook secret" });
     return;
