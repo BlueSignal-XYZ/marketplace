@@ -956,7 +956,8 @@ exports.calculateDailyCredits = scheduledCreditAccrual.calculateDailyCredits;
 /**
  * Scheduled: Data Retention Audit — runs weekly on Sunday at 03:00 UTC.
  * Counts archivable readings (>12 months old). Logs audit event.
- * TODO: Add Cloud Storage archival + RTDB deletion before 50+ devices.
+ * TODO(P2, Added 2026-04-05, Updated 2026-04-12): Add Cloud Storage archival
+ * + RTDB deletion before 50+ devices. See CLAUDE.md open items + v1.2 plan.
  */
 exports.auditDataRetention = scheduledDataRetention.auditDataRetention;
 

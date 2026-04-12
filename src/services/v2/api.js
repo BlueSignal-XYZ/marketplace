@@ -11,7 +11,9 @@
  * Usage: import { getDevices, getAlerts, ApiError } from '../../services/v2/api';
  */
 
-import { isDemoMode } from '../../utils/demoMode';
+// Demo routing uses the unified service — do NOT read VITE_* mock env vars here.
+// See CLAUDE.md ADR "Single demo-mode entry point — 2026-04-12".
+import { isDemoMode } from '../demo';
 import * as realClient from './client';
 import * as demoClient from './demoInterceptor';
 
