@@ -267,22 +267,50 @@ export interface EventsPrograms {
 }
 
 // team-cap-table.json
+export type MemberStatus = 'Active' | 'Open' | 'Vested' | 'Terminated';
+
 export interface TeamMember {
   name: string;
   role: string;
   equity: number;
+  shares?: number | null;
   startDate: string;
   vesting: string;
+  vestingYears?: number | null;
+  cliffYears?: number | null;
+  status?: MemberStatus;
+  filed83b?: boolean;
+  filed83bDate?: string | null;
 }
+
+export type Instrument =
+  | 'Common Stock'
+  | 'Preferred Stock'
+  | 'SAFE'
+  | 'Convertible Note'
+  | 'Reserved';
+
+export type RoundStatus = 'Issued' | 'Reserved' | 'Planned' | 'Closed' | 'Converting';
+
+// Accept legacy lowercase status values from existing RTDB rows; they are
+// normalized on read in the panel.
+export type AnyRoundStatus = RoundStatus | 'issued' | 'reserved' | 'planned';
 
 export interface FundingRound {
   name: string;
+  instrument?: Instrument;
   shares: number;
   price: number | null;
-  status: 'issued' | 'reserved' | 'planned';
+  status: AnyRoundStatus;
   targetRaise: number | null;
   targetValuation: number | null;
   targetShares: number | null;
+  valuationCap?: number | null;
+  discountPct?: number | null;
+  interestPct?: number | null;
+  maturityDate?: string | null;
+  liquidationPref?: number | null;
+  participation?: boolean | null;
 }
 
 export interface TeamCapTable {
