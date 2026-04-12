@@ -122,17 +122,123 @@ const updateUserProfile = async (req, res) => {
 
   const db = admin.database();
 
-  const allowedProfileFields = ["displayName", "phone", "company", "bio", "role"];
-  const allowedSettingsFields = ["timezone", "units"];
-  const allowedTopLevel = ["onboardingCompleted", "onboardingCompletedAt"];
+  // Whitelists. Role is intentionally omitted from self-update — role changes
+  // must go through updateUserRole (admin-only). Email is owned by Firebase Auth.
+  const allowedProfileScalars = [
+    "displayName",
+    "phone",
+    "company",
+    "bio",
+    "username",
+    "photoURL",
+    "onboardingComplete",
+  ];
+  const allowedProfileObjects = ["address", "privacy"];
+  const allowedSettingsScalars = ["timezone", "units"];
+  const allowedSettingsObjects = ["notifications"];
+
+  const allAllowed = new Set([
+    ...allowedProfileScalars,
+    ...allowedProfileObjects,
+    ...allowedSettingsScalars,
+    ...allowedSettingsObjects,
+  ]);
+
+  // Reject unknown fields up front so callers discover silent-drop bugs.
+  const unknownFields = Object.keys(profileData).filter((k) => !allAllowed.has(k));
+  if (unknownFields.length > 0) {
+    return res.status(400).json({
+      error: `Unknown profile fields: ${unknownFields.join(", ")}`,
+      allowed: Array.from(allAllowed),
+    });
+  }
+
+  // Validation — mirrors database.rules.json constraints so callers get a
+  // meaningful 400 instead of a generic RTDB permission-denied 500.
+  const validationErrors = [];
+  const checkStrLen = (key, val, max) => {
+    if (val !== undefined && val !== null && typeof val === "string" && val.length > max) {
+      validationErrors.push(`${key} exceeds ${max} characters`);
+    }
+  };
+  checkStrLen("displayName", profileData.displayName, 100);
+  checkStrLen("phone", profileData.phone, 20);
+  checkStrLen("company", profileData.company, 200);
+  checkStrLen("bio", profileData.bio, 1000);
+  checkStrLen("username", profileData.username, 50);
+  checkStrLen("photoURL", profileData.photoURL, 2048);
+
+  if (profileData.username !== undefined && profileData.username !== null) {
+    if (!/^[a-z0-9_-]{3,50}$/.test(profileData.username)) {
+      validationErrors.push("username must be 3-50 chars of [a-z0-9_-]");
+    }
+  }
+  if (profileData.privacy && typeof profileData.privacy === "object") {
+    // Privacy sub-fields: profileVisibility is a string, the others are
+    // booleans in the current UI. A formal enum for profileVisibility is
+    // tracked as a follow-up item.
+    const { profileVisibility, activityStatus, transactionPrivacy, dataUploadPrivacy } =
+      profileData.privacy;
+    if (profileVisibility !== undefined && typeof profileVisibility !== "string") {
+      validationErrors.push("privacy.profileVisibility must be a string");
+    }
+    if (profileVisibility !== undefined && typeof profileVisibility === "string" && profileVisibility.length > 50) {
+      validationErrors.push("privacy.profileVisibility exceeds 50 characters");
+    }
+    [
+      ["activityStatus", activityStatus],
+      ["transactionPrivacy", transactionPrivacy],
+      ["dataUploadPrivacy", dataUploadPrivacy],
+    ].forEach(([name, v]) => {
+      if (v !== undefined && v !== null && typeof v !== "boolean") {
+        validationErrors.push(`privacy.${name} must be boolean`);
+      }
+    });
+  }
+  if (profileData.notifications && typeof profileData.notifications === "object") {
+    ["email", "sms", "push"].forEach((k) => {
+      if (
+        profileData.notifications[k] !== undefined &&
+        typeof profileData.notifications[k] !== "boolean"
+      ) {
+        validationErrors.push(`notifications.${k} must be boolean`);
+      }
+    });
+  }
+  if (profileData.onboardingComplete !== undefined && typeof profileData.onboardingComplete !== "boolean") {
+    validationErrors.push("onboardingComplete must be boolean");
+  }
+  if (validationErrors.length > 0) {
+    return res.status(400).json({ error: "Validation failed", details: validationErrors });
+  }
+
+  // Build the RTDB multi-path update. Nested objects are flattened to
+  // per-sub-field paths so partial updates don't clobber unprovided keys.
   const filteredData = {};
-  Object.keys(profileData).forEach((key) => {
-    if (allowedSettingsFields.includes(key)) {
+  allowedProfileScalars.forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(profileData, key)) {
+      filteredData[`profile/${key}`] = profileData[key];
+    }
+  });
+  allowedSettingsScalars.forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(profileData, key)) {
       filteredData[`settings/${key}`] = profileData[key];
-    } else if (allowedTopLevel.includes(key)) {
-      filteredData[`profile/${key}`] = profileData[key];
-    } else if (allowedProfileFields.includes(key)) {
-      filteredData[`profile/${key}`] = profileData[key];
+    }
+  });
+  allowedProfileObjects.forEach((key) => {
+    const obj = profileData[key];
+    if (obj && typeof obj === "object" && !Array.isArray(obj)) {
+      Object.keys(obj).forEach((subKey) => {
+        filteredData[`profile/${key}/${subKey}`] = obj[subKey];
+      });
+    }
+  });
+  allowedSettingsObjects.forEach((key) => {
+    const obj = profileData[key];
+    if (obj && typeof obj === "object" && !Array.isArray(obj)) {
+      Object.keys(obj).forEach((subKey) => {
+        filteredData[`settings/${key}/${subKey}`] = obj[subKey];
+      });
     }
   });
 
@@ -140,7 +246,7 @@ const updateUserProfile = async (req, res) => {
 
   try {
     await db.ref(`users/${uid}`).update(filteredData);
-    res.json({ success: true });
+    res.json({ success: true, updatedFields: Object.keys(filteredData) });
   } catch (error) {
     console.error("Failed to update profile:", error);
     res.status(500).json({ error: "Failed to update profile" });
@@ -281,9 +387,31 @@ const completeOnboarding = async (req, res) => {
     };
 
     if (onboardingData) {
-      if (onboardingData.company) updates["profile/company"] = onboardingData.company;
-      if (onboardingData.phone) updates["profile/phone"] = onboardingData.phone;
+      // Accept profile fields collected during the onboarding form.
+      // Role is accepted here (but NOT in updateUserProfile) because role
+      // is set exactly once during onboarding; subsequent changes must go
+      // through updateUserRole (admin-only).
+      if (onboardingData.displayName) updates["profile/displayName"] = onboardingData.displayName;
+      if (onboardingData.company !== undefined) updates["profile/company"] = onboardingData.company;
+      if (onboardingData.phone !== undefined) updates["profile/phone"] = onboardingData.phone;
+      if (onboardingData.bio !== undefined) updates["profile/bio"] = onboardingData.bio;
       if (onboardingData.timezone) updates["settings/timezone"] = onboardingData.timezone;
+
+      if (onboardingData.role) {
+        // Exclude admin — admin role can only be set via seedAdmin or updateUserRole.
+        const validSelfRoles = /^(buyer|seller|installer)$/;
+        if (!validSelfRoles.test(String(onboardingData.role))) {
+          return res.status(400).json({
+            error: "role must be one of buyer|seller|installer (admin cannot be self-assigned)",
+          });
+        }
+        // Additionally: if the user is already admin, refuse to downgrade via onboarding.
+        const currentRoleSnap = await db.ref(`users/${uid}/profile/role`).once("value");
+        if (currentRoleSnap.val() === "admin") {
+          return res.status(403).json({ error: "Cannot change admin role via onboarding" });
+        }
+        updates["profile/role"] = onboardingData.role;
+      }
     }
 
     await db.ref(`users/${uid}`).update(updates);

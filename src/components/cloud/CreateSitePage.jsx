@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import CloudPageLayout from './CloudPageLayout';
 import { useAppContext } from '../../context/AppContext';
-import { GeocodingAPI } from '../../scripts/back_door';
+import { SiteAPI } from '../../scripts/back_door';
 import LocationCapture from '../installer/LocationCapture';
 import { ButtonPrimary, ButtonSecondary } from '../shared/button/Button';
 import { Input } from '../shared/input/Input';
@@ -290,7 +290,7 @@ export default function CreateSitePage() {
         siteData.longitude = formData.location.longitude;
       }
 
-      const result = await GeocodingAPI.createSite(siteData);
+      const result = await SiteAPI.create(siteData);
 
       ACTIONS?.logNotification?.('success', 'Site created successfully!');
       navigate(`/cloud/sites/${result.siteId}`);

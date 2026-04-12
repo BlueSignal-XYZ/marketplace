@@ -6,7 +6,6 @@ import { ButtonPrimary, ButtonSecondary } from '../../shared/button/Button';
 import FormSection from '../../shared/FormSection/FormSection';
 import { Input } from '../../shared/input/Input';
 import { useAppContext } from '../../../context/AppContext';
-import { UserProfileAPI } from '../../../scripts/back_door';
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -136,24 +135,20 @@ const ProfileSettingsTab = () => {
     try {
       const trimmedName = displayName.trim();
       const trimmedUsername = username.trim();
-      await UserProfileAPI.update(user.uid, {
+      // Role is intentionally NOT sent — the profile update endpoint
+      // rejects it (role changes require admin). Role is shown read-only.
+      const result = await ACTIONS.saveProfile(user.uid, {
         displayName: trimmedName,
         username: trimmedUsername,
-        role,
       });
 
-      // Sync updated profile to local context
-      ACTIONS.updateUser(user.uid, {
-        ...user,
-        displayName: trimmedName,
-        username: trimmedUsername,
-        role,
-      });
+      if (!result.success) {
+        logNotification?.('error', result.error || 'Failed to save profile. Please try again.');
+        return;
+      }
 
       logNotification?.('success', 'Profile updated successfully!');
       setEditing(false);
-    } catch {
-      logNotification?.('error', 'Failed to save profile. Please try again.');
     } finally {
       setSaving(false);
     }
