@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useFirebaseData } from '../hooks/useFirebaseData';
+import { useWriteBack } from '../hooks/useWriteBack';
 import Panel from '../components/Panel';
 import PriorityBadge from '../components/PriorityBadge';
-import type { CompetitiveIntel } from '../types';
+import EditableCell from '../components/EditableCell';
+import AddForm, { type FieldDef } from '../components/AddForm';
+import type { Competitor, CompetitiveIntel } from '../types';
 
 const Grid = styled.div`
   display: grid;
@@ -14,6 +18,7 @@ const Card = styled.div`
   background: ${({ theme }) => theme.colors.surface2};
   border-radius: ${({ theme }) => theme.layout.radiusSm};
   padding: 0.75rem;
+  position: relative;
 `;
 
 const Name = styled.div`
@@ -24,6 +29,17 @@ const Name = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.4rem;
+`;
+
+const NameText = styled.div`
+  flex: 1;
+`;
+
+const ThreatRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 `;
 
 const Section = styled.div`
@@ -75,41 +91,151 @@ const BCResponse = styled.div`
   color: ${({ theme }) => theme.colors.text2};
 `;
 
+const Btn = styled.button<{ $danger?: boolean }>`
+  background: ${({ $danger, theme }) => ($danger ? theme.colors.redDim : theme.colors.accentDim)};
+  color: ${({ $danger, theme }) => ($danger ? theme.colors.red : theme.colors.accent)};
+  border: none;
+  border-radius: 3px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const DeleteBtn = styled(Btn)`
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+`;
+
+const InlineSelect = styled.select`
+  background: ${({ theme }) => theme.colors.bg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 3px;
+  color: ${({ theme }) => theme.colors.text};
+  padding: 0.15rem 0.35rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  outline: none;
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.accent};
+  }
+`;
+
+const THREAT_OPTIONS: Competitor['threat'][] = ['high', 'medium', 'low'];
+
+const ADD_FIELDS: FieldDef[] = [
+  { name: 'name', label: 'Name' },
+  {
+    name: 'threat',
+    label: 'Threat',
+    type: 'select',
+    options: [...THREAT_OPTIONS],
+    defaultValue: 'medium',
+  },
+  { name: 'ourResponse', label: 'Our Response' },
+];
+
 export default function CompetitivePanel() {
   const { data, loading } = useFirebaseData<CompetitiveIntel>('/ops-dashboard/competitive-intel');
+  const { writeImmediate } = useWriteBack('/ops-dashboard/competitive-intel');
+  const [showAdd, setShowAdd] = useState(false);
+
   const competitors = data?.competitors ?? [];
   const battleCards = data?.battleCards ?? [];
+
+  const persist = (updated: Competitor[]) => {
+    writeImmediate({
+      lastUpdated: data?.lastUpdated ?? '',
+      competitors: updated,
+      battleCards,
+    });
+  };
+
+  const updateCompetitor = (index: number, field: keyof Competitor, value: string) => {
+    const updated = [...competitors];
+    const current = { ...updated[index] } as Competitor;
+    (current as any)[field] = value;
+    updated[index] = current;
+    persist(updated);
+  };
+
+  const deleteCompetitor = (index: number) => {
+    if (!confirm(`Delete ${competitors[index].name}?`)) return;
+    persist(competitors.filter((_, i) => i !== index));
+  };
+
+  const addCompetitor = (values: Record<string, string>) => {
+    const newItem: Competitor = {
+      name: values.name,
+      threat: (values.threat as Competitor['threat']) || 'medium',
+      strengths: [],
+      weaknesses: [],
+      recentMoves: [],
+      ourResponse: values.ourResponse,
+    };
+    persist([...competitors, newItem]);
+    setShowAdd(false);
+  };
+
+  const actions = <Btn onClick={() => setShowAdd(!showAdd)}>{showAdd ? 'Cancel' : '+ Add'}</Btn>;
 
   return (
     <Panel
       id="competitive"
       title="Competitive Intel"
       badge={competitors.length}
+      actions={actions}
       empty={!loading && competitors.length === 0}
     >
       <Grid>
         {competitors.map((c, i) => (
           <Card key={i}>
+            <DeleteBtn $danger onClick={() => deleteCompetitor(i)}>
+              ×
+            </DeleteBtn>
             <Name>
-              {c.name} <PriorityBadge value={c.threat} />
+              <NameText>
+                <EditableCell value={c.name} onSave={(v) => updateCompetitor(i, 'name', v)} />
+              </NameText>
+              <ThreatRow>
+                <PriorityBadge value={c.threat} />
+                <InlineSelect
+                  value={c.threat}
+                  onChange={(e) => updateCompetitor(i, 'threat', e.target.value)}
+                >
+                  {THREAT_OPTIONS.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </InlineSelect>
+              </ThreatRow>
             </Name>
-            <Section>
-              <SectionLabel>Strengths</SectionLabel>
-              <ul>
-                {c.strengths.map((s, j) => (
-                  <ListItem key={j}>{s}</ListItem>
-                ))}
-              </ul>
-            </Section>
-            <Section>
-              <SectionLabel>Weaknesses</SectionLabel>
-              <ul>
-                {c.weaknesses.map((w, j) => (
-                  <ListItem key={j}>{w}</ListItem>
-                ))}
-              </ul>
-            </Section>
-            {c.recentMoves.length > 0 && (
+            {c.strengths?.length > 0 && (
+              <Section>
+                <SectionLabel>Strengths</SectionLabel>
+                <ul>
+                  {c.strengths.map((s, j) => (
+                    <ListItem key={j}>{s}</ListItem>
+                  ))}
+                </ul>
+              </Section>
+            )}
+            {c.weaknesses?.length > 0 && (
+              <Section>
+                <SectionLabel>Weaknesses</SectionLabel>
+                <ul>
+                  {c.weaknesses.map((w, j) => (
+                    <ListItem key={j}>{w}</ListItem>
+                  ))}
+                </ul>
+              </Section>
+            )}
+            {c.recentMoves?.length > 0 && (
               <Section>
                 <SectionLabel>Recent Moves</SectionLabel>
                 <ul>
@@ -121,7 +247,12 @@ export default function CompetitivePanel() {
             )}
             <Section>
               <SectionLabel>Our Response</SectionLabel>
-              <div style={{ fontSize: '0.75rem', color: '#4f8ff7' }}>{c.ourResponse}</div>
+              <div style={{ fontSize: '0.75rem', color: '#4f8ff7' }}>
+                <EditableCell
+                  value={c.ourResponse}
+                  onSave={(v) => updateCompetitor(i, 'ourResponse', v)}
+                />
+              </div>
             </Section>
           </Card>
         ))}
@@ -136,6 +267,9 @@ export default function CompetitivePanel() {
             </BCRow>
           ))}
         </BattleCards>
+      )}
+      {showAdd && (
+        <AddForm fields={ADD_FIELDS} onAdd={addCompetitor} onCancel={() => setShowAdd(false)} />
       )}
     </Panel>
   );
