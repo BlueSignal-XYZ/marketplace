@@ -16,6 +16,9 @@ const Aside = styled.aside<{ $open: boolean }>`
     top: 0;
     left: 0;
     z-index: 100;
+    width: min(85vw, 300px);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
     transform: ${({ $open }) => ($open ? 'translateX(0)' : 'translateX(-100%)')};
     transition: transform 0.2s ease;
   }
@@ -62,6 +65,11 @@ const GroupHeader = styled.button`
   &:hover {
     color: ${({ theme }) => theme.colors.text2};
   }
+
+  @media (max-width: 1024px) {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const NavItem = styled.a<{ $active: boolean }>`
@@ -80,6 +88,11 @@ const NavItem = styled.a<{ $active: boolean }>`
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
     color: ${({ theme }) => theme.colors.text};
+  }
+
+  @media (max-width: 1024px) {
+    padding: 0.75rem 1rem 0.75rem 1.75rem;
+    font-size: 0.9rem;
   }
 `;
 

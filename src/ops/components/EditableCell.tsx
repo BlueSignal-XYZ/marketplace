@@ -9,6 +9,12 @@ const Display = styled.span`
   &:hover {
     background: ${({ theme }) => theme.colors.surface2};
   }
+
+  @media (max-width: 768px) {
+    display: inline-block;
+    padding: 0.4rem 0.45rem;
+    min-height: 28px;
+  }
 `;
 
 const Input = styled.input`

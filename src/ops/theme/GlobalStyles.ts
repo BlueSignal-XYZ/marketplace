@@ -9,6 +9,7 @@ export const OpsGlobalStyles = createGlobalStyle`
 
   html {
     height: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -19,6 +20,14 @@ export const OpsGlobalStyles = createGlobalStyle`
     line-height: 1.5;
     height: 100%;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent iOS Safari from auto-zooming on input focus (anything < 16px triggers zoom). */
+  @media (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px;
+    }
   }
 
   #root {
