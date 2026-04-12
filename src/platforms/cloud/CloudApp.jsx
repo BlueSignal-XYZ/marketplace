@@ -106,7 +106,7 @@ function CloudLanding({ user, authLoading }) {
     if (!user?.uid) return;
     if (devicesLoading) return;
 
-    if (hasDevices || user.onboardingCompleted) {
+    if (hasDevices || user.onboardingComplete) {
       navigate('/dashboard/main', { replace: true });
     } else {
       navigate('/cloud/onboarding', { replace: true });
@@ -129,7 +129,7 @@ function CloudAuthGate({ children, authLoading, isOnboardingRoute = false }) {
     if (authLoading || devicesLoading) return;
     if (!user?.uid) return;
     if (!isOnboardingRoute) return;
-    if (hasDevices || user.onboardingCompleted) {
+    if (hasDevices || user.onboardingComplete) {
       navigate('/dashboard/main', { replace: true });
     }
   }, [authLoading, devicesLoading, user, hasDevices, isOnboardingRoute, navigate]);

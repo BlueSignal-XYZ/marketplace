@@ -319,22 +319,24 @@ export default function OnboardingWizard() {
     setLoading(true);
 
     try {
-      const profilePayload = {
+      // completeOnboarding is the single endpoint authorized to set role
+      // and flip onboardingComplete. Role cannot be changed via the generic
+      // profile update endpoint after this point.
+      const onboardingPayload = {
         displayName: formData.displayName.trim(),
         company: formData.company,
         phone: formData.phone,
         bio: formData.bio,
         role: formData.role,
-        onboardingCompleted: true,
-        onboardingCompletedAt: new Date().toISOString(),
       };
 
-      await UserProfileAPI.update(user.uid, profilePayload);
+      await UserProfileAPI.completeOnboarding(user.uid, onboardingPayload);
 
-      // Sync full profile payload to local context
+      // Sync local context with the new fields (updateUser now re-fetches from backend).
       await ACTIONS.updateUser(user.uid, {
         ...user,
-        ...profilePayload,
+        ...onboardingPayload,
+        onboardingComplete: true,
       });
 
       const dashboardRoutes = {
