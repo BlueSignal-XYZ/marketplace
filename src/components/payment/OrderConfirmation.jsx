@@ -102,7 +102,7 @@ function OrderConfirmation({ proceedToPayment, checkoutItems }) {
         })
         .catch((error) => setError({ message: `Failed to fetch item details: ${error.message}` }));
     }
-  }, []);
+  }, [checkoutItem.priceID, serverUrl]);
 
   useEffect(() => {
     const { unit_amount } = item || {};

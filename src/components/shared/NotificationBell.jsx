@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
@@ -274,15 +274,7 @@ const NotificationBell = ({ light = false }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Load notifications
-  useEffect(() => {
-    if (!user?.uid) return;
-    loadNotifications();
-    const interval = setInterval(loadNotifications, 60000);
-    return () => clearInterval(interval);
-  }, [user?.uid]);
-
-  const loadNotifications = async () => {
+  const loadNotifications = useCallback(async () => {
     if (!user?.uid) return;
     setLoading(true);
 
@@ -321,7 +313,15 @@ const NotificationBell = ({ light = false }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.uid]);
+
+  // Load notifications
+  useEffect(() => {
+    if (!user?.uid) return;
+    loadNotifications();
+    const interval = setInterval(loadNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user?.uid, loadNotifications]);
 
   const handleMarkRead = async (notificationId) => {
     try {

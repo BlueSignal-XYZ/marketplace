@@ -168,9 +168,18 @@ export function LocationCapture({ onLocationSet, initialLocation, googleMapsApiK
   });
 
   /**
-   * Reverse geocode helper
+   * Reverse geocode helper — resolves coordinates to a formatted street address
+   * via the Google Maps Geocoder loaded by useJsApiLoader above.
    */
-  const reverseGeocodeLocal = useCallback((...args) => reverseGeocode(...args), [reverseGeocode]);
+  const reverseGeocodeLocal = useCallback((coords) => {
+    if (!window.google?.maps) return;
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ location: coords }, (results, status) => {
+      if (status === 'OK' && results?.[0]) {
+        setFormattedAddress(results[0].formatted_address);
+      }
+    });
+  }, []);
 
   /**
    * Capture GPS location

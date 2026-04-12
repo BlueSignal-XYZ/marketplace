@@ -2229,6 +2229,12 @@ export {
   NFT_API,
   DeviceAPI,
   MarketplaceAPI,
+  // Payments
+  StripeAPI,
+  // QR / device provisioning
+  QRCodeAPI,
+  // Regional programs
+  VirginiaAPI,
   // Commercial pipeline APIs
   CustomerAPI,
   SiteAPI,
