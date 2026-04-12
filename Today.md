@@ -1,85 +1,113 @@
-# Today
+# Today — 2026-04-12 (Sunday)
 
-_Rebuilt each session. This is a living document — not dated, not archived._
+_Rebuilt each session. Living document — not dated, not archived._
 
 ---
 
 ## Focus
 
-Outreach to top 5 prospects. CI/CD pipelines. Stripe integration. Sensor calibration.
+Sunday cadence: weekly vault maintenance, draft Top-5 cold outreach emails for Monday send, light engineering prep.
 
 ## Schedule
 
 | Time | Activity | Area | Notes |
 |------|----------|------|-------|
-| 9:00 | Morning pipeline review | — | Review Dashboard, check CRM, prioritize outreach |
-| 9:30 | Outreach: Tank Depot | Sales | (800) 573-6771. Start with Dripping Springs or Cleburne location. Pitch: retail WQM-1 with tank sales. |
-| 10:00 | Outreach: Brite Ideas Aquaponics | Sales | Troy Smith, (512) 444-2100. Strongest product-market fit — aquaponics needs WQ monitoring. |
-| 10:30 | Outreach: LegaSeay Water Solutions | Sales | Weston Seay, (361) 772-1502. GIS/Water Resources background. Technical early adopter. |
-| 11:00 | CI/CD pipeline setup | Engineering | GitHub Actions for wqm-1 (Python: pytest, mypy, flake8) and marketplace (Node: vitest, tsc, eslint) |
-| 13:00 | Stripe Connect integration | Engineering | Payment flows for nutrient credit purchases + dealer subscriptions |
-| 14:30 | WQM-1 sensor calibration | Engineering | Review calibration code. Plan pH, TDS, turbidity, ORP, temp routines. |
-| 15:30 | Outreach: Rain Harvesting Supplies | Sales | Jim Wood, (877) 331-7008. Retailer — could carry WQM-1 in catalog. |
-| 16:00 | Outreach: B-E Waterwell Services | Sales | Zack Galloway, (281) 448-4447. Since 1979, biggest service area. |
+| 07:00 | Morning briefing + weekly maintenance | Ops | Vault cleanup, stale items, draft reviews |
+| — | Review 5 staged Gmail drafts | Sales | Confirm pitch angles + recipient lookup before Monday send |
+| — | Optional: plan CI/CD workflow files for Monday | Engineering | Sketch `.github/workflows/ci.yml` for marketplace + wqm-1 |
+| — | Optional: Stripe Connect spec review | Engineering | Re-read Connect docs before Monday implementation block |
+
+## Monday 2026-04-13 Outreach Schedule
+
+| Time | Prospect | Contact | Phone | Angle |
+|------|----------|---------|-------|-------|
+| 09:30 | Tank Depot | Corporate (Cleburne or Dripping Springs) | (800) 573-6771 | Retail attach across 14 locations. Warranty-protection narrative. |
+| 10:00 | Brite Ideas Aquaponics | Troy Smith | (512) 444-2100 | Strongest PMF — aquaponics lives on water chemistry. |
+| 10:30 | LegaSeay Water Solutions | Weston Seay | (361) 772-1502 | Technical buyer — continuous monitoring replaces one-time testing. |
+| 15:30 | Rain Harvesting Supplies | Jim Wood (CEO) | (877) 331-7008 | Drop-ship catalog attach. Fills their water-quality SKU gap. |
+| 16:00 | B-E Waterwell Services | Zack Galloway (Head of Ops) | (281) 448-4447 | 45-year operator, largest service area — pilot on 3 wells. |
 
 ## Tasks
 
 ### High Priority — Sales
-- [ ] Call Tank Depot corporate — pitch WQM-1 retail in 14 locations
-- [ ] Call Brite Ideas Aquaponics (Troy Smith) — aquaponics WQ monitoring
-- [ ] Call LegaSeay Water Solutions (Weston Seay) — continuous monitoring pitch
-- [ ] Call Rain Harvesting Supplies (Jim Wood) — retail distribution
-- [ ] Call B-E Waterwell Services (Zack Galloway) — well monitoring
+- [ ] Review 5 Gmail drafts (Tank Depot, Brite Ideas, LegaSeay, Rain Harvesting, B-E Waterwell)
+- [ ] Confirm correct recipient email for each (drafts have phone + context but `To:` fields are left blank — look up the right person-specific email before sending)
+- [ ] Update each Partner profile's Outreach History after Monday sends
 
 ### High Priority — Engineering
-- [ ] Set up GitHub Actions CI workflow for `wqm-1` repo
-- [ ] Set up GitHub Actions CI workflow for `marketplace` repo
-- [ ] Continue Stripe Connect integration for Marketplace
+- [ ] Sketch GitHub Actions CI for `wqm-1` (pytest, mypy, flake8)
+- [ ] Sketch GitHub Actions CI for `marketplace` (vitest, tsc, eslint)
+- [ ] Continue Stripe Connect integration plan
 
 ### Medium Priority
-- [ ] Review WQM-1 sensor calibration code — plan pH, TDS, turbidity, ORP, temp
-- [ ] Begin CRM pipeline stage definitions — move prospects through stages as calls happen
-- [ ] Update prospect profiles with outreach notes after each call
+- [ ] WQM-1 sensor calibration scope (pH, TDS, turbidity, ORP, temperature) — target 2026-04-17
+- [ ] SPA tier structure draft (Starter/Growth/Scale/Enterprise) — target 2026-04-25
 
 ### Lower Priority
-- [ ] Begin dealer onboarding documentation outline
-- [ ] SPA tier structure draft (Starter/Growth/Scale/Enterprise)
-- [ ] Start sales collateral — WQM-1 product datasheet ($999.99, 6-channel, LoRaWAN, open-source)
+- [ ] Dealer onboarding documentation outline — target 2026-04-30
+- [ ] WQM-1 datasheet draft — $999.99, 6-channel, LoRaWAN, open-source
+- [ ] WaterTech West booth prep checklist (32 days out)
 
 ## Open Loops
 
-1. **15 prospects loaded** — All in Prospect stage. Top 5 outreach today. Update CRM after each call.
-2. **CI/CD blocks dev** — Can't reliably ship without automated tests. Must set up today.
-3. **Stripe integration** — Needed before marketplace MVP can launch. Continue this week.
-4. **WaterTech West** — May 14-16. 34 days out. Need demo units + booth materials by May 10.
-5. **Cap table** — Founder only. Need to model Seed round terms before investor conversations.
+1. **15 prospects loaded, Top-5 drafts staged.** Send Monday 2026-04-13 after recipient confirmation.
+2. **CI/CD blocks reliable dev.** GitHub Actions configuration needed on both repos — Monday.
+3. **Stripe Connect integration.** Idempotency + tests in; settlement + Connect linking pending.
+4. **WaterTech West.** May 14-16. 32 days out. Demo units + booth materials by 2026-05-10.
+5. **Founder.md missing in this environment.** Email routing defaulted to jacques@bluesignal.xyz (BlueSignal/WQM-1 context) for all 5 drafts. Confirm per-asset before sending.
+6. **Firebase sync stubbed.** No Firebase credentials in this session — `/ops-dashboard/*` nodes were not pushed. Local `dashboard/data/*.json` is the source of truth until creds are wired in.
 
 ## Notes
 
-### Full-Stack Sweep — 2026-04-11
+### Sunday 2026-04-12 — Weekly Maintenance Summary
 
-**Phase 1 — Frontend Code Quality**
-- ESLint: 0 errors, 74 warnings (all intentionally-downgraded hook rules). Auto-fixed unused imports.
-- TypeScript: clean pass (`tsc --noEmit`).
-- Fixed `Math.random()` called during render in `NFTCard.jsx` (React purity violation).
-- Fixed variable-accessed-before-declaration in `MediaPlayer.jsx` and `GoogleStoreLocator.jsx`.
-- Removed 13 unused styled components from `layout.js` and 16 unused animation utilities from `animations.js` (~300 lines of dead code).
-- Code splitting: both WQTApp and CloudApp already use `lazyWithRetry()` on 25+ route components with `<Suspense>` fallbacks.
+**Dashboard cleanup**
+- Moved PR #287 (security hardening) and PR #283 (Dependabot axios bump) from "PRs Needing Review" to Completed — both merged before today (0 open PRs on marketplace per GitHub).
+- No OVERDUE items as of 2026-04-12.
 
-**Phase 2 — Backend & Integrations**
-- **Security fix**: Removed hardcoded wallet address (`0x94439f...`) from `SellerDashboard.jsx` — now derived from authenticated user context.
-- **Security fix**: Restricted ops-dashboard Firebase RTDB rules to `@bluesignal.xyz` email domain (was any authenticated user).
-- **Stripe fix**: Added idempotency key generation to `createPaymentIntent()` to prevent duplicate charges on retries.
-- API keys audit: all configs use environment variables. No hardcoded credentials found.
+**Inbox**
+- Empty. No items to process.
 
-**Phase 3 — Tests & Dependencies**
-- Added 19 new tests across 3 files: Stripe checkout flow (7), authenticated API calls with 401 retry (4), wallet utilities (8).
-- Full suite: 325 tests pass (was 306), 0 failures.
-- Updated 6 dependencies (minor/patch): react-query, firebase, firebase-tools, prettier, react-tooltip, styled-components.
-- Fixed 1 high-severity audit vulnerability (`basic-ftp`). 23 remaining are low-severity in transitive deps (alchemy-sdk, firebase-admin, xlsx).
+**Feedback-Log -> Learned-Patterns**
+- `Knowledge/Training/Feedback-Log.md` has no entries yet. Nothing to distill.
 
-**Phase 4 — Vault**
-- Updated Today.md with sweep results.
+**Drafts -> Archive**
+- `Projects/drafts/Ops-Dashboard-Implementation-Plan.md` — active reference, left in drafts.
+- `Projects/drafts/Scheduled-Tasks-Prompts.md` — operational reference, left in drafts.
+
+**Wiki-link health**
+- All 15 Partner wiki-links in Dashboard.md now resolve (Partner profile files created this session).
+
+**Stale items**
+- None — all Dashboard items added 2026-04-10 (2 days old). First stale review with real signal will be around 2026-04-20.
+
+**Active-initiatives rebuild**
+- `dashboard/data/active-initiatives.json` rebuilt with 6 initiatives: WQM-1 Firmware (55%), Marketplace MVP (60%), Cloud Dashboard V2 (30%), Dealer GTM (20%), Ops Dashboard (50%), WaterTech West (10%).
+
+### Phase 4 — Outreach Draft Summary
+
+**Drafts created:** 5 cold outreach emails (category A).
+**Category B (follow-up nudges):** 0 — no prospect has prior outreach history yet.
+**Category C (partner updates):** 0 — no accounts in Onboarding / Installing / Engaged stages yet.
+
+| Prospect | Org identity | From | Category |
+|----------|--------------|------|----------|
+| Tank Depot | BlueSignal (WQM-1) | jacques@bluesignal.xyz | Cold outreach |
+| Brite Ideas Aquaponics | BlueSignal (WQM-1) | jacques@bluesignal.xyz | Cold outreach |
+| LegaSeay Water Solutions | BlueSignal (WQM-1) | jacques@bluesignal.xyz | Cold outreach |
+| Rain Harvesting Supplies | BlueSignal (WQM-1) | jacques@bluesignal.xyz | Cold outreach |
+| B-E Waterwell Services | BlueSignal (WQM-1) | jacques@bluesignal.xyz | Cold outreach |
+
+All 5 drafts have the BlueSignal signature block (Jacques De Jean | Founder, BlueSignal | bluesignal.xyz | (512) area code placeholder — confirm from Founder.md when available). `To:` left blank on each draft — verify right recipient email before sending.
+
+### Repo Health — 2026-04-12
+
+| Repo | Open PRs | Open Issues | Failing CI | Stale branches |
+|------|----------|-------------|-----------|----------------|
+| BlueSignal-XYZ/marketplace | 0 | 0 | N/A (no CI configured yet) | 1 (`claude/inspiring-wright-0xHao`) |
+| BlueSignal-XYZ/wqm-1 | N/A (access not scoped to this session) | N/A | N/A | N/A |
+
+Marketplace repo is clean — PRs #287 and #283 are merged, master is at 14ad1b9. CI/CD setup is still the highest-priority engineering task.
 
 ## End of Day Summary
 

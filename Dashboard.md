@@ -13,8 +13,7 @@ Priority-sorted task index. Organized by urgency tier. Every item stays here unt
 - [ ] **CI/CD pipeline setup** — Set up GitHub Actions automated testing and deployment pipelines for both `wqm-1` and `marketplace` repos. Blocks all reliable dev work. Owner: Founder. Target: 2026-04-14. (Added 2026-04-10, updated 2026-04-11)
 
 ### Engineering — PRs Needing Review
-- [ ] **Review PR #287 — Security hardening** — Role escalation fix, wallet/Stripe verification, 33 new tests (339 total passing). Critical security fix. Owner: Founder. Target: 2026-04-13. (Added 2026-04-11, updated 2026-04-11)
-- [ ] **Review PR #283 — Dependabot axios bump** — axios 1.14→1.15 in /functions. Fixes SSRF + header injection vulnerabilities. Owner: Founder. Target: 2026-04-13. (Added 2026-04-11, updated 2026-04-11)
+_No open PRs on BlueSignal-XYZ/marketplace as of 2026-04-12. See Completed section for merged items._
 
 ---
 
@@ -82,6 +81,8 @@ Priority-sorted task index. Organized by urgency tier. Every item stays here unt
 
 ## Completed
 
+- [x] **PR #287 — Security hardening** — Role escalation fix, wallet/Stripe verification, 33 new tests (339 total passing). Merged before 2026-04-12. (Added 2026-04-11, completed 2026-04-12)
+- [x] **PR #283 — Dependabot axios bump** — axios 1.14→1.15 in /functions. SSRF + header injection vulnerabilities fixed. Merged before 2026-04-12. (Added 2026-04-11, completed 2026-04-12)
 - [x] **Load Water Prospects into CRM** — 15 prospects loaded with enriched data (contacts, phones, addresses). (Added 2026-04-10, completed 2026-04-10)
 - [x] **Build prospect profiles** — 15 profiles created in `Knowledge/People/Partners/` with full research: addresses, multiple locations, owner names, services, WQM-1 fit analysis. (Added 2026-04-10, completed 2026-04-10)
 - [x] **Set up pipeline dashboard** — HTML dashboard with CRM, Team & Cap Table, products, competitive intel. Sidebar nav, terminal, iOS-compatible. (Added 2026-04-10, completed 2026-04-10)
