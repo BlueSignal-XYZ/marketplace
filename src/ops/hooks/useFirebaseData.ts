@@ -9,6 +9,34 @@ interface FirebaseDataState<T> {
   error: Error | null;
 }
 
+// Firebase RTDB stores arrays as objects with numeric keys.
+// Recursively convert numeric-keyed objects back to arrays at every level.
+function convertNumericKeysToArrays(val: unknown): unknown {
+  if (val === null || val === undefined) return val;
+  if (typeof val !== 'object') return val;
+
+  if (Array.isArray(val)) {
+    return val.map(convertNumericKeysToArrays);
+  }
+
+  const obj = val as Record<string, unknown>;
+  const keys = Object.keys(obj);
+
+  // Check if all keys are sequential integers starting from 0 — treat as array
+  if (keys.length > 0 && keys.every((k) => /^\d+$/.test(k))) {
+    return keys
+      .sort((a, b) => Number(a) - Number(b))
+      .map((k) => convertNumericKeysToArrays(obj[k]));
+  }
+
+  // Otherwise it's a regular object — recurse into each value
+  const result: Record<string, unknown> = {};
+  for (const k of keys) {
+    result[k] = convertNumericKeysToArrays(obj[k]);
+  }
+  return result;
+}
+
 // Global event emitter so edits (via useWriteBack) can trigger refetches
 // in all useFirebaseData hooks watching the same path.
 type Listener = () => void;
@@ -43,16 +71,8 @@ export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
           throw new Error(`RTDB fetch failed: ${res.status} ${res.statusText}`);
         }
 
-        let val = await res.json();
-
-        // Firebase RTDB converts arrays to objects with numeric keys.
-        if (val && typeof val === 'object' && !Array.isArray(val)) {
-          const keys = Object.keys(val);
-          const isNumericKeys = keys.every((k) => /^\d+$/.test(k));
-          if (isNumericKeys && keys.length > 0) {
-            val = keys.sort((a, b) => Number(a) - Number(b)).map((k) => val[k]);
-          }
-        }
+        const raw = await res.json();
+        const val = convertNumericKeysToArrays(raw);
 
         if (!cancelled) {
           setData(val as T | null);
@@ -70,7 +90,6 @@ export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
 
     fetchData();
 
-    // Register listener for this path
     const refresh = () => {
       if (!cancelled) fetchData();
     };
