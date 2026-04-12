@@ -17,6 +17,12 @@ const FieldWrapper = styled.div`
   gap: 0.15rem;
   flex: 1;
   min-width: 100px;
+
+  /* Stack fields full-width on phones so iPhone SE (375px) doesn't crush them. */
+  @media (max-width: 480px) {
+    min-width: 0;
+    flex-basis: 100%;
+  }
 `;
 
 const Label = styled.label`
@@ -36,6 +42,12 @@ const Input = styled.input`
   &:focus {
     border-color: ${({ theme }) => theme.colors.accent};
   }
+
+  /* 16px prevents iOS Safari auto-zoom on focus. */
+  @media (max-width: 1024px) {
+    font-size: 16px;
+    padding: 0.5rem 0.6rem;
+  }
 `;
 
 const SelectInput = styled.select`
@@ -49,6 +61,11 @@ const SelectInput = styled.select`
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.accent};
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+    padding: 0.5rem 0.6rem;
   }
 `;
 
@@ -65,6 +82,13 @@ const Btn = styled.button<{ $variant?: string }>`
 
   &:hover {
     opacity: 0.9;
+  }
+
+  @media (max-width: 480px) {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    min-height: 40px;
   }
 `;
 
@@ -111,6 +135,7 @@ export default function AddForm({ fields, onAdd, onCancel }: AddFormProps) {
           ) : (
             <Input
               type={f.type ?? 'text'}
+              inputMode={f.type === 'number' ? 'decimal' : undefined}
               value={values[f.name]}
               onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
               placeholder={f.label}

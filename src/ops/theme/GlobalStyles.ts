@@ -23,8 +23,9 @@ export const OpsGlobalStyles = createGlobalStyle`
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Prevent iOS Safari from auto-zooming on input focus (anything < 16px triggers zoom). */
-  @media (max-width: 768px) {
+  /* Prevent iOS Safari from auto-zooming on input focus (anything < 16px
+     triggers zoom). Covers iPhone (all sizes) and iPad portrait. */
+  @media (max-width: 1024px) {
     input, select, textarea {
       font-size: 16px;
     }

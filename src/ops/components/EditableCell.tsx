@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import styled from 'styled-components';
 
 const Display = styled.span`
@@ -10,7 +11,7 @@ const Display = styled.span`
     background: ${({ theme }) => theme.colors.surface2};
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     display: inline-block;
     padding: 0.4rem 0.45rem;
     min-height: 28px;
@@ -26,6 +27,12 @@ const Input = styled.input`
   outline: none;
   width: 100%;
   font-size: inherit;
+
+  /* 16px prevents iOS Safari auto-zoom on focus. Covers iPhone + iPad portrait. */
+  @media (max-width: 1024px) {
+    font-size: 16px;
+    padding: 0.35rem 0.4rem;
+  }
 `;
 
 interface EditableCellProps {
@@ -40,10 +47,6 @@ export default function EditableCell({ value, onSave, type = 'text' }: EditableC
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (editing) inputRef.current?.focus();
-  }, [editing]);
-
-  useEffect(() => {
     setDraft(String(value));
   }, [value]);
 
@@ -52,11 +55,21 @@ export default function EditableCell({ value, onSave, type = 'text' }: EditableC
     if (draft !== String(value)) onSave(draft);
   };
 
+  // iOS Safari only opens the keyboard when focus() is called synchronously
+  // inside the user-gesture handler. flushSync forces the Input to mount
+  // before focus() runs, keeping us inside the same tap context.
+  const beginEdit = () => {
+    flushSync(() => setEditing(true));
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  };
+
   if (editing) {
     return (
       <Input
         ref={inputRef}
         type={type}
+        inputMode={type === 'number' ? 'decimal' : 'text'}
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onBlur={commit}
@@ -71,5 +84,5 @@ export default function EditableCell({ value, onSave, type = 'text' }: EditableC
     );
   }
 
-  return <Display onClick={() => setEditing(true)}>{value || '—'}</Display>;
+  return <Display onClick={beginEdit}>{value || '—'}</Display>;
 }

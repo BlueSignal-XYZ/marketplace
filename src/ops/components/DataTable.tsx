@@ -5,9 +5,9 @@ export const Table = styled.table`
   border-collapse: collapse;
   font-size: 0.8rem;
 
-  /* On phones/small tablets, let the table scroll horizontally inside its panel
-     instead of forcing the whole page to scroll. */
-  @media (max-width: 768px) {
+  /* On phones and iPad portrait, let the table scroll horizontally inside its
+     panel instead of forcing the whole page to scroll. */
+  @media (max-width: 1024px) {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -23,7 +23,7 @@ export const Th = styled.th`
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   white-space: nowrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     padding: 0.55rem 0.6rem;
     font-size: 0.82rem;
   }
@@ -35,7 +35,7 @@ export const Td = styled.td`
   color: ${({ theme }) => theme.colors.text2};
   vertical-align: top;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     padding: 0.55rem 0.6rem;
     font-size: 0.82rem;
   }
