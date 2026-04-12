@@ -167,6 +167,11 @@ export default function TeamCapPanel() {
     setShowAddRound(false);
   };
 
+  const deleteRound = (index: number) => {
+    if (!confirm(`Remove ${rounds[index].name}?`)) return;
+    save({ members, capTable: { ...capTable, rounds: rounds.filter((_, i) => i !== index) } });
+  };
+
   const actions = (
     <BtnRow>
       <Btn onClick={() => setShowAddMember(!showAddMember)}>+ Member</Btn>
@@ -240,6 +245,7 @@ export default function TeamCapPanel() {
             <Th>Status</Th>
             <Th>Target Raise</Th>
             <Th>Valuation</Th>
+            <Th></Th>
           </tr>
         </thead>
         <tbody>
@@ -259,6 +265,11 @@ export default function TeamCapPanel() {
               </Td>
               <Td>{r.targetRaise != null ? `$${r.targetRaise.toLocaleString()}` : '—'}</Td>
               <Td>{r.targetValuation != null ? `$${r.targetValuation.toLocaleString()}` : '—'}</Td>
+              <Td>
+                <Btn $danger onClick={() => deleteRound(i)}>
+                  Remove
+                </Btn>
+              </Td>
             </Tr>
           ))}
         </tbody>
