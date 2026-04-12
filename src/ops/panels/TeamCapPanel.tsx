@@ -5,7 +5,6 @@ import { useWriteBack } from '../hooks/useWriteBack';
 import Panel from '../components/Panel';
 import { Table, Th, Td, Tr } from '../components/DataTable';
 import EditableCell from '../components/EditableCell';
-import PriorityBadge from '../components/PriorityBadge';
 import AddForm, { type FieldDef } from '../components/AddForm';
 import type { TeamCapTable, TeamMember, FundingRound } from '../types';
 
@@ -101,6 +100,24 @@ const ROUND_FIELDS: FieldDef[] = [
 ];
 
 const BAR_COLORS = ['#4f8ff7', '#a78bfa', '#34d399', '#fbbf24', '#fb923c', '#f87171', '#9498a8'];
+
+const ROUND_STATUSES: FundingRound['status'][] = ['planned', 'reserved', 'issued'];
+
+const StatusSelect = styled.select`
+  background: ${({ theme }) => theme.colors.bg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 3px;
+  color: ${({ theme }) => theme.colors.text};
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  outline: none;
+  text-transform: capitalize;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.accent};
+  }
+`;
 
 export default function TeamCapPanel() {
   const { data, loading } = useFirebaseData<TeamCapTable>('/ops-dashboard/team-cap-table');
@@ -251,7 +268,9 @@ export default function TeamCapPanel() {
         <tbody>
           {rounds.map((r, i) => (
             <Tr key={i}>
-              <Td style={{ color: '#e2e4ea', fontWeight: 600 }}>{r.name}</Td>
+              <Td style={{ color: '#e2e4ea', fontWeight: 600 }}>
+                <EditableCell value={r.name} onSave={(v) => updateRound(i, 'name', v)} />
+              </Td>
               <Td>
                 <EditableCell
                   value={r.shares}
@@ -259,12 +278,39 @@ export default function TeamCapPanel() {
                   onSave={(v) => updateRound(i, 'shares', v)}
                 />
               </Td>
-              <Td>{r.price != null ? `$${r.price}` : '—'}</Td>
               <Td>
-                <PriorityBadge value={r.status} />
+                <EditableCell
+                  value={r.price ?? ''}
+                  type="number"
+                  onSave={(v) => updateRound(i, 'price', v)}
+                />
               </Td>
-              <Td>{r.targetRaise != null ? `$${r.targetRaise.toLocaleString()}` : '—'}</Td>
-              <Td>{r.targetValuation != null ? `$${r.targetValuation.toLocaleString()}` : '—'}</Td>
+              <Td>
+                <StatusSelect
+                  value={r.status}
+                  onChange={(e) => updateRound(i, 'status', e.target.value)}
+                >
+                  {ROUND_STATUSES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </StatusSelect>
+              </Td>
+              <Td>
+                <EditableCell
+                  value={r.targetRaise ?? ''}
+                  type="number"
+                  onSave={(v) => updateRound(i, 'targetRaise', v)}
+                />
+              </Td>
+              <Td>
+                <EditableCell
+                  value={r.targetValuation ?? ''}
+                  type="number"
+                  onSave={(v) => updateRound(i, 'targetValuation', v)}
+                />
+              </Td>
               <Td>
                 <Btn $danger onClick={() => deleteRound(i)}>
                   Remove
