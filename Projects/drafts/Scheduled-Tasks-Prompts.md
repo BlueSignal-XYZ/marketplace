@@ -146,26 +146,15 @@ PHASE 3.5 — FIREBASE SYNC
 PHASE 4 — OUTREACH & FOLLOW-UP DRAFTS
 Using the Gmail MCP tool (gmail_create_draft), create draft emails for each of the following categories. Write as Jacques De Jean (the founder) — first person, direct, sharp, no corporate jargon. Lead with value, not features. Every email must have a clear next step or ask. Do NOT send — leave all as drafts for review.
 
-IMPORTANT — Read Knowledge/People/Team/Founder.md for email routing rules. Jacques operates across three organizations. Each email MUST use the correct sender identity, CC, and context:
+IMPORTANT — Read Knowledge/People/Team/Founder.md (local, gitignored) before drafting any email. It is the single source of truth for Jacques' identity, positioning rules, email routing (sender + CC), signature blocks, audience tone matrix, and scenario handling across the three organizations.
 
-EMAIL ROUTING:
-- BlueSignal (hardware, WQM-1, sensors, monitoring): Send from jacques@bluesignal.xyz
-- WaterQuality.Trading (marketplace, credits, trading): Send from jacques@bluesignal.xyz
-- Aquaria.world (aquaculture network, GC installers, dealer-installer network): Send from jacques@aquaria.world, CC jacques@aquaria.world
-- If unclear which org: default to jacques@bluesignal.xyz
+Apply Founder.md verbatim:
+- § 3 Positioning Rules — determines which entity to lead with and how / whether to cross-mention.
+- § 4 Email Routing — pick the correct From / CC / signature block per org context; never blur brands. If an email would touch multiple orgs, draft it for the primary org only and stage a separate follow-up thread for the second.
+- § 5 Audience Tone Matrix — match tone to builder / technical buyer / utility / investor.
+- § 6 Common Scenarios — canonical responses for recurring question patterns (including monitoring-of-AWG-output type crossovers).
 
-BRAND SEPARATION — CRITICAL:
-- BlueSignal = hardware brand (WQM-1, sensors, monitoring devices)
-- WaterQuality.Trading = marketplace/credits brand (nutrient credits, trading platform)
-- Aquaria.world = aquaculture dealer-installer network
-- NEVER blur these brands. If an email touches multiple orgs, lead with the one most relevant to the recipient's business.
-
-SIGNATURE:
-- Use HTML contentType for all emails.
-- Append the appropriate signature block at the bottom of every email body:
-  - BlueSignal context: "Jacques De Jean | Founder, BlueSignal | bluesignal.xyz | (512) area code from profile"
-  - Aquaria context: "Jacques De Jean | Consultant, Aquaria | aquaria.world"
-  - WQT context: "Jacques De Jean | Founder, WaterQuality.Trading | waterquality.trading"
+Use HTML contentType for all emails and append the matching signature block from Founder.md § 4. If the org context is unclear, apply the default routing specified in Founder.md § 4.
 
 A) COLD PROSPECT OUTREACH
 For each prospect in Knowledge/People/Partners/ whose CRM stage is "Prospect" and has NO outreach history yet:
