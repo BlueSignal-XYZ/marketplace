@@ -9,6 +9,15 @@ interface FirebaseDataState<T> {
   error: Error | null;
 }
 
+// Global event emitter so edits (via useWriteBack) can trigger refetches
+// in all useFirebaseData hooks watching the same path.
+type Listener = () => void;
+const listeners: Map<string, Set<Listener>> = new Map();
+
+export function notifyRefresh(path: string) {
+  listeners.get(path)?.forEach((fn) => fn());
+}
+
 export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +35,6 @@ export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
           return;
         }
 
-        // Get the user's ID token for authenticated REST API access
         const token = await user.getIdToken();
         const url = `${DB_URL}${path}.json?auth=${token}`;
         const res = await fetch(url);
@@ -38,7 +46,6 @@ export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
         let val = await res.json();
 
         // Firebase RTDB converts arrays to objects with numeric keys.
-        // Convert back to arrays when all keys are sequential integers.
         if (val && typeof val === 'object' && !Array.isArray(val)) {
           const keys = Object.keys(val);
           const isNumericKeys = keys.every((k) => /^\d+$/.test(k));
@@ -63,8 +70,16 @@ export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
 
     fetchData();
 
+    // Register listener for this path
+    const refresh = () => {
+      if (!cancelled) fetchData();
+    };
+    if (!listeners.has(path)) listeners.set(path, new Set());
+    listeners.get(path)!.add(refresh);
+
     return () => {
       cancelled = true;
+      listeners.get(path)?.delete(refresh);
     };
   }, [path]);
 
