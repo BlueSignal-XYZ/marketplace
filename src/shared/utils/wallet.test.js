@@ -1,11 +1,32 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { hasWalletProvider, connectAndSign, getConnectedAddress } from './wallet';
 
+// Hoisted mock so each test can override the send/signMessage behavior.
+const { mockSend, mockSignMessage, mockGetSigner } = vi.hoisted(() => ({
+  mockSend: vi.fn(),
+  mockSignMessage: vi.fn(),
+  mockGetSigner: vi.fn(),
+}));
+
+vi.mock('ethers', () => {
+  function BrowserProvider() {
+    return {
+      send: mockSend,
+      getSigner: mockGetSigner,
+    };
+  }
+  return { BrowserProvider };
+});
+
 describe('wallet utilities', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Clean up window.ethereum between tests
     delete window.ethereum;
+    mockSend.mockReset();
+    mockSignMessage.mockReset();
+    mockGetSigner.mockReset();
+    mockGetSigner.mockResolvedValue({ signMessage: mockSignMessage });
   });
 
   describe('hasWalletProvider', () => {
@@ -63,17 +84,38 @@ describe('wallet utilities', () => {
 
     it('should throw when no accounts are returned', async () => {
       window.ethereum = {};
+      mockSend.mockResolvedValue([]);
 
-      // Mock BrowserProvider via ethers
-      vi.doMock('ethers', () => ({
-        BrowserProvider: vi.fn().mockImplementation(() => ({
-          send: vi.fn().mockResolvedValue([]),
-        })),
-      }));
+      await expect(connectAndSign()).rejects.toThrow(/No accounts returned/);
+    });
 
-      // Re-import after mock
-      const { connectAndSign: freshConnect } = await import('./wallet');
-      await expect(freshConnect()).rejects.toThrow();
+    it('should throw when accounts array is null', async () => {
+      window.ethereum = {};
+      mockSend.mockResolvedValue(null);
+
+      await expect(connectAndSign()).rejects.toThrow(/No accounts returned/);
+    });
+
+    it('should return address, signature, and message on success', async () => {
+      window.ethereum = {};
+      mockSend.mockResolvedValue(['0xDEADBEEF']);
+      mockSignMessage.mockResolvedValue('0xsignature');
+
+      const result = await connectAndSign();
+
+      expect(result.address).toBe('0xDEADBEEF');
+      expect(result.signature).toBe('0xsignature');
+      expect(result.message).toMatch(/Sign this message to link your wallet/);
+      expect(mockGetSigner).toHaveBeenCalledWith('0xDEADBEEF');
+      expect(mockSignMessage).toHaveBeenCalledWith(result.message);
+    });
+
+    it('should propagate errors from signMessage (user rejection)', async () => {
+      window.ethereum = {};
+      mockSend.mockResolvedValue(['0xabc']);
+      mockSignMessage.mockRejectedValue(new Error('User rejected'));
+
+      await expect(connectAndSign()).rejects.toThrow('User rejected');
     });
   });
 });
