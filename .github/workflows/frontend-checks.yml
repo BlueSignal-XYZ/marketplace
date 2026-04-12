@@ -164,7 +164,7 @@ jobs:
 
       - name: Post Lighthouse results to PR
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const scores = {
@@ -260,7 +260,7 @@ jobs:
           echo "SIZES_EOF" >> "$GITHUB_OUTPUT"
 
       - name: Post bundle size report to PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const body = `${{ steps.sizes.outputs.report }}`;
