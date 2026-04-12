@@ -18,28 +18,48 @@ async function listDevices(req, res) {
       return res.status(400).json({ success: false, error: "Missing userId" });
     }
 
+    // Optional server-side filters
+    //   ?siteId=<string>           restrict to devices assigned to a specific site
+    //   ?installerId=<string>      restrict to devices commissioned by a given installer
+    // Both filters validate input length/shape before querying to avoid
+    // unbounded string attacks in Firebase queries.
+    const siteId = typeof req.query.siteId === "string" ? req.query.siteId.trim() : null;
+    const installerId =
+      typeof req.query.installerId === "string" ? req.query.installerId.trim() : null;
+
+    if (siteId && (siteId.length > 128 || !/^[\w-]+$/.test(siteId))) {
+      return res.status(400).json({ success: false, error: "Invalid siteId" });
+    }
+    if (installerId && (installerId.length > 128 || !/^[\w-]+$/.test(installerId))) {
+      return res.status(400).json({ success: false, error: "Invalid installerId" });
+    }
+
     const db = admin.database();
     const snap = await db.ref("devices").orderByChild("ownerId").equalTo(uid).once("value");
     const raw = snap.val() || {};
 
-    const devices = Object.entries(raw).map(([id, val]) => ({
-      id,
-      name: val.name || id,
-      status: val.status || "inactive",
-      onlineStatus: val.onlineStatus || (val.status === "active" ? "online" : "offline"),
-      siteId: val.siteId || val.installation?.siteId || null,
-      battery: val.battery ?? 0,
-      lastReadingAt: val.lastReadingAt || val.lastReading || "",
-      location: {
-        latitude: val.latitude || val.location?.latitude || 0,
-        longitude: val.longitude || val.location?.longitude || 0,
-        address: val.address || val.location?.address || "",
-        city: val.city || val.location?.city || "",
-        state: val.state || val.location?.state || "",
-        country: val.country || val.location?.country || "US",
-      },
-      creditsGenerated: val.creditsGenerated || 0,
-    }));
+    const devices = Object.entries(raw)
+      .map(([id, val]) => ({
+        id,
+        name: val.name || id,
+        status: val.status || "inactive",
+        onlineStatus: val.onlineStatus || (val.status === "active" ? "online" : "offline"),
+        siteId: val.siteId || val.installation?.siteId || null,
+        installerId: val.installation?.installerId || val.installerId || null,
+        battery: val.battery ?? 0,
+        lastReadingAt: val.lastReadingAt || val.lastReading || "",
+        location: {
+          latitude: val.latitude || val.location?.latitude || 0,
+          longitude: val.longitude || val.location?.longitude || 0,
+          address: val.address || val.location?.address || "",
+          city: val.city || val.location?.city || "",
+          state: val.state || val.location?.state || "",
+          country: val.country || val.location?.country || "US",
+        },
+        creditsGenerated: val.creditsGenerated || 0,
+      }))
+      .filter((d) => (siteId ? d.siteId === siteId : true))
+      .filter((d) => (installerId ? d.installerId === installerId : true));
 
     res.json({ success: true, data: devices });
   } catch (error) {

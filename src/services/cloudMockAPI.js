@@ -6,9 +6,12 @@
 // Data Flow Architecture:
 //   Pollution Gateway Pro → HTTPS (run-uplink) → Central API (API_URL) → Cloud Frontend
 //
-// TODO: Replace all mock APIs below with real backend API calls that aggregate data
-//       from Pollution Gateway Pro uploads (via gateway's API_URL ingest endpoint).
-//       Do NOT call gateway SQLite directly. Do NOT require changes to PGP repo.
+// TODO(P2, Added 2026-04-05, Updated 2026-04-12): Replace all mock APIs below
+//       with real backend API calls that aggregate data from Pollution Gateway
+//       Pro uploads (via gateway's API_URL ingest endpoint). Do NOT call
+//       gateway SQLite directly. Do NOT require changes to PGP repo.
+//       Note: runtime mock routing is now governed by src/services/demo/ —
+//       this file remains the mock data source for that service.
 //
 // PGP Sensor Field Names (must match exactly):
 //   - temp_c: Temperature in Celsius
@@ -692,8 +695,9 @@ export const CloudMockAPI = {
     },
     getTimeSeriesData: async (deviceId, range = '24h') => {
       await delay();
-      // TODO: Replace with real backend API that aggregates PGP time-series data
-      //       from gateway uploads (via API_URL ingest endpoint)
+      // TODO(P2, Added 2026-04-05, Updated 2026-04-12): Replace with real backend
+      //       API that aggregates PGP time-series data from gateway uploads
+      //       (via API_URL ingest endpoint). Tracked in CLAUDE.md open items.
 
       // Generate mock time series data using PGP sensor field names
       const points = range === '24h' ? 24 : range === '7d' ? 168 : 720;

@@ -1,10 +1,12 @@
 /**
  * Scheduled: Data Retention — runs weekly on Sunday at 03:00 UTC.
  *
- * TODO: Before 50+ devices are active, implement full archival pipeline:
+ * TODO(P2, Added 2026-04-05, Updated 2026-04-12): Before 50+ devices are
+ * active, implement full archival pipeline:
  * 1. Export readings older than 12 months to Cloud Storage as JSON
  * 2. Delete exported readings from RTDB
  * 3. Revenue-grade data must be retained for verification period + 3 years minimum
+ * Tracked in CLAUDE.md open items.
  *
  * A device reporting every 15 minutes generates ~35,000 readings/year.
  * At 50 devices that's 1.75M records annually. Without pruning, RTDB
@@ -72,8 +74,8 @@ exports.auditDataRetention = functions.pubsub
       thresholdDays: ARCHIVE_THRESHOLD_DAYS,
       timestamp: now,
       createdAt: new Date().toISOString(),
-      // TODO: When archival is implemented, add:
-      // archivedCount, archiveBucket, deleteCount
+      // TODO(P2, Added 2026-04-05, Updated 2026-04-12): When archival is
+      // implemented, add: archivedCount, archiveBucket, deleteCount
     });
 
     return null;

@@ -1,16 +1,78 @@
 /**
  * BlueSignal Credit Generation from Device Readings
- * 
+ *
  * When an enrolled device submits qualifying readings, this module:
  * 1. Checks if the device has any active enrollments in trading programs
  * 2. Validates readings meet program requirements
  * 3. Generates credit records in /credits/
- * 4. Updates enrollment counters
- * 5. Creates notification for the user
+ * 4. Writes an immutable audit record to /creditAuditLog/ capturing inputs,
+ *    formula, tier, multiplier, and result — the answer to "how was this
+ *    credit calculated?" for utilities, auditors, and institutional buyers.
+ *    See CLAUDE.md ADR "Credit audit trail as immutable RTDB node — 2026-04-12"
+ *    and the v1.1 plan §2.3.
+ * 5. Updates enrollment counters
+ * 6. Creates notification for the user
  */
 
 const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
+
+/**
+ * Write an append-only audit record for a generated credit.
+ *
+ * The audit log is readable by the credit owner and admins (see
+ * database.rules.json `/creditAuditLog`). Writes are server-only and the
+ * rule enforces no-updates-once-written.
+ *
+ * @param {import('firebase-admin').database.Database} db
+ * @param {string} creditId
+ * @param {object} entry  Must include: deviceId, programId, inputs, formula,
+ *                        result, confidenceFlags.
+ */
+async function writeCreditAudit(db, creditId, entry) {
+  if (!creditId) return;
+  try {
+    await db.ref(`creditAuditLog/${creditId}`).set({
+      ...entry,
+      creditId,
+      writtenAt: admin.database.ServerValue.TIMESTAMP,
+      schemaVersion: 1,
+    });
+  } catch (err) {
+    // Audit-log failures must not block credit generation; surface via logs.
+    console.error(`creditAuditLog write failed for credit ${creditId}:`, err);
+  }
+}
+
+/**
+ * Build the confidence-flag array for a credit. Flags surface data-quality
+ * concerns that auditors must see (e.g., calibration expired at generation
+ * time).
+ *
+ * @param {object} deviceData  Device RTDB snapshot value
+ * @param {object} readingData Readings snapshot value
+ * @returns {string[]}
+ */
+function buildConfidenceFlags(deviceData, readingData) {
+  const flags = [];
+  const now = Date.now();
+
+  const calibExpiry = deviceData?.calibration?.expiresAt;
+  if (calibExpiry && Number(calibExpiry) < now) flags.push("calibration-expired");
+
+  const sensors = readingData?.sensors || readingData || {};
+  if (sensors.ph != null && (sensors.ph < 0 || sensors.ph > 14)) {
+    flags.push("ph-out-of-range");
+  }
+  if (sensors.turbidity != null && sensors.turbidity < 0) {
+    flags.push("turbidity-negative");
+  }
+
+  if (!deviceData?.installation?.siteId) flags.push("no-site-assignment");
+  if (!readingData) flags.push("reading-missing");
+
+  return flags;
+}
 
 /**
  * Process new readings and generate credits for enrolled devices.
@@ -127,6 +189,36 @@ const onReadingCreated = functions.database
 
         await creditRef.set(creditRecord);
 
+        // 6b. Write audit trail — MUST be set after the credit record exists
+        //     so the auditLog entry references a valid creditId.
+        await writeCreditAudit(db, creditId, {
+          trigger: "onReadingCreated",
+          deviceId,
+          enrollmentId,
+          programId: enrollment.programId,
+          programType: program.type || "nutrient",
+          methodology:
+            program.methodology ||
+            `auto-${program.type}-${enrollment.programId}`,
+          verificationTier: program.verificationTier || "auto",
+          inputs: {
+            readingTimestamp: parseInt(timestamp),
+            sensors,
+            requiredSensors,
+            ratePerUnit,
+            qualityMultiplier: program.incentives?.qualityMultiplier || 1,
+          },
+          formula:
+            "creditAmount = ratePerUnit * qualityMultiplier * qualifyingReadingCount",
+          qualifyingReadingCount: 1,
+          result: {
+            creditAmount,
+            unit: program.incentives?.unit || "lbs",
+          },
+          confidenceFlags: buildConfidenceFlags(deviceData, readingData),
+          owner: enrollment.userId,
+        });
+
         // 7. Update enrollment counters
         const currentGenerated = enrollment.creditsGenerated || 0;
         const currentAvailable = enrollment.creditsAvailable || 0;
@@ -221,7 +313,40 @@ const calculateCredits = async (req, res) => {
       : 0;
 
     const ratePerUnit = program.incentives?.ratePerUnit || 0.01;
-    const totalCredits = readingsCount * ratePerUnit;
+    const qualityMultiplier = program.incentives?.qualityMultiplier || 1;
+    const totalCredits = readingsCount * ratePerUnit * qualityMultiplier;
+
+    // Dry-run audit: we record the calculation even when called via the
+    // manual calculate endpoint so auditors have a trail for previews
+    // (e.g., when an admin inspects a period before generating credits).
+    // Use the enrollmentId+fromTimestamp as a stable-ish audit key so
+    // repeated calculations for the same window update-in-place rather
+    // than spam the log.
+    const auditKey = `calc-${enrollmentId}-${fromTimestamp || "all"}-${toTimestamp || "all"}`;
+    await writeCreditAudit(db, auditKey, {
+      trigger: "calculateCredits",
+      deviceId: enrollment.deviceId,
+      enrollmentId,
+      programId: enrollment.programId,
+      programType: program.type || "nutrient",
+      methodology: program.methodology || `manual-${program.type}`,
+      verificationTier: program.verificationTier || "auto",
+      inputs: {
+        fromTimestamp: fromTimestamp || null,
+        toTimestamp: toTimestamp || null,
+        ratePerUnit,
+        qualityMultiplier,
+      },
+      formula: "totalCredits = ratePerUnit * qualityMultiplier * readingsCount",
+      qualifyingReadingCount: readingsCount,
+      result: {
+        creditAmount: totalCredits,
+        unit: program.incentives?.unit || "lbs",
+      },
+      confidenceFlags:
+        readingsCount === 0 ? ["no-readings-in-window"] : [],
+      owner: enrollment.userId,
+    });
 
     return res.json({
       enrollmentId,
@@ -229,8 +354,10 @@ const calculateCredits = async (req, res) => {
       programId: enrollment.programId,
       readingsCount,
       ratePerUnit,
+      qualityMultiplier,
       totalCredits,
       unit: program.incentives?.unit || "lbs",
+      auditKey,
     });
   } catch (error) {
     console.error("Credit calculation error:", error);

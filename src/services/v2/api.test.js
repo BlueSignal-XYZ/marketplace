@@ -80,9 +80,23 @@ vi.mock('./demoInterceptor', () => ({
   getCreditAccruals: vi.fn(),
 }));
 
-// Mock demoMode utility — default to non-demo
+// Mock the unified demo service — default to non-demo.
+// api.js imports from `../demo`, which is now the single entry point.
+// The legacy `utils/demoMode` module is still mocked below to cover any
+// transitive imports that haven't migrated yet.
+vi.mock('../demo', () => ({
+  isDemoMode: vi.fn(() => false),
+  mockMarketplaceResponse: vi.fn(() => ({})),
+  setDemoMode: vi.fn(),
+  clearDemoMode: vi.fn(),
+  getDemoHintForScreen: vi.fn(() => null),
+  assertDemoMode: vi.fn(),
+}));
 vi.mock('../../utils/demoMode', () => ({
   isDemoMode: vi.fn(() => false),
+  setDemoMode: vi.fn(),
+  clearDemoMode: vi.fn(),
+  getDemoHintForScreen: vi.fn(() => null),
 }));
 
 // Need to re-import after mocks are set up

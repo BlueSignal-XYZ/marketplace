@@ -250,6 +250,31 @@
       }
     },
 
+    "creditAuditLog": {
+      "$creditId": {
+        ".read": "auth != null && (root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' || data.child('owner').val() === auth.uid || root.child('credits').child($creditId).child('ownership').child('currentOwner').val() === auth.uid)",
+        ".write": "auth != null && root.child('users').child(auth.uid).child('profile').child('role').val() === 'admin' && !data.exists()",
+        ".validate": "newData.hasChildren(['trigger', 'deviceId', 'programId', 'formula', 'result'])",
+
+        "trigger": { ".validate": "newData.isString() && newData.val().matches(/^(onReadingCreated|calculateCredits|manualAdjust)$/)" },
+        "creditId": { ".validate": "newData.isString()" },
+        "deviceId": { ".validate": "newData.isString()" },
+        "enrollmentId": { ".validate": "newData.isString()" },
+        "programId": { ".validate": "newData.isString()" },
+        "programType": { ".validate": "newData.isString()" },
+        "methodology": { ".validate": "newData.isString()" },
+        "verificationTier": { ".validate": "newData.isString()" },
+        "formula": { ".validate": "newData.isString()" },
+        "qualifyingReadingCount": { ".validate": "newData.isNumber()" },
+        "owner": { ".validate": "newData.isString()" },
+        "writtenAt": { ".validate": "newData.isNumber()" },
+        "schemaVersion": { ".validate": "newData.isNumber()" },
+        "inputs": { ".validate": true },
+        "result": { ".validate": true },
+        "confidenceFlags": { ".validate": true }
+      }
+    },
+
     "listings": {
       ".read": true,
       "$listingId": {

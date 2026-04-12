@@ -1,6 +1,67 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file is the operating manual for any AI agent — current Opus/Sonnet class or future Mythos-tier — touching this repository. Read this before making changes.
+
+## Core Principles
+
+1. **Never break tri-mode deployment.** Run `npm run build` before any PR. All four targets (wqt, cloud, landing, ops) must compile cleanly.
+2. **Design system tokens are law.** No hardcoded colors, spacing, or fonts. Use `src/design-system/`.
+3. **Demo mode is fully isolated.** Zero production imports from mock modules. The single entry point is `src/services/demo/` — do not add new mock toggles anywhere else.
+4. **Show your work on credits.** Every credit calculation writes a `creditAuditLog` entry capturing inputs, formula, tier, multiplier, and result. This is the answer to "how was this credit calculated?" for utilities, auditors, and investors.
+5. **Two brands, always.** BlueSignal = hardware (cloud.bluesignal.xyz, bluesignal.xyz). WaterQuality.Trading = marketplace (waterquality.trading). Never cross the wires.
+6. **Stage, don't suggest.** Prepare the deliverable — commit-ready code, drafted email, created calendar event, written SOP — and present for approval. Do not describe work that could instead be done.
+
+## Security Boundaries
+
+The marketplace repo is **public**. Mythos-class models capable of autonomous vulnerability discovery will point at public GitHub repos when they reach GA. Assume adversarial review.
+
+- **No secrets in client-side code.** All sensitive values via `VITE_` env vars or backend-only. No API keys, service account JSON, or tokens committed.
+- **All API endpoints validate input types and ranges before processing.** Validate at the boundary — do not trust request bodies.
+- **Firebase security rules enforce auth on all write operations.** Root rules `".read": false, ".write": false` — grant access node-by-node with explicit auth predicates.
+- **Sensor reading ingestion validates device ownership and reading ranges before write.** pH 0–14, turbidity non-negative, temperature realistic bounds. Reject readings from devices not owned by the authenticated user.
+- **CORS restricted to expected origins.** waterquality.trading, cloud.bluesignal.xyz, bluesignal.xyz, ops.bluesignal.xyz — no wildcards.
+- **Rate limiting on public-facing Cloud Function endpoints.** Pre-order capture, readings ingestion, contact form. Bound concurrent requests per IP.
+- **No destructive RTDB writes without a targeted child path.** Never write to `/` or wildcard paths. Every `ref()` path must be specific.
+
+When introducing a new endpoint, write the security audit entry in `docs/security/` before merging. See `docs/security/README.md` for the template.
+
+## Open Items
+
+Format: `- [ ] {description} — Added YYYY-MM-DD, Updated YYYY-MM-DD, Priority P0-P3`
+
+- [ ] Unify mock/demo modes into single `src/services/demo/` entry — Added 2026-04-12, Updated 2026-04-12, Priority P1 (v1.1-A, see v1.1 plan)
+- [ ] Credit audit trail surfaced in Cloud device detail page UI — Added 2026-04-12, Updated 2026-04-12, Priority P1 (backend in; UI pending)
+- [ ] Installer dashboard real-API wiring (needs commission-by-installer index) — Added 2026-04-12, Updated 2026-04-12, Priority P2
+- [ ] HubSpot trigger deployment via manual CI workflow dispatch — Added 2026-04-12, Updated 2026-04-12, Priority P2
+- [ ] Legacy `?app=landing` configurator — track analytics, remove after 30 days of zero traffic — Added 2026-04-12, Updated 2026-04-12, Priority P3
+- [ ] Cloud Storage archival + RTDB deletion before 50+ devices (functions/index.js:959, scheduled/dataRetention.js) — Added 2026-04-12, Updated 2026-04-12, Priority P2
+- [ ] Signature-based wallet-ownership verification in v2/blockchain.js — Added 2026-04-12, Updated 2026-04-12, Priority P1
+- [ ] Historical price/sparkline tracking in v2/market.js — Added 2026-04-12, Updated 2026-04-12, Priority P3
+- [ ] Component-layer TypeScript migration (v1.2 scope) — Added 2026-04-12, Updated 2026-04-12, Priority P2
+
+Any TODO older than 60 days without a priority gets triaged — assigned a P-tier or explicitly marked "won't fix" with rationale.
+
+## Architecture Decision Log
+
+Format: `### {Decision} — {YYYY-MM-DD}\nContext: ...\nAlternatives: ...\nDecision: ...\nRationale: ...`
+
+### Quad-site isolation for Landing + Ops Dashboard — 2025-Q4
+- **Context**: Landing (bluesignal.xyz) and Ops (ops.bluesignal.xyz) have different trust models and dependency footprints than the Cloud/Marketplace shared app.
+- **Alternatives**: (a) Share `main.jsx` entry with runtime mode detection, (b) separate top-level entry points.
+- **Decision**: Separate entry points (`landing.html`, `ops.html`) with zero shared imports from `src/components/`, `src/context/`, `src/scripts/`.
+- **Rationale**: Smaller attack surface, independent bundle size, no cross-brand code leakage, auth-gating of Ops is trivially enforceable.
+
+### Single demo-mode entry point — 2026-04-12
+- **Context**: Two parallel mock systems existed (`back_door.js` `USE_MARKETPLACE_MOCKS` + `demoInterceptor.js`/`cloudMockAPI.js`).
+- **Alternatives**: (a) Keep both with a shared env flag, (b) consolidate behind one service, (c) remove mock-mode entirely.
+- **Decision**: Single `src/services/demo/` module is the sole demo-mode entry. `back_door.js` imports `isDemoMode` and `mockMarketplaceResponse` from it. `demoInterceptor.js` also delegates activation to the same function.
+- **Rationale**: Deterministic isolation boundary — when demo mode is off, there is exactly one branch to prove is dead. Agents and humans reading the code can answer "is this mock or real?" in one lookup.
+
+### Credit audit trail as immutable RTDB node — 2026-04-12
+- **Context**: Every credit generation must be answerable to "how was this calculated?" for utilities, auditors, institutional buyers. Upstream of EU AI Act automated-audit requirements (Aug 2, 2026).
+- **Alternatives**: (a) Log to `console.log`, (b) embed in credit record, (c) dedicated append-only node.
+- **Decision**: Append-only `creditAuditLog/{creditId}` node in RTDB. Readable by credit owner + admins. Written by `creditGeneration.onReadingCreated` and `calculateCredits`. Read-only from client (no updates, no deletes).
+- **Rationale**: Separation of concerns — credit records describe the asset, audit log describes provenance. Append-only semantics are enforceable in Firebase rules via `.write: !data.exists()`. Queryable by creditId without bloating credit record payloads.
 
 ## Project Overview
 

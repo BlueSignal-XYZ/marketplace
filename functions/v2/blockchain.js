@@ -71,7 +71,9 @@ async function linkWallet(req, res) {
       return res.status(400).json({ success: false, error: "Missing userId or walletAddress" });
     }
 
-    // TODO: Verify signature proves wallet ownership
+    // TODO(P1, Added 2026-04-05, Updated 2026-04-12): Verify signature proves
+    // wallet ownership. Without this, a user can claim any wallet address.
+    // See docs/security/v1.1-hardening-audit.md SR-07.
     const db = admin.database();
     const now = new Date().toISOString();
     await db.ref(`users/${userId}/wallet`).set({

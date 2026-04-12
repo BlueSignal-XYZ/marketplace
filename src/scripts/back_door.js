@@ -2,6 +2,7 @@ import axios from 'axios';
 import configs from '../../configs';
 import { auth } from '../apis/firebase';
 import { AUTH_SESSION_EXPIRED_EVENT } from '../services/v2/client';
+import { isDemoMode, mockMarketplaceResponse } from '../services/demo';
 
 // Lightweight process polyfill for browser
 if (typeof window !== 'undefined' && typeof window.process === 'undefined') {
@@ -1397,22 +1398,14 @@ const CommissionAPI = {
 
 /*************************MARKETPLACE_ENDPOINTS************************************* */
 
-// Mock mode flag — unified with VITE_USE_MOCK_DATA so cloud dashboard pages
-// and marketplace API calls always agree on data source.
-// VITE_USE_MARKETPLACE_MOCKS overrides if explicitly set; otherwise falls
-// through to the global flag (mock ON by default, OFF only when "false").
-// Uses the same !== "false" opt-out pattern as Cloud components for consistency.
-const USE_MARKETPLACE_MOCKS = import.meta.env.VITE_USE_MARKETPLACE_MOCKS
-  ? import.meta.env.VITE_USE_MARKETPLACE_MOCKS === 'true'
-  : import.meta.env.VITE_USE_MOCK_DATA === 'true';
+// Demo / mock-mode routing is governed by src/services/demo (imported at top).
+// Do NOT re-check `VITE_*_MOCK*` env vars here; the demo service honors them
+// internally for backward compatibility. See "Single demo-mode entry point —
+// 2026-04-12" ADR in CLAUDE.md.
 
 const handleMarketplacePost = async (endpoint, body) => {
-  if (USE_MARKETPLACE_MOCKS) {
-    // Basic shape so UI doesn't explode; you can extend this later
-    if (endpoint === 'events/listings') {
-      return { nfts: [] };
-    }
-    return {};
+  if (isDemoMode()) {
+    return mockMarketplaceResponse(endpoint);
   }
 
   try {

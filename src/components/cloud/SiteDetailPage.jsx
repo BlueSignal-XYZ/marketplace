@@ -404,17 +404,25 @@ export default function SiteDetailPage() {
     setLoading(true);
     setError(null);
     try {
-      const [allSites, allDevices, allAlerts] = await Promise.all([
+      // Server-side siteId filter replaces the former load-everything-then-filter
+      // pattern (see v1.1 plan §1.2). Demo interceptor ignores the filter and
+      // returns the full device set, which is then client-side filtered below
+      // as a fallback — preserving existing demo-mode behavior.
+      const [allSites, siteScopedDevices, allAlerts] = await Promise.all([
         getSites(user?.uid).catch(() => []),
-        getDevices(user?.uid).catch(() => []),
+        getDevices(user?.uid, { siteId }).catch(() => []),
         getAlerts(user?.uid).catch(() => []),
       ]);
 
       const siteData = (allSites || []).find((s) => s.id === siteId);
       const siteDeviceIds = siteData?.devices?.length
         ? siteData.devices
-        : (allDevices || []).filter((d) => d.siteId === siteId).map((d) => d.id);
-      const siteDevices = (allDevices || []).filter((d) => siteDeviceIds.includes(d.id));
+        : (siteScopedDevices || []).filter((d) => d.siteId === siteId).map((d) => d.id);
+      // Fallback filter covers the demo-interceptor case where siteScopedDevices
+      // may contain the full set; it is a no-op when the server honored the filter.
+      const siteDevices = (siteScopedDevices || []).filter((d) =>
+        siteDeviceIds.includes(d.id)
+      );
       const siteAlerts = (allAlerts || []).filter((a) => siteDeviceIds.includes(a.deviceId));
 
       if (siteData) {

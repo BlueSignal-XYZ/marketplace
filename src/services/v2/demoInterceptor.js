@@ -193,12 +193,23 @@ function toSite(site, allDevices) {
 // ── Exported API functions (match client.ts signatures) ──────────────────
 
 /**
- * Get all devices for a user.
+ * Get all devices for a user. Honors optional filters (siteId, installerId)
+ * to mirror the real v2 client signature; SiteDetailPage relies on this for
+ * demo-mode fallback filtering.
+ * @param {string} _userId
+ * @param {{ siteId?: string, installerId?: string }} [filters]
  * @returns {Promise<DeviceSummary[]>}
  */
-export async function getDevices(_userId) {
+export async function getDevices(_userId, filters = {}) {
   const devices = await CloudMockAPI.devices.getAll();
-  return (devices || []).map(toDeviceSummary);
+  let summaries = (devices || []).map(toDeviceSummary);
+  if (filters.siteId) {
+    summaries = summaries.filter((d) => d.siteId === filters.siteId);
+  }
+  if (filters.installerId) {
+    summaries = summaries.filter((d) => d.installerId === filters.installerId);
+  }
+  return summaries;
 }
 
 /**

@@ -75,7 +75,7 @@ async function getMarketStats(req, res) {
         activeListings,
         avgNitrogenPrice: Math.round(avgNPrice * 100) / 100,
         avgPhosphorusPrice: Math.round(avgPPrice * 100) / 100,
-        nitrogenPriceChange24h: 0, // TODO: implement historical tracking
+        nitrogenPriceChange24h: 0, // TODO(P3, Added 2026-04-05, Updated 2026-04-12): historical tracking
         phosphorusPriceChange24h: 0,
         last24hTransactions: 0,
         totalVolume: 0,
@@ -121,12 +121,12 @@ async function getMarketTicker(req, res) {
       return {
         nutrientType,
         price: Math.round(avg * 100) / 100,
-        change24h: 0, // TODO: historical price tracking
+        change24h: 0, // TODO(P3, Added 2026-04-05, Updated 2026-04-12): historical price tracking
         change7d: 0,
         volume24h: 0,
         high24h: Math.round(high * 100) / 100,
         low24h: Math.round(low * 100) / 100,
-        sparkline7d: [], // TODO: historical data points
+        sparkline7d: [], // TODO(P3, Added 2026-04-05, Updated 2026-04-12): historical data points
       };
     };
 

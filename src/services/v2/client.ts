@@ -271,8 +271,21 @@ export function calculateCredits(
 
 // ── Device endpoints (Cloud) ─────────────────────────────
 
-export function getDevices(userId: string): Promise<DeviceSummary[]> {
-  return get<DeviceSummary[]>(`/v2/devices?userId=${userId}`, true);
+export interface GetDevicesFilters {
+  /** Restrict to devices assigned to a specific site. */
+  siteId?: string;
+  /** Restrict to devices commissioned by a given installer (by UID). */
+  installerId?: string;
+}
+
+export function getDevices(
+  userId: string,
+  filters: GetDevicesFilters = {}
+): Promise<DeviceSummary[]> {
+  const params = new URLSearchParams({ userId });
+  if (filters.siteId) params.set('siteId', filters.siteId);
+  if (filters.installerId) params.set('installerId', filters.installerId);
+  return get<DeviceSummary[]>(`/v2/devices?${params.toString()}`, true);
 }
 
 export function getDevice(deviceId: string): Promise<Device> {
