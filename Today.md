@@ -81,6 +81,33 @@ Outreach to top 5 prospects. CI/CD pipelines. Stripe integration. Sensor calibra
 **Phase 4 — Vault**
 - Updated Today.md with sweep results.
 
+### Full-Stack Sweep — 2026-04-12
+
+**Phase 1 — Frontend Code Quality**
+- ESLint: 0 errors, reduced warnings 58 → 47. `tsc --noEmit` clean.
+- **Bug fix**: `LocationCapture.jsx` referenced undefined `reverseGeocode` — replaced with inline Google Maps Geocoder implementation so GPS + map-pin flows now return a formatted address instead of silently throwing.
+- Wrapped `loadNotifications`, `loadPortfolio`, `loadProgram`, `loadDevices` in `useCallback` so `useEffect` dependency arrays are correct (fixes stale-closure risk in `NotificationBell`, `CreditPortfolioPage`, `TradingProgramDetailPage`).
+- `CheckoutForm` / `OrderConfirmation` Stripe effects now declare `payAmount`, `serverUrl`, `priceID` as deps — effects re-run correctly when inputs change.
+- Exposed `StripeAPI`, `QRCodeAPI`, `VirginiaAPI` namespaces from `back_door.js` (were defined but never exported — dead-code flag).
+- Removed stale `eslint-disable` in `QRScanner.jsx`; prefixed unused `user` prop in `CloudShell.jsx`.
+
+**Phase 2 — Backend & Integrations**
+- **Security regression fix**: `database.rules.json` ops-dashboard node was back to `"auth != null"` (any authenticated user). Restored `@bluesignal.xyz` email-domain restriction + `email_verified === true` check on both read and write.
+- **Webhook hardening**: HubSpot webhook no longer accepts requests when `HUBSPOT_CLIENT_SECRET` is missing (was silently skipping signature verification "for backwards compatibility" — classic forge-by-omission hole). Added unequal-buffer-length guard before `timingSafeEqual`.
+- **Webhook hardening**: TTN webhook secret comparison is now `crypto.timingSafeEqual` instead of `!==`, eliminating a byte-by-byte timing attack surface.
+- **CORS**: added `ops.bluesignal.xyz` + `ops-bluesignal.web.app` to the allow-list (quad-site architecture regression).
+
+**Phase 3 — Tests & Dependencies**
+- Added 11 new tests across 2 files:
+  - `wallet.test.js`: 5 tests covering `connectAndSign` — null/empty accounts, success path, signer propagation, user-rejection error.
+  - `creditAuditService.test.ts`: 6 tests for `getCreditAudit` + `getAuditTrailForDevice` — empty-ID short-circuit, permission-denied warning path, descending-sort contract, empty-result handling.
+- Full suite: **342 → 353 passing** (+11), 10 todo, 0 failures.
+- Dependencies: `globals` 17.4.0 → 17.5.0 (only safe minor available). All remaining audit findings require major downgrades (alchemy-sdk 3→2, firebase-admin 13→10) or have no upstream fix yet (xlsx) — deferred per sweep rules (minor/patch only).
+- Bundle note: `ops.bluesignal.xyz` build not profiled; largest source-tree deps are `mapbox-gl`, `three`, `jspdf`, `lottie-web` — all tree-shaken per-route and loaded via `lazyWithRetry`.
+
+**Phase 4 — Vault**
+- Appended sweep summary (this block) to Today.md.
+
 ## End of Day Summary
 
 _To be completed at wrap-up._
