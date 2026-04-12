@@ -12,7 +12,7 @@ Open-source water quality monitoring infrastructure. BlueSignal builds hardware 
 | **WaterQuality.Trading** | waterquality.trading | Marketplace — nutrient credit trading, deregulated water credits | Marketplace/credits brand |
 | **Aquaria.world** | aquaria.world | Aquaculture dealer-installer network, channel strategy | Consulting/advisory |
 
-**CRITICAL:** Never blur these brands. BlueSignal = hardware. WaterQuality.Trading = marketplace/credits. Aquaria = aquaculture network. Each has its own email identity and context. See [[Knowledge/People/Team/Founder]] for email routing rules.
+**CRITICAL:** Never blur these brands. BlueSignal = hardware. WaterQuality.Trading = marketplace/credits. Aquaria = aquaculture network. Each has its own email identity and context. See [[Knowledge/People/Team/Founder]] (local, gitignored) for full identity, positioning rules, email routing, signature blocks, audience tone matrix, and scenario handling — that file is the single source of truth for all outbound communication on Jacques' behalf.
 
 ## Focus Areas
 

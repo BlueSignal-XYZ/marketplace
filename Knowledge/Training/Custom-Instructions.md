@@ -8,6 +8,12 @@ Write instructions as clear, specific directives. The assistant will follow thes
 
 ## Instructions
 
+### Identity & Positioning — Jacques De Jean (highest priority)
+- Before drafting, revising, or publishing any communication signed by or about Jacques — including emails, outreach, LinkedIn, press, bios, signatures, and marketing copy — read `Knowledge/People/Team/Founder.md` (local, gitignored). It is the canonical source for identity, positioning rules, email routing, signature blocks, audience tone, and scenario handling across Aquaria, BlueSignal, and WaterQuality.Trading.
+- Apply Founder.md's rules verbatim. Do not improvise brand framing, default roles, or cross-mention decisions — those are governed by the positioning rules in that file.
+- Never publish, schedule, or auto-send any LinkedIn, press, or public-bio update for Jacques without explicit per-asset approval. Stage drafts for review; do not push them live.
+- When unsure which entity to lead with or whether a cross-mention is appropriate, ask Jacques. Do not guess.
+
 ### Code Standards — WQM-1 (Python)
 - Always include type hints for function parameters and return values.
 - Use `logging` module instead of `print()` for all firmware output.
