@@ -7,34 +7,6 @@
 
 ---
 
-## Remediation Status (updated 2026-04-12 after execution)
-
-This audit started as read-only assessment; user approved full remediation. The table below reflects what shipped on this branch.
-
-| Phase | Status | Notes |
-|-------|--------|-------|
-| A.1 — CreateSite API swap | **Shipped** | `GeocodingAPI.createSite` → `SiteAPI.create` |
-| A.2 — Listing payload reshape | **Shipped** | Backend accepts rich UI payload; auto-creates credit from site |
-| A.3 — Profile whitelist + reject unknown | **Shipped** | Username, bio, photoURL, address, privacy, notifications now accepted; role removed from self-update (admin-only) |
-| A.4 — Onboarding casing | **Shipped** | Standardized on `onboardingComplete` everywhere; OnboardingWizard uses `completeOnboarding` endpoint |
-| B.1 — AppContext.updateUser | **Shipped** | Documented as "refetch + sync"; added `ACTIONS.saveProfile` convenience |
-| B.2 — Offline persistence + connection state | **Shipped** | `subscribeToConnectionState`, Firestore IndexedDB persistence, `STATES.isOnline` |
-| B.3 — Axios retry/backoff/classify | **Shipped** | 2s/4s/8s/16s backoff on 5xx + network; `classifyError` helper |
-| B.4 — Rules tightening | **Shipped** | Validators for username/bio/photoURL/address/privacy; admin self-escalation blocked at rules layer |
-| C.1 — Order stub → real flow | **Shipped** | OrderPanel routes to filtered marketplace / create-listing; per-listing buy was already wired via `PurchaseFlowPage` |
-| C.2 — Alert management UI | **Verified** | `AlertsPage.jsx` already has acknowledge+resolve wired; audit finding was incomplete |
-| C.3 — Listing cancel UI | **Shipped** | Seller-only "Cancel My Listing" on `ListingDetailPage` |
-| C.4 — Device threshold editor | **Deferred** | Requires sensor threshold UX design; endpoint remains orphaned |
-| C.5 — Profile image upload | **Shipped** | Added `storage.rules`, `src/apis/storage.js`, `uploadProfileImage()`; wired in ProfileSettings |
-| D — Retire cloudMockAPI | **Deferred** | Requires new backend aggregation of Pollution Gateway Pro data — separate workstream per CLAUDE.md P2 |
-| E.2 — Orphaned `/order/create` | **Known-issue only** | OrderAPI (11 methods) is broadly orphaned — broader architectural issue than this audit's scope |
-| E.3 — 2FA/deactivate/delete | **Deferred** | Needs new endpoints + Firebase MFA integration |
-| E.4 — Data export/backup | **Deferred** | Needs new endpoints + RTDB-to-JSON exporter |
-
-Build verified: `npm run build` succeeds for all four targets (wqt, cloud, landing, ops). Ship commit: see branch history after this file.
-
----
-
 ## Executive Summary
 
 The user reports that "marketplace and cloud applications are not writing or editing to the user profile, meaning data is not persistent and network errors are common." This audit confirms that report and expands it.
