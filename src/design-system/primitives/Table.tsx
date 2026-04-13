@@ -42,37 +42,35 @@ export interface TableProps<T> {
   loading?: boolean;
   /** Compact density */
   compact?: boolean;
+  /** Render rows as a stacked card list below the `sm` breakpoint (640px). Default true. */
+  mobileCardView?: boolean;
   className?: string;
 }
 
 // ── Styled ────────────────────────────────────────────────
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $hideOnMobile: boolean }>`
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   border: 1px solid ${({ theme }) => theme.components.tableBorder};
   border-radius: ${({ theme }) => theme.radius.md}px;
   -webkit-overflow-scrolling: touch;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}px) {
-    border-radius: ${({ theme }) => theme.radius.sm}px;
-
-    & th:first-child,
-    & td:first-child {
-      position: sticky;
-      left: 0;
-      z-index: 1;
-      background: inherit;
-      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.04);
+  ${({ $hideOnMobile, theme }) =>
+    $hideOnMobile &&
+    `
+    @media (max-width: ${theme.breakpoints.sm - 1}px) {
+      display: none;
     }
-  }
+  `}
 `;
 
 const StyledTable = styled.table`
   width: 100%;
-  min-width: 520px;
   border-collapse: collapse;
   font-family: ${({ theme }) => theme.fonts.sans};
+  table-layout: auto;
 `;
 
 const Thead = styled.thead`
@@ -91,6 +89,11 @@ const Th = styled.th<{ $align: string; $sortable: boolean; $hideBelow?: number }
   user-select: none;
   white-space: nowrap;
   border-bottom: 1px solid ${({ theme }) => theme.components.tableBorder};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md - 1}px) {
+    padding: 9px 10px;
+    white-space: normal;
+  }
 
   ${({ $hideBelow }) =>
     $hideBelow &&
@@ -137,6 +140,12 @@ const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean; $hideB
   text-align: ${({ $align }) => $align};
   font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : 'inherit')};
   white-space: nowrap;
+  overflow-wrap: anywhere;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md - 1}px) {
+    padding: ${({ $compact }) => ($compact ? '8px 10px' : '10px 10px')};
+    white-space: normal;
+  }
 
   ${({ $hideBelow }) =>
     $hideBelow &&
@@ -154,6 +163,76 @@ const Empty = styled.td`
   font-size: 14px;
 `;
 
+// ── Mobile card view (below `sm` breakpoint) ──────────────
+
+const CardList = styled.div`
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm - 1}px) {
+    display: flex;
+  }
+`;
+
+const Card = styled.div<{ $clickable: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: ${({ theme }) => theme.components.cardBg};
+  border: 1px solid ${({ theme }) => theme.components.tableBorder};
+  border-radius: ${({ theme }) => theme.radius.md}px;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+  transition: background ${({ theme }) => theme.animation.fast};
+
+  &:hover {
+    ${({ $clickable, theme }) => $clickable && `background: ${theme.components.tableRowHover};`}
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
+const CardRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+`;
+
+const CardLabel = styled.span`
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  flex-shrink: 0;
+`;
+
+const CardValue = styled.span<{ $mono: boolean; $align: string }>`
+  font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : theme.fonts.sans)};
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.text};
+  text-align: ${({ $align }) => $align};
+  min-width: 0;
+  overflow-wrap: anywhere;
+`;
+
+const CardEmpty = styled.div`
+  padding: 32px 16px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 14px;
+  border: 1px dashed ${({ theme }) => theme.components.tableBorder};
+  border-radius: ${({ theme }) => theme.radius.md}px;
+`;
+
 // ── Component ─────────────────────────────────────────────
 
 export function Table<T>({
@@ -164,6 +243,7 @@ export function Table<T>({
   emptyMessage = 'No data',
   loading = false,
   compact = false,
+  mobileCardView = true,
   className,
 }: TableProps<T>) {
   const [sortKey, setSortKey] = useState<string | null>(null);
@@ -199,50 +279,94 @@ export function Table<T>({
   }, [data, sortKey, sortDir, columns]);
 
   return (
-    <Wrapper className={className}>
-      <StyledTable>
-        <Thead>
-          <tr>
-            {columns.map((col) => (
-              <Th
-                key={col.key}
-                scope="col"
-                $align={col.align || 'left'}
-                $sortable={!!col.sortable}
-                $hideBelow={col.hideBelow}
-                style={col.width ? { width: col.width } : undefined}
-                onClick={() => handleSort(col)}
-                aria-sort={
-                  col.sortable
-                    ? sortKey === col.key && sortDir
-                      ? sortDir === 'asc'
-                        ? 'ascending'
-                        : 'descending'
-                      : 'none'
-                    : undefined
-                }
-              >
-                {col.header}
-                {col.sortable && (
-                  <SortArrow $active={sortKey === col.key && sortDir !== null}>
-                    {sortKey === col.key && sortDir === 'desc' ? '↓' : '↑'}
-                  </SortArrow>
-                )}
-              </Th>
-            ))}
-          </tr>
-        </Thead>
-        <Tbody>
-          {sortedData.length === 0 && !loading ? (
+    <>
+      <Wrapper className={className} $hideOnMobile={mobileCardView}>
+        <StyledTable>
+          <Thead>
             <tr>
-              <Empty colSpan={columns.length}>{emptyMessage}</Empty>
+              {columns.map((col) => (
+                <Th
+                  key={col.key}
+                  scope="col"
+                  $align={col.align || 'left'}
+                  $sortable={!!col.sortable}
+                  $hideBelow={col.hideBelow}
+                  style={col.width ? { width: col.width } : undefined}
+                  onClick={() => handleSort(col)}
+                  aria-sort={
+                    col.sortable
+                      ? sortKey === col.key && sortDir
+                        ? sortDir === 'asc'
+                          ? 'ascending'
+                          : 'descending'
+                        : 'none'
+                      : undefined
+                  }
+                >
+                  {col.header}
+                  {col.sortable && (
+                    <SortArrow $active={sortKey === col.key && sortDir !== null}>
+                      {sortKey === col.key && sortDir === 'desc' ? '↓' : '↑'}
+                    </SortArrow>
+                  )}
+                </Th>
+              ))}
             </tr>
+          </Thead>
+          <Tbody>
+            {sortedData.length === 0 && !loading ? (
+              <tr>
+                <Empty colSpan={columns.length}>{emptyMessage}</Empty>
+              </tr>
+            ) : (
+              sortedData.map((row, i) => (
+                <Tr
+                  key={rowKey(row)}
+                  $clickable={!!onRowClick}
+                  onClick={() => onRowClick?.(row)}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  onKeyDown={
+                    onRowClick
+                      ? (e: React.KeyboardEvent) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onRowClick(row);
+                          }
+                        }
+                      : undefined
+                  }
+                >
+                  {columns.map((col) => (
+                    <Td
+                      key={col.key}
+                      $align={col.align || 'left'}
+                      $mono={!!col.mono}
+                      $compact={compact}
+                      $hideBelow={col.hideBelow}
+                    >
+                      {col.render
+                        ? col.render(row, i)
+                        : ((row as Record<string, unknown>)[col.key] as React.ReactNode)}
+                    </Td>
+                  ))}
+                </Tr>
+              ))
+            )}
+          </Tbody>
+        </StyledTable>
+      </Wrapper>
+
+      {mobileCardView && (
+        <CardList className={className} role="list">
+          {sortedData.length === 0 && !loading ? (
+            <CardEmpty>{emptyMessage}</CardEmpty>
           ) : (
             sortedData.map((row, i) => (
-              <Tr
+              <Card
                 key={rowKey(row)}
+                role="listitem"
                 $clickable={!!onRowClick}
-                onClick={() => onRowClick?.(row)}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
                 tabIndex={onRowClick ? 0 : undefined}
                 onKeyDown={
                   onRowClick
@@ -256,23 +380,20 @@ export function Table<T>({
                 }
               >
                 {columns.map((col) => (
-                  <Td
-                    key={col.key}
-                    $align={col.align || 'left'}
-                    $mono={!!col.mono}
-                    $compact={compact}
-                    $hideBelow={col.hideBelow}
-                  >
-                    {col.render
-                      ? col.render(row, i)
-                      : ((row as Record<string, unknown>)[col.key] as React.ReactNode)}
-                  </Td>
+                  <CardRow key={col.key}>
+                    <CardLabel>{col.header}</CardLabel>
+                    <CardValue $mono={!!col.mono} $align={col.align || 'right'}>
+                      {col.render
+                        ? col.render(row, i)
+                        : ((row as Record<string, unknown>)[col.key] as React.ReactNode)}
+                    </CardValue>
+                  </CardRow>
                 ))}
-              </Tr>
+              </Card>
             ))
           )}
-        </Tbody>
-      </StyledTable>
-    </Wrapper>
+        </CardList>
+      )}
+    </>
   );
 }

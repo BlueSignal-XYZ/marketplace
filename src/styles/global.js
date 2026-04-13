@@ -114,6 +114,10 @@ export const GlobalStyle = createGlobalStyle`
 
         /* Smooth scrolling */
         scroll-behavior: smooth;
+
+        /* Prevent page-level horizontal scroll from any stray wide child */
+        max-width: 100vw;
+        overflow-x: hidden;
     }
 
     body {
@@ -128,6 +132,10 @@ export const GlobalStyle = createGlobalStyle`
 
         /* Minimum font size for mobile readability */
         font-size: 16px;
+
+        /* Viewport safety net — matches landing page behavior */
+        max-width: 100vw;
+        overflow-x: hidden;
 
         /* Safe area padding for notched devices */
         padding-left: ${safeAreaInsets.left};

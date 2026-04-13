@@ -490,12 +490,13 @@ const COLUMNS = [
     key: 'region',
     header: 'Region',
     sortable: true,
-    hideBelow: 1024,
+    hideBelow: 1280,
     render: (row) => row.region || '—',
   },
   {
     key: 'verificationLevel',
     header: 'Verification',
+    hideBelow: 900,
     render: (row) => <VerificationBadge level={row.verificationLevel || 'self-reported'} />,
   },
   {
@@ -504,12 +505,12 @@ const COLUMNS = [
     width: '90px',
     mono: true,
     sortable: true,
-    hideBelow: 1024,
+    hideBelow: 1280,
   },
   {
     key: 'sellerName',
     header: 'Seller',
-    hideBelow: 1024,
+    hideBelow: 1280,
     render: (row) => row.sellerName || '—',
   },
 ];

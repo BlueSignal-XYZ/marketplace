@@ -176,6 +176,7 @@ const COLUMNS = [
     header: 'Type',
     sortable: true,
     width: '100px',
+    hideBelow: 640,
     render: (row: RegistryCredit) => creditTypeBadge(row.type),
   },
   {
@@ -189,6 +190,7 @@ const COLUMNS = [
   {
     key: 'projectName',
     header: 'Project',
+    hideBelow: 900,
     render: (row: RegistryCredit) => row.projectName,
   },
   {
@@ -197,6 +199,7 @@ const COLUMNS = [
     mono: true,
     sortable: true,
     width: '110px',
+    hideBelow: 1024,
     render: (row: RegistryCredit) =>
       new Date(row.issueDate).toLocaleDateString('en-US', {
         year: 'numeric',

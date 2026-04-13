@@ -52,7 +52,11 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
+
+  @media (min-width: 640px) {
+    min-width: 200px;
+  }
 `;
 
 const IconSlot = styled.span`
