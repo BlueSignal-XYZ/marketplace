@@ -27,6 +27,12 @@ const Header = styled.div`
   align-items: center;
   margin-bottom: 0.35rem;
   gap: 0.5rem;
+  /* Reserve room for the absolutely-positioned DeleteBtn at top-right. */
+  padding-right: 1.5rem;
+
+  @media (max-width: 1024px) {
+    padding-right: 2.5rem;
+  }
 `;
 
 const Name = styled.div`
@@ -79,6 +85,16 @@ const DeleteBtn = styled(Btn)`
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
+  line-height: 1;
+
+  /* Give the close-X a real tap target on phones without enlarging it
+     visually on desktop. */
+  @media (max-width: 1024px) {
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+  }
 `;
 
 const StatusSelect = styled.select`

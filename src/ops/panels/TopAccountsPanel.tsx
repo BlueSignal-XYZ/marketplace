@@ -28,26 +28,6 @@ const Btn = styled.button<{ $danger?: boolean }>`
   }
 `;
 
-const HealthRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-`;
-
-const InlineSelect = styled.select`
-  background: ${({ theme }) => theme.colors.bg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 3px;
-  color: ${({ theme }) => theme.colors.text};
-  padding: 0.15rem 0.35rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  outline: none;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.accent};
-  }
-`;
-
 const HEALTH_OPTIONS = ['prospect', 'customer', 'at-risk', 'churned'];
 
 const ADD_FIELDS: FieldDef[] = [
@@ -140,19 +120,11 @@ export default function TopAccountsPanel() {
                 <EditableCell value={a.name} onSave={(v) => updateItem(i, 'name', v)} />
               </Td>
               <Td>
-                <HealthRow>
-                  <PriorityBadge value={a.health} />
-                  <InlineSelect
-                    value={a.health}
-                    onChange={(e) => updateItem(i, 'health', e.target.value)}
-                  >
-                    {HEALTH_OPTIONS.map((h) => (
-                      <option key={h} value={h}>
-                        {h}
-                      </option>
-                    ))}
-                  </InlineSelect>
-                </HealthRow>
+                <PriorityBadge
+                  value={a.health}
+                  options={HEALTH_OPTIONS}
+                  onChange={(v) => updateItem(i, 'health', v)}
+                />
               </Td>
               <Td>
                 <EditableCell

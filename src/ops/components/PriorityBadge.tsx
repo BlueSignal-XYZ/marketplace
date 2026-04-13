@@ -17,21 +17,89 @@ const colorMap: Record<string, { bg: string; fg: string }> = {
 
 const fallback = { bg: 'rgba(148,152,168,0.10)', fg: '#9498a8' };
 
-const Pill = styled.span<{ $bg: string; $fg: string }>`
+const pillStyles = `
   display: inline-block;
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
-  background: ${({ $bg }) => $bg};
-  color: ${({ $fg }) => $fg};
   text-transform: capitalize;
   white-space: nowrap;
+  line-height: 1.2;
 `;
 
-export default function PriorityBadge({ value }: { value: string }) {
+const Pill = styled.span<{ $bg: string; $fg: string }>`
+  ${pillStyles}
+  background: ${({ $bg }) => $bg};
+  color: ${({ $fg }) => $fg};
+`;
+
+/**
+ * Editable variant — a native <select> styled exactly like the pill so the
+ * component doubles as display + edit control (no separate "raw" dropdown
+ * next to the badge, which previously looked like duplicated state).
+ */
+const PillSelect = styled.select<{ $bg: string; $fg: string }>`
+  ${pillStyles}
+  background: ${({ $bg }) => $bg};
+  color: ${({ $fg }) => $fg};
+  border: none;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 0.5rem;
+
+  &:focus {
+    box-shadow: 0 0 0 1px ${({ $fg }) => $fg};
+  }
+
+  /* Native <option> menus inherit the OS theme; force readable contrast. */
+  & option {
+    background: #1a1c22;
+    color: #e2e4ea;
+  }
+
+  /* Mobile: 16px prevents iOS Safari auto-zoom on focus, and a larger
+     padding gives the native picker a usable touch target without
+     changing the visual pill size drastically. */
+  @media (max-width: 1024px) {
+    font-size: 16px;
+    padding: 0.35rem 0.7rem;
+    min-height: 32px;
+  }
+`;
+
+interface PriorityBadgeProps {
+  value: string;
+  /** When provided together with onChange, render as an editable pill-select. */
+  options?: readonly string[];
+  onChange?: (value: string) => void;
+}
+
+export default function PriorityBadge({ value, options, onChange }: PriorityBadgeProps) {
   const key = value.toLowerCase();
   const { bg, fg } = colorMap[key] ?? fallback;
+
+  if (options && onChange) {
+    return (
+      <PillSelect
+        $bg={bg}
+        $fg={fg}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label="Select priority"
+      >
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </PillSelect>
+    );
+  }
+
   return (
     <Pill $bg={bg} $fg={fg}>
       {value}

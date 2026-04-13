@@ -12,8 +12,17 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+
+  /* On phones, let the title row and crowded action groups (e.g. the five
+     buttons on Team & Cap Table) wrap instead of overflowing horizontally. */
+  @media (max-width: 640px) {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+  }
 `;
 
 const TitleRow = styled.div`

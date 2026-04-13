@@ -11,7 +11,7 @@ import {
   computeProForma,
   computeReservedShares,
   deriveFounderPctFromEquity,
-  memberBucket,
+  isFounderRole,
   normalizeTeamCapTable,
 } from './dilution';
 import KPICards, { type KPIData } from './KPICards';
@@ -121,10 +121,15 @@ export default function TeamCapPanel() {
     [members, rounds]
   );
 
+  // Use `isFounderRole` rather than `memberBucket === 'Founder'` — the
+  // latter requires BOTH "founder" AND "ceo" in the role string and
+  // silently excludes realistic entries like role="Founder" or role="CEO"
+  // from the Founder % KPI, which is why users reported the card showing
+  // 0.0% even after entering a clear founder.
   const founderShares = useMemo(
     () =>
       members
-        .filter((m) => memberBucket(m) === 'Founder')
+        .filter(isFounderRole)
         .reduce(
           (acc, m) => acc + (m.shares ?? Math.round(((m.equity || 0) / 100) * totalOutstanding)),
           0
@@ -132,12 +137,27 @@ export default function TeamCapPanel() {
     [members, totalOutstanding]
   );
 
+  // Founder shares valued against the pro-forma (post-planned-rounds)
+  // share count, so the diluted KPI stays meaningful once share entries
+  // exist but before they're fully issued.
+  const founderSharesProforma = useMemo(
+    () =>
+      members
+        .filter(isFounderRole)
+        .reduce(
+          (acc, m) =>
+            acc + (m.shares ?? Math.round(((m.equity || 0) / 100) * proformaAll.final.totalShares)),
+          0
+        ),
+    [members, proformaAll.final.totalShares]
+  );
+
   // When no shares have been issued/reserved yet, fall back to member equity
   // percentages so the Founder % KPIs reflect user intent immediately
   // (e.g. a newly-added 80% founder reads 80%, not 0%).
   const equityPctFallback = useMemo(() => deriveFounderPctFromEquity(members), [members]);
-  const hasCurrentShares = totalOutstanding > 0;
-  const hasProformaShares = proformaAll.final.totalShares > 0;
+  const hasCurrentShares = totalOutstanding > 0 && founderShares > 0;
+  const hasProformaShares = proformaAll.final.totalShares > 0 && founderSharesProforma > 0;
 
   const kpis: KPIData = {
     authorized: capTable.authorized,
@@ -148,7 +168,7 @@ export default function TeamCapPanel() {
       ? (founderShares / totalOutstanding) * 100
       : equityPctFallback,
     founderPctDiluted: hasProformaShares
-      ? (proformaAll.final.founderShares / proformaAll.final.totalShares) * 100
+      ? (founderSharesProforma / proformaAll.final.totalShares) * 100
       : equityPctFallback,
     founderPctEstimated: !hasCurrentShares || !hasProformaShares,
   };

@@ -30,16 +30,16 @@ const Name = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 0.4rem;
+  /* Reserve room for the absolutely-positioned DeleteBtn at top-right. */
+  padding-right: 1.5rem;
+
+  @media (max-width: 1024px) {
+    padding-right: 2.5rem;
+  }
 `;
 
 const NameText = styled.div`
   flex: 1;
-`;
-
-const ThreatRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
 `;
 
 const Section = styled.div`
@@ -109,19 +109,15 @@ const DeleteBtn = styled(Btn)`
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-`;
+  line-height: 1;
 
-const InlineSelect = styled.select`
-  background: ${({ theme }) => theme.colors.bg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 3px;
-  color: ${({ theme }) => theme.colors.text};
-  padding: 0.15rem 0.35rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  outline: none;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.accent};
+  /* Give the close-X a real tap target on phones without enlarging it
+     visually on desktop. */
+  @media (max-width: 1024px) {
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
   }
 `;
 
@@ -201,19 +197,11 @@ export default function CompetitivePanel() {
               <NameText>
                 <EditableCell value={c.name} onSave={(v) => updateCompetitor(i, 'name', v)} />
               </NameText>
-              <ThreatRow>
-                <PriorityBadge value={c.threat} />
-                <InlineSelect
-                  value={c.threat}
-                  onChange={(e) => updateCompetitor(i, 'threat', e.target.value)}
-                >
-                  {THREAT_OPTIONS.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </InlineSelect>
-              </ThreatRow>
+              <PriorityBadge
+                value={c.threat}
+                options={THREAT_OPTIONS}
+                onChange={(v) => updateCompetitor(i, 'threat', v)}
+              />
             </Name>
             {c.strengths?.length > 0 && (
               <Section>
