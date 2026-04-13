@@ -28,26 +28,6 @@ const Btn = styled.button<{ $danger?: boolean }>`
   }
 `;
 
-const PriorityRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-`;
-
-const InlineSelect = styled.select`
-  background: ${({ theme }) => theme.colors.bg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 3px;
-  color: ${({ theme }) => theme.colors.text};
-  padding: 0.15rem 0.35rem;
-  font-size: 0.75rem;
-  cursor: pointer;
-  outline: none;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.accent};
-  }
-`;
-
 const PRIORITY_OPTIONS: OpenLoop['priority'][] = ['high', 'medium', 'low'];
 
 const ADD_FIELDS: FieldDef[] = [
@@ -122,19 +102,11 @@ export default function OpenLoopsPanel() {
           {items.map((item, i) => (
             <Tr key={i}>
               <Td>
-                <PriorityRow>
-                  <PriorityBadge value={item.priority} />
-                  <InlineSelect
-                    value={item.priority}
-                    onChange={(e) => updateItem(i, 'priority', e.target.value)}
-                  >
-                    {PRIORITY_OPTIONS.map((p) => (
-                      <option key={p} value={p}>
-                        {p}
-                      </option>
-                    ))}
-                  </InlineSelect>
-                </PriorityRow>
+                <PriorityBadge
+                  value={item.priority}
+                  options={PRIORITY_OPTIONS}
+                  onChange={(v) => updateItem(i, 'priority', v)}
+                />
               </Td>
               <Td style={{ color: '#e2e4ea' }}>
                 <EditableCell value={item.title} onSave={(v) => updateItem(i, 'title', v)} />
