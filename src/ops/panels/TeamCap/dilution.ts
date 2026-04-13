@@ -122,20 +122,39 @@ function roleIsCofounder(m: TeamMember): boolean {
 }
 
 /**
+ * Role-based predicate used by the KPI calculations. `memberBucket` only
+ * returns 'Founder' when BOTH "founder" AND "ceo" appear in the role
+ * string, which misses common entries like role="Founder" or role="CEO"
+ * alone — those silently fall to 'Co-founders' and get excluded from the
+ * Founder % KPI, yielding 0% even when a single 80%-equity founder is
+ * the whole team. For display, treat anyone whose role contains "founder"
+ * or "ceo" as counting toward Founder %.
+ */
+export function isFounderRole(m: TeamMember): boolean {
+  const role = (m.role || '').toLowerCase();
+  return role.includes('founder') || role.includes('ceo');
+}
+
+/**
  * Fallback Founder % when no shares have been issued/reserved yet. Reads
  * member `equity` percentages directly so the KPI cards stay responsive
  * to user intent before any rounds are captured.
  *
  * Divisor is max(totalEquity, 100) so a single member entered as "80%"
  * reads as 80% (not inflated to 100%) when they are the only person
- * on the cap table so far.
+ * on the cap table so far. If no member matches `isFounderRole` we fall
+ * back to total member equity — this handles teams entered with generic
+ * roles ("President", "Owner") where the user still expects their entries
+ * to register somewhere on the Founder % KPI.
  */
 export function deriveFounderPctFromEquity(members: TeamMember[]): number {
-  const founderEq = members
-    .filter((m) => memberBucket(m) === 'Founder')
-    .reduce((a, m) => a + (m.equity || 0), 0);
   const totalEq = members.reduce((a, m) => a + (m.equity || 0), 0);
   if (totalEq <= 0) return 0;
+  const founders = members.filter(isFounderRole);
+  const founderEq = (founders.length > 0 ? founders : members).reduce(
+    (a, m) => a + (m.equity || 0),
+    0
+  );
   return Math.min(100, (founderEq / Math.max(totalEq, 100)) * 100);
 }
 
