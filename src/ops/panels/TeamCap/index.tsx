@@ -10,6 +10,7 @@ import {
   computeIssuedShares,
   computeProForma,
   computeReservedShares,
+  deriveFounderPctFromEquity,
   memberBucket,
   normalizeTeamCapTable,
 } from './dilution';
@@ -92,8 +93,9 @@ const ROUND_FIELDS: FieldDef[] = [
     label: 'Status',
     type: 'select',
     options: ['Issued', 'Reserved', 'Planned', 'Closed', 'Converting'],
-    defaultValue: 'Planned',
+    defaultValue: 'Issued',
   },
+  { name: 'shares', label: 'Shares', type: 'number', defaultValue: '0' },
   { name: 'targetRaise', label: 'Target Raise', type: 'number' },
   { name: 'targetValuation', label: 'Valuation / Cap', type: 'number' },
 ];
@@ -130,16 +132,25 @@ export default function TeamCapPanel() {
     [members, totalOutstanding]
   );
 
+  // When no shares have been issued/reserved yet, fall back to member equity
+  // percentages so the Founder % KPIs reflect user intent immediately
+  // (e.g. a newly-added 80% founder reads 80%, not 0%).
+  const equityPctFallback = useMemo(() => deriveFounderPctFromEquity(members), [members]);
+  const hasCurrentShares = totalOutstanding > 0;
+  const hasProformaShares = proformaAll.final.totalShares > 0;
+
   const kpis: KPIData = {
     authorized: capTable.authorized,
     issued: issuedShares,
     reserved: reservedShares,
     available: Math.max(0, capTable.authorized - issuedShares - reservedShares),
-    founderPctCurrent: totalOutstanding > 0 ? (founderShares / totalOutstanding) * 100 : 0,
-    founderPctDiluted:
-      proformaAll.final.totalShares > 0
-        ? (proformaAll.final.founderShares / proformaAll.final.totalShares) * 100
-        : 0,
+    founderPctCurrent: hasCurrentShares
+      ? (founderShares / totalOutstanding) * 100
+      : equityPctFallback,
+    founderPctDiluted: hasProformaShares
+      ? (proformaAll.final.founderShares / proformaAll.final.totalShares) * 100
+      : equityPctFallback,
+    founderPctEstimated: !hasCurrentShares || !hasProformaShares,
   };
 
   const save = (updated: TeamCapTable) => writeImmediate(updated);
@@ -188,9 +199,9 @@ export default function TeamCapPanel() {
     const r: FundingRound = {
       name: values.name,
       instrument: (values.instrument as Instrument) || 'SAFE',
-      shares: 0,
+      shares: values.shares ? Number(values.shares) : 0,
       price: null,
-      status: (values.status as FundingRound['status']) || 'Planned',
+      status: (values.status as FundingRound['status']) || 'Issued',
       targetRaise: values.targetRaise ? Number(values.targetRaise) : null,
       targetValuation: values.targetValuation ? Number(values.targetValuation) : null,
       targetShares: null,

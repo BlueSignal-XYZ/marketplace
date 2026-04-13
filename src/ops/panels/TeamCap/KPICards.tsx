@@ -44,9 +44,12 @@ export interface KPIData {
   available: number;
   founderPctCurrent: number;
   founderPctDiluted: number;
+  /** True when Founder % is derived from member equity rather than shares. */
+  founderPctEstimated?: boolean;
 }
 
 export default function KPICards({ data }: { data: KPIData }) {
+  const estSuffix = data.founderPctEstimated ? ' (est.)' : '';
   return (
     <Grid>
       <Card>
@@ -72,12 +75,12 @@ export default function KPICards({ data }: { data: KPIData }) {
       <Card>
         <Label>Founder %</Label>
         <Value>{formatPct(data.founderPctCurrent)}</Value>
-        <Sub>current</Sub>
+        <Sub>current{estSuffix}</Sub>
       </Card>
       <Card>
         <Label>Founder % (FD)</Label>
         <Value>{formatPct(data.founderPctDiluted)}</Value>
-        <Sub>fully diluted pro-forma</Sub>
+        <Sub>fully diluted pro-forma{estSuffix}</Sub>
       </Card>
     </Grid>
   );

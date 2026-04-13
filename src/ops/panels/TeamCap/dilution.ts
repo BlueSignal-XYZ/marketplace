@@ -121,6 +121,24 @@ function roleIsCofounder(m: TeamMember): boolean {
   return memberBucket(m) === 'Co-founders';
 }
 
+/**
+ * Fallback Founder % when no shares have been issued/reserved yet. Reads
+ * member `equity` percentages directly so the KPI cards stay responsive
+ * to user intent before any rounds are captured.
+ *
+ * Divisor is max(totalEquity, 100) so a single member entered as "80%"
+ * reads as 80% (not inflated to 100%) when they are the only person
+ * on the cap table so far.
+ */
+export function deriveFounderPctFromEquity(members: TeamMember[]): number {
+  const founderEq = members
+    .filter((m) => memberBucket(m) === 'Founder')
+    .reduce((a, m) => a + (m.equity || 0), 0);
+  const totalEq = members.reduce((a, m) => a + (m.equity || 0), 0);
+  if (totalEq <= 0) return 0;
+  return Math.min(100, (founderEq / Math.max(totalEq, 100)) * 100);
+}
+
 // ---------------------------------------------------------------------------
 // Pro-forma dilution engine.
 //
