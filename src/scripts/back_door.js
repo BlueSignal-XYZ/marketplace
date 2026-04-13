@@ -1817,21 +1817,78 @@ const getUserProfile = async (uid) => {
   }
 };
 
+// Direct RTDB write — bypasses the Cloud Function whitelist that was
+// silently dropping nested fields like `address` and `preferences`. Mirrors
+// the ops dashboard's useWriteBack pattern: PATCH against
+// `users/{uid}/profile.json` (or `/settings.json`) with the user's auth
+// token in the URL. RTDB rules enforce `auth.uid === $uid` so security
+// equals the previous Cloud Function path; the difference is that any
+// schema field the UI exposes now round-trips without a backend redeploy.
+const PROFILE_SETTINGS_KEYS = new Set(['timezone', 'units', 'notifications']);
+
 const updateUserProfile = async (uid, profileData) => {
-  try {
-    const response = await authPost(`${configs.server_url}/user/profile/update`, {
-      uid,
-      profileData,
-    });
-    return response?.data;
-  } catch (error) {
-    const serverMsg = error?.response?.data?.error || error?.response?.data?.message;
-    console.error('[UserProfileAPI.update] Failed:', serverMsg || error.message, {
-      uid,
-      status: error?.response?.status,
-    });
-    throw error;
+  const currentUser = auth?.currentUser;
+  if (!currentUser) {
+    throw new Error('Not authenticated');
   }
+  if (currentUser.uid !== uid) {
+    throw new Error('Forbidden — can only update your own profile');
+  }
+  if (!profileData || typeof profileData !== 'object') {
+    throw new Error('Invalid profileData');
+  }
+
+  const dbUrl = import.meta.env.VITE_FIREBASE_DATABASE_URL;
+  if (!dbUrl) {
+    throw new Error('Missing VITE_FIREBASE_DATABASE_URL');
+  }
+
+  // Route incoming flat fields to the right RTDB sub-path so the existing
+  // /user/profile/get flatten in functions/auth.js (and any local readers)
+  // continue to round-trip.
+  const profileUpdate = {};
+  const settingsUpdate = {};
+  for (const [key, value] of Object.entries(profileData)) {
+    if (value === undefined) continue;
+    if (PROFILE_SETTINGS_KEYS.has(key)) {
+      settingsUpdate[key] = value;
+    } else {
+      profileUpdate[key] = value;
+    }
+  }
+  profileUpdate.updatedAt = Date.now();
+
+  const token = await currentUser.getIdToken();
+  const writes = [];
+  if (Object.keys(profileUpdate).length > 0) {
+    writes.push(
+      fetch(`${dbUrl}/users/${uid}/profile.json?auth=${token}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileUpdate),
+      })
+    );
+  }
+  if (Object.keys(settingsUpdate).length > 0) {
+    writes.push(
+      fetch(`${dbUrl}/users/${uid}/settings.json?auth=${token}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settingsUpdate),
+      })
+    );
+  }
+
+  const responses = await Promise.all(writes);
+  for (const res of responses) {
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      console.error('[UserProfileAPI.update] RTDB write failed:', res.status, text);
+      throw new Error(`Profile update failed (${res.status})${text ? `: ${text}` : ''}`);
+    }
+  }
+
+  return { success: true };
 };
 
 const updateUserRole = async (targetUid, role) => {

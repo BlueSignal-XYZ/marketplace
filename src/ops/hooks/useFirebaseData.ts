@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { auth } from '../firebase';
 
 const DB_URL = 'https://waterquality-trading-default-rtdb.firebaseio.com';
@@ -7,6 +7,47 @@ interface FirebaseDataState<T> {
   data: T | null;
   loading: boolean;
   error: Error | null;
+}
+
+// ── Last-sync timestamp (in-memory, no RTDB round-trip) ────────────────────
+// Updated whenever any useFirebaseData hook successfully fetches, or whenever
+// `refreshAll()` is invoked. Topbar reads this via `useLastSync`.
+
+let lastSyncMs: number = Date.now();
+const syncListeners = new Set<() => void>();
+
+function notifySyncTick() {
+  lastSyncMs = Date.now();
+  syncListeners.forEach((fn) => fn());
+}
+
+/**
+ * Re-trigger every `useFirebaseData` listener registered in the app. Used by
+ * the Topbar refresh button so KPIs reflect the latest RTDB state on demand.
+ */
+export function refreshAll(): void {
+  for (const set of listeners.values()) {
+    set.forEach((fn) => fn());
+  }
+  // Tick optimistically; individual fetches will tick again on success.
+  notifySyncTick();
+}
+
+/**
+ * Subscribe to the last-sync timestamp. Returns ms-since-epoch of the most
+ * recent successful fetch or refresh.
+ */
+export function useLastSync(): number {
+  return useSyncExternalStore(
+    (cb) => {
+      syncListeners.add(cb);
+      return () => {
+        syncListeners.delete(cb);
+      };
+    },
+    () => lastSyncMs,
+    () => lastSyncMs
+  );
 }
 
 // Firebase RTDB stores arrays as objects with numeric keys.
@@ -78,6 +119,7 @@ export function useFirebaseData<T>(path: string): FirebaseDataState<T> {
           setData(val as T | null);
           setLoading(false);
           setError(null);
+          notifySyncTick();
         }
       } catch (err) {
         console.error('[ops-rtdb] Error fetching', path, err);
