@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import { useFirebaseData } from '../hooks/useFirebaseData';
+import { refreshAll, useLastSync } from '../hooks/useFirebaseData';
 
 const Bar = styled.header`
   min-height: ${({ theme }) => theme.layout.topbarHeight};
@@ -72,8 +73,13 @@ const RefreshBtn = styled.button`
   cursor: pointer;
   transition: border-color ${({ theme }) => theme.transition};
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: ${({ theme }) => theme.colors.accent};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
   }
 
   @media (max-width: 768px) {
@@ -109,7 +115,8 @@ interface TopbarProps {
 }
 
 export default function Topbar({ title, onMenuToggle, onSignOut }: TopbarProps) {
-  const { data: lastSynced } = useFirebaseData<string>('/ops-dashboard/last-synced');
+  const lastSyncMs = useLastSync();
+  const [busy, setBusy] = useState(false);
 
   const today = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -117,6 +124,14 @@ export default function Topbar({ title, onMenuToggle, onSignOut }: TopbarProps) 
     month: 'long',
     day: 'numeric',
   });
+
+  // Re-fetch every Firebase node currently subscribed and update the synced
+  // timestamp. Brief busy state so the user sees the click registered.
+  const handleRefresh = () => {
+    setBusy(true);
+    refreshAll();
+    setTimeout(() => setBusy(false), 400);
+  };
 
   return (
     <Bar>
@@ -126,8 +141,10 @@ export default function Topbar({ title, onMenuToggle, onSignOut }: TopbarProps) 
       </Left>
       <Right>
         <span>{today}</span>
-        {lastSynced && <span>Synced: {new Date(lastSynced).toLocaleTimeString()}</span>}
-        <RefreshBtn onClick={() => window.location.reload()}>Refresh</RefreshBtn>
+        <span>Synced: {new Date(lastSyncMs).toLocaleTimeString()}</span>
+        <RefreshBtn onClick={handleRefresh} disabled={busy}>
+          {busy ? 'Refreshing…' : 'Refresh'}
+        </RefreshBtn>
         <SignOutBtn onClick={onSignOut}>Sign Out</SignOutBtn>
       </Right>
     </Bar>

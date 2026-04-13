@@ -139,12 +139,14 @@ const Td = styled.td<{ $align: string; $mono: boolean; $compact: boolean; $hideB
   color: ${({ theme }) => theme.colors.text};
   text-align: ${({ $align }) => $align};
   font-family: ${({ $mono, theme }) => ($mono ? theme.fonts.mono : 'inherit')};
-  white-space: nowrap;
+  /* Mono cells (IDs, numeric values) shouldn't break mid-string; everything
+     else wraps so long values don't push the table past its wrapper. */
+  white-space: ${({ $mono }) => ($mono ? 'nowrap' : 'normal')};
   overflow-wrap: anywhere;
+  vertical-align: top;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md - 1}px) {
     padding: ${({ $compact }) => ($compact ? '8px 10px' : '10px 10px')};
-    white-space: normal;
   }
 
   ${({ $hideBelow }) =>
